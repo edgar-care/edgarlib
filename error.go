@@ -1,4 +1,4 @@
-package error
+package edgarlib
 
 func CheckError(err error) {
 	if err != nil {
