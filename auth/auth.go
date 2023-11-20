@@ -1,8 +1,10 @@
 package auth
 
 import (
+	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/jwtauth/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -35,4 +37,24 @@ func HashPassword(password string) string {
 func CheckPassword(password string, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func GetAuthenticatedUser(w http.ResponseWriter, r *http.Request) string {
+	_, claims, _ := jwtauth.FromContext(r.Context())
+
+	return claims["patient"].(map[string]interface{})["id"].(string)
+}
+
+func AuthMiddleware(w http.ResponseWriter, r *http.Request) string {
+	reqToken := r.Header.Get("Authorization")
+	if reqToken == "" {
+		return ""
+	}
+	splitToken := strings.Split(reqToken, "Bearer ")
+	reqToken = splitToken[1]
+
+	if VerifyToken(reqToken) == false {
+		return ""
+	}
+	return GetAuthenticatedUser(w, r)
 }
