@@ -1,0 +1,44 @@
+<!-- email_template.html -->
+<html>
+<head>
+  <title>Email Template</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #EFF2FA;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #FFFFFF;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    img.logo {
+      display: block;
+      margin: 0 auto;
+      max-width: 50%;
+    }
+
+    p.body-content {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <img class="logo" src="https://document-patient.s3.amazonaws.com/Full%20width%20-%20color.png" alt="Logo">
+        <p class="body-content">{{.Body}}</p>
+    </div>
+</body>
+</html>
