@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"context"
+	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
 )
 
@@ -9,27 +11,40 @@ type LoginInput struct {
 	Password string `json:"password"`
 }
 
-func Login(input LoginInput, t string) (string, error) {
-	var doctor interface{}
-	var admin interface{}
-	var patient interface{}
+type LoginResponse struct {
+	Token string
+	Code  int
+	err   error
+}
+
+func Login(input LoginInput, t string) LoginResponse {
+	var resp LoginResponse
+	var doctor *graphql.GetDoctorByEmailResponse
+	var admin *graphql.GetAdminByEmailResponse
+	var patient *graphql.GetPatientByEmailResponse
 	var token string
 	var err error
+	gqlClient := graphql.CreateClient()
+
 	if t == "d" {
-		doctor, err = graphql.GetDoctorByEmail(input.Email)
+		doctor, err = graphql.GetDoctorByEmail(context.Background(), gqlClient, input.Email)
 	} else if t == "a" {
-		admin, err = graphql.GetAdminByEmail(input.Email)
+		admin, err = graphql.GetAdminByEmail(context.Background(), gqlClient, input.Email)
 	} else {
-		patient, err = graphql.GetPatientByEmail(input.Email)
+		patient, err = graphql.GetPatientByEmail(context.Background(), gqlClient, input.Email)
 	}
 	if err != nil {
-		return "Could not find user: " + err.Error(), err
+		resp.Code = 400
+		resp.err = errors.New("could not find user: " + err.Error())
+		return resp
 	}
 
-	if !(t == "d" && CheckPassword(input.Password, doctor.(graphql.Doctor).Password)) &&
-		!(t == "a" && CheckPassword(input.Password, admin.(graphql.Admin).Password)) &&
-		!(t == "p" && CheckPassword(input.Password, patient.(graphql.Patient).Password)) {
-		return "Username and password mismatch.", err
+	if !(t == "d" && CheckPassword(input.Password, doctor.GetDoctorByEmail.Password)) &&
+		!(t == "a" && CheckPassword(input.Password, admin.GetAdminByEmail.Password)) &&
+		!(t == "p" && CheckPassword(input.Password, patient.GetPatientByEmail.Password)) {
+		resp.Code = 401
+		resp.err = errors.New("username and password mismatch")
+		return resp
 	}
 
 	if t == "d" {
@@ -45,5 +60,8 @@ func Login(input LoginInput, t string) (string, error) {
 			"patient": patient,
 		})
 	}
-	return token, err
+	resp.Token = token
+	resp.Code = 200
+	resp.err = nil
+	return resp
 }
