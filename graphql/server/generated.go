@@ -2621,6 +2621,7 @@ type Alert {
     comment: String!
 }
 
+
 type Query {
     # Get the entire list of patients.
     getPatients: [Patient]

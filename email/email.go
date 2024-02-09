@@ -12,9 +12,11 @@ import (
 )
 
 type Email struct {
-	To      string
-	Subject string
-	Body    string
+	To            string
+	Subject       string
+	Body          string
+	Template      string
+	TemplateInfos map[string]interface{}
 }
 
 func readHTMLFile(filePath string) (string, error) {
@@ -25,6 +27,13 @@ func readHTMLFile(filePath string) (string, error) {
 	return string(content), nil
 }
 
+func replaceHtmlContent(content string, replacements map[string]interface{}) string {
+	for key, value := range replacements {
+		content = strings.Replace(content, "{{."+key+"}}", fmt.Sprintf("%v", value), -1)
+	}
+	return content
+}
+
 func SendEmail(emailInfo Email) error {
 	sesSMTPServer := os.Getenv("SES_SMTP_URL")
 	sesSMTPPort, err := strconv.Atoi(os.Getenv("SES_SMTP_PORT"))
@@ -33,19 +42,23 @@ func SendEmail(emailInfo Email) error {
 	sesPassword := os.Getenv("SES_PASSWORD")
 
 	fromAddress := os.Getenv("SENDER_EMAIL")
+	var message string
 
-	htmlFile, err := readHTMLFile("./email/email_template.html")
-	if err != nil {
-		return err
+	if emailInfo.Template == "" {
+		message = emailInfo.Body
+	} else {
+		htmlFile, err := readHTMLFile("./email/templates/" + emailInfo.Template + ".html")
+		if err != nil {
+			return err
+		}
+		htmlContent := replaceHtmlContent(htmlFile, emailInfo.TemplateInfos)
+		fmt.Print(htmlContent)
+
+		message = fmt.Sprintf("Subject: %s\r\n", emailInfo.Subject)
+		message += "MIME-version: 1.0;\r\n"
+		message += "Content-Type: text/html; charset=\"UTF-8\";\r\n\r\n"
+		message += htmlContent
 	}
-	htmlContent := strings.Replace(htmlFile, "{{.Body}}", emailInfo.Body, -1)
-
-	message := fmt.Sprintf("Subject: %s\r\n", emailInfo.Subject)
-	message += "MIME-version: 1.0;\r\n"
-	message += "Content-Type: text/html; charset=\"UTF-8\";\r\n\r\n"
-	message += htmlContent
-	// message := fmt.Sprintf("Subject: %s\r\n\r\n%s", emailInfo.Subject, emailInfo.Body)
-
 	auth := smtp.PlainAuth("", sesUsername, sesPassword, sesSMTPServer)
 	err = smtp.SendMail(
 		fmt.Sprintf("%s:%d", sesSMTPServer, sesSMTPPort),
