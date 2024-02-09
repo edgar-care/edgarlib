@@ -14,7 +14,7 @@ type LoginInput struct {
 type LoginResponse struct {
 	Token string
 	Code  int
-	err   error
+	Err   error
 }
 
 func Login(input LoginInput, t string) LoginResponse {
@@ -35,7 +35,7 @@ func Login(input LoginInput, t string) LoginResponse {
 	}
 	if err != nil {
 		resp.Code = 400
-		resp.err = errors.New("could not find user: " + err.Error())
+		resp.Err = errors.New("could not find user: " + err.Error())
 		return resp
 	}
 
@@ -43,7 +43,7 @@ func Login(input LoginInput, t string) LoginResponse {
 		!(t == "a" && CheckPassword(input.Password, admin.GetAdminByEmail.Password)) &&
 		!(t == "p" && CheckPassword(input.Password, patient.GetPatientByEmail.Password)) {
 		resp.Code = 401
-		resp.err = errors.New("username and password mismatch")
+		resp.Err = errors.New("username and password mismatch")
 		return resp
 	}
 
@@ -62,6 +62,6 @@ func Login(input LoginInput, t string) LoginResponse {
 	}
 	resp.Token = token
 	resp.Code = 200
-	resp.err = nil
+	resp.Err = nil
 	return resp
 }

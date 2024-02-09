@@ -9,193 +9,193 @@ import (
 )
 
 type Admin struct {
-	ID       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	ID       string `json:"id" bson:"_id"`
+	Email    string `json:"email" bson:"email"`
+	Password string `json:"password" bson:"password"`
+	Name     string `json:"name" bson:"name"`
+	LastName string `json:"lastName" bson:"lastName"`
 }
 
 type Alert struct {
-	ID       string   `json:"id"`
-	Name     string   `json:"name"`
-	Sex      *string  `json:"sex,omitempty"`
-	Height   *int     `json:"height,omitempty"`
-	Weight   *int     `json:"weight,omitempty"`
-	Symptoms []string `json:"symptoms"`
-	Comment  string   `json:"comment"`
+	ID       string   `json:"id" bson:"_id"`
+	Name     string   `json:"name" bson:"name"`
+	Sex      *string  `json:"sex,omitempty" bson:"sex"`
+	Height   *int     `json:"height,omitempty" bson:"height"`
+	Weight   *int     `json:"weight,omitempty" bson:"weight"`
+	Symptoms []string `json:"symptoms" bson:"symptoms"`
+	Comment  string   `json:"comment" bson:"comment"`
 }
 
 type AnteChir struct {
-	ID              string   `json:"id"`
-	Name            string   `json:"name"`
-	Localisation    string   `json:"localisation"`
-	InducedSymptoms []string `json:"induced_symptoms,omitempty"`
+	ID              string   `json:"id" bson:"_id"`
+	Name            string   `json:"name" bson:"name"`
+	Localisation    string   `json:"localisation" bson:"localisation"`
+	InducedSymptoms []string `json:"induced_symptoms,omitempty" bson:"induced_symptoms"`
 }
 
 type AnteDisease struct {
-	ID         string   `json:"id"`
-	Name       string   `json:"name"`
-	Chronicity float64  `json:"chronicity"`
-	Chir       *string  `json:"chir,omitempty"`
-	Treatment  []string `json:"treatment,omitempty"`
-	Symptoms   []string `json:"symptoms,omitempty"`
+	ID         string   `json:"id" bson:"_id"`
+	Name       string   `json:"name" bson:"name"`
+	Chronicity float64  `json:"chronicity" bson:"chronicity"`
+	Chir       *string  `json:"chir,omitempty" bson:"chir"`
+	Treatment  []string `json:"treatment,omitempty" bson:"treatment"`
+	Symptoms   []string `json:"symptoms,omitempty" bson:"symptoms"`
 }
 
 type AnteFamily struct {
-	ID      string   `json:"id"`
-	Name    string   `json:"name"`
-	Disease []string `json:"disease"`
+	ID      string   `json:"id" bson:"_id"`
+	Name    string   `json:"name" bson:"name"`
+	Disease []string `json:"disease" bson:"disease"`
 }
 
 type DemoAccount struct {
-	ID       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	ID       string `json:"id" bson:"_id"`
+	Email    string `json:"email" bson:"email"`
+	Password string `json:"password" bson:"password"`
 }
 
 type Disease struct {
-	ID               string           `json:"id"`
-	Code             string           `json:"code"`
-	Name             string           `json:"name"`
-	Symptoms         []string         `json:"symptoms"`
-	SymptomsAcute    []*SymptomWeight `json:"symptoms_acute,omitempty"`
-	SymptomsSubacute []*SymptomWeight `json:"symptoms_subacute,omitempty"`
-	SymptomsChronic  []*SymptomWeight `json:"symptoms_chronic,omitempty"`
-	Advice           *string          `json:"advice,omitempty"`
+	ID               string           `json:"id" bson:"_id"`
+	Code             string           `json:"code" bson:"code"`
+	Name             string           `json:"name" bson:"name"`
+	Symptoms         []string         `json:"symptoms" bson:"symptoms"`
+	SymptomsAcute    []*SymptomWeight `json:"symptoms_acute,omitempty" bson:"symptoms_acute"`
+	SymptomsSubacute []*SymptomWeight `json:"symptoms_subacute,omitempty" bson:"symptoms_subacute"`
+	SymptomsChronic  []*SymptomWeight `json:"symptoms_chronic,omitempty" bson:"symptoms_chronic"`
+	Advice           *string          `json:"advice,omitempty" bson:"advice"`
 }
 
 type Doctor struct {
-	ID            string    `json:"id"`
-	Email         string    `json:"email"`
-	Password      string    `json:"password"`
-	RendezVousIds []*string `json:"rendez_vous_ids,omitempty"`
-	PatientIds    []*string `json:"patient_ids,omitempty"`
+	ID            string    `json:"id" bson:"_id"`
+	Email         string    `json:"email" bson:"email"`
+	Password      string    `json:"password" bson:"password"`
+	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+	PatientIds    []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
 }
 
 type Document struct {
-	ID           string       `json:"id"`
-	OwnerID      string       `json:"owner_id"`
-	Name         string       `json:"name"`
-	DocumentType DocumentType `json:"document_type"`
-	Category     Category     `json:"category"`
-	IsFavorite   bool         `json:"is_favorite"`
-	DownloadURL  string       `json:"download_url"`
+	ID           string       `json:"id" bson:"_id"`
+	OwnerID      string       `json:"owner_id" bson:"owner_id"`
+	Name         string       `json:"name" bson:"name"`
+	DocumentType DocumentType `json:"document_type" bson:"document_type"`
+	Category     Category     `json:"category" bson:"category"`
+	IsFavorite   bool         `json:"is_favorite" bson:"is_favorite"`
+	DownloadURL  string       `json:"download_url" bson:"download_url"`
 }
 
 type Health struct {
-	ID                    string   `json:"id"`
-	PatientsAllergies     []string `json:"patients_allergies,omitempty"`
-	PatientsIllness       []string `json:"patients_illness,omitempty"`
-	PatientsTreatments    []string `json:"patients_treatments,omitempty"`
-	PatientsPrimaryDoctor string   `json:"patients_primary_doctor"`
+	ID                    string   `json:"id" bson:"_id"`
+	PatientsAllergies     []string `json:"patients_allergies,omitempty" bson:"patients_allergies"`
+	PatientsIllness       []string `json:"patients_illness,omitempty" bson:"patients_illness"`
+	PatientsTreatments    []string `json:"patients_treatments,omitempty" bson:"patients_treatments"`
+	PatientsPrimaryDoctor string   `json:"patients_primary_doctor" bson:"patients_primary_doctor"`
 }
 
 type Info struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Birthdate string `json:"birthdate"`
-	Height    int    `json:"height"`
-	Weight    int    `json:"weight"`
-	Sex       Sex    `json:"sex"`
-	Surname   string `json:"surname"`
+	ID        string `json:"id" bson:"_id"`
+	Name      string `json:"name" bson:"name"`
+	Birthdate string `json:"birthdate" bson:"birthdate"`
+	Height    int    `json:"height" bson:"height"`
+	Weight    int    `json:"weight" bson:"weight"`
+	Sex       Sex    `json:"sex" bson:"sex"`
+	Surname   string `json:"surname" bson:"surname"`
 }
 
 type Logs struct {
-	Question string `json:"question"`
-	Answer   string `json:"answer"`
+	Question string `json:"question" bson:"question"`
+	Answer   string `json:"answer" bson:"answer"`
 }
 
 type LogsInput struct {
-	Question string `json:"question"`
-	Answer   string `json:"answer"`
+	Question string `json:"question" bson:"question"`
+	Answer   string `json:"answer" bson:"answer"`
 }
 
 type MedicalInfo struct {
-	Info   *string `json:"Info,omitempty"`
-	Health *string `json:"Health,omitempty"`
+	Info   *string `json:"Info,omitempty" bson:"Info"`
+	Health *string `json:"Health,omitempty" bson:"Health"`
 }
 
 type Mutation struct {
 }
 
 type Notification struct {
-	ID      string `json:"id"`
-	Token   string `json:"token"`
-	Title   string `json:"title"`
-	Message string `json:"message"`
+	ID      string `json:"id" bson:"_id"`
+	Token   string `json:"token" bson:"token"`
+	Title   string `json:"title" bson:"title"`
+	Message string `json:"message" bson:"message"`
 }
 
 type Patient struct {
-	ID                 string    `json:"id"`
-	Email              string    `json:"email"`
-	Password           string    `json:"password"`
-	RendezVousIds      []*string `json:"rendez_vous_ids,omitempty"`
-	OnboardingInfoID   *string   `json:"onboarding_info_id,omitempty"`
-	OnboardingHealthID *string   `json:"onboarding_health_id,omitempty"`
-	DocumentIds        []*string `json:"document_ids,omitempty"`
+	ID                 string    `json:"id" bson:"_id"`
+	Email              string    `json:"email" bson:"email"`
+	Password           string    `json:"password" bson:"password"`
+	RendezVousIds      []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+	OnboardingInfoID   *string   `json:"onboarding_info_id,omitempty" bson:"onboarding_info_id"`
+	OnboardingHealthID *string   `json:"onboarding_health_id,omitempty" bson:"onboarding_health_id"`
+	DocumentIds        []*string `json:"document_ids,omitempty" bson:"document_ids"`
 }
 
 type Query struct {
 }
 
 type Rdv struct {
-	ID                string  `json:"id"`
-	DoctorID          string  `json:"doctor_id"`
-	IDPatient         string  `json:"id_patient"`
-	StartDate         int     `json:"start_date"`
-	EndDate           int     `json:"end_date"`
-	CancelationReason *string `json:"cancelation_reason,omitempty"`
+	ID                string  `json:"id" bson:"_id"`
+	DoctorID          string  `json:"doctor_id" bson:"doctor_id"`
+	IDPatient         string  `json:"id_patient" bson:"id_patient"`
+	StartDate         int     `json:"start_date" bson:"start_date"`
+	EndDate           int     `json:"end_date" bson:"end_date"`
+	CancelationReason *string `json:"cancelation_reason,omitempty" bson:"cancelation_reason"`
 }
 
 type Session struct {
-	ID           string   `json:"id"`
-	Symptoms     []string `json:"symptoms"`
-	Age          int      `json:"age"`
-	Height       int      `json:"height"`
-	Weight       int      `json:"weight"`
-	Sex          string   `json:"sex"`
-	LastQuestion string   `json:"last_question"`
-	Logs         []*Logs  `json:"logs"`
-	Alerts       []string `json:"alerts"`
+	ID           string   `json:"id" bson:"_id"`
+	Symptoms     []string `json:"symptoms" bson:"symptoms"`
+	Age          int      `json:"age" bson:"age"`
+	Height       int      `json:"height" bson:"height"`
+	Weight       int      `json:"weight" bson:"weight"`
+	Sex          string   `json:"sex" bson:"sex"`
+	LastQuestion string   `json:"last_question" bson:"last_question"`
+	Logs         []*Logs  `json:"logs" bson:"logs"`
+	Alerts       []string `json:"alerts" bson:"alerts"`
 }
 
 type Symptom struct {
-	ID       string   `json:"id"`
-	Code     string   `json:"code"`
-	Name     string   `json:"name"`
-	Location *string  `json:"location,omitempty"`
-	Duration *int     `json:"duration,omitempty"`
-	Acute    *int     `json:"acute,omitempty"`
-	Subacute *int     `json:"subacute,omitempty"`
-	Chronic  *int     `json:"chronic,omitempty"`
-	Symptom  []string `json:"symptom"`
-	Advice   *string  `json:"advice,omitempty"`
-	Question string   `json:"question"`
+	ID       string   `json:"id" bson:"_id"`
+	Code     string   `json:"code" bson:"code"`
+	Name     string   `json:"name" bson:"name"`
+	Location *string  `json:"location,omitempty" bson:"location"`
+	Duration *int     `json:"duration,omitempty" bson:"duration"`
+	Acute    *int     `json:"acute,omitempty" bson:"acute"`
+	Subacute *int     `json:"subacute,omitempty" bson:"subacute"`
+	Chronic  *int     `json:"chronic,omitempty" bson:"chronic"`
+	Symptom  []string `json:"symptom" bson:"symptom"`
+	Advice   *string  `json:"advice,omitempty" bson:"advice"`
+	Question string   `json:"question" bson:"question"`
 }
 
 type SymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+	Key   string  `json:"key" bson:"key"`
+	Value float64 `json:"value" bson:"value"`
 }
 
 type SymptomWeightInput struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+	Key   string  `json:"key" bson:"key"`
+	Value float64 `json:"value" bson:"value"`
 }
 
 type TestAccount struct {
-	ID       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	ID       string `json:"id" bson:"_id"`
+	Email    string `json:"email" bson:"email"`
+	Password string `json:"password" bson:"password"`
 }
 
 type Treatment struct {
-	ID          string   `json:"id"`
-	Name        string   `json:"name"`
-	Disease     string   `json:"disease"`
-	Symptoms    []string `json:"symptoms,omitempty"`
-	SideEffects []string `json:"side_effects,omitempty"`
+	ID          string   `json:"id" bson:"_id"`
+	Name        string   `json:"name" bson:"name"`
+	Disease     string   `json:"disease" bson:"disease"`
+	Symptoms    []string `json:"symptoms,omitempty" bson:"symptoms"`
+	SideEffects []string `json:"side_effects,omitempty" bson:"side_effects"`
 }
 
 type Category string
