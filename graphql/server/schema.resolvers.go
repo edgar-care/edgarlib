@@ -7,7 +7,6 @@ package server
 import (
 	"context"
 	"errors"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"os"
@@ -139,7 +138,27 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 
 // UpdateDoctor is the resolver for the updateDoctor field.
 func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, rendezVousIds []*string, patientIds []*string) (*model.Doctor, error) {
-	panic(fmt.Errorf("not implemented: UpdateDoctor - updateDoctor"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":             objId,
+		"email":           email,
+		"password":        password,
+		"rendez_vous_ids": rendezVousIds,
+		"patient_ids":     patientIds,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").ReplaceOne(ctx, filter, updated)
+	return &model.Doctor{
+		ID:            id,
+		Email:         *email,
+		Password:      *password,
+		RendezVousIds: rendezVousIds,
+		PatientIds:    patientIds,
+	}, err
 }
 
 // DeleteDoctor is the resolver for the deleteDoctor field.
@@ -192,7 +211,27 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, email string, passwo
 
 // UpdateAdmin is the resolver for the updateAdmin field.
 func (r *mutationResolver) UpdateAdmin(ctx context.Context, id string, email *string, password *string, name *string, lastName *string) (*model.Admin, error) {
-	panic(fmt.Errorf("not implemented: UpdateAdmin - updateAdmin"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":       objId,
+		"email":     email,
+		"password":  password,
+		"name":      name,
+		"last_name": lastName,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").ReplaceOne(ctx, filter, updated)
+	return &model.Admin{
+		ID:       id,
+		Email:    *email,
+		Password: *password,
+		Name:     *name,
+		LastName: *lastName,
+	}, err
 }
 
 // DeleteAdmin is the resolver for the deleteAdmin field.
@@ -241,7 +280,23 @@ func (r *mutationResolver) CreateDemoAccount(ctx context.Context, email string, 
 
 // UpdateDemoAccount is the resolver for the updateDemoAccount field.
 func (r *mutationResolver) UpdateDemoAccount(ctx context.Context, id string, email *string, password *string) (*model.DemoAccount, error) {
-	panic(fmt.Errorf("not implemented: UpdateDemoAccount - updateDemoAccount"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":      objId,
+		"email":    email,
+		"password": password,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").ReplaceOne(ctx, filter, updated)
+	return &model.DemoAccount{
+		ID:       id,
+		Email:    *email,
+		Password: *password,
+	}, err
 }
 
 // DeleteDemoAccount is the resolver for the deleteDemoAccount field.
@@ -290,7 +345,23 @@ func (r *mutationResolver) CreateTestAccount(ctx context.Context, email string, 
 
 // UpdateTestAccount is the resolver for the updateTestAccount field.
 func (r *mutationResolver) UpdateTestAccount(ctx context.Context, id string, email *string, password *string) (*model.TestAccount, error) {
-	panic(fmt.Errorf("not implemented: UpdateTestAccount - updateTestAccount"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":      objId,
+		"email":    email,
+		"password": password,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").ReplaceOne(ctx, filter, updated)
+	return &model.TestAccount{
+		ID:       id,
+		Email:    *email,
+		Password: *password,
+	}, err
 }
 
 // DeleteTestAccount is the resolver for the deleteTestAccount field.
@@ -347,7 +418,40 @@ func (r *mutationResolver) CreateSession(ctx context.Context, symptoms []string,
 
 // UpdateSession is the resolver for the updateSession field.
 func (r *mutationResolver) UpdateSession(ctx context.Context, id string, symptoms []string, age *int, height *int, weight *int, sex *string, lastQuestion *string, logs []*model.LogsInput, alerts []string) (*model.Session, error) {
-	panic(fmt.Errorf("not implemented: UpdateSession - updateSession"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":          objId,
+		"symptoms":     symptoms,
+		"age":          age,
+		"height":       height,
+		"weight":       weight,
+		"sex":          sex,
+		"lastQuestion": lastQuestion,
+		"logs":         logs,
+		"alert":        alerts,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").ReplaceOne(ctx, filter, updated)
+
+	var convertedLogs []*model.Logs
+	for _, log := range logs {
+		convertedLogs = append(convertedLogs, &model.Logs{Question: log.Question, Answer: log.Answer})
+	}
+	return &model.Session{
+		ID:           id,
+		Symptoms:     symptoms,
+		Age:          *age,
+		Height:       *height,
+		Weight:       *weight,
+		Sex:          *sex,
+		LastQuestion: *lastQuestion,
+		Logs:         convertedLogs,
+		Alerts:       alerts,
+	}, err
 }
 
 // DeleteSession is the resolver for the deleteSession field.
@@ -403,7 +507,40 @@ func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name 
 
 // UpdateSymptom is the resolver for the updateSymptom field.
 func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) (*model.Symptom, error) {
-	panic(fmt.Errorf("not implemented: UpdateSymptom - updateSymptom"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":      objId,
+		"code":     code,
+		"name":     name,
+		"location": location,
+		"duration": duration,
+		"acute":    acute,
+		"subacute": subacute,
+		"chronic":  chronic,
+		"symptom":  symptom,
+		"advice":   advice,
+		"question": question,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").ReplaceOne(ctx, filter, updated)
+
+	return &model.Symptom{
+		ID:       id,
+		Code:     *code,
+		Name:     *name,
+		Location: location,
+		Duration: duration,
+		Acute:    acute,
+		Subacute: subacute,
+		Chronic:  chronic,
+		Symptom:  symptom,
+		Advice:   advice,
+		Question: *question,
+	}, err
 }
 
 // DeleteSymptom is the resolver for the deleteSymptom field.
@@ -476,7 +613,55 @@ func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name 
 
 // UpdateDisease is the resolver for the updateDisease field.
 func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) (*model.Disease, error) {
-	panic(fmt.Errorf("not implemented: UpdateDisease - updateDisease"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":              objId,
+		"code":             code,
+		"name":             name,
+		"symptoms":         symptoms,
+		"symptomsAcute":    symptomsAcute,
+		"symptomsSubacute": symptomsSubacute,
+		"symptomsChronic":  symptomsChronic,
+		"advice":           advice,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").ReplaceOne(ctx, filter, updated)
+
+	var convertedAcute []*model.SymptomWeight
+	for _, acute := range symptomsAcute {
+		convertedAcute = append(convertedAcute, &model.SymptomWeight{
+			Key:   acute.Key,
+			Value: acute.Value,
+		})
+	}
+	var convertedSubAcute []*model.SymptomWeight
+	for _, sub := range symptomsSubacute {
+		convertedSubAcute = append(convertedSubAcute, &model.SymptomWeight{
+			Key:   sub.Key,
+			Value: sub.Value,
+		})
+	}
+	var convertedChronic []*model.SymptomWeight
+	for _, chronic := range symptomsChronic {
+		convertedChronic = append(convertedChronic, &model.SymptomWeight{
+			Key:   chronic.Key,
+			Value: chronic.Value,
+		})
+	}
+	return &model.Disease{
+		ID:               id,
+		Code:             *code,
+		Name:             *name,
+		Symptoms:         symptoms,
+		SymptomsAcute:    convertedAcute,
+		SymptomsSubacute: convertedSubAcute,
+		SymptomsChronic:  convertedChronic,
+		Advice:           advice,
+	}, err
 }
 
 // DeleteDisease is the resolver for the deleteDisease field.
@@ -524,7 +709,32 @@ func (r *mutationResolver) CreateInfo(ctx context.Context, name string, birthdat
 
 // UpdateInfo is the resolver for the updateInfo field.
 func (r *mutationResolver) UpdateInfo(ctx context.Context, id string, name *string, birthdate *string, height *int, weight *int, sex *string, surname *string) (*model.Info, error) {
-	panic(fmt.Errorf("not implemented: UpdateInfo - updateInfo"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":       objId,
+		"name":      name,
+		"birthdate": birthdate,
+		"height":    height,
+		"weight":    weight,
+		"sex":       sex,
+		"surname":   surname,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Info").ReplaceOne(ctx, filter, updated)
+
+	return &model.Info{
+		ID:        id,
+		Name:      *name,
+		Birthdate: *birthdate,
+		Height:    *height,
+		Weight:    *weight,
+		Sex:       model.Sex(*sex),
+		Surname:   *surname,
+	}, err
 }
 
 // DeleteInfo is the resolver for the deleteInfo field.
@@ -568,7 +778,28 @@ func (r *mutationResolver) CreateHealth(ctx context.Context, patientsAllergies [
 
 // UpdateHealth is the resolver for the updateHealth field.
 func (r *mutationResolver) UpdateHealth(ctx context.Context, id string, patientsAllergies []string, patientsIllness []string, patientsPrimaryDoctor *string, patientsTreatments []string) (*model.Health, error) {
-	panic(fmt.Errorf("not implemented: UpdateHealth - updateHealth"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":                   objId,
+		"patientsAllergies":     patientsAllergies,
+		"patientsIllness":       patientsIllness,
+		"patientsPrimaryDoctor": patientsPrimaryDoctor,
+		"patientsTreatments":    patientsTreatments,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Health").ReplaceOne(ctx, filter, updated)
+
+	return &model.Health{
+		ID:                    id,
+		PatientsAllergies:     patientsAllergies,
+		PatientsIllness:       patientsIllness,
+		PatientsTreatments:    patientsTreatments,
+		PatientsPrimaryDoctor: *patientsPrimaryDoctor,
+	}, err
 }
 
 // DeleteHealth is the resolver for the deleteHealth field.
@@ -610,7 +841,26 @@ func (r *mutationResolver) CreateNotification(ctx context.Context, token string,
 
 // UpdateNotification is the resolver for the updateNotification field.
 func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error) {
-	panic(fmt.Errorf("not implemented: UpdateNotification - updateNotification"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":     objId,
+		"token":   token,
+		"message": message,
+		"title":   title,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").ReplaceOne(ctx, filter, updated)
+
+	return &model.Notification{
+		ID:      id,
+		Token:   token,
+		Title:   title,
+		Message: message,
+	}, err
 }
 
 // DeleteNotification is the resolver for the deleteNotification field.
@@ -655,7 +905,30 @@ func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doct
 
 // UpdateRdv is the resolver for the updateRdv field.
 func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string) (*model.Rdv, error) {
-	panic(fmt.Errorf("not implemented: UpdateRdv - updateRdv"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":                objId,
+		"id_patient":         idPatient,
+		"doctor_id":          doctorID,
+		"start_date":         startDate,
+		"end_date":           endDate,
+		"cancelation_reason": cancelationReason,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").ReplaceOne(ctx, filter, updated)
+
+	return &model.Rdv{
+		ID:                id,
+		DoctorID:          *doctorID,
+		IDPatient:         *idPatient,
+		StartDate:         *startDate,
+		EndDate:           *endDate,
+		CancelationReason: cancelationReason,
+	}, err
 }
 
 // DeleteRdv is the resolver for the deleteRdv field.
@@ -719,7 +992,37 @@ func (r *mutationResolver) CreateDocument(ctx context.Context, ownerID string, n
 
 // UpdateDocument is the resolver for the updateDocument field.
 func (r *mutationResolver) UpdateDocument(ctx context.Context, id string, name *string, isFavorite *bool) (*model.Document, error) {
-	panic(fmt.Errorf("not implemented: UpdateDocument - updateDocument"))
+	var replacement model.Document
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").FindOne(ctx, filter).Decode(&replacement)
+	if err != nil {
+		return nil, err
+	}
+
+	updated := bson.M{
+		"_id":           objId,
+		"owner_id":      replacement.OwnerID,
+		"name":          name,
+		"document_type": replacement.DocumentType,
+		"category":      replacement.Category,
+		"is_favorite":   isFavorite,
+		"download_url":  replacement.DownloadURL,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").ReplaceOne(ctx, filter, updated)
+
+	return &model.Document{
+		ID:           id,
+		OwnerID:      replacement.OwnerID,
+		Name:         *name,
+		DocumentType: replacement.DocumentType,
+		Category:     replacement.Category,
+		IsFavorite:   *isFavorite,
+		DownloadURL:  replacement.DownloadURL,
+	}, err
 }
 
 // DeleteDocument is the resolver for the deleteDocument field.
@@ -761,7 +1064,26 @@ func (r *mutationResolver) CreateAnteChir(ctx context.Context, name string, loca
 
 // UpdateAnteChir is the resolver for the updateAnteChir field.
 func (r *mutationResolver) UpdateAnteChir(ctx context.Context, id string, name *string, localisation *string, inducedSymptoms []string) (*model.AnteChir, error) {
-	panic(fmt.Errorf("not implemented: UpdateAnteChir - updateAnteChir"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":              objId,
+		"name":             name,
+		"localisation":     localisation,
+		"induced_symptoms": inducedSymptoms,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").ReplaceOne(ctx, filter, updated)
+
+	return &model.AnteChir{
+		ID:              id,
+		Name:            *name,
+		Localisation:    *localisation,
+		InducedSymptoms: inducedSymptoms,
+	}, err
 }
 
 // DeleteAnteChir is the resolver for the deleteAnteChir field.
@@ -807,7 +1129,30 @@ func (r *mutationResolver) CreateAnteDisease(ctx context.Context, name string, c
 
 // UpdateAnteDisease is the resolver for the updateAnteDisease field.
 func (r *mutationResolver) UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, chir *string, treatment []string, symptoms []string) (*model.AnteDisease, error) {
-	panic(fmt.Errorf("not implemented: UpdateAnteDisease - updateAnteDisease"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":        objId,
+		"name":       name,
+		"chronicity": chronicity,
+		"chir":       chir,
+		"treatment":  treatment,
+		"symptoms":   symptoms,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").ReplaceOne(ctx, filter, updated)
+
+	return &model.AnteDisease{
+		ID:         id,
+		Name:       *name,
+		Chronicity: *chronicity,
+		Chir:       chir,
+		Treatment:  treatment,
+		Symptoms:   symptoms,
+	}, err
 }
 
 // DeleteAnteDisease is the resolver for the deleteAnteDisease field.
@@ -847,7 +1192,24 @@ func (r *mutationResolver) CreateAnteFamily(ctx context.Context, name string, di
 
 // UpdateAnteFamily is the resolver for the updateAnteFamily field.
 func (r *mutationResolver) UpdateAnteFamily(ctx context.Context, id string, name *string, disease []string) (*model.AnteFamily, error) {
-	panic(fmt.Errorf("not implemented: UpdateAnteFamily - updateAnteFamily"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":     objId,
+		"name":    name,
+		"disease": disease,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").ReplaceOne(ctx, filter, updated)
+
+	return &model.AnteFamily{
+		ID:      id,
+		Name:    *name,
+		Disease: disease,
+	}, err
 }
 
 // DeleteAnteFamily is the resolver for the deleteAnteFamily field.
@@ -891,7 +1253,24 @@ func (r *mutationResolver) CreateTreatment(ctx context.Context, name string, dis
 
 // UpdateTreatment is the resolver for the updateTreatment field.
 func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, name *string, disease *string, symptoms []string, sideEffects []string) (*model.Treatment, error) {
-	panic(fmt.Errorf("not implemented: UpdateTreatment - updateTreatment"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":     objId,
+		"name":    name,
+		"disease": disease,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").ReplaceOne(ctx, filter, updated)
+
+	return &model.Treatment{
+		ID:      id,
+		Name:    *name,
+		Disease: *disease,
+	}, err
 }
 
 // DeleteTreatment is the resolver for the deleteTreatment field.
@@ -939,7 +1318,32 @@ func (r *mutationResolver) CreateAlert(ctx context.Context, name string, sex *st
 
 // UpdateAlert is the resolver for the updateAlert field.
 func (r *mutationResolver) UpdateAlert(ctx context.Context, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) (*model.Alert, error) {
-	panic(fmt.Errorf("not implemented: UpdateAlert - updateAlert"))
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":      objId,
+		"name":     name,
+		"sex":      sex,
+		"height":   height,
+		"weight":   weight,
+		"symptoms": symptoms,
+		"comment":  comment,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").ReplaceOne(ctx, filter, updated)
+
+	return &model.Alert{
+		ID:       id,
+		Name:     *name,
+		Sex:      sex,
+		Height:   height,
+		Weight:   weight,
+		Symptoms: symptoms,
+		Comment:  *comment,
+	}, err
 }
 
 // DeleteAlert is the resolver for the deleteAlert field.

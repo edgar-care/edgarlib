@@ -17,11 +17,11 @@ const (
 
 // CreateAdminCreateAdmin includes the requested fields of the GraphQL type Admin.
 type CreateAdminCreateAdmin struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	Id        string `json:"id"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Name      string `json:"name"`
+	Last_name string `json:"last_name"`
 }
 
 // GetId returns CreateAdminCreateAdmin.Id, and is useful for accessing the field via an interface.
@@ -36,8 +36,8 @@ func (v *CreateAdminCreateAdmin) GetPassword() string { return v.Password }
 // GetName returns CreateAdminCreateAdmin.Name, and is useful for accessing the field via an interface.
 func (v *CreateAdminCreateAdmin) GetName() string { return v.Name }
 
-// GetLastName returns CreateAdminCreateAdmin.LastName, and is useful for accessing the field via an interface.
-func (v *CreateAdminCreateAdmin) GetLastName() string { return v.LastName }
+// GetLast_name returns CreateAdminCreateAdmin.Last_name, and is useful for accessing the field via an interface.
+func (v *CreateAdminCreateAdmin) GetLast_name() string { return v.Last_name }
 
 // CreateAdminResponse is returned by CreateAdmin on success.
 type CreateAdminResponse struct {
@@ -886,11 +886,11 @@ const (
 
 // GetAdminByEmailGetAdminByEmailAdmin includes the requested fields of the GraphQL type Admin.
 type GetAdminByEmailGetAdminByEmailAdmin struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	Id        string `json:"id"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Name      string `json:"name"`
+	Last_name string `json:"last_name"`
 }
 
 // GetId returns GetAdminByEmailGetAdminByEmailAdmin.Id, and is useful for accessing the field via an interface.
@@ -905,8 +905,8 @@ func (v *GetAdminByEmailGetAdminByEmailAdmin) GetPassword() string { return v.Pa
 // GetName returns GetAdminByEmailGetAdminByEmailAdmin.Name, and is useful for accessing the field via an interface.
 func (v *GetAdminByEmailGetAdminByEmailAdmin) GetName() string { return v.Name }
 
-// GetLastName returns GetAdminByEmailGetAdminByEmailAdmin.LastName, and is useful for accessing the field via an interface.
-func (v *GetAdminByEmailGetAdminByEmailAdmin) GetLastName() string { return v.LastName }
+// GetLast_name returns GetAdminByEmailGetAdminByEmailAdmin.Last_name, and is useful for accessing the field via an interface.
+func (v *GetAdminByEmailGetAdminByEmailAdmin) GetLast_name() string { return v.Last_name }
 
 // GetAdminByEmailResponse is returned by GetAdminByEmail on success.
 type GetAdminByEmailResponse struct {
@@ -920,11 +920,11 @@ func (v *GetAdminByEmailResponse) GetGetAdminByEmail() GetAdminByEmailGetAdminBy
 
 // GetAdminByIdGetAdminByIdAdmin includes the requested fields of the GraphQL type Admin.
 type GetAdminByIdGetAdminByIdAdmin struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	Id        string `json:"id"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Name      string `json:"name"`
+	Last_name string `json:"last_name"`
 }
 
 // GetId returns GetAdminByIdGetAdminByIdAdmin.Id, and is useful for accessing the field via an interface.
@@ -939,8 +939,8 @@ func (v *GetAdminByIdGetAdminByIdAdmin) GetPassword() string { return v.Password
 // GetName returns GetAdminByIdGetAdminByIdAdmin.Name, and is useful for accessing the field via an interface.
 func (v *GetAdminByIdGetAdminByIdAdmin) GetName() string { return v.Name }
 
-// GetLastName returns GetAdminByIdGetAdminByIdAdmin.LastName, and is useful for accessing the field via an interface.
-func (v *GetAdminByIdGetAdminByIdAdmin) GetLastName() string { return v.LastName }
+// GetLast_name returns GetAdminByIdGetAdminByIdAdmin.Last_name, and is useful for accessing the field via an interface.
+func (v *GetAdminByIdGetAdminByIdAdmin) GetLast_name() string { return v.Last_name }
 
 // GetAdminByIdResponse is returned by GetAdminById on success.
 type GetAdminByIdResponse struct {
@@ -952,11 +952,11 @@ func (v *GetAdminByIdResponse) GetGetAdminById() GetAdminByIdGetAdminByIdAdmin {
 
 // GetAdminsGetAdminsAdmin includes the requested fields of the GraphQL type Admin.
 type GetAdminsGetAdminsAdmin struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	Id        string `json:"id"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Name      string `json:"name"`
+	Last_name string `json:"last_name"`
 }
 
 // GetId returns GetAdminsGetAdminsAdmin.Id, and is useful for accessing the field via an interface.
@@ -971,8 +971,8 @@ func (v *GetAdminsGetAdminsAdmin) GetPassword() string { return v.Password }
 // GetName returns GetAdminsGetAdminsAdmin.Name, and is useful for accessing the field via an interface.
 func (v *GetAdminsGetAdminsAdmin) GetName() string { return v.Name }
 
-// GetLastName returns GetAdminsGetAdminsAdmin.LastName, and is useful for accessing the field via an interface.
-func (v *GetAdminsGetAdminsAdmin) GetLastName() string { return v.LastName }
+// GetLast_name returns GetAdminsGetAdminsAdmin.Last_name, and is useful for accessing the field via an interface.
+func (v *GetAdminsGetAdminsAdmin) GetLast_name() string { return v.Last_name }
 
 // GetAdminsResponse is returned by GetAdmins on success.
 type GetAdminsResponse struct {
@@ -2642,11 +2642,11 @@ func (v *UpdateAdminResponse) GetUpdateAdmin() UpdateAdminUpdateAdmin { return v
 
 // UpdateAdminUpdateAdmin includes the requested fields of the GraphQL type Admin.
 type UpdateAdminUpdateAdmin struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	Id        string `json:"id"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Name      string `json:"name"`
+	Last_name string `json:"last_name"`
 }
 
 // GetId returns UpdateAdminUpdateAdmin.Id, and is useful for accessing the field via an interface.
@@ -2661,8 +2661,8 @@ func (v *UpdateAdminUpdateAdmin) GetPassword() string { return v.Password }
 // GetName returns UpdateAdminUpdateAdmin.Name, and is useful for accessing the field via an interface.
 func (v *UpdateAdminUpdateAdmin) GetName() string { return v.Name }
 
-// GetLastName returns UpdateAdminUpdateAdmin.LastName, and is useful for accessing the field via an interface.
-func (v *UpdateAdminUpdateAdmin) GetLastName() string { return v.LastName }
+// GetLast_name returns UpdateAdminUpdateAdmin.Last_name, and is useful for accessing the field via an interface.
+func (v *UpdateAdminUpdateAdmin) GetLast_name() string { return v.Last_name }
 
 // UpdateAlertResponse is returned by UpdateAlert on success.
 type UpdateAlertResponse struct {
@@ -3342,10 +3342,10 @@ func (v *UpdateTreatmentUpdateTreatment) GetSide_effects() []string { return v.S
 
 // __CreateAdminInput is used internally by genqlient
 type __CreateAdminInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Name      string `json:"name"`
+	Last_name string `json:"last_name"`
 }
 
 // GetEmail returns __CreateAdminInput.Email, and is useful for accessing the field via an interface.
@@ -3357,8 +3357,8 @@ func (v *__CreateAdminInput) GetPassword() string { return v.Password }
 // GetName returns __CreateAdminInput.Name, and is useful for accessing the field via an interface.
 func (v *__CreateAdminInput) GetName() string { return v.Name }
 
-// GetLastName returns __CreateAdminInput.LastName, and is useful for accessing the field via an interface.
-func (v *__CreateAdminInput) GetLastName() string { return v.LastName }
+// GetLast_name returns __CreateAdminInput.Last_name, and is useful for accessing the field via an interface.
+func (v *__CreateAdminInput) GetLast_name() string { return v.Last_name }
 
 // __CreateAlertInput is used internally by genqlient
 type __CreateAlertInput struct {
@@ -4096,11 +4096,11 @@ func (v *__GetTreatmentByIDInput) GetId() string { return v.Id }
 
 // __UpdateAdminInput is used internally by genqlient
 type __UpdateAdminInput struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	LastName string `json:"lastName"`
+	Id        string `json:"id"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Name      string `json:"name"`
+	Last_name string `json:"last_name"`
 }
 
 // GetId returns __UpdateAdminInput.Id, and is useful for accessing the field via an interface.
@@ -4115,8 +4115,8 @@ func (v *__UpdateAdminInput) GetPassword() string { return v.Password }
 // GetName returns __UpdateAdminInput.Name, and is useful for accessing the field via an interface.
 func (v *__UpdateAdminInput) GetName() string { return v.Name }
 
-// GetLastName returns __UpdateAdminInput.LastName, and is useful for accessing the field via an interface.
-func (v *__UpdateAdminInput) GetLastName() string { return v.LastName }
+// GetLast_name returns __UpdateAdminInput.Last_name, and is useful for accessing the field via an interface.
+func (v *__UpdateAdminInput) GetLast_name() string { return v.Last_name }
 
 // __UpdateAlertInput is used internally by genqlient
 type __UpdateAlertInput struct {
@@ -4574,13 +4574,13 @@ func (v *__UpdateTreatmentInput) GetSide_effects() []string { return v.Side_effe
 
 // The query or mutation executed by CreateAdmin.
 const CreateAdmin_Operation = `
-mutation CreateAdmin ($email: String!, $password: String!, $name: String!, $lastName: String!) {
-	createAdmin(email: $email, password: $password, name: $name, lastName: $lastName) {
+mutation CreateAdmin ($email: String!, $password: String!, $name: String!, $last_name: String!) {
+	createAdmin(email: $email, password: $password, name: $name, last_name: $last_name) {
 		id
 		email
 		password
 		name
-		lastName
+		last_name
 	}
 }
 `
@@ -4591,16 +4591,16 @@ func CreateAdmin(
 	email string,
 	password string,
 	name string,
-	lastName string,
+	last_name string,
 ) (*CreateAdminResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateAdmin",
 		Query:  CreateAdmin_Operation,
 		Variables: &__CreateAdminInput{
-			Email:    email,
-			Password: password,
-			Name:     name,
-			LastName: lastName,
+			Email:     email,
+			Password:  password,
+			Name:      name,
+			Last_name: last_name,
 		},
 	}
 	var err error
@@ -6060,7 +6060,7 @@ query GetAdminByEmail ($email: String!) {
 		email
 		password
 		name
-		lastName
+		last_name
 	}
 }
 `
@@ -6099,7 +6099,7 @@ query GetAdminById ($id: String!) {
 		email
 		password
 		name
-		lastName
+		last_name
 	}
 }
 `
@@ -6138,7 +6138,7 @@ query GetAdmins {
 		email
 		password
 		name
-		lastName
+		last_name
 	}
 }
 `
@@ -7718,13 +7718,13 @@ func GetTreatments(
 
 // The query or mutation executed by UpdateAdmin.
 const UpdateAdmin_Operation = `
-mutation UpdateAdmin ($id: String!, $email: String, $password: String, $name: String, $lastName: String) {
-	updateAdmin(id: $id, email: $email, password: $password, name: $name, lastName: $lastName) {
+mutation UpdateAdmin ($id: String!, $email: String, $password: String, $name: String, $last_name: String) {
+	updateAdmin(id: $id, email: $email, password: $password, name: $name, last_name: $last_name) {
 		id
 		email
 		password
 		name
-		lastName
+		last_name
 	}
 }
 `
@@ -7736,17 +7736,17 @@ func UpdateAdmin(
 	email string,
 	password string,
 	name string,
-	lastName string,
+	last_name string,
 ) (*UpdateAdminResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateAdmin",
 		Query:  UpdateAdmin_Operation,
 		Variables: &__UpdateAdminInput{
-			Id:       id,
-			Email:    email,
-			Password: password,
-			Name:     name,
-			LastName: lastName,
+			Id:        id,
+			Email:     email,
+			Password:  password,
+			Name:      name,
+			Last_name: last_name,
 		},
 	}
 	var err error

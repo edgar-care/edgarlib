@@ -13,7 +13,7 @@ type Admin struct {
 	Email    string `json:"email" bson:"email"`
 	Password string `json:"password" bson:"password"`
 	Name     string `json:"name" bson:"name"`
-	LastName string `json:"lastName" bson:"lastName"`
+	LastName string `json:"last_name" bson:"last_name"`
 }
 
 type Alert struct {

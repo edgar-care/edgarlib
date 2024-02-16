@@ -1,10 +1,10 @@
-mutation CreateAdmin($email: String!, $password: String!, $name: String!, $lastName: String!){
-    createAdmin(email: $email, password: $password, name: $name, lastName: $lastName){
+mutation CreateAdmin($email: String!, $password: String!, $name: String!, $last_name: String!){
+    createAdmin(email: $email, password: $password, name: $name, last_name: $last_name){
         id
         email
         password
         name
-        lastName
+        last_name
     }
 }
 
@@ -281,13 +281,13 @@ mutation DeleteTreatment($id: String!){
     deleteTreatment(id: $id)
 }
 
-mutation UpdateAdmin($id: String!, $email: String, $password: String, $name: String, $lastName: String){
-    updateAdmin(id: $id, email: $email, password: $password, name: $name, lastName: $lastName){
+mutation UpdateAdmin($id: String!, $email: String, $password: String, $name: String, $last_name: String){
+    updateAdmin(id: $id, email: $email, password: $password, name: $name, last_name: $last_name){
         id
         email
         password
         name
-        lastName
+        last_name
     }
 }
 
@@ -494,7 +494,7 @@ query GetAdminByEmail($email: String!){
         email
         password
         name
-        lastName
+        last_name
     }
 }
 
@@ -504,7 +504,7 @@ query GetAdminById($id: String!){
         email
         password
         name
-        lastName
+        last_name
     }
 }
 
@@ -514,7 +514,7 @@ query GetAdmins{
         email
         password
         name
-        lastName
+        last_name
     }
 }
 
