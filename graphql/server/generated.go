@@ -461,7 +461,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Admin.ID(childComplexity), true
 
-	case "Admin.lastName":
+	case "Admin.last_name":
 		if e.complexity.Admin.LastName == nil {
 			break
 		}
@@ -905,7 +905,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAdmin(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["lastName"].(string)), true
+		return e.complexity.Mutation.CreateAdmin(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["last_name"].(string)), true
 
 	case "Mutation.createAlert":
 		if e.complexity.Mutation.CreateAlert == nil {
@@ -1349,7 +1349,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAdmin(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["lastName"].(*string)), true
+		return e.complexity.Mutation.UpdateAdmin(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["last_name"].(*string)), true
 
 	case "Mutation.updateAlert":
 		if e.complexity.Mutation.UpdateAlert == nil {
@@ -2469,7 +2469,7 @@ type Admin {
     email: String!
     password: String!
     name: String!
-    lastName: String!
+    last_name: String!
 }
 
 # Session entity
@@ -2779,10 +2779,10 @@ type Mutation {
     deleteDoctor(id: String!): Boolean
 
     # Create a new Admin.
-    createAdmin(email: String!, password: String!, name: String!, lastName: String!): Admin
+    createAdmin(email: String!, password: String!, name: String!, last_name: String!): Admin
 
     # Update a Admin.
-    updateAdmin(id: String!, email: String, password: String, name: String, lastName: String): Admin
+    updateAdmin(id: String!, email: String, password: String, name: String, last_name: String): Admin
 
     # Delete a Admin.
     deleteAdmin(id: String!): Boolean
@@ -2994,14 +2994,14 @@ func (ec *executionContext) field_Mutation_createAdmin_args(ctx context.Context,
 	}
 	args["name"] = arg2
 	var arg3 string
-	if tmp, ok := rawArgs["lastName"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName"))
+	if tmp, ok := rawArgs["last_name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_name"))
 		arg3, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["lastName"] = arg3
+	args["last_name"] = arg3
 	return args, nil
 }
 
@@ -4116,14 +4116,14 @@ func (ec *executionContext) field_Mutation_updateAdmin_args(ctx context.Context,
 	}
 	args["name"] = arg3
 	var arg4 *string
-	if tmp, ok := rawArgs["lastName"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName"))
+	if tmp, ok := rawArgs["last_name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_name"))
 		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["lastName"] = arg4
+	args["last_name"] = arg4
 	return args, nil
 }
 
@@ -5712,8 +5712,8 @@ func (ec *executionContext) fieldContext_Admin_name(ctx context.Context, field g
 	return fc, nil
 }
 
-func (ec *executionContext) _Admin_lastName(ctx context.Context, field graphql.CollectedField, obj *model.Admin) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Admin_lastName(ctx, field)
+func (ec *executionContext) _Admin_last_name(ctx context.Context, field graphql.CollectedField, obj *model.Admin) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Admin_last_name(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -5743,7 +5743,7 @@ func (ec *executionContext) _Admin_lastName(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Admin_lastName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Admin_last_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Admin",
 		Field:      field,
@@ -8698,7 +8698,7 @@ func (ec *executionContext) _Mutation_createAdmin(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAdmin(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["lastName"].(string))
+		return ec.resolvers.Mutation().CreateAdmin(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["last_name"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8728,8 +8728,8 @@ func (ec *executionContext) fieldContext_Mutation_createAdmin(ctx context.Contex
 				return ec.fieldContext_Admin_password(ctx, field)
 			case "name":
 				return ec.fieldContext_Admin_name(ctx, field)
-			case "lastName":
-				return ec.fieldContext_Admin_lastName(ctx, field)
+			case "last_name":
+				return ec.fieldContext_Admin_last_name(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -8762,7 +8762,7 @@ func (ec *executionContext) _Mutation_updateAdmin(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAdmin(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["lastName"].(*string))
+		return ec.resolvers.Mutation().UpdateAdmin(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["last_name"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8792,8 +8792,8 @@ func (ec *executionContext) fieldContext_Mutation_updateAdmin(ctx context.Contex
 				return ec.fieldContext_Admin_password(ctx, field)
 			case "name":
 				return ec.fieldContext_Admin_name(ctx, field)
-			case "lastName":
-				return ec.fieldContext_Admin_lastName(ctx, field)
+			case "last_name":
+				return ec.fieldContext_Admin_last_name(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -12558,8 +12558,8 @@ func (ec *executionContext) fieldContext_Query_getAdmins(ctx context.Context, fi
 				return ec.fieldContext_Admin_password(ctx, field)
 			case "name":
 				return ec.fieldContext_Admin_name(ctx, field)
-			case "lastName":
-				return ec.fieldContext_Admin_lastName(ctx, field)
+			case "last_name":
+				return ec.fieldContext_Admin_last_name(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -12611,8 +12611,8 @@ func (ec *executionContext) fieldContext_Query_getAdminById(ctx context.Context,
 				return ec.fieldContext_Admin_password(ctx, field)
 			case "name":
 				return ec.fieldContext_Admin_name(ctx, field)
-			case "lastName":
-				return ec.fieldContext_Admin_lastName(ctx, field)
+			case "last_name":
+				return ec.fieldContext_Admin_last_name(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -12675,8 +12675,8 @@ func (ec *executionContext) fieldContext_Query_getAdminByEmail(ctx context.Conte
 				return ec.fieldContext_Admin_password(ctx, field)
 			case "name":
 				return ec.fieldContext_Admin_name(ctx, field)
-			case "lastName":
-				return ec.fieldContext_Admin_lastName(ctx, field)
+			case "last_name":
+				return ec.fieldContext_Admin_last_name(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -18339,8 +18339,8 @@ func (ec *executionContext) _Admin(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "lastName":
-			out.Values[i] = ec._Admin_lastName(ctx, field, obj)
+		case "last_name":
+			out.Values[i] = ec._Admin_last_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

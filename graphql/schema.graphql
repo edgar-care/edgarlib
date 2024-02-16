@@ -45,7 +45,7 @@ type Admin {
     email: String!
     password: String!
     name: String!
-    lastName: String!
+    last_name: String!
 }
 
 # Session entity
@@ -355,10 +355,10 @@ type Mutation {
     deleteDoctor(id: String!): Boolean
 
     # Create a new Admin.
-    createAdmin(email: String!, password: String!, name: String!, lastName: String!): Admin
+    createAdmin(email: String!, password: String!, name: String!, last_name: String!): Admin
 
     # Update a Admin.
-    updateAdmin(id: String!, email: String, password: String, name: String, lastName: String): Admin
+    updateAdmin(id: String!, email: String, password: String, name: String, last_name: String): Admin
 
     # Delete a Admin.
     deleteAdmin(id: String!): Boolean
