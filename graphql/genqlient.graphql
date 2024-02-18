@@ -1,0 +1,974 @@
+mutation CreateAdmin($email: String!, $password: String!, $name: String!, $last_name: String!){
+    createAdmin(email: $email, password: $password, name: $name, last_name: $last_name){
+        id
+        email
+        password
+        name
+        last_name
+    }
+}
+
+mutation CreateAlert($name: String!, $sex: String, $height: Int, $weight: Int, $symptoms: [String!]!, $comment: String!){
+    createAlert(name: $name, sex: $sex, height: $height, weight: $weight, symptoms: $symptoms, comment: $comment){
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+    }
+}
+
+mutation CreateAnteChir($name: String!, $localisation: String!, $induced_symptoms: [String!]){
+    createAnteChir(name: $name, localisation: $localisation, induced_symptoms: $induced_symptoms){
+        id
+        name
+        localisation
+        induced_symptoms
+    }
+}
+
+mutation CreateAnteDisease($name: String!, $chronicity: Float!, $chir: String, $treatment: [String!], $symptoms: [String!]){
+    createAnteDisease(name: $name, chronicity: $chronicity, chir: $chir, treatment: $treatment, symptoms: $symptoms){
+        id
+        name
+        chronicity
+        chir
+        treatment
+        symptoms
+    }
+}
+
+mutation CreateAnteFamily($name: String!, $disease: [String!]!){
+    createAnteFamily(name: $name, disease: $disease){
+        id
+        name
+        disease
+    }
+}
+
+mutation CreateDemoAccount($email: String!, $password: String!){
+    createDemoAccount(email: $email, password: $password){
+        id
+        email
+        password
+    }
+}
+
+mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_acute: [SymptomWeightInput!], $symptoms_subacute: [SymptomWeightInput!], $symptoms_chronic: [SymptomWeightInput!], $advice: String){
+    createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_acute: $symptoms_acute, symptoms_subacute: $symptoms_subacute, symptoms_chronic: $symptoms_chronic, advice: $advice){
+        id
+        code
+        name
+        symptoms
+        symptoms_acute{
+            key
+            value
+        }
+        symptoms_subacute{
+            key
+            value
+        }
+        symptoms_chronic{
+            key
+            value
+        }
+        advice
+    }
+}
+
+mutation CreateDoctor($email: String!, $password: String!){
+    createDoctor(email: $email, password: $password){
+        id
+        email
+        password
+        rendez_vous_ids
+        patient_ids
+    }
+}
+
+mutation CreateDocument($owner_id: String!, $name: String!, $document_type: String!, $category: String!, $is_favorite: Boolean!, $download_url: String!){
+    createDocument(owner_id: $owner_id, name: $name, document_type: $document_type, category: $category, is_favorite: $is_favorite, download_url: $download_url){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+    }
+}
+
+mutation CreateHealth($patients_allergies: [String!], $patients_illness: [String!], $patients_primary_doctor: String!, $patients_treatments: [String!]){
+    createHealth(patients_allergies: $patients_allergies, patients_illness: $patients_illness, patients_primary_doctor: $patients_primary_doctor, patients_treatments: $patients_treatments){
+        id
+        patients_allergies
+        patients_illness
+        patients_treatments
+        patients_primary_doctor
+    }
+}
+
+mutation CreateInfo($name: String!, $birthdate: String!, $height: Int!, $weight: Int!, $sex: String!, $surname: String!){
+    createInfo(name: $name, birthdate: $birthdate, height: $height, weight: $weight, sex: $sex, surname: $surname){
+        id
+        name
+        birthdate
+        height
+        weight
+        sex
+        surname
+    }
+}
+
+mutation CreateNotification($token: String!, $message: String!, $title: String!){
+    createNotification(token: $token, message: $message, title: $title){
+        id
+        token
+        title
+        message
+    }
+}
+
+mutation CreatePatient($email: String!, $password: String!){
+    createPatient(email: $email, password: $password){
+        id
+        email
+        password
+        rendez_vous_ids
+        onboarding_info_id
+        onboarding_health_id
+        document_ids
+    }
+}
+
+mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!){
+    createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+    }
+}
+
+mutation CreateSession($symptoms: [String!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!){
+    createSession(symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, last_question: $last_question, logs: $logs, alerts: $alerts){
+        id
+        symptoms
+        age
+        height
+        weight
+        sex
+        last_question
+        logs{
+            question
+            answer
+        }
+        alerts
+    }
+}
+
+mutation CreateSymptom($code: String!, $name: String!, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!]!, $advice: String, $question: String!){
+    createSymptom(code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question){
+        id
+        code
+        name
+        location
+        duration
+        acute
+        subacute
+        chronic
+        symptom
+        advice
+        question
+    }
+}
+
+mutation CreateTestAccount($email: String!, $password: String!){
+    createTestAccount(email: $email, password: $password){
+        id
+        email
+        password
+    }
+}
+
+mutation CreateTreatment($name: String!, $disease: String!, $symptoms: [String!], $side_effects: [String!]){
+    createTreatment(name: $name, disease: $disease, symptoms: $symptoms, side_effects: $side_effects){
+        id
+        name
+        disease
+        symptoms
+        side_effects
+    }
+}
+
+mutation DeleteAdmin($id: String!){
+    deleteAdmin(id: $id)
+}
+
+mutation DeleteAlert($id: String!){
+    deleteAlert(id: $id)
+}
+
+mutation DeleteAnteChir($id: String!){
+    deleteAnteChir(id: $id)
+}
+
+mutation DeleteAnteDisease($id: String!){
+    deleteAnteDisease(id: $id)
+}
+
+mutation DeleteAnteFamily($id: String!){
+    deleteAnteFamily(id: $id)
+}
+
+mutation DeleteDemoAccount($id: String!){
+    deleteDemoAccount(id: $id)
+}
+
+mutation DeleteDisease($id: String!){
+    deleteDisease(id: $id)
+}
+
+mutation DeleteDoctor($id: String!){
+    deleteDoctor(id: $id)
+}
+
+mutation DeleteDocument($id: String!){
+    deleteDocument(id: $id)
+}
+
+mutation DeleteHealth($id: String!){
+    deleteHealth(id: $id)
+}
+
+mutation DeleteInfo($id: String!){
+    deleteInfo(id: $id)
+}
+
+mutation DeleteNotification($id: String!){
+    deleteNotification(id: $id)
+}
+
+mutation DeletePatient($id: String!){
+    deletePatient(id: $id)
+}
+
+mutation DeleteRdv($id: String!){
+    deleteRdv(id: $id)
+}
+
+mutation DeleteSession($id: String!){
+    deleteSession(id: $id)
+}
+
+mutation DeleteSlot($id: String!){
+    deleteSlot(id: $id)
+}
+
+mutation DeleteSymptom($id: String!){
+    deleteSymptom(id: $id)
+}
+
+mutation DeleteTestAccount($id: String!){
+    deleteTestAccount(id: $id)
+}
+
+mutation DeleteTreatment($id: String!){
+    deleteTreatment(id: $id)
+}
+
+mutation UpdateAdmin($id: String!, $email: String, $password: String, $name: String, $last_name: String){
+    updateAdmin(id: $id, email: $email, password: $password, name: $name, last_name: $last_name){
+        id
+        email
+        password
+        name
+        last_name
+    }
+}
+
+mutation UpdateAlert($id: String!, $name: String, $sex: String, $height: Int, $weight: Int, $symptoms: [String!], $comment: String){
+    updateAlert(id: $id, name: $name, sex: $sex, height: $height, weight: $weight, symptoms: $symptoms, comment: $comment){
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+    }
+}
+
+mutation UpdateAnteChir($id: String!, $name: String, $localisation: String, $induced_symptoms: [String!]){
+    updateAnteChir(id: $id, name: $name, localisation: $localisation, induced_symptoms: $induced_symptoms){
+        id
+        name
+        localisation
+        induced_symptoms
+    }
+}
+
+mutation UpdateAnteDisease($id: String!, $name: String, $chronicity: Float, $chir: String, $treatment: [String!], $symptoms: [String!]){
+    updateAnteDisease(id: $id, name: $name, chronicity: $chronicity, chir: $chir, treatment: $treatment, symptoms: $symptoms){
+        id
+        name
+        chronicity
+        chir
+        treatment
+        symptoms
+    }
+}
+
+mutation UpdateAnteFamily($id: String!, $name: String, $disease: [String!]){
+    updateAnteFamily(id: $id, name: $name, disease: $disease){
+        id
+        name
+        disease
+    }
+}
+
+mutation UpdateDemoAccount($id: String!, $email: String, $password: String){
+    updateDemoAccount(id: $id, email: $email, password: $password){
+        id
+        email
+        password
+    }
+}
+
+mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_acute: [SymptomWeightInput!], $symptoms_subacute: [SymptomWeightInput!], $symptoms_chronic: [SymptomWeightInput!], $advice: String){
+    updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_acute: $symptoms_acute, symptoms_subacute: $symptoms_subacute, symptoms_chronic: $symptoms_chronic, advice: $advice){
+        id
+        code
+        name
+        symptoms
+        symptoms_acute{
+            key
+            value
+        }
+        symptoms_subacute{
+            key
+            value
+        }
+        symptoms_chronic{
+            key
+            value
+        }
+        advice
+    }
+}
+
+mutation UpdateDoctor($id: String!, $email: String, $password: String, $rendez_vous_ids: [String], $patient_ids: [String]){
+    updateDoctor(id: $id, email: $email, password: $password, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids){
+        id
+        email
+        password
+        rendez_vous_ids
+        patient_ids
+    }
+}
+
+mutation UpdateDocument($id: String!, $name: String, $is_favorite: Boolean){
+    updateDocument(id: $id, name: $name, is_favorite: $is_favorite){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+    }
+}
+
+mutation UpdateHealth($id: String!, $patients_allergies: [String!], $patients_illness: [String!], $patients_primary_doctor: String, $patients_treatments: [String!]){
+    updateHealth(id: $id, patients_allergies: $patients_allergies, patients_illness: $patients_illness, patients_primary_doctor: $patients_primary_doctor, patients_treatments: $patients_treatments){
+        id
+        patients_allergies
+        patients_illness
+        patients_treatments
+        patients_primary_doctor
+    }
+}
+
+mutation UpdateInfo($id: String!, $name: String, $birthdate: String, $height: Int, $weight: Int, $sex: String, $surname: String){
+    updateInfo(id: $id, name: $name, birthdate: $birthdate, height: $height, weight: $weight, sex: $sex, surname: $surname){
+        id
+        name
+        birthdate
+        height
+        weight
+        sex
+        surname
+    }
+}
+
+mutation UpdateNotification($id: String!, $token: String!, $message: String!, $title: String!){
+    updateNotification(id: $id, token: $token, message: $message, title: $title){
+        id
+        token
+        title
+        message
+    }
+}
+
+mutation UpdatePatient($id: String!, $email: String, $password: String, $onboarding_info_id: String, $onboarding_health_id: String, $rendez_vous_ids: [String], $document_ids: [String]){
+    updatePatient(id: $id, email: $email, password: $password, onboarding_info_id: $onboarding_info_id, onboarding_health_id: $onboarding_health_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids){
+        id
+        email
+        password
+        rendez_vous_ids
+        onboarding_info_id
+        onboarding_health_id
+        document_ids
+    }
+}
+
+mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String){
+    updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+    }
+}
+
+mutation UpdateSession($id: String!, $symptoms: [String!], $age: Int, $height: Int, $weight: Int, $sex: String, $last_question: String, $logs: [LogsInput!], $alerts: [String!]){
+    updateSession(id: $id, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, last_question: $last_question, logs: $logs, alerts: $alerts){
+        id
+        symptoms
+        age
+        height
+        weight
+        sex
+        last_question
+        logs{
+            question
+            answer
+        }
+        alerts
+    }
+}
+
+mutation UpdateSymptom($id: String!, $code: String, $name: String, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!], $advice: String, $question: String){
+    updateSymptom(id: $id, code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question){
+        id
+        code
+        name
+        location
+        duration
+        acute
+        subacute
+        chronic
+        symptom
+        advice
+        question
+    }
+}
+
+mutation UpdateTestAccount($id: String!, $email: String, $password: String){
+    updateTestAccount(id: $id, email: $email, password: $password){
+        id
+        email
+        password
+    }
+}
+
+mutation UpdateTreatment($id: String!, $name: String, $disease: String, $symptoms: [String!], $side_effects: [String!]){
+    updateTreatment(id: $id, name: $name, disease: $disease, symptoms: $symptoms, side_effects: $side_effects){
+        id
+        name
+        disease
+        symptoms
+        side_effects
+    }
+}
+
+query GetAdminByEmail($email: String!){
+    getAdminByEmail(email: $email){
+        id
+        email
+        password
+        name
+        last_name
+    }
+}
+
+query GetAdminById($id: String!){
+    getAdminById(id: $id){
+        id
+        email
+        password
+        name
+        last_name
+    }
+}
+
+query GetAdmins{
+    getAdmins{
+        id
+        email
+        password
+        name
+        last_name
+    }
+}
+
+query GetAlertById($id: String!){
+    getAlertById(id: $id){
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+    }
+}
+
+query GetAlerts{
+    getAlerts{
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+    }
+}
+
+query GetAnteChirByID($id: String!){
+    getAnteChirByID(id: $id){
+        id
+        name
+        localisation
+        induced_symptoms
+    }
+}
+
+query GetAnteChirs{
+    getAnteChirs{
+        id
+        name
+        localisation
+        induced_symptoms
+    }
+}
+
+query GetAnteDiseaseByID($id: String!){
+    getAnteDiseaseByID(id: $id){
+        id
+        name
+        chronicity
+        chir
+        treatment
+        symptoms
+    }
+}
+
+query GetAnteDiseases{
+    getAnteDiseases{
+        id
+        name
+        chronicity
+        chir
+        treatment
+        symptoms
+    }
+}
+
+query GetAnteFamilies{
+    getAnteFamilies{
+        id
+        name
+        disease
+    }
+}
+
+query GetAnteFamilyByID($id: String!){
+    getAnteFamilyByID(id: $id){
+        id
+        name
+        disease
+    }
+}
+
+query GetDemoAccountByEmail($email: String!){
+    getDemoAccountByEmail(email: $email){
+        id
+        email
+        password
+    }
+}
+
+query GetDemoAccountById($id: String!){
+    getDemoAccountById(id: $id){
+        id
+        email
+        password
+    }
+}
+
+query GetDemoAccounts{
+    getDemoAccounts{
+        id
+        email
+        password
+    }
+}
+
+query GetDiseaseById($id: String!){
+    getDiseaseById(id: $id){
+        id
+        code
+        name
+        symptoms
+        symptoms_acute{
+            key
+            value
+        }
+        symptoms_subacute{
+            key
+            value
+        }
+        symptoms_chronic{
+            key
+            value
+        }
+        advice
+    }
+}
+
+query GetDiseases{
+    getDiseases{
+        id
+        code
+        name
+        symptoms
+        symptoms_acute{
+            key
+            value
+        }
+        symptoms_subacute{
+            key
+            value
+        }
+        symptoms_chronic{
+            key
+            value
+        }
+        advice
+    }
+}
+
+query GetDoctorByEmail($email: String!){
+    getDoctorByEmail(email: $email){
+        id
+        email
+        password
+        rendez_vous_ids
+        patient_ids
+    }
+}
+
+query GetDoctorById($id: String!){
+    getDoctorById(id: $id){
+        id
+        email
+        password
+        rendez_vous_ids
+        patient_ids
+    }
+}
+
+query GetDoctorRdv($doctor_id: String!){
+    getDoctorRdv(doctor_id: $doctor_id){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+    }
+}
+
+query GetDoctors{
+    getDoctors{
+        id
+        email
+        password
+        rendez_vous_ids
+        patient_ids
+    }
+}
+
+query GetDocumentById($id: String!){
+    getDocumentById(id: $id){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+    }
+}
+
+query GetDocuments{
+    getDocuments{
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+    }
+}
+
+query GetHealthById($id: String!){
+    getHealthById(id: $id){
+        id
+        patients_allergies
+        patients_illness
+        patients_treatments
+        patients_primary_doctor
+    }
+}
+
+query GetHealths{
+    getHealths{
+        id
+        patients_allergies
+        patients_illness
+        patients_treatments
+        patients_primary_doctor
+    }
+}
+
+query GetInfoById($id: String!){
+    getInfoById(id: $id){
+        id
+        name
+        birthdate
+        height
+        weight
+        sex
+        surname
+    }
+}
+
+query GetInfos{
+    getInfos{
+        id
+        name
+        birthdate
+        height
+        weight
+        sex
+        surname
+    }
+}
+
+query GetNotificationById($id: String!){
+    getNotificationById(id: $id){
+        id
+        token
+        title
+        message
+    }
+}
+
+query GetNotifications{
+    getNotifications{
+        id
+        token
+        title
+        message
+    }
+}
+
+query GetPatientByEmail($email: String!){
+    getPatientByEmail(email: $email){
+        id
+        email
+        password
+        rendez_vous_ids
+        onboarding_info_id
+        onboarding_health_id
+        document_ids
+    }
+}
+
+query GetPatientById($id: String!){
+    getPatientById(id: $id){
+        id
+        email
+        password
+        rendez_vous_ids
+        onboarding_info_id
+        onboarding_health_id
+        document_ids
+    }
+}
+
+query GetPatientDocument($id: String!){
+    getPatientDocument(id: $id){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+    }
+}
+
+query GetPatientRdv($id_patient: String!){
+    getPatientRdv(id_patient: $id_patient){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+    }
+}
+
+query GetPatients{
+    getPatients{
+        id
+        email
+        password
+        rendez_vous_ids
+        onboarding_info_id
+        onboarding_health_id
+        document_ids
+    }
+}
+
+query GetRdvById($id: String!){
+    getRdvById(id: $id){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+    }
+}
+
+query GetSessionById($id: String!){
+    getSessionById(id: $id){
+        id
+        symptoms
+        age
+        height
+        weight
+        sex
+        last_question
+        logs{
+            question
+            answer
+        }
+        alerts
+    }
+}
+
+query GetSessions{
+    getSessions{
+        id
+        symptoms
+        age
+        height
+        weight
+        sex
+        last_question
+        logs{
+            question
+            answer
+        }
+        alerts
+    }
+}
+
+query GetSymptomById($id: String!){
+    getSymptomById(id: $id){
+        id
+        code
+        name
+        location
+        duration
+        acute
+        subacute
+        chronic
+        symptom
+        advice
+        question
+    }
+}
+
+query GetSymptoms{
+    getSymptoms{
+        id
+        code
+        name
+        location
+        duration
+        acute
+        subacute
+        chronic
+        symptom
+        advice
+        question
+    }
+}
+
+query GetTestAccountByEmail($email: String!){
+    getTestAccountByEmail(email: $email){
+        id
+        email
+        password
+    }
+}
+
+query GetTestAccountById($id: String!){
+    getTestAccountById(id: $id){
+        id
+        email
+        password
+    }
+}
+
+query GetTestAccounts{
+    getTestAccounts{
+        id
+        email
+        password
+    }
+}
+
+query GetTreatmentByID($id: String!){
+    getTreatmentByID(id: $id){
+        id
+        name
+        disease
+        symptoms
+        side_effects
+    }
+}
+
+query GetTreatments{
+    getTreatments{
+        id
+        name
+        disease
+        symptoms
+        side_effects
+    }
+}

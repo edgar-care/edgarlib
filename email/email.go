@@ -2,40 +2,75 @@ package email
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/smtp"
+	"os"
+	"strconv"
+	"strings"
 
-	"github.com/davecgh/go-spew/spew"
+	"github.com/edgar-care/edgarlib"
 )
 
 type Email struct {
-	To      string
-	Subject string
-	Body    string
+	To            string
+	Subject       string
+	Body          string
+	Template      string
+	TemplateInfos map[string]interface{}
+}
+
+func readHTMLFile(filePath string) (string, error) {
+	content, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return "", err
+	}
+	return string(content), nil
+}
+
+func replaceHtmlContent(content string, replacements map[string]interface{}) string {
+	for key, value := range replacements {
+		content = strings.Replace(content, "{{."+key+"}}", fmt.Sprintf("%v", value), -1)
+	}
+	return content
 }
 
 func SendEmail(emailInfo Email) error {
-	// smtpServer := os.Getenv("SMTP_SERVER")
-	// smtpPort, err := strconv.Atoi(os.Getenv("SMTP_PORT"))
+	sesSMTPServer := os.Getenv("SES_SMTP_URL")
+	sesSMTPPort, err := strconv.Atoi(os.Getenv("SES_SMTP_PORT"))
+	edgarlib.CheckError(err)
+	sesUsername := os.Getenv("SES_USERNAME")
+	sesPassword := os.Getenv("SES_PASSWORD")
 
-	// edgarlib.CheckError(err)
+	fromAddress := os.Getenv("SENDER_EMAIL")
+	var message string
 
-	// senderEmail := os.Getenv("SENDER_EMAIL")
-	// senderPassword := os.Getenv("SENDER_PASSWORD")
-	// recipientEmail := emailInfo.To
+	if emailInfo.Template == "" {
+		message = emailInfo.Body
+	} else {
+		htmlFile, err := readHTMLFile("./email/templates/" + emailInfo.Template + ".html")
+		if err != nil {
+			return err
+		}
+		htmlContent := replaceHtmlContent(htmlFile, emailInfo.TemplateInfos)
+		fmt.Print(htmlContent)
 
-	// emailMessage := []byte(
-	// 	"Subject: " + emailInfo.Subject + "\r\n" +
-	// 		"To: " + recipientEmail + "\r\n" +
-	// 		"Content-Type: text/plain; charset=UTF-8\r\n" +
-	// 		"\r\n" + emailInfo.Body,
-	// )
-	// auth := smtp.PlainAuth("", senderEmail, senderPassword, smtpServer)
-	// err = smtp.SendMail(smtpServer+":"+strconv.Itoa(smtpPort), auth, senderEmail, []string{recipientEmail}, emailMessage)
-	// if err != nil {
-	// 	log.Printf("Email sent sucessfuly !")
-	// } else {
-	// 	log.Println("Eror Email did not send !")
-	// }
-	fmt.Println("SENDING MAIL (TODO)")
-	spew.Dump(emailInfo)
+		message = fmt.Sprintf("Subject: %s\r\n", emailInfo.Subject)
+		message += "MIME-version: 1.0;\r\n"
+		message += "Content-Type: text/html; charset=\"UTF-8\";\r\n\r\n"
+		message += htmlContent
+	}
+	auth := smtp.PlainAuth("", sesUsername, sesPassword, sesSMTPServer)
+	err = smtp.SendMail(
+		fmt.Sprintf("%s:%d", sesSMTPServer, sesSMTPPort),
+		auth,
+		fromAddress,
+		[]string{emailInfo.To},
+		[]byte(message),
+	)
+	if err != nil {
+		fmt.Println("Error sending email:", err)
+		return err
+	}
+
 	return nil
 }
