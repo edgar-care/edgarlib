@@ -8,6 +8,21 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+type AddressInput struct {
+	Street   string `json:"street"`
+	Zip_code string `json:"zip_code"`
+	Country  string `json:"country"`
+}
+
+// GetStreet returns AddressInput.Street, and is useful for accessing the field via an interface.
+func (v *AddressInput) GetStreet() string { return v.Street }
+
+// GetZip_code returns AddressInput.Zip_code, and is useful for accessing the field via an interface.
+func (v *AddressInput) GetZip_code() string { return v.Zip_code }
+
+// GetCountry returns AddressInput.Country, and is useful for accessing the field via an interface.
+func (v *AddressInput) GetCountry() string { return v.Country }
+
 type Category string
 
 const (
@@ -295,11 +310,14 @@ func (v *CreateDiseaseResponse) GetCreateDisease() CreateDiseaseCreateDisease { 
 
 // CreateDoctorCreateDoctor includes the requested fields of the GraphQL type Doctor.
 type CreateDoctorCreateDoctor struct {
-	Id              string   `json:"id"`
-	Email           string   `json:"email"`
-	Password        string   `json:"password"`
-	Rendez_vous_ids []string `json:"rendez_vous_ids"`
-	Patient_ids     []string `json:"patient_ids"`
+	Id              string                          `json:"id"`
+	Email           string                          `json:"email"`
+	Password        string                          `json:"password"`
+	Name            string                          `json:"name"`
+	Firstname       string                          `json:"firstname"`
+	Address         CreateDoctorCreateDoctorAddress `json:"address"`
+	Rendez_vous_ids []string                        `json:"rendez_vous_ids"`
+	Patient_ids     []string                        `json:"patient_ids"`
 }
 
 // GetId returns CreateDoctorCreateDoctor.Id, and is useful for accessing the field via an interface.
@@ -311,11 +329,36 @@ func (v *CreateDoctorCreateDoctor) GetEmail() string { return v.Email }
 // GetPassword returns CreateDoctorCreateDoctor.Password, and is useful for accessing the field via an interface.
 func (v *CreateDoctorCreateDoctor) GetPassword() string { return v.Password }
 
+// GetName returns CreateDoctorCreateDoctor.Name, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctor) GetName() string { return v.Name }
+
+// GetFirstname returns CreateDoctorCreateDoctor.Firstname, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctor) GetFirstname() string { return v.Firstname }
+
+// GetAddress returns CreateDoctorCreateDoctor.Address, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctor) GetAddress() CreateDoctorCreateDoctorAddress { return v.Address }
+
 // GetRendez_vous_ids returns CreateDoctorCreateDoctor.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *CreateDoctorCreateDoctor) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
 // GetPatient_ids returns CreateDoctorCreateDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *CreateDoctorCreateDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// CreateDoctorCreateDoctorAddress includes the requested fields of the GraphQL type Address.
+type CreateDoctorCreateDoctorAddress struct {
+	Street   string `json:"street"`
+	Zip_code string `json:"zip_code"`
+	Country  string `json:"country"`
+}
+
+// GetStreet returns CreateDoctorCreateDoctorAddress.Street, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctorAddress) GetStreet() string { return v.Street }
+
+// GetZip_code returns CreateDoctorCreateDoctorAddress.Zip_code, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctorAddress) GetZip_code() string { return v.Zip_code }
+
+// GetCountry returns CreateDoctorCreateDoctorAddress.Country, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctorAddress) GetCountry() string { return v.Country }
 
 // CreateDoctorResponse is returned by CreateDoctor on success.
 type CreateDoctorResponse struct {
@@ -367,79 +410,147 @@ func (v *CreateDocumentResponse) GetCreateDocument() CreateDocumentCreateDocumen
 	return v.CreateDocument
 }
 
-// CreateHealthCreateHealth includes the requested fields of the GraphQL type Health.
-type CreateHealthCreateHealth struct {
-	Id                      string   `json:"id"`
-	Patients_allergies      []string `json:"patients_allergies"`
-	Patients_illness        []string `json:"patients_illness"`
-	Patients_treatments     []string `json:"patients_treatments"`
-	Patients_primary_doctor string   `json:"patients_primary_doctor"`
+// CreateMedicalFolderCreateMedicalFolderMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
+type CreateMedicalFolderCreateMedicalFolderMedicalInfo struct {
+	Id                  string                                                                                   `json:"id"`
+	Name                string                                                                                   `json:"name"`
+	Firstname           string                                                                                   `json:"firstname"`
+	Birthdate           int                                                                                      `json:"birthdate"`
+	Sex                 Sex                                                                                      `json:"sex"`
+	Height              int                                                                                      `json:"height"`
+	Weight              int                                                                                      `json:"weight"`
+	Primary_doctor_id   string                                                                                   `json:"primary_doctor_id"`
+	Medical_antecedents []CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents `json:"medical_antecedents"`
+	Onboarding_status   OnboardingStatus                                                                         `json:"onboarding_status"`
 }
 
-// GetId returns CreateHealthCreateHealth.Id, and is useful for accessing the field via an interface.
-func (v *CreateHealthCreateHealth) GetId() string { return v.Id }
+// GetId returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Id, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetId() string { return v.Id }
 
-// GetPatients_allergies returns CreateHealthCreateHealth.Patients_allergies, and is useful for accessing the field via an interface.
-func (v *CreateHealthCreateHealth) GetPatients_allergies() []string { return v.Patients_allergies }
+// GetName returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Name, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetName() string { return v.Name }
 
-// GetPatients_illness returns CreateHealthCreateHealth.Patients_illness, and is useful for accessing the field via an interface.
-func (v *CreateHealthCreateHealth) GetPatients_illness() []string { return v.Patients_illness }
+// GetFirstname returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Firstname, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetFirstname() string { return v.Firstname }
 
-// GetPatients_treatments returns CreateHealthCreateHealth.Patients_treatments, and is useful for accessing the field via an interface.
-func (v *CreateHealthCreateHealth) GetPatients_treatments() []string { return v.Patients_treatments }
+// GetBirthdate returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Birthdate, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetBirthdate() int { return v.Birthdate }
 
-// GetPatients_primary_doctor returns CreateHealthCreateHealth.Patients_primary_doctor, and is useful for accessing the field via an interface.
-func (v *CreateHealthCreateHealth) GetPatients_primary_doctor() string {
-	return v.Patients_primary_doctor
+// GetSex returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Sex, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetSex() Sex { return v.Sex }
+
+// GetHeight returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Height, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetHeight() int { return v.Height }
+
+// GetWeight returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Weight, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetWeight() int { return v.Weight }
+
+// GetPrimary_doctor_id returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Primary_doctor_id, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetPrimary_doctor_id() string {
+	return v.Primary_doctor_id
 }
 
-// CreateHealthResponse is returned by CreateHealth on success.
-type CreateHealthResponse struct {
-	CreateHealth CreateHealthCreateHealth `json:"createHealth"`
+// GetMedical_antecedents returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Medical_antecedents, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetMedical_antecedents() []CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents {
+	return v.Medical_antecedents
 }
 
-// GetCreateHealth returns CreateHealthResponse.CreateHealth, and is useful for accessing the field via an interface.
-func (v *CreateHealthResponse) GetCreateHealth() CreateHealthCreateHealth { return v.CreateHealth }
-
-// CreateInfoCreateInfo includes the requested fields of the GraphQL type Info.
-type CreateInfoCreateInfo struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	Birthdate string `json:"birthdate"`
-	Height    int    `json:"height"`
-	Weight    int    `json:"weight"`
-	Sex       Sex    `json:"sex"`
-	Surname   string `json:"surname"`
+// GetOnboarding_status returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Onboarding_status, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetOnboarding_status() OnboardingStatus {
+	return v.Onboarding_status
 }
 
-// GetId returns CreateInfoCreateInfo.Id, and is useful for accessing the field via an interface.
-func (v *CreateInfoCreateInfo) GetId() string { return v.Id }
-
-// GetName returns CreateInfoCreateInfo.Name, and is useful for accessing the field via an interface.
-func (v *CreateInfoCreateInfo) GetName() string { return v.Name }
-
-// GetBirthdate returns CreateInfoCreateInfo.Birthdate, and is useful for accessing the field via an interface.
-func (v *CreateInfoCreateInfo) GetBirthdate() string { return v.Birthdate }
-
-// GetHeight returns CreateInfoCreateInfo.Height, and is useful for accessing the field via an interface.
-func (v *CreateInfoCreateInfo) GetHeight() int { return v.Height }
-
-// GetWeight returns CreateInfoCreateInfo.Weight, and is useful for accessing the field via an interface.
-func (v *CreateInfoCreateInfo) GetWeight() int { return v.Weight }
-
-// GetSex returns CreateInfoCreateInfo.Sex, and is useful for accessing the field via an interface.
-func (v *CreateInfoCreateInfo) GetSex() Sex { return v.Sex }
-
-// GetSurname returns CreateInfoCreateInfo.Surname, and is useful for accessing the field via an interface.
-func (v *CreateInfoCreateInfo) GetSurname() string { return v.Surname }
-
-// CreateInfoResponse is returned by CreateInfo on success.
-type CreateInfoResponse struct {
-	CreateInfo CreateInfoCreateInfo `json:"createInfo"`
+// CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents includes the requested fields of the GraphQL type MedicalAntecedents.
+type CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents struct {
+	Name           string                                                                                            `json:"name"`
+	Medicines      []CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines `json:"medicines"`
+	Still_relevant bool                                                                                              `json:"still_relevant"`
 }
 
-// GetCreateInfo returns CreateInfoResponse.CreateInfo, and is useful for accessing the field via an interface.
-func (v *CreateInfoResponse) GetCreateInfo() CreateInfoCreateInfo { return v.CreateInfo }
+// GetName returns CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Name, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetName() string {
+	return v.Name
+}
+
+// GetMedicines returns CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Medicines, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetMedicines() []CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines {
+	return v.Medicines
+}
+
+// GetStill_relevant returns CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Still_relevant, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetStill_relevant() bool {
+	return v.Still_relevant
+}
+
+// CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines includes the requested fields of the GraphQL type Medicines.
+type CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines struct {
+	Period   []Period `json:"period"`
+	Day      []Day    `json:"day"`
+	Quantity int      `json:"quantity"`
+}
+
+// GetPeriod returns CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Period, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetPeriod() []Period {
+	return v.Period
+}
+
+// GetDay returns CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Day, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetDay() []Day {
+	return v.Day
+}
+
+// GetQuantity returns CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Quantity, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetQuantity() int {
+	return v.Quantity
+}
+
+// CreateMedicalFolderResponse is returned by CreateMedicalFolder on success.
+type CreateMedicalFolderResponse struct {
+	CreateMedicalFolder CreateMedicalFolderCreateMedicalFolderMedicalInfo `json:"createMedicalFolder"`
+}
+
+// GetCreateMedicalFolder returns CreateMedicalFolderResponse.CreateMedicalFolder, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderResponse) GetCreateMedicalFolder() CreateMedicalFolderCreateMedicalFolderMedicalInfo {
+	return v.CreateMedicalFolder
+}
+
+// CreateMedicamentCreateMedicament includes the requested fields of the GraphQL type Medicament.
+type CreateMedicamentCreateMedicament struct {
+	Id               string   `json:"id"`
+	Name             string   `json:"name"`
+	Unit             Unit     `json:"unit"`
+	Target_diseases  []string `json:"target_diseases"`
+	Treated_symptoms []string `json:"treated_symptoms"`
+	Side_effects     []string `json:"side_effects"`
+}
+
+// GetId returns CreateMedicamentCreateMedicament.Id, and is useful for accessing the field via an interface.
+func (v *CreateMedicamentCreateMedicament) GetId() string { return v.Id }
+
+// GetName returns CreateMedicamentCreateMedicament.Name, and is useful for accessing the field via an interface.
+func (v *CreateMedicamentCreateMedicament) GetName() string { return v.Name }
+
+// GetUnit returns CreateMedicamentCreateMedicament.Unit, and is useful for accessing the field via an interface.
+func (v *CreateMedicamentCreateMedicament) GetUnit() Unit { return v.Unit }
+
+// GetTarget_diseases returns CreateMedicamentCreateMedicament.Target_diseases, and is useful for accessing the field via an interface.
+func (v *CreateMedicamentCreateMedicament) GetTarget_diseases() []string { return v.Target_diseases }
+
+// GetTreated_symptoms returns CreateMedicamentCreateMedicament.Treated_symptoms, and is useful for accessing the field via an interface.
+func (v *CreateMedicamentCreateMedicament) GetTreated_symptoms() []string { return v.Treated_symptoms }
+
+// GetSide_effects returns CreateMedicamentCreateMedicament.Side_effects, and is useful for accessing the field via an interface.
+func (v *CreateMedicamentCreateMedicament) GetSide_effects() []string { return v.Side_effects }
+
+// CreateMedicamentResponse is returned by CreateMedicament on success.
+type CreateMedicamentResponse struct {
+	CreateMedicament CreateMedicamentCreateMedicament `json:"createMedicament"`
+}
+
+// GetCreateMedicament returns CreateMedicamentResponse.CreateMedicament, and is useful for accessing the field via an interface.
+func (v *CreateMedicamentResponse) GetCreateMedicament() CreateMedicamentCreateMedicament {
+	return v.CreateMedicament
+}
 
 // CreateNotificationCreateNotification includes the requested fields of the GraphQL type Notification.
 type CreateNotificationCreateNotification struct {
@@ -473,13 +584,12 @@ func (v *CreateNotificationResponse) GetCreateNotification() CreateNotificationC
 
 // CreatePatientCreatePatient includes the requested fields of the GraphQL type Patient.
 type CreatePatientCreatePatient struct {
-	Id                   string   `json:"id"`
-	Email                string   `json:"email"`
-	Password             string   `json:"password"`
-	Rendez_vous_ids      []string `json:"rendez_vous_ids"`
-	Onboarding_info_id   string   `json:"onboarding_info_id"`
-	Onboarding_health_id string   `json:"onboarding_health_id"`
-	Document_ids         []string `json:"document_ids"`
+	Id              string   `json:"id"`
+	Email           string   `json:"email"`
+	Password        string   `json:"password"`
+	Rendez_vous_ids []string `json:"rendez_vous_ids"`
+	Medical_info_id string   `json:"medical_info_id"`
+	Document_ids    []string `json:"document_ids"`
 }
 
 // GetId returns CreatePatientCreatePatient.Id, and is useful for accessing the field via an interface.
@@ -494,11 +604,8 @@ func (v *CreatePatientCreatePatient) GetPassword() string { return v.Password }
 // GetRendez_vous_ids returns CreatePatientCreatePatient.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *CreatePatientCreatePatient) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
-// GetOnboarding_info_id returns CreatePatientCreatePatient.Onboarding_info_id, and is useful for accessing the field via an interface.
-func (v *CreatePatientCreatePatient) GetOnboarding_info_id() string { return v.Onboarding_info_id }
-
-// GetOnboarding_health_id returns CreatePatientCreatePatient.Onboarding_health_id, and is useful for accessing the field via an interface.
-func (v *CreatePatientCreatePatient) GetOnboarding_health_id() string { return v.Onboarding_health_id }
+// GetMedical_info_id returns CreatePatientCreatePatient.Medical_info_id, and is useful for accessing the field via an interface.
+func (v *CreatePatientCreatePatient) GetMedical_info_id() string { return v.Medical_info_id }
 
 // GetDocument_ids returns CreatePatientCreatePatient.Document_ids, and is useful for accessing the field via an interface.
 func (v *CreatePatientCreatePatient) GetDocument_ids() []string { return v.Document_ids }
@@ -723,6 +830,18 @@ func (v *CreateTreatmentResponse) GetCreateTreatment() CreateTreatmentCreateTrea
 	return v.CreateTreatment
 }
 
+type Day string
+
+const (
+	DayMonday    Day = "MONDAY"
+	DayTuesday   Day = "TUESDAY"
+	DayWednesday Day = "WEDNESDAY"
+	DayThursday  Day = "THURSDAY"
+	DayFriday    Day = "FRIDAY"
+	DaySaturday  Day = "SATURDAY"
+	DaySunday    Day = "SUNDAY"
+)
+
 // DeleteAdminResponse is returned by DeleteAdmin on success.
 type DeleteAdminResponse struct {
 	DeleteAdmin bool `json:"deleteAdmin"`
@@ -795,21 +914,21 @@ type DeleteDocumentResponse struct {
 // GetDeleteDocument returns DeleteDocumentResponse.DeleteDocument, and is useful for accessing the field via an interface.
 func (v *DeleteDocumentResponse) GetDeleteDocument() bool { return v.DeleteDocument }
 
-// DeleteHealthResponse is returned by DeleteHealth on success.
-type DeleteHealthResponse struct {
-	DeleteHealth bool `json:"deleteHealth"`
+// DeleteMedicalFolderResponse is returned by DeleteMedicalFolder on success.
+type DeleteMedicalFolderResponse struct {
+	DeleteMedicalFolder bool `json:"deleteMedicalFolder"`
 }
 
-// GetDeleteHealth returns DeleteHealthResponse.DeleteHealth, and is useful for accessing the field via an interface.
-func (v *DeleteHealthResponse) GetDeleteHealth() bool { return v.DeleteHealth }
+// GetDeleteMedicalFolder returns DeleteMedicalFolderResponse.DeleteMedicalFolder, and is useful for accessing the field via an interface.
+func (v *DeleteMedicalFolderResponse) GetDeleteMedicalFolder() bool { return v.DeleteMedicalFolder }
 
-// DeleteInfoResponse is returned by DeleteInfo on success.
-type DeleteInfoResponse struct {
-	DeleteInfo bool `json:"deleteInfo"`
+// DeleteMedicamentResponse is returned by DeleteMedicament on success.
+type DeleteMedicamentResponse struct {
+	DeleteMedicament bool `json:"deleteMedicament"`
 }
 
-// GetDeleteInfo returns DeleteInfoResponse.DeleteInfo, and is useful for accessing the field via an interface.
-func (v *DeleteInfoResponse) GetDeleteInfo() bool { return v.DeleteInfo }
+// GetDeleteMedicament returns DeleteMedicamentResponse.DeleteMedicament, and is useful for accessing the field via an interface.
+func (v *DeleteMedicamentResponse) GetDeleteMedicament() bool { return v.DeleteMedicament }
 
 // DeleteNotificationResponse is returned by DeleteNotification on success.
 type DeleteNotificationResponse struct {
@@ -1526,11 +1645,14 @@ func (v *GetDiseasesResponse) GetGetDiseases() []GetDiseasesGetDiseasesDisease {
 
 // GetDoctorByEmailGetDoctorByEmailDoctor includes the requested fields of the GraphQL type Doctor.
 type GetDoctorByEmailGetDoctorByEmailDoctor struct {
-	Id              string   `json:"id"`
-	Email           string   `json:"email"`
-	Password        string   `json:"password"`
-	Rendez_vous_ids []string `json:"rendez_vous_ids"`
-	Patient_ids     []string `json:"patient_ids"`
+	Id              string                                        `json:"id"`
+	Email           string                                        `json:"email"`
+	Password        string                                        `json:"password"`
+	Name            string                                        `json:"name"`
+	Firstname       string                                        `json:"firstname"`
+	Address         GetDoctorByEmailGetDoctorByEmailDoctorAddress `json:"address"`
+	Rendez_vous_ids []string                                      `json:"rendez_vous_ids"`
+	Patient_ids     []string                                      `json:"patient_ids"`
 }
 
 // GetId returns GetDoctorByEmailGetDoctorByEmailDoctor.Id, and is useful for accessing the field via an interface.
@@ -1542,6 +1664,17 @@ func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetEmail() string { return v.Em
 // GetPassword returns GetDoctorByEmailGetDoctorByEmailDoctor.Password, and is useful for accessing the field via an interface.
 func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetPassword() string { return v.Password }
 
+// GetName returns GetDoctorByEmailGetDoctorByEmailDoctor.Name, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetName() string { return v.Name }
+
+// GetFirstname returns GetDoctorByEmailGetDoctorByEmailDoctor.Firstname, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetFirstname() string { return v.Firstname }
+
+// GetAddress returns GetDoctorByEmailGetDoctorByEmailDoctor.Address, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetAddress() GetDoctorByEmailGetDoctorByEmailDoctorAddress {
+	return v.Address
+}
+
 // GetRendez_vous_ids returns GetDoctorByEmailGetDoctorByEmailDoctor.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetRendez_vous_ids() []string {
 	return v.Rendez_vous_ids
@@ -1549,6 +1682,22 @@ func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetRendez_vous_ids() []string {
 
 // GetPatient_ids returns GetDoctorByEmailGetDoctorByEmailDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetDoctorByEmailGetDoctorByEmailDoctorAddress includes the requested fields of the GraphQL type Address.
+type GetDoctorByEmailGetDoctorByEmailDoctorAddress struct {
+	Street   string `json:"street"`
+	Zip_code string `json:"zip_code"`
+	Country  string `json:"country"`
+}
+
+// GetStreet returns GetDoctorByEmailGetDoctorByEmailDoctorAddress.Street, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctorAddress) GetStreet() string { return v.Street }
+
+// GetZip_code returns GetDoctorByEmailGetDoctorByEmailDoctorAddress.Zip_code, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctorAddress) GetZip_code() string { return v.Zip_code }
+
+// GetCountry returns GetDoctorByEmailGetDoctorByEmailDoctorAddress.Country, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctorAddress) GetCountry() string { return v.Country }
 
 // GetDoctorByEmailResponse is returned by GetDoctorByEmail on success.
 type GetDoctorByEmailResponse struct {
@@ -1562,11 +1711,14 @@ func (v *GetDoctorByEmailResponse) GetGetDoctorByEmail() GetDoctorByEmailGetDoct
 
 // GetDoctorByIdGetDoctorByIdDoctor includes the requested fields of the GraphQL type Doctor.
 type GetDoctorByIdGetDoctorByIdDoctor struct {
-	Id              string   `json:"id"`
-	Email           string   `json:"email"`
-	Password        string   `json:"password"`
-	Rendez_vous_ids []string `json:"rendez_vous_ids"`
-	Patient_ids     []string `json:"patient_ids"`
+	Id              string                                  `json:"id"`
+	Email           string                                  `json:"email"`
+	Password        string                                  `json:"password"`
+	Name            string                                  `json:"name"`
+	Firstname       string                                  `json:"firstname"`
+	Address         GetDoctorByIdGetDoctorByIdDoctorAddress `json:"address"`
+	Rendez_vous_ids []string                                `json:"rendez_vous_ids"`
+	Patient_ids     []string                                `json:"patient_ids"`
 }
 
 // GetId returns GetDoctorByIdGetDoctorByIdDoctor.Id, and is useful for accessing the field via an interface.
@@ -1578,11 +1730,38 @@ func (v *GetDoctorByIdGetDoctorByIdDoctor) GetEmail() string { return v.Email }
 // GetPassword returns GetDoctorByIdGetDoctorByIdDoctor.Password, and is useful for accessing the field via an interface.
 func (v *GetDoctorByIdGetDoctorByIdDoctor) GetPassword() string { return v.Password }
 
+// GetName returns GetDoctorByIdGetDoctorByIdDoctor.Name, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctor) GetName() string { return v.Name }
+
+// GetFirstname returns GetDoctorByIdGetDoctorByIdDoctor.Firstname, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctor) GetFirstname() string { return v.Firstname }
+
+// GetAddress returns GetDoctorByIdGetDoctorByIdDoctor.Address, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctor) GetAddress() GetDoctorByIdGetDoctorByIdDoctorAddress {
+	return v.Address
+}
+
 // GetRendez_vous_ids returns GetDoctorByIdGetDoctorByIdDoctor.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByIdGetDoctorByIdDoctor) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
 // GetPatient_ids returns GetDoctorByIdGetDoctorByIdDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByIdGetDoctorByIdDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetDoctorByIdGetDoctorByIdDoctorAddress includes the requested fields of the GraphQL type Address.
+type GetDoctorByIdGetDoctorByIdDoctorAddress struct {
+	Street   string `json:"street"`
+	Zip_code string `json:"zip_code"`
+	Country  string `json:"country"`
+}
+
+// GetStreet returns GetDoctorByIdGetDoctorByIdDoctorAddress.Street, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctorAddress) GetStreet() string { return v.Street }
+
+// GetZip_code returns GetDoctorByIdGetDoctorByIdDoctorAddress.Zip_code, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctorAddress) GetZip_code() string { return v.Zip_code }
+
+// GetCountry returns GetDoctorByIdGetDoctorByIdDoctorAddress.Country, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctorAddress) GetCountry() string { return v.Country }
 
 // GetDoctorByIdResponse is returned by GetDoctorById on success.
 type GetDoctorByIdResponse struct {
@@ -1632,11 +1811,14 @@ func (v *GetDoctorRdvResponse) GetGetDoctorRdv() []GetDoctorRdvGetDoctorRdv { re
 
 // GetDoctorsGetDoctorsDoctor includes the requested fields of the GraphQL type Doctor.
 type GetDoctorsGetDoctorsDoctor struct {
-	Id              string   `json:"id"`
-	Email           string   `json:"email"`
-	Password        string   `json:"password"`
-	Rendez_vous_ids []string `json:"rendez_vous_ids"`
-	Patient_ids     []string `json:"patient_ids"`
+	Id              string                            `json:"id"`
+	Email           string                            `json:"email"`
+	Password        string                            `json:"password"`
+	Name            string                            `json:"name"`
+	Firstname       string                            `json:"firstname"`
+	Address         GetDoctorsGetDoctorsDoctorAddress `json:"address"`
+	Rendez_vous_ids []string                          `json:"rendez_vous_ids"`
+	Patient_ids     []string                          `json:"patient_ids"`
 }
 
 // GetId returns GetDoctorsGetDoctorsDoctor.Id, and is useful for accessing the field via an interface.
@@ -1648,11 +1830,36 @@ func (v *GetDoctorsGetDoctorsDoctor) GetEmail() string { return v.Email }
 // GetPassword returns GetDoctorsGetDoctorsDoctor.Password, and is useful for accessing the field via an interface.
 func (v *GetDoctorsGetDoctorsDoctor) GetPassword() string { return v.Password }
 
+// GetName returns GetDoctorsGetDoctorsDoctor.Name, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctor) GetName() string { return v.Name }
+
+// GetFirstname returns GetDoctorsGetDoctorsDoctor.Firstname, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctor) GetFirstname() string { return v.Firstname }
+
+// GetAddress returns GetDoctorsGetDoctorsDoctor.Address, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctor) GetAddress() GetDoctorsGetDoctorsDoctorAddress { return v.Address }
+
 // GetRendez_vous_ids returns GetDoctorsGetDoctorsDoctor.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorsGetDoctorsDoctor) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
 // GetPatient_ids returns GetDoctorsGetDoctorsDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorsGetDoctorsDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetDoctorsGetDoctorsDoctorAddress includes the requested fields of the GraphQL type Address.
+type GetDoctorsGetDoctorsDoctorAddress struct {
+	Street   string `json:"street"`
+	Zip_code string `json:"zip_code"`
+	Country  string `json:"country"`
+}
+
+// GetStreet returns GetDoctorsGetDoctorsDoctorAddress.Street, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctorAddress) GetStreet() string { return v.Street }
+
+// GetZip_code returns GetDoctorsGetDoctorsDoctorAddress.Zip_code, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctorAddress) GetZip_code() string { return v.Zip_code }
+
+// GetCountry returns GetDoctorsGetDoctorsDoctorAddress.Country, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctorAddress) GetCountry() string { return v.Country }
 
 // GetDoctorsResponse is returned by GetDoctors on success.
 type GetDoctorsResponse struct {
@@ -1748,159 +1955,301 @@ func (v *GetDocumentsResponse) GetGetDocuments() []GetDocumentsGetDocumentsDocum
 	return v.GetDocuments
 }
 
-// GetHealthByIdGetHealthByIdHealth includes the requested fields of the GraphQL type Health.
-type GetHealthByIdGetHealthByIdHealth struct {
-	Id                      string   `json:"id"`
-	Patients_allergies      []string `json:"patients_allergies"`
-	Patients_illness        []string `json:"patients_illness"`
-	Patients_treatments     []string `json:"patients_treatments"`
-	Patients_primary_doctor string   `json:"patients_primary_doctor"`
+// GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
+type GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo struct {
+	Id                  string                                                                                     `json:"id"`
+	Name                string                                                                                     `json:"name"`
+	Firstname           string                                                                                     `json:"firstname"`
+	Birthdate           int                                                                                        `json:"birthdate"`
+	Sex                 Sex                                                                                        `json:"sex"`
+	Height              int                                                                                        `json:"height"`
+	Weight              int                                                                                        `json:"weight"`
+	Primary_doctor_id   string                                                                                     `json:"primary_doctor_id"`
+	Medical_antecedents []GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents `json:"medical_antecedents"`
+	Onboarding_status   OnboardingStatus                                                                           `json:"onboarding_status"`
 }
 
-// GetId returns GetHealthByIdGetHealthByIdHealth.Id, and is useful for accessing the field via an interface.
-func (v *GetHealthByIdGetHealthByIdHealth) GetId() string { return v.Id }
+// GetId returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Id, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetId() string { return v.Id }
 
-// GetPatients_allergies returns GetHealthByIdGetHealthByIdHealth.Patients_allergies, and is useful for accessing the field via an interface.
-func (v *GetHealthByIdGetHealthByIdHealth) GetPatients_allergies() []string {
-	return v.Patients_allergies
+// GetName returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Name, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetName() string { return v.Name }
+
+// GetFirstname returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Firstname, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetFirstname() string {
+	return v.Firstname
 }
 
-// GetPatients_illness returns GetHealthByIdGetHealthByIdHealth.Patients_illness, and is useful for accessing the field via an interface.
-func (v *GetHealthByIdGetHealthByIdHealth) GetPatients_illness() []string { return v.Patients_illness }
+// GetBirthdate returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Birthdate, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetBirthdate() int { return v.Birthdate }
 
-// GetPatients_treatments returns GetHealthByIdGetHealthByIdHealth.Patients_treatments, and is useful for accessing the field via an interface.
-func (v *GetHealthByIdGetHealthByIdHealth) GetPatients_treatments() []string {
-	return v.Patients_treatments
+// GetSex returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Sex, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetSex() Sex { return v.Sex }
+
+// GetHeight returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Height, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetHeight() int { return v.Height }
+
+// GetWeight returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Weight, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetWeight() int { return v.Weight }
+
+// GetPrimary_doctor_id returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Primary_doctor_id, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetPrimary_doctor_id() string {
+	return v.Primary_doctor_id
 }
 
-// GetPatients_primary_doctor returns GetHealthByIdGetHealthByIdHealth.Patients_primary_doctor, and is useful for accessing the field via an interface.
-func (v *GetHealthByIdGetHealthByIdHealth) GetPatients_primary_doctor() string {
-	return v.Patients_primary_doctor
+// GetMedical_antecedents returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Medical_antecedents, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetMedical_antecedents() []GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents {
+	return v.Medical_antecedents
 }
 
-// GetHealthByIdResponse is returned by GetHealthById on success.
-type GetHealthByIdResponse struct {
-	GetHealthById GetHealthByIdGetHealthByIdHealth `json:"getHealthById"`
+// GetOnboarding_status returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Onboarding_status, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetOnboarding_status() OnboardingStatus {
+	return v.Onboarding_status
 }
 
-// GetGetHealthById returns GetHealthByIdResponse.GetHealthById, and is useful for accessing the field via an interface.
-func (v *GetHealthByIdResponse) GetGetHealthById() GetHealthByIdGetHealthByIdHealth {
-	return v.GetHealthById
+// GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents includes the requested fields of the GraphQL type MedicalAntecedents.
+type GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents struct {
+	Name           string                                                                                              `json:"name"`
+	Medicines      []GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines `json:"medicines"`
+	Still_relevant bool                                                                                                `json:"still_relevant"`
 }
 
-// GetHealthsGetHealthsHealth includes the requested fields of the GraphQL type Health.
-type GetHealthsGetHealthsHealth struct {
-	Id                      string   `json:"id"`
-	Patients_allergies      []string `json:"patients_allergies"`
-	Patients_illness        []string `json:"patients_illness"`
-	Patients_treatments     []string `json:"patients_treatments"`
-	Patients_primary_doctor string   `json:"patients_primary_doctor"`
+// GetName returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents.Name, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents) GetName() string {
+	return v.Name
 }
 
-// GetId returns GetHealthsGetHealthsHealth.Id, and is useful for accessing the field via an interface.
-func (v *GetHealthsGetHealthsHealth) GetId() string { return v.Id }
-
-// GetPatients_allergies returns GetHealthsGetHealthsHealth.Patients_allergies, and is useful for accessing the field via an interface.
-func (v *GetHealthsGetHealthsHealth) GetPatients_allergies() []string { return v.Patients_allergies }
-
-// GetPatients_illness returns GetHealthsGetHealthsHealth.Patients_illness, and is useful for accessing the field via an interface.
-func (v *GetHealthsGetHealthsHealth) GetPatients_illness() []string { return v.Patients_illness }
-
-// GetPatients_treatments returns GetHealthsGetHealthsHealth.Patients_treatments, and is useful for accessing the field via an interface.
-func (v *GetHealthsGetHealthsHealth) GetPatients_treatments() []string { return v.Patients_treatments }
-
-// GetPatients_primary_doctor returns GetHealthsGetHealthsHealth.Patients_primary_doctor, and is useful for accessing the field via an interface.
-func (v *GetHealthsGetHealthsHealth) GetPatients_primary_doctor() string {
-	return v.Patients_primary_doctor
+// GetMedicines returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents.Medicines, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents) GetMedicines() []GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines {
+	return v.Medicines
 }
 
-// GetHealthsResponse is returned by GetHealths on success.
-type GetHealthsResponse struct {
-	GetHealths []GetHealthsGetHealthsHealth `json:"getHealths"`
+// GetStill_relevant returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents.Still_relevant, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedents) GetStill_relevant() bool {
+	return v.Still_relevant
 }
 
-// GetGetHealths returns GetHealthsResponse.GetHealths, and is useful for accessing the field via an interface.
-func (v *GetHealthsResponse) GetGetHealths() []GetHealthsGetHealthsHealth { return v.GetHealths }
-
-// GetInfoByIdGetInfoByIdInfo includes the requested fields of the GraphQL type Info.
-type GetInfoByIdGetInfoByIdInfo struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	Birthdate string `json:"birthdate"`
-	Height    int    `json:"height"`
-	Weight    int    `json:"weight"`
-	Sex       Sex    `json:"sex"`
-	Surname   string `json:"surname"`
+// GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines includes the requested fields of the GraphQL type Medicines.
+type GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines struct {
+	Period   []Period `json:"period"`
+	Day      []Day    `json:"day"`
+	Quantity int      `json:"quantity"`
 }
 
-// GetId returns GetInfoByIdGetInfoByIdInfo.Id, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdGetInfoByIdInfo) GetId() string { return v.Id }
-
-// GetName returns GetInfoByIdGetInfoByIdInfo.Name, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdGetInfoByIdInfo) GetName() string { return v.Name }
-
-// GetBirthdate returns GetInfoByIdGetInfoByIdInfo.Birthdate, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdGetInfoByIdInfo) GetBirthdate() string { return v.Birthdate }
-
-// GetHeight returns GetInfoByIdGetInfoByIdInfo.Height, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdGetInfoByIdInfo) GetHeight() int { return v.Height }
-
-// GetWeight returns GetInfoByIdGetInfoByIdInfo.Weight, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdGetInfoByIdInfo) GetWeight() int { return v.Weight }
-
-// GetSex returns GetInfoByIdGetInfoByIdInfo.Sex, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdGetInfoByIdInfo) GetSex() Sex { return v.Sex }
-
-// GetSurname returns GetInfoByIdGetInfoByIdInfo.Surname, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdGetInfoByIdInfo) GetSurname() string { return v.Surname }
-
-// GetInfoByIdResponse is returned by GetInfoById on success.
-type GetInfoByIdResponse struct {
-	GetInfoById GetInfoByIdGetInfoByIdInfo `json:"getInfoById"`
+// GetPeriod returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Period, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetPeriod() []Period {
+	return v.Period
 }
 
-// GetGetInfoById returns GetInfoByIdResponse.GetInfoById, and is useful for accessing the field via an interface.
-func (v *GetInfoByIdResponse) GetGetInfoById() GetInfoByIdGetInfoByIdInfo { return v.GetInfoById }
-
-// GetInfosGetInfosInfo includes the requested fields of the GraphQL type Info.
-type GetInfosGetInfosInfo struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	Birthdate string `json:"birthdate"`
-	Height    int    `json:"height"`
-	Weight    int    `json:"weight"`
-	Sex       Sex    `json:"sex"`
-	Surname   string `json:"surname"`
+// GetDay returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Day, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetDay() []Day {
+	return v.Day
 }
 
-// GetId returns GetInfosGetInfosInfo.Id, and is useful for accessing the field via an interface.
-func (v *GetInfosGetInfosInfo) GetId() string { return v.Id }
-
-// GetName returns GetInfosGetInfosInfo.Name, and is useful for accessing the field via an interface.
-func (v *GetInfosGetInfosInfo) GetName() string { return v.Name }
-
-// GetBirthdate returns GetInfosGetInfosInfo.Birthdate, and is useful for accessing the field via an interface.
-func (v *GetInfosGetInfosInfo) GetBirthdate() string { return v.Birthdate }
-
-// GetHeight returns GetInfosGetInfosInfo.Height, and is useful for accessing the field via an interface.
-func (v *GetInfosGetInfosInfo) GetHeight() int { return v.Height }
-
-// GetWeight returns GetInfosGetInfosInfo.Weight, and is useful for accessing the field via an interface.
-func (v *GetInfosGetInfosInfo) GetWeight() int { return v.Weight }
-
-// GetSex returns GetInfosGetInfosInfo.Sex, and is useful for accessing the field via an interface.
-func (v *GetInfosGetInfosInfo) GetSex() Sex { return v.Sex }
-
-// GetSurname returns GetInfosGetInfosInfo.Surname, and is useful for accessing the field via an interface.
-func (v *GetInfosGetInfosInfo) GetSurname() string { return v.Surname }
-
-// GetInfosResponse is returned by GetInfos on success.
-type GetInfosResponse struct {
-	GetInfos []GetInfosGetInfosInfo `json:"getInfos"`
+// GetQuantity returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Quantity, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetQuantity() int {
+	return v.Quantity
 }
 
-// GetGetInfos returns GetInfosResponse.GetInfos, and is useful for accessing the field via an interface.
-func (v *GetInfosResponse) GetGetInfos() []GetInfosGetInfosInfo { return v.GetInfos }
+// GetMedicalFolderByIDResponse is returned by GetMedicalFolderByID on success.
+type GetMedicalFolderByIDResponse struct {
+	GetMedicalFolderById GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo `json:"getMedicalFolderById"`
+}
+
+// GetGetMedicalFolderById returns GetMedicalFolderByIDResponse.GetMedicalFolderById, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDResponse) GetGetMedicalFolderById() GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo {
+	return v.GetMedicalFolderById
+}
+
+// GetMedicalFolderGetMedicalFolderMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
+type GetMedicalFolderGetMedicalFolderMedicalInfo struct {
+	Id                  string                                                                             `json:"id"`
+	Name                string                                                                             `json:"name"`
+	Firstname           string                                                                             `json:"firstname"`
+	Birthdate           int                                                                                `json:"birthdate"`
+	Sex                 Sex                                                                                `json:"sex"`
+	Height              int                                                                                `json:"height"`
+	Weight              int                                                                                `json:"weight"`
+	Primary_doctor_id   string                                                                             `json:"primary_doctor_id"`
+	Medical_antecedents []GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents `json:"medical_antecedents"`
+	Onboarding_status   OnboardingStatus                                                                   `json:"onboarding_status"`
+}
+
+// GetId returns GetMedicalFolderGetMedicalFolderMedicalInfo.Id, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetId() string { return v.Id }
+
+// GetName returns GetMedicalFolderGetMedicalFolderMedicalInfo.Name, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetName() string { return v.Name }
+
+// GetFirstname returns GetMedicalFolderGetMedicalFolderMedicalInfo.Firstname, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetFirstname() string { return v.Firstname }
+
+// GetBirthdate returns GetMedicalFolderGetMedicalFolderMedicalInfo.Birthdate, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetBirthdate() int { return v.Birthdate }
+
+// GetSex returns GetMedicalFolderGetMedicalFolderMedicalInfo.Sex, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetSex() Sex { return v.Sex }
+
+// GetHeight returns GetMedicalFolderGetMedicalFolderMedicalInfo.Height, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetHeight() int { return v.Height }
+
+// GetWeight returns GetMedicalFolderGetMedicalFolderMedicalInfo.Weight, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetWeight() int { return v.Weight }
+
+// GetPrimary_doctor_id returns GetMedicalFolderGetMedicalFolderMedicalInfo.Primary_doctor_id, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetPrimary_doctor_id() string {
+	return v.Primary_doctor_id
+}
+
+// GetMedical_antecedents returns GetMedicalFolderGetMedicalFolderMedicalInfo.Medical_antecedents, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetMedical_antecedents() []GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents {
+	return v.Medical_antecedents
+}
+
+// GetOnboarding_status returns GetMedicalFolderGetMedicalFolderMedicalInfo.Onboarding_status, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetOnboarding_status() OnboardingStatus {
+	return v.Onboarding_status
+}
+
+// GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents includes the requested fields of the GraphQL type MedicalAntecedents.
+type GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents struct {
+	Name           string                                                                                      `json:"name"`
+	Medicines      []GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines `json:"medicines"`
+	Still_relevant bool                                                                                        `json:"still_relevant"`
+}
+
+// GetName returns GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Name, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetName() string {
+	return v.Name
+}
+
+// GetMedicines returns GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Medicines, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetMedicines() []GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines {
+	return v.Medicines
+}
+
+// GetStill_relevant returns GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Still_relevant, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetStill_relevant() bool {
+	return v.Still_relevant
+}
+
+// GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines includes the requested fields of the GraphQL type Medicines.
+type GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines struct {
+	Period   []Period `json:"period"`
+	Day      []Day    `json:"day"`
+	Quantity int      `json:"quantity"`
+}
+
+// GetPeriod returns GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Period, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetPeriod() []Period {
+	return v.Period
+}
+
+// GetDay returns GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Day, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetDay() []Day {
+	return v.Day
+}
+
+// GetQuantity returns GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Quantity, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetQuantity() int {
+	return v.Quantity
+}
+
+// GetMedicalFolderResponse is returned by GetMedicalFolder on success.
+type GetMedicalFolderResponse struct {
+	GetMedicalFolder []GetMedicalFolderGetMedicalFolderMedicalInfo `json:"getMedicalFolder"`
+}
+
+// GetGetMedicalFolder returns GetMedicalFolderResponse.GetMedicalFolder, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderResponse) GetGetMedicalFolder() []GetMedicalFolderGetMedicalFolderMedicalInfo {
+	return v.GetMedicalFolder
+}
+
+// GetMedicamentByIDGetMedicamentByIDMedicament includes the requested fields of the GraphQL type Medicament.
+type GetMedicamentByIDGetMedicamentByIDMedicament struct {
+	Id               string   `json:"id"`
+	Name             string   `json:"name"`
+	Unit             Unit     `json:"unit"`
+	Target_diseases  []string `json:"target_diseases"`
+	Treated_symptoms []string `json:"treated_symptoms"`
+	Side_effects     []string `json:"side_effects"`
+}
+
+// GetId returns GetMedicamentByIDGetMedicamentByIDMedicament.Id, and is useful for accessing the field via an interface.
+func (v *GetMedicamentByIDGetMedicamentByIDMedicament) GetId() string { return v.Id }
+
+// GetName returns GetMedicamentByIDGetMedicamentByIDMedicament.Name, and is useful for accessing the field via an interface.
+func (v *GetMedicamentByIDGetMedicamentByIDMedicament) GetName() string { return v.Name }
+
+// GetUnit returns GetMedicamentByIDGetMedicamentByIDMedicament.Unit, and is useful for accessing the field via an interface.
+func (v *GetMedicamentByIDGetMedicamentByIDMedicament) GetUnit() Unit { return v.Unit }
+
+// GetTarget_diseases returns GetMedicamentByIDGetMedicamentByIDMedicament.Target_diseases, and is useful for accessing the field via an interface.
+func (v *GetMedicamentByIDGetMedicamentByIDMedicament) GetTarget_diseases() []string {
+	return v.Target_diseases
+}
+
+// GetTreated_symptoms returns GetMedicamentByIDGetMedicamentByIDMedicament.Treated_symptoms, and is useful for accessing the field via an interface.
+func (v *GetMedicamentByIDGetMedicamentByIDMedicament) GetTreated_symptoms() []string {
+	return v.Treated_symptoms
+}
+
+// GetSide_effects returns GetMedicamentByIDGetMedicamentByIDMedicament.Side_effects, and is useful for accessing the field via an interface.
+func (v *GetMedicamentByIDGetMedicamentByIDMedicament) GetSide_effects() []string {
+	return v.Side_effects
+}
+
+// GetMedicamentByIDResponse is returned by GetMedicamentByID on success.
+type GetMedicamentByIDResponse struct {
+	GetMedicamentByID GetMedicamentByIDGetMedicamentByIDMedicament `json:"getMedicamentByID"`
+}
+
+// GetGetMedicamentByID returns GetMedicamentByIDResponse.GetMedicamentByID, and is useful for accessing the field via an interface.
+func (v *GetMedicamentByIDResponse) GetGetMedicamentByID() GetMedicamentByIDGetMedicamentByIDMedicament {
+	return v.GetMedicamentByID
+}
+
+// GetMedicamentsGetMedicamentsMedicament includes the requested fields of the GraphQL type Medicament.
+type GetMedicamentsGetMedicamentsMedicament struct {
+	Id               string   `json:"id"`
+	Name             string   `json:"name"`
+	Unit             Unit     `json:"unit"`
+	Target_diseases  []string `json:"target_diseases"`
+	Treated_symptoms []string `json:"treated_symptoms"`
+	Side_effects     []string `json:"side_effects"`
+}
+
+// GetId returns GetMedicamentsGetMedicamentsMedicament.Id, and is useful for accessing the field via an interface.
+func (v *GetMedicamentsGetMedicamentsMedicament) GetId() string { return v.Id }
+
+// GetName returns GetMedicamentsGetMedicamentsMedicament.Name, and is useful for accessing the field via an interface.
+func (v *GetMedicamentsGetMedicamentsMedicament) GetName() string { return v.Name }
+
+// GetUnit returns GetMedicamentsGetMedicamentsMedicament.Unit, and is useful for accessing the field via an interface.
+func (v *GetMedicamentsGetMedicamentsMedicament) GetUnit() Unit { return v.Unit }
+
+// GetTarget_diseases returns GetMedicamentsGetMedicamentsMedicament.Target_diseases, and is useful for accessing the field via an interface.
+func (v *GetMedicamentsGetMedicamentsMedicament) GetTarget_diseases() []string {
+	return v.Target_diseases
+}
+
+// GetTreated_symptoms returns GetMedicamentsGetMedicamentsMedicament.Treated_symptoms, and is useful for accessing the field via an interface.
+func (v *GetMedicamentsGetMedicamentsMedicament) GetTreated_symptoms() []string {
+	return v.Treated_symptoms
+}
+
+// GetSide_effects returns GetMedicamentsGetMedicamentsMedicament.Side_effects, and is useful for accessing the field via an interface.
+func (v *GetMedicamentsGetMedicamentsMedicament) GetSide_effects() []string { return v.Side_effects }
+
+// GetMedicamentsResponse is returned by GetMedicaments on success.
+type GetMedicamentsResponse struct {
+	GetMedicaments []GetMedicamentsGetMedicamentsMedicament `json:"getMedicaments"`
+}
+
+// GetGetMedicaments returns GetMedicamentsResponse.GetMedicaments, and is useful for accessing the field via an interface.
+func (v *GetMedicamentsResponse) GetGetMedicaments() []GetMedicamentsGetMedicamentsMedicament {
+	return v.GetMedicaments
+}
 
 // GetNotificationByIdGetNotificationByIdNotification includes the requested fields of the GraphQL type Notification.
 type GetNotificationByIdGetNotificationByIdNotification struct {
@@ -1964,13 +2313,12 @@ func (v *GetNotificationsResponse) GetGetNotifications() []GetNotificationsGetNo
 
 // GetPatientByEmailGetPatientByEmailPatient includes the requested fields of the GraphQL type Patient.
 type GetPatientByEmailGetPatientByEmailPatient struct {
-	Id                   string   `json:"id"`
-	Email                string   `json:"email"`
-	Password             string   `json:"password"`
-	Rendez_vous_ids      []string `json:"rendez_vous_ids"`
-	Onboarding_info_id   string   `json:"onboarding_info_id"`
-	Onboarding_health_id string   `json:"onboarding_health_id"`
-	Document_ids         []string `json:"document_ids"`
+	Id              string   `json:"id"`
+	Email           string   `json:"email"`
+	Password        string   `json:"password"`
+	Rendez_vous_ids []string `json:"rendez_vous_ids"`
+	Medical_info_id string   `json:"medical_info_id"`
+	Document_ids    []string `json:"document_ids"`
 }
 
 // GetId returns GetPatientByEmailGetPatientByEmailPatient.Id, and is useful for accessing the field via an interface.
@@ -1987,14 +2335,9 @@ func (v *GetPatientByEmailGetPatientByEmailPatient) GetRendez_vous_ids() []strin
 	return v.Rendez_vous_ids
 }
 
-// GetOnboarding_info_id returns GetPatientByEmailGetPatientByEmailPatient.Onboarding_info_id, and is useful for accessing the field via an interface.
-func (v *GetPatientByEmailGetPatientByEmailPatient) GetOnboarding_info_id() string {
-	return v.Onboarding_info_id
-}
-
-// GetOnboarding_health_id returns GetPatientByEmailGetPatientByEmailPatient.Onboarding_health_id, and is useful for accessing the field via an interface.
-func (v *GetPatientByEmailGetPatientByEmailPatient) GetOnboarding_health_id() string {
-	return v.Onboarding_health_id
+// GetMedical_info_id returns GetPatientByEmailGetPatientByEmailPatient.Medical_info_id, and is useful for accessing the field via an interface.
+func (v *GetPatientByEmailGetPatientByEmailPatient) GetMedical_info_id() string {
+	return v.Medical_info_id
 }
 
 // GetDocument_ids returns GetPatientByEmailGetPatientByEmailPatient.Document_ids, and is useful for accessing the field via an interface.
@@ -2012,13 +2355,12 @@ func (v *GetPatientByEmailResponse) GetGetPatientByEmail() GetPatientByEmailGetP
 
 // GetPatientByIdGetPatientByIdPatient includes the requested fields of the GraphQL type Patient.
 type GetPatientByIdGetPatientByIdPatient struct {
-	Id                   string   `json:"id"`
-	Email                string   `json:"email"`
-	Password             string   `json:"password"`
-	Rendez_vous_ids      []string `json:"rendez_vous_ids"`
-	Onboarding_info_id   string   `json:"onboarding_info_id"`
-	Onboarding_health_id string   `json:"onboarding_health_id"`
-	Document_ids         []string `json:"document_ids"`
+	Id              string   `json:"id"`
+	Email           string   `json:"email"`
+	Password        string   `json:"password"`
+	Rendez_vous_ids []string `json:"rendez_vous_ids"`
+	Medical_info_id string   `json:"medical_info_id"`
+	Document_ids    []string `json:"document_ids"`
 }
 
 // GetId returns GetPatientByIdGetPatientByIdPatient.Id, and is useful for accessing the field via an interface.
@@ -2033,15 +2375,8 @@ func (v *GetPatientByIdGetPatientByIdPatient) GetPassword() string { return v.Pa
 // GetRendez_vous_ids returns GetPatientByIdGetPatientByIdPatient.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *GetPatientByIdGetPatientByIdPatient) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
-// GetOnboarding_info_id returns GetPatientByIdGetPatientByIdPatient.Onboarding_info_id, and is useful for accessing the field via an interface.
-func (v *GetPatientByIdGetPatientByIdPatient) GetOnboarding_info_id() string {
-	return v.Onboarding_info_id
-}
-
-// GetOnboarding_health_id returns GetPatientByIdGetPatientByIdPatient.Onboarding_health_id, and is useful for accessing the field via an interface.
-func (v *GetPatientByIdGetPatientByIdPatient) GetOnboarding_health_id() string {
-	return v.Onboarding_health_id
-}
+// GetMedical_info_id returns GetPatientByIdGetPatientByIdPatient.Medical_info_id, and is useful for accessing the field via an interface.
+func (v *GetPatientByIdGetPatientByIdPatient) GetMedical_info_id() string { return v.Medical_info_id }
 
 // GetDocument_ids returns GetPatientByIdGetPatientByIdPatient.Document_ids, and is useful for accessing the field via an interface.
 func (v *GetPatientByIdGetPatientByIdPatient) GetDocument_ids() []string { return v.Document_ids }
@@ -2140,13 +2475,12 @@ func (v *GetPatientRdvResponse) GetGetPatientRdv() []GetPatientRdvGetPatientRdv 
 
 // GetPatientsGetPatientsPatient includes the requested fields of the GraphQL type Patient.
 type GetPatientsGetPatientsPatient struct {
-	Id                   string   `json:"id"`
-	Email                string   `json:"email"`
-	Password             string   `json:"password"`
-	Rendez_vous_ids      []string `json:"rendez_vous_ids"`
-	Onboarding_info_id   string   `json:"onboarding_info_id"`
-	Onboarding_health_id string   `json:"onboarding_health_id"`
-	Document_ids         []string `json:"document_ids"`
+	Id              string   `json:"id"`
+	Email           string   `json:"email"`
+	Password        string   `json:"password"`
+	Rendez_vous_ids []string `json:"rendez_vous_ids"`
+	Medical_info_id string   `json:"medical_info_id"`
+	Document_ids    []string `json:"document_ids"`
 }
 
 // GetId returns GetPatientsGetPatientsPatient.Id, and is useful for accessing the field via an interface.
@@ -2161,13 +2495,8 @@ func (v *GetPatientsGetPatientsPatient) GetPassword() string { return v.Password
 // GetRendez_vous_ids returns GetPatientsGetPatientsPatient.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *GetPatientsGetPatientsPatient) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
-// GetOnboarding_info_id returns GetPatientsGetPatientsPatient.Onboarding_info_id, and is useful for accessing the field via an interface.
-func (v *GetPatientsGetPatientsPatient) GetOnboarding_info_id() string { return v.Onboarding_info_id }
-
-// GetOnboarding_health_id returns GetPatientsGetPatientsPatient.Onboarding_health_id, and is useful for accessing the field via an interface.
-func (v *GetPatientsGetPatientsPatient) GetOnboarding_health_id() string {
-	return v.Onboarding_health_id
-}
+// GetMedical_info_id returns GetPatientsGetPatientsPatient.Medical_info_id, and is useful for accessing the field via an interface.
+func (v *GetPatientsGetPatientsPatient) GetMedical_info_id() string { return v.Medical_info_id }
 
 // GetDocument_ids returns GetPatientsGetPatientsPatient.Document_ids, and is useful for accessing the field via an interface.
 func (v *GetPatientsGetPatientsPatient) GetDocument_ids() []string { return v.Document_ids }
@@ -2613,6 +2942,53 @@ func (v *LogsInput) GetQuestion() string { return v.Question }
 // GetAnswer returns LogsInput.Answer, and is useful for accessing the field via an interface.
 func (v *LogsInput) GetAnswer() string { return v.Answer }
 
+type MedicalAntecedentsInput struct {
+	Name           string           `json:"name"`
+	Medicines      []MedicinesInput `json:"medicines"`
+	Still_relevant bool             `json:"still_relevant"`
+}
+
+// GetName returns MedicalAntecedentsInput.Name, and is useful for accessing the field via an interface.
+func (v *MedicalAntecedentsInput) GetName() string { return v.Name }
+
+// GetMedicines returns MedicalAntecedentsInput.Medicines, and is useful for accessing the field via an interface.
+func (v *MedicalAntecedentsInput) GetMedicines() []MedicinesInput { return v.Medicines }
+
+// GetStill_relevant returns MedicalAntecedentsInput.Still_relevant, and is useful for accessing the field via an interface.
+func (v *MedicalAntecedentsInput) GetStill_relevant() bool { return v.Still_relevant }
+
+type MedicinesInput struct {
+	Period   []Period `json:"period"`
+	Day      []Day    `json:"day"`
+	Quantity int      `json:"quantity"`
+}
+
+// GetPeriod returns MedicinesInput.Period, and is useful for accessing the field via an interface.
+func (v *MedicinesInput) GetPeriod() []Period { return v.Period }
+
+// GetDay returns MedicinesInput.Day, and is useful for accessing the field via an interface.
+func (v *MedicinesInput) GetDay() []Day { return v.Day }
+
+// GetQuantity returns MedicinesInput.Quantity, and is useful for accessing the field via an interface.
+func (v *MedicinesInput) GetQuantity() int { return v.Quantity }
+
+type OnboardingStatus string
+
+const (
+	OnboardingStatusNotStarted OnboardingStatus = "NOT_STARTED"
+	OnboardingStatusInProgress OnboardingStatus = "IN_PROGRESS"
+	OnboardingStatusDone       OnboardingStatus = "DONE"
+)
+
+type Period string
+
+const (
+	PeriodMorning Period = "MORNING"
+	PeriodNoon    Period = "NOON"
+	PeriodEvening Period = "EVENING"
+	PeriodNight   Period = "NIGHT"
+)
+
 type Sex string
 
 const (
@@ -2631,6 +3007,15 @@ func (v *SymptomWeightInput) GetKey() string { return v.Key }
 
 // GetValue returns SymptomWeightInput.Value, and is useful for accessing the field via an interface.
 func (v *SymptomWeightInput) GetValue() float64 { return v.Value }
+
+type Unit string
+
+const (
+	UnitApplication Unit = "APPLICATION"
+	UnitTablet      Unit = "TABLET"
+	UnitTablespoon  Unit = "TABLESPOON"
+	UnitCoffeespoon Unit = "COFFEESPOON"
+)
 
 // UpdateAdminResponse is returned by UpdateAdmin on success.
 type UpdateAdminResponse struct {
@@ -2920,11 +3305,14 @@ func (v *UpdateDoctorResponse) GetUpdateDoctor() UpdateDoctorUpdateDoctor { retu
 
 // UpdateDoctorUpdateDoctor includes the requested fields of the GraphQL type Doctor.
 type UpdateDoctorUpdateDoctor struct {
-	Id              string   `json:"id"`
-	Email           string   `json:"email"`
-	Password        string   `json:"password"`
-	Rendez_vous_ids []string `json:"rendez_vous_ids"`
-	Patient_ids     []string `json:"patient_ids"`
+	Id              string                          `json:"id"`
+	Email           string                          `json:"email"`
+	Password        string                          `json:"password"`
+	Name            string                          `json:"name"`
+	Firstname       string                          `json:"firstname"`
+	Rendez_vous_ids []string                        `json:"rendez_vous_ids"`
+	Patient_ids     []string                        `json:"patient_ids"`
+	Address         UpdateDoctorUpdateDoctorAddress `json:"address"`
 }
 
 // GetId returns UpdateDoctorUpdateDoctor.Id, and is useful for accessing the field via an interface.
@@ -2936,11 +3324,36 @@ func (v *UpdateDoctorUpdateDoctor) GetEmail() string { return v.Email }
 // GetPassword returns UpdateDoctorUpdateDoctor.Password, and is useful for accessing the field via an interface.
 func (v *UpdateDoctorUpdateDoctor) GetPassword() string { return v.Password }
 
+// GetName returns UpdateDoctorUpdateDoctor.Name, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctor) GetName() string { return v.Name }
+
+// GetFirstname returns UpdateDoctorUpdateDoctor.Firstname, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctor) GetFirstname() string { return v.Firstname }
+
 // GetRendez_vous_ids returns UpdateDoctorUpdateDoctor.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *UpdateDoctorUpdateDoctor) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
 // GetPatient_ids returns UpdateDoctorUpdateDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *UpdateDoctorUpdateDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetAddress returns UpdateDoctorUpdateDoctor.Address, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctor) GetAddress() UpdateDoctorUpdateDoctorAddress { return v.Address }
+
+// UpdateDoctorUpdateDoctorAddress includes the requested fields of the GraphQL type Address.
+type UpdateDoctorUpdateDoctorAddress struct {
+	Street   string `json:"street"`
+	Zip_code string `json:"zip_code"`
+	Country  string `json:"country"`
+}
+
+// GetStreet returns UpdateDoctorUpdateDoctorAddress.Street, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctorAddress) GetStreet() string { return v.Street }
+
+// GetZip_code returns UpdateDoctorUpdateDoctorAddress.Zip_code, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctorAddress) GetZip_code() string { return v.Zip_code }
+
+// GetCountry returns UpdateDoctorUpdateDoctorAddress.Country, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctorAddress) GetCountry() string { return v.Country }
 
 // UpdateDocumentResponse is returned by UpdateDocument on success.
 type UpdateDocumentResponse struct {
@@ -2984,79 +3397,109 @@ func (v *UpdateDocumentUpdateDocument) GetIs_favorite() bool { return v.Is_favor
 // GetDownload_url returns UpdateDocumentUpdateDocument.Download_url, and is useful for accessing the field via an interface.
 func (v *UpdateDocumentUpdateDocument) GetDownload_url() string { return v.Download_url }
 
-// UpdateHealthResponse is returned by UpdateHealth on success.
-type UpdateHealthResponse struct {
-	UpdateHealth UpdateHealthUpdateHealth `json:"updateHealth"`
+// UpdateMedicalFolderResponse is returned by UpdateMedicalFolder on success.
+type UpdateMedicalFolderResponse struct {
+	UpdateMedicalFolder UpdateMedicalFolderUpdateMedicalFolderMedicalInfo `json:"updateMedicalFolder"`
 }
 
-// GetUpdateHealth returns UpdateHealthResponse.UpdateHealth, and is useful for accessing the field via an interface.
-func (v *UpdateHealthResponse) GetUpdateHealth() UpdateHealthUpdateHealth { return v.UpdateHealth }
-
-// UpdateHealthUpdateHealth includes the requested fields of the GraphQL type Health.
-type UpdateHealthUpdateHealth struct {
-	Id                      string   `json:"id"`
-	Patients_allergies      []string `json:"patients_allergies"`
-	Patients_illness        []string `json:"patients_illness"`
-	Patients_treatments     []string `json:"patients_treatments"`
-	Patients_primary_doctor string   `json:"patients_primary_doctor"`
+// GetUpdateMedicalFolder returns UpdateMedicalFolderResponse.UpdateMedicalFolder, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderResponse) GetUpdateMedicalFolder() UpdateMedicalFolderUpdateMedicalFolderMedicalInfo {
+	return v.UpdateMedicalFolder
 }
 
-// GetId returns UpdateHealthUpdateHealth.Id, and is useful for accessing the field via an interface.
-func (v *UpdateHealthUpdateHealth) GetId() string { return v.Id }
-
-// GetPatients_allergies returns UpdateHealthUpdateHealth.Patients_allergies, and is useful for accessing the field via an interface.
-func (v *UpdateHealthUpdateHealth) GetPatients_allergies() []string { return v.Patients_allergies }
-
-// GetPatients_illness returns UpdateHealthUpdateHealth.Patients_illness, and is useful for accessing the field via an interface.
-func (v *UpdateHealthUpdateHealth) GetPatients_illness() []string { return v.Patients_illness }
-
-// GetPatients_treatments returns UpdateHealthUpdateHealth.Patients_treatments, and is useful for accessing the field via an interface.
-func (v *UpdateHealthUpdateHealth) GetPatients_treatments() []string { return v.Patients_treatments }
-
-// GetPatients_primary_doctor returns UpdateHealthUpdateHealth.Patients_primary_doctor, and is useful for accessing the field via an interface.
-func (v *UpdateHealthUpdateHealth) GetPatients_primary_doctor() string {
-	return v.Patients_primary_doctor
+// UpdateMedicalFolderUpdateMedicalFolderMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
+type UpdateMedicalFolderUpdateMedicalFolderMedicalInfo struct {
+	Id                  string                                                                                   `json:"id"`
+	Name                string                                                                                   `json:"name"`
+	Firstname           string                                                                                   `json:"firstname"`
+	Birthdate           int                                                                                      `json:"birthdate"`
+	Sex                 Sex                                                                                      `json:"sex"`
+	Height              int                                                                                      `json:"height"`
+	Weight              int                                                                                      `json:"weight"`
+	Primary_doctor_id   string                                                                                   `json:"primary_doctor_id"`
+	Medical_antecedents []UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents `json:"medical_antecedents"`
+	Onboarding_status   OnboardingStatus                                                                         `json:"onboarding_status"`
 }
 
-// UpdateInfoResponse is returned by UpdateInfo on success.
-type UpdateInfoResponse struct {
-	UpdateInfo UpdateInfoUpdateInfo `json:"updateInfo"`
+// GetId returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Id, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetId() string { return v.Id }
+
+// GetName returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Name, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetName() string { return v.Name }
+
+// GetFirstname returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Firstname, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetFirstname() string { return v.Firstname }
+
+// GetBirthdate returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Birthdate, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetBirthdate() int { return v.Birthdate }
+
+// GetSex returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Sex, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetSex() Sex { return v.Sex }
+
+// GetHeight returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Height, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetHeight() int { return v.Height }
+
+// GetWeight returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Weight, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetWeight() int { return v.Weight }
+
+// GetPrimary_doctor_id returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Primary_doctor_id, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetPrimary_doctor_id() string {
+	return v.Primary_doctor_id
 }
 
-// GetUpdateInfo returns UpdateInfoResponse.UpdateInfo, and is useful for accessing the field via an interface.
-func (v *UpdateInfoResponse) GetUpdateInfo() UpdateInfoUpdateInfo { return v.UpdateInfo }
-
-// UpdateInfoUpdateInfo includes the requested fields of the GraphQL type Info.
-type UpdateInfoUpdateInfo struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	Birthdate string `json:"birthdate"`
-	Height    int    `json:"height"`
-	Weight    int    `json:"weight"`
-	Sex       Sex    `json:"sex"`
-	Surname   string `json:"surname"`
+// GetMedical_antecedents returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Medical_antecedents, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetMedical_antecedents() []UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents {
+	return v.Medical_antecedents
 }
 
-// GetId returns UpdateInfoUpdateInfo.Id, and is useful for accessing the field via an interface.
-func (v *UpdateInfoUpdateInfo) GetId() string { return v.Id }
+// GetOnboarding_status returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Onboarding_status, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetOnboarding_status() OnboardingStatus {
+	return v.Onboarding_status
+}
 
-// GetName returns UpdateInfoUpdateInfo.Name, and is useful for accessing the field via an interface.
-func (v *UpdateInfoUpdateInfo) GetName() string { return v.Name }
+// UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents includes the requested fields of the GraphQL type MedicalAntecedents.
+type UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents struct {
+	Name           string                                                                                            `json:"name"`
+	Medicines      []UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines `json:"medicines"`
+	Still_relevant bool                                                                                              `json:"still_relevant"`
+}
 
-// GetBirthdate returns UpdateInfoUpdateInfo.Birthdate, and is useful for accessing the field via an interface.
-func (v *UpdateInfoUpdateInfo) GetBirthdate() string { return v.Birthdate }
+// GetName returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Name, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetName() string {
+	return v.Name
+}
 
-// GetHeight returns UpdateInfoUpdateInfo.Height, and is useful for accessing the field via an interface.
-func (v *UpdateInfoUpdateInfo) GetHeight() int { return v.Height }
+// GetMedicines returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Medicines, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetMedicines() []UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines {
+	return v.Medicines
+}
 
-// GetWeight returns UpdateInfoUpdateInfo.Weight, and is useful for accessing the field via an interface.
-func (v *UpdateInfoUpdateInfo) GetWeight() int { return v.Weight }
+// GetStill_relevant returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents.Still_relevant, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedents) GetStill_relevant() bool {
+	return v.Still_relevant
+}
 
-// GetSex returns UpdateInfoUpdateInfo.Sex, and is useful for accessing the field via an interface.
-func (v *UpdateInfoUpdateInfo) GetSex() Sex { return v.Sex }
+// UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines includes the requested fields of the GraphQL type Medicines.
+type UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines struct {
+	Period   []Period `json:"period"`
+	Day      []Day    `json:"day"`
+	Quantity int      `json:"quantity"`
+}
 
-// GetSurname returns UpdateInfoUpdateInfo.Surname, and is useful for accessing the field via an interface.
-func (v *UpdateInfoUpdateInfo) GetSurname() string { return v.Surname }
+// GetPeriod returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Period, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetPeriod() []Period {
+	return v.Period
+}
+
+// GetDay returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Day, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetDay() []Day {
+	return v.Day
+}
+
+// GetQuantity returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines.Quantity, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfoMedical_antecedentsMedicalAntecedentsMedicines) GetQuantity() int {
+	return v.Quantity
+}
 
 // UpdateNotificationResponse is returned by UpdateNotification on success.
 type UpdateNotificationResponse struct {
@@ -3098,13 +3541,12 @@ func (v *UpdatePatientResponse) GetUpdatePatient() UpdatePatientUpdatePatient { 
 
 // UpdatePatientUpdatePatient includes the requested fields of the GraphQL type Patient.
 type UpdatePatientUpdatePatient struct {
-	Id                   string   `json:"id"`
-	Email                string   `json:"email"`
-	Password             string   `json:"password"`
-	Rendez_vous_ids      []string `json:"rendez_vous_ids"`
-	Onboarding_info_id   string   `json:"onboarding_info_id"`
-	Onboarding_health_id string   `json:"onboarding_health_id"`
-	Document_ids         []string `json:"document_ids"`
+	Id              string   `json:"id"`
+	Email           string   `json:"email"`
+	Password        string   `json:"password"`
+	Rendez_vous_ids []string `json:"rendez_vous_ids"`
+	Medical_info_id string   `json:"medical_info_id"`
+	Document_ids    []string `json:"document_ids"`
 }
 
 // GetId returns UpdatePatientUpdatePatient.Id, and is useful for accessing the field via an interface.
@@ -3119,11 +3561,8 @@ func (v *UpdatePatientUpdatePatient) GetPassword() string { return v.Password }
 // GetRendez_vous_ids returns UpdatePatientUpdatePatient.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *UpdatePatientUpdatePatient) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
-// GetOnboarding_info_id returns UpdatePatientUpdatePatient.Onboarding_info_id, and is useful for accessing the field via an interface.
-func (v *UpdatePatientUpdatePatient) GetOnboarding_info_id() string { return v.Onboarding_info_id }
-
-// GetOnboarding_health_id returns UpdatePatientUpdatePatient.Onboarding_health_id, and is useful for accessing the field via an interface.
-func (v *UpdatePatientUpdatePatient) GetOnboarding_health_id() string { return v.Onboarding_health_id }
+// GetMedical_info_id returns UpdatePatientUpdatePatient.Medical_info_id, and is useful for accessing the field via an interface.
+func (v *UpdatePatientUpdatePatient) GetMedical_info_id() string { return v.Medical_info_id }
 
 // GetDocument_ids returns UpdatePatientUpdatePatient.Document_ids, and is useful for accessing the field via an interface.
 func (v *UpdatePatientUpdatePatient) GetDocument_ids() []string { return v.Document_ids }
@@ -3488,8 +3927,11 @@ func (v *__CreateDiseaseInput) GetAdvice() string { return v.Advice }
 
 // __CreateDoctorInput is used internally by genqlient
 type __CreateDoctorInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email     string       `json:"email"`
+	Password  string       `json:"password"`
+	Name      string       `json:"name"`
+	Firstname string       `json:"firstname"`
+	Address   AddressInput `json:"address"`
 }
 
 // GetEmail returns __CreateDoctorInput.Email, and is useful for accessing the field via an interface.
@@ -3497,6 +3939,15 @@ func (v *__CreateDoctorInput) GetEmail() string { return v.Email }
 
 // GetPassword returns __CreateDoctorInput.Password, and is useful for accessing the field via an interface.
 func (v *__CreateDoctorInput) GetPassword() string { return v.Password }
+
+// GetName returns __CreateDoctorInput.Name, and is useful for accessing the field via an interface.
+func (v *__CreateDoctorInput) GetName() string { return v.Name }
+
+// GetFirstname returns __CreateDoctorInput.Firstname, and is useful for accessing the field via an interface.
+func (v *__CreateDoctorInput) GetFirstname() string { return v.Firstname }
+
+// GetAddress returns __CreateDoctorInput.Address, and is useful for accessing the field via an interface.
+func (v *__CreateDoctorInput) GetAddress() AddressInput { return v.Address }
 
 // __CreateDocumentInput is used internally by genqlient
 type __CreateDocumentInput struct {
@@ -3526,53 +3977,71 @@ func (v *__CreateDocumentInput) GetIs_favorite() bool { return v.Is_favorite }
 // GetDownload_url returns __CreateDocumentInput.Download_url, and is useful for accessing the field via an interface.
 func (v *__CreateDocumentInput) GetDownload_url() string { return v.Download_url }
 
-// __CreateHealthInput is used internally by genqlient
-type __CreateHealthInput struct {
-	Patients_allergies      []string `json:"patients_allergies"`
-	Patients_illness        []string `json:"patients_illness"`
-	Patients_primary_doctor string   `json:"patients_primary_doctor"`
-	Patients_treatments     []string `json:"patients_treatments"`
+// __CreateMedicalFolderInput is used internally by genqlient
+type __CreateMedicalFolderInput struct {
+	Name                string                    `json:"name"`
+	Firstname           string                    `json:"firstname"`
+	Birthdate           int                       `json:"birthdate"`
+	Sex                 string                    `json:"sex"`
+	Height              int                       `json:"height"`
+	Weight              int                       `json:"weight"`
+	Primary_doctor_id   string                    `json:"primary_doctor_id"`
+	Medical_antecedents []MedicalAntecedentsInput `json:"medical_antecedents"`
+	Onboarding_status   string                    `json:"onboarding_status"`
 }
 
-// GetPatients_allergies returns __CreateHealthInput.Patients_allergies, and is useful for accessing the field via an interface.
-func (v *__CreateHealthInput) GetPatients_allergies() []string { return v.Patients_allergies }
+// GetName returns __CreateMedicalFolderInput.Name, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetName() string { return v.Name }
 
-// GetPatients_illness returns __CreateHealthInput.Patients_illness, and is useful for accessing the field via an interface.
-func (v *__CreateHealthInput) GetPatients_illness() []string { return v.Patients_illness }
+// GetFirstname returns __CreateMedicalFolderInput.Firstname, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetFirstname() string { return v.Firstname }
 
-// GetPatients_primary_doctor returns __CreateHealthInput.Patients_primary_doctor, and is useful for accessing the field via an interface.
-func (v *__CreateHealthInput) GetPatients_primary_doctor() string { return v.Patients_primary_doctor }
+// GetBirthdate returns __CreateMedicalFolderInput.Birthdate, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetBirthdate() int { return v.Birthdate }
 
-// GetPatients_treatments returns __CreateHealthInput.Patients_treatments, and is useful for accessing the field via an interface.
-func (v *__CreateHealthInput) GetPatients_treatments() []string { return v.Patients_treatments }
+// GetSex returns __CreateMedicalFolderInput.Sex, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetSex() string { return v.Sex }
 
-// __CreateInfoInput is used internally by genqlient
-type __CreateInfoInput struct {
-	Name      string `json:"name"`
-	Birthdate string `json:"birthdate"`
-	Height    int    `json:"height"`
-	Weight    int    `json:"weight"`
-	Sex       string `json:"sex"`
-	Surname   string `json:"surname"`
+// GetHeight returns __CreateMedicalFolderInput.Height, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetHeight() int { return v.Height }
+
+// GetWeight returns __CreateMedicalFolderInput.Weight, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetWeight() int { return v.Weight }
+
+// GetPrimary_doctor_id returns __CreateMedicalFolderInput.Primary_doctor_id, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetPrimary_doctor_id() string { return v.Primary_doctor_id }
+
+// GetMedical_antecedents returns __CreateMedicalFolderInput.Medical_antecedents, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetMedical_antecedents() []MedicalAntecedentsInput {
+	return v.Medical_antecedents
 }
 
-// GetName returns __CreateInfoInput.Name, and is useful for accessing the field via an interface.
-func (v *__CreateInfoInput) GetName() string { return v.Name }
+// GetOnboarding_status returns __CreateMedicalFolderInput.Onboarding_status, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetOnboarding_status() string { return v.Onboarding_status }
 
-// GetBirthdate returns __CreateInfoInput.Birthdate, and is useful for accessing the field via an interface.
-func (v *__CreateInfoInput) GetBirthdate() string { return v.Birthdate }
+// __CreateMedicamentInput is used internally by genqlient
+type __CreateMedicamentInput struct {
+	Name             string   `json:"name"`
+	Unit             string   `json:"unit"`
+	Target_dieseases []string `json:"target_dieseases"`
+	Treated_symptoms []string `json:"treated_symptoms"`
+	Side_effects     []string `json:"side_effects"`
+}
 
-// GetHeight returns __CreateInfoInput.Height, and is useful for accessing the field via an interface.
-func (v *__CreateInfoInput) GetHeight() int { return v.Height }
+// GetName returns __CreateMedicamentInput.Name, and is useful for accessing the field via an interface.
+func (v *__CreateMedicamentInput) GetName() string { return v.Name }
 
-// GetWeight returns __CreateInfoInput.Weight, and is useful for accessing the field via an interface.
-func (v *__CreateInfoInput) GetWeight() int { return v.Weight }
+// GetUnit returns __CreateMedicamentInput.Unit, and is useful for accessing the field via an interface.
+func (v *__CreateMedicamentInput) GetUnit() string { return v.Unit }
 
-// GetSex returns __CreateInfoInput.Sex, and is useful for accessing the field via an interface.
-func (v *__CreateInfoInput) GetSex() string { return v.Sex }
+// GetTarget_dieseases returns __CreateMedicamentInput.Target_dieseases, and is useful for accessing the field via an interface.
+func (v *__CreateMedicamentInput) GetTarget_dieseases() []string { return v.Target_dieseases }
 
-// GetSurname returns __CreateInfoInput.Surname, and is useful for accessing the field via an interface.
-func (v *__CreateInfoInput) GetSurname() string { return v.Surname }
+// GetTreated_symptoms returns __CreateMedicamentInput.Treated_symptoms, and is useful for accessing the field via an interface.
+func (v *__CreateMedicamentInput) GetTreated_symptoms() []string { return v.Treated_symptoms }
+
+// GetSide_effects returns __CreateMedicamentInput.Side_effects, and is useful for accessing the field via an interface.
+func (v *__CreateMedicamentInput) GetSide_effects() []string { return v.Side_effects }
 
 // __CreateNotificationInput is used internally by genqlient
 type __CreateNotificationInput struct {
@@ -3806,21 +4275,21 @@ type __DeleteDocumentInput struct {
 // GetId returns __DeleteDocumentInput.Id, and is useful for accessing the field via an interface.
 func (v *__DeleteDocumentInput) GetId() string { return v.Id }
 
-// __DeleteHealthInput is used internally by genqlient
-type __DeleteHealthInput struct {
+// __DeleteMedicalFolderInput is used internally by genqlient
+type __DeleteMedicalFolderInput struct {
 	Id string `json:"id"`
 }
 
-// GetId returns __DeleteHealthInput.Id, and is useful for accessing the field via an interface.
-func (v *__DeleteHealthInput) GetId() string { return v.Id }
+// GetId returns __DeleteMedicalFolderInput.Id, and is useful for accessing the field via an interface.
+func (v *__DeleteMedicalFolderInput) GetId() string { return v.Id }
 
-// __DeleteInfoInput is used internally by genqlient
-type __DeleteInfoInput struct {
+// __DeleteMedicamentInput is used internally by genqlient
+type __DeleteMedicamentInput struct {
 	Id string `json:"id"`
 }
 
-// GetId returns __DeleteInfoInput.Id, and is useful for accessing the field via an interface.
-func (v *__DeleteInfoInput) GetId() string { return v.Id }
+// GetId returns __DeleteMedicamentInput.Id, and is useful for accessing the field via an interface.
+func (v *__DeleteMedicamentInput) GetId() string { return v.Id }
 
 // __DeleteNotificationInput is used internally by genqlient
 type __DeleteNotificationInput struct {
@@ -3990,21 +4459,21 @@ type __GetDocumentByIdInput struct {
 // GetId returns __GetDocumentByIdInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetDocumentByIdInput) GetId() string { return v.Id }
 
-// __GetHealthByIdInput is used internally by genqlient
-type __GetHealthByIdInput struct {
+// __GetMedicalFolderByIDInput is used internally by genqlient
+type __GetMedicalFolderByIDInput struct {
 	Id string `json:"id"`
 }
 
-// GetId returns __GetHealthByIdInput.Id, and is useful for accessing the field via an interface.
-func (v *__GetHealthByIdInput) GetId() string { return v.Id }
+// GetId returns __GetMedicalFolderByIDInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetMedicalFolderByIDInput) GetId() string { return v.Id }
 
-// __GetInfoByIdInput is used internally by genqlient
-type __GetInfoByIdInput struct {
+// __GetMedicamentByIDInput is used internally by genqlient
+type __GetMedicamentByIDInput struct {
 	Id string `json:"id"`
 }
 
-// GetId returns __GetInfoByIdInput.Id, and is useful for accessing the field via an interface.
-func (v *__GetInfoByIdInput) GetId() string { return v.Id }
+// GetId returns __GetMedicamentByIDInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetMedicamentByIDInput) GetId() string { return v.Id }
 
 // __GetNotificationByIdInput is used internally by genqlient
 type __GetNotificationByIdInput struct {
@@ -4270,11 +4739,14 @@ func (v *__UpdateDiseaseInput) GetAdvice() string { return v.Advice }
 
 // __UpdateDoctorInput is used internally by genqlient
 type __UpdateDoctorInput struct {
-	Id              string   `json:"id"`
-	Email           string   `json:"email"`
-	Password        string   `json:"password"`
-	Rendez_vous_ids []string `json:"rendez_vous_ids"`
-	Patient_ids     []string `json:"patient_ids"`
+	Id              string       `json:"id"`
+	Email           string       `json:"email"`
+	Password        string       `json:"password"`
+	Name            string       `json:"name"`
+	Firstname       string       `json:"firstname"`
+	Rendez_vous_ids []string     `json:"rendez_vous_ids"`
+	Patient_ids     []string     `json:"patient_ids"`
+	Address         AddressInput `json:"address"`
 }
 
 // GetId returns __UpdateDoctorInput.Id, and is useful for accessing the field via an interface.
@@ -4286,11 +4758,20 @@ func (v *__UpdateDoctorInput) GetEmail() string { return v.Email }
 // GetPassword returns __UpdateDoctorInput.Password, and is useful for accessing the field via an interface.
 func (v *__UpdateDoctorInput) GetPassword() string { return v.Password }
 
+// GetName returns __UpdateDoctorInput.Name, and is useful for accessing the field via an interface.
+func (v *__UpdateDoctorInput) GetName() string { return v.Name }
+
+// GetFirstname returns __UpdateDoctorInput.Firstname, and is useful for accessing the field via an interface.
+func (v *__UpdateDoctorInput) GetFirstname() string { return v.Firstname }
+
 // GetRendez_vous_ids returns __UpdateDoctorInput.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *__UpdateDoctorInput) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
 
 // GetPatient_ids returns __UpdateDoctorInput.Patient_ids, and is useful for accessing the field via an interface.
 func (v *__UpdateDoctorInput) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetAddress returns __UpdateDoctorInput.Address, and is useful for accessing the field via an interface.
+func (v *__UpdateDoctorInput) GetAddress() AddressInput { return v.Address }
 
 // __UpdateDocumentInput is used internally by genqlient
 type __UpdateDocumentInput struct {
@@ -4308,61 +4789,51 @@ func (v *__UpdateDocumentInput) GetName() string { return v.Name }
 // GetIs_favorite returns __UpdateDocumentInput.Is_favorite, and is useful for accessing the field via an interface.
 func (v *__UpdateDocumentInput) GetIs_favorite() bool { return v.Is_favorite }
 
-// __UpdateHealthInput is used internally by genqlient
-type __UpdateHealthInput struct {
-	Id                      string   `json:"id"`
-	Patients_allergies      []string `json:"patients_allergies"`
-	Patients_illness        []string `json:"patients_illness"`
-	Patients_primary_doctor string   `json:"patients_primary_doctor"`
-	Patients_treatments     []string `json:"patients_treatments"`
+// __UpdateMedicalFolderInput is used internally by genqlient
+type __UpdateMedicalFolderInput struct {
+	Id                  string                    `json:"id"`
+	Name                string                    `json:"name"`
+	Firstname           string                    `json:"firstname"`
+	Birthdate           int                       `json:"birthdate"`
+	Sex                 string                    `json:"sex"`
+	Height              int                       `json:"height"`
+	Weight              int                       `json:"weight"`
+	Primary_doctor_id   string                    `json:"primary_doctor_id"`
+	Medical_antecedents []MedicalAntecedentsInput `json:"medical_antecedents"`
+	Onboarding_status   string                    `json:"onboarding_status"`
 }
 
-// GetId returns __UpdateHealthInput.Id, and is useful for accessing the field via an interface.
-func (v *__UpdateHealthInput) GetId() string { return v.Id }
+// GetId returns __UpdateMedicalFolderInput.Id, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetId() string { return v.Id }
 
-// GetPatients_allergies returns __UpdateHealthInput.Patients_allergies, and is useful for accessing the field via an interface.
-func (v *__UpdateHealthInput) GetPatients_allergies() []string { return v.Patients_allergies }
+// GetName returns __UpdateMedicalFolderInput.Name, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetName() string { return v.Name }
 
-// GetPatients_illness returns __UpdateHealthInput.Patients_illness, and is useful for accessing the field via an interface.
-func (v *__UpdateHealthInput) GetPatients_illness() []string { return v.Patients_illness }
+// GetFirstname returns __UpdateMedicalFolderInput.Firstname, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetFirstname() string { return v.Firstname }
 
-// GetPatients_primary_doctor returns __UpdateHealthInput.Patients_primary_doctor, and is useful for accessing the field via an interface.
-func (v *__UpdateHealthInput) GetPatients_primary_doctor() string { return v.Patients_primary_doctor }
+// GetBirthdate returns __UpdateMedicalFolderInput.Birthdate, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetBirthdate() int { return v.Birthdate }
 
-// GetPatients_treatments returns __UpdateHealthInput.Patients_treatments, and is useful for accessing the field via an interface.
-func (v *__UpdateHealthInput) GetPatients_treatments() []string { return v.Patients_treatments }
+// GetSex returns __UpdateMedicalFolderInput.Sex, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetSex() string { return v.Sex }
 
-// __UpdateInfoInput is used internally by genqlient
-type __UpdateInfoInput struct {
-	Id        string `json:"id"`
-	Name      string `json:"name"`
-	Birthdate string `json:"birthdate"`
-	Height    int    `json:"height"`
-	Weight    int    `json:"weight"`
-	Sex       string `json:"sex"`
-	Surname   string `json:"surname"`
+// GetHeight returns __UpdateMedicalFolderInput.Height, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetHeight() int { return v.Height }
+
+// GetWeight returns __UpdateMedicalFolderInput.Weight, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetWeight() int { return v.Weight }
+
+// GetPrimary_doctor_id returns __UpdateMedicalFolderInput.Primary_doctor_id, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetPrimary_doctor_id() string { return v.Primary_doctor_id }
+
+// GetMedical_antecedents returns __UpdateMedicalFolderInput.Medical_antecedents, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetMedical_antecedents() []MedicalAntecedentsInput {
+	return v.Medical_antecedents
 }
 
-// GetId returns __UpdateInfoInput.Id, and is useful for accessing the field via an interface.
-func (v *__UpdateInfoInput) GetId() string { return v.Id }
-
-// GetName returns __UpdateInfoInput.Name, and is useful for accessing the field via an interface.
-func (v *__UpdateInfoInput) GetName() string { return v.Name }
-
-// GetBirthdate returns __UpdateInfoInput.Birthdate, and is useful for accessing the field via an interface.
-func (v *__UpdateInfoInput) GetBirthdate() string { return v.Birthdate }
-
-// GetHeight returns __UpdateInfoInput.Height, and is useful for accessing the field via an interface.
-func (v *__UpdateInfoInput) GetHeight() int { return v.Height }
-
-// GetWeight returns __UpdateInfoInput.Weight, and is useful for accessing the field via an interface.
-func (v *__UpdateInfoInput) GetWeight() int { return v.Weight }
-
-// GetSex returns __UpdateInfoInput.Sex, and is useful for accessing the field via an interface.
-func (v *__UpdateInfoInput) GetSex() string { return v.Sex }
-
-// GetSurname returns __UpdateInfoInput.Surname, and is useful for accessing the field via an interface.
-func (v *__UpdateInfoInput) GetSurname() string { return v.Surname }
+// GetOnboarding_status returns __UpdateMedicalFolderInput.Onboarding_status, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetOnboarding_status() string { return v.Onboarding_status }
 
 // __UpdateNotificationInput is used internally by genqlient
 type __UpdateNotificationInput struct {
@@ -4386,13 +4857,12 @@ func (v *__UpdateNotificationInput) GetTitle() string { return v.Title }
 
 // __UpdatePatientInput is used internally by genqlient
 type __UpdatePatientInput struct {
-	Id                   string   `json:"id"`
-	Email                string   `json:"email"`
-	Password             string   `json:"password"`
-	Onboarding_info_id   string   `json:"onboarding_info_id"`
-	Onboarding_health_id string   `json:"onboarding_health_id"`
-	Rendez_vous_ids      []string `json:"rendez_vous_ids"`
-	Document_ids         []string `json:"document_ids"`
+	Id              string   `json:"id"`
+	Email           string   `json:"email"`
+	Password        string   `json:"password"`
+	Medical_info_id string   `json:"medical_info_id"`
+	Rendez_vous_ids []string `json:"rendez_vous_ids"`
+	Document_ids    []string `json:"document_ids"`
 }
 
 // GetId returns __UpdatePatientInput.Id, and is useful for accessing the field via an interface.
@@ -4404,11 +4874,8 @@ func (v *__UpdatePatientInput) GetEmail() string { return v.Email }
 // GetPassword returns __UpdatePatientInput.Password, and is useful for accessing the field via an interface.
 func (v *__UpdatePatientInput) GetPassword() string { return v.Password }
 
-// GetOnboarding_info_id returns __UpdatePatientInput.Onboarding_info_id, and is useful for accessing the field via an interface.
-func (v *__UpdatePatientInput) GetOnboarding_info_id() string { return v.Onboarding_info_id }
-
-// GetOnboarding_health_id returns __UpdatePatientInput.Onboarding_health_id, and is useful for accessing the field via an interface.
-func (v *__UpdatePatientInput) GetOnboarding_health_id() string { return v.Onboarding_health_id }
+// GetMedical_info_id returns __UpdatePatientInput.Medical_info_id, and is useful for accessing the field via an interface.
+func (v *__UpdatePatientInput) GetMedical_info_id() string { return v.Medical_info_id }
 
 // GetRendez_vous_ids returns __UpdatePatientInput.Rendez_vous_ids, and is useful for accessing the field via an interface.
 func (v *__UpdatePatientInput) GetRendez_vous_ids() []string { return v.Rendez_vous_ids }
@@ -4901,11 +5368,18 @@ func CreateDisease(
 
 // The query or mutation executed by CreateDoctor.
 const CreateDoctor_Operation = `
-mutation CreateDoctor ($email: String!, $password: String!) {
-	createDoctor(email: $email, password: $password) {
+mutation CreateDoctor ($email: String!, $password: String!, $name: String!, $firstname: String!, $address: AddressInput!) {
+	createDoctor(email: $email, password: $password, name: $name, firstname: $firstname, address: $address) {
 		id
 		email
 		password
+		name
+		firstname
+		address {
+			street
+			zip_code
+			country
+		}
 		rendez_vous_ids
 		patient_ids
 	}
@@ -4917,13 +5391,19 @@ func CreateDoctor(
 	client graphql.Client,
 	email string,
 	password string,
+	name string,
+	firstname string,
+	address AddressInput,
 ) (*CreateDoctorResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateDoctor",
 		Query:  CreateDoctor_Operation,
 		Variables: &__CreateDoctorInput{
-			Email:    email,
-			Password: password,
+			Email:     email,
+			Password:  password,
+			Name:      name,
+			Firstname: firstname,
+			Address:   address,
 		},
 	}
 	var err error
@@ -4991,40 +5471,63 @@ func CreateDocument(
 	return &data, err
 }
 
-// The query or mutation executed by CreateHealth.
-const CreateHealth_Operation = `
-mutation CreateHealth ($patients_allergies: [String!], $patients_illness: [String!], $patients_primary_doctor: String!, $patients_treatments: [String!]) {
-	createHealth(patients_allergies: $patients_allergies, patients_illness: $patients_illness, patients_primary_doctor: $patients_primary_doctor, patients_treatments: $patients_treatments) {
+// The query or mutation executed by CreateMedicalFolder.
+const CreateMedicalFolder_Operation = `
+mutation CreateMedicalFolder ($name: String!, $firstname: String!, $birthdate: Int!, $sex: String!, $height: Int!, $weight: Int!, $primary_doctor_id: String!, $medical_antecedents: [MedicalAntecedentsInput!]!, $onboarding_status: String!) {
+	createMedicalFolder(name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, medical_antecedents: $medical_antecedents, onboarding_status: $onboarding_status) {
 		id
-		patients_allergies
-		patients_illness
-		patients_treatments
-		patients_primary_doctor
+		name
+		firstname
+		birthdate
+		sex
+		height
+		weight
+		primary_doctor_id
+		medical_antecedents {
+			name
+			medicines {
+				period
+				day
+				quantity
+			}
+			still_relevant
+		}
+		onboarding_status
 	}
 }
 `
 
-func CreateHealth(
+func CreateMedicalFolder(
 	ctx context.Context,
 	client graphql.Client,
-	patients_allergies []string,
-	patients_illness []string,
-	patients_primary_doctor string,
-	patients_treatments []string,
-) (*CreateHealthResponse, error) {
+	name string,
+	firstname string,
+	birthdate int,
+	sex string,
+	height int,
+	weight int,
+	primary_doctor_id string,
+	medical_antecedents []MedicalAntecedentsInput,
+	onboarding_status string,
+) (*CreateMedicalFolderResponse, error) {
 	req := &graphql.Request{
-		OpName: "CreateHealth",
-		Query:  CreateHealth_Operation,
-		Variables: &__CreateHealthInput{
-			Patients_allergies:      patients_allergies,
-			Patients_illness:        patients_illness,
-			Patients_primary_doctor: patients_primary_doctor,
-			Patients_treatments:     patients_treatments,
+		OpName: "CreateMedicalFolder",
+		Query:  CreateMedicalFolder_Operation,
+		Variables: &__CreateMedicalFolderInput{
+			Name:                name,
+			Firstname:           firstname,
+			Birthdate:           birthdate,
+			Sex:                 sex,
+			Height:              height,
+			Weight:              weight,
+			Primary_doctor_id:   primary_doctor_id,
+			Medical_antecedents: medical_antecedents,
+			Onboarding_status:   onboarding_status,
 		},
 	}
 	var err error
 
-	var data CreateHealthResponse
+	var data CreateMedicalFolderResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -5036,46 +5539,43 @@ func CreateHealth(
 	return &data, err
 }
 
-// The query or mutation executed by CreateInfo.
-const CreateInfo_Operation = `
-mutation CreateInfo ($name: String!, $birthdate: String!, $height: Int!, $weight: Int!, $sex: String!, $surname: String!) {
-	createInfo(name: $name, birthdate: $birthdate, height: $height, weight: $weight, sex: $sex, surname: $surname) {
+// The query or mutation executed by CreateMedicament.
+const CreateMedicament_Operation = `
+mutation CreateMedicament ($name: String!, $unit: String, $target_dieseases: [String!]!, $treated_symptoms: [String!]!, $side_effects: [String!]!) {
+	createMedicament(name: $name, unit: $unit, target_dieseases: $target_dieseases, treated_symptoms: $treated_symptoms, side_effects: $side_effects) {
 		id
 		name
-		birthdate
-		height
-		weight
-		sex
-		surname
+		unit
+		target_diseases
+		treated_symptoms
+		side_effects
 	}
 }
 `
 
-func CreateInfo(
+func CreateMedicament(
 	ctx context.Context,
 	client graphql.Client,
 	name string,
-	birthdate string,
-	height int,
-	weight int,
-	sex string,
-	surname string,
-) (*CreateInfoResponse, error) {
+	unit string,
+	target_dieseases []string,
+	treated_symptoms []string,
+	side_effects []string,
+) (*CreateMedicamentResponse, error) {
 	req := &graphql.Request{
-		OpName: "CreateInfo",
-		Query:  CreateInfo_Operation,
-		Variables: &__CreateInfoInput{
-			Name:      name,
-			Birthdate: birthdate,
-			Height:    height,
-			Weight:    weight,
-			Sex:       sex,
-			Surname:   surname,
+		OpName: "CreateMedicament",
+		Query:  CreateMedicament_Operation,
+		Variables: &__CreateMedicamentInput{
+			Name:             name,
+			Unit:             unit,
+			Target_dieseases: target_dieseases,
+			Treated_symptoms: treated_symptoms,
+			Side_effects:     side_effects,
 		},
 	}
 	var err error
 
-	var data CreateInfoResponse
+	var data CreateMedicamentResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -5137,8 +5637,7 @@ mutation CreatePatient ($email: String!, $password: String!) {
 		email
 		password
 		rendez_vous_ids
-		onboarding_info_id
-		onboarding_health_id
+		medical_info_id
 		document_ids
 	}
 }
@@ -5722,28 +6221,28 @@ func DeleteDocument(
 	return &data, err
 }
 
-// The query or mutation executed by DeleteHealth.
-const DeleteHealth_Operation = `
-mutation DeleteHealth ($id: String!) {
-	deleteHealth(id: $id)
+// The query or mutation executed by DeleteMedicalFolder.
+const DeleteMedicalFolder_Operation = `
+mutation DeleteMedicalFolder ($id: String!) {
+	deleteMedicalFolder(id: $id)
 }
 `
 
-func DeleteHealth(
+func DeleteMedicalFolder(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
-) (*DeleteHealthResponse, error) {
+) (*DeleteMedicalFolderResponse, error) {
 	req := &graphql.Request{
-		OpName: "DeleteHealth",
-		Query:  DeleteHealth_Operation,
-		Variables: &__DeleteHealthInput{
+		OpName: "DeleteMedicalFolder",
+		Query:  DeleteMedicalFolder_Operation,
+		Variables: &__DeleteMedicalFolderInput{
 			Id: id,
 		},
 	}
 	var err error
 
-	var data DeleteHealthResponse
+	var data DeleteMedicalFolderResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -5755,28 +6254,28 @@ func DeleteHealth(
 	return &data, err
 }
 
-// The query or mutation executed by DeleteInfo.
-const DeleteInfo_Operation = `
-mutation DeleteInfo ($id: String!) {
-	deleteInfo(id: $id)
+// The query or mutation executed by DeleteMedicament.
+const DeleteMedicament_Operation = `
+mutation DeleteMedicament ($id: String!) {
+	deleteMedicament(id: $id)
 }
 `
 
-func DeleteInfo(
+func DeleteMedicament(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
-) (*DeleteInfoResponse, error) {
+) (*DeleteMedicamentResponse, error) {
 	req := &graphql.Request{
-		OpName: "DeleteInfo",
-		Query:  DeleteInfo_Operation,
-		Variables: &__DeleteInfoInput{
+		OpName: "DeleteMedicament",
+		Query:  DeleteMedicament_Operation,
+		Variables: &__DeleteMedicamentInput{
 			Id: id,
 		},
 	}
 	var err error
 
-	var data DeleteInfoResponse
+	var data DeleteMedicamentResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -6673,6 +7172,13 @@ query GetDoctorByEmail ($email: String!) {
 		id
 		email
 		password
+		name
+		firstname
+		address {
+			street
+			zip_code
+			country
+		}
 		rendez_vous_ids
 		patient_ids
 	}
@@ -6712,6 +7218,13 @@ query GetDoctorById ($id: String!) {
 		id
 		email
 		password
+		name
+		firstname
+		address {
+			street
+			zip_code
+			country
+		}
 		rendez_vous_ids
 		patient_ids
 	}
@@ -6791,6 +7304,13 @@ query GetDoctors {
 		id
 		email
 		password
+		name
+		firstname
+		address {
+			street
+			zip_code
+			country
+		}
 		rendez_vous_ids
 		patient_ids
 	}
@@ -6897,34 +7417,95 @@ func GetDocuments(
 	return &data, err
 }
 
-// The query or mutation executed by GetHealthById.
-const GetHealthById_Operation = `
-query GetHealthById ($id: String!) {
-	getHealthById(id: $id) {
+// The query or mutation executed by GetMedicalFolder.
+const GetMedicalFolder_Operation = `
+query GetMedicalFolder {
+	getMedicalFolder {
 		id
-		patients_allergies
-		patients_illness
-		patients_treatments
-		patients_primary_doctor
+		name
+		firstname
+		birthdate
+		sex
+		height
+		weight
+		primary_doctor_id
+		medical_antecedents {
+			name
+			medicines {
+				period
+				day
+				quantity
+			}
+			still_relevant
+		}
+		onboarding_status
 	}
 }
 `
 
-func GetHealthById(
+func GetMedicalFolder(
+	ctx context.Context,
+	client graphql.Client,
+) (*GetMedicalFolderResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetMedicalFolder",
+		Query:  GetMedicalFolder_Operation,
+	}
+	var err error
+
+	var data GetMedicalFolderResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetMedicalFolderByID.
+const GetMedicalFolderByID_Operation = `
+query GetMedicalFolderByID ($id: String!) {
+	getMedicalFolderById(id: $id) {
+		id
+		name
+		firstname
+		birthdate
+		sex
+		height
+		weight
+		primary_doctor_id
+		medical_antecedents {
+			name
+			medicines {
+				period
+				day
+				quantity
+			}
+			still_relevant
+		}
+		onboarding_status
+	}
+}
+`
+
+func GetMedicalFolderByID(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
-) (*GetHealthByIdResponse, error) {
+) (*GetMedicalFolderByIDResponse, error) {
 	req := &graphql.Request{
-		OpName: "GetHealthById",
-		Query:  GetHealthById_Operation,
-		Variables: &__GetHealthByIdInput{
+		OpName: "GetMedicalFolderByID",
+		Query:  GetMedicalFolderByID_Operation,
+		Variables: &__GetMedicalFolderByIDInput{
 			Id: id,
 		},
 	}
 	var err error
 
-	var data GetHealthByIdResponse
+	var data GetMedicalFolderByIDResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -6936,71 +7517,35 @@ func GetHealthById(
 	return &data, err
 }
 
-// The query or mutation executed by GetHealths.
-const GetHealths_Operation = `
-query GetHealths {
-	getHealths {
-		id
-		patients_allergies
-		patients_illness
-		patients_treatments
-		patients_primary_doctor
-	}
-}
-`
-
-func GetHealths(
-	ctx context.Context,
-	client graphql.Client,
-) (*GetHealthsResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetHealths",
-		Query:  GetHealths_Operation,
-	}
-	var err error
-
-	var data GetHealthsResponse
-	resp := &graphql.Response{Data: &data}
-
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
-	)
-
-	return &data, err
-}
-
-// The query or mutation executed by GetInfoById.
-const GetInfoById_Operation = `
-query GetInfoById ($id: String!) {
-	getInfoById(id: $id) {
+// The query or mutation executed by GetMedicamentByID.
+const GetMedicamentByID_Operation = `
+query GetMedicamentByID ($id: String!) {
+	getMedicamentByID(id: $id) {
 		id
 		name
-		birthdate
-		height
-		weight
-		sex
-		surname
+		unit
+		target_diseases
+		treated_symptoms
+		side_effects
 	}
 }
 `
 
-func GetInfoById(
+func GetMedicamentByID(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
-) (*GetInfoByIdResponse, error) {
+) (*GetMedicamentByIDResponse, error) {
 	req := &graphql.Request{
-		OpName: "GetInfoById",
-		Query:  GetInfoById_Operation,
-		Variables: &__GetInfoByIdInput{
+		OpName: "GetMedicamentByID",
+		Query:  GetMedicamentByID_Operation,
+		Variables: &__GetMedicamentByIDInput{
 			Id: id,
 		},
 	}
 	var err error
 
-	var data GetInfoByIdResponse
+	var data GetMedicamentByIDResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -7012,32 +7557,31 @@ func GetInfoById(
 	return &data, err
 }
 
-// The query or mutation executed by GetInfos.
-const GetInfos_Operation = `
-query GetInfos {
-	getInfos {
+// The query or mutation executed by GetMedicaments.
+const GetMedicaments_Operation = `
+query GetMedicaments {
+	getMedicaments {
 		id
 		name
-		birthdate
-		height
-		weight
-		sex
-		surname
+		unit
+		target_diseases
+		treated_symptoms
+		side_effects
 	}
 }
 `
 
-func GetInfos(
+func GetMedicaments(
 	ctx context.Context,
 	client graphql.Client,
-) (*GetInfosResponse, error) {
+) (*GetMedicamentsResponse, error) {
 	req := &graphql.Request{
-		OpName: "GetInfos",
-		Query:  GetInfos_Operation,
+		OpName: "GetMedicaments",
+		Query:  GetMedicaments_Operation,
 	}
 	var err error
 
-	var data GetInfosResponse
+	var data GetMedicamentsResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -7129,8 +7673,7 @@ query GetPatientByEmail ($email: String!) {
 		email
 		password
 		rendez_vous_ids
-		onboarding_info_id
-		onboarding_health_id
+		medical_info_id
 		document_ids
 	}
 }
@@ -7170,8 +7713,7 @@ query GetPatientById ($id: String!) {
 		email
 		password
 		rendez_vous_ids
-		onboarding_info_id
-		onboarding_health_id
+		medical_info_id
 		document_ids
 	}
 }
@@ -7292,8 +7834,7 @@ query GetPatients {
 		email
 		password
 		rendez_vous_ids
-		onboarding_info_id
-		onboarding_health_id
+		medical_info_id
 		document_ids
 	}
 }
@@ -8059,13 +8600,20 @@ func UpdateDisease(
 
 // The query or mutation executed by UpdateDoctor.
 const UpdateDoctor_Operation = `
-mutation UpdateDoctor ($id: String!, $email: String, $password: String, $rendez_vous_ids: [String], $patient_ids: [String]) {
-	updateDoctor(id: $id, email: $email, password: $password, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids) {
+mutation UpdateDoctor ($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!) {
+	updateDoctor(id: $id, email: $email, password: $password, name: $name, firstname: $firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address) {
 		id
 		email
 		password
+		name
+		firstname
 		rendez_vous_ids
 		patient_ids
+		address {
+			street
+			zip_code
+			country
+		}
 	}
 }
 `
@@ -8076,8 +8624,11 @@ func UpdateDoctor(
 	id string,
 	email string,
 	password string,
+	name string,
+	firstname string,
 	rendez_vous_ids []string,
 	patient_ids []string,
+	address AddressInput,
 ) (*UpdateDoctorResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateDoctor",
@@ -8086,8 +8637,11 @@ func UpdateDoctor(
 			Id:              id,
 			Email:           email,
 			Password:        password,
+			Name:            name,
+			Firstname:       firstname,
 			Rendez_vous_ids: rendez_vous_ids,
 			Patient_ids:     patient_ids,
+			Address:         address,
 		},
 	}
 	var err error
@@ -8149,95 +8703,65 @@ func UpdateDocument(
 	return &data, err
 }
 
-// The query or mutation executed by UpdateHealth.
-const UpdateHealth_Operation = `
-mutation UpdateHealth ($id: String!, $patients_allergies: [String!], $patients_illness: [String!], $patients_primary_doctor: String, $patients_treatments: [String!]) {
-	updateHealth(id: $id, patients_allergies: $patients_allergies, patients_illness: $patients_illness, patients_primary_doctor: $patients_primary_doctor, patients_treatments: $patients_treatments) {
-		id
-		patients_allergies
-		patients_illness
-		patients_treatments
-		patients_primary_doctor
-	}
-}
-`
-
-func UpdateHealth(
-	ctx context.Context,
-	client graphql.Client,
-	id string,
-	patients_allergies []string,
-	patients_illness []string,
-	patients_primary_doctor string,
-	patients_treatments []string,
-) (*UpdateHealthResponse, error) {
-	req := &graphql.Request{
-		OpName: "UpdateHealth",
-		Query:  UpdateHealth_Operation,
-		Variables: &__UpdateHealthInput{
-			Id:                      id,
-			Patients_allergies:      patients_allergies,
-			Patients_illness:        patients_illness,
-			Patients_primary_doctor: patients_primary_doctor,
-			Patients_treatments:     patients_treatments,
-		},
-	}
-	var err error
-
-	var data UpdateHealthResponse
-	resp := &graphql.Response{Data: &data}
-
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
-	)
-
-	return &data, err
-}
-
-// The query or mutation executed by UpdateInfo.
-const UpdateInfo_Operation = `
-mutation UpdateInfo ($id: String!, $name: String, $birthdate: String, $height: Int, $weight: Int, $sex: String, $surname: String) {
-	updateInfo(id: $id, name: $name, birthdate: $birthdate, height: $height, weight: $weight, sex: $sex, surname: $surname) {
+// The query or mutation executed by UpdateMedicalFolder.
+const UpdateMedicalFolder_Operation = `
+mutation UpdateMedicalFolder ($id: String!, $name: String, $firstname: String, $birthdate: Int, $sex: String, $height: Int, $weight: Int, $primary_doctor_id: String, $medical_antecedents: [MedicalAntecedentsInput!], $onboarding_status: String) {
+	updateMedicalFolder(id: $id, name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, medical_antecedents: $medical_antecedents, onboarding_status: $onboarding_status) {
 		id
 		name
+		firstname
 		birthdate
+		sex
 		height
 		weight
-		sex
-		surname
+		primary_doctor_id
+		medical_antecedents {
+			name
+			medicines {
+				period
+				day
+				quantity
+			}
+			still_relevant
+		}
+		onboarding_status
 	}
 }
 `
 
-func UpdateInfo(
+func UpdateMedicalFolder(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
 	name string,
-	birthdate string,
+	firstname string,
+	birthdate int,
+	sex string,
 	height int,
 	weight int,
-	sex string,
-	surname string,
-) (*UpdateInfoResponse, error) {
+	primary_doctor_id string,
+	medical_antecedents []MedicalAntecedentsInput,
+	onboarding_status string,
+) (*UpdateMedicalFolderResponse, error) {
 	req := &graphql.Request{
-		OpName: "UpdateInfo",
-		Query:  UpdateInfo_Operation,
-		Variables: &__UpdateInfoInput{
-			Id:        id,
-			Name:      name,
-			Birthdate: birthdate,
-			Height:    height,
-			Weight:    weight,
-			Sex:       sex,
-			Surname:   surname,
+		OpName: "UpdateMedicalFolder",
+		Query:  UpdateMedicalFolder_Operation,
+		Variables: &__UpdateMedicalFolderInput{
+			Id:                  id,
+			Name:                name,
+			Firstname:           firstname,
+			Birthdate:           birthdate,
+			Sex:                 sex,
+			Height:              height,
+			Weight:              weight,
+			Primary_doctor_id:   primary_doctor_id,
+			Medical_antecedents: medical_antecedents,
+			Onboarding_status:   onboarding_status,
 		},
 	}
 	var err error
 
-	var data UpdateInfoResponse
+	var data UpdateMedicalFolderResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -8295,14 +8819,13 @@ func UpdateNotification(
 
 // The query or mutation executed by UpdatePatient.
 const UpdatePatient_Operation = `
-mutation UpdatePatient ($id: String!, $email: String, $password: String, $onboarding_info_id: String, $onboarding_health_id: String, $rendez_vous_ids: [String], $document_ids: [String]) {
-	updatePatient(id: $id, email: $email, password: $password, onboarding_info_id: $onboarding_info_id, onboarding_health_id: $onboarding_health_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids) {
+mutation UpdatePatient ($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String]) {
+	updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids) {
 		id
 		email
 		password
 		rendez_vous_ids
-		onboarding_info_id
-		onboarding_health_id
+		medical_info_id
 		document_ids
 	}
 }
@@ -8314,8 +8837,7 @@ func UpdatePatient(
 	id string,
 	email string,
 	password string,
-	onboarding_info_id string,
-	onboarding_health_id string,
+	medical_info_id string,
 	rendez_vous_ids []string,
 	document_ids []string,
 ) (*UpdatePatientResponse, error) {
@@ -8323,13 +8845,12 @@ func UpdatePatient(
 		OpName: "UpdatePatient",
 		Query:  UpdatePatient_Operation,
 		Variables: &__UpdatePatientInput{
-			Id:                   id,
-			Email:                email,
-			Password:             password,
-			Onboarding_info_id:   onboarding_info_id,
-			Onboarding_health_id: onboarding_health_id,
-			Rendez_vous_ids:      rendez_vous_ids,
-			Document_ids:         document_ids,
+			Id:              id,
+			Email:           email,
+			Password:        password,
+			Medical_info_id: medical_info_id,
+			Rendez_vous_ids: rendez_vous_ids,
+			Document_ids:    document_ids,
 		},
 	}
 	var err error

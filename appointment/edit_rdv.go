@@ -3,6 +3,7 @@ package appointment
 import (
 	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
@@ -47,7 +48,7 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
 
-	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Onboarding_info_id, patient.GetPatientById.Onboarding_health_id, append(removeElement(patient.GetPatientById.Rendez_vous_ids, appointmentId), newAppointmentId), patient.GetPatientById.Document_ids)
+	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, append(removeElement(patient.GetPatientById.Rendez_vous_ids, appointmentId), newAppointmentId), patient.GetPatientById.Document_ids)
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update patient")}
 	}
@@ -62,13 +63,12 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 			CancelationReason: &updatedRdv.UpdateRdv.Cancelation_reason,
 		},
 		Patient: model.Patient{
-			ID:                 updatedPatient.UpdatePatient.Id,
-			Email:              updatedPatient.UpdatePatient.Email,
-			Password:           updatedPatient.UpdatePatient.Password,
-			RendezVousIds:      graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Rendez_vous_ids),
-			OnboardingInfoID:   &updatedPatient.UpdatePatient.Onboarding_info_id,
-			OnboardingHealthID: &updatedPatient.UpdatePatient.Onboarding_health_id,
-			DocumentIds:        graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Document_ids),
+			ID:            updatedPatient.UpdatePatient.Id,
+			Email:         updatedPatient.UpdatePatient.Email,
+			Password:      updatedPatient.UpdatePatient.Password,
+			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Rendez_vous_ids),
+			MedicalInfoID: &updatedPatient.UpdatePatient.Medical_info_id,
+			DocumentIds:   graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Document_ids),
 		},
 		Code: 200,
 		Err:  nil,

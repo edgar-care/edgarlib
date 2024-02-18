@@ -3,6 +3,7 @@ package appointment
 import (
 	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
@@ -33,16 +34,15 @@ func DeleteRdv(rdvId string, patientId string) DeleteRdvResponse {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Onboarding_info_id, patient.GetPatientById.Onboarding_health_id, removeElement(patient.GetPatientById.Rendez_vous_ids, rdvId), patient.GetPatientById.Document_ids)
+	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, removeElement(patient.GetPatientById.Rendez_vous_ids, rdvId), patient.GetPatientById.Document_ids)
 	return DeleteRdvResponse{
 		UpdatedPatient: model.Patient{
-			ID:                 updatedPatient.UpdatePatient.Id,
-			Email:              updatedPatient.UpdatePatient.Email,
-			Password:           updatedPatient.UpdatePatient.Password,
-			RendezVousIds:      graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Rendez_vous_ids),
-			OnboardingInfoID:   &updatedPatient.UpdatePatient.Onboarding_info_id,
-			OnboardingHealthID: &updatedPatient.UpdatePatient.Onboarding_health_id,
-			DocumentIds:        graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Document_ids),
+			ID:            updatedPatient.UpdatePatient.Id,
+			Email:         updatedPatient.UpdatePatient.Email,
+			Password:      updatedPatient.UpdatePatient.Password,
+			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Rendez_vous_ids),
+			MedicalInfoID: &updatedPatient.UpdatePatient.Medical_info_id,
+			DocumentIds:   graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Document_ids),
 		},
 		Code: 200,
 		Err:  nil,
