@@ -42,7 +42,17 @@ func CheckPassword(password string, hash string) bool {
 func GetAuthenticatedUser(w http.ResponseWriter, r *http.Request) string {
 	_, claims, _ := jwtauth.FromContext(r.Context())
 
-	return claims["patient"].(map[string]interface{})["id"].(string)
+	patientClaim, ok := claims["patient"].(map[string]interface{})
+	if !ok || patientClaim == nil {
+		return ""
+	}
+
+	id, ok := patientClaim["id"].(string)
+	if !ok {
+		return ""
+	}
+
+	return id
 }
 
 func AuthMiddleware(w http.ResponseWriter, r *http.Request) string {

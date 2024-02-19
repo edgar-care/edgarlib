@@ -32,7 +32,7 @@ func CreateRdv(patientId string, doctorId string, startDate int, endDate int, se
 	updatedDoctor, err := graphql.UpdateDoctor(context.Background(), gqlClient, doctorId, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, append(doctor.GetDoctorById.Rendez_vous_ids, rdv.CreateRdv.Id), doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
 
 	if err != nil {
-		return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("update failed" + err.Error())}
+		return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 500, Err: errors.New("update failed" + err.Error())}
 	}
 
 	if patientId != "" {

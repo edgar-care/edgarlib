@@ -1782,6 +1782,18 @@ func (r *queryResolver) GetNotificationByID(ctx context.Context, id string) (*mo
 // GetPatientRdv is the resolver for the getPatientRdv field.
 func (r *queryResolver) GetPatientRdv(ctx context.Context, idPatient string) ([]*model.Rdv, error) {
 	var results []*model.Rdv
+	objId, err := primitive.ObjectIDFromHex(idPatient)
+	if err != nil {
+		return nil, err
+	}
+
+	patientFilter := bson.M{"_id": objId}
+
+	test := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, patientFilter)
+
+	if test.Err() != nil {
+		return nil, test.Err()
+	}
 
 	filter := bson.M{"id_patient": idPatient}
 
@@ -1800,7 +1812,18 @@ func (r *queryResolver) GetPatientRdv(ctx context.Context, idPatient string) ([]
 // GetDoctorRdv is the resolver for the getDoctorRdv field.
 func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error) {
 	var results []*model.Rdv
+	objId, err := primitive.ObjectIDFromHex(doctorID)
+	if err != nil {
+		return nil, err
+	}
 
+	doctorFilter := bson.M{"_id": objId}
+
+	test := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, doctorFilter)
+
+	if test.Err() != nil {
+		return nil, test.Err()
+	}
 	filter := bson.M{
 		"doctor_id":          doctorID,
 		"appointment_status": bson.M{"$ne": "OPENED"},
@@ -1880,6 +1903,18 @@ func (r *queryResolver) GetSlots(ctx context.Context, id string) ([]*model.Rdv, 
 // GetWaitingRdv is the resolver for the getWaitingRdv field.
 func (r *queryResolver) GetWaitingRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error) {
 	var results []*model.Rdv
+	objId, err := primitive.ObjectIDFromHex(doctorID)
+	if err != nil {
+		return nil, err
+	}
+
+	doctorFilter := bson.M{"_id": objId}
+
+	test := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, doctorFilter)
+
+	if test.Err() != nil {
+		return nil, test.Err()
+	}
 
 	filter := bson.M{
 		"doctor_id":          doctorID,

@@ -25,7 +25,7 @@ func remElement(slice []string, element string) []string {
 
 func DeletePatient(PatientId string, doctorId string) DeletePatientResponse {
 	if PatientId == "" {
-		return DeletePatientResponse{UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("slot id is required")}
+		return DeletePatientResponse{UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("patient id is required")}
 	}
 	gqlClient := graphql.CreateClient()
 
