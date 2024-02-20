@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/edgar-care/edgarlib/graphql/server/model"
 	"net/http"
 	"os"
 
@@ -10,18 +11,18 @@ import (
 )
 
 type examRequestBody struct {
-	Context []Symptom `json:"context"`
+	Context []model.SessionSymptom `json:"context"`
 }
 
 type examResponseBody struct {
-	Context  []Symptom `json:"context"`
-	Done     bool      `json:"done"`
-	Question string    `json:"question"`
-	Symptoms []string  `json:"symptoms"`
-	Alert    []string  `json:"alert"`
+	Context  []model.SessionSymptom `json:"context"`
+	Done     bool                   `json:"done"`
+	Question string                 `json:"question"`
+	Symptoms []string               `json:"symptoms"`
+	Alert    []string               `json:"alert"`
 }
 
-func CallExam(context []Symptom) examResponseBody {
+func CallExam(context []model.SessionSymptom) examResponseBody {
 	var rBody = examRequestBody{
 		Context: context,
 	}

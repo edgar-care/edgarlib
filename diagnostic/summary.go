@@ -3,13 +3,13 @@ package diagnostic
 import (
 	"context"
 	"errors"
-	"github.com/edgar-care/edgarlib/diagnostic/utils"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
 
 type GetSummaryResponse struct {
 	SessionId string
-	Symptoms  []utils.Symptom
+	Symptoms  []model.SessionSymptom
 	Age       int
 	Height    int
 	Weight    int
@@ -35,10 +35,18 @@ func GetSummary(id string) GetSummaryResponse {
 			Answer:   log.Answer,
 		})
 	}
+	var sessionSymptoms []model.SessionSymptom
+	for _, sessionSymptom := range session.GetSessionById.Symptoms {
+		var nSS model.SessionSymptom
+		nSS.Name = sessionSymptom.Name
+		nSS.Presence = &sessionSymptom.Presence
+		nSS.Duration = &sessionSymptom.Duration
+		sessionSymptoms = append(sessionSymptoms, nSS)
+	}
 
 	return GetSummaryResponse{
 		SessionId: session.GetSessionById.Id,
-		Symptoms:  utils.StringToSymptoms(session.GetSessionById.Symptoms),
+		Symptoms:  sessionSymptoms,
 		Age:       session.GetSessionById.Age,
 		Height:    session.GetSessionById.Height,
 		Weight:    session.GetSessionById.Weight,
