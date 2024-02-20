@@ -1,6 +1,7 @@
 package email
 
 import (
+	"embed"
 	"fmt"
 	"io/ioutil"
 	"net/smtp"
@@ -8,8 +9,13 @@ import (
 	"strconv"
 	"strings"
 
+	_ "embed"
+
 	"github.com/edgar-care/edgarlib"
 )
+
+//go:embed templates/*.html
+var embeddedTemplates embed.FS
 
 type Email struct {
 	To            string
@@ -44,20 +50,21 @@ func SendEmail(emailInfo Email) error {
 	fromAddress := os.Getenv("SENDER_EMAIL")
 	var message string
 
+	message = fmt.Sprintf("Subject: %s\r\n", emailInfo.Subject)
+	message += "MIME-version: 1.0;\r\n"
+	message += "Content-Type: text/html; charset=\"UTF-8\";\r\n\r\n"
 	if emailInfo.Template == "" {
-		message = emailInfo.Body
+		message += emailInfo.Body
 	} else {
-		htmlFile, err := readHTMLFile("./email/templates/" + emailInfo.Template + ".html")
+		templateFilePath := fmt.Sprintf("templates/%s.html", emailInfo.Template)
+		templateContent, err := embeddedTemplates.ReadFile(templateFilePath)
 		if err != nil {
-			return err
-		}
-		htmlContent := replaceHtmlContent(htmlFile, emailInfo.TemplateInfos)
-		fmt.Print(htmlContent)
+			message += emailInfo.Body
+		} else {
+			htmlContent := replaceHtmlContent(string(templateContent), emailInfo.TemplateInfos)
 
-		message = fmt.Sprintf("Subject: %s\r\n", emailInfo.Subject)
-		message += "MIME-version: 1.0;\r\n"
-		message += "Content-Type: text/html; charset=\"UTF-8\";\r\n\r\n"
-		message += htmlContent
+			message += htmlContent
+		}
 	}
 	auth := smtp.PlainAuth("", sesUsername, sesPassword, sesSMTPServer)
 	err = smtp.SendMail(

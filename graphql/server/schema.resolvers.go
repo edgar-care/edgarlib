@@ -7,11 +7,11 @@ package server
 import (
 	"context"
 	"errors"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"os"
 
 	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // CreatePatient is the resolver for the createPatient field.
@@ -43,53 +43,30 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, onboardingInfoID *string, onboardingHealthID *string, rendezVousIds []*string, documentIds []*string) (*model.Patient, error) {
-	var replacement model.Patient
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
 	filter := bson.M{"_id": objId}
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, filter).Decode(&replacement)
-	if err != nil {
-		return nil, err
-	}
 
 	updated := bson.M{
-		"_id":                  objId,
-		"email":                replacement.Email,
-		"password":             replacement.Password,
-		"rendez_vous_ids":      replacement.RendezVousIds,
-		"onboarding_info_id":   replacement.OnboardingInfoID,
-		"onboarding_health_id": replacement.OnboardingHealthID,
-		"document_ids":         replacement.DocumentIds,
-	}
-	if email != nil {
-		updated["email"] = *email
-		replacement.Email = *email
-	}
-	if password != nil {
-		updated["password"] = *password
-		replacement.Password = *password
-	}
-	if onboardingInfoID != nil {
-		updated["rendez_vous_ids"] = onboardingInfoID
-		replacement.OnboardingInfoID = onboardingInfoID
-	}
-	if onboardingHealthID != nil {
-		updated["onboarding_info_id"] = onboardingHealthID
-		replacement.OnboardingHealthID = onboardingHealthID
-	}
-	if rendezVousIds != nil {
-		updated["onboarding_health_id"] = rendezVousIds
-		replacement.RendezVousIds = rendezVousIds
-	}
-	if documentIds != nil {
-		updated["document_ids"] = documentIds
-		replacement.DocumentIds = documentIds
+		"_id":             objId,
+		"email":           email,
+		"password":        password,
+		"rendez_vous_ids": rendezVousIds,
+		"medical_info_id": medicalInfoID,
+		"document_ids":    documentIds,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
-	return &replacement, err
+	return &model.Patient{
+		ID:            id,
+		Email:         *email,
+		Password:      *password,
+		RendezVousIds: rendezVousIds,
+		MedicalInfoID: medicalInfoID,
+		DocumentIds:   documentIds,
+	}, err
 }
 
 // DeletePatient is the resolver for the deletePatient field.
@@ -109,7 +86,7 @@ func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool,
 }
 
 // CreateDoctor is the resolver for the createDoctor field.
-func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, password string) (*model.Doctor, error) {
+func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error) {
 	var result model.Doctor
 
 	filter := bson.M{"email": email}
@@ -120,24 +97,37 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 	}
 
 	newDoctor := bson.M{
-		"email":    email,
-		"password": password,
+		"email":     email,
+		"password":  password,
+		"name":      name,
+		"firstname": firstname,
+		"address":   address,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").InsertOne(ctx, newDoctor)
 	if err != nil {
 		return nil, err
 	}
+
+	listaddress := &model.Address{
+		Street:  address.Street,
+		ZipCode: address.ZipCode,
+		Country: address.Country,
+	}
+
 	entity := model.Doctor{
-		Email:    email,
-		Password: password,
-		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
+		Email:     email,
+		Password:  password,
+		Name:      name,
+		Firstname: firstname,
+		Address:   listaddress,
+		ID:        res.InsertedID.(primitive.ObjectID).Hex(),
 	}
 	return &entity, err
 }
 
 // UpdateDoctor is the resolver for the updateDoctor field.
-func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, rendezVousIds []*string, patientIds []*string) (*model.Doctor, error) {
+func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address model.AddressInput) (*model.Doctor, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -148,14 +138,24 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 		"_id":             objId,
 		"email":           email,
 		"password":        password,
+		"name":            name,
+		"firstname":       firstname,
 		"rendez_vous_ids": rendezVousIds,
 		"patient_ids":     patientIds,
+		"address":         address,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").ReplaceOne(ctx, filter, updated)
 	return &model.Doctor{
-		ID:            id,
-		Email:         *email,
-		Password:      *password,
+		ID:        id,
+		Email:     *email,
+		Password:  *password,
+		Name:      *name,
+		Firstname: *firstname,
+		Address: &model.Address{
+			Street:  address.Street,
+			ZipCode: address.ZipCode,
+			Country: address.Country,
+		},
 		RendezVousIds: rendezVousIds,
 		PatientIds:    patientIds,
 	}, err
@@ -673,144 +673,6 @@ func (r *mutationResolver) DeleteDisease(ctx context.Context, id string) (*bool,
 	}
 	filter := bson.M{"_id": objId}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").DeleteOne(ctx, filter)
-	if err != nil {
-		return &resp, err
-	}
-	resp = true
-	return &resp, err
-}
-
-// CreateInfo is the resolver for the createInfo field.
-func (r *mutationResolver) CreateInfo(ctx context.Context, name string, birthdate string, height int, weight int, sex string, surname string) (*model.Info, error) {
-	newInfo := bson.M{
-		"name":      name,
-		"birthdate": birthdate,
-		"height":    height,
-		"weight":    weight,
-		"sex":       sex,
-		"surname":   surname,
-	}
-
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Info").InsertOne(ctx, newInfo)
-	if err != nil {
-		return nil, err
-	}
-	entity := model.Info{
-		ID:        res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:      name,
-		Birthdate: birthdate,
-		Height:    height,
-		Weight:    weight,
-		Sex:       model.Sex(sex),
-		Surname:   surname,
-	}
-	return &entity, err
-}
-
-// UpdateInfo is the resolver for the updateInfo field.
-func (r *mutationResolver) UpdateInfo(ctx context.Context, id string, name *string, birthdate *string, height *int, weight *int, sex *string, surname *string) (*model.Info, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	filter := bson.M{"_id": objId}
-
-	updated := bson.M{
-		"_id":       objId,
-		"name":      name,
-		"birthdate": birthdate,
-		"height":    height,
-		"weight":    weight,
-		"sex":       sex,
-		"surname":   surname,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Info").ReplaceOne(ctx, filter, updated)
-
-	return &model.Info{
-		ID:        id,
-		Name:      *name,
-		Birthdate: *birthdate,
-		Height:    *height,
-		Weight:    *weight,
-		Sex:       model.Sex(*sex),
-		Surname:   *surname,
-	}, err
-}
-
-// DeleteInfo is the resolver for the deleteInfo field.
-func (r *mutationResolver) DeleteInfo(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Info").DeleteOne(ctx, filter)
-	if err != nil {
-		return &resp, err
-	}
-	resp = true
-	return &resp, err
-}
-
-// CreateHealth is the resolver for the createHealth field.
-func (r *mutationResolver) CreateHealth(ctx context.Context, patientsAllergies []string, patientsIllness []string, patientsPrimaryDoctor string, patientsTreatments []string) (*model.Health, error) {
-	newHealth := bson.M{
-		"patientsAllergies":     patientsAllergies,
-		"patientsIllness":       patientsIllness,
-		"patientsPrimaryDoctor": patientsPrimaryDoctor,
-		"patientsTreatments":    patientsTreatments,
-	}
-
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Health").InsertOne(ctx, newHealth)
-	if err != nil {
-		return nil, err
-	}
-	entity := model.Health{
-		ID:                    res.InsertedID.(primitive.ObjectID).Hex(),
-		PatientsAllergies:     patientsAllergies,
-		PatientsIllness:       patientsIllness,
-		PatientsTreatments:    patientsTreatments,
-		PatientsPrimaryDoctor: patientsPrimaryDoctor,
-	}
-	return &entity, err
-}
-
-// UpdateHealth is the resolver for the updateHealth field.
-func (r *mutationResolver) UpdateHealth(ctx context.Context, id string, patientsAllergies []string, patientsIllness []string, patientsPrimaryDoctor *string, patientsTreatments []string) (*model.Health, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	filter := bson.M{"_id": objId}
-
-	updated := bson.M{
-		"_id":                   objId,
-		"patientsAllergies":     patientsAllergies,
-		"patientsIllness":       patientsIllness,
-		"patientsPrimaryDoctor": patientsPrimaryDoctor,
-		"patientsTreatments":    patientsTreatments,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Health").ReplaceOne(ctx, filter, updated)
-
-	return &model.Health{
-		ID:                    id,
-		PatientsAllergies:     patientsAllergies,
-		PatientsIllness:       patientsIllness,
-		PatientsTreatments:    patientsTreatments,
-		PatientsPrimaryDoctor: *patientsPrimaryDoctor,
-	}, err
-}
-
-// DeleteHealth is the resolver for the deleteHealth field.
-func (r *mutationResolver) DeleteHealth(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Health").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1362,6 +1224,177 @@ func (r *mutationResolver) DeleteAlert(ctx context.Context, id string) (*bool, e
 	return &resp, err
 }
 
+// CreateMedicament is the resolver for the createMedicament field.
+func (r *mutationResolver) CreateMedicament(ctx context.Context, name string, unit *string, targetDieseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicament, error) {
+	newMedicament := bson.M{
+		"name":             name,
+		"unit":             unit,
+		"target_dieseases": targetDieseases,
+		"treated_symptoms": treatedSymptoms,
+		"side_effects":     sideEffects,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicament").InsertOne(ctx, newMedicament)
+	if err != nil {
+		return nil, err
+	}
+	entity := model.Medicament{
+		ID:              res.InsertedID.(primitive.ObjectID).Hex(),
+		Name:            name,
+		Unit:            model.Unit(*unit),
+		TargetDiseases:  targetDieseases,
+		TreatedSymptoms: treatedSymptoms,
+		SideEffects:     sideEffects,
+	}
+	return &entity, err
+}
+
+// DeleteMedicament is the resolver for the deleteMedicament field.
+func (r *mutationResolver) DeleteMedicament(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicament").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+
+	return &resp, nil
+}
+
+// CreateMedicalFolder is the resolver for the createMedicalFolder field.
+func (r *mutationResolver) CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus string) (*model.MedicalInfo, error) {
+	// Créer une nouvelle instance de MedicalInfo avec les données fournies
+	newMedicalInfo := bson.M{
+		"name":                name,
+		"firstname":           firstname,
+		"birthdate":           birthdate,
+		"sex":                 sex,
+		"height":              height,
+		"weight":              weight,
+		"primary_doctor_id":   primaryDoctorID,
+		"medical_antecedents": medicalAntecedents,
+		"onboarding_status":   onboardingStatus,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").InsertOne(ctx, newMedicalInfo)
+	if err != nil {
+		return nil, err
+	}
+
+	var convertedMedicalAntecedents []*model.MedicalAntecedents
+	for _, antecedent := range medicalAntecedents {
+		convertedMedicines := make([]*model.Medicines, len(antecedent.Medicines))
+		for i, med := range antecedent.Medicines {
+			convertedMedicines[i] = &model.Medicines{
+				Period:   med.Period,
+				Day:      med.Day,
+				Quantity: med.Quantity,
+			}
+		}
+		convertedMedicalAntecedents = append(convertedMedicalAntecedents, &model.MedicalAntecedents{
+			Name:          antecedent.Name,
+			Medicines:     convertedMedicines,
+			StillRelevant: antecedent.StillRelevant,
+		})
+	}
+
+	res, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").InsertOne(ctx, newMedicalInfo)
+	if err != nil {
+		return nil, err
+	}
+
+	entity := model.MedicalInfo{
+		ID:                 res.InsertedID.(primitive.ObjectID).Hex(),
+		Name:               name,
+		Firstname:          firstname,
+		Birthdate:          birthdate,
+		Sex:                model.Sex(sex),
+		Height:             height,
+		Weight:             weight,
+		PrimaryDoctorID:    primaryDoctorID,
+		MedicalAntecedents: convertedMedicalAntecedents,
+		OnboardingStatus:   model.OnboardingStatus(onboardingStatus),
+	}
+
+	// Renvoyer la nouvelle instance de MedicalInfo créée avec succès
+	return &entity, err
+}
+
+// UpdateMedicalFolder is the resolver for the updateMedicalFolder field.
+func (r *mutationResolver) UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus *string) (*model.MedicalInfo, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":                 objId,
+		"name":                name,
+		"firstname":           firstname,
+		"birthdate":           birthdate,
+		"sex":                 sex,
+		"height":              height,
+		"weight":              weight,
+		"primary_doctor_id":   primaryDoctorID,
+		"medical_antecedents": medicalAntecedents,
+		"onboarding_status":   onboardingStatus,
+	}
+
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").ReplaceOne(ctx, filter, updated)
+
+	var convertedMedicalAntecedents []*model.MedicalAntecedents
+	for _, antecedent := range medicalAntecedents {
+		convertedMedicines := make([]*model.Medicines, len(antecedent.Medicines))
+		for i, med := range antecedent.Medicines {
+			convertedMedicines[i] = &model.Medicines{
+				Period:   med.Period,
+				Day:      med.Day,
+				Quantity: med.Quantity,
+			}
+		}
+		convertedMedicalAntecedents = append(convertedMedicalAntecedents, &model.MedicalAntecedents{
+			Name:          antecedent.Name,
+			Medicines:     convertedMedicines,
+			StillRelevant: antecedent.StillRelevant,
+		})
+	}
+	return &model.MedicalInfo{
+		ID:                 id,
+		Name:               *name,
+		Firstname:          *firstname,
+		Birthdate:          *birthdate,
+		Sex:                model.Sex(*sex),
+		Height:             *height,
+		Weight:             *weight,
+		PrimaryDoctorID:    *primaryDoctorID,
+		MedicalAntecedents: convertedMedicalAntecedents,
+		OnboardingStatus:   model.OnboardingStatus(*onboardingStatus),
+	}, err
+}
+
+// DeleteMedicalFolder is the resolver for the deleteMedicalFolder field.
+func (r *mutationResolver) DeleteMedicalFolder(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+
+	return &resp, nil
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -1665,40 +1698,6 @@ func (r *queryResolver) GetDiseaseByID(ctx context.Context, id string) (*model.D
 	return &result, nil
 }
 
-// GetInfos is the resolver for the getInfos field.
-func (r *queryResolver) GetInfos(ctx context.Context) ([]*model.Info, error) {
-	filter := bson.D{}
-	var results []*model.Info
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Info").Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-// GetInfoByID is the resolver for the getInfoById field.
-func (r *queryResolver) GetInfoByID(ctx context.Context, id string) (*model.Info, error) {
-	var result model.Info
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-
-	filter := bson.M{"_id": objId}
-
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Info").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
 // GetSymptoms is the resolver for the getSymptoms field.
 func (r *queryResolver) GetSymptoms(ctx context.Context) ([]*model.Symptom, error) {
 	filter := bson.D{}
@@ -1731,40 +1730,6 @@ func (r *queryResolver) GetDiseases(ctx context.Context) ([]*model.Disease, erro
 		return nil, err
 	}
 	return results, nil
-}
-
-// GetHealths is the resolver for the getHealths field.
-func (r *queryResolver) GetHealths(ctx context.Context) ([]*model.Health, error) {
-	filter := bson.D{}
-	var results []*model.Health
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Health").Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-// GetHealthByID is the resolver for the getHealthById field.
-func (r *queryResolver) GetHealthByID(ctx context.Context, id string) (*model.Health, error) {
-	var result model.Health
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-
-	filter := bson.M{"_id": objId}
-
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Health").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
 }
 
 // GetNotifications is the resolver for the getNotifications field.
@@ -2073,6 +2038,78 @@ func (r *queryResolver) GetAlertByID(ctx context.Context, id string) (*model.Ale
 	if err != nil {
 		return nil, err
 	}
+	return &result, nil
+}
+
+// GetMedicalFolder is the resolver for the getMedicalFolder field.
+func (r *queryResolver) GetMedicalFolder(ctx context.Context) ([]*model.MedicalInfo, error) {
+	var results []*model.MedicalInfo
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+// GetMedicalFolderByID is the resolver for the getMedicalFolderById field.
+func (r *queryResolver) GetMedicalFolderByID(ctx context.Context, id string) (*model.MedicalInfo, error) {
+	var result model.MedicalInfo
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+// GetMedicaments is the resolver for the getMedicaments field.
+func (r *queryResolver) GetMedicaments(ctx context.Context) ([]*model.Medicament, error) {
+	var results []*model.Medicament
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicament").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+// GetMedicamentByID is the resolver for the getMedicamentByID field.
+func (r *queryResolver) GetMedicamentByID(ctx context.Context, id string) (*model.Medicament, error) {
+	var result model.Medicament
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicament").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
 	return &result, nil
 }
 

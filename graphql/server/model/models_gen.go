@@ -8,6 +8,18 @@ import (
 	"strconv"
 )
 
+type Address struct {
+	Street  string `json:"street" bson:"street"`
+	ZipCode string `json:"zip_code" bson:"zip_code"`
+	Country string `json:"country" bson:"country"`
+}
+
+type AddressInput struct {
+	Street  string `json:"street" bson:"street"`
+	ZipCode string `json:"zip_code" bson:"zip_code"`
+	Country string `json:"country" bson:"country"`
+}
+
 type Admin struct {
 	ID       string `json:"id" bson:"_id"`
 	Email    string `json:"email" bson:"email"`
@@ -69,6 +81,9 @@ type Doctor struct {
 	ID            string    `json:"id" bson:"_id"`
 	Email         string    `json:"email" bson:"email"`
 	Password      string    `json:"password" bson:"password"`
+	Name          string    `json:"name" bson:"name"`
+	Firstname     string    `json:"firstname" bson:"firstname"`
+	Address       *Address  `json:"address" bson:"address"`
 	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
 	PatientIds    []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
 }
@@ -83,24 +98,6 @@ type Document struct {
 	DownloadURL  string       `json:"download_url" bson:"download_url"`
 }
 
-type Health struct {
-	ID                    string   `json:"id" bson:"_id"`
-	PatientsAllergies     []string `json:"patients_allergies,omitempty" bson:"patients_allergies"`
-	PatientsIllness       []string `json:"patients_illness,omitempty" bson:"patients_illness"`
-	PatientsTreatments    []string `json:"patients_treatments,omitempty" bson:"patients_treatments"`
-	PatientsPrimaryDoctor string   `json:"patients_primary_doctor" bson:"patients_primary_doctor"`
-}
-
-type Info struct {
-	ID        string `json:"id" bson:"_id"`
-	Name      string `json:"name" bson:"name"`
-	Birthdate string `json:"birthdate" bson:"birthdate"`
-	Height    int    `json:"height" bson:"height"`
-	Weight    int    `json:"weight" bson:"weight"`
-	Sex       Sex    `json:"sex" bson:"sex"`
-	Surname   string `json:"surname" bson:"surname"`
-}
-
 type Logs struct {
 	Question string `json:"question" bson:"question"`
 	Answer   string `json:"answer" bson:"answer"`
@@ -111,9 +108,60 @@ type LogsInput struct {
 	Answer   string `json:"answer" bson:"answer"`
 }
 
+type MedicalAntecedents struct {
+	ID            string       `json:"id" bson:"_id"`
+	Name          string       `json:"name" bson:"name"`
+	Medicines     []*Medicines `json:"medicines" bson:"medicines"`
+	StillRelevant bool         `json:"still_relevant" bson:"still_relevant"`
+}
+
+type MedicalAntecedentsInput struct {
+	Name          string            `json:"name" bson:"name"`
+	Medicines     []*MedicinesInput `json:"medicines" bson:"medicines"`
+	StillRelevant bool              `json:"still_relevant" bson:"still_relevant"`
+}
+
 type MedicalInfo struct {
-	Info   *string `json:"Info,omitempty" bson:"Info"`
-	Health *string `json:"Health,omitempty" bson:"Health"`
+	ID                 string                `json:"id" bson:"_id"`
+	Name               string                `json:"name" bson:"name"`
+	Firstname          string                `json:"firstname" bson:"firstname"`
+	Birthdate          int                   `json:"birthdate" bson:"birthdate"`
+	Sex                Sex                   `json:"sex" bson:"sex"`
+	Height             int                   `json:"height" bson:"height"`
+	Weight             int                   `json:"weight" bson:"weight"`
+	PrimaryDoctorID    string                `json:"primary_doctor_id" bson:"primary_doctor_id"`
+	StillRelevant      bool                  `json:"still_relevant" bson:"still_relevant"`
+	OnboardingStatus   OnboardingStatus      `json:"onboarding_status" bson:"onboarding_status"`
+	MedicalAntecedents []*MedicalAntecedents `json:"medical_antecedents" bson:"medical_antecedents"`
+}
+
+type Medicament struct {
+	ID              string   `json:"id" bson:"_id"`
+	Name            string   `json:"name" bson:"name"`
+	Unit            Unit     `json:"unit" bson:"unit"`
+	TargetDiseases  []string `json:"target_diseases" bson:"target_diseases"`
+	TreatedSymptoms []string `json:"treated_symptoms" bson:"treated_symptoms"`
+	SideEffects     []string `json:"side_effects" bson:"side_effects"`
+}
+
+type MedicamentInput struct {
+	Name            string   `json:"name" bson:"name"`
+	Unit            Unit     `json:"unit" bson:"unit"`
+	TargetDiseases  []string `json:"target_diseases" bson:"target_diseases"`
+	TreatedSymptoms []string `json:"treated_symptoms" bson:"treated_symptoms"`
+	SideEffects     []string `json:"side_effects" bson:"side_effects"`
+}
+
+type Medicines struct {
+	Period   []*Period `json:"period" bson:"period"`
+	Day      []*Day    `json:"day" bson:"day"`
+	Quantity int       `json:"quantity" bson:"quantity"`
+}
+
+type MedicinesInput struct {
+	Period   []*Period `json:"period" bson:"period"`
+	Day      []*Day    `json:"day" bson:"day"`
+	Quantity int       `json:"quantity" bson:"quantity"`
 }
 
 type Mutation struct {
@@ -127,13 +175,12 @@ type Notification struct {
 }
 
 type Patient struct {
-	ID                 string    `json:"id" bson:"_id"`
-	Email              string    `json:"email" bson:"email"`
-	Password           string    `json:"password" bson:"password"`
-	RendezVousIds      []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
-	OnboardingInfoID   *string   `json:"onboarding_info_id,omitempty" bson:"onboarding_info_id"`
-	OnboardingHealthID *string   `json:"onboarding_health_id,omitempty" bson:"onboarding_health_id"`
-	DocumentIds        []*string `json:"document_ids,omitempty" bson:"document_ids"`
+	ID            string    `json:"id" bson:"_id"`
+	Email         string    `json:"email" bson:"email"`
+	Password      string    `json:"password" bson:"password"`
+	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+	MedicalInfoID *string   `json:"medical_info_id,omitempty" bson:"medical_info_id"`
+	DocumentIds   []*string `json:"document_ids,omitempty" bson:"document_ids"`
 }
 
 type Query struct {
@@ -239,6 +286,57 @@ func (e Category) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+type Day string
+
+const (
+	DayMonday    Day = "MONDAY"
+	DayTuesday   Day = "TUESDAY"
+	DayWednesday Day = "WEDNESDAY"
+	DayThursday  Day = "THURSDAY"
+	DayFriday    Day = "FRIDAY"
+	DaySaturday  Day = "SATURDAY"
+	DaySunday    Day = "SUNDAY"
+)
+
+var AllDay = []Day{
+	DayMonday,
+	DayTuesday,
+	DayWednesday,
+	DayThursday,
+	DayFriday,
+	DaySaturday,
+	DaySunday,
+}
+
+func (e Day) IsValid() bool {
+	switch e {
+	case DayMonday, DayTuesday, DayWednesday, DayThursday, DayFriday, DaySaturday, DaySunday:
+		return true
+	}
+	return false
+}
+
+func (e Day) String() string {
+	return string(e)
+}
+
+func (e *Day) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Day(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Day", str)
+	}
+	return nil
+}
+
+func (e Day) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type DocumentType string
 
 const (
@@ -288,19 +386,19 @@ type OnboardingStatus string
 
 const (
 	OnboardingStatusNotStarted OnboardingStatus = "NOT_STARTED"
-	OnboardingStatusStarted    OnboardingStatus = "STARTED"
-	OnboardingStatusFinished   OnboardingStatus = "FINISHED"
+	OnboardingStatusInProgress OnboardingStatus = "IN_PROGRESS"
+	OnboardingStatusDone       OnboardingStatus = "DONE"
 )
 
 var AllOnboardingStatus = []OnboardingStatus{
 	OnboardingStatusNotStarted,
-	OnboardingStatusStarted,
-	OnboardingStatusFinished,
+	OnboardingStatusInProgress,
+	OnboardingStatusDone,
 }
 
 func (e OnboardingStatus) IsValid() bool {
 	switch e {
-	case OnboardingStatusNotStarted, OnboardingStatusStarted, OnboardingStatusFinished:
+	case OnboardingStatusNotStarted, OnboardingStatusInProgress, OnboardingStatusDone:
 		return true
 	}
 	return false
@@ -324,6 +422,51 @@ func (e *OnboardingStatus) UnmarshalGQL(v interface{}) error {
 }
 
 func (e OnboardingStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Period string
+
+const (
+	PeriodMorning Period = "MORNING"
+	PeriodNoon    Period = "NOON"
+	PeriodEvening Period = "EVENING"
+	PeriodNight   Period = "NIGHT"
+)
+
+var AllPeriod = []Period{
+	PeriodMorning,
+	PeriodNoon,
+	PeriodEvening,
+	PeriodNight,
+}
+
+func (e Period) IsValid() bool {
+	switch e {
+	case PeriodMorning, PeriodNoon, PeriodEvening, PeriodNight:
+		return true
+	}
+	return false
+}
+
+func (e Period) String() string {
+	return string(e)
+}
+
+func (e *Period) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Period(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Period", str)
+	}
+	return nil
+}
+
+func (e Period) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -367,5 +510,50 @@ func (e *Sex) UnmarshalGQL(v interface{}) error {
 }
 
 func (e Sex) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Unit string
+
+const (
+	UnitApplication Unit = "APPLICATION"
+	UnitTablet      Unit = "TABLET"
+	UnitTablespoon  Unit = "TABLESPOON"
+	UnitCoffeespoon Unit = "COFFEESPOON"
+)
+
+var AllUnit = []Unit{
+	UnitApplication,
+	UnitTablet,
+	UnitTablespoon,
+	UnitCoffeespoon,
+}
+
+func (e Unit) IsValid() bool {
+	switch e {
+	case UnitApplication, UnitTablet, UnitTablespoon, UnitCoffeespoon:
+		return true
+	}
+	return false
+}
+
+func (e Unit) String() string {
+	return string(e)
+}
+
+func (e *Unit) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Unit(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Unit", str)
+	}
+	return nil
+}
+
+func (e Unit) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
