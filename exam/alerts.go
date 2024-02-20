@@ -7,8 +7,8 @@ import (
 
 func isAlertPresent(context []ExamContextItem, symptom string) bool {
 	for _, e := range context {
-		if e.Present != nil {
-			if e.Symptom == symptom && *e.Present == true {
+		if e.Presence != nil {
+			if e.Name == symptom && *e.Presence == true {
 				return true
 			}
 		}

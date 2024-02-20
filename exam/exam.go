@@ -11,8 +11,9 @@ type ExamResponse struct {
 }
 
 type ExamContextItem struct {
-	Symptom string
-	Present *bool
+	Name     string
+	Presence *bool
+	Duration *int32
 }
 
 func Exam(context []ExamContextItem) ExamResponse {

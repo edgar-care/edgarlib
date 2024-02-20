@@ -1,3 +1,6 @@
+##  Substructures  -----------------------------------------------------------------------------------------------------
+
+#  Disease
 type SymptomWeight {
     key: String!
     value: Float!
@@ -6,6 +9,19 @@ type SymptomWeight {
 input SymptomWeightInput {
     key: String!
     value: Float!
+}
+
+#  Session
+type SessionSymptom {
+    name: String!
+    presence: Boolean
+    duration: Int
+}
+
+input SessionSymptomInput {
+    name: String!
+    presence: Boolean
+    duration: Int
 }
 
 type Logs {
@@ -17,6 +33,8 @@ input LogsInput {
     question: String!
     answer: String!
 }
+
+##  Entities  ----------------------------------------------------------------------------------------------------------
 
 # Patient entity
 type Patient {
@@ -63,13 +81,16 @@ type Admin {
 
 # Session entity
 type Session {
-	id: ID!
-	symptoms: [String!]!
+    id: ID!
+    symptoms: [SessionSymptom!]!
     age: Int!
     height: Int!
     weight: Int!
     sex: String!
-	last_question: String!
+    ante_chirs: [String!]!
+    ante_diseases: [String!]!
+    treatments: [String!]!
+    last_question: String!
     logs: [Logs!]!
     alerts: [String!]!
 }
@@ -141,13 +162,6 @@ type Document {
    download_url: String!
 }
 
-type AnteChir {
-    id: ID!
-    name: String!
-    localisation: String!
-    induced_symptoms: [String!]
-}
-
 type TestAccount {
     id: ID!
     email: String!
@@ -158,6 +172,13 @@ type DemoAccount {
     id: ID!
     email: String!
     password: String!
+}
+
+type AnteChir {
+    id: ID!
+    name: String!
+    localisation: String!
+    induced_symptoms: [String!]
 }
 
 type AnteDisease {
@@ -235,6 +256,7 @@ input MedicamentInput {
     side_effects: [String!]!
 }
 
+## Query  --------------------------------------------------------------------------------------------------------------
 
 type Query {
     # Get the entire list of patients.
@@ -369,6 +391,8 @@ type Query {
 
 }
 
+##  Mutation  ----------------------------------------------------------------------------------------------------------
+
 type Mutation {
     # Create a new patient.
     createPatient(email: String!, password: String!): Patient
@@ -416,10 +440,10 @@ type Mutation {
     deleteTestAccount(id: String!): Boolean
 
     # Create a new session.
-    createSession(symptoms: [String!]!, age: Int!, height: Int!, weight: Int!, sex: String!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
+    createSession(symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, treatments: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
 
     # Update a new session.
-    updateSession(id: String!, symptoms: [String!], age: Int, height: Int, weight: Int, sex: String, last_question: String, logs: [LogsInput!], alerts: [String!]): Session
+    updateSession(id: String!, symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], treatments: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
 
     # Delete a session.
     deleteSession(id: String!): Boolean
@@ -536,6 +560,8 @@ type Mutation {
     deleteMedicalFolder(id: String!): Boolean
 
 }
+
+##  Enums  -------------------------------------------------------------------------------------------------------------
 
 enum Sex {
     MALE,
