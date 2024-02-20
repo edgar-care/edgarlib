@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/edgar-care/edgarlib"
 	edgarmail "github.com/edgar-care/edgarlib/email"
 	"github.com/edgar-care/edgarlib/graphql"
@@ -29,9 +30,15 @@ func MissingPassword(email string) MissingPasswordResponse {
 	edgarlib.CheckError(err)
 
 	err = edgarmail.SendEmail(edgarmail.Email{
-		To:      email,
-		Subject: "Réinitialisation de votre mot de passe",
-		Body:    fmt.Sprintf("Pour réinitialiser votre mot de passe, cliquez ici (app.edgar-sante.fr/reset-password?uuid=%s)", patient_uuid.String()),
+		To:       email,
+		Subject:  "Réinitialisation de votre mot de passe",
+		Body:     fmt.Sprintf("Pour réinitialiser votre mot de passe, cliquez ici (app.edgar-sante.fr/reset-password?uuid=%s)", patient_uuid.String()),
+		Template: "basic_with_button",
+		TemplateInfos: map[string]interface{}{
+			"Body":        "Pour réinitialiser votre mot de passe, cliquez ici",
+			"ButtonUrl":   fmt.Sprintf("app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String()),
+			"ButtonTitle": "Cliquez ici",
+		},
 	})
 	edgarlib.CheckError(err)
 
