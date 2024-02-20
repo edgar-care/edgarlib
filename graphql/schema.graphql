@@ -24,8 +24,7 @@ type Patient {
     email: String!
     password: String!
     rendez_vous_ids: [String]
-    onboarding_info_id: String
-    onboarding_health_id: String
+    medical_info_id: String
     document_ids: [String]
 }
 
@@ -34,9 +33,23 @@ type Doctor {
     id: ID!
     email: String!
     password: String!
+    name: String!
+    firstname: String!
+    address: Address!
     rendez_vous_ids: [String]
     patient_ids: [String]
-    #slot_ids: [String]
+}
+
+type Address {
+    street: String!
+    zip_code: String!
+    country: String!
+}
+
+input AddressInput {
+    street: String!
+    zip_code: String!
+    country: String!
 }
 
 # Admin entity
@@ -88,27 +101,18 @@ type Disease {
     advice: String
 }
 
-type Info {
-	id: ID!
-	name: String!
-    birthdate: String!
+type MedicalInfo {
+    id: ID!
+    name: String!
+    firstname: String!
+    birthdate: Int!
+    sex: Sex!
     height: Int!
     weight: Int!
-    sex: Sex!
-	surname: String!
-}
-
-type Health {
-	id:	ID!
-	patients_allergies: [String!]
-	patients_illness: [String!]
-    patients_treatments: [String!]
-    patients_primary_doctor: String!
-}
-
-type MedicalInfo {
-    Info: String
-    Health: String
+    primary_doctor_id: String!
+    still_relevant: Boolean!
+    onboarding_status: OnboardingStatus!
+    medical_antecedents: [MedicalAntecedents!]!
 }
 
 type Notification {
@@ -126,14 +130,6 @@ type Rdv {
     end_date: Int!
     cancelation_reason: String
 }
-
-# type Slot {
-#     id: ID!
-#     doctor_id: String!
-#     appointment_id: String!
-#     start_date: Int!
-#     end_date: Int!
-# }
 
 type Document {
    id: ID!
@@ -197,6 +193,48 @@ type Alert {
     comment: String!
 }
 
+type MedicalAntecedents {
+    id: ID!
+    name: String!
+    medicines: [Medicines!]!
+    still_relevant: Boolean!
+}
+
+type Medicines {
+    period: [Period]!
+    day: [Day]!
+    quantity: Int!
+}
+
+input MedicalAntecedentsInput {
+    name: String!
+    medicines: [MedicinesInput!]!
+    still_relevant: Boolean!
+}
+
+input MedicinesInput {
+    period: [Period]!
+    day: [Day]!
+    quantity: Int!
+}
+
+type Medicament {
+    id: ID!
+    name: String!
+    unit: Unit!
+    target_diseases: [String!]!
+    treated_symptoms: [String!]!
+    side_effects: [String!]!
+}
+
+input MedicamentInput {
+    name: String!
+    unit: Unit!
+    target_diseases: [String!]!
+    treated_symptoms: [String!]!
+    side_effects: [String!]!
+}
+
 
 type Query {
     # Get the entire list of patients.
@@ -256,23 +294,11 @@ type Query {
     # Find a disease using its id.
     getDiseaseById(id: String!): Disease
 
-    # Get the entire list of info.
-    getInfos: [Info]
-
-    # Find a info using its id.
-    getInfoById(id: String!): Info
-
     # Get the entire list of symptoms
     getSymptoms: [Symptom]
 
     # Get the entire list of diseases
     getDiseases: [Disease]
-
-    # Get the entire list of health.
-    getHealths: [Health]
-
-    # Find a health using its id.
-    getHealthById(id: String!): Health
 
     # Get the entire list of notification.
     getNotifications: [Notification]
@@ -288,12 +314,6 @@ type Query {
 
     # Find a rdv using its id.
     getRdvById(id: String!): Rdv
-
-    #Get the entire list of slot doctors.
-    # getDoctorSlot(doctor_id: String!): [Slot]
-
-    # # Find a slot using its id.
-    # getSlotById(id: String!): Slot
 
     # Get the entire list of document patient
     getDocuments: [Document]
@@ -333,6 +353,20 @@ type Query {
     # Get an alert by its id.
     getAlertById(id: String!): Alert
 
+# ========================================== #
+
+    # Get the entire list of Medicament.
+    getMedicalFolder: [MedicalInfo]
+
+    # Get an Medicament by its id.
+    getMedicalFolderById(id: String!): MedicalInfo
+
+    # Get the entire list of Medicament.
+    getMedicaments: [Medicament]
+
+    # Get an Medicament by its id.
+    getMedicamentByID(id: String!): Medicament
+
 }
 
 type Mutation {
@@ -340,16 +374,16 @@ type Mutation {
     createPatient(email: String!, password: String!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, onboarding_info_id: String, onboarding_health_id: String, rendez_vous_ids: [String], document_ids: [String]): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String]): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
 
     # Create a new doctor.
-    createDoctor(email: String!, password: String!): Doctor
+    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!): Doctor
 
     # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, rendez_vous_ids: [String], patient_ids: [String]): Doctor #rendez_vous_id: String , slot_ids: [String]
+    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput!): Doctor #rendez_vous_id: String , slot_ids: [String]
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
@@ -408,24 +442,6 @@ type Mutation {
     # Delete a disease.
     deleteDisease(id: String!): Boolean
 
-    # Create a new info.
-    createInfo(name: String!, birthdate: String!, height: Int!, weight: Int!, sex: String!, surname: String!): Info
-
-    # Update a new info. #A verifier birthdate
-    updateInfo(id: String!, name: String, birthdate: String, height: Int, weight: Int, sex: String, surname: String): Info
-
-    # Delete a info.
-    deleteInfo(id: String!): Boolean
-
-    # Create a new health.
-    createHealth(patients_allergies: [String!], patients_illness: [String!], patients_primary_doctor: String!, patients_treatments: [String!]): Health
-
-    # Update a new health.
-    updateHealth(id: String!, patients_allergies: [String!], patients_illness: [String!], patients_primary_doctor: String, patients_treatments: [String!]): Health
-
-    # Delete a health.
-    deleteHealth(id: String!): Boolean
-
     # Create a new notification.
     createNotification(token: String!, message: String!, title: String!): Notification
 
@@ -443,12 +459,6 @@ type Mutation {
 
     # Delete a Rdv.
     deleteRdv(id: String!): Boolean
-
-    # Create a new Slot.
-    #createSlot(doctor_id: String!, start_date: Int!, end_date: Int!): Slot
-
-    # Update a new Slot.
-    #updateSlot(id: String!, doctor_id: String, appointment_id: String, start_date: Int, end_date: Int): Slot
 
     # Delete a Slot.
     deleteSlot(id: String!): Boolean
@@ -507,6 +517,24 @@ type Mutation {
     # Delete an alert.
     deleteAlert(id: String!): Boolean
 
+# ================================================ #
+
+    # Create a new Medicament.
+    createMedicament(name: String!, unit: String, target_dieseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicament
+
+    # Delete an Medicament.
+    deleteMedicament(id: String!): Boolean
+
+
+    # Create a new MedicalFolder.!
+    createMedicalFolder(name: String!, firstname: String!, birthdate: Int!, sex: String!, height: Int!, weight: Int!, primary_doctor_id: String!, medical_antecedents: [MedicalAntecedentsInput!]!, onboarding_status: String!): MedicalInfo
+
+    # Update a new MedicalFolder.
+    updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, medical_antecedents: [MedicalAntecedentsInput!], onboarding_status: String): MedicalInfo
+
+    # Delete an MedicalFolder.
+    deleteMedicalFolder(id: String!): Boolean
+
 }
 
 enum Sex {
@@ -517,8 +545,8 @@ enum Sex {
 
 enum OnboardingStatus {
 	NOT_STARTED,
-	STARTED,
-    FINISHED
+	IN_PROGRESS,
+    DONE
 }
 
 enum Category {
@@ -531,4 +559,28 @@ enum DocumentType {
     PRESCRIPTION,
     OTHER,
     CERTIFICATE
+}
+
+enum Unit {
+    APPLICATION,
+    TABLET,
+    TABLESPOON,
+    COFFEESPOON
+}
+
+enum Period {
+    MORNING,
+    NOON,
+    EVENING,
+    NIGHT
+}
+
+enum Day {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
 }
