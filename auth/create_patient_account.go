@@ -2,6 +2,7 @@ package auth
 
 import (
 	"fmt"
+
 	"github.com/edgar-care/edgarlib"
 	"github.com/edgar-care/edgarlib/auth/utils"
 	edgarmail "github.com/edgar-care/edgarlib/email"
@@ -28,9 +29,15 @@ func CreatePatientAccount(email string) CreatePatientAccountResponse {
 	edgarlib.CheckError(err)
 
 	err = edgarmail.SendEmail(edgarmail.Email{
-		To:      email,
-		Subject: "Création de votre compte - edgar-sante.fr",
-		Body:    fmt.Sprintf("Votre compte à bien été créé, cliquez ici pour mettre à jour votre mot de passe (app.edgar-sante.fr/reset-password?uuid=%s)", patient_uuid.String()),
+		To:       email,
+		Subject:  "Création de votre compte - edgar-sante.fr",
+		Body:     fmt.Sprintf("Votre compte à bien été créé, cliquez ici pour mettre à jour votre mot de passe (app.edgar-sante.fr/reset-password?uuid=%s)", patient_uuid.String()),
+		Template: "basic_with_button",
+		TemplateInfos: map[string]interface{}{
+			"Body":        "Votre compte à bien été créé, cliquez ici pour mettre à jour votre mot de passe",
+			"ButtonUrl":   fmt.Sprintf("app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String()),
+			"ButtonTitle": "Cliquez ici",
+		},
 	})
 	edgarlib.CheckError(err)
 
