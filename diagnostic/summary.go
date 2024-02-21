@@ -17,7 +17,7 @@ type GetSummaryResponse struct {
 	Sex         string
 	AnteChirs   []model.AnteChir
 	AnteDisease []model.AnteDisease
-	Treatments  []model.Treatment
+	Medicines   []model.Treatment
 	Logs        []graphql.LogsInput
 	Alerts      []model.Alert
 	Code        int
@@ -76,16 +76,17 @@ func GetSummary(id string) GetSummaryResponse {
 		anteDiseases = append(anteDiseases, nAD)
 	}
 
-	var treatments []model.Treatment
-	for _, treatmentId := range session.GetSessionById.Treatments {
-		treatment, _ := graphql.GetTreatmentByID(context.Background(), gqlClient, treatmentId)
+	var medicines []model.Treatment
+	for _, medicineId := range session.GetSessionById.Medicine {
+		treatment, _ := graphql.GetTreatmentByID(context.Background(), gqlClient, medicineId)
 		var nT model.Treatment
 		nT.ID = treatment.GetTreatmentByID.Id
-		nT.Name = treatment.GetTreatmentByID.Name
-		nT.Disease = treatment.GetTreatmentByID.Disease
-		nT.Symptoms = treatment.GetTreatmentByID.Symptoms
-		nT.SideEffects = treatment.GetTreatmentByID.Side_effects
-		treatments = append(treatments, nT)
+		// TODO: fix le summary de traitement
+		//nT.Name = treatment.GetTreatmentByID.Name
+		//nT.Disease = treatment.GetTreatmentByID.Disease
+		//nT.Symptoms = treatment.GetTreatmentByID.Symptoms
+		//nT.SideEffects = treatment.GetTreatmentByID.Side_effects
+		medicines = append(medicines, nT)
 	}
 
 	var logs []graphql.LogsInput
@@ -120,7 +121,7 @@ func GetSummary(id string) GetSummaryResponse {
 		Sex:         session.GetSessionById.Sex,
 		AnteChirs:   anteChirs,
 		AnteDisease: anteDiseases,
-		Treatments:  treatments,
+		Medicines:   medicines,
 		Logs:        logs,
 		Alerts:      alerts,
 		Code:        200,

@@ -157,7 +157,7 @@ type ComplexityRoot struct {
 		Weight               func(childComplexity int) int
 	}
 
-	Medicament struct {
+	Medicine struct {
 		ID              func(childComplexity int) int
 		Name            func(childComplexity int) int
 		SideEffects     func(childComplexity int) int
@@ -177,11 +177,11 @@ type ComplexityRoot struct {
 		CreateDoctor        func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
 		CreateDocument      func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
 		CreateMedicalFolder func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) int
-		CreateMedicament    func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
+		CreateMedicine      func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
 		CreateNotification  func(childComplexity int, token string, message string, title string) int
 		CreatePatient       func(childComplexity int, email string, password string) int
 		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
-		CreateSession       func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
+		CreateSession       func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
 		CreateSymptom       func(childComplexity int, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) int
 		CreateTestAccount   func(childComplexity int, email string, password string) int
 		CreateTreatment     func(childComplexity int, period []model.Period, day []model.Day, quantity int, medicineID string) int
@@ -195,7 +195,7 @@ type ComplexityRoot struct {
 		DeleteDoctor        func(childComplexity int, id string) int
 		DeleteDocument      func(childComplexity int, id string) int
 		DeleteMedicalFolder func(childComplexity int, id string) int
-		DeleteMedicament    func(childComplexity int, id string) int
+		DeleteMedicine      func(childComplexity int, id string) int
 		DeleteNotification  func(childComplexity int, id string) int
 		DeletePatient       func(childComplexity int, id string) int
 		DeleteRdv           func(childComplexity int, id string) int
@@ -217,7 +217,7 @@ type ComplexityRoot struct {
 		UpdateNotification  func(childComplexity int, id string, token string, message string, title string) int
 		UpdatePatient       func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) int
 		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) int
-		UpdateSession       func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
+		UpdateSession       func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
 		UpdateSymptom       func(childComplexity int, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) int
 		UpdateTestAccount   func(childComplexity int, id string, email *string, password *string) int
 		UpdateTreatment     func(childComplexity int, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) int
@@ -264,8 +264,8 @@ type ComplexityRoot struct {
 		GetDocuments              func(childComplexity int) int
 		GetMedicalFolder          func(childComplexity int) int
 		GetMedicalFolderByID      func(childComplexity int, id string) int
-		GetMedicamentByID         func(childComplexity int, id string) int
-		GetMedicaments            func(childComplexity int) int
+		GetMedicineByID           func(childComplexity int, id string) int
+		GetMedicines              func(childComplexity int) int
 		GetNotificationByID       func(childComplexity int, id string) int
 		GetNotifications          func(childComplexity int) int
 		GetPatientByEmail         func(childComplexity int, email string) int
@@ -310,9 +310,9 @@ type ComplexityRoot struct {
 		ID           func(childComplexity int) int
 		LastQuestion func(childComplexity int) int
 		Logs         func(childComplexity int) int
+		Medicine     func(childComplexity int) int
 		Sex          func(childComplexity int) int
 		Symptoms     func(childComplexity int) int
-		Treatments   func(childComplexity int) int
 		Weight       func(childComplexity int) int
 	}
 
@@ -325,6 +325,7 @@ type ComplexityRoot struct {
 		Duration func(childComplexity int) int
 		Name     func(childComplexity int) int
 		Presence func(childComplexity int) int
+		Treated  func(childComplexity int) int
 	}
 
 	Symptom struct {
@@ -377,8 +378,8 @@ type MutationResolver interface {
 	CreateTestAccount(ctx context.Context, email string, password string) (*model.TestAccount, error)
 	UpdateTestAccount(ctx context.Context, id string, email *string, password *string) (*model.TestAccount, error)
 	DeleteTestAccount(ctx context.Context, id string) (*bool, error)
-	CreateSession(ctx context.Context, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
-	UpdateSession(ctx context.Context, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
+	CreateSession(ctx context.Context, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
+	UpdateSession(ctx context.Context, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
 	DeleteSession(ctx context.Context, id string) (*bool, error)
 	CreateSymptom(ctx context.Context, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) (*model.Symptom, error)
 	UpdateSymptom(ctx context.Context, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) (*model.Symptom, error)
@@ -411,8 +412,8 @@ type MutationResolver interface {
 	CreateAlert(ctx context.Context, name string, sex *string, height *int, weight *int, symptoms []string, comment string) (*model.Alert, error)
 	UpdateAlert(ctx context.Context, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) (*model.Alert, error)
 	DeleteAlert(ctx context.Context, id string) (*bool, error)
-	CreateMedicament(ctx context.Context, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicament, error)
-	DeleteMedicament(ctx context.Context, id string) (*bool, error)
+	CreateMedicine(ctx context.Context, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicine, error)
+	DeleteMedicine(ctx context.Context, id string) (*bool, error)
 	CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) (*model.MedicalInfo, error)
 	UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) (*model.MedicalInfo, error)
 	DeleteMedicalFolder(ctx context.Context, id string) (*bool, error)
@@ -462,8 +463,8 @@ type QueryResolver interface {
 	GetAlertByID(ctx context.Context, id string) (*model.Alert, error)
 	GetMedicalFolder(ctx context.Context) ([]*model.MedicalInfo, error)
 	GetMedicalFolderByID(ctx context.Context, id string) (*model.MedicalInfo, error)
-	GetMedicaments(ctx context.Context) ([]*model.Medicament, error)
-	GetMedicamentByID(ctx context.Context, id string) (*model.Medicament, error)
+	GetMedicines(ctx context.Context) ([]*model.Medicine, error)
+	GetMedicineByID(ctx context.Context, id string) (*model.Medicine, error)
 	GetPatientsFromDoctorByID(ctx context.Context, id string) ([]*model.Patient, error)
 }
 
@@ -990,47 +991,47 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MedicalInfo.Weight(childComplexity), true
 
-	case "Medicament.id":
-		if e.complexity.Medicament.ID == nil {
+	case "Medicine.id":
+		if e.complexity.Medicine.ID == nil {
 			break
 		}
 
-		return e.complexity.Medicament.ID(childComplexity), true
+		return e.complexity.Medicine.ID(childComplexity), true
 
-	case "Medicament.name":
-		if e.complexity.Medicament.Name == nil {
+	case "Medicine.name":
+		if e.complexity.Medicine.Name == nil {
 			break
 		}
 
-		return e.complexity.Medicament.Name(childComplexity), true
+		return e.complexity.Medicine.Name(childComplexity), true
 
-	case "Medicament.side_effects":
-		if e.complexity.Medicament.SideEffects == nil {
+	case "Medicine.side_effects":
+		if e.complexity.Medicine.SideEffects == nil {
 			break
 		}
 
-		return e.complexity.Medicament.SideEffects(childComplexity), true
+		return e.complexity.Medicine.SideEffects(childComplexity), true
 
-	case "Medicament.target_diseases":
-		if e.complexity.Medicament.TargetDiseases == nil {
+	case "Medicine.target_diseases":
+		if e.complexity.Medicine.TargetDiseases == nil {
 			break
 		}
 
-		return e.complexity.Medicament.TargetDiseases(childComplexity), true
+		return e.complexity.Medicine.TargetDiseases(childComplexity), true
 
-	case "Medicament.treated_symptoms":
-		if e.complexity.Medicament.TreatedSymptoms == nil {
+	case "Medicine.treated_symptoms":
+		if e.complexity.Medicine.TreatedSymptoms == nil {
 			break
 		}
 
-		return e.complexity.Medicament.TreatedSymptoms(childComplexity), true
+		return e.complexity.Medicine.TreatedSymptoms(childComplexity), true
 
-	case "Medicament.unit":
-		if e.complexity.Medicament.Unit == nil {
+	case "Medicine.unit":
+		if e.complexity.Medicine.Unit == nil {
 			break
 		}
 
-		return e.complexity.Medicament.Unit(childComplexity), true
+		return e.complexity.Medicine.Unit(childComplexity), true
 
 	case "Mutation.createAdmin":
 		if e.complexity.Mutation.CreateAdmin == nil {
@@ -1152,17 +1153,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateMedicalFolder(childComplexity, args["name"].(string), args["firstname"].(string), args["birthdate"].(int), args["sex"].(string), args["height"].(int), args["weight"].(int), args["primary_doctor_id"].(string), args["antecedent_disease_ids"].([]string), args["onboarding_status"].(string)), true
 
-	case "Mutation.createMedicament":
-		if e.complexity.Mutation.CreateMedicament == nil {
+	case "Mutation.createMedicine":
+		if e.complexity.Mutation.CreateMedicine == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_createMedicament_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_createMedicine_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateMedicament(childComplexity, args["name"].(string), args["unit"].(*string), args["target_diseases"].([]string), args["treated_symptoms"].([]string), args["side_effects"].([]string)), true
+		return e.complexity.Mutation.CreateMedicine(childComplexity, args["name"].(string), args["unit"].(*string), args["target_diseases"].([]string), args["treated_symptoms"].([]string), args["side_effects"].([]string)), true
 
 	case "Mutation.createNotification":
 		if e.complexity.Mutation.CreateNotification == nil {
@@ -1210,7 +1211,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSession(childComplexity, args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(int), args["height"].(int), args["weight"].(int), args["sex"].(string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["treatments"].([]string), args["last_question"].(string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
+		return e.complexity.Mutation.CreateSession(childComplexity, args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(int), args["height"].(int), args["weight"].(int), args["sex"].(string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["medicine"].([]string), args["last_question"].(string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
 
 	case "Mutation.createSymptom":
 		if e.complexity.Mutation.CreateSymptom == nil {
@@ -1368,17 +1369,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteMedicalFolder(childComplexity, args["id"].(string)), true
 
-	case "Mutation.deleteMedicament":
-		if e.complexity.Mutation.DeleteMedicament == nil {
+	case "Mutation.deleteMedicine":
+		if e.complexity.Mutation.DeleteMedicine == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_deleteMedicament_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_deleteMedicine_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteMedicament(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeleteMedicine(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteNotification":
 		if e.complexity.Mutation.DeleteNotification == nil {
@@ -1642,7 +1643,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSession(childComplexity, args["id"].(string), args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(*int), args["height"].(*int), args["weight"].(*int), args["sex"].(*string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["treatments"].([]string), args["last_question"].(*string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
+		return e.complexity.Mutation.UpdateSession(childComplexity, args["id"].(string), args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(*int), args["height"].(*int), args["weight"].(*int), args["sex"].(*string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["medicine"].([]string), args["last_question"].(*string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
 
 	case "Mutation.updateSymptom":
 		if e.complexity.Mutation.UpdateSymptom == nil {
@@ -1988,24 +1989,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetMedicalFolderByID(childComplexity, args["id"].(string)), true
 
-	case "Query.getMedicamentByID":
-		if e.complexity.Query.GetMedicamentByID == nil {
+	case "Query.getMedicineByID":
+		if e.complexity.Query.GetMedicineByID == nil {
 			break
 		}
 
-		args, err := ec.field_Query_getMedicamentByID_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_getMedicineByID_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.GetMedicamentByID(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GetMedicineByID(childComplexity, args["id"].(string)), true
 
-	case "Query.getMedicaments":
-		if e.complexity.Query.GetMedicaments == nil {
+	case "Query.getMedicines":
+		if e.complexity.Query.GetMedicines == nil {
 			break
 		}
 
-		return e.complexity.Query.GetMedicaments(childComplexity), true
+		return e.complexity.Query.GetMedicines(childComplexity), true
 
 	case "Query.getNotificationById":
 		if e.complexity.Query.GetNotificationByID == nil {
@@ -2348,6 +2349,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Session.Logs(childComplexity), true
 
+	case "Session.medicine":
+		if e.complexity.Session.Medicine == nil {
+			break
+		}
+
+		return e.complexity.Session.Medicine(childComplexity), true
+
 	case "Session.sex":
 		if e.complexity.Session.Sex == nil {
 			break
@@ -2361,13 +2369,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Session.Symptoms(childComplexity), true
-
-	case "Session.treatments":
-		if e.complexity.Session.Treatments == nil {
-			break
-		}
-
-		return e.complexity.Session.Treatments(childComplexity), true
 
 	case "Session.weight":
 		if e.complexity.Session.Weight == nil {
@@ -2410,6 +2411,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SessionSymptom.Presence(childComplexity), true
+
+	case "SessionSymptom.treated":
+		if e.complexity.SessionSymptom.Treated == nil {
+			break
+		}
+
+		return e.complexity.SessionSymptom.Treated(childComplexity), true
 
 	case "Symptom.acute":
 		if e.complexity.Symptom.Acute == nil {
@@ -2569,7 +2577,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAddressInput,
 		ec.unmarshalInputLogsInput,
 		ec.unmarshalInputMedicalAntecedentsInput,
-		ec.unmarshalInputMedicamentInput,
+		ec.unmarshalInputMedicineInput,
 		ec.unmarshalInputSessionDiseasesInput,
 		ec.unmarshalInputSessionSymptomInput,
 		ec.unmarshalInputSymptomWeightInput,
@@ -2689,12 +2697,14 @@ type SessionSymptom {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 input SessionSymptomInput {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 type Logs {
@@ -2775,7 +2785,7 @@ type Session {
     sex: String!
     ante_chirs: [String!]!
     ante_diseases: [String!]!
-    treatments: [String!]!
+    medicine: [String!]!
     last_question: String!
     logs: [Logs!]!
     alerts: [String!]!
@@ -2928,7 +2938,7 @@ input TreatmentInput {
     medicine_id: String!
 }
 
-type Medicament {
+type Medicine {
     id: ID!
     name: String!
     unit: MedicineUnit!
@@ -2937,7 +2947,7 @@ type Medicament {
     side_effects: [String!]!
 }
 
-input MedicamentInput {
+input MedicineInput {
     name: String!
     unit: MedicineUnit!
     target_diseases: [String!]!
@@ -3078,14 +3088,14 @@ type Query {
     # Get the entire list of Medicament.
     getMedicalFolder: [MedicalInfo]
 
-    # Get an Medicament by its id.
+    # Get a Medicine by its id.
     getMedicalFolderById(id: String!): MedicalInfo
 
-    # Get the entire list of Medicament.
-    getMedicaments: [Medicament]
+    # Get the entire list of Medicine.
+    getMedicines: [Medicine]
 
-    # Get an Medicament by its id.
-    getMedicamentByID(id: String!): Medicament
+    # Get an Medicine by its id.
+    getMedicineByID(id: String!): Medicine
 
     # Get all patient from doctor with id.
     getPatientsFromDoctorById(id: String!): [Patient]
@@ -3141,10 +3151,10 @@ type Mutation {
     deleteTestAccount(id: String!): Boolean
 
     # Create a new session.
-    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, treatments: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
+    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, medicine: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
 
     # Update a new session.
-    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], treatments: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
+    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], medicine: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
 
     # Delete a session.
     deleteSession(id: String!): Boolean
@@ -3240,11 +3250,11 @@ type Mutation {
 
 # ================================================ #
 
-    # Create a new Medicament.
-    createMedicament(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicament
+    # Create a new Medicine.
+    createMedicine(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicine
 
-    # Delete an Medicament.
-    deleteMedicament(id: String!): Boolean
+    # Delete an Medicine.
+    deleteMedicine(id: String!): Boolean
 
 
     # Create a new MedicalFolder.!
@@ -3830,7 +3840,7 @@ func (ec *executionContext) field_Mutation_createMedicalFolder_args(ctx context.
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createMedicament_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_createMedicine_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -4074,14 +4084,14 @@ func (ec *executionContext) field_Mutation_createSession_args(ctx context.Contex
 	}
 	args["ante_diseases"] = arg7
 	var arg8 []string
-	if tmp, ok := rawArgs["treatments"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatments"))
+	if tmp, ok := rawArgs["medicine"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine"))
 		arg8, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatments"] = arg8
+	args["medicine"] = arg8
 	var arg9 string
 	if tmp, ok := rawArgs["last_question"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
@@ -4424,7 +4434,7 @@ func (ec *executionContext) field_Mutation_deleteMedicalFolder_args(ctx context.
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteMedicament_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_deleteMedicine_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -5406,14 +5416,14 @@ func (ec *executionContext) field_Mutation_updateSession_args(ctx context.Contex
 	}
 	args["ante_diseases"] = arg8
 	var arg9 []string
-	if tmp, ok := rawArgs["treatments"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatments"))
+	if tmp, ok := rawArgs["medicine"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine"))
 		arg9, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatments"] = arg9
+	args["medicine"] = arg9
 	var arg10 *string
 	if tmp, ok := rawArgs["last_question"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
@@ -5858,7 +5868,7 @@ func (ec *executionContext) field_Query_getMedicalFolderById_args(ctx context.Co
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getMedicamentByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_getMedicineByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -9305,8 +9315,8 @@ func (ec *executionContext) fieldContext_MedicalInfo_antecedent_disease_ids(ctx 
 	return fc, nil
 }
 
-func (ec *executionContext) _Medicament_id(ctx context.Context, field graphql.CollectedField, obj *model.Medicament) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medicament_id(ctx, field)
+func (ec *executionContext) _Medicine_id(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -9336,9 +9346,9 @@ func (ec *executionContext) _Medicament_id(ctx context.Context, field graphql.Co
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Medicament_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Medicine_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Medicament",
+		Object:     "Medicine",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -9349,8 +9359,8 @@ func (ec *executionContext) fieldContext_Medicament_id(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Medicament_name(ctx context.Context, field graphql.CollectedField, obj *model.Medicament) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medicament_name(ctx, field)
+func (ec *executionContext) _Medicine_name(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_name(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -9380,9 +9390,9 @@ func (ec *executionContext) _Medicament_name(ctx context.Context, field graphql.
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Medicament_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Medicine_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Medicament",
+		Object:     "Medicine",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -9393,8 +9403,8 @@ func (ec *executionContext) fieldContext_Medicament_name(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Medicament_unit(ctx context.Context, field graphql.CollectedField, obj *model.Medicament) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medicament_unit(ctx, field)
+func (ec *executionContext) _Medicine_unit(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_unit(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -9424,9 +9434,9 @@ func (ec *executionContext) _Medicament_unit(ctx context.Context, field graphql.
 	return ec.marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Medicament_unit(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Medicine_unit(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Medicament",
+		Object:     "Medicine",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -9437,8 +9447,8 @@ func (ec *executionContext) fieldContext_Medicament_unit(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Medicament_target_diseases(ctx context.Context, field graphql.CollectedField, obj *model.Medicament) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medicament_target_diseases(ctx, field)
+func (ec *executionContext) _Medicine_target_diseases(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_target_diseases(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -9468,9 +9478,9 @@ func (ec *executionContext) _Medicament_target_diseases(ctx context.Context, fie
 	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Medicament_target_diseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Medicine_target_diseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Medicament",
+		Object:     "Medicine",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -9481,8 +9491,8 @@ func (ec *executionContext) fieldContext_Medicament_target_diseases(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Medicament_treated_symptoms(ctx context.Context, field graphql.CollectedField, obj *model.Medicament) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medicament_treated_symptoms(ctx, field)
+func (ec *executionContext) _Medicine_treated_symptoms(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -9512,9 +9522,9 @@ func (ec *executionContext) _Medicament_treated_symptoms(ctx context.Context, fi
 	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Medicament_treated_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Medicine_treated_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Medicament",
+		Object:     "Medicine",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -9525,8 +9535,8 @@ func (ec *executionContext) fieldContext_Medicament_treated_symptoms(ctx context
 	return fc, nil
 }
 
-func (ec *executionContext) _Medicament_side_effects(ctx context.Context, field graphql.CollectedField, obj *model.Medicament) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Medicament_side_effects(ctx, field)
+func (ec *executionContext) _Medicine_side_effects(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_side_effects(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -9556,9 +9566,9 @@ func (ec *executionContext) _Medicament_side_effects(ctx context.Context, field 
 	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Medicament_side_effects(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Medicine_side_effects(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Medicament",
+		Object:     "Medicine",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -10483,7 +10493,7 @@ func (ec *executionContext) _Mutation_createSession(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSession(rctx, fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(int), fc.Args["height"].(int), fc.Args["weight"].(int), fc.Args["sex"].(string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["treatments"].([]string), fc.Args["last_question"].(string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
+		return ec.resolvers.Mutation().CreateSession(rctx, fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(int), fc.Args["height"].(int), fc.Args["weight"].(int), fc.Args["sex"].(string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["medicine"].([]string), fc.Args["last_question"].(string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10523,8 +10533,8 @@ func (ec *executionContext) fieldContext_Mutation_createSession(ctx context.Cont
 				return ec.fieldContext_Session_ante_chirs(ctx, field)
 			case "ante_diseases":
 				return ec.fieldContext_Session_ante_diseases(ctx, field)
-			case "treatments":
-				return ec.fieldContext_Session_treatments(ctx, field)
+			case "medicine":
+				return ec.fieldContext_Session_medicine(ctx, field)
 			case "last_question":
 				return ec.fieldContext_Session_last_question(ctx, field)
 			case "logs":
@@ -10563,7 +10573,7 @@ func (ec *executionContext) _Mutation_updateSession(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateSession(rctx, fc.Args["id"].(string), fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(*int), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["sex"].(*string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["treatments"].([]string), fc.Args["last_question"].(*string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
+		return ec.resolvers.Mutation().UpdateSession(rctx, fc.Args["id"].(string), fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(*int), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["sex"].(*string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["medicine"].([]string), fc.Args["last_question"].(*string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10603,8 +10613,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSession(ctx context.Cont
 				return ec.fieldContext_Session_ante_chirs(ctx, field)
 			case "ante_diseases":
 				return ec.fieldContext_Session_ante_diseases(ctx, field)
-			case "treatments":
-				return ec.fieldContext_Session_treatments(ctx, field)
+			case "medicine":
+				return ec.fieldContext_Session_medicine(ctx, field)
 			case "last_question":
 				return ec.fieldContext_Session_last_question(ctx, field)
 			case "logs":
@@ -12589,8 +12599,8 @@ func (ec *executionContext) fieldContext_Mutation_deleteAlert(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createMedicament(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createMedicament(ctx, field)
+func (ec *executionContext) _Mutation_createMedicine(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createMedicine(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -12603,7 +12613,7 @@ func (ec *executionContext) _Mutation_createMedicament(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateMedicament(rctx, fc.Args["name"].(string), fc.Args["unit"].(*string), fc.Args["target_diseases"].([]string), fc.Args["treated_symptoms"].([]string), fc.Args["side_effects"].([]string))
+		return ec.resolvers.Mutation().CreateMedicine(rctx, fc.Args["name"].(string), fc.Args["unit"].(*string), fc.Args["target_diseases"].([]string), fc.Args["treated_symptoms"].([]string), fc.Args["side_effects"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12612,12 +12622,12 @@ func (ec *executionContext) _Mutation_createMedicament(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.Medicament)
+	res := resTmp.(*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicament2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicament(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_createMedicament(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_createMedicine(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -12626,19 +12636,19 @@ func (ec *executionContext) fieldContext_Mutation_createMedicament(ctx context.C
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_Medicament_id(ctx, field)
+				return ec.fieldContext_Medicine_id(ctx, field)
 			case "name":
-				return ec.fieldContext_Medicament_name(ctx, field)
+				return ec.fieldContext_Medicine_name(ctx, field)
 			case "unit":
-				return ec.fieldContext_Medicament_unit(ctx, field)
+				return ec.fieldContext_Medicine_unit(ctx, field)
 			case "target_diseases":
-				return ec.fieldContext_Medicament_target_diseases(ctx, field)
+				return ec.fieldContext_Medicine_target_diseases(ctx, field)
 			case "treated_symptoms":
-				return ec.fieldContext_Medicament_treated_symptoms(ctx, field)
+				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
-				return ec.fieldContext_Medicament_side_effects(ctx, field)
+				return ec.fieldContext_Medicine_side_effects(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Medicament", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
 	}
 	defer func() {
@@ -12648,15 +12658,15 @@ func (ec *executionContext) fieldContext_Mutation_createMedicament(ctx context.C
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createMedicament_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_createMedicine_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_deleteMedicament(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_deleteMedicament(ctx, field)
+func (ec *executionContext) _Mutation_deleteMedicine(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteMedicine(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -12669,7 +12679,7 @@ func (ec *executionContext) _Mutation_deleteMedicament(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteMedicament(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeleteMedicine(rctx, fc.Args["id"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12683,7 +12693,7 @@ func (ec *executionContext) _Mutation_deleteMedicament(ctx context.Context, fiel
 	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_deleteMedicament(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_deleteMedicine(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -12700,7 +12710,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteMedicament(ctx context.C
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteMedicament_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_deleteMedicine_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -14297,8 +14307,8 @@ func (ec *executionContext) fieldContext_Query_getSessions(ctx context.Context, 
 				return ec.fieldContext_Session_ante_chirs(ctx, field)
 			case "ante_diseases":
 				return ec.fieldContext_Session_ante_diseases(ctx, field)
-			case "treatments":
-				return ec.fieldContext_Session_treatments(ctx, field)
+			case "medicine":
+				return ec.fieldContext_Session_medicine(ctx, field)
 			case "last_question":
 				return ec.fieldContext_Session_last_question(ctx, field)
 			case "logs":
@@ -14366,8 +14376,8 @@ func (ec *executionContext) fieldContext_Query_getSessionById(ctx context.Contex
 				return ec.fieldContext_Session_ante_chirs(ctx, field)
 			case "ante_diseases":
 				return ec.fieldContext_Session_ante_diseases(ctx, field)
-			case "treatments":
-				return ec.fieldContext_Session_treatments(ctx, field)
+			case "medicine":
+				return ec.fieldContext_Session_medicine(ctx, field)
 			case "last_question":
 				return ec.fieldContext_Session_last_question(ctx, field)
 			case "logs":
@@ -16114,8 +16124,8 @@ func (ec *executionContext) fieldContext_Query_getMedicalFolderById(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_getMedicaments(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getMedicaments(ctx, field)
+func (ec *executionContext) _Query_getMedicines(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getMedicines(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -16128,7 +16138,7 @@ func (ec *executionContext) _Query_getMedicaments(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetMedicaments(rctx)
+		return ec.resolvers.Query().GetMedicines(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16137,12 +16147,12 @@ func (ec *executionContext) _Query_getMedicaments(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Medicament)
+	res := resTmp.([]*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicament2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicament(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getMedicaments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getMedicines(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -16151,26 +16161,26 @@ func (ec *executionContext) fieldContext_Query_getMedicaments(ctx context.Contex
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_Medicament_id(ctx, field)
+				return ec.fieldContext_Medicine_id(ctx, field)
 			case "name":
-				return ec.fieldContext_Medicament_name(ctx, field)
+				return ec.fieldContext_Medicine_name(ctx, field)
 			case "unit":
-				return ec.fieldContext_Medicament_unit(ctx, field)
+				return ec.fieldContext_Medicine_unit(ctx, field)
 			case "target_diseases":
-				return ec.fieldContext_Medicament_target_diseases(ctx, field)
+				return ec.fieldContext_Medicine_target_diseases(ctx, field)
 			case "treated_symptoms":
-				return ec.fieldContext_Medicament_treated_symptoms(ctx, field)
+				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
-				return ec.fieldContext_Medicament_side_effects(ctx, field)
+				return ec.fieldContext_Medicine_side_effects(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Medicament", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_getMedicamentByID(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getMedicamentByID(ctx, field)
+func (ec *executionContext) _Query_getMedicineByID(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getMedicineByID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -16183,7 +16193,7 @@ func (ec *executionContext) _Query_getMedicamentByID(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetMedicamentByID(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetMedicineByID(rctx, fc.Args["id"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16192,12 +16202,12 @@ func (ec *executionContext) _Query_getMedicamentByID(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.Medicament)
+	res := resTmp.(*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicament2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicament(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getMedicamentByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getMedicineByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -16206,19 +16216,19 @@ func (ec *executionContext) fieldContext_Query_getMedicamentByID(ctx context.Con
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_Medicament_id(ctx, field)
+				return ec.fieldContext_Medicine_id(ctx, field)
 			case "name":
-				return ec.fieldContext_Medicament_name(ctx, field)
+				return ec.fieldContext_Medicine_name(ctx, field)
 			case "unit":
-				return ec.fieldContext_Medicament_unit(ctx, field)
+				return ec.fieldContext_Medicine_unit(ctx, field)
 			case "target_diseases":
-				return ec.fieldContext_Medicament_target_diseases(ctx, field)
+				return ec.fieldContext_Medicine_target_diseases(ctx, field)
 			case "treated_symptoms":
-				return ec.fieldContext_Medicament_treated_symptoms(ctx, field)
+				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
-				return ec.fieldContext_Medicament_side_effects(ctx, field)
+				return ec.fieldContext_Medicine_side_effects(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Medicament", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
 	}
 	defer func() {
@@ -16228,7 +16238,7 @@ func (ec *executionContext) fieldContext_Query_getMedicamentByID(ctx context.Con
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getMedicamentByID_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_getMedicineByID_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -16918,6 +16928,8 @@ func (ec *executionContext) fieldContext_Session_symptoms(ctx context.Context, f
 				return ec.fieldContext_SessionSymptom_presence(ctx, field)
 			case "duration":
 				return ec.fieldContext_SessionSymptom_duration(ctx, field)
+			case "treated":
+				return ec.fieldContext_SessionSymptom_treated(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SessionSymptom", field.Name)
 		},
@@ -17189,8 +17201,8 @@ func (ec *executionContext) fieldContext_Session_ante_diseases(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Session_treatments(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Session_treatments(ctx, field)
+func (ec *executionContext) _Session_medicine(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Session_medicine(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -17203,7 +17215,7 @@ func (ec *executionContext) _Session_treatments(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Treatments, nil
+		return obj.Medicine, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -17220,7 +17232,7 @@ func (ec *executionContext) _Session_treatments(ctx context.Context, field graph
 	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Session_treatments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Session_medicine(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Session",
 		Field:      field,
@@ -17580,6 +17592,47 @@ func (ec *executionContext) fieldContext_SessionSymptom_duration(ctx context.Con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SessionSymptom_treated(ctx context.Context, field graphql.CollectedField, obj *model.SessionSymptom) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SessionSymptom_treated(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Treated, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SessionSymptom_treated(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SessionSymptom",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -20387,8 +20440,8 @@ func (ec *executionContext) unmarshalInputMedicalAntecedentsInput(ctx context.Co
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputMedicamentInput(ctx context.Context, obj interface{}) (model.MedicamentInput, error) {
-	var it model.MedicamentInput
+func (ec *executionContext) unmarshalInputMedicineInput(ctx context.Context, obj interface{}) (model.MedicineInput, error) {
+	var it model.MedicineInput
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -20483,7 +20536,7 @@ func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "presence", "duration"}
+	fieldsInOrder := [...]string{"name", "presence", "duration", "treated"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -20511,6 +20564,13 @@ func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Contex
 				return it, err
 			}
 			it.Duration = data
+		case "treated":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treated"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Treated = data
 		}
 	}
 
@@ -21370,44 +21430,44 @@ func (ec *executionContext) _MedicalInfo(ctx context.Context, sel ast.SelectionS
 	return out
 }
 
-var medicamentImplementors = []string{"Medicament"}
+var medicineImplementors = []string{"Medicine"}
 
-func (ec *executionContext) _Medicament(ctx context.Context, sel ast.SelectionSet, obj *model.Medicament) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, medicamentImplementors)
+func (ec *executionContext) _Medicine(ctx context.Context, sel ast.SelectionSet, obj *model.Medicine) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, medicineImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("Medicament")
+			out.Values[i] = graphql.MarshalString("Medicine")
 		case "id":
-			out.Values[i] = ec._Medicament_id(ctx, field, obj)
+			out.Values[i] = ec._Medicine_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "name":
-			out.Values[i] = ec._Medicament_name(ctx, field, obj)
+			out.Values[i] = ec._Medicine_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "unit":
-			out.Values[i] = ec._Medicament_unit(ctx, field, obj)
+			out.Values[i] = ec._Medicine_unit(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "target_diseases":
-			out.Values[i] = ec._Medicament_target_diseases(ctx, field, obj)
+			out.Values[i] = ec._Medicine_target_diseases(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "treated_symptoms":
-			out.Values[i] = ec._Medicament_treated_symptoms(ctx, field, obj)
+			out.Values[i] = ec._Medicine_treated_symptoms(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "side_effects":
-			out.Values[i] = ec._Medicament_side_effects(ctx, field, obj)
+			out.Values[i] = ec._Medicine_side_effects(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -21649,13 +21709,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteAlert(ctx, field)
 			})
-		case "createMedicament":
+		case "createMedicine":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createMedicament(ctx, field)
+				return ec._Mutation_createMedicine(ctx, field)
 			})
-		case "deleteMedicament":
+		case "deleteMedicine":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteMedicament(ctx, field)
+				return ec._Mutation_deleteMedicine(ctx, field)
 			})
 		case "createMedicalFolder":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -22656,7 +22716,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getMedicaments":
+		case "getMedicines":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -22665,7 +22725,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_getMedicaments(ctx, field)
+				res = ec._Query_getMedicines(ctx, field)
 				return res
 			}
 
@@ -22675,7 +22735,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getMedicamentByID":
+		case "getMedicineByID":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -22684,7 +22744,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_getMedicamentByID(ctx, field)
+				res = ec._Query_getMedicineByID(ctx, field)
 				return res
 			}
 
@@ -22871,8 +22931,8 @@ func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "treatments":
-			out.Values[i] = ec._Session_treatments(ctx, field, obj)
+		case "medicine":
+			out.Values[i] = ec._Session_medicine(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -22978,6 +23038,8 @@ func (ec *executionContext) _SessionSymptom(ctx context.Context, sel ast.Selecti
 			out.Values[i] = ec._SessionSymptom_presence(ctx, field, obj)
 		case "duration":
 			out.Values[i] = ec._SessionSymptom_duration(ctx, field, obj)
+		case "treated":
+			out.Values[i] = ec._SessionSymptom_treated(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -25221,7 +25283,7 @@ func (ec *executionContext) marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcare�
 	return ec._MedicalInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOMedicament2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicament(ctx context.Context, sel ast.SelectionSet, v []*model.Medicament) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v []*model.Medicine) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -25248,7 +25310,7 @@ func (ec *executionContext) marshalOMedicament2ᚕᚖgithubᚗcomᚋedgarᚑcare
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOMedicament2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicament(ctx, sel, v[i])
+			ret[i] = ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -25262,11 +25324,11 @@ func (ec *executionContext) marshalOMedicament2ᚕᚖgithubᚗcomᚋedgarᚑcare
 	return ret
 }
 
-func (ec *executionContext) marshalOMedicament2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicament(ctx context.Context, sel ast.SelectionSet, v *model.Medicament) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v *model.Medicine) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._Medicament(ctx, sel, v)
+	return ec._Medicine(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {

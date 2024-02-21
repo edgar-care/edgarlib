@@ -31,20 +31,24 @@ func Initiate(id string) InitiateResponse {
 		input.Sex = "O"
 	}
 	input.AnteChirs = []string{}
-	input.AnteDiseases = []string{}
-	input.Treatments = []string{}
-	input.Treatments = append(input.Treatments, "CanonFlesh")
+	input.AnteDiseases = patientInfos.GetMedicalFolderById.Antecedent_disease_ids
 
-	// TODO: uncomment when treatment is implemented in back
-	//for _, medical_antecedent := range patientInfos.GetMedicalFolderById.Medical_antecedents {
-	//	if medical_antecedent.Still_relevant == true {
-	//		input.Treatments = append(input.Treatments, medical_antecedent.Name)
-	//	}
-	//}
+	input.Medicine = []string{}
+	input.Medicine = append(input.Medicine, "CanonFlesh")
+
+	for _, antecedentDiseaseId := range input.AnteDiseases {
+		antecedentDisease, _ := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, antecedentDiseaseId)
+		if antecedentDisease.GetAnteDiseaseByID.Still_relevant == true {
+			for _, treatmentIds := range antecedentDisease.GetAnteDiseaseByID.Treatment_ids {
+				treatment, _ := graphql.GetTreatmentByID(context.Background(), gqlClient, treatmentIds)
+				input.Medicine = append(input.Medicine, treatment.GetTreatmentByID.Medicine_id)
+			}
+		}
+	}
 
 	utils.WakeNlpUp()
 
-	session, err := graphql.CreateSession(context.Background(), gqlClient, []graphql.SessionDiseasesInput{}, []graphql.SessionSymptomInput{}, input.Age, input.Height, input.Weight, input.Sex, input.AnteChirs, input.AnteDiseases, input.Treatments, "", []graphql.LogsInput{}, []string{})
+	session, err := graphql.CreateSession(context.Background(), gqlClient, []graphql.SessionDiseasesInput{}, []graphql.SessionSymptomInput{}, input.Age, input.Height, input.Weight, input.Sex, input.AnteChirs, input.AnteDiseases, input.Medicine, "", []graphql.LogsInput{}, []string{})
 
 	if err != nil {
 		return InitiateResponse{"", 500, errors.New("unable to create session")}
