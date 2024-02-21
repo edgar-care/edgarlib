@@ -3,9 +3,10 @@ package exam
 import (
 	"context"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
 
-func isAlertPresent(context []ExamContextItem, symptom string) bool {
+func isAlertPresent(context []model.SessionSymptom, symptom string) bool {
 	for _, e := range context {
 		if e.Presence != nil {
 			if e.Name == symptom && *e.Presence == true {
@@ -16,7 +17,7 @@ func isAlertPresent(context []ExamContextItem, symptom string) bool {
 	return false
 }
 
-func coverAlert(context []ExamContextItem, alert graphql.GetAlertsGetAlertsAlert) string {
+func coverAlert(context []model.SessionSymptom, alert graphql.GetAlertsGetAlertsAlert) string {
 	present := true
 	for _, symptom := range alert.Symptoms {
 		presence := isAlertPresent(context, symptom)
@@ -31,7 +32,7 @@ func coverAlert(context []ExamContextItem, alert graphql.GetAlertsGetAlertsAlert
 	}
 }
 
-func CheckAlerts(patientContext []ExamContextItem) ([]string, error) {
+func CheckAlerts(patientContext []model.SessionSymptom) ([]string, error) {
 	gqlClient := graphql.CreateClient()
 	alerts, err := graphql.GetAlerts(context.Background(), gqlClient)
 	if err != nil {

@@ -61,7 +61,11 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	for _, s := range exam.Context {
 		var ns graphql.SessionSymptomInput
 		ns.Name = s.Name
-		ns.Presence = *s.Presence
+		if s.Presence != nil && *s.Presence == true {
+			ns.Presence = true
+		} else {
+			ns.Presence = false
+		}
 		ns.Duration = 0
 		symptomsinput = append(symptomsinput, ns)
 	}
