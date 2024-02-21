@@ -187,7 +187,7 @@ type ComplexityRoot struct {
 		CreateNotification  func(childComplexity int, token string, message string, title string) int
 		CreatePatient       func(childComplexity int, email string, password string) int
 		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
-		CreateSession       func(childComplexity int, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
+		CreateSession       func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
 		CreateSymptom       func(childComplexity int, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) int
 		CreateTestAccount   func(childComplexity int, email string, password string) int
 		CreateTreatment     func(childComplexity int, name string, disease string, symptoms []string, sideEffects []string) int
@@ -223,7 +223,7 @@ type ComplexityRoot struct {
 		UpdateNotification  func(childComplexity int, id string, token string, message string, title string) int
 		UpdatePatient       func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) int
 		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) int
-		UpdateSession       func(childComplexity int, id string, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
+		UpdateSession       func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
 		UpdateSymptom       func(childComplexity int, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) int
 		UpdateTestAccount   func(childComplexity int, id string, email *string, password *string) int
 		UpdateTreatment     func(childComplexity int, id string, name *string, disease *string, symptoms []string, sideEffects []string) int
@@ -311,6 +311,7 @@ type ComplexityRoot struct {
 		Alerts       func(childComplexity int) int
 		AnteChirs    func(childComplexity int) int
 		AnteDiseases func(childComplexity int) int
+		Diseases     func(childComplexity int) int
 		Height       func(childComplexity int) int
 		ID           func(childComplexity int) int
 		LastQuestion func(childComplexity int) int
@@ -319,6 +320,11 @@ type ComplexityRoot struct {
 		Symptoms     func(childComplexity int) int
 		Treatments   func(childComplexity int) int
 		Weight       func(childComplexity int) int
+	}
+
+	SessionDiseases struct {
+		Name     func(childComplexity int) int
+		Presence func(childComplexity int) int
 	}
 
 	SessionSymptom struct {
@@ -377,8 +383,8 @@ type MutationResolver interface {
 	CreateTestAccount(ctx context.Context, email string, password string) (*model.TestAccount, error)
 	UpdateTestAccount(ctx context.Context, id string, email *string, password *string) (*model.TestAccount, error)
 	DeleteTestAccount(ctx context.Context, id string) (*bool, error)
-	CreateSession(ctx context.Context, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
-	UpdateSession(ctx context.Context, id string, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
+	CreateSession(ctx context.Context, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
+	UpdateSession(ctx context.Context, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) (*model.Session, error)
 	DeleteSession(ctx context.Context, id string) (*bool, error)
 	CreateSymptom(ctx context.Context, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) (*model.Symptom, error)
 	UpdateSymptom(ctx context.Context, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) (*model.Symptom, error)
@@ -1231,7 +1237,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSession(childComplexity, args["symptoms"].([]*model.SessionSymptomInput), args["age"].(int), args["height"].(int), args["weight"].(int), args["sex"].(string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["treatments"].([]string), args["last_question"].(string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
+		return e.complexity.Mutation.CreateSession(childComplexity, args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(int), args["height"].(int), args["weight"].(int), args["sex"].(string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["treatments"].([]string), args["last_question"].(string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
 
 	case "Mutation.createSymptom":
 		if e.complexity.Mutation.CreateSymptom == nil {
@@ -1663,7 +1669,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSession(childComplexity, args["id"].(string), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(*int), args["height"].(*int), args["weight"].(*int), args["sex"].(*string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["treatments"].([]string), args["last_question"].(*string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
+		return e.complexity.Mutation.UpdateSession(childComplexity, args["id"].(string), args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(*int), args["height"].(*int), args["weight"].(*int), args["sex"].(*string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["treatments"].([]string), args["last_question"].(*string), args["logs"].([]*model.LogsInput), args["alerts"].([]string)), true
 
 	case "Mutation.updateSymptom":
 		if e.complexity.Mutation.UpdateSymptom == nil {
@@ -2334,6 +2340,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Session.AnteDiseases(childComplexity), true
 
+	case "Session.diseases":
+		if e.complexity.Session.Diseases == nil {
+			break
+		}
+
+		return e.complexity.Session.Diseases(childComplexity), true
+
 	case "Session.height":
 		if e.complexity.Session.Height == nil {
 			break
@@ -2389,6 +2402,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Session.Weight(childComplexity), true
+
+	case "SessionDiseases.name":
+		if e.complexity.SessionDiseases.Name == nil {
+			break
+		}
+
+		return e.complexity.SessionDiseases.Name(childComplexity), true
+
+	case "SessionDiseases.presence":
+		if e.complexity.SessionDiseases.Presence == nil {
+			break
+		}
+
+		return e.complexity.SessionDiseases.Presence(childComplexity), true
 
 	case "SessionSymptom.duration":
 		if e.complexity.SessionSymptom.Duration == nil {
@@ -2571,6 +2598,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputMedicalAntecedentsInput,
 		ec.unmarshalInputMedicamentInput,
 		ec.unmarshalInputMedicinesInput,
+		ec.unmarshalInputSessionDiseasesInput,
 		ec.unmarshalInputSessionSymptomInput,
 		ec.unmarshalInputSymptomWeightInput,
 	)
@@ -2706,6 +2734,16 @@ input LogsInput {
     answer: String!
 }
 
+type SessionDiseases {
+    name: String!
+    presence: Float!
+}
+
+input SessionDiseasesInput {
+    name: String!
+    presence: Float!
+}
+
 ##  Entities  ----------------------------------------------------------------------------------------------------------
 
 # Patient entity
@@ -2756,6 +2794,7 @@ type Admin {
 # Session entity
 type Session {
     id: ID!
+    diseases: [SessionDiseases!]!
     symptoms: [SessionSymptom!]!
     age: Int!
     height: Int!
@@ -3128,10 +3167,10 @@ type Mutation {
     deleteTestAccount(id: String!): Boolean
 
     # Create a new session.
-    createSession(symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, treatments: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
+    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, treatments: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
 
     # Update a new session.
-    updateSession(id: String!, symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], treatments: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
+    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], treatments: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
 
     # Delete a session.
     deleteSession(id: String!): Boolean
@@ -3994,105 +4033,114 @@ func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, r
 func (ec *executionContext) field_Mutation_createSession_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []*model.SessionSymptomInput
+	var arg0 []*model.SessionDiseasesInput
+	if tmp, ok := rawArgs["diseases"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
+		arg0, err = ec.unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["diseases"] = arg0
+	var arg1 []*model.SessionSymptomInput
 	if tmp, ok := rawArgs["symptoms"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg0, err = ec.unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx, tmp)
+		arg1, err = ec.unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["symptoms"] = arg0
-	var arg1 int
+	args["symptoms"] = arg1
+	var arg2 int
 	if tmp, ok := rawArgs["age"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("age"))
-		arg1, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["age"] = arg1
-	var arg2 int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
 		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["height"] = arg2
+	args["age"] = arg2
 	var arg3 int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+	if tmp, ok := rawArgs["height"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
 		arg3, err = ec.unmarshalNInt2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["weight"] = arg3
-	var arg4 string
+	args["height"] = arg3
+	var arg4 int
+	if tmp, ok := rawArgs["weight"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+		arg4, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["weight"] = arg4
+	var arg5 string
 	if tmp, ok := rawArgs["sex"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg4, err = ec.unmarshalNString2string(ctx, tmp)
+		arg5, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["sex"] = arg4
-	var arg5 []string
+	args["sex"] = arg5
+	var arg6 []string
 	if tmp, ok := rawArgs["ante_chirs"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_chirs"))
-		arg5, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ante_chirs"] = arg5
-	var arg6 []string
-	if tmp, ok := rawArgs["ante_diseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
 		arg6, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["ante_diseases"] = arg6
+	args["ante_chirs"] = arg6
 	var arg7 []string
-	if tmp, ok := rawArgs["treatments"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatments"))
+	if tmp, ok := rawArgs["ante_diseases"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
 		arg7, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatments"] = arg7
-	var arg8 string
+	args["ante_diseases"] = arg7
+	var arg8 []string
+	if tmp, ok := rawArgs["treatments"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatments"))
+		arg8, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["treatments"] = arg8
+	var arg9 string
 	if tmp, ok := rawArgs["last_question"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
-		arg8, err = ec.unmarshalNString2string(ctx, tmp)
+		arg9, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["last_question"] = arg8
-	var arg9 []*model.LogsInput
+	args["last_question"] = arg9
+	var arg10 []*model.LogsInput
 	if tmp, ok := rawArgs["logs"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
-		arg9, err = ec.unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx, tmp)
+		arg10, err = ec.unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["logs"] = arg9
-	var arg10 []string
+	args["logs"] = arg10
+	var arg11 []string
 	if tmp, ok := rawArgs["alerts"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alerts"))
-		arg10, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+		arg11, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["alerts"] = arg10
+	args["alerts"] = arg11
 	return args, nil
 }
 
@@ -5317,105 +5365,114 @@ func (ec *executionContext) field_Mutation_updateSession_args(ctx context.Contex
 		}
 	}
 	args["id"] = arg0
-	var arg1 []*model.SessionSymptomInput
+	var arg1 []*model.SessionDiseasesInput
+	if tmp, ok := rawArgs["diseases"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
+		arg1, err = ec.unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["diseases"] = arg1
+	var arg2 []*model.SessionSymptomInput
 	if tmp, ok := rawArgs["symptoms"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg1, err = ec.unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx, tmp)
+		arg2, err = ec.unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["symptoms"] = arg1
-	var arg2 *int
+	args["symptoms"] = arg2
+	var arg3 *int
 	if tmp, ok := rawArgs["age"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("age"))
-		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["age"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
 		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["height"] = arg3
+	args["age"] = arg3
 	var arg4 *int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+	if tmp, ok := rawArgs["height"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
 		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["weight"] = arg4
-	var arg5 *string
+	args["height"] = arg4
+	var arg5 *int
+	if tmp, ok := rawArgs["weight"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+		arg5, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["weight"] = arg5
+	var arg6 *string
 	if tmp, ok := rawArgs["sex"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["sex"] = arg5
-	var arg6 []string
+	args["sex"] = arg6
+	var arg7 []string
 	if tmp, ok := rawArgs["ante_chirs"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_chirs"))
-		arg6, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ante_chirs"] = arg6
-	var arg7 []string
-	if tmp, ok := rawArgs["ante_diseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
 		arg7, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["ante_diseases"] = arg7
+	args["ante_chirs"] = arg7
 	var arg8 []string
-	if tmp, ok := rawArgs["treatments"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatments"))
+	if tmp, ok := rawArgs["ante_diseases"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
 		arg8, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatments"] = arg8
-	var arg9 *string
+	args["ante_diseases"] = arg8
+	var arg9 []string
+	if tmp, ok := rawArgs["treatments"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatments"))
+		arg9, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["treatments"] = arg9
+	var arg10 *string
 	if tmp, ok := rawArgs["last_question"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
-		arg9, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg10, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["last_question"] = arg9
-	var arg10 []*model.LogsInput
+	args["last_question"] = arg10
+	var arg11 []*model.LogsInput
 	if tmp, ok := rawArgs["logs"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
-		arg10, err = ec.unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx, tmp)
+		arg11, err = ec.unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["logs"] = arg10
-	var arg11 []string
+	args["logs"] = arg11
+	var arg12 []string
 	if tmp, ok := rawArgs["alerts"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alerts"))
-		arg11, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		arg12, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["alerts"] = arg11
+	args["alerts"] = arg12
 	return args, nil
 }
 
@@ -10596,7 +10653,7 @@ func (ec *executionContext) _Mutation_createSession(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSession(rctx, fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(int), fc.Args["height"].(int), fc.Args["weight"].(int), fc.Args["sex"].(string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["treatments"].([]string), fc.Args["last_question"].(string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
+		return ec.resolvers.Mutation().CreateSession(rctx, fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(int), fc.Args["height"].(int), fc.Args["weight"].(int), fc.Args["sex"].(string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["treatments"].([]string), fc.Args["last_question"].(string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10620,6 +10677,8 @@ func (ec *executionContext) fieldContext_Mutation_createSession(ctx context.Cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Session_id(ctx, field)
+			case "diseases":
+				return ec.fieldContext_Session_diseases(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Session_symptoms(ctx, field)
 			case "age":
@@ -10674,7 +10733,7 @@ func (ec *executionContext) _Mutation_updateSession(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateSession(rctx, fc.Args["id"].(string), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(*int), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["sex"].(*string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["treatments"].([]string), fc.Args["last_question"].(*string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
+		return ec.resolvers.Mutation().UpdateSession(rctx, fc.Args["id"].(string), fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(*int), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["sex"].(*string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["treatments"].([]string), fc.Args["last_question"].(*string), fc.Args["logs"].([]*model.LogsInput), fc.Args["alerts"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10698,6 +10757,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSession(ctx context.Cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Session_id(ctx, field)
+			case "diseases":
+				return ec.fieldContext_Session_diseases(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Session_symptoms(ctx, field)
 			case "age":
@@ -14390,6 +14451,8 @@ func (ec *executionContext) fieldContext_Query_getSessions(ctx context.Context, 
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Session_id(ctx, field)
+			case "diseases":
+				return ec.fieldContext_Session_diseases(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Session_symptoms(ctx, field)
 			case "age":
@@ -14457,6 +14520,8 @@ func (ec *executionContext) fieldContext_Query_getSessionById(ctx context.Contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Session_id(ctx, field)
+			case "diseases":
+				return ec.fieldContext_Session_diseases(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Session_symptoms(ctx, field)
 			case "age":
@@ -16928,6 +16993,56 @@ func (ec *executionContext) fieldContext_Session_id(ctx context.Context, field g
 	return fc, nil
 }
 
+func (ec *executionContext) _Session_diseases(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Session_diseases(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Diseases, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.SessionDiseases)
+	fc.Result = res
+	return ec.marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Session_diseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Session",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_SessionDiseases_name(ctx, field)
+			case "presence":
+				return ec.fieldContext_SessionDiseases_presence(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SessionDiseases", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Session_symptoms(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Session_symptoms(ctx, field)
 	if err != nil {
@@ -17421,6 +17536,94 @@ func (ec *executionContext) fieldContext_Session_alerts(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SessionDiseases_name(ctx context.Context, field graphql.CollectedField, obj *model.SessionDiseases) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SessionDiseases_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SessionDiseases_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SessionDiseases",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SessionDiseases_presence(ctx context.Context, field graphql.CollectedField, obj *model.SessionDiseases) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SessionDiseases_presence(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Presence, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SessionDiseases_presence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SessionDiseases",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -20444,6 +20647,40 @@ func (ec *executionContext) unmarshalInputMedicinesInput(ctx context.Context, ob
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSessionDiseasesInput(ctx context.Context, obj interface{}) (model.SessionDiseasesInput, error) {
+	var it model.SessionDiseasesInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "presence"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "presence":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("presence"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Presence = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Context, obj interface{}) (model.SessionSymptomInput, error) {
 	var it model.SessionSymptomInput
 	asMap := map[string]interface{}{}
@@ -22800,6 +23037,11 @@ func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "diseases":
+			out.Values[i] = ec._Session_diseases(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "symptoms":
 			out.Values[i] = ec._Session_symptoms(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -22852,6 +23094,50 @@ func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "alerts":
 			out.Values[i] = ec._Session_alerts(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var sessionDiseasesImplementors = []string{"SessionDiseases"}
+
+func (ec *executionContext) _SessionDiseases(ctx context.Context, sel ast.SelectionSet, obj *model.SessionDiseases) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sessionDiseasesImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SessionDiseases")
+		case "name":
+			out.Values[i] = ec._SessionDiseases_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "presence":
+			out.Values[i] = ec._SessionDiseases_presence(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -23925,6 +24211,82 @@ func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 	wg.Wait()
 
 	return ret
+}
+
+func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionDiseases) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseases(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseases(ctx context.Context, sel ast.SelectionSet, v *model.SessionDiseases) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SessionDiseases(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.SessionDiseasesInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInput(ctx context.Context, v interface{}) (*model.SessionDiseasesInput, error) {
+	res, err := ec.unmarshalInputSessionDiseasesInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionSymptom) graphql.Marshaler {
@@ -25200,6 +25562,26 @@ func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedg
 		return graphql.Null
 	}
 	return ec._Session(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.SessionDiseasesInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
 func (ec *executionContext) unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {

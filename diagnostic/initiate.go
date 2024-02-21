@@ -36,7 +36,7 @@ func Initiate(id string) InitiateResponse {
 
 	utils.WakeNlpUp()
 
-	session, err := graphql.CreateSession(context.Background(), gqlClient, []graphql.SessionSymptomInput{}, input.Age, input.Height, input.Weight, input.Sex, input.AnteChirs, input.AnteDiseases, input.Treatments, "", []graphql.LogsInput{}, []string{})
+	session, err := graphql.CreateSession(context.Background(), gqlClient, []graphql.SessionDiseasesInput{}, []graphql.SessionSymptomInput{}, input.Age, input.Height, input.Weight, input.Sex, input.AnteChirs, input.AnteDiseases, input.Treatments, "", []graphql.LogsInput{}, []string{})
 
 	if err != nil {
 		return InitiateResponse{"", 500, errors.New("unable to create session")}
