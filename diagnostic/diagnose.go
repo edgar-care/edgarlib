@@ -2,6 +2,7 @@ package diagnostic
 
 import (
 	"context"
+	"fmt"
 	"github.com/edgar-care/edgarlib"
 	"github.com/edgar-care/edgarlib/diagnostic/utils"
 	"github.com/edgar-care/edgarlib/graphql"
@@ -25,6 +26,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		ns.Name = s.Name
 		ns.Presence = &s.Presence
 		ns.Duration = &s.Duration
+		ns.Treated = s.Treated
 		symptoms = append(symptoms, ns)
 	}
 
@@ -43,6 +45,8 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	newSymptoms := utils.CallNlp(sentence, questionSymptom)
 
+	fmt.Println(newSymptoms)
+
 	for _, s := range newSymptoms.Context {
 		var newSessionSymptom model.SessionSymptom
 		newSessionSymptom.Name = s.Name
@@ -50,33 +54,54 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		symptoms = append(symptoms, newSessionSymptom)
 	}
 
-	exam := utils.CallExam(symptoms)
-
-	if len(exam.Alert) > 0 {
-		for _, alert := range exam.Alert {
-			session.GetSessionById.Alerts = append(session.GetSessionById.Alerts, alert)
-		}
-	}
 	var symptomsinput []graphql.SessionSymptomInput
-	for _, s := range exam.Context {
-		var ns graphql.SessionSymptomInput
-		ns.Name = s.Name
-		if s.Presence != nil && *s.Presence == true {
-			ns.Presence = true
-		} else {
-			ns.Presence = false
-		}
-		ns.Duration = 0
-		symptomsinput = append(symptomsinput, ns)
-	}
 
-	if len(session.GetSessionById.Ante_diseases) > 0 {
-		anteSymptomQuestion, anteSymptom := utils.CheckAnteDiseaseInSymptoms(session.GetSessionById)
-		if anteSymptom != "" {
-			exam.Question = anteSymptomQuestion
-			session.GetSessionById.Last_question = anteSymptom
-		} else if len(exam.Symptoms) > 0 {
-			session.GetSessionById.Last_question = exam.Symptoms[0]
+	var exam utils.ExamResponseBody
+	if len(symptoms) == 0 {
+		exam.Question = "Pourriez-vous décrire vos symptomes ?"
+		exam.Done = false
+		exam.Context = symptoms
+		exam.Symptoms = []string{}
+		exam.Alert = []string{}
+	} else if session.GetSessionById.Treatments[0] == "CanonFlesh" {
+		exam.Question = "Avez-vous pris des médicaments récemment ?"
+		if len(session.GetSessionById.Treatments) > 1 {
+			session.GetSessionById.Treatments = session.GetSessionById.Treatments[1:]
+		} else {
+			session.GetSessionById.Treatments = []string{}
+		}
+	} else {
+		exam = utils.CallExam(symptoms)
+
+		if len(exam.Alert) > 0 {
+			for _, alert := range exam.Alert {
+				session.GetSessionById.Alerts = append(session.GetSessionById.Alerts, alert)
+			}
+		}
+		for _, s := range exam.Context {
+			var ns graphql.SessionSymptomInput
+			ns.Name = s.Name
+			if s.Presence != nil && *s.Presence == true {
+				ns.Presence = true
+			} else {
+				ns.Presence = false
+			}
+			ns.Duration = 0
+			symptomsinput = append(symptomsinput, ns)
+		}
+
+		if len(session.GetSessionById.Treatments) > 0 {
+			symptomsinput = utils.CheckTreatments(symptomsinput, session.GetSessionById.Treatments)
+		}
+
+		if len(session.GetSessionById.Ante_diseases) > 0 {
+			anteSymptomQuestion, anteSymptom := utils.CheckAnteDiseaseInSymptoms(session.GetSessionById)
+			if anteSymptom != "" {
+				exam.Question = anteSymptomQuestion
+				session.GetSessionById.Last_question = anteSymptom
+			} else if len(exam.Symptoms) > 0 {
+				session.GetSessionById.Last_question = exam.Symptoms[0]
+			}
 		}
 	}
 

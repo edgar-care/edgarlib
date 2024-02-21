@@ -214,15 +214,17 @@ type SessionDiseasesInput struct {
 }
 
 type SessionSymptom struct {
-	Name     string `json:"name" bson:"name"`
-	Presence *bool  `json:"presence,omitempty" bson:"presence"`
-	Duration *int   `json:"duration,omitempty" bson:"duration"`
+	Name     string   `json:"name" bson:"name"`
+	Presence *bool    `json:"presence,omitempty" bson:"presence"`
+	Duration *int     `json:"duration,omitempty" bson:"duration"`
+	Treated  []string `json:"treated,omitempty" bson:"treated"`
 }
 
 type SessionSymptomInput struct {
-	Name     string `json:"name" bson:"name"`
-	Presence *bool  `json:"presence,omitempty" bson:"presence"`
-	Duration *int   `json:"duration,omitempty" bson:"duration"`
+	Name     string   `json:"name" bson:"name"`
+	Presence *bool    `json:"presence,omitempty" bson:"presence"`
+	Duration *int     `json:"duration,omitempty" bson:"duration"`
+	Treated  []string `json:"treated,omitempty" bson:"treated"`
 }
 
 type Symptom struct {

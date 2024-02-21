@@ -16,12 +16,14 @@ type SessionSymptom {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 input SessionSymptomInput {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 type Logs {

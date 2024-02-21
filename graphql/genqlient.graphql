@@ -152,6 +152,7 @@ mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionS
             name
             presence
             duration
+            treated
         }
         age
         height
@@ -449,6 +450,7 @@ mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $sympto
             name
             presence
             duration
+            treated
         }
         age
         height
@@ -886,6 +888,7 @@ query GetSessionById($id: String!){
             name
             presence
             duration
+            treated
         }
         age
         height
@@ -914,6 +917,7 @@ query GetSessions{
             name
             presence
             duration
+            treated
         }
         age
         height

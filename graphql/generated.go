@@ -722,9 +722,10 @@ func (v *CreateSessionCreateSessionLogs) GetAnswer() string { return v.Answer }
 
 // CreateSessionCreateSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type CreateSessionCreateSessionSymptomsSessionSymptom struct {
-	Name     string `json:"name"`
-	Presence bool   `json:"presence"`
-	Duration int    `json:"duration"`
+	Name     string   `json:"name"`
+	Presence bool     `json:"presence"`
+	Duration int      `json:"duration"`
+	Treated  []string `json:"treated"`
 }
 
 // GetName returns CreateSessionCreateSessionSymptomsSessionSymptom.Name, and is useful for accessing the field via an interface.
@@ -735,6 +736,9 @@ func (v *CreateSessionCreateSessionSymptomsSessionSymptom) GetPresence() bool { 
 
 // GetDuration returns CreateSessionCreateSessionSymptomsSessionSymptom.Duration, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSessionSymptomsSessionSymptom) GetDuration() int { return v.Duration }
+
+// GetTreated returns CreateSessionCreateSessionSymptomsSessionSymptom.Treated, and is useful for accessing the field via an interface.
+func (v *CreateSessionCreateSessionSymptomsSessionSymptom) GetTreated() []string { return v.Treated }
 
 // CreateSessionResponse is returned by CreateSession on success.
 type CreateSessionResponse struct {
@@ -2679,9 +2683,10 @@ func (v *GetSessionByIdGetSessionByIdSessionLogs) GetAnswer() string { return v.
 
 // GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom struct {
-	Name     string `json:"name"`
-	Presence bool   `json:"presence"`
-	Duration int    `json:"duration"`
+	Name     string   `json:"name"`
+	Presence bool     `json:"presence"`
+	Duration int      `json:"duration"`
+	Treated  []string `json:"treated"`
 }
 
 // GetName returns GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom.Name, and is useful for accessing the field via an interface.
@@ -2695,6 +2700,11 @@ func (v *GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom) GetPresence(
 // GetDuration returns GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom.Duration, and is useful for accessing the field via an interface.
 func (v *GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom) GetDuration() int {
 	return v.Duration
+}
+
+// GetTreated returns GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom.Treated, and is useful for accessing the field via an interface.
+func (v *GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom) GetTreated() []string {
+	return v.Treated
 }
 
 // GetSessionByIdResponse is returned by GetSessionById on success.
@@ -2793,9 +2803,10 @@ func (v *GetSessionsGetSessionsSessionLogs) GetAnswer() string { return v.Answer
 
 // GetSessionsGetSessionsSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type GetSessionsGetSessionsSessionSymptomsSessionSymptom struct {
-	Name     string `json:"name"`
-	Presence bool   `json:"presence"`
-	Duration int    `json:"duration"`
+	Name     string   `json:"name"`
+	Presence bool     `json:"presence"`
+	Duration int      `json:"duration"`
+	Treated  []string `json:"treated"`
 }
 
 // GetName returns GetSessionsGetSessionsSessionSymptomsSessionSymptom.Name, and is useful for accessing the field via an interface.
@@ -2806,6 +2817,9 @@ func (v *GetSessionsGetSessionsSessionSymptomsSessionSymptom) GetPresence() bool
 
 // GetDuration returns GetSessionsGetSessionsSessionSymptomsSessionSymptom.Duration, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSessionSymptomsSessionSymptom) GetDuration() int { return v.Duration }
+
+// GetTreated returns GetSessionsGetSessionsSessionSymptomsSessionSymptom.Treated, and is useful for accessing the field via an interface.
+func (v *GetSessionsGetSessionsSessionSymptomsSessionSymptom) GetTreated() []string { return v.Treated }
 
 // GetSessionsResponse is returned by GetSessions on success.
 type GetSessionsResponse struct {
@@ -3264,9 +3278,10 @@ func (v *SessionDiseasesInput) GetName() string { return v.Name }
 func (v *SessionDiseasesInput) GetPresence() float64 { return v.Presence }
 
 type SessionSymptomInput struct {
-	Name     string `json:"name"`
-	Presence bool   `json:"presence"`
-	Duration int    `json:"duration"`
+	Name     string   `json:"name"`
+	Presence bool     `json:"presence"`
+	Duration int      `json:"duration"`
+	Treated  []string `json:"treated"`
 }
 
 // GetName returns SessionSymptomInput.Name, and is useful for accessing the field via an interface.
@@ -3277,6 +3292,9 @@ func (v *SessionSymptomInput) GetPresence() bool { return v.Presence }
 
 // GetDuration returns SessionSymptomInput.Duration, and is useful for accessing the field via an interface.
 func (v *SessionSymptomInput) GetDuration() int { return v.Duration }
+
+// GetTreated returns SessionSymptomInput.Treated, and is useful for accessing the field via an interface.
+func (v *SessionSymptomInput) GetTreated() []string { return v.Treated }
 
 type Sex string
 
@@ -3945,9 +3963,10 @@ func (v *UpdateSessionUpdateSessionLogs) GetAnswer() string { return v.Answer }
 
 // UpdateSessionUpdateSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type UpdateSessionUpdateSessionSymptomsSessionSymptom struct {
-	Name     string `json:"name"`
-	Presence bool   `json:"presence"`
-	Duration int    `json:"duration"`
+	Name     string   `json:"name"`
+	Presence bool     `json:"presence"`
+	Duration int      `json:"duration"`
+	Treated  []string `json:"treated"`
 }
 
 // GetName returns UpdateSessionUpdateSessionSymptomsSessionSymptom.Name, and is useful for accessing the field via an interface.
@@ -3958,6 +3977,9 @@ func (v *UpdateSessionUpdateSessionSymptomsSessionSymptom) GetPresence() bool { 
 
 // GetDuration returns UpdateSessionUpdateSessionSymptomsSessionSymptom.Duration, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSessionSymptomsSessionSymptom) GetDuration() int { return v.Duration }
+
+// GetTreated returns UpdateSessionUpdateSessionSymptomsSessionSymptom.Treated, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSessionSymptomsSessionSymptom) GetTreated() []string { return v.Treated }
 
 // UpdateSymptomResponse is returned by UpdateSymptom on success.
 type UpdateSymptomResponse struct {
@@ -6117,6 +6139,7 @@ mutation CreateSession ($diseases: [SessionDiseasesInput!]!, $symptoms: [Session
 			name
 			presence
 			duration
+			treated
 		}
 		age
 		height
@@ -8356,6 +8379,7 @@ query GetSessionById ($id: String!) {
 			name
 			presence
 			duration
+			treated
 		}
 		age
 		height
@@ -8413,6 +8437,7 @@ query GetSessions {
 			name
 			presence
 			duration
+			treated
 		}
 		age
 		height
@@ -9520,6 +9545,7 @@ mutation UpdateSession ($id: String!, $diseases: [SessionDiseasesInput!], $sympt
 			name
 			presence
 			duration
+			treated
 		}
 		age
 		height

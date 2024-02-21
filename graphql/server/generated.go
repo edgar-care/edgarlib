@@ -325,6 +325,7 @@ type ComplexityRoot struct {
 		Duration func(childComplexity int) int
 		Name     func(childComplexity int) int
 		Presence func(childComplexity int) int
+		Treated  func(childComplexity int) int
 	}
 
 	Symptom struct {
@@ -2411,6 +2412,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SessionSymptom.Presence(childComplexity), true
 
+	case "SessionSymptom.treated":
+		if e.complexity.SessionSymptom.Treated == nil {
+			break
+		}
+
+		return e.complexity.SessionSymptom.Treated(childComplexity), true
+
 	case "Symptom.acute":
 		if e.complexity.Symptom.Acute == nil {
 			break
@@ -2689,12 +2697,14 @@ type SessionSymptom {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 input SessionSymptomInput {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 type Logs {
@@ -16918,6 +16928,8 @@ func (ec *executionContext) fieldContext_Session_symptoms(ctx context.Context, f
 				return ec.fieldContext_SessionSymptom_presence(ctx, field)
 			case "duration":
 				return ec.fieldContext_SessionSymptom_duration(ctx, field)
+			case "treated":
+				return ec.fieldContext_SessionSymptom_treated(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SessionSymptom", field.Name)
 		},
@@ -17580,6 +17592,47 @@ func (ec *executionContext) fieldContext_SessionSymptom_duration(ctx context.Con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SessionSymptom_treated(ctx context.Context, field graphql.CollectedField, obj *model.SessionSymptom) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SessionSymptom_treated(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Treated, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SessionSymptom_treated(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SessionSymptom",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -20483,7 +20536,7 @@ func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "presence", "duration"}
+	fieldsInOrder := [...]string{"name", "presence", "duration", "treated"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -20511,6 +20564,13 @@ func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Contex
 				return it, err
 			}
 			it.Duration = data
+		case "treated":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treated"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Treated = data
 		}
 	}
 
@@ -22978,6 +23038,8 @@ func (ec *executionContext) _SessionSymptom(ctx context.Context, sel ast.Selecti
 			out.Values[i] = ec._SessionSymptom_presence(ctx, field, obj)
 		case "duration":
 			out.Values[i] = ec._SessionSymptom_duration(ctx, field, obj)
+		case "treated":
+			out.Values[i] = ec._SessionSymptom_treated(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

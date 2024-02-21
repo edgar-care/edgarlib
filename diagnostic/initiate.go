@@ -36,6 +36,7 @@ func Initiate(id string) InitiateResponse {
 	input.Treatments = append(input.Treatments, "CanonFlesh")
 
 	// TODO: uncomment when treatment is implemented in back
+	input.Treatments = append(input.Treatments, "6604118f72ebd0bab92c125a") // todo: delete this after test
 	//for _, medical_antecedent := range patientInfos.GetMedicalFolderById.Medical_antecedents {
 	//	if medical_antecedent.Still_relevant == true {
 	//		input.Treatments = append(input.Treatments, medical_antecedent.Name)

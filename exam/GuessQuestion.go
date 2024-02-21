@@ -79,10 +79,6 @@ func GuessQuestion(patientContext []model.SessionSymptom) (string, []string, boo
 		mapped[i] = calculCoverage(patientContext, e)
 	}
 
-	if len(patientContext) == 0 {
-		return "Pourriez-vous décrire vos symptomes ?", []string{}, false
-	}
-
 	sort.Sort(ByCoverage(mapped))
 
 	for _, disease := range mapped {

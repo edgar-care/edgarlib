@@ -411,7 +411,7 @@ func (r *mutationResolver) CreateSession(ctx context.Context, diseases []*model.
 
 	var convertedSymptoms []*model.SessionSymptom
 	for _, symptom := range symptoms {
-		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration})
+		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration, Treated: symptom.Treated})
 	}
 
 	var convertedLogs []*model.Logs
@@ -468,7 +468,7 @@ func (r *mutationResolver) UpdateSession(ctx context.Context, id string, disease
 
 	var convertedSymptoms []*model.SessionSymptom
 	for _, symptom := range symptoms {
-		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration})
+		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration, Treated: symptom.Treated})
 	}
 
 	var convertedLogs []*model.Logs
