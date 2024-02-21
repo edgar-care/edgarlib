@@ -1,13 +1,8 @@
 package utils
 
 import (
-	"bytes"
-	"encoding/json"
+	"github.com/edgar-care/edgarlib/exam"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
-	"net/http"
-	"os"
-
-	"github.com/edgar-care/edgarlib"
 )
 
 type examRequestBody struct {
@@ -23,20 +18,29 @@ type examResponseBody struct {
 }
 
 func CallExam(context []model.SessionSymptom) examResponseBody {
-	var rBody = examRequestBody{
-		Context: context,
-	}
+	//var rBody = examRequestBody{
+	//	Context: context,
+	//}
 
-	var buf = new(bytes.Buffer)
-	err := json.NewEncoder(buf).Encode(rBody)
-	edgarlib.CheckError(err)
+	//var buf = new(bytes.Buffer)
+	//err := json.NewEncoder(buf).Encode(rBody)
+	//edgarlib.CheckError(err)
+	//
+	//resp, err := http.Post(os.Getenv("EXAM_URL"), "application/json", buf)
+	//edgarlib.CheckError(err)
+	//
+	//var respBody examResponseBody
+	//err = json.NewDecoder(resp.Body).Decode(&respBody)
+	//edgarlib.CheckError(err)
 
-	resp, err := http.Post(os.Getenv("EXAM_URL"), "application/json", buf)
-	edgarlib.CheckError(err)
+	examr := exam.Exam(context)
 
 	var respBody examResponseBody
-	err = json.NewDecoder(resp.Body).Decode(&respBody)
-	edgarlib.CheckError(err)
+	respBody.Context = examr.Context
+	respBody.Done = examr.Done
+	respBody.Question = examr.Question
+	respBody.Symptoms = examr.Symptoms
+	respBody.Alert = examr.Alert
 
 	return respBody
 }

@@ -79,12 +79,13 @@ type ComplexityRoot struct {
 	}
 
 	AnteDisease struct {
-		Chir       func(childComplexity int) int
-		Chronicity func(childComplexity int) int
-		ID         func(childComplexity int) int
-		Name       func(childComplexity int) int
-		Symptoms   func(childComplexity int) int
-		Treatment  func(childComplexity int) int
+		Chronicity    func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Name          func(childComplexity int) int
+		StillRelevant func(childComplexity int) int
+		SurgeryIds    func(childComplexity int) int
+		Symptoms      func(childComplexity int) int
+		TreatmentIds  func(childComplexity int) int
 	}
 
 	AnteFamily struct {
@@ -175,7 +176,7 @@ type ComplexityRoot struct {
 		CreateAdmin         func(childComplexity int, email string, password string, name string, lastName string) int
 		CreateAlert         func(childComplexity int, name string, sex *string, height *int, weight *int, symptoms []string, comment string) int
 		CreateAnteChir      func(childComplexity int, name string, localisation string, inducedSymptoms []string) int
-		CreateAnteDisease   func(childComplexity int, name string, chronicity float64, chir *string, treatment []string, symptoms []string) int
+		CreateAnteDisease   func(childComplexity int, name string, chronicity float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) int
 		CreateAnteFamily    func(childComplexity int, name string, disease []string) int
 		CreateDemoAccount   func(childComplexity int, email string, password string) int
 		CreateDisease       func(childComplexity int, code string, name string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
@@ -212,7 +213,7 @@ type ComplexityRoot struct {
 		UpdateAdmin         func(childComplexity int, id string, email *string, password *string, name *string, lastName *string) int
 		UpdateAlert         func(childComplexity int, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) int
 		UpdateAnteChir      func(childComplexity int, id string, name *string, localisation *string, inducedSymptoms []string) int
-		UpdateAnteDisease   func(childComplexity int, id string, name *string, chronicity *float64, chir *string, treatment []string, symptoms []string) int
+		UpdateAnteDisease   func(childComplexity int, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) int
 		UpdateAnteFamily    func(childComplexity int, id string, name *string, disease []string) int
 		UpdateDemoAccount   func(childComplexity int, id string, email *string, password *string) int
 		UpdateDisease       func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
@@ -398,8 +399,8 @@ type MutationResolver interface {
 	CreateAnteChir(ctx context.Context, name string, localisation string, inducedSymptoms []string) (*model.AnteChir, error)
 	UpdateAnteChir(ctx context.Context, id string, name *string, localisation *string, inducedSymptoms []string) (*model.AnteChir, error)
 	DeleteAnteChir(ctx context.Context, id string) (*bool, error)
-	CreateAnteDisease(ctx context.Context, name string, chronicity float64, chir *string, treatment []string, symptoms []string) (*model.AnteDisease, error)
-	UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, chir *string, treatment []string, symptoms []string) (*model.AnteDisease, error)
+	CreateAnteDisease(ctx context.Context, name string, chronicity float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) (*model.AnteDisease, error)
+	UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) (*model.AnteDisease, error)
 	DeleteAnteDisease(ctx context.Context, id string) (*bool, error)
 	CreateAnteFamily(ctx context.Context, name string, disease []string) (*model.AnteFamily, error)
 	UpdateAnteFamily(ctx context.Context, id string, name *string, disease []string) (*model.AnteFamily, error)
@@ -625,13 +626,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AnteChir.Name(childComplexity), true
 
-	case "AnteDisease.chir":
-		if e.complexity.AnteDisease.Chir == nil {
-			break
-		}
-
-		return e.complexity.AnteDisease.Chir(childComplexity), true
-
 	case "AnteDisease.chronicity":
 		if e.complexity.AnteDisease.Chronicity == nil {
 			break
@@ -653,6 +647,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AnteDisease.Name(childComplexity), true
 
+	case "AnteDisease.still_relevant":
+		if e.complexity.AnteDisease.StillRelevant == nil {
+			break
+		}
+
+		return e.complexity.AnteDisease.StillRelevant(childComplexity), true
+
+	case "AnteDisease.surgery_ids":
+		if e.complexity.AnteDisease.SurgeryIds == nil {
+			break
+		}
+
+		return e.complexity.AnteDisease.SurgeryIds(childComplexity), true
+
 	case "AnteDisease.symptoms":
 		if e.complexity.AnteDisease.Symptoms == nil {
 			break
@@ -660,12 +668,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AnteDisease.Symptoms(childComplexity), true
 
-	case "AnteDisease.treatment":
-		if e.complexity.AnteDisease.Treatment == nil {
+	case "AnteDisease.treatment_ids":
+		if e.complexity.AnteDisease.TreatmentIds == nil {
 			break
 		}
 
-		return e.complexity.AnteDisease.Treatment(childComplexity), true
+		return e.complexity.AnteDisease.TreatmentIds(childComplexity), true
 
 	case "AnteFamily.disease":
 		if e.complexity.AnteFamily.Disease == nil {
@@ -1091,7 +1099,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAnteDisease(childComplexity, args["name"].(string), args["chronicity"].(float64), args["chir"].(*string), args["treatment"].([]string), args["symptoms"].([]string)), true
+		return e.complexity.Mutation.CreateAnteDisease(childComplexity, args["name"].(string), args["chronicity"].(float64), args["surgery_ids"].([]string), args["symptoms"].([]string), args["treatment_ids"].([]string), args["still_relevant"].(bool)), true
 
 	case "Mutation.createAnteFamily":
 		if e.complexity.Mutation.CreateAnteFamily == nil {
@@ -1535,7 +1543,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAnteDisease(childComplexity, args["id"].(string), args["name"].(*string), args["chronicity"].(*float64), args["chir"].(*string), args["treatment"].([]string), args["symptoms"].([]string)), true
+		return e.complexity.Mutation.UpdateAnteDisease(childComplexity, args["id"].(string), args["name"].(*string), args["chronicity"].(*float64), args["surgery_ids"].([]string), args["symptoms"].([]string), args["treatment_ids"].([]string), args["still_relevant"].(*bool)), true
 
 	case "Mutation.updateAnteFamily":
 		if e.complexity.Mutation.UpdateAnteFamily == nil {
@@ -2852,9 +2860,10 @@ type AnteDisease {
     id: ID!
     name: String!
     chronicity: Float!
-    chir: String
-    treatment: [String!]
+    surgery_ids: [String!]
     symptoms: [String!]
+    treatment_ids: [String!]
+    still_relevant: Boolean!
 }
 
 type AnteFamily {
@@ -3185,10 +3194,10 @@ type Mutation {
     deleteAnteChir(id: String!): Boolean
 
     # Create a new antedisease.
-    createAnteDisease(name: String!, chronicity: Float!, chir: String, treatment: [String!], symptoms: [String!]): AnteDisease
+    createAnteDisease(name: String!, chronicity: Float!, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean!): AnteDisease
 
     # Update a new antedisease.
-    updateAnteDisease(id: String!, name: String, chronicity: Float, chir: String, treatment: [String!], symptoms: [String!]): AnteDisease
+    updateAnteDisease(id: String!, name: String, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean): AnteDisease
 
     # Delete a antedisease.
     deleteAnteDisease(id: String!): Boolean
@@ -3460,33 +3469,42 @@ func (ec *executionContext) field_Mutation_createAnteDisease_args(ctx context.Co
 		}
 	}
 	args["chronicity"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["chir"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chir"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg2 []string
+	if tmp, ok := rawArgs["surgery_ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("surgery_ids"))
+		arg2, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["chir"] = arg2
+	args["surgery_ids"] = arg2
 	var arg3 []string
-	if tmp, ok := rawArgs["treatment"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment"))
+	if tmp, ok := rawArgs["symptoms"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
 		arg3, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatment"] = arg3
+	args["symptoms"] = arg3
 	var arg4 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+	if tmp, ok := rawArgs["treatment_ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_ids"))
 		arg4, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["symptoms"] = arg4
+	args["treatment_ids"] = arg4
+	var arg5 bool
+	if tmp, ok := rawArgs["still_relevant"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("still_relevant"))
+		arg5, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["still_relevant"] = arg5
 	return args, nil
 }
 
@@ -4717,33 +4735,42 @@ func (ec *executionContext) field_Mutation_updateAnteDisease_args(ctx context.Co
 		}
 	}
 	args["chronicity"] = arg2
-	var arg3 *string
-	if tmp, ok := rawArgs["chir"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chir"))
-		arg3, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg3 []string
+	if tmp, ok := rawArgs["surgery_ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("surgery_ids"))
+		arg3, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["chir"] = arg3
+	args["surgery_ids"] = arg3
 	var arg4 []string
-	if tmp, ok := rawArgs["treatment"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment"))
+	if tmp, ok := rawArgs["symptoms"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
 		arg4, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatment"] = arg4
+	args["symptoms"] = arg4
 	var arg5 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+	if tmp, ok := rawArgs["treatment_ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_ids"))
 		arg5, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["symptoms"] = arg5
+	args["treatment_ids"] = arg5
+	var arg6 *bool
+	if tmp, ok := rawArgs["still_relevant"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("still_relevant"))
+		arg6, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["still_relevant"] = arg6
 	return args, nil
 }
 
@@ -7084,8 +7111,8 @@ func (ec *executionContext) fieldContext_AnteDisease_chronicity(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _AnteDisease_chir(ctx context.Context, field graphql.CollectedField, obj *model.AnteDisease) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AnteDisease_chir(ctx, field)
+func (ec *executionContext) _AnteDisease_surgery_ids(ctx context.Context, field graphql.CollectedField, obj *model.AnteDisease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteDisease_surgery_ids(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -7098,48 +7125,7 @@ func (ec *executionContext) _AnteDisease_chir(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Chir, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_AnteDisease_chir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AnteDisease",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _AnteDisease_treatment(ctx context.Context, field graphql.CollectedField, obj *model.AnteDisease) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AnteDisease_treatment(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Treatment, nil
+		return obj.SurgeryIds, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7153,7 +7139,7 @@ func (ec *executionContext) _AnteDisease_treatment(ctx context.Context, field gr
 	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_AnteDisease_treatment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_AnteDisease_surgery_ids(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "AnteDisease",
 		Field:      field,
@@ -7202,6 +7188,91 @@ func (ec *executionContext) fieldContext_AnteDisease_symptoms(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnteDisease_treatment_ids(ctx context.Context, field graphql.CollectedField, obj *model.AnteDisease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TreatmentIds, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteDisease_treatment_ids(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteDisease",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnteDisease_still_relevant(ctx context.Context, field graphql.CollectedField, obj *model.AnteDisease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteDisease_still_relevant(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StillRelevant, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteDisease_still_relevant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteDisease",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -11913,7 +11984,7 @@ func (ec *executionContext) _Mutation_createAnteDisease(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAnteDisease(rctx, fc.Args["name"].(string), fc.Args["chronicity"].(float64), fc.Args["chir"].(*string), fc.Args["treatment"].([]string), fc.Args["symptoms"].([]string))
+		return ec.resolvers.Mutation().CreateAnteDisease(rctx, fc.Args["name"].(string), fc.Args["chronicity"].(float64), fc.Args["surgery_ids"].([]string), fc.Args["symptoms"].([]string), fc.Args["treatment_ids"].([]string), fc.Args["still_relevant"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11941,12 +12012,14 @@ func (ec *executionContext) fieldContext_Mutation_createAnteDisease(ctx context.
 				return ec.fieldContext_AnteDisease_name(ctx, field)
 			case "chronicity":
 				return ec.fieldContext_AnteDisease_chronicity(ctx, field)
-			case "chir":
-				return ec.fieldContext_AnteDisease_chir(ctx, field)
-			case "treatment":
-				return ec.fieldContext_AnteDisease_treatment(ctx, field)
+			case "surgery_ids":
+				return ec.fieldContext_AnteDisease_surgery_ids(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_AnteDisease_symptoms(ctx, field)
+			case "treatment_ids":
+				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
+			case "still_relevant":
+				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
@@ -11979,7 +12052,7 @@ func (ec *executionContext) _Mutation_updateAnteDisease(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAnteDisease(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["chronicity"].(*float64), fc.Args["chir"].(*string), fc.Args["treatment"].([]string), fc.Args["symptoms"].([]string))
+		return ec.resolvers.Mutation().UpdateAnteDisease(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["chronicity"].(*float64), fc.Args["surgery_ids"].([]string), fc.Args["symptoms"].([]string), fc.Args["treatment_ids"].([]string), fc.Args["still_relevant"].(*bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12007,12 +12080,14 @@ func (ec *executionContext) fieldContext_Mutation_updateAnteDisease(ctx context.
 				return ec.fieldContext_AnteDisease_name(ctx, field)
 			case "chronicity":
 				return ec.fieldContext_AnteDisease_chronicity(ctx, field)
-			case "chir":
-				return ec.fieldContext_AnteDisease_chir(ctx, field)
-			case "treatment":
-				return ec.fieldContext_AnteDisease_treatment(ctx, field)
+			case "surgery_ids":
+				return ec.fieldContext_AnteDisease_surgery_ids(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_AnteDisease_symptoms(ctx, field)
+			case "treatment_ids":
+				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
+			case "still_relevant":
+				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
@@ -15573,12 +15648,14 @@ func (ec *executionContext) fieldContext_Query_getAnteDiseases(ctx context.Conte
 				return ec.fieldContext_AnteDisease_name(ctx, field)
 			case "chronicity":
 				return ec.fieldContext_AnteDisease_chronicity(ctx, field)
-			case "chir":
-				return ec.fieldContext_AnteDisease_chir(ctx, field)
-			case "treatment":
-				return ec.fieldContext_AnteDisease_treatment(ctx, field)
+			case "surgery_ids":
+				return ec.fieldContext_AnteDisease_surgery_ids(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_AnteDisease_symptoms(ctx, field)
+			case "treatment_ids":
+				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
+			case "still_relevant":
+				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
@@ -15628,12 +15705,14 @@ func (ec *executionContext) fieldContext_Query_getAnteDiseaseByID(ctx context.Co
 				return ec.fieldContext_AnteDisease_name(ctx, field)
 			case "chronicity":
 				return ec.fieldContext_AnteDisease_chronicity(ctx, field)
-			case "chir":
-				return ec.fieldContext_AnteDisease_chir(ctx, field)
-			case "treatment":
-				return ec.fieldContext_AnteDisease_treatment(ctx, field)
+			case "surgery_ids":
+				return ec.fieldContext_AnteDisease_surgery_ids(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_AnteDisease_symptoms(ctx, field)
+			case "treatment_ids":
+				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
+			case "still_relevant":
+				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
@@ -20698,12 +20777,17 @@ func (ec *executionContext) _AnteDisease(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "chir":
-			out.Values[i] = ec._AnteDisease_chir(ctx, field, obj)
-		case "treatment":
-			out.Values[i] = ec._AnteDisease_treatment(ctx, field, obj)
+		case "surgery_ids":
+			out.Values[i] = ec._AnteDisease_surgery_ids(ctx, field, obj)
 		case "symptoms":
 			out.Values[i] = ec._AnteDisease_symptoms(ctx, field, obj)
+		case "treatment_ids":
+			out.Values[i] = ec._AnteDisease_treatment_ids(ctx, field, obj)
+		case "still_relevant":
+			out.Values[i] = ec._AnteDisease_still_relevant(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

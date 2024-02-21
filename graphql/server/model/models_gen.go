@@ -48,12 +48,13 @@ type AnteChir struct {
 }
 
 type AnteDisease struct {
-	ID         string   `json:"id" bson:"_id"`
-	Name       string   `json:"name" bson:"name"`
-	Chronicity float64  `json:"chronicity" bson:"chronicity"`
-	Chir       *string  `json:"chir,omitempty" bson:"chir"`
-	Treatment  []string `json:"treatment,omitempty" bson:"treatment"`
-	Symptoms   []string `json:"symptoms,omitempty" bson:"symptoms"`
+	ID            string   `json:"id" bson:"_id"`
+	Name          string   `json:"name" bson:"name"`
+	Chronicity    float64  `json:"chronicity" bson:"chronicity"`
+	SurgeryIds    []string `json:"surgery_ids,omitempty" bson:"surgery_ids"`
+	Symptoms      []string `json:"symptoms,omitempty" bson:"symptoms"`
+	TreatmentIds  []string `json:"treatment_ids,omitempty" bson:"treatment_ids"`
+	StillRelevant bool     `json:"still_relevant" bson:"still_relevant"`
 }
 
 type AnteFamily struct {

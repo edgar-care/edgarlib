@@ -6,11 +6,9 @@ require (
 	github.com/99designs/gqlgen v0.17.43
 	github.com/Khan/genqlient v0.6.0
 	github.com/aws/aws-sdk-go v1.50.11
-	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/jwtauth/v5 v5.1.1
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.5.1
-	github.com/stretchr/testify v1.8.4
 	github.com/vektah/gqlparser/v2 v2.5.11
 	go.mongodb.org/mongo-driver v1.13.1
 	golang.org/x/crypto v0.18.0
@@ -33,7 +31,6 @@ require (
 	github.com/lestrrat-go/option v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sosodev/duration v1.1.0 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
