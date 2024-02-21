@@ -3,6 +3,7 @@ package exam
 import (
 	"context"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/server/model"
 	"sort"
 )
 
@@ -20,7 +21,7 @@ func (a ByCoverage) Len() int           { return len(a) }
 func (a ByCoverage) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByCoverage) Less(i, j int) bool { return a[i].coverage > a[j].coverage }
 
-func findInContext(context []ExamContextItem, symptom string) *ExamContextItem {
+func findInContext(context []model.SessionSymptom, symptom string) *model.SessionSymptom {
 	for _, item := range context {
 		if item.Name == symptom {
 			return &item
@@ -29,7 +30,7 @@ func findInContext(context []ExamContextItem, symptom string) *ExamContextItem {
 	return nil
 }
 
-func isPresent(context []ExamContextItem, symptom string) *bool {
+func isPresent(context []model.SessionSymptom, symptom string) *bool {
 	item := findInContext(context, symptom)
 	if item != nil {
 		return item.Presence
@@ -37,7 +38,7 @@ func isPresent(context []ExamContextItem, symptom string) *bool {
 	return nil
 }
 
-func calculCoverage(context []ExamContextItem, disease graphql.GetDiseasesGetDiseasesDisease) diseaseCoverage {
+func calculCoverage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease) diseaseCoverage {
 	var coverage int
 	var present int
 	var absent int
@@ -69,7 +70,7 @@ func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptom
 	return "Est-ce que vous avez ce symptôme: " + symptomName + " ?"
 }
 
-func GuessQuestion(patientContext []ExamContextItem) (string, []string, bool) {
+func GuessQuestion(patientContext []model.SessionSymptom) (string, []string, bool) {
 	gqlClient := graphql.CreateClient()
 	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
 	symptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
