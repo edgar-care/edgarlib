@@ -36,7 +36,7 @@ func GetMedicamentById(id string) GetMedicamentByIdResponse {
 		TreatedSymptoms: medicament.GetMedicamentByID.Treated_symptoms,
 		SideEffects:     medicament.GetMedicamentByID.Side_effects,
 	}
-	return GetMedicamentByIdResponse{res, 201, nil}
+	return GetMedicamentByIdResponse{res, 200, nil}
 }
 
 func GetMedicaments() GetMedicamentsResponse {
@@ -58,5 +58,5 @@ func GetMedicaments() GetMedicamentsResponse {
 			SideEffects:     medicament.Side_effects,
 		})
 	}
-	return GetMedicamentsResponse{res, 201, nil}
+	return GetMedicamentsResponse{res, 200, nil}
 }
