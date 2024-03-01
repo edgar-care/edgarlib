@@ -216,7 +216,7 @@ type ComplexityRoot struct {
 		UpdateAnteFamily    func(childComplexity int, id string, name *string, disease []string) int
 		UpdateDemoAccount   func(childComplexity int, id string, email *string, password *string) int
 		UpdateDisease       func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
-		UpdateDoctor        func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address model.AddressInput) int
+		UpdateDoctor        func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) int
 		UpdateDocument      func(childComplexity int, id string, name *string, isFavorite *bool) int
 		UpdateMedicalFolder func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus *string) int
 		UpdateNotification  func(childComplexity int, id string, token string, message string, title string) int
@@ -359,7 +359,7 @@ type MutationResolver interface {
 	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error)
-	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address model.AddressInput) (*model.Doctor, error)
+	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) (*model.Doctor, error)
 	DeleteDoctor(ctx context.Context, id string) (*bool, error)
 	CreateAdmin(ctx context.Context, email string, password string, name string, lastName string) (*model.Admin, error)
 	UpdateAdmin(ctx context.Context, id string, email *string, password *string, name *string, lastName *string) (*model.Admin, error)
@@ -1573,7 +1573,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["firstname"].(*string), args["rendez_vous_ids"].([]*string), args["patient_ids"].([]*string), args["address"].(model.AddressInput)), true
+		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["firstname"].(*string), args["rendez_vous_ids"].([]*string), args["patient_ids"].([]*string), args["address"].(*model.AddressInput)), true
 
 	case "Mutation.updateDocument":
 		if e.complexity.Mutation.UpdateDocument == nil {
@@ -2999,7 +2999,7 @@ type Mutation {
     createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!): Doctor
 
     # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput!): Doctor #rendez_vous_id: String , slot_ids: [String]
+    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput): Doctor #rendez_vous_id: String , slot_ids: [String]
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
@@ -4844,10 +4844,10 @@ func (ec *executionContext) field_Mutation_updateDoctor_args(ctx context.Context
 		}
 	}
 	args["patient_ids"] = arg6
-	var arg7 model.AddressInput
+	var arg7 *model.AddressInput
 	if tmp, ok := rawArgs["address"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-		arg7, err = ec.unmarshalNAddressInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx, tmp)
+		arg7, err = ec.unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -9686,7 +9686,7 @@ func (ec *executionContext) _Mutation_updateDoctor(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["patient_ids"].([]*string), fc.Args["address"].(model.AddressInput))
+		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["patient_ids"].([]*string), fc.Args["address"].(*model.AddressInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -23570,6 +23570,14 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAddressInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v []*model.Admin) graphql.Marshaler {

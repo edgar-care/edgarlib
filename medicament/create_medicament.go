@@ -39,7 +39,7 @@ func CreateMedicament(input CreateMedicamentInput) CreateMedicamentResponse {
 			TreatedSymptoms: medicament.CreateMedicament.Treated_symptoms,
 			SideEffects:     medicament.CreateMedicament.Side_effects,
 		},
-		Code: 200,
+		Code: 201,
 		Err:  nil,
 	}
 }
