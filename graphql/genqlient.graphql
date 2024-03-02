@@ -138,14 +138,21 @@ mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!,
     }
 }
 
-mutation CreateSession($symptoms: [String!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!){
-    createSession(symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, last_question: $last_question, logs: $logs, alerts: $alerts){
+mutation CreateSession($symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $treatments: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!){
+    createSession(symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts){
         id
-        symptoms
+        symptoms{
+            name
+            presence
+            duration
+        }
         age
         height
         weight
         sex
+        ante_chirs
+        ante_diseases
+        treatments
         last_question
         logs{
             question
@@ -429,10 +436,14 @@ mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start
     }
 }
 
-mutation UpdateSession($id: String!, $symptoms: [String!], $age: Int, $height: Int, $weight: Int, $sex: String, $last_question: String, $logs: [LogsInput!], $alerts: [String!]){
-    updateSession(id: $id, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, last_question: $last_question, logs: $logs, alerts: $alerts){
+mutation UpdateSession($id: String!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $treatments: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!){
+    updateSession(id: $id, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts){
         id
-        symptoms
+        symptoms{
+            name
+            presence
+            duration
+        }
         age
         height
         weight
@@ -855,11 +866,18 @@ query GetRdvById($id: String!){
 query GetSessionById($id: String!){
     getSessionById(id: $id){
         id
-        symptoms
+        symptoms{
+            name
+            presence
+            duration
+        }
         age
         height
         weight
         sex
+        ante_chirs
+        ante_diseases
+        treatments
         last_question
         logs{
             question
@@ -872,11 +890,18 @@ query GetSessionById($id: String!){
 query GetSessions{
     getSessions{
         id
-        symptoms
+        symptoms{
+            name
+            presence
+            duration
+        }
         age
         height
         weight
         sex
+        ante_chirs
+        ante_diseases
+        treatments
         last_question
         logs{
             question

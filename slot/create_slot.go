@@ -3,6 +3,7 @@ package slot
 import (
 	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
@@ -34,7 +35,7 @@ func CreateSlot(input CreateSlotInput) CreateSlotResponse {
 		return CreateSlotResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	updatedDoctor, err := graphql.UpdateDoctor(context.Background(), gqlClient, input.DoctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, append(doctor.GetDoctorById.Rendez_vous_ids, rdv.CreateRdv.Id), doctor.GetDoctorById.Patient_ids)
+	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, input.DoctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, append(doctor.GetDoctorById.Rendez_vous_ids, rdv.CreateRdv.Id), doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
 	if err != nil {
 		return CreateSlotResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("update failed" + err.Error())}
 	}
@@ -47,13 +48,6 @@ func CreateSlot(input CreateSlotInput) CreateSlotResponse {
 			StartDate:         rdv.CreateRdv.Start_date,
 			EndDate:           rdv.CreateRdv.End_date,
 			CancelationReason: &rdv.CreateRdv.Cancelation_reason,
-		},
-		Doctor: model.Doctor{
-			ID:            updatedDoctor.UpdateDoctor.Id,
-			Email:         updatedDoctor.UpdateDoctor.Email,
-			Password:      updatedDoctor.UpdateDoctor.Password,
-			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(updatedDoctor.UpdateDoctor.Rendez_vous_ids),
-			PatientIds:    graphql.ConvertStringSliceToPointerSlice(updatedDoctor.UpdateDoctor.Patient_ids),
 		},
 		Code: 200,
 		Err:  nil,

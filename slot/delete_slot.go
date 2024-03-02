@@ -3,6 +3,7 @@ package slot
 import (
 	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
@@ -48,7 +49,8 @@ func DeleteSlot(slotId string, doctorId string) DeleteSlotResponse {
 		return DeleteSlotResponse{Deleted: false, UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	updatedDoctor, err := graphql.UpdateDoctor(context.Background(), gqlClient, doctorId, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, remElement(doctor.GetDoctorById.Rendez_vous_ids, slotId), doctor.GetDoctorById.Patient_ids)
+	//updatedDoctor, err := graphql.UpdateDoctor(context.Background(), gqlClient, doctorId, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, remElement(doctor.GetDoctorById.Rendez_vous_ids, slotId), doctor.GetDoctorById.Patient_ids)
+	updatedDoctor, _ := graphql.UpdateDoctor(context.Background(), gqlClient, doctorId, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, remElement(doctor.GetDoctorById.Rendez_vous_ids, slotId), doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
 
 	return DeleteSlotResponse{
 		Deleted: deleted.DeleteSlot,
@@ -56,6 +58,8 @@ func DeleteSlot(slotId string, doctorId string) DeleteSlotResponse {
 			ID:            updatedDoctor.UpdateDoctor.Id,
 			Email:         updatedDoctor.UpdateDoctor.Email,
 			Password:      updatedDoctor.UpdateDoctor.Password,
+			Name:          updatedDoctor.UpdateDoctor.Name,
+			Firstname:     updatedDoctor.UpdateDoctor.Firstname,
 			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(updatedDoctor.UpdateDoctor.Rendez_vous_ids),
 			PatientIds:    graphql.ConvertStringSliceToPointerSlice(updatedDoctor.UpdateDoctor.Patient_ids),
 		},

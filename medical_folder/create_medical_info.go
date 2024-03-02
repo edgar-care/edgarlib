@@ -124,7 +124,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 			MedicalAntecedents: medicalAntecedentsResp,
 			OnboardingStatus:   model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
 		},
-		Code: 200,
+		Code: 201,
 		Err:  nil,
 	}
 }

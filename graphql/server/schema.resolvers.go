@@ -127,7 +127,7 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 }
 
 // UpdateDoctor is the resolver for the updateDoctor field.
-func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address model.AddressInput) (*model.Doctor, error) {
+func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) (*model.Doctor, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -381,21 +381,29 @@ func (r *mutationResolver) DeleteTestAccount(ctx context.Context, id string) (*b
 }
 
 // CreateSession is the resolver for the createSession field.
-func (r *mutationResolver) CreateSession(ctx context.Context, symptoms []string, age int, height int, weight int, sex string, lastQuestion string, logs []*model.LogsInput, alerts []string) (*model.Session, error) {
+func (r *mutationResolver) CreateSession(ctx context.Context, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) (*model.Session, error) {
 	newSession := bson.M{
-		"symptoms":     symptoms,
-		"age":          age,
-		"height":       height,
-		"weight":       weight,
-		"sex":          sex,
-		"lastQuestion": lastQuestion,
-		"logs":         logs,
-		"alerts":       alerts,
+		"symptoms":      symptoms,
+		"age":           age,
+		"height":        height,
+		"weight":        weight,
+		"sex":           sex,
+		"ante_chirs":    anteChirs,
+		"ante_diseases": anteDiseases,
+		"treatments":    treatments,
+		"last_question": lastQuestion,
+		"logs":          logs,
+		"alerts":        alerts,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").InsertOne(ctx, newSession)
 	if err != nil {
 		return nil, err
+	}
+
+	var convertedSymptoms []*model.SessionSymptom
+	for _, symptom := range symptoms {
+		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration})
 	}
 
 	var convertedLogs []*model.Logs
@@ -404,11 +412,14 @@ func (r *mutationResolver) CreateSession(ctx context.Context, symptoms []string,
 	}
 	entity := model.Session{
 		ID:           res.InsertedID.(primitive.ObjectID).Hex(),
-		Symptoms:     symptoms,
+		Symptoms:     convertedSymptoms,
 		Age:          age,
 		Height:       height,
 		Weight:       weight,
 		Sex:          sex,
+		AnteChirs:    anteChirs,
+		AnteDiseases: anteDiseases,
+		Treatments:   treatments,
 		LastQuestion: lastQuestion,
 		Logs:         convertedLogs,
 		Alerts:       alerts,
@@ -417,7 +428,7 @@ func (r *mutationResolver) CreateSession(ctx context.Context, symptoms []string,
 }
 
 // UpdateSession is the resolver for the updateSession field.
-func (r *mutationResolver) UpdateSession(ctx context.Context, id string, symptoms []string, age *int, height *int, weight *int, sex *string, lastQuestion *string, logs []*model.LogsInput, alerts []string) (*model.Session, error) {
+func (r *mutationResolver) UpdateSession(ctx context.Context, id string, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) (*model.Session, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -425,17 +436,25 @@ func (r *mutationResolver) UpdateSession(ctx context.Context, id string, symptom
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":          objId,
-		"symptoms":     symptoms,
-		"age":          age,
-		"height":       height,
-		"weight":       weight,
-		"sex":          sex,
-		"lastQuestion": lastQuestion,
-		"logs":         logs,
-		"alert":        alerts,
+		"_id":           objId,
+		"symptoms":      symptoms,
+		"age":           age,
+		"height":        height,
+		"weight":        weight,
+		"sex":           sex,
+		"ante_chirs":    anteChirs,
+		"ante_diseases": anteDiseases,
+		"treatments":    treatments,
+		"last_question": lastQuestion,
+		"logs":          logs,
+		"alerts":        alerts,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").ReplaceOne(ctx, filter, updated)
+
+	var convertedSymptoms []*model.SessionSymptom
+	for _, symptom := range symptoms {
+		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration})
+	}
 
 	var convertedLogs []*model.Logs
 	for _, log := range logs {
@@ -443,11 +462,14 @@ func (r *mutationResolver) UpdateSession(ctx context.Context, id string, symptom
 	}
 	return &model.Session{
 		ID:           id,
-		Symptoms:     symptoms,
+		Symptoms:     convertedSymptoms,
 		Age:          *age,
 		Height:       *height,
 		Weight:       *weight,
 		Sex:          *sex,
+		AnteChirs:    anteChirs,
+		AnteDiseases: anteDiseases,
+		Treatments:   treatments,
 		LastQuestion: *lastQuestion,
 		Logs:         convertedLogs,
 		Alerts:       alerts,

@@ -18,7 +18,16 @@ func GetMedicalInfosById(id string) GetMedicalInfoByIdResponse {
 	gqlClient := graphql.CreateClient()
 	var res model.MedicalInfo
 
-	medical, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, id)
+	id_med, err := graphql.GetPatientById(context.Background(), gqlClient, id)
+	if err != nil {
+		return GetMedicalInfoByIdResponse{model.MedicalInfo{}, 400, errors.New("ID does not correspond to patient")}
+	}
+
+	if id_med.GetPatientById.Medical_info_id == "" {
+		return GetMedicalInfoByIdResponse{model.MedicalInfo{}, 400, errors.New("ID not found")}
+	}
+
+	medical, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, id_med.GetPatientById.Medical_info_id)
 	if err != nil {
 		return GetMedicalInfoByIdResponse{model.MedicalInfo{}, 400, errors.New("ID does not correspond to any medical information")}
 	}

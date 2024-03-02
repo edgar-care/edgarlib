@@ -3,14 +3,16 @@ package exam
 import (
 	"context"
 	"github.com/edgar-care/edgarlib/graphql"
-	"math/rand"
+	"github.com/edgar-care/edgarlib/graphql/server/model"
 	"sort"
 )
 
 type diseaseCoverage struct {
-	coverage int
-	present  int
-	absent   int
+	disease           string
+	coverage          int
+	present           int
+	absent            int
+	potentialQuestion string
 }
 
 type ByCoverage []diseaseCoverage
@@ -19,27 +21,28 @@ func (a ByCoverage) Len() int           { return len(a) }
 func (a ByCoverage) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByCoverage) Less(i, j int) bool { return a[i].coverage > a[j].coverage }
 
-func findInContext(context []ExamContextItem, symptom string) *ExamContextItem {
+func findInContext(context []model.SessionSymptom, symptom string) *model.SessionSymptom {
 	for _, item := range context {
-		if item.Symptom == symptom {
+		if item.Name == symptom {
 			return &item
 		}
 	}
 	return nil
 }
 
-func isPresent(context []ExamContextItem, symptom string) *bool {
+func isPresent(context []model.SessionSymptom, symptom string) *bool {
 	item := findInContext(context, symptom)
 	if item != nil {
-		return item.Present
+		return item.Presence
 	}
 	return nil
 }
 
-func calculCoverage(context []ExamContextItem, disease graphql.GetDiseasesGetDiseasesDisease) diseaseCoverage {
+func calculCoverage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease) diseaseCoverage {
 	var coverage int
 	var present int
 	var absent int
+	var potentialquestionSymptom string
 	total := len(disease.Symptoms)
 
 	for _, symptom := range disease.Symptoms {
@@ -51,16 +54,26 @@ func calculCoverage(context []ExamContextItem, disease graphql.GetDiseasesGetDis
 			} else {
 				absent += 1
 			}
+		} else {
+			potentialquestionSymptom = symptom
 		}
 	}
-	return diseaseCoverage{coverage: coverage * 100 / total, present: present * 100 / total, absent: absent * 100 / total}
+	return diseaseCoverage{disease: disease.Code, coverage: coverage * 100 / total, present: present * 100 / total, absent: absent * 100 / total, potentialQuestion: potentialquestionSymptom}
 }
 
-func GuessQuestion(patientContext []ExamContextItem) (string, []string, bool) {
+func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptomsSymptom) string {
+	for _, symptom := range symptoms {
+		if symptomName == symptom.Name {
+			return symptom.Question
+		}
+	}
+	return "Est-ce que vous avez ce symptôme: " + symptomName + " ?"
+}
+
+func GuessQuestion(patientContext []model.SessionSymptom) (string, []string, bool) {
 	gqlClient := graphql.CreateClient()
 	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
-	symptoms := []string{"respiration_difficile", "toux", "respiration_sifflante", "somnolence", "anxiete", "brulure_poitrine", "respiration_difficile", "boule_gorge", "maux_de_tetes", "vision_trouble", "tache_visuel", "abdominalgies", "asthenie", "anorexie", "amaigrissement"}
-	next := symptoms[rand.Intn(len(symptoms))]
+	symptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
 	mapped := make([]diseaseCoverage, len(diseases.GetDiseases))
 	for i, e := range diseases.GetDiseases {
 		mapped[i] = calculCoverage(patientContext, e)
@@ -79,7 +92,7 @@ func GuessQuestion(patientContext []ExamContextItem) (string, []string, bool) {
 		if disease.present >= 70 {
 			return "", []string{}, true
 		}
-		return next, []string{next}, false
+		return getTheQuestion(disease.potentialQuestion, symptoms.GetSymptoms), []string{disease.potentialQuestion}, false
 	}
 	return "", []string{}, true
 }

@@ -1,7 +1,9 @@
 package exam
 
+import "github.com/edgar-care/edgarlib/graphql/server/model"
+
 type ExamResponse struct {
-	Context  []ExamContextItem
+	Context  []model.SessionSymptom
 	Question string
 	Symptoms []string
 	Done     bool
@@ -10,12 +12,7 @@ type ExamResponse struct {
 	Err      error
 }
 
-type ExamContextItem struct {
-	Symptom string
-	Present *bool
-}
-
-func Exam(context []ExamContextItem) ExamResponse {
+func Exam(context []model.SessionSymptom) ExamResponse {
 	question, possibleSymptoms, isDone := GuessQuestion(context)
 	alert, err := CheckAlerts(context)
 	if err != nil {
