@@ -9,10 +9,8 @@ import (
 )
 
 type CreateSlotInput struct {
-	DoctorID  string `json:"doctor_id"`
-	IdPatient string `json:"id_patient"`
-	StartDate int    `json:"start_date"`
-	EndDate   int    `json:"end_date"`
+	StartDate int `json:"start_date"`
+	EndDate   int `json:"end_date"`
 }
 
 type CreateSlotResponse struct {
@@ -22,20 +20,20 @@ type CreateSlotResponse struct {
 	Err    error
 }
 
-func CreateSlot(input CreateSlotInput) CreateSlotResponse {
+func CreateSlot(input CreateSlotInput, doctorID string) CreateSlotResponse {
 	gqlClient := graphql.CreateClient()
 
-	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, input.IdPatient, input.DoctorID, input.StartDate, input.EndDate)
+	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, "", doctorID, input.StartDate, input.EndDate)
 	if err != nil {
 		return CreateSlotResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
 
-	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, input.DoctorID)
+	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, doctorID)
 	if err != nil {
 		return CreateSlotResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, input.DoctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, append(doctor.GetDoctorById.Rendez_vous_ids, rdv.CreateRdv.Id), doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
+	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, append(doctor.GetDoctorById.Rendez_vous_ids, rdv.CreateRdv.Id), doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
 	if err != nil {
 		return CreateSlotResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("update failed" + err.Error())}
 	}

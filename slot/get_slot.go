@@ -3,9 +3,9 @@ package slot
 import (
 	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
-	"github.com/jinzhu/copier"
 )
 
 type GetSlotByIdResponse struct {
@@ -31,8 +31,14 @@ func GetSlotById(id string, doctorId string) GetSlotByIdResponse {
 	if slot.GetRdvById.Doctor_id != doctorId {
 		return GetSlotByIdResponse{model.Rdv{}, 403, errors.New("you cannot access to this appointment")}
 	}
-	copier.Copy(&res, &slot.GetRdvById)
-	return GetSlotByIdResponse{res, 201, nil}
+	res = model.Rdv{
+		ID:        slot.GetRdvById.Id,
+		DoctorID:  slot.GetRdvById.Doctor_id,
+		IDPatient: slot.GetRdvById.Id_patient,
+		StartDate: slot.GetRdvById.Start_date,
+		EndDate:   slot.GetRdvById.End_date,
+	}
+	return GetSlotByIdResponse{res, 200, nil}
 }
 
 func GetSlots(doctorId string) GetSlotsResponse {
@@ -60,5 +66,5 @@ func GetSlots(doctorId string) GetSlotsResponse {
 			CancelationReason: &temp,
 		})
 	}
-	return GetSlotsResponse{res, 201, nil}
+	return GetSlotsResponse{res, 200, nil}
 }
