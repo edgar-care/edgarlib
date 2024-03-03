@@ -39,7 +39,7 @@ func DeleteSlot(slotId string, doctorId string) DeleteSlotResponse {
 		return DeleteSlotResponse{Deleted: false, UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("this slot is booked, you cannot delete it")}
 	}
 
-	deleted, err := graphql.DeleteSlot(context.Background(), gqlClient, slotId)
+	deleted, err := graphql.DeleteRdv(context.Background(), gqlClient, slotId)
 	if err != nil {
 		return DeleteSlotResponse{Deleted: false, UpdatedDoctor: model.Doctor{}, Code: 500, Err: errors.New("error while deleting slot: " + err.Error())}
 	}
@@ -49,11 +49,14 @@ func DeleteSlot(slotId string, doctorId string) DeleteSlotResponse {
 		return DeleteSlotResponse{Deleted: false, UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	//updatedDoctor, err := graphql.UpdateDoctor(context.Background(), gqlClient, doctorId, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, remElement(doctor.GetDoctorById.Rendez_vous_ids, slotId), doctor.GetDoctorById.Patient_ids)
-	updatedDoctor, _ := graphql.UpdateDoctor(context.Background(), gqlClient, doctorId, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, remElement(doctor.GetDoctorById.Rendez_vous_ids, slotId), doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
+	updatedDoctor, err := graphql.UpdateDoctor(context.Background(), gqlClient, doctorId, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, remElement(doctor.GetDoctorById.Rendez_vous_ids, slotId), doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
+
+	if err != nil {
+		return DeleteSlotResponse{Deleted: false, UpdatedDoctor: model.Doctor{}, Code: 500, Err: errors.New("error updating patient: " + err.Error())}
+	}
 
 	return DeleteSlotResponse{
-		Deleted: deleted.DeleteSlot,
+		Deleted: deleted.DeleteRdv,
 		UpdatedDoctor: model.Doctor{
 			ID:            updatedDoctor.UpdateDoctor.Id,
 			Email:         updatedDoctor.UpdateDoctor.Email,

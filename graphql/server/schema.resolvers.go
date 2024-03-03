@@ -839,7 +839,7 @@ func (r *mutationResolver) DeleteSlot(ctx context.Context, id string) (*bool, er
 		return &resp, err
 	}
 	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Slot").DeleteOne(ctx, filter)
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
