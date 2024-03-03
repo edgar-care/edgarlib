@@ -113,6 +113,7 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 		Street:  address.Street,
 		ZipCode: address.ZipCode,
 		Country: address.Country,
+		City:    address.City,
 	}
 
 	entity := model.Doctor{
@@ -155,6 +156,7 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 			Street:  address.Street,
 			ZipCode: address.ZipCode,
 			Country: address.Country,
+			City:    address.City,
 		},
 		RendezVousIds: rendezVousIds,
 		PatientIds:    patientIds,
