@@ -12,12 +12,14 @@ type Address struct {
 	Street  string `json:"street" bson:"street"`
 	ZipCode string `json:"zip_code" bson:"zip_code"`
 	Country string `json:"country" bson:"country"`
+	City    string `json:"city" bson:"city"`
 }
 
 type AddressInput struct {
 	Street  string `json:"street" bson:"street"`
 	ZipCode string `json:"zip_code" bson:"zip_code"`
 	Country string `json:"country" bson:"country"`
+	City    string `json:"city" bson:"city"`
 }
 
 type Admin struct {

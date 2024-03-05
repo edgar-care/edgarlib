@@ -12,6 +12,7 @@ type AddressInput struct {
 	Street   string `json:"street"`
 	Zip_code string `json:"zip_code"`
 	Country  string `json:"country"`
+	City     string `json:"city"`
 }
 
 // GetStreet returns AddressInput.Street, and is useful for accessing the field via an interface.
@@ -22,6 +23,9 @@ func (v *AddressInput) GetZip_code() string { return v.Zip_code }
 
 // GetCountry returns AddressInput.Country, and is useful for accessing the field via an interface.
 func (v *AddressInput) GetCountry() string { return v.Country }
+
+// GetCity returns AddressInput.City, and is useful for accessing the field via an interface.
+func (v *AddressInput) GetCity() string { return v.City }
 
 type Category string
 

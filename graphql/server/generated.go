@@ -47,6 +47,7 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Address struct {
+		City    func(childComplexity int) int
 		Country func(childComplexity int) int
 		Street  func(childComplexity int) int
 		ZipCode func(childComplexity int) int
@@ -474,6 +475,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e, 0, 0, nil}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "Address.city":
+		if e.complexity.Address.City == nil {
+			break
+		}
+
+		return e.complexity.Address.City(childComplexity), true
 
 	case "Address.country":
 		if e.complexity.Address.Country == nil {
@@ -2654,12 +2662,14 @@ type Address {
     street: String!
     zip_code: String!
     country: String!
+    city: String!
 }
 
 input AddressInput {
     street: String!
     zip_code: String!
     country: String!
+    city: String!
 }
 
 # Admin entity
@@ -6025,6 +6035,50 @@ func (ec *executionContext) fieldContext_Address_country(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Address_city(ctx context.Context, field graphql.CollectedField, obj *model.Address) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Address_city(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.City, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Address_city(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Address",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Admin_id(ctx context.Context, field graphql.CollectedField, obj *model.Admin) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Admin_id(ctx, field)
 	if err != nil {
@@ -7859,6 +7913,8 @@ func (ec *executionContext) fieldContext_Doctor_address(ctx context.Context, fie
 				return ec.fieldContext_Address_zip_code(ctx, field)
 			case "country":
 				return ec.fieldContext_Address_country(ctx, field)
+			case "city":
+				return ec.fieldContext_Address_city(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Address", field.Name)
 		},
@@ -19584,7 +19640,7 @@ func (ec *executionContext) unmarshalInputAddressInput(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"street", "zip_code", "country"}
+	fieldsInOrder := [...]string{"street", "zip_code", "country", "city"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -19612,6 +19668,13 @@ func (ec *executionContext) unmarshalInputAddressInput(ctx context.Context, obj 
 				return it, err
 			}
 			it.Country = data
+		case "city":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.City = data
 		}
 	}
 
@@ -19895,6 +19958,11 @@ func (ec *executionContext) _Address(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "country":
 			out.Values[i] = ec._Address_country(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "city":
+			out.Values[i] = ec._Address_city(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

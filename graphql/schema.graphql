@@ -62,12 +62,14 @@ type Address {
     street: String!
     zip_code: String!
     country: String!
+    city: String!
 }
 
 input AddressInput {
     street: String!
     zip_code: String!
     country: String!
+    city: String!
 }
 
 # Admin entity
