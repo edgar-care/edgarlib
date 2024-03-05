@@ -1065,3 +1065,14 @@ query GetMedicalFolder{
         onboarding_status
     }
 }
+
+query GetPatientsFromDoctorById($id: String!){
+    getPatientsFromDoctorById(id: $id){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+    }
+}
