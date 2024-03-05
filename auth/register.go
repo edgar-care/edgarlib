@@ -45,7 +45,7 @@ type RegisterAndLoginResponse struct {
 
 func RegisterDoctor(email string, password string, name string, firstname string, address AddressInput) (model.Doctor, error) {
 	gqlClient := graphql.CreateClient()
-	password = utils.HashPassword(email)
+	password = utils.HashPassword(password)
 	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, email, password, firstname, name, graphql.AddressInput{Street: address.Street, Zip_code: address.ZipCode, Country: address.Country})
 	if err != nil {
 		return model.Doctor{}, fmt.Errorf("Unable to create account: %s", err.Error())
