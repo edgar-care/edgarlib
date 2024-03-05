@@ -11,7 +11,7 @@ import (
 )
 
 type DoctorInput struct {
-	Password  string       `jon:"passwordjs"`
+	Password  string       `jon:"password"`
 	Email     string       `json:"email"`
 	Name      string       `json:"name"`
 	Firstname string       `json:"firstname"`
@@ -19,9 +19,10 @@ type DoctorInput struct {
 }
 
 type AddressInput struct {
-	Street  string `json:"Street"`
+	Street  string `json:"street"`
 	ZipCode string `json:"zip_code"`
 	Country string `json:"country"`
+	City    string `json:"city"`
 }
 
 type PatientInput struct {
@@ -46,7 +47,7 @@ type RegisterAndLoginResponse struct {
 func RegisterDoctor(email string, password string, name string, firstname string, address AddressInput) (model.Doctor, error) {
 	gqlClient := graphql.CreateClient()
 	password = utils.HashPassword(password)
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, email, password, firstname, name, graphql.AddressInput{Street: address.Street, Zip_code: address.ZipCode, Country: address.Country})
+	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, email, password, firstname, name, graphql.AddressInput{Street: address.Street, Zip_code: address.ZipCode, Country: address.Country, City: address.City})
 	if err != nil {
 		return model.Doctor{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
@@ -54,6 +55,7 @@ func RegisterDoctor(email string, password string, name string, firstname string
 		Street:  address.Street,
 		ZipCode: address.ZipCode,
 		Country: address.Country,
+		City:    address.City,
 	}
 	return model.Doctor{
 		ID:            doctor.CreateDoctor.Id,
