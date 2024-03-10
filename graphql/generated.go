@@ -2507,6 +2507,52 @@ func (v *GetPatientRdvResponse) GetGetPatientRdv() []GetPatientRdvGetPatientRdv 
 	return v.GetPatientRdv
 }
 
+// GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient includes the requested fields of the GraphQL type Patient.
+type GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient struct {
+	Id              string   `json:"id"`
+	Email           string   `json:"email"`
+	Password        string   `json:"password"`
+	Rendez_vous_ids []string `json:"rendez_vous_ids"`
+	Medical_info_id string   `json:"medical_info_id"`
+	Document_ids    []string `json:"document_ids"`
+}
+
+// GetId returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Id, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetId() string { return v.Id }
+
+// GetEmail returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Email, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetEmail() string { return v.Email }
+
+// GetPassword returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Password, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetPassword() string {
+	return v.Password
+}
+
+// GetRendez_vous_ids returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Rendez_vous_ids, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetRendez_vous_ids() []string {
+	return v.Rendez_vous_ids
+}
+
+// GetMedical_info_id returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Medical_info_id, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetMedical_info_id() string {
+	return v.Medical_info_id
+}
+
+// GetDocument_ids returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Document_ids, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetDocument_ids() []string {
+	return v.Document_ids
+}
+
+// GetPatientsFromDoctorByIdResponse is returned by GetPatientsFromDoctorById on success.
+type GetPatientsFromDoctorByIdResponse struct {
+	GetPatientsFromDoctorById []GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient `json:"getPatientsFromDoctorById"`
+}
+
+// GetGetPatientsFromDoctorById returns GetPatientsFromDoctorByIdResponse.GetPatientsFromDoctorById, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdResponse) GetGetPatientsFromDoctorById() []GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient {
+	return v.GetPatientsFromDoctorById
+}
+
 // GetPatientsGetPatientsPatient includes the requested fields of the GraphQL type Patient.
 type GetPatientsGetPatientsPatient struct {
 	Id              string   `json:"id"`
@@ -4657,6 +4703,14 @@ type __GetPatientRdvInput struct {
 
 // GetId_patient returns __GetPatientRdvInput.Id_patient, and is useful for accessing the field via an interface.
 func (v *__GetPatientRdvInput) GetId_patient() string { return v.Id_patient }
+
+// __GetPatientsFromDoctorByIdInput is used internally by genqlient
+type __GetPatientsFromDoctorByIdInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __GetPatientsFromDoctorByIdInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetPatientsFromDoctorByIdInput) GetId() string { return v.Id }
 
 // __GetRdvByIdInput is used internally by genqlient
 type __GetRdvByIdInput struct {
@@ -8019,6 +8073,46 @@ func GetPatients(
 	var err error
 
 	var data GetPatientsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetPatientsFromDoctorById.
+const GetPatientsFromDoctorById_Operation = `
+query GetPatientsFromDoctorById ($id: String!) {
+	getPatientsFromDoctorById(id: $id) {
+		id
+		email
+		password
+		rendez_vous_ids
+		medical_info_id
+		document_ids
+	}
+}
+`
+
+func GetPatientsFromDoctorById(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*GetPatientsFromDoctorByIdResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetPatientsFromDoctorById",
+		Query:  GetPatientsFromDoctorById_Operation,
+		Variables: &__GetPatientsFromDoctorByIdInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetPatientsFromDoctorByIdResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
