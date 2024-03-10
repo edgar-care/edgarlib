@@ -49,15 +49,15 @@ func Login(input LoginInput, t string) LoginResponse {
 
 	if t == "d" {
 		token, err = CreateToken(map[string]interface{}{
-			"doctor": doctor,
+			"doctor": doctor.GetDoctorByEmail,
 		})
 	} else if t == "a" {
 		token, err = CreateToken(map[string]interface{}{
-			"admin": admin,
+			"admin": admin.GetAdminByEmail,
 		})
 	} else {
 		token, err = CreateToken(map[string]interface{}{
-			"patient": patient,
+			"patient": patient.GetPatientByEmail,
 		})
 	}
 	resp.Token = token
