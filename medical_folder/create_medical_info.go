@@ -3,7 +3,6 @@ package medical_folder
 import (
 	"context"
 	"errors"
-
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
@@ -34,11 +33,9 @@ type CreateMedicine struct {
 
 type CreateMedicalInfoResponse struct {
 	MedicalInfo model.MedicalInfo
-	// MedicalAntecedents []*model.MedicalAntecedents
-	// Medicines          model.Medicines
-	Patient model.Patient
-	Code    int
-	Err     error
+	Patient     model.Patient
+	Code        int
+	Err         error
 }
 
 func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMedicalInfoResponse {
@@ -67,6 +64,14 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 			Medicines:      medicines,
 			Still_relevant: antecedent.StillRelevant,
 		}
+	}
+	control, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
+	if err != nil {
+		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
+	}
+
+	if control.GetPatientById.Medical_info_id != "" {
+		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("medical folder has already been create")}
 	}
 
 	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Weight, input.Height, input.PrimaryDoctorID, medicalAntecedents, input.OnboardingStatus)
