@@ -29,11 +29,22 @@ type GetPatientsResponse struct {
 	Err          error
 }
 
-func GetPatientById(id string) GetPatientByIdResponse {
+func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 	gqlClient := graphql.CreateClient()
+
+	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, doctorid)
+	if err != nil {
+		return GetPatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
+	}
+	for _, item := range doctor.GetDoctorById.Patient_ids {
+		if item != id {
+			return GetPatientByIdResponse{Code: 400, Err: errors.New("unauthorized to access to this account")}
+		}
+	}
+
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
 	if err != nil {
-		return GetPatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to a patient")}
+		return GetPatientByIdResponse{Code: 401, Err: errors.New("id does not correspond to a patient")}
 	}
 
 	if patient.GetPatientById.Medical_info_id == "" {
