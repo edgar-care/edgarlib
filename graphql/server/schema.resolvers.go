@@ -2137,6 +2137,39 @@ func (r *queryResolver) GetMedicamentByID(ctx context.Context, id string) (*mode
 	return &result, nil
 }
 
+// GetPatientsFromDoctorByID is the resolver for the getPatientsFromDoctorById field.
+func (r *queryResolver) GetPatientsFromDoctorByID(ctx context.Context, id string) ([]*model.Patient, error) {
+	var doctor model.Doctor
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, filter).Decode(&doctor)
+	if err != nil {
+		return nil, err
+	}
+
+	var patients []*model.Patient
+	for _, patientId := range doctor.PatientIds {
+		var patient model.Patient
+		objId, err := primitive.ObjectIDFromHex(*patientId)
+		if err != nil {
+			return nil, err
+		}
+
+		filter := bson.M{"_id": objId}
+		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, filter).Decode(&patient)
+		if err != nil {
+			return nil, err
+		}
+		patients = append(patients, &patient)
+	}
+	return patients, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 

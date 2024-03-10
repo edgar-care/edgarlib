@@ -391,6 +391,9 @@ type Query {
     # Get an Medicament by its id.
     getMedicamentByID(id: String!): Medicament
 
+    # Get all patient from doctor with id.
+    getPatientsFromDoctorById(id: String!): [Patient]
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
