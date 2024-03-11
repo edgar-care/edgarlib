@@ -36,10 +36,15 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 	if err != nil {
 		return GetPatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
+	idFound := false
 	for _, item := range doctor.GetDoctorById.Patient_ids {
-		if item != id {
-			return GetPatientByIdResponse{Code: 400, Err: errors.New("unauthorized to access to this account")}
+		if item == id {
+			idFound = true
+			break
 		}
+	}
+	if !idFound {
+		return GetPatientByIdResponse{Code: 400, Err: errors.New("unauthorized to access to this account")}
 	}
 
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
