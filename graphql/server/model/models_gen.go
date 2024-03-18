@@ -189,12 +189,14 @@ type Query struct {
 }
 
 type Rdv struct {
-	ID                string  `json:"id" bson:"_id"`
-	DoctorID          string  `json:"doctor_id" bson:"doctor_id"`
-	IDPatient         string  `json:"id_patient" bson:"id_patient"`
-	StartDate         int     `json:"start_date" bson:"start_date"`
-	EndDate           int     `json:"end_date" bson:"end_date"`
-	CancelationReason *string `json:"cancelation_reason,omitempty" bson:"cancelation_reason"`
+	ID                string            `json:"id" bson:"_id"`
+	DoctorID          string            `json:"doctor_id" bson:"doctor_id"`
+	IDPatient         string            `json:"id_patient" bson:"id_patient"`
+	StartDate         int               `json:"start_date" bson:"start_date"`
+	EndDate           int               `json:"end_date" bson:"end_date"`
+	CancelationReason *string           `json:"cancelation_reason,omitempty" bson:"cancelation_reason"`
+	AppointmentStatus AppointmentStatus `json:"appointment_status" bson:"appointment_status"`
+	SessionsIds       []string          `json:"sessions_ids,omitempty" bson:"sessions_ids"`
 }
 
 type Session struct {
@@ -260,6 +262,53 @@ type Treatment struct {
 	Disease     string   `json:"disease" bson:"disease"`
 	Symptoms    []string `json:"symptoms,omitempty" bson:"symptoms"`
 	SideEffects []string `json:"side_effects,omitempty" bson:"side_effects"`
+}
+
+type AppointmentStatus string
+
+const (
+	AppointmentStatusWaitingForReview    AppointmentStatus = "waitingForReview"
+	AppointmentStatusAcceptedDueToReview AppointmentStatus = "acceptedDueToReview"
+	AppointmentStatusCanceledDueToReview AppointmentStatus = "canceledDueToReview"
+	AppointmentStatusCanceled            AppointmentStatus = "canceled"
+	AppointmentStatusSlotCreate          AppointmentStatus = "slotCreate"
+)
+
+var AllAppointmentStatus = []AppointmentStatus{
+	AppointmentStatusWaitingForReview,
+	AppointmentStatusAcceptedDueToReview,
+	AppointmentStatusCanceledDueToReview,
+	AppointmentStatusCanceled,
+	AppointmentStatusSlotCreate,
+}
+
+func (e AppointmentStatus) IsValid() bool {
+	switch e {
+	case AppointmentStatusWaitingForReview, AppointmentStatusAcceptedDueToReview, AppointmentStatusCanceledDueToReview, AppointmentStatusCanceled, AppointmentStatusSlotCreate:
+		return true
+	}
+	return false
+}
+
+func (e AppointmentStatus) String() string {
+	return string(e)
+}
+
+func (e *AppointmentStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AppointmentStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AppointmentStatus", str)
+	}
+	return nil
+}
+
+func (e AppointmentStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type Category string

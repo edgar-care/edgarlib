@@ -34,7 +34,7 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
 	}
 
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, patientId, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, patientId, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason, appointment.GetRdvById.Appointment_status, appointment.GetRdvById.Sessions_ids)
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
@@ -43,7 +43,7 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
-	_, err = graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, "", oldAppointment.GetRdvById.Doctor_id, oldAppointment.GetRdvById.Start_date, oldAppointment.GetRdvById.End_date, oldAppointment.GetRdvById.Cancelation_reason)
+	_, err = graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, "", oldAppointment.GetRdvById.Doctor_id, oldAppointment.GetRdvById.Start_date, oldAppointment.GetRdvById.End_date, oldAppointment.GetRdvById.Cancelation_reason, oldAppointment.GetRdvById.Appointment_status, oldAppointment.GetRdvById.Sessions_ids)
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
@@ -61,6 +61,8 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 			StartDate:         updatedRdv.UpdateRdv.Start_date,
 			EndDate:           updatedRdv.UpdateRdv.End_date,
 			CancelationReason: &updatedRdv.UpdateRdv.Cancelation_reason,
+			AppointmentStatus: model.AppointmentStatus(updatedRdv.UpdateRdv.Appointment_status),
+			SessionsIds:       updatedRdv.UpdateRdv.Sessions_ids,
 		},
 		Patient: model.Patient{
 			ID:            updatedPatient.UpdatePatient.Id,

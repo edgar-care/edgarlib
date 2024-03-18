@@ -24,19 +24,19 @@ func GetSlotById(id string, doctorId string) GetSlotByIdResponse {
 	gqlClient := graphql.CreateClient()
 	var res model.Rdv
 
-	slot, err := graphql.GetRdvById(context.Background(), gqlClient, id)
+	slot, err := graphql.GetSlotById(context.Background(), gqlClient, id)
 	if err != nil {
 		return GetSlotByIdResponse{model.Rdv{}, 400, errors.New("id does not correspond to a slot")}
 	}
-	if slot.GetRdvById.Doctor_id != doctorId {
+	if slot.GetSlotById.Doctor_id != doctorId {
 		return GetSlotByIdResponse{model.Rdv{}, 403, errors.New("you cannot access to this appointment")}
 	}
 	res = model.Rdv{
-		ID:        slot.GetRdvById.Id,
-		DoctorID:  slot.GetRdvById.Doctor_id,
-		IDPatient: slot.GetRdvById.Id_patient,
-		StartDate: slot.GetRdvById.Start_date,
-		EndDate:   slot.GetRdvById.End_date,
+		ID:        slot.GetSlotById.Id,
+		DoctorID:  slot.GetSlotById.Doctor_id,
+		IDPatient: slot.GetSlotById.Id_patient,
+		StartDate: slot.GetSlotById.Start_date,
+		EndDate:   slot.GetSlotById.End_date,
 	}
 	return GetSlotByIdResponse{res, 200, nil}
 }
@@ -50,12 +50,12 @@ func GetSlots(doctorId string) GetSlotsResponse {
 		return GetSlotsResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a doctor")}
 	}
 
-	slots, err := graphql.GetDoctorRdv(context.Background(), gqlClient, doctorId)
+	slots, err := graphql.GetSlots(context.Background(), gqlClient, doctorId)
 	if err != nil {
 		return GetSlotsResponse{[]model.Rdv{}, 400, errors.New("invalid input: " + err.Error())}
 	}
 
-	for _, slot := range slots.GetDoctorRdv {
+	for _, slot := range slots.GetSlots {
 		temp := slot.Cancelation_reason
 		res = append(res, model.Rdv{
 			ID:                slot.Id,

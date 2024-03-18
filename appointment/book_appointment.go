@@ -15,7 +15,7 @@ type BookAppointmentResponse struct {
 	Err     error
 }
 
-func BookAppointment(appointmentId string, patientId string) BookAppointmentResponse {
+func BookAppointment(appointmentId string, patientId string, sessions_ids []string) BookAppointmentResponse {
 	gqlClient := graphql.CreateClient()
 	if appointmentId == "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment id is required")}
@@ -34,8 +34,9 @@ func BookAppointment(appointmentId string, patientId string) BookAppointmentResp
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
 	}
+	var appointment_status = graphql.AppointmentStatusWaitingforreview
 
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, patientId, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, patientId, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason, appointment_status, sessions_ids)
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
@@ -43,6 +44,17 @@ func BookAppointment(appointmentId string, patientId string) BookAppointmentResp
 	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, append(patient.GetPatientById.Rendez_vous_ids, appointmentId), patient.GetPatientById.Document_ids)
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update patient")}
+	}
+
+	//add update doctor, add patient in the list
+	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, appointment.GetRdvById.Doctor_id)
+	if err != nil {
+		return BookAppointmentResponse{Rdv: model.Rdv{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
+	}
+
+	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.GetDoctorById.Id, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, append(doctor.GetDoctorById.Patient_ids, patientId), graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
+	if err != nil {
+		return BookAppointmentResponse{Rdv: model.Rdv{}, Code: 400, Err: errors.New("update failed" + err.Error())}
 	}
 
 	return BookAppointmentResponse{
@@ -53,6 +65,8 @@ func BookAppointment(appointmentId string, patientId string) BookAppointmentResp
 			StartDate:         updatedRdv.UpdateRdv.Start_date,
 			EndDate:           updatedRdv.UpdateRdv.End_date,
 			CancelationReason: &updatedRdv.UpdateRdv.Cancelation_reason,
+			AppointmentStatus: model.AppointmentStatus(updatedRdv.UpdateRdv.Appointment_status),
+			SessionsIds:       updatedRdv.UpdateRdv.Sessions_ids,
 		},
 		Patient: model.Patient{
 			ID:            updatedPatient.UpdatePatient.Id,
