@@ -31,7 +31,7 @@ func GetWaitingReview(doctorId string) GetWaitingReviewResponse {
 			EndDate:           appointment.End_date,
 			CancelationReason: &temp,
 			AppointmentStatus: model.AppointmentStatus(appointment.Appointment_status),
-			SessionsIds:       appointment.Sessions_ids,
+			SessionID:         appointment.Session_id,
 		})
 	}
 	return GetWaitingReviewResponse{res, 200, nil}
