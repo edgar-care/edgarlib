@@ -74,7 +74,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("medical folder has already been create")}
 	}
 
-	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Weight, input.Height, input.PrimaryDoctorID, medicalAntecedents, input.OnboardingStatus)
+	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, medicalAntecedents, input.OnboardingStatus)
 	if err != nil {
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
 	}
