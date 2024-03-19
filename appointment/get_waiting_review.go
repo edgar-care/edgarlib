@@ -7,22 +7,21 @@ import (
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
 
-type GetRdvDoctorResponse struct {
+type GetWaitingReviewResponse struct {
 	Rdv  []model.Rdv
 	Code int
 	Err  error
 }
 
-func GetRdvDoctor(doctorId string) GetRdvDoctorResponse {
+func GetWaitingReview(doctorId string) GetWaitingReviewResponse {
 	gqlClient := graphql.CreateClient()
 	var res []model.Rdv
+	rdv, err := graphql.GetWaitingRdv(context.Background(), gqlClient, doctorId)
 
-	rdv, err := graphql.GetDoctorRdv(context.Background(), gqlClient, doctorId)
 	if err != nil {
-		return GetRdvDoctorResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a doctor")}
+		return GetWaitingReviewResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a patient")}
 	}
-
-	for _, appointment := range rdv.GetDoctorRdv {
+	for _, appointment := range rdv.GetWaitingRdv {
 		temp := appointment.Cancelation_reason
 		res = append(res, model.Rdv{
 			ID:                appointment.Id,
@@ -35,6 +34,5 @@ func GetRdvDoctor(doctorId string) GetRdvDoctorResponse {
 			SessionsIds:       appointment.Sessions_ids,
 		})
 	}
-
-	return GetRdvDoctorResponse{res, 200, nil}
+	return GetWaitingReviewResponse{res, 200, nil}
 }

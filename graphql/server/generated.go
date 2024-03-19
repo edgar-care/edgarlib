@@ -186,7 +186,7 @@ type ComplexityRoot struct {
 		CreateMedicament    func(childComplexity int, name string, unit *string, targetDieseases []string, treatedSymptoms []string, sideEffects []string) int
 		CreateNotification  func(childComplexity int, token string, message string, title string) int
 		CreatePatient       func(childComplexity int, email string, password string) int
-		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int) int
+		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds []string) int
 		CreateSession       func(childComplexity int, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
 		CreateSymptom       func(childComplexity int, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) int
 		CreateTestAccount   func(childComplexity int, email string, password string) int
@@ -222,7 +222,7 @@ type ComplexityRoot struct {
 		UpdateMedicalFolder func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus *string) int
 		UpdateNotification  func(childComplexity int, id string, token string, message string, title string) int
 		UpdatePatient       func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) int
-		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string) int
+		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds []string) int
 		UpdateSession       func(childComplexity int, id string, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
 		UpdateSymptom       func(childComplexity int, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) int
 		UpdateTestAccount   func(childComplexity int, id string, email *string, password *string) int
@@ -283,6 +283,8 @@ type ComplexityRoot struct {
 		GetRdvByID                func(childComplexity int, id string) int
 		GetSessionByID            func(childComplexity int, id string) int
 		GetSessions               func(childComplexity int) int
+		GetSlotByID               func(childComplexity int, id string) int
+		GetSlots                  func(childComplexity int, id string) int
 		GetSymptomByID            func(childComplexity int, id string) int
 		GetSymptoms               func(childComplexity int) int
 		GetTestAccountByEmail     func(childComplexity int, email string) int
@@ -290,14 +292,17 @@ type ComplexityRoot struct {
 		GetTestAccounts           func(childComplexity int) int
 		GetTreatmentByID          func(childComplexity int, id string) int
 		GetTreatments             func(childComplexity int) int
+		GetWaitingRdv             func(childComplexity int, doctorID string) int
 	}
 
 	Rdv struct {
+		AppointmentStatus func(childComplexity int) int
 		CancelationReason func(childComplexity int) int
 		DoctorID          func(childComplexity int) int
 		EndDate           func(childComplexity int) int
 		ID                func(childComplexity int) int
 		IDPatient         func(childComplexity int) int
+		SessionsIds       func(childComplexity int) int
 		StartDate         func(childComplexity int) int
 	}
 
@@ -384,8 +389,8 @@ type MutationResolver interface {
 	CreateNotification(ctx context.Context, token string, message string, title string) (*model.Notification, error)
 	UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error)
 	DeleteNotification(ctx context.Context, id string) (*bool, error)
-	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int) (*model.Rdv, error)
-	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string) (*model.Rdv, error)
+	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error)
+	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error)
 	DeleteRdv(ctx context.Context, id string) (*bool, error)
 	DeleteSlot(ctx context.Context, id string) (*bool, error)
 	CreateDocument(ctx context.Context, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) (*model.Document, error)
@@ -439,6 +444,9 @@ type QueryResolver interface {
 	GetPatientRdv(ctx context.Context, idPatient string) ([]*model.Rdv, error)
 	GetDoctorRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error)
 	GetRdvByID(ctx context.Context, id string) (*model.Rdv, error)
+	GetSlotByID(ctx context.Context, id string) (*model.Rdv, error)
+	GetSlots(ctx context.Context, id string) ([]*model.Rdv, error)
+	GetWaitingRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error)
 	GetDocuments(ctx context.Context) ([]*model.Document, error)
 	GetDocumentByID(ctx context.Context, id string) (*model.Document, error)
 	GetPatientDocument(ctx context.Context, id string) ([]*model.Document, error)
@@ -1211,7 +1219,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int)), true
+		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["sessions_ids"].([]string)), true
 
 	case "Mutation.createSession":
 		if e.complexity.Mutation.CreateSession == nil {
@@ -1643,7 +1651,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string)), true
+		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["sessions_ids"].([]string)), true
 
 	case "Mutation.updateSession":
 		if e.complexity.Mutation.UpdateSession == nil {
@@ -2137,6 +2145,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetSessions(childComplexity), true
 
+	case "Query.getSlotById":
+		if e.complexity.Query.GetSlotByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getSlotById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSlotByID(childComplexity, args["id"].(string)), true
+
+	case "Query.getSlots":
+		if e.complexity.Query.GetSlots == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getSlots_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSlots(childComplexity, args["id"].(string)), true
+
 	case "Query.getSymptomById":
 		if e.complexity.Query.GetSymptomByID == nil {
 			break
@@ -2206,6 +2238,25 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetTreatments(childComplexity), true
 
+	case "Query.getWaitingRdv":
+		if e.complexity.Query.GetWaitingRdv == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getWaitingRdv_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetWaitingRdv(childComplexity, args["doctor_id"].(string)), true
+
+	case "Rdv.appointment_status":
+		if e.complexity.Rdv.AppointmentStatus == nil {
+			break
+		}
+
+		return e.complexity.Rdv.AppointmentStatus(childComplexity), true
+
 	case "Rdv.cancelation_reason":
 		if e.complexity.Rdv.CancelationReason == nil {
 			break
@@ -2240,6 +2291,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Rdv.IDPatient(childComplexity), true
+
+	case "Rdv.sessions_ids":
+		if e.complexity.Rdv.SessionsIds == nil {
+			break
+		}
+
+		return e.complexity.Rdv.SessionsIds(childComplexity), true
 
 	case "Rdv.start_date":
 		if e.complexity.Rdv.StartDate == nil {
@@ -2766,6 +2824,8 @@ type Rdv {
     start_date: Int!
     end_date: Int!
     cancelation_reason: String
+    appointment_status: AppointmentStatus!
+    sessions_ids: [String!]
 }
 
 type Document {
@@ -2953,6 +3013,15 @@ type Query {
     # Find a rdv using its id.
     getRdvById(id: String!): Rdv
 
+    #Find a slot and rdv using its id.
+    getSlotById(id: String!): Rdv
+
+    #Find all rdv and slot.
+    getSlots(id: String!): [Rdv]
+
+    # Get the entire list of waiting review
+    getWaitingRdv(doctor_id: String!): [Rdv]
+
     # Get the entire list of document patient
     getDocuments: [Document]
 
@@ -3095,10 +3164,10 @@ type Mutation {
     deleteNotification(id: String!): Boolean
 
     # Create a new Rdv.
-    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!): Rdv
+    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, sessions_ids: [String!]): Rdv
 
     # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String): Rdv
+    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, sessions_ids: [String!]): Rdv
 
     # Delete a Rdv.
     deleteRdv(id: String!): Boolean
@@ -3228,6 +3297,14 @@ enum Day {
     FRIDAY,
     SATURDAY,
     SUNDAY
+}
+
+enum AppointmentStatus {
+    waitingForReview,
+    acceptedDueToReview,
+    canceledDueToReview,
+    canceled
+    slotCreate
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -3884,6 +3961,24 @@ func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, r
 		}
 	}
 	args["end_date"] = arg3
+	var arg4 model.AppointmentStatus
+	if tmp, ok := rawArgs["appointment_status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
+		arg4, err = ec.unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["appointment_status"] = arg4
+	var arg5 []string
+	if tmp, ok := rawArgs["sessions_ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sessions_ids"))
+		arg5, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sessions_ids"] = arg5
 	return args, nil
 }
 
@@ -5171,6 +5266,24 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 		}
 	}
 	args["cancelation_reason"] = arg5
+	var arg6 *model.AppointmentStatus
+	if tmp, ok := rawArgs["appointment_status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
+		arg6, err = ec.unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["appointment_status"] = arg6
+	var arg7 []string
+	if tmp, ok := rawArgs["sessions_ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sessions_ids"))
+		arg7, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sessions_ids"] = arg7
 	return args, nil
 }
 
@@ -5837,6 +5950,36 @@ func (ec *executionContext) field_Query_getSessionById_args(ctx context.Context,
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getSlotById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getSlots_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getSymptomById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -5894,6 +6037,21 @@ func (ec *executionContext) field_Query_getTreatmentByID_args(ctx context.Contex
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getWaitingRdv_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["doctor_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("doctor_id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["doctor_id"] = arg0
 	return args, nil
 }
 
@@ -11200,7 +11358,7 @@ func (ec *executionContext) _Mutation_createRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["id_patient"].(string), fc.Args["doctor_id"].(string), fc.Args["start_date"].(int), fc.Args["end_date"].(int))
+		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["id_patient"].(string), fc.Args["doctor_id"].(string), fc.Args["start_date"].(int), fc.Args["end_date"].(int), fc.Args["appointment_status"].(model.AppointmentStatus), fc.Args["sessions_ids"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11234,6 +11392,10 @@ func (ec *executionContext) fieldContext_Mutation_createRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_end_date(ctx, field)
 			case "cancelation_reason":
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -11266,7 +11428,7 @@ func (ec *executionContext) _Mutation_updateRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string))
+		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["sessions_ids"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11300,6 +11462,10 @@ func (ec *executionContext) fieldContext_Mutation_updateRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_end_date(ctx, field)
 			case "cancelation_reason":
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -14744,6 +14910,10 @@ func (ec *executionContext) fieldContext_Query_getPatientRdv(ctx context.Context
 				return ec.fieldContext_Rdv_end_date(ctx, field)
 			case "cancelation_reason":
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -14810,6 +14980,10 @@ func (ec *executionContext) fieldContext_Query_getDoctorRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_end_date(ctx, field)
 			case "cancelation_reason":
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -14876,6 +15050,10 @@ func (ec *executionContext) fieldContext_Query_getRdvById(ctx context.Context, f
 				return ec.fieldContext_Rdv_end_date(ctx, field)
 			case "cancelation_reason":
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -14888,6 +15066,216 @@ func (ec *executionContext) fieldContext_Query_getRdvById(ctx context.Context, f
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getRdvById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getSlotById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSlotById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetSlotByID(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Rdv)
+	fc.Result = res
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getSlotById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Rdv_id(ctx, field)
+			case "doctor_id":
+				return ec.fieldContext_Rdv_doctor_id(ctx, field)
+			case "id_patient":
+				return ec.fieldContext_Rdv_id_patient(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Rdv_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Rdv_end_date(ctx, field)
+			case "cancelation_reason":
+				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSlotById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getSlots(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSlots(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetSlots(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Rdv)
+	fc.Result = res
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getSlots(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Rdv_id(ctx, field)
+			case "doctor_id":
+				return ec.fieldContext_Rdv_doctor_id(ctx, field)
+			case "id_patient":
+				return ec.fieldContext_Rdv_id_patient(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Rdv_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Rdv_end_date(ctx, field)
+			case "cancelation_reason":
+				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSlots_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getWaitingRdv(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getWaitingRdv(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetWaitingRdv(rctx, fc.Args["doctor_id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Rdv)
+	fc.Result = res
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getWaitingRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Rdv_id(ctx, field)
+			case "doctor_id":
+				return ec.fieldContext_Rdv_doctor_id(ctx, field)
+			case "id_patient":
+				return ec.fieldContext_Rdv_id_patient(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Rdv_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Rdv_end_date(ctx, field)
+			case "cancelation_reason":
+				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "sessions_ids":
+				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getWaitingRdv_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -16378,6 +16766,91 @@ func (ec *executionContext) _Rdv_cancelation_reason(ctx context.Context, field g
 }
 
 func (ec *executionContext) fieldContext_Rdv_cancelation_reason(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Rdv",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Rdv_appointment_status(ctx context.Context, field graphql.CollectedField, obj *model.Rdv) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Rdv_appointment_status(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AppointmentStatus, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.AppointmentStatus)
+	fc.Result = res
+	return ec.marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Rdv_appointment_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Rdv",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type AppointmentStatus does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Rdv_sessions_ids(ctx context.Context, field graphql.CollectedField, obj *model.Rdv) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Rdv_sessions_ids(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SessionsIds, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Rdv_sessions_ids(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Rdv",
 		Field:      field,
@@ -21789,6 +22262,63 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getSlotById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getSlotById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getSlots":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getSlots(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getWaitingRdv":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getWaitingRdv(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "getDocuments":
 			field := field
 
@@ -22200,6 +22730,13 @@ func (ec *executionContext) _Rdv(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 		case "cancelation_reason":
 			out.Values[i] = ec._Rdv_cancelation_reason(ctx, field, obj)
+		case "appointment_status":
+			out.Values[i] = ec._Rdv_appointment_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "sessions_ids":
+			out.Values[i] = ec._Rdv_sessions_ids(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -22916,6 +23453,16 @@ func (ec *executionContext) marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedg
 func (ec *executionContext) unmarshalNAddressInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (model.AddressInput, error) {
 	res, err := ec.unmarshalInputAddressInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (model.AppointmentStatus, error) {
+	var res model.AppointmentStatus
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v model.AppointmentStatus) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
@@ -24003,6 +24550,22 @@ func (ec *executionContext) marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋ
 		return graphql.Null
 	}
 	return ec._AnteFamily(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (*model.AppointmentStatus, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.AppointmentStatus)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v *model.AppointmentStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

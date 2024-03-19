@@ -39,6 +39,8 @@ func GetDoctorAppointment(appointmentId string, doctorId string) GetDoctorAppoin
 			StartDate:         rdv.GetRdvById.Start_date,
 			EndDate:           rdv.GetRdvById.End_date,
 			CancelationReason: &rdv.GetRdvById.Cancelation_reason,
+			AppointmentStatus: model.AppointmentStatus(rdv.GetRdvById.Appointment_status),
+			SessionsIds:       rdv.GetRdvById.Sessions_ids,
 		},
 		Code: 200,
 		Err:  nil,
@@ -68,6 +70,8 @@ func GetAllDoctorAppointment(doctorId string) GetAllDoctorAppointmentResponse {
 			StartDate:         appointment.Start_date,
 			EndDate:           appointment.End_date,
 			CancelationReason: &temp,
+			AppointmentStatus: model.AppointmentStatus(appointment.Appointment_status),
+			SessionsIds:       appointment.Sessions_ids,
 		})
 	}
 	return GetAllDoctorAppointmentResponse{res, 201, nil}

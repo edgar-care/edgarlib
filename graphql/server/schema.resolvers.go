@@ -766,12 +766,14 @@ func (r *mutationResolver) DeleteNotification(ctx context.Context, id string) (*
 }
 
 // CreateRdv is the resolver for the createRdv field.
-func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int) (*model.Rdv, error) {
+func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error) {
 	newRdv := bson.M{
-		"id_patient": idPatient,
-		"doctor_id":  doctorID,
-		"start_date": startDate,
-		"end_date":   endDate,
+		"id_patient":         idPatient,
+		"doctor_id":          doctorID,
+		"start_date":         startDate,
+		"end_date":           endDate,
+		"appointment_status": appointmentStatus,
+		"sessions_ids":       sessionsIds,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").InsertOne(ctx, newRdv)
@@ -785,12 +787,14 @@ func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doct
 		StartDate:         startDate,
 		EndDate:           endDate,
 		CancelationReason: nil,
+		AppointmentStatus: appointmentStatus,
+		SessionsIds:       sessionsIds,
 	}
 	return &entity, err
 }
 
 // UpdateRdv is the resolver for the updateRdv field.
-func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string) (*model.Rdv, error) {
+func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -804,6 +808,8 @@ func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *
 		"start_date":         startDate,
 		"end_date":           endDate,
 		"cancelation_reason": cancelationReason,
+		"appointment_status": appointmentStatus,
+		"sessions_ids":       sessionsIds,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").ReplaceOne(ctx, filter, updated)
 
@@ -814,6 +820,8 @@ func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *
 		StartDate:         *startDate,
 		EndDate:           *endDate,
 		CancelationReason: cancelationReason,
+		AppointmentStatus: *appointmentStatus,
+		SessionsIds:       sessionsIds,
 	}, err
 }
 
@@ -1812,7 +1820,11 @@ func (r *queryResolver) GetPatientRdv(ctx context.Context, idPatient string) ([]
 func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error) {
 	var results []*model.Rdv
 
-	filter := bson.M{"doctor_id": doctorID}
+	filter := bson.M{
+		"doctor_id":  doctorID,
+		"id_patient": bson.M{"$ne": ""},
+		//"AppointmentStatus": bson.M{"$ne": nil},
+	}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
 	if err != nil {
@@ -1834,13 +1846,76 @@ func (r *queryResolver) GetRdvByID(ctx context.Context, id string) (*model.Rdv, 
 		return nil, err
 	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{
+		"_id":        objId,
+		"id_patient": bson.M{"$ne": ""},
+	}
 
 	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
 	return &result, nil
+}
+
+// GetSlotByID is the resolver for the getSlotById field.
+func (r *queryResolver) GetSlotByID(ctx context.Context, id string) (*model.Rdv, error) {
+	var result model.Rdv
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{
+		"_id": objId,
+	}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetSlots is the resolver for the getSlots field.
+func (r *queryResolver) GetSlots(ctx context.Context, id string) ([]*model.Rdv, error) {
+	var results []*model.Rdv
+
+	filter := bson.M{
+		"doctor_id": id,
+	}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+// GetWaitingRdv is the resolver for the getWaitingRdv field.
+func (r *queryResolver) GetWaitingRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error) {
+	var results []*model.Rdv
+
+	filter := bson.M{
+		"doctor_id":          doctorID,
+		"appointment_status": "waitingForReview",
+	}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
 }
 
 // GetDocuments is the resolver for the getDocuments field.

@@ -27,6 +27,16 @@ func (v *AddressInput) GetCountry() string { return v.Country }
 // GetCity returns AddressInput.City, and is useful for accessing the field via an interface.
 func (v *AddressInput) GetCity() string { return v.City }
 
+type AppointmentStatus string
+
+const (
+	AppointmentStatusWaitingforreview    AppointmentStatus = "waitingForReview"
+	AppointmentStatusAcceptedduetoreview AppointmentStatus = "acceptedDueToReview"
+	AppointmentStatusCanceledduetoreview AppointmentStatus = "canceledDueToReview"
+	AppointmentStatusCanceled            AppointmentStatus = "canceled"
+	AppointmentStatusSlotcreate          AppointmentStatus = "slotCreate"
+)
+
 type Category string
 
 const (
@@ -624,12 +634,14 @@ func (v *CreatePatientResponse) GetCreatePatient() CreatePatientCreatePatient { 
 
 // CreateRdvCreateRdv includes the requested fields of the GraphQL type Rdv.
 type CreateRdvCreateRdv struct {
-	Id                 string `json:"id"`
-	Doctor_id          string `json:"doctor_id"`
-	Id_patient         string `json:"id_patient"`
-	Start_date         int    `json:"start_date"`
-	End_date           int    `json:"end_date"`
-	Cancelation_reason string `json:"cancelation_reason"`
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
 }
 
 // GetId returns CreateRdvCreateRdv.Id, and is useful for accessing the field via an interface.
@@ -649,6 +661,12 @@ func (v *CreateRdvCreateRdv) GetEnd_date() int { return v.End_date }
 
 // GetCancelation_reason returns CreateRdvCreateRdv.Cancelation_reason, and is useful for accessing the field via an interface.
 func (v *CreateRdvCreateRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns CreateRdvCreateRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *CreateRdvCreateRdv) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
+
+// GetSessions_ids returns CreateRdvCreateRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *CreateRdvCreateRdv) GetSessions_ids() []string { return v.Sessions_ids }
 
 // CreateRdvResponse is returned by CreateRdv on success.
 type CreateRdvResponse struct {
@@ -1722,6 +1740,7 @@ type GetDoctorByEmailGetDoctorByEmailDoctorAddress struct {
 	Street   string `json:"street"`
 	Zip_code string `json:"zip_code"`
 	Country  string `json:"country"`
+	City     string `json:"city"`
 }
 
 // GetStreet returns GetDoctorByEmailGetDoctorByEmailDoctorAddress.Street, and is useful for accessing the field via an interface.
@@ -1732,6 +1751,9 @@ func (v *GetDoctorByEmailGetDoctorByEmailDoctorAddress) GetZip_code() string { r
 
 // GetCountry returns GetDoctorByEmailGetDoctorByEmailDoctorAddress.Country, and is useful for accessing the field via an interface.
 func (v *GetDoctorByEmailGetDoctorByEmailDoctorAddress) GetCountry() string { return v.Country }
+
+// GetCity returns GetDoctorByEmailGetDoctorByEmailDoctorAddress.City, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctorAddress) GetCity() string { return v.City }
 
 // GetDoctorByEmailResponse is returned by GetDoctorByEmail on success.
 type GetDoctorByEmailResponse struct {
@@ -1786,6 +1808,7 @@ type GetDoctorByIdGetDoctorByIdDoctorAddress struct {
 	Street   string `json:"street"`
 	Zip_code string `json:"zip_code"`
 	Country  string `json:"country"`
+	City     string `json:"city"`
 }
 
 // GetStreet returns GetDoctorByIdGetDoctorByIdDoctorAddress.Street, and is useful for accessing the field via an interface.
@@ -1796,6 +1819,9 @@ func (v *GetDoctorByIdGetDoctorByIdDoctorAddress) GetZip_code() string { return 
 
 // GetCountry returns GetDoctorByIdGetDoctorByIdDoctorAddress.Country, and is useful for accessing the field via an interface.
 func (v *GetDoctorByIdGetDoctorByIdDoctorAddress) GetCountry() string { return v.Country }
+
+// GetCity returns GetDoctorByIdGetDoctorByIdDoctorAddress.City, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctorAddress) GetCity() string { return v.City }
 
 // GetDoctorByIdResponse is returned by GetDoctorById on success.
 type GetDoctorByIdResponse struct {
@@ -1809,12 +1835,14 @@ func (v *GetDoctorByIdResponse) GetGetDoctorById() GetDoctorByIdGetDoctorByIdDoc
 
 // GetDoctorRdvGetDoctorRdv includes the requested fields of the GraphQL type Rdv.
 type GetDoctorRdvGetDoctorRdv struct {
-	Id                 string `json:"id"`
-	Doctor_id          string `json:"doctor_id"`
-	Id_patient         string `json:"id_patient"`
-	Start_date         int    `json:"start_date"`
-	End_date           int    `json:"end_date"`
-	Cancelation_reason string `json:"cancelation_reason"`
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
 }
 
 // GetId returns GetDoctorRdvGetDoctorRdv.Id, and is useful for accessing the field via an interface.
@@ -1834,6 +1862,14 @@ func (v *GetDoctorRdvGetDoctorRdv) GetEnd_date() int { return v.End_date }
 
 // GetCancelation_reason returns GetDoctorRdvGetDoctorRdv.Cancelation_reason, and is useful for accessing the field via an interface.
 func (v *GetDoctorRdvGetDoctorRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns GetDoctorRdvGetDoctorRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *GetDoctorRdvGetDoctorRdv) GetAppointment_status() AppointmentStatus {
+	return v.Appointment_status
+}
+
+// GetSessions_ids returns GetDoctorRdvGetDoctorRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *GetDoctorRdvGetDoctorRdv) GetSessions_ids() []string { return v.Sessions_ids }
 
 // GetDoctorRdvResponse is returned by GetDoctorRdv on success.
 type GetDoctorRdvResponse struct {
@@ -1884,6 +1920,7 @@ type GetDoctorsGetDoctorsDoctorAddress struct {
 	Street   string `json:"street"`
 	Zip_code string `json:"zip_code"`
 	Country  string `json:"country"`
+	City     string `json:"city"`
 }
 
 // GetStreet returns GetDoctorsGetDoctorsDoctorAddress.Street, and is useful for accessing the field via an interface.
@@ -1894,6 +1931,9 @@ func (v *GetDoctorsGetDoctorsDoctorAddress) GetZip_code() string { return v.Zip_
 
 // GetCountry returns GetDoctorsGetDoctorsDoctorAddress.Country, and is useful for accessing the field via an interface.
 func (v *GetDoctorsGetDoctorsDoctorAddress) GetCountry() string { return v.Country }
+
+// GetCity returns GetDoctorsGetDoctorsDoctorAddress.City, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctorAddress) GetCity() string { return v.City }
 
 // GetDoctorsResponse is returned by GetDoctors on success.
 type GetDoctorsResponse struct {
@@ -2471,12 +2511,14 @@ func (v *GetPatientDocumentResponse) GetGetPatientDocument() []GetPatientDocumen
 
 // GetPatientRdvGetPatientRdv includes the requested fields of the GraphQL type Rdv.
 type GetPatientRdvGetPatientRdv struct {
-	Id                 string `json:"id"`
-	Doctor_id          string `json:"doctor_id"`
-	Id_patient         string `json:"id_patient"`
-	Start_date         int    `json:"start_date"`
-	End_date           int    `json:"end_date"`
-	Cancelation_reason string `json:"cancelation_reason"`
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
 }
 
 // GetId returns GetPatientRdvGetPatientRdv.Id, and is useful for accessing the field via an interface.
@@ -2496,6 +2538,14 @@ func (v *GetPatientRdvGetPatientRdv) GetEnd_date() int { return v.End_date }
 
 // GetCancelation_reason returns GetPatientRdvGetPatientRdv.Cancelation_reason, and is useful for accessing the field via an interface.
 func (v *GetPatientRdvGetPatientRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns GetPatientRdvGetPatientRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *GetPatientRdvGetPatientRdv) GetAppointment_status() AppointmentStatus {
+	return v.Appointment_status
+}
+
+// GetSessions_ids returns GetPatientRdvGetPatientRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *GetPatientRdvGetPatientRdv) GetSessions_ids() []string { return v.Sessions_ids }
 
 // GetPatientRdvResponse is returned by GetPatientRdv on success.
 type GetPatientRdvResponse struct {
@@ -2591,12 +2641,14 @@ func (v *GetPatientsResponse) GetGetPatients() []GetPatientsGetPatientsPatient {
 
 // GetRdvByIdGetRdvByIdRdv includes the requested fields of the GraphQL type Rdv.
 type GetRdvByIdGetRdvByIdRdv struct {
-	Id                 string `json:"id"`
-	Doctor_id          string `json:"doctor_id"`
-	Id_patient         string `json:"id_patient"`
-	Start_date         int    `json:"start_date"`
-	End_date           int    `json:"end_date"`
-	Cancelation_reason string `json:"cancelation_reason"`
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
 }
 
 // GetId returns GetRdvByIdGetRdvByIdRdv.Id, and is useful for accessing the field via an interface.
@@ -2616,6 +2668,14 @@ func (v *GetRdvByIdGetRdvByIdRdv) GetEnd_date() int { return v.End_date }
 
 // GetCancelation_reason returns GetRdvByIdGetRdvByIdRdv.Cancelation_reason, and is useful for accessing the field via an interface.
 func (v *GetRdvByIdGetRdvByIdRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns GetRdvByIdGetRdvByIdRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *GetRdvByIdGetRdvByIdRdv) GetAppointment_status() AppointmentStatus {
+	return v.Appointment_status
+}
+
+// GetSessions_ids returns GetRdvByIdGetRdvByIdRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *GetRdvByIdGetRdvByIdRdv) GetSessions_ids() []string { return v.Sessions_ids }
 
 // GetRdvByIdResponse is returned by GetRdvById on success.
 type GetRdvByIdResponse struct {
@@ -2812,6 +2872,96 @@ type GetSessionsResponse struct {
 
 // GetGetSessions returns GetSessionsResponse.GetSessions, and is useful for accessing the field via an interface.
 func (v *GetSessionsResponse) GetGetSessions() []GetSessionsGetSessionsSession { return v.GetSessions }
+
+// GetSlotByIdGetSlotByIdRdv includes the requested fields of the GraphQL type Rdv.
+type GetSlotByIdGetSlotByIdRdv struct {
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
+}
+
+// GetId returns GetSlotByIdGetSlotByIdRdv.Id, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetId() string { return v.Id }
+
+// GetDoctor_id returns GetSlotByIdGetSlotByIdRdv.Doctor_id, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetDoctor_id() string { return v.Doctor_id }
+
+// GetId_patient returns GetSlotByIdGetSlotByIdRdv.Id_patient, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetId_patient() string { return v.Id_patient }
+
+// GetStart_date returns GetSlotByIdGetSlotByIdRdv.Start_date, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetStart_date() int { return v.Start_date }
+
+// GetEnd_date returns GetSlotByIdGetSlotByIdRdv.End_date, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetEnd_date() int { return v.End_date }
+
+// GetCancelation_reason returns GetSlotByIdGetSlotByIdRdv.Cancelation_reason, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns GetSlotByIdGetSlotByIdRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetAppointment_status() AppointmentStatus {
+	return v.Appointment_status
+}
+
+// GetSessions_ids returns GetSlotByIdGetSlotByIdRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdGetSlotByIdRdv) GetSessions_ids() []string { return v.Sessions_ids }
+
+// GetSlotByIdResponse is returned by GetSlotById on success.
+type GetSlotByIdResponse struct {
+	GetSlotById GetSlotByIdGetSlotByIdRdv `json:"getSlotById"`
+}
+
+// GetGetSlotById returns GetSlotByIdResponse.GetSlotById, and is useful for accessing the field via an interface.
+func (v *GetSlotByIdResponse) GetGetSlotById() GetSlotByIdGetSlotByIdRdv { return v.GetSlotById }
+
+// GetSlotsGetSlotsRdv includes the requested fields of the GraphQL type Rdv.
+type GetSlotsGetSlotsRdv struct {
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
+}
+
+// GetId returns GetSlotsGetSlotsRdv.Id, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetId() string { return v.Id }
+
+// GetDoctor_id returns GetSlotsGetSlotsRdv.Doctor_id, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetDoctor_id() string { return v.Doctor_id }
+
+// GetId_patient returns GetSlotsGetSlotsRdv.Id_patient, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetId_patient() string { return v.Id_patient }
+
+// GetStart_date returns GetSlotsGetSlotsRdv.Start_date, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetStart_date() int { return v.Start_date }
+
+// GetEnd_date returns GetSlotsGetSlotsRdv.End_date, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetEnd_date() int { return v.End_date }
+
+// GetCancelation_reason returns GetSlotsGetSlotsRdv.Cancelation_reason, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns GetSlotsGetSlotsRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
+
+// GetSessions_ids returns GetSlotsGetSlotsRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *GetSlotsGetSlotsRdv) GetSessions_ids() []string { return v.Sessions_ids }
+
+// GetSlotsResponse is returned by GetSlots on success.
+type GetSlotsResponse struct {
+	GetSlots []GetSlotsGetSlotsRdv `json:"getSlots"`
+}
+
+// GetGetSlots returns GetSlotsResponse.GetSlots, and is useful for accessing the field via an interface.
+func (v *GetSlotsResponse) GetGetSlots() []GetSlotsGetSlotsRdv { return v.GetSlots }
 
 // GetSymptomByIdGetSymptomByIdSymptom includes the requested fields of the GraphQL type Symptom.
 type GetSymptomByIdGetSymptomByIdSymptom struct {
@@ -3073,6 +3223,54 @@ type GetTreatmentsResponse struct {
 // GetGetTreatments returns GetTreatmentsResponse.GetTreatments, and is useful for accessing the field via an interface.
 func (v *GetTreatmentsResponse) GetGetTreatments() []GetTreatmentsGetTreatmentsTreatment {
 	return v.GetTreatments
+}
+
+// GetWaitingRdvGetWaitingRdv includes the requested fields of the GraphQL type Rdv.
+type GetWaitingRdvGetWaitingRdv struct {
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
+}
+
+// GetId returns GetWaitingRdvGetWaitingRdv.Id, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetId() string { return v.Id }
+
+// GetDoctor_id returns GetWaitingRdvGetWaitingRdv.Doctor_id, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetDoctor_id() string { return v.Doctor_id }
+
+// GetId_patient returns GetWaitingRdvGetWaitingRdv.Id_patient, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetId_patient() string { return v.Id_patient }
+
+// GetStart_date returns GetWaitingRdvGetWaitingRdv.Start_date, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetStart_date() int { return v.Start_date }
+
+// GetEnd_date returns GetWaitingRdvGetWaitingRdv.End_date, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetEnd_date() int { return v.End_date }
+
+// GetCancelation_reason returns GetWaitingRdvGetWaitingRdv.Cancelation_reason, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns GetWaitingRdvGetWaitingRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetAppointment_status() AppointmentStatus {
+	return v.Appointment_status
+}
+
+// GetSessions_ids returns GetWaitingRdvGetWaitingRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvGetWaitingRdv) GetSessions_ids() []string { return v.Sessions_ids }
+
+// GetWaitingRdvResponse is returned by GetWaitingRdv on success.
+type GetWaitingRdvResponse struct {
+	GetWaitingRdv []GetWaitingRdvGetWaitingRdv `json:"getWaitingRdv"`
+}
+
+// GetGetWaitingRdv returns GetWaitingRdvResponse.GetWaitingRdv, and is useful for accessing the field via an interface.
+func (v *GetWaitingRdvResponse) GetGetWaitingRdv() []GetWaitingRdvGetWaitingRdv {
+	return v.GetWaitingRdv
 }
 
 type LogsInput struct {
@@ -3736,12 +3934,14 @@ func (v *UpdateRdvResponse) GetUpdateRdv() UpdateRdvUpdateRdv { return v.UpdateR
 
 // UpdateRdvUpdateRdv includes the requested fields of the GraphQL type Rdv.
 type UpdateRdvUpdateRdv struct {
-	Id                 string `json:"id"`
-	Doctor_id          string `json:"doctor_id"`
-	Id_patient         string `json:"id_patient"`
-	Start_date         int    `json:"start_date"`
-	End_date           int    `json:"end_date"`
-	Cancelation_reason string `json:"cancelation_reason"`
+	Id                 string            `json:"id"`
+	Doctor_id          string            `json:"doctor_id"`
+	Id_patient         string            `json:"id_patient"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
 }
 
 // GetId returns UpdateRdvUpdateRdv.Id, and is useful for accessing the field via an interface.
@@ -3761,6 +3961,12 @@ func (v *UpdateRdvUpdateRdv) GetEnd_date() int { return v.End_date }
 
 // GetCancelation_reason returns UpdateRdvUpdateRdv.Cancelation_reason, and is useful for accessing the field via an interface.
 func (v *UpdateRdvUpdateRdv) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns UpdateRdvUpdateRdv.Appointment_status, and is useful for accessing the field via an interface.
+func (v *UpdateRdvUpdateRdv) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
+
+// GetSessions_ids returns UpdateRdvUpdateRdv.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *UpdateRdvUpdateRdv) GetSessions_ids() []string { return v.Sessions_ids }
 
 // UpdateSessionResponse is returned by UpdateSession on success.
 type UpdateSessionResponse struct {
@@ -4250,10 +4456,12 @@ func (v *__CreatePatientInput) GetPassword() string { return v.Password }
 
 // __CreateRdvInput is used internally by genqlient
 type __CreateRdvInput struct {
-	Id_patient string `json:"id_patient"`
-	Doctor_id  string `json:"doctor_id"`
-	Start_date int    `json:"start_date"`
-	End_date   int    `json:"end_date"`
+	Id_patient         string            `json:"id_patient"`
+	Doctor_id          string            `json:"doctor_id"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
 }
 
 // GetId_patient returns __CreateRdvInput.Id_patient, and is useful for accessing the field via an interface.
@@ -4267,6 +4475,12 @@ func (v *__CreateRdvInput) GetStart_date() int { return v.Start_date }
 
 // GetEnd_date returns __CreateRdvInput.End_date, and is useful for accessing the field via an interface.
 func (v *__CreateRdvInput) GetEnd_date() int { return v.End_date }
+
+// GetAppointment_status returns __CreateRdvInput.Appointment_status, and is useful for accessing the field via an interface.
+func (v *__CreateRdvInput) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
+
+// GetSessions_ids returns __CreateRdvInput.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *__CreateRdvInput) GetSessions_ids() []string { return v.Sessions_ids }
 
 // __CreateSessionInput is used internally by genqlient
 type __CreateSessionInput struct {
@@ -4728,6 +4942,22 @@ type __GetSessionByIdInput struct {
 // GetId returns __GetSessionByIdInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetSessionByIdInput) GetId() string { return v.Id }
 
+// __GetSlotByIdInput is used internally by genqlient
+type __GetSlotByIdInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __GetSlotByIdInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetSlotByIdInput) GetId() string { return v.Id }
+
+// __GetSlotsInput is used internally by genqlient
+type __GetSlotsInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __GetSlotsInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetSlotsInput) GetId() string { return v.Id }
+
 // __GetSymptomByIdInput is used internally by genqlient
 type __GetSymptomByIdInput struct {
 	Id string `json:"id"`
@@ -4759,6 +4989,14 @@ type __GetTreatmentByIDInput struct {
 
 // GetId returns __GetTreatmentByIDInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetTreatmentByIDInput) GetId() string { return v.Id }
+
+// __GetWaitingRdvInput is used internally by genqlient
+type __GetWaitingRdvInput struct {
+	Doctor_id string `json:"doctor_id"`
+}
+
+// GetDoctor_id returns __GetWaitingRdvInput.Doctor_id, and is useful for accessing the field via an interface.
+func (v *__GetWaitingRdvInput) GetDoctor_id() string { return v.Doctor_id }
 
 // __UpdateAdminInput is used internally by genqlient
 type __UpdateAdminInput struct {
@@ -5082,12 +5320,14 @@ func (v *__UpdatePatientInput) GetDocument_ids() []string { return v.Document_id
 
 // __UpdateRdvInput is used internally by genqlient
 type __UpdateRdvInput struct {
-	Id                 string `json:"id"`
-	Id_patient         string `json:"id_patient"`
-	Doctor_id          string `json:"doctor_id"`
-	Start_date         int    `json:"start_date"`
-	End_date           int    `json:"end_date"`
-	Cancelation_reason string `json:"cancelation_reason"`
+	Id                 string            `json:"id"`
+	Id_patient         string            `json:"id_patient"`
+	Doctor_id          string            `json:"doctor_id"`
+	Start_date         int               `json:"start_date"`
+	End_date           int               `json:"end_date"`
+	Cancelation_reason string            `json:"cancelation_reason"`
+	Appointment_status AppointmentStatus `json:"appointment_status"`
+	Sessions_ids       []string          `json:"sessions_ids"`
 }
 
 // GetId returns __UpdateRdvInput.Id, and is useful for accessing the field via an interface.
@@ -5107,6 +5347,12 @@ func (v *__UpdateRdvInput) GetEnd_date() int { return v.End_date }
 
 // GetCancelation_reason returns __UpdateRdvInput.Cancelation_reason, and is useful for accessing the field via an interface.
 func (v *__UpdateRdvInput) GetCancelation_reason() string { return v.Cancelation_reason }
+
+// GetAppointment_status returns __UpdateRdvInput.Appointment_status, and is useful for accessing the field via an interface.
+func (v *__UpdateRdvInput) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
+
+// GetSessions_ids returns __UpdateRdvInput.Sessions_ids, and is useful for accessing the field via an interface.
+func (v *__UpdateRdvInput) GetSessions_ids() []string { return v.Sessions_ids }
 
 // __UpdateSessionInput is used internally by genqlient
 type __UpdateSessionInput struct {
@@ -5882,14 +6128,16 @@ func CreatePatient(
 
 // The query or mutation executed by CreateRdv.
 const CreateRdv_Operation = `
-mutation CreateRdv ($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!) {
-	createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date) {
+mutation CreateRdv ($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!, $appointment_status: AppointmentStatus!, $sessions_ids: [String!]) {
+	createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, appointment_status: $appointment_status, sessions_ids: $sessions_ids) {
 		id
 		doctor_id
 		id_patient
 		start_date
 		end_date
 		cancelation_reason
+		appointment_status
+		sessions_ids
 	}
 }
 `
@@ -5901,15 +6149,19 @@ func CreateRdv(
 	doctor_id string,
 	start_date int,
 	end_date int,
+	appointment_status AppointmentStatus,
+	sessions_ids []string,
 ) (*CreateRdvResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateRdv",
 		Query:  CreateRdv_Operation,
 		Variables: &__CreateRdvInput{
-			Id_patient: id_patient,
-			Doctor_id:  doctor_id,
-			Start_date: start_date,
-			End_date:   end_date,
+			Id_patient:         id_patient,
+			Doctor_id:          doctor_id,
+			Start_date:         start_date,
+			End_date:           end_date,
+			Appointment_status: appointment_status,
+			Sessions_ids:       sessions_ids,
 		},
 	}
 	var err error
@@ -7400,6 +7652,7 @@ query GetDoctorByEmail ($email: String!) {
 			street
 			zip_code
 			country
+			city
 		}
 		rendez_vous_ids
 		patient_ids
@@ -7446,6 +7699,7 @@ query GetDoctorById ($id: String!) {
 			street
 			zip_code
 			country
+			city
 		}
 		rendez_vous_ids
 		patient_ids
@@ -7489,6 +7743,8 @@ query GetDoctorRdv ($doctor_id: String!) {
 		start_date
 		end_date
 		cancelation_reason
+		appointment_status
+		sessions_ids
 	}
 }
 `
@@ -7532,6 +7788,7 @@ query GetDoctors {
 			street
 			zip_code
 			country
+			city
 		}
 		rendez_vous_ids
 		patient_ids
@@ -8018,6 +8275,8 @@ query GetPatientRdv ($id_patient: String!) {
 		start_date
 		end_date
 		cancelation_reason
+		appointment_status
+		sessions_ids
 	}
 }
 `
@@ -8134,6 +8393,8 @@ query GetRdvById ($id: String!) {
 		start_date
 		end_date
 		cancelation_reason
+		appointment_status
+		sessions_ids
 	}
 }
 `
@@ -8255,6 +8516,90 @@ func GetSessions(
 	var err error
 
 	var data GetSessionsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetSlotById.
+const GetSlotById_Operation = `
+query GetSlotById ($id: String!) {
+	getSlotById(id: $id) {
+		id
+		doctor_id
+		id_patient
+		start_date
+		end_date
+		cancelation_reason
+		appointment_status
+		sessions_ids
+	}
+}
+`
+
+func GetSlotById(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*GetSlotByIdResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetSlotById",
+		Query:  GetSlotById_Operation,
+		Variables: &__GetSlotByIdInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetSlotByIdResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetSlots.
+const GetSlots_Operation = `
+query GetSlots ($id: String!) {
+	getSlots(id: $id) {
+		id
+		doctor_id
+		id_patient
+		start_date
+		end_date
+		cancelation_reason
+		appointment_status
+		sessions_ids
+	}
+}
+`
+
+func GetSlots(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*GetSlotsResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetSlots",
+		Query:  GetSlots_Operation,
+		Variables: &__GetSlotsInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetSlotsResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -8522,6 +8867,48 @@ func GetTreatments(
 	var err error
 
 	var data GetTreatmentsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetWaitingRdv.
+const GetWaitingRdv_Operation = `
+query GetWaitingRdv ($doctor_id: String!) {
+	getWaitingRdv(doctor_id: $doctor_id) {
+		id
+		doctor_id
+		id_patient
+		start_date
+		end_date
+		cancelation_reason
+		appointment_status
+		sessions_ids
+	}
+}
+`
+
+func GetWaitingRdv(
+	ctx context.Context,
+	client graphql.Client,
+	doctor_id string,
+) (*GetWaitingRdvResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetWaitingRdv",
+		Query:  GetWaitingRdv_Operation,
+		Variables: &__GetWaitingRdvInput{
+			Doctor_id: doctor_id,
+		},
+	}
+	var err error
+
+	var data GetWaitingRdvResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -9145,14 +9532,16 @@ func UpdatePatient(
 
 // The query or mutation executed by UpdateRdv.
 const UpdateRdv_Operation = `
-mutation UpdateRdv ($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String) {
-	updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason) {
+mutation UpdateRdv ($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $sessions_ids: [String!]) {
+	updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason, appointment_status: $appointment_status, sessions_ids: $sessions_ids) {
 		id
 		doctor_id
 		id_patient
 		start_date
 		end_date
 		cancelation_reason
+		appointment_status
+		sessions_ids
 	}
 }
 `
@@ -9166,6 +9555,8 @@ func UpdateRdv(
 	start_date int,
 	end_date int,
 	cancelation_reason string,
+	appointment_status AppointmentStatus,
+	sessions_ids []string,
 ) (*UpdateRdvResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateRdv",
@@ -9177,6 +9568,8 @@ func UpdateRdv(
 			Start_date:         start_date,
 			End_date:           end_date,
 			Cancelation_reason: cancelation_reason,
+			Appointment_status: appointment_status,
+			Sessions_ids:       sessions_ids,
 		},
 	}
 	var err error
