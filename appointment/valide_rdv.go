@@ -15,11 +15,11 @@ type ValidateRdvResponse struct {
 }
 
 type ReviewInput struct {
-	Reason     string `json:"reason"`
+	Reason     string `json:"reason,omitempty"`
 	Validation bool   `json:"validation"`
 }
 
-func ValidateRdv(appointmentId string, reason string, validation bool) EditRdvResponse {
+func ValidateRdv(appointmentId string, input ReviewInput) EditRdvResponse {
 	gqlClient := graphql.CreateClient()
 	if appointmentId == "" {
 		return EditRdvResponse{Rdv: model.Rdv{}, Code: 400, Err: errors.New("appointment id is required")}
@@ -32,12 +32,12 @@ func ValidateRdv(appointmentId string, reason string, validation bool) EditRdvRe
 
 	var appointment_status graphql.AppointmentStatus
 
-	if validation == true {
-		appointment_status = graphql.AppointmentStatusAcceptedduetoreview
+	if input.Validation == true {
+		appointment_status = graphql.AppointmentStatusAcceptedDueToReview
 	} else {
-		appointment_status = graphql.AppointmentStatusCanceledduetoreview
+		appointment_status = graphql.AppointmentStatusCanceledDueToReview
 	}
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, appointment.GetRdvById.Id_patient, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, reason, appointment_status, appointment.GetRdvById.Sessions_ids)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, appointment.GetRdvById.Id_patient, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, input.Reason, appointment_status, appointment.GetRdvById.Session_id)
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
@@ -51,7 +51,7 @@ func ValidateRdv(appointmentId string, reason string, validation bool) EditRdvRe
 			EndDate:           updatedRdv.UpdateRdv.End_date,
 			CancelationReason: &updatedRdv.UpdateRdv.Cancelation_reason,
 			AppointmentStatus: model.AppointmentStatus(updatedRdv.UpdateRdv.Appointment_status),
-			SessionsIds:       updatedRdv.UpdateRdv.Sessions_ids,
+			SessionID:         updatedRdv.UpdateRdv.Session_id,
 		},
 		Code: 200,
 		Err:  nil,
