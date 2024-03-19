@@ -22,7 +22,9 @@ func CancelRdv(id string, reason string) CancelRdvResponse {
 	if err != nil {
 		return CancelRdvResponse{Reason: "", Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
-	_, err = graphql.UpdateRdv(context.Background(), gqlClient, id, "", rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, reason)
+
+	var appointment_status = graphql.AppointmentStatusCanceled
+	_, err = graphql.UpdateRdv(context.Background(), gqlClient, id, "", rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, reason, appointment_status, rdv.GetRdvById.Sessions_ids)
 	if err != nil {
 		return CancelRdvResponse{Reason: "", Code: 500, Err: errors.New("unable to update appointment")}
 	}

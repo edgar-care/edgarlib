@@ -127,14 +127,16 @@ mutation CreatePatient($email: String!, $password: String!){
     }
 }
 
-mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!){
-    createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date){
+mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!, $appointment_status: AppointmentStatus!, $sessions_ids: [String!]){
+    createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, appointment_status: $appointment_status, sessions_ids: $sessions_ids){
         id
         doctor_id
         id_patient
         start_date
         end_date
         cancelation_reason
+        appointment_status
+        sessions_ids
     }
 }
 
@@ -425,14 +427,16 @@ mutation UpdatePatient($id: String!, $email: String, $password: String, $medical
     }
 }
 
-mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String){
-    updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason){
+mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $sessions_ids: [String!]){
+    updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason, appointment_status: $appointment_status, sessions_ids: $sessions_ids){
         id
         doctor_id
         id_patient
         start_date
         end_date
         cancelation_reason
+        appointment_status
+        sessions_ids
     }
 }
 
@@ -703,6 +707,7 @@ query GetDoctorByEmail($email: String!){
             street
             zip_code
             country
+            city
         }
         rendez_vous_ids
         patient_ids
@@ -720,6 +725,7 @@ query GetDoctorById($id: String!){
             street
             zip_code
             country
+            city
         }
         rendez_vous_ids
         patient_ids
@@ -734,6 +740,8 @@ query GetDoctorRdv($doctor_id: String!){
         start_date
         end_date
         cancelation_reason
+        appointment_status
+        sessions_ids
     }
 }
 
@@ -748,6 +756,7 @@ query GetDoctors{
             street
             zip_code
             country
+            city
         }
         rendez_vous_ids
         patient_ids
@@ -838,6 +847,8 @@ query GetPatientRdv($id_patient: String!){
         start_date
         end_date
         cancelation_reason
+        appointment_status
+        sessions_ids
     }
 }
 
@@ -860,6 +871,8 @@ query GetRdvById($id: String!){
         start_date
         end_date
         cancelation_reason
+        appointment_status
+        sessions_ids
     }
 }
 
@@ -1074,5 +1087,44 @@ query GetPatientsFromDoctorById($id: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+    }
+}
+
+query GetWaitingRdv($doctor_id: String!) {
+    getWaitingRdv(doctor_id: $doctor_id) {
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        sessions_ids
+    }
+}
+
+query GetSlotById($id: String!){
+    getSlotById(id: $id){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        sessions_ids
+    }
+}
+
+query GetSlots($id: String!){
+    getSlots(id:$id){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        sessions_ids
     }
 }

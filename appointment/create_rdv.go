@@ -15,10 +15,11 @@ type CreateRdvResponse struct {
 	Err    error
 }
 
-func CreateRdv(patientId string, doctorId string, startDate int, endDate int) CreateRdvResponse {
+func CreateRdv(patientId string, doctorId string, startDate int, endDate int, sessions_ids []string) CreateRdvResponse {
 	gqlClient := graphql.CreateClient()
 
-	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, patientId, doctorId, startDate, endDate)
+	var appointment_status graphql.AppointmentStatus = "waitingForReview"
+	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, patientId, doctorId, startDate, endDate, appointment_status, sessions_ids)
 	if err != nil {
 		return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
@@ -34,6 +35,17 @@ func CreateRdv(patientId string, doctorId string, startDate int, endDate int) Cr
 		return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("update failed" + err.Error())}
 	}
 
+	if patientId != "" {
+		patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientId)
+		if err != nil {
+			return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
+		}
+		_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, append(patient.GetPatientById.Rendez_vous_ids, rdv.CreateRdv.Id), patient.GetPatientById.Document_ids)
+		if err != nil {
+			return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 500, Err: errors.New("unable to update patient")}
+		}
+	}
+
 	return CreateRdvResponse{
 		Rdv: model.Rdv{
 			ID:                rdv.CreateRdv.Id,
@@ -42,6 +54,8 @@ func CreateRdv(patientId string, doctorId string, startDate int, endDate int) Cr
 			StartDate:         rdv.CreateRdv.Start_date,
 			EndDate:           rdv.CreateRdv.End_date,
 			CancelationReason: &rdv.CreateRdv.Cancelation_reason,
+			AppointmentStatus: model.AppointmentStatus(rdv.CreateRdv.Appointment_status),
+			SessionsIds:       rdv.CreateRdv.Sessions_ids,
 		},
 		Doctor: model.Doctor{
 			ID:            updatedDoctor.UpdateDoctor.Id,

@@ -31,5 +31,7 @@ func GetRdvPatient(appointmentId string, patientId string) GetRdvPatientResponse
 		StartDate:         rdv.GetRdvById.Start_date,
 		EndDate:           rdv.GetRdvById.End_date,
 		CancelationReason: &rdv.GetRdvById.Cancelation_reason,
+		AppointmentStatus: model.AppointmentStatus(rdv.GetRdvById.Appointment_status),
+		SessionsIds:       rdv.GetRdvById.Sessions_ids,
 	}, 200, nil}
 }
