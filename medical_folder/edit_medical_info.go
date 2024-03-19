@@ -45,7 +45,7 @@ func UpdateMedicalFolder(newMedicalInfo CreateMedicalInfoInput, medicalInfoID st
 		}
 	}
 
-	updatedMedicalFolder, err := graphql.UpdateMedicalFolder(context.Background(), gqlClient, medicalInfoID, newMedicalInfo.Name, newMedicalInfo.Firstname, newMedicalInfo.Birthdate, newMedicalInfo.Sex, newMedicalInfo.Weight, newMedicalInfo.Height, newMedicalInfo.PrimaryDoctorID, medicalAntecedents, newMedicalInfo.OnboardingStatus)
+	updatedMedicalFolder, err := graphql.UpdateMedicalFolder(context.Background(), gqlClient, medicalInfoID, newMedicalInfo.Name, newMedicalInfo.Firstname, newMedicalInfo.Birthdate, newMedicalInfo.Sex, newMedicalInfo.Height, newMedicalInfo.Weight, newMedicalInfo.PrimaryDoctorID, medicalAntecedents, newMedicalInfo.OnboardingStatus)
 	if err != nil {
 		return UpdateMedicalFolderResponse{MedicalInfo: model.MedicalInfo{}, Code: 500, Err: errors.New("unable to update medical folder")}
 	}
