@@ -186,7 +186,7 @@ type ComplexityRoot struct {
 		CreateMedicament    func(childComplexity int, name string, unit *string, targetDieseases []string, treatedSymptoms []string, sideEffects []string) int
 		CreateNotification  func(childComplexity int, token string, message string, title string) int
 		CreatePatient       func(childComplexity int, email string, password string) int
-		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds []string) int
+		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds string) int
 		CreateSession       func(childComplexity int, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
 		CreateSymptom       func(childComplexity int, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) int
 		CreateTestAccount   func(childComplexity int, email string, password string) int
@@ -222,7 +222,7 @@ type ComplexityRoot struct {
 		UpdateMedicalFolder func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus *string) int
 		UpdateNotification  func(childComplexity int, id string, token string, message string, title string) int
 		UpdatePatient       func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) int
-		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds []string) int
+		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds *string) int
 		UpdateSession       func(childComplexity int, id string, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
 		UpdateSymptom       func(childComplexity int, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) int
 		UpdateTestAccount   func(childComplexity int, id string, email *string, password *string) int
@@ -389,8 +389,8 @@ type MutationResolver interface {
 	CreateNotification(ctx context.Context, token string, message string, title string) (*model.Notification, error)
 	UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error)
 	DeleteNotification(ctx context.Context, id string) (*bool, error)
-	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error)
-	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error)
+	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds string) (*model.Rdv, error)
+	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds *string) (*model.Rdv, error)
 	DeleteRdv(ctx context.Context, id string) (*bool, error)
 	DeleteSlot(ctx context.Context, id string) (*bool, error)
 	CreateDocument(ctx context.Context, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) (*model.Document, error)
@@ -1219,7 +1219,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["sessions_ids"].([]string)), true
+		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["sessions_ids"].(string)), true
 
 	case "Mutation.createSession":
 		if e.complexity.Mutation.CreateSession == nil {
@@ -1651,7 +1651,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["sessions_ids"].([]string)), true
+		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["sessions_ids"].(*string)), true
 
 	case "Mutation.updateSession":
 		if e.complexity.Mutation.UpdateSession == nil {
@@ -2825,7 +2825,7 @@ type Rdv {
     end_date: Int!
     cancelation_reason: String
     appointment_status: AppointmentStatus!
-    sessions_ids: [String!]
+    sessions_ids: String!
 }
 
 type Document {
@@ -3164,10 +3164,10 @@ type Mutation {
     deleteNotification(id: String!): Boolean
 
     # Create a new Rdv.
-    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, sessions_ids: [String!]): Rdv
+    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, sessions_ids: String!): Rdv
 
     # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, sessions_ids: [String!]): Rdv
+    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, sessions_ids: String): Rdv
 
     # Delete a Rdv.
     deleteRdv(id: String!): Boolean
@@ -3970,10 +3970,10 @@ func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, r
 		}
 	}
 	args["appointment_status"] = arg4
-	var arg5 []string
+	var arg5 string
 	if tmp, ok := rawArgs["sessions_ids"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sessions_ids"))
-		arg5, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		arg5, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5275,10 +5275,10 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 		}
 	}
 	args["appointment_status"] = arg6
-	var arg7 []string
+	var arg7 *string
 	if tmp, ok := rawArgs["sessions_ids"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sessions_ids"))
-		arg7, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -11358,7 +11358,7 @@ func (ec *executionContext) _Mutation_createRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["id_patient"].(string), fc.Args["doctor_id"].(string), fc.Args["start_date"].(int), fc.Args["end_date"].(int), fc.Args["appointment_status"].(model.AppointmentStatus), fc.Args["sessions_ids"].([]string))
+		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["id_patient"].(string), fc.Args["doctor_id"].(string), fc.Args["start_date"].(int), fc.Args["end_date"].(int), fc.Args["appointment_status"].(model.AppointmentStatus), fc.Args["sessions_ids"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11428,7 +11428,7 @@ func (ec *executionContext) _Mutation_updateRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["sessions_ids"].([]string))
+		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["sessions_ids"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16843,11 +16843,14 @@ func (ec *executionContext) _Rdv_sessions_ids(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Rdv_sessions_ids(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22737,6 +22740,9 @@ func (ec *executionContext) _Rdv(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 		case "sessions_ids":
 			out.Values[i] = ec._Rdv_sessions_ids(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -641,7 +641,7 @@ type CreateRdvCreateRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns CreateRdvCreateRdv.Id, and is useful for accessing the field via an interface.
@@ -666,7 +666,7 @@ func (v *CreateRdvCreateRdv) GetCancelation_reason() string { return v.Cancelati
 func (v *CreateRdvCreateRdv) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
 
 // GetSessions_ids returns CreateRdvCreateRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *CreateRdvCreateRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *CreateRdvCreateRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // CreateRdvResponse is returned by CreateRdv on success.
 type CreateRdvResponse struct {
@@ -1842,7 +1842,7 @@ type GetDoctorRdvGetDoctorRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns GetDoctorRdvGetDoctorRdv.Id, and is useful for accessing the field via an interface.
@@ -1869,7 +1869,7 @@ func (v *GetDoctorRdvGetDoctorRdv) GetAppointment_status() AppointmentStatus {
 }
 
 // GetSessions_ids returns GetDoctorRdvGetDoctorRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *GetDoctorRdvGetDoctorRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *GetDoctorRdvGetDoctorRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // GetDoctorRdvResponse is returned by GetDoctorRdv on success.
 type GetDoctorRdvResponse struct {
@@ -2518,7 +2518,7 @@ type GetPatientRdvGetPatientRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns GetPatientRdvGetPatientRdv.Id, and is useful for accessing the field via an interface.
@@ -2545,7 +2545,7 @@ func (v *GetPatientRdvGetPatientRdv) GetAppointment_status() AppointmentStatus {
 }
 
 // GetSessions_ids returns GetPatientRdvGetPatientRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *GetPatientRdvGetPatientRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *GetPatientRdvGetPatientRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // GetPatientRdvResponse is returned by GetPatientRdv on success.
 type GetPatientRdvResponse struct {
@@ -2648,7 +2648,7 @@ type GetRdvByIdGetRdvByIdRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns GetRdvByIdGetRdvByIdRdv.Id, and is useful for accessing the field via an interface.
@@ -2675,7 +2675,7 @@ func (v *GetRdvByIdGetRdvByIdRdv) GetAppointment_status() AppointmentStatus {
 }
 
 // GetSessions_ids returns GetRdvByIdGetRdvByIdRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *GetRdvByIdGetRdvByIdRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *GetRdvByIdGetRdvByIdRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // GetRdvByIdResponse is returned by GetRdvById on success.
 type GetRdvByIdResponse struct {
@@ -2882,7 +2882,7 @@ type GetSlotByIdGetSlotByIdRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns GetSlotByIdGetSlotByIdRdv.Id, and is useful for accessing the field via an interface.
@@ -2909,7 +2909,7 @@ func (v *GetSlotByIdGetSlotByIdRdv) GetAppointment_status() AppointmentStatus {
 }
 
 // GetSessions_ids returns GetSlotByIdGetSlotByIdRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *GetSlotByIdGetSlotByIdRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *GetSlotByIdGetSlotByIdRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // GetSlotByIdResponse is returned by GetSlotById on success.
 type GetSlotByIdResponse struct {
@@ -2928,7 +2928,7 @@ type GetSlotsGetSlotsRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns GetSlotsGetSlotsRdv.Id, and is useful for accessing the field via an interface.
@@ -2953,7 +2953,7 @@ func (v *GetSlotsGetSlotsRdv) GetCancelation_reason() string { return v.Cancelat
 func (v *GetSlotsGetSlotsRdv) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
 
 // GetSessions_ids returns GetSlotsGetSlotsRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *GetSlotsGetSlotsRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *GetSlotsGetSlotsRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // GetSlotsResponse is returned by GetSlots on success.
 type GetSlotsResponse struct {
@@ -3234,7 +3234,7 @@ type GetWaitingRdvGetWaitingRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns GetWaitingRdvGetWaitingRdv.Id, and is useful for accessing the field via an interface.
@@ -3261,7 +3261,7 @@ func (v *GetWaitingRdvGetWaitingRdv) GetAppointment_status() AppointmentStatus {
 }
 
 // GetSessions_ids returns GetWaitingRdvGetWaitingRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *GetWaitingRdvGetWaitingRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *GetWaitingRdvGetWaitingRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // GetWaitingRdvResponse is returned by GetWaitingRdv on success.
 type GetWaitingRdvResponse struct {
@@ -3941,7 +3941,7 @@ type UpdateRdvUpdateRdv struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns UpdateRdvUpdateRdv.Id, and is useful for accessing the field via an interface.
@@ -3966,7 +3966,7 @@ func (v *UpdateRdvUpdateRdv) GetCancelation_reason() string { return v.Cancelati
 func (v *UpdateRdvUpdateRdv) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
 
 // GetSessions_ids returns UpdateRdvUpdateRdv.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *UpdateRdvUpdateRdv) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *UpdateRdvUpdateRdv) GetSessions_ids() string { return v.Sessions_ids }
 
 // UpdateSessionResponse is returned by UpdateSession on success.
 type UpdateSessionResponse struct {
@@ -4461,7 +4461,7 @@ type __CreateRdvInput struct {
 	Start_date         int               `json:"start_date"`
 	End_date           int               `json:"end_date"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId_patient returns __CreateRdvInput.Id_patient, and is useful for accessing the field via an interface.
@@ -4480,7 +4480,7 @@ func (v *__CreateRdvInput) GetEnd_date() int { return v.End_date }
 func (v *__CreateRdvInput) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
 
 // GetSessions_ids returns __CreateRdvInput.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *__CreateRdvInput) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *__CreateRdvInput) GetSessions_ids() string { return v.Sessions_ids }
 
 // __CreateSessionInput is used internally by genqlient
 type __CreateSessionInput struct {
@@ -5327,7 +5327,7 @@ type __UpdateRdvInput struct {
 	End_date           int               `json:"end_date"`
 	Cancelation_reason string            `json:"cancelation_reason"`
 	Appointment_status AppointmentStatus `json:"appointment_status"`
-	Sessions_ids       []string          `json:"sessions_ids"`
+	Sessions_ids       string            `json:"sessions_ids"`
 }
 
 // GetId returns __UpdateRdvInput.Id, and is useful for accessing the field via an interface.
@@ -5352,7 +5352,7 @@ func (v *__UpdateRdvInput) GetCancelation_reason() string { return v.Cancelation
 func (v *__UpdateRdvInput) GetAppointment_status() AppointmentStatus { return v.Appointment_status }
 
 // GetSessions_ids returns __UpdateRdvInput.Sessions_ids, and is useful for accessing the field via an interface.
-func (v *__UpdateRdvInput) GetSessions_ids() []string { return v.Sessions_ids }
+func (v *__UpdateRdvInput) GetSessions_ids() string { return v.Sessions_ids }
 
 // __UpdateSessionInput is used internally by genqlient
 type __UpdateSessionInput struct {
@@ -6128,7 +6128,7 @@ func CreatePatient(
 
 // The query or mutation executed by CreateRdv.
 const CreateRdv_Operation = `
-mutation CreateRdv ($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!, $appointment_status: AppointmentStatus!, $sessions_ids: [String!]) {
+mutation CreateRdv ($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!, $appointment_status: AppointmentStatus!, $sessions_ids: String!) {
 	createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, appointment_status: $appointment_status, sessions_ids: $sessions_ids) {
 		id
 		doctor_id
@@ -6150,7 +6150,7 @@ func CreateRdv(
 	start_date int,
 	end_date int,
 	appointment_status AppointmentStatus,
-	sessions_ids []string,
+	sessions_ids string,
 ) (*CreateRdvResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateRdv",
@@ -9532,7 +9532,7 @@ func UpdatePatient(
 
 // The query or mutation executed by UpdateRdv.
 const UpdateRdv_Operation = `
-mutation UpdateRdv ($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $sessions_ids: [String!]) {
+mutation UpdateRdv ($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $sessions_ids: String) {
 	updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason, appointment_status: $appointment_status, sessions_ids: $sessions_ids) {
 		id
 		doctor_id
@@ -9556,7 +9556,7 @@ func UpdateRdv(
 	end_date int,
 	cancelation_reason string,
 	appointment_status AppointmentStatus,
-	sessions_ids []string,
+	sessions_ids string,
 ) (*UpdateRdvResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateRdv",
