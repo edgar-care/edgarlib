@@ -34,7 +34,7 @@ func CreateMedicament(input CreateMedicamentInput) CreateMedicamentResponse {
 		Medicament: model.Medicament{
 			ID:              medicament.CreateMedicament.Id,
 			Name:            medicament.CreateMedicament.Name,
-			Unit:            model.Unit(medicament.CreateMedicament.Unit),
+			Unit:            model.MedicineUnit(medicament.CreateMedicament.Unit),
 			TargetDiseases:  medicament.CreateMedicament.Target_diseases,
 			TreatedSymptoms: medicament.CreateMedicament.Treated_symptoms,
 			SideEffects:     medicament.CreateMedicament.Side_effects,

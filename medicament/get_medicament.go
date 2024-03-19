@@ -31,7 +31,7 @@ func GetMedicamentById(id string) GetMedicamentByIdResponse {
 	res = model.Medicament{
 		ID:              medicament.GetMedicamentByID.Id,
 		Name:            medicament.GetMedicamentByID.Name,
-		Unit:            model.Unit(medicament.GetMedicamentByID.Unit),
+		Unit:            model.MedicineUnit(medicament.GetMedicamentByID.Unit),
 		TargetDiseases:  medicament.GetMedicamentByID.Target_diseases,
 		TreatedSymptoms: medicament.GetMedicamentByID.Treated_symptoms,
 		SideEffects:     medicament.GetMedicamentByID.Side_effects,
@@ -52,7 +52,7 @@ func GetMedicaments() GetMedicamentsResponse {
 		res = append(res, model.Medicament{
 			ID:              medicament.Id,
 			Name:            medicament.Name,
-			Unit:            model.Unit(medicament.Unit),
+			Unit:            model.MedicineUnit(medicament.Unit),
 			TargetDiseases:  medicament.Target_diseases,
 			TreatedSymptoms: medicament.Treated_symptoms,
 			SideEffects:     medicament.Side_effects,
