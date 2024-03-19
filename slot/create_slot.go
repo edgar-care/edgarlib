@@ -24,7 +24,7 @@ func CreateSlot(input CreateSlotInput, doctorID string) CreateSlotResponse {
 	gqlClient := graphql.CreateClient()
 
 	var appointment_status graphql.AppointmentStatus = "slotCreate"
-	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, "", doctorID, input.StartDate, input.EndDate, appointment_status, []string{})
+	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, "", doctorID, input.StartDate, input.EndDate, appointment_status, "")
 	if err != nil {
 		return CreateSlotResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}

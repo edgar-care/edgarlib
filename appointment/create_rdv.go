@@ -15,7 +15,7 @@ type CreateRdvResponse struct {
 	Err    error
 }
 
-func CreateRdv(patientId string, doctorId string, startDate int, endDate int, sessions_ids []string) CreateRdvResponse {
+func CreateRdv(patientId string, doctorId string, startDate int, endDate int, sessions_ids string) CreateRdvResponse {
 	gqlClient := graphql.CreateClient()
 
 	var appointment_status graphql.AppointmentStatus = "waitingForReview"

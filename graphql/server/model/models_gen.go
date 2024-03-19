@@ -196,7 +196,7 @@ type Rdv struct {
 	EndDate           int               `json:"end_date" bson:"end_date"`
 	CancelationReason *string           `json:"cancelation_reason,omitempty" bson:"cancelation_reason"`
 	AppointmentStatus AppointmentStatus `json:"appointment_status" bson:"appointment_status"`
-	SessionsIds       []string          `json:"sessions_ids,omitempty" bson:"sessions_ids"`
+	SessionsIds       string            `json:"sessions_ids" bson:"sessions_ids"`
 }
 
 type Session struct {

@@ -766,7 +766,7 @@ func (r *mutationResolver) DeleteNotification(ctx context.Context, id string) (*
 }
 
 // CreateRdv is the resolver for the createRdv field.
-func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error) {
+func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds string) (*model.Rdv, error) {
 	newRdv := bson.M{
 		"id_patient":         idPatient,
 		"doctor_id":          doctorID,
@@ -794,7 +794,7 @@ func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doct
 }
 
 // UpdateRdv is the resolver for the updateRdv field.
-func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds []string) (*model.Rdv, error) {
+func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds *string) (*model.Rdv, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -821,7 +821,7 @@ func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *
 		EndDate:           *endDate,
 		CancelationReason: cancelationReason,
 		AppointmentStatus: *appointmentStatus,
-		SessionsIds:       sessionsIds,
+		SessionsIds:       *sessionsIds,
 	}, err
 }
 

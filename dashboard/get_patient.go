@@ -9,8 +9,7 @@ import (
 )
 
 type GetPatientByIdResponse struct {
-	Patient     model.Patient
-	MedicalInfo model.MedicalInfo
+	PatientInfo PatientWithMedicalInfo `json:"patient_info"`
 	Code        int
 	Err         error
 }
@@ -60,7 +59,7 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 	if err != nil {
 		return GetPatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to an medical table")}
 	}
-
+	var patients PatientWithMedicalInfo
 	medicalAntecedentsResp := make([]*model.MedicalAntecedents, len(medicalInfo.GetMedicalFolderById.Medical_antecedents))
 	for i, antecedent := range medicalInfo.GetMedicalFolderById.Medical_antecedents {
 		medicines := make([]*model.Medicines, len(antecedent.Medicines))
@@ -88,15 +87,11 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		}
 	}
 
-	return GetPatientByIdResponse{
-		Patient: model.Patient{
-			ID:            patient.GetPatientById.Id,
-			Email:         patient.GetPatientById.Email,
-			Password:      patient.GetPatientById.Password,
-			MedicalInfoID: &patient.GetPatientById.Medical_info_id,
-			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(patient.GetPatientById.Rendez_vous_ids),
-			DocumentIds:   graphql.ConvertStringSliceToPointerSlice(patient.GetPatientById.Document_ids),
-		},
+	patients = PatientWithMedicalInfo{
+		ID:            patient.GetPatientById.Id,
+		Email:         patient.GetPatientById.Email,
+		RendezVousIds: patient.GetPatientById.Rendez_vous_ids,
+		DocumentsIds:  patient.GetPatientById.Document_ids,
 		MedicalInfo: model.MedicalInfo{
 			ID:                 medicalInfo.GetMedicalFolderById.Id,
 			Name:               medicalInfo.GetMedicalFolderById.Name,
@@ -109,8 +104,10 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 			OnboardingStatus:   model.OnboardingStatus(medicalInfo.GetMedicalFolderById.Onboarding_status),
 			MedicalAntecedents: medicalAntecedentsResp,
 		},
-		Code: 200,
-		Err:  nil,
+	}
+
+	return GetPatientByIdResponse{
+		PatientInfo: patients,
 	}
 }
 

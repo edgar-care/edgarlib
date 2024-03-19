@@ -15,7 +15,7 @@ type BookAppointmentResponse struct {
 	Err     error
 }
 
-func BookAppointment(appointmentId string, patientId string, sessions_ids []string) BookAppointmentResponse {
+func BookAppointment(appointmentId string, patientId string, sessions_ids string) BookAppointmentResponse {
 	gqlClient := graphql.CreateClient()
 	if appointmentId == "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment id is required")}
