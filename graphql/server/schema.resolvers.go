@@ -1821,9 +1821,8 @@ func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string) ([]*m
 	var results []*model.Rdv
 
 	filter := bson.M{
-		"doctor_id":  doctorID,
-		"id_patient": bson.M{"$ne": ""},
-		//"AppointmentStatus": bson.M{"$ne": nil},
+		"doctor_id":          doctorID,
+		"appointment_status": bson.M{"$ne": "OPENED"},
 	}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
@@ -1848,7 +1847,7 @@ func (r *queryResolver) GetRdvByID(ctx context.Context, id string) (*model.Rdv, 
 
 	filter := bson.M{
 		"_id":                objId,
-		"appointment_status": "WAITING_FOR_REVIEW",
+		"appointment_status": bson.M{"$ne": "OPENED"},
 	}
 
 	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
