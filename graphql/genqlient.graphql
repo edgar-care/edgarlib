@@ -127,8 +127,8 @@ mutation CreatePatient($email: String!, $password: String!){
     }
 }
 
-mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!, $appointment_status: AppointmentStatus!, $sessions_ids: String!){
-    createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, appointment_status: $appointment_status, sessions_ids: $sessions_ids){
+mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!, $end_date: Int!, $appointment_status: AppointmentStatus!, $session_id: String!){
+    createRdv(id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, appointment_status: $appointment_status, session_id: $session_id){
         id
         doctor_id
         id_patient
@@ -136,7 +136,7 @@ mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!,
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }
 
@@ -427,8 +427,8 @@ mutation UpdatePatient($id: String!, $email: String, $password: String, $medical
     }
 }
 
-mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $sessions_ids: String){
-    updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason, appointment_status: $appointment_status, sessions_ids: $sessions_ids){
+mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $session_id: String){
+   updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason, appointment_status: $appointment_status, session_id: $session_id){
         id
         doctor_id
         id_patient
@@ -436,7 +436,7 @@ mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }
 
@@ -741,7 +741,7 @@ query GetDoctorRdv($doctor_id: String!){
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }
 
@@ -848,7 +848,7 @@ query GetPatientRdv($id_patient: String!){
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }
 
@@ -872,7 +872,7 @@ query GetRdvById($id: String!){
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }
 
@@ -1000,8 +1000,8 @@ query GetTreatments{
     }
 }
 
-mutation CreateMedicament($name: String!, $unit: String, $target_dieseases: [String!]!, $treated_symptoms: [String!]!, $side_effects: [String!]!){
-    createMedicament(name: $name, unit: $unit, target_dieseases: $target_dieseases, treated_symptoms: $treated_symptoms, side_effects: $side_effects){
+mutation CreateMedicament($name: String!, $unit: String, $target_diseases: [String!]!, $treated_symptoms: [String!]!, $side_effects: [String!]!){
+    createMedicament(name: $name, unit: $unit, target_diseases: $target_diseases, treated_symptoms: $treated_symptoms, side_effects: $side_effects){
         id
         name
         unit
@@ -1099,7 +1099,7 @@ query GetWaitingRdv($doctor_id: String!) {
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }
 
@@ -1112,7 +1112,7 @@ query GetSlotById($id: String!){
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }
 
@@ -1125,6 +1125,6 @@ query GetSlots($id: String!){
         end_date
         cancelation_reason
         appointment_status
-        sessions_ids
+        session_id
     }
 }

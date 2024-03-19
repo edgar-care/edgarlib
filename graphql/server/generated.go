@@ -153,7 +153,6 @@ type ComplexityRoot struct {
 		OnboardingStatus   func(childComplexity int) int
 		PrimaryDoctorID    func(childComplexity int) int
 		Sex                func(childComplexity int) int
-		StillRelevant      func(childComplexity int) int
 		Weight             func(childComplexity int) int
 	}
 
@@ -183,10 +182,10 @@ type ComplexityRoot struct {
 		CreateDoctor        func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
 		CreateDocument      func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
 		CreateMedicalFolder func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus string) int
-		CreateMedicament    func(childComplexity int, name string, unit *string, targetDieseases []string, treatedSymptoms []string, sideEffects []string) int
+		CreateMedicament    func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
 		CreateNotification  func(childComplexity int, token string, message string, title string) int
 		CreatePatient       func(childComplexity int, email string, password string) int
-		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds string) int
+		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
 		CreateSession       func(childComplexity int, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
 		CreateSymptom       func(childComplexity int, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) int
 		CreateTestAccount   func(childComplexity int, email string, password string) int
@@ -222,7 +221,7 @@ type ComplexityRoot struct {
 		UpdateMedicalFolder func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus *string) int
 		UpdateNotification  func(childComplexity int, id string, token string, message string, title string) int
 		UpdatePatient       func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) int
-		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds *string) int
+		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) int
 		UpdateSession       func(childComplexity int, id string, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, treatments []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
 		UpdateSymptom       func(childComplexity int, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) int
 		UpdateTestAccount   func(childComplexity int, id string, email *string, password *string) int
@@ -302,7 +301,7 @@ type ComplexityRoot struct {
 		EndDate           func(childComplexity int) int
 		ID                func(childComplexity int) int
 		IDPatient         func(childComplexity int) int
-		SessionsIds       func(childComplexity int) int
+		SessionID         func(childComplexity int) int
 		StartDate         func(childComplexity int) int
 	}
 
@@ -389,8 +388,8 @@ type MutationResolver interface {
 	CreateNotification(ctx context.Context, token string, message string, title string) (*model.Notification, error)
 	UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error)
 	DeleteNotification(ctx context.Context, id string) (*bool, error)
-	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds string) (*model.Rdv, error)
-	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds *string) (*model.Rdv, error)
+	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) (*model.Rdv, error)
+	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) (*model.Rdv, error)
 	DeleteRdv(ctx context.Context, id string) (*bool, error)
 	DeleteSlot(ctx context.Context, id string) (*bool, error)
 	CreateDocument(ctx context.Context, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) (*model.Document, error)
@@ -411,7 +410,7 @@ type MutationResolver interface {
 	CreateAlert(ctx context.Context, name string, sex *string, height *int, weight *int, symptoms []string, comment string) (*model.Alert, error)
 	UpdateAlert(ctx context.Context, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) (*model.Alert, error)
 	DeleteAlert(ctx context.Context, id string) (*bool, error)
-	CreateMedicament(ctx context.Context, name string, unit *string, targetDieseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicament, error)
+	CreateMedicament(ctx context.Context, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicament, error)
 	DeleteMedicament(ctx context.Context, id string) (*bool, error)
 	CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus string) (*model.MedicalInfo, error)
 	UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus *string) (*model.MedicalInfo, error)
@@ -976,13 +975,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MedicalInfo.Sex(childComplexity), true
 
-	case "MedicalInfo.still_relevant":
-		if e.complexity.MedicalInfo.StillRelevant == nil {
-			break
-		}
-
-		return e.complexity.MedicalInfo.StillRelevant(childComplexity), true
-
 	case "MedicalInfo.weight":
 		if e.complexity.MedicalInfo.Weight == nil {
 			break
@@ -1183,7 +1175,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateMedicament(childComplexity, args["name"].(string), args["unit"].(*string), args["target_dieseases"].([]string), args["treated_symptoms"].([]string), args["side_effects"].([]string)), true
+		return e.complexity.Mutation.CreateMedicament(childComplexity, args["name"].(string), args["unit"].(*string), args["target_diseases"].([]string), args["treated_symptoms"].([]string), args["side_effects"].([]string)), true
 
 	case "Mutation.createNotification":
 		if e.complexity.Mutation.CreateNotification == nil {
@@ -1219,7 +1211,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["sessions_ids"].(string)), true
+		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["session_id"].(string)), true
 
 	case "Mutation.createSession":
 		if e.complexity.Mutation.CreateSession == nil {
@@ -1651,7 +1643,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["sessions_ids"].(*string)), true
+		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["session_id"].(*string)), true
 
 	case "Mutation.updateSession":
 		if e.complexity.Mutation.UpdateSession == nil {
@@ -2292,12 +2284,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Rdv.IDPatient(childComplexity), true
 
-	case "Rdv.sessions_ids":
-		if e.complexity.Rdv.SessionsIds == nil {
+	case "Rdv.session_id":
+		if e.complexity.Rdv.SessionID == nil {
 			break
 		}
 
-		return e.complexity.Rdv.SessionsIds(childComplexity), true
+		return e.complexity.Rdv.SessionID(childComplexity), true
 
 	case "Rdv.start_date":
 		if e.complexity.Rdv.StartDate == nil {
@@ -2805,7 +2797,6 @@ type MedicalInfo {
     height: Int!
     weight: Int!
     primary_doctor_id: String!
-    still_relevant: Boolean!
     onboarding_status: OnboardingStatus!
     medical_antecedents: [MedicalAntecedents!]!
 }
@@ -2825,7 +2816,7 @@ type Rdv {
     end_date: Int!
     cancelation_reason: String
     appointment_status: AppointmentStatus!
-    sessions_ids: String!
+    session_id: String!
 }
 
 type Document {
@@ -2918,7 +2909,7 @@ input MedicinesInput {
 type Medicament {
     id: ID!
     name: String!
-    unit: Unit!
+    unit: MedicineUnit!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
@@ -2926,7 +2917,7 @@ type Medicament {
 
 input MedicamentInput {
     name: String!
-    unit: Unit!
+    unit: MedicineUnit!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
@@ -3164,10 +3155,10 @@ type Mutation {
     deleteNotification(id: String!): Boolean
 
     # Create a new Rdv.
-    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, sessions_ids: String!): Rdv
+    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, session_id: String!): Rdv
 
     # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, sessions_ids: String): Rdv
+    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, session_id: String): Rdv
 
     # Delete a Rdv.
     deleteRdv(id: String!): Boolean
@@ -3232,7 +3223,7 @@ type Mutation {
 # ================================================ #
 
     # Create a new Medicament.
-    createMedicament(name: String!, unit: String, target_dieseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicament
+    createMedicament(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicament
 
     # Delete an Medicament.
     deleteMedicament(id: String!): Boolean
@@ -3275,7 +3266,7 @@ enum DocumentType {
     CERTIFICATE
 }
 
-enum Unit {
+enum MedicineUnit {
     APPLICATION,
     TABLET,
     TABLESPOON,
@@ -3300,11 +3291,11 @@ enum Day {
 }
 
 enum AppointmentStatus {
-    waitingForReview,
-    acceptedDueToReview,
-    canceledDueToReview,
-    canceled
-    slotCreate
+    WAITING_FOR_REVIEW,
+    ACCEPTED_DUE_TO_REVIEW,
+    CANCELED_DUE_TO_REVIEW,
+    CANCELED,
+    OPENED
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -3836,14 +3827,14 @@ func (ec *executionContext) field_Mutation_createMedicament_args(ctx context.Con
 	}
 	args["unit"] = arg1
 	var arg2 []string
-	if tmp, ok := rawArgs["target_dieseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("target_dieseases"))
+	if tmp, ok := rawArgs["target_diseases"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("target_diseases"))
 		arg2, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["target_dieseases"] = arg2
+	args["target_diseases"] = arg2
 	var arg3 []string
 	if tmp, ok := rawArgs["treated_symptoms"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treated_symptoms"))
@@ -3971,14 +3962,14 @@ func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, r
 	}
 	args["appointment_status"] = arg4
 	var arg5 string
-	if tmp, ok := rawArgs["sessions_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sessions_ids"))
+	if tmp, ok := rawArgs["session_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("session_id"))
 		arg5, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["sessions_ids"] = arg5
+	args["session_id"] = arg5
 	return args, nil
 }
 
@@ -5276,14 +5267,14 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 	}
 	args["appointment_status"] = arg6
 	var arg7 *string
-	if tmp, ok := rawArgs["sessions_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sessions_ids"))
+	if tmp, ok := rawArgs["session_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("session_id"))
 		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["sessions_ids"] = arg7
+	args["session_id"] = arg7
 	return args, nil
 }
 
@@ -9126,50 +9117,6 @@ func (ec *executionContext) fieldContext_MedicalInfo_primary_doctor_id(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _MedicalInfo_still_relevant(ctx context.Context, field graphql.CollectedField, obj *model.MedicalInfo) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_MedicalInfo_still_relevant(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.StillRelevant, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_MedicalInfo_still_relevant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MedicalInfo",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _MedicalInfo_onboarding_status(ctx context.Context, field graphql.CollectedField, obj *model.MedicalInfo) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MedicalInfo_onboarding_status(ctx, field)
 	if err != nil {
@@ -9382,9 +9329,9 @@ func (ec *executionContext) _Medicament_unit(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Unit)
+	res := resTmp.(model.MedicineUnit)
 	fc.Result = res
-	return ec.marshalNUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐUnit(ctx, field.Selections, res)
+	return ec.marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Medicament_unit(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9394,7 +9341,7 @@ func (ec *executionContext) fieldContext_Medicament_unit(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Unit does not have child fields")
+			return nil, errors.New("field of type MedicineUnit does not have child fields")
 		},
 	}
 	return fc, nil
@@ -11358,7 +11305,7 @@ func (ec *executionContext) _Mutation_createRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["id_patient"].(string), fc.Args["doctor_id"].(string), fc.Args["start_date"].(int), fc.Args["end_date"].(int), fc.Args["appointment_status"].(model.AppointmentStatus), fc.Args["sessions_ids"].(string))
+		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["id_patient"].(string), fc.Args["doctor_id"].(string), fc.Args["start_date"].(int), fc.Args["end_date"].(int), fc.Args["appointment_status"].(model.AppointmentStatus), fc.Args["session_id"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11394,8 +11341,8 @@ func (ec *executionContext) fieldContext_Mutation_createRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -11428,7 +11375,7 @@ func (ec *executionContext) _Mutation_updateRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["sessions_ids"].(*string))
+		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["session_id"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11464,8 +11411,8 @@ func (ec *executionContext) fieldContext_Mutation_updateRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -12690,7 +12637,7 @@ func (ec *executionContext) _Mutation_createMedicament(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateMedicament(rctx, fc.Args["name"].(string), fc.Args["unit"].(*string), fc.Args["target_dieseases"].([]string), fc.Args["treated_symptoms"].([]string), fc.Args["side_effects"].([]string))
+		return ec.resolvers.Mutation().CreateMedicament(rctx, fc.Args["name"].(string), fc.Args["unit"].(*string), fc.Args["target_diseases"].([]string), fc.Args["treated_symptoms"].([]string), fc.Args["side_effects"].([]string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12846,8 +12793,6 @@ func (ec *executionContext) fieldContext_Mutation_createMedicalFolder(ctx contex
 				return ec.fieldContext_MedicalInfo_weight(ctx, field)
 			case "primary_doctor_id":
 				return ec.fieldContext_MedicalInfo_primary_doctor_id(ctx, field)
-			case "still_relevant":
-				return ec.fieldContext_MedicalInfo_still_relevant(ctx, field)
 			case "onboarding_status":
 				return ec.fieldContext_MedicalInfo_onboarding_status(ctx, field)
 			case "medical_antecedents":
@@ -12922,8 +12867,6 @@ func (ec *executionContext) fieldContext_Mutation_updateMedicalFolder(ctx contex
 				return ec.fieldContext_MedicalInfo_weight(ctx, field)
 			case "primary_doctor_id":
 				return ec.fieldContext_MedicalInfo_primary_doctor_id(ctx, field)
-			case "still_relevant":
-				return ec.fieldContext_MedicalInfo_still_relevant(ctx, field)
 			case "onboarding_status":
 				return ec.fieldContext_MedicalInfo_onboarding_status(ctx, field)
 			case "medical_antecedents":
@@ -14912,8 +14855,8 @@ func (ec *executionContext) fieldContext_Query_getPatientRdv(ctx context.Context
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -14982,8 +14925,8 @@ func (ec *executionContext) fieldContext_Query_getDoctorRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -15052,8 +14995,8 @@ func (ec *executionContext) fieldContext_Query_getRdvById(ctx context.Context, f
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -15122,8 +15065,8 @@ func (ec *executionContext) fieldContext_Query_getSlotById(ctx context.Context, 
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -15192,8 +15135,8 @@ func (ec *executionContext) fieldContext_Query_getSlots(ctx context.Context, fie
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -15262,8 +15205,8 @@ func (ec *executionContext) fieldContext_Query_getWaitingRdv(ctx context.Context
 				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
 			case "appointment_status":
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
-			case "sessions_ids":
-				return ec.fieldContext_Rdv_sessions_ids(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -16112,8 +16055,6 @@ func (ec *executionContext) fieldContext_Query_getMedicalFolder(ctx context.Cont
 				return ec.fieldContext_MedicalInfo_weight(ctx, field)
 			case "primary_doctor_id":
 				return ec.fieldContext_MedicalInfo_primary_doctor_id(ctx, field)
-			case "still_relevant":
-				return ec.fieldContext_MedicalInfo_still_relevant(ctx, field)
 			case "onboarding_status":
 				return ec.fieldContext_MedicalInfo_onboarding_status(ctx, field)
 			case "medical_antecedents":
@@ -16177,8 +16118,6 @@ func (ec *executionContext) fieldContext_Query_getMedicalFolderById(ctx context.
 				return ec.fieldContext_MedicalInfo_weight(ctx, field)
 			case "primary_doctor_id":
 				return ec.fieldContext_MedicalInfo_primary_doctor_id(ctx, field)
-			case "still_relevant":
-				return ec.fieldContext_MedicalInfo_still_relevant(ctx, field)
 			case "onboarding_status":
 				return ec.fieldContext_MedicalInfo_onboarding_status(ctx, field)
 			case "medical_antecedents":
@@ -16822,8 +16761,8 @@ func (ec *executionContext) fieldContext_Rdv_appointment_status(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Rdv_sessions_ids(ctx context.Context, field graphql.CollectedField, obj *model.Rdv) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Rdv_sessions_ids(ctx, field)
+func (ec *executionContext) _Rdv_session_id(ctx context.Context, field graphql.CollectedField, obj *model.Rdv) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Rdv_session_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -16836,7 +16775,7 @@ func (ec *executionContext) _Rdv_sessions_ids(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.SessionsIds, nil
+		return obj.SessionID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16853,7 +16792,7 @@ func (ec *executionContext) _Rdv_sessions_ids(ctx context.Context, field graphql
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Rdv_sessions_ids(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Rdv_session_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Rdv",
 		Field:      field,
@@ -20353,7 +20292,7 @@ func (ec *executionContext) unmarshalInputMedicamentInput(ctx context.Context, o
 			it.Name = data
 		case "unit":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unit"))
-			data, err := ec.unmarshalNUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐUnit(ctx, v)
+			data, err := ec.unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -21231,11 +21170,6 @@ func (ec *executionContext) _MedicalInfo(ctx context.Context, sel ast.SelectionS
 			}
 		case "primary_doctor_id":
 			out.Values[i] = ec._MedicalInfo_primary_doctor_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "still_relevant":
-			out.Values[i] = ec._MedicalInfo_still_relevant(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -22738,8 +22672,8 @@ func (ec *executionContext) _Rdv(ctx context.Context, sel ast.SelectionSet, obj 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "sessions_ids":
-			out.Values[i] = ec._Rdv_sessions_ids(ctx, field, obj)
+		case "session_id":
+			out.Values[i] = ec._Rdv_session_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -23758,6 +23692,16 @@ func (ec *executionContext) unmarshalNMedicalAntecedentsInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx context.Context, v interface{}) (model.MedicineUnit, error) {
+	var res model.MedicineUnit
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx context.Context, sel ast.SelectionSet, v model.MedicineUnit) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) marshalNMedicines2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicinesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Medicines) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -24045,16 +23989,6 @@ func (ec *executionContext) marshalNSymptomWeight2ᚖgithubᚗcomᚋedgarᚑcare
 func (ec *executionContext) unmarshalNSymptomWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInput(ctx context.Context, v interface{}) (*model.SymptomWeightInput, error) {
 	res, err := ec.unmarshalInputSymptomWeightInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐUnit(ctx context.Context, v interface{}) (model.Unit, error) {
-	var res model.Unit
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐUnit(ctx context.Context, sel ast.SelectionSet, v model.Unit) graphql.Marshaler {
-	return v
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

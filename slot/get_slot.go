@@ -32,11 +32,13 @@ func GetSlotById(id string, doctorId string) GetSlotByIdResponse {
 		return GetSlotByIdResponse{model.Rdv{}, 403, errors.New("you cannot access to this appointment")}
 	}
 	res = model.Rdv{
-		ID:        slot.GetSlotById.Id,
-		DoctorID:  slot.GetSlotById.Doctor_id,
-		IDPatient: slot.GetSlotById.Id_patient,
-		StartDate: slot.GetSlotById.Start_date,
-		EndDate:   slot.GetSlotById.End_date,
+		ID:                slot.GetSlotById.Id,
+		DoctorID:          slot.GetSlotById.Doctor_id,
+		IDPatient:         slot.GetSlotById.Id_patient,
+		StartDate:         slot.GetSlotById.Start_date,
+		EndDate:           slot.GetSlotById.End_date,
+		AppointmentStatus: model.AppointmentStatus(slot.GetSlotById.Appointment_status),
+		SessionID:         slot.GetSlotById.Session_id,
 	}
 	return GetSlotByIdResponse{res, 200, nil}
 }
@@ -64,6 +66,8 @@ func GetSlots(doctorId string) GetSlotsResponse {
 			StartDate:         slot.Start_date,
 			EndDate:           slot.End_date,
 			CancelationReason: &temp,
+			AppointmentStatus: model.AppointmentStatus(slot.Appointment_status),
+			SessionID:         slot.Session_id,
 		})
 	}
 	return GetSlotsResponse{res, 200, nil}

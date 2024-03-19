@@ -766,14 +766,14 @@ func (r *mutationResolver) DeleteNotification(ctx context.Context, id string) (*
 }
 
 // CreateRdv is the resolver for the createRdv field.
-func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionsIds string) (*model.Rdv, error) {
+func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) (*model.Rdv, error) {
 	newRdv := bson.M{
 		"id_patient":         idPatient,
 		"doctor_id":          doctorID,
 		"start_date":         startDate,
 		"end_date":           endDate,
 		"appointment_status": appointmentStatus,
-		"sessions_ids":       sessionsIds,
+		"session_id":         sessionID,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").InsertOne(ctx, newRdv)
@@ -788,13 +788,13 @@ func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doct
 		EndDate:           endDate,
 		CancelationReason: nil,
 		AppointmentStatus: appointmentStatus,
-		SessionsIds:       sessionsIds,
+		SessionID:         sessionID,
 	}
 	return &entity, err
 }
 
 // UpdateRdv is the resolver for the updateRdv field.
-func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionsIds *string) (*model.Rdv, error) {
+func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) (*model.Rdv, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -809,7 +809,7 @@ func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *
 		"end_date":           endDate,
 		"cancelation_reason": cancelationReason,
 		"appointment_status": appointmentStatus,
-		"sessions_ids":       sessionsIds,
+		"session_id":         sessionID,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").ReplaceOne(ctx, filter, updated)
 
@@ -821,7 +821,7 @@ func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *
 		EndDate:           *endDate,
 		CancelationReason: cancelationReason,
 		AppointmentStatus: *appointmentStatus,
-		SessionsIds:       *sessionsIds,
+		SessionID:         *sessionID,
 	}, err
 }
 
@@ -1257,11 +1257,11 @@ func (r *mutationResolver) DeleteAlert(ctx context.Context, id string) (*bool, e
 }
 
 // CreateMedicament is the resolver for the createMedicament field.
-func (r *mutationResolver) CreateMedicament(ctx context.Context, name string, unit *string, targetDieseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicament, error) {
+func (r *mutationResolver) CreateMedicament(ctx context.Context, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicament, error) {
 	newMedicament := bson.M{
 		"name":             name,
 		"unit":             unit,
-		"target_dieseases": targetDieseases,
+		"target_diseases":  targetDiseases,
 		"treated_symptoms": treatedSymptoms,
 		"side_effects":     sideEffects,
 	}
@@ -1273,8 +1273,8 @@ func (r *mutationResolver) CreateMedicament(ctx context.Context, name string, un
 	entity := model.Medicament{
 		ID:              res.InsertedID.(primitive.ObjectID).Hex(),
 		Name:            name,
-		Unit:            model.Unit(*unit),
-		TargetDiseases:  targetDieseases,
+		Unit:            model.MedicineUnit(*unit),
+		TargetDiseases:  targetDiseases,
 		TreatedSymptoms: treatedSymptoms,
 		SideEffects:     sideEffects,
 	}
@@ -1848,7 +1848,7 @@ func (r *queryResolver) GetRdvByID(ctx context.Context, id string) (*model.Rdv, 
 
 	filter := bson.M{
 		"_id":                objId,
-		"appointment_status": "waitingForReview",
+		"appointment_status": "WAITING_FOR_REVIEW",
 	}
 
 	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
@@ -1903,7 +1903,7 @@ func (r *queryResolver) GetWaitingRdv(ctx context.Context, doctorID string) ([]*
 
 	filter := bson.M{
 		"doctor_id":          doctorID,
-		"appointment_status": "waitingForReview",
+		"appointment_status": "WAITING_FOR_REVIEW",
 	}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)

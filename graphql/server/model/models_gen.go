@@ -132,26 +132,25 @@ type MedicalInfo struct {
 	Height             int                   `json:"height" bson:"height"`
 	Weight             int                   `json:"weight" bson:"weight"`
 	PrimaryDoctorID    string                `json:"primary_doctor_id" bson:"primary_doctor_id"`
-	StillRelevant      bool                  `json:"still_relevant" bson:"still_relevant"`
 	OnboardingStatus   OnboardingStatus      `json:"onboarding_status" bson:"onboarding_status"`
 	MedicalAntecedents []*MedicalAntecedents `json:"medical_antecedents" bson:"medical_antecedents"`
 }
 
 type Medicament struct {
-	ID              string   `json:"id" bson:"_id"`
-	Name            string   `json:"name" bson:"name"`
-	Unit            Unit     `json:"unit" bson:"unit"`
-	TargetDiseases  []string `json:"target_diseases" bson:"target_diseases"`
-	TreatedSymptoms []string `json:"treated_symptoms" bson:"treated_symptoms"`
-	SideEffects     []string `json:"side_effects" bson:"side_effects"`
+	ID              string       `json:"id" bson:"_id"`
+	Name            string       `json:"name" bson:"name"`
+	Unit            MedicineUnit `json:"unit" bson:"unit"`
+	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
+	TreatedSymptoms []string     `json:"treated_symptoms" bson:"treated_symptoms"`
+	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
 }
 
 type MedicamentInput struct {
-	Name            string   `json:"name" bson:"name"`
-	Unit            Unit     `json:"unit" bson:"unit"`
-	TargetDiseases  []string `json:"target_diseases" bson:"target_diseases"`
-	TreatedSymptoms []string `json:"treated_symptoms" bson:"treated_symptoms"`
-	SideEffects     []string `json:"side_effects" bson:"side_effects"`
+	Name            string       `json:"name" bson:"name"`
+	Unit            MedicineUnit `json:"unit" bson:"unit"`
+	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
+	TreatedSymptoms []string     `json:"treated_symptoms" bson:"treated_symptoms"`
+	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
 }
 
 type Medicines struct {
@@ -196,7 +195,7 @@ type Rdv struct {
 	EndDate           int               `json:"end_date" bson:"end_date"`
 	CancelationReason *string           `json:"cancelation_reason,omitempty" bson:"cancelation_reason"`
 	AppointmentStatus AppointmentStatus `json:"appointment_status" bson:"appointment_status"`
-	SessionsIds       string            `json:"sessions_ids" bson:"sessions_ids"`
+	SessionID         string            `json:"session_id" bson:"session_id"`
 }
 
 type Session struct {
@@ -267,11 +266,11 @@ type Treatment struct {
 type AppointmentStatus string
 
 const (
-	AppointmentStatusWaitingForReview    AppointmentStatus = "waitingForReview"
-	AppointmentStatusAcceptedDueToReview AppointmentStatus = "acceptedDueToReview"
-	AppointmentStatusCanceledDueToReview AppointmentStatus = "canceledDueToReview"
-	AppointmentStatusCanceled            AppointmentStatus = "canceled"
-	AppointmentStatusSlotCreate          AppointmentStatus = "slotCreate"
+	AppointmentStatusWaitingForReview    AppointmentStatus = "WAITING_FOR_REVIEW"
+	AppointmentStatusAcceptedDueToReview AppointmentStatus = "ACCEPTED_DUE_TO_REVIEW"
+	AppointmentStatusCanceledDueToReview AppointmentStatus = "CANCELED_DUE_TO_REVIEW"
+	AppointmentStatusCanceled            AppointmentStatus = "CANCELED"
+	AppointmentStatusOpened              AppointmentStatus = "OPENED"
 )
 
 var AllAppointmentStatus = []AppointmentStatus{
@@ -279,12 +278,12 @@ var AllAppointmentStatus = []AppointmentStatus{
 	AppointmentStatusAcceptedDueToReview,
 	AppointmentStatusCanceledDueToReview,
 	AppointmentStatusCanceled,
-	AppointmentStatusSlotCreate,
+	AppointmentStatusOpened,
 }
 
 func (e AppointmentStatus) IsValid() bool {
 	switch e {
-	case AppointmentStatusWaitingForReview, AppointmentStatusAcceptedDueToReview, AppointmentStatusCanceledDueToReview, AppointmentStatusCanceled, AppointmentStatusSlotCreate:
+	case AppointmentStatusWaitingForReview, AppointmentStatusAcceptedDueToReview, AppointmentStatusCanceledDueToReview, AppointmentStatusCanceled, AppointmentStatusOpened:
 		return true
 	}
 	return false
@@ -448,6 +447,51 @@ func (e DocumentType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+type MedicineUnit string
+
+const (
+	MedicineUnitApplication MedicineUnit = "APPLICATION"
+	MedicineUnitTablet      MedicineUnit = "TABLET"
+	MedicineUnitTablespoon  MedicineUnit = "TABLESPOON"
+	MedicineUnitCoffeespoon MedicineUnit = "COFFEESPOON"
+)
+
+var AllMedicineUnit = []MedicineUnit{
+	MedicineUnitApplication,
+	MedicineUnitTablet,
+	MedicineUnitTablespoon,
+	MedicineUnitCoffeespoon,
+}
+
+func (e MedicineUnit) IsValid() bool {
+	switch e {
+	case MedicineUnitApplication, MedicineUnitTablet, MedicineUnitTablespoon, MedicineUnitCoffeespoon:
+		return true
+	}
+	return false
+}
+
+func (e MedicineUnit) String() string {
+	return string(e)
+}
+
+func (e *MedicineUnit) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MedicineUnit(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MedicineUnit", str)
+	}
+	return nil
+}
+
+func (e MedicineUnit) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type OnboardingStatus string
 
 const (
@@ -576,50 +620,5 @@ func (e *Sex) UnmarshalGQL(v interface{}) error {
 }
 
 func (e Sex) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type Unit string
-
-const (
-	UnitApplication Unit = "APPLICATION"
-	UnitTablet      Unit = "TABLET"
-	UnitTablespoon  Unit = "TABLESPOON"
-	UnitCoffeespoon Unit = "COFFEESPOON"
-)
-
-var AllUnit = []Unit{
-	UnitApplication,
-	UnitTablet,
-	UnitTablespoon,
-	UnitCoffeespoon,
-}
-
-func (e Unit) IsValid() bool {
-	switch e {
-	case UnitApplication, UnitTablet, UnitTablespoon, UnitCoffeespoon:
-		return true
-	}
-	return false
-}
-
-func (e Unit) String() string {
-	return string(e)
-}
-
-func (e *Unit) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Unit(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Unit", str)
-	}
-	return nil
-}
-
-func (e Unit) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

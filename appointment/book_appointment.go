@@ -14,7 +14,7 @@ type BookAppointmentResponse struct {
 	Err     error
 }
 
-func BookAppointment(appointmentId string, patientId string, sessions_ids string) BookAppointmentResponse {
+func BookAppointment(appointmentId string, patientId string, session_id string) BookAppointmentResponse {
 	gqlClient := graphql.CreateClient()
 	if appointmentId == "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment id is required")}
@@ -33,9 +33,9 @@ func BookAppointment(appointmentId string, patientId string, sessions_ids string
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
 	}
-	var appointment_status = graphql.AppointmentStatusWaitingforreview
+	var appointment_status = graphql.AppointmentStatusWaitingForReview
 
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, patientId, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason, appointment_status, sessions_ids)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, patientId, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason, appointment_status, session_id)
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
@@ -65,7 +65,7 @@ func BookAppointment(appointmentId string, patientId string, sessions_ids string
 			EndDate:           updatedRdv.UpdateRdv.End_date,
 			CancelationReason: &updatedRdv.UpdateRdv.Cancelation_reason,
 			AppointmentStatus: model.AppointmentStatus(updatedRdv.UpdateRdv.Appointment_status),
-			SessionsIds:       updatedRdv.UpdateRdv.Sessions_ids,
+			SessionID:         updatedRdv.UpdateRdv.Session_id,
 		},
 		Patient: model.Patient{
 			ID:            updatedPatient.UpdatePatient.Id,

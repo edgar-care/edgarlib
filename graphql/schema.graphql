@@ -133,7 +133,6 @@ type MedicalInfo {
     height: Int!
     weight: Int!
     primary_doctor_id: String!
-    still_relevant: Boolean!
     onboarding_status: OnboardingStatus!
     medical_antecedents: [MedicalAntecedents!]!
 }
@@ -153,7 +152,7 @@ type Rdv {
     end_date: Int!
     cancelation_reason: String
     appointment_status: AppointmentStatus!
-    sessions_ids: String!
+    session_id: String!
 }
 
 type Document {
@@ -246,7 +245,7 @@ input MedicinesInput {
 type Medicament {
     id: ID!
     name: String!
-    unit: Unit!
+    unit: MedicineUnit!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
@@ -254,7 +253,7 @@ type Medicament {
 
 input MedicamentInput {
     name: String!
-    unit: Unit!
+    unit: MedicineUnit!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
@@ -492,10 +491,10 @@ type Mutation {
     deleteNotification(id: String!): Boolean
 
     # Create a new Rdv.
-    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, sessions_ids: String!): Rdv
+    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, session_id: String!): Rdv
 
     # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, sessions_ids: String): Rdv
+    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, session_id: String): Rdv
 
     # Delete a Rdv.
     deleteRdv(id: String!): Boolean
@@ -560,7 +559,7 @@ type Mutation {
 # ================================================ #
 
     # Create a new Medicament.
-    createMedicament(name: String!, unit: String, target_dieseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicament
+    createMedicament(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicament
 
     # Delete an Medicament.
     deleteMedicament(id: String!): Boolean
@@ -603,7 +602,7 @@ enum DocumentType {
     CERTIFICATE
 }
 
-enum Unit {
+enum MedicineUnit {
     APPLICATION,
     TABLET,
     TABLESPOON,
@@ -628,9 +627,9 @@ enum Day {
 }
 
 enum AppointmentStatus {
-    waitingForReview,
-    acceptedDueToReview,
-    canceledDueToReview,
-    canceled
-    slotCreate
+    WAITING_FOR_REVIEW,
+    ACCEPTED_DUE_TO_REVIEW,
+    CANCELED_DUE_TO_REVIEW,
+    CANCELED,
+    OPENED
 }

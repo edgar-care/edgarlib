@@ -15,11 +15,11 @@ type CreateRdvResponse struct {
 	Err    error
 }
 
-func CreateRdv(patientId string, doctorId string, startDate int, endDate int, sessions_ids string) CreateRdvResponse {
+func CreateRdv(patientId string, doctorId string, startDate int, endDate int, session_id string) CreateRdvResponse {
 	gqlClient := graphql.CreateClient()
 
-	var appointment_status graphql.AppointmentStatus = "waitingForReview"
-	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, patientId, doctorId, startDate, endDate, appointment_status, sessions_ids)
+	var appointment_status graphql.AppointmentStatus = "WAITING_FOR_REVIEW"
+	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, patientId, doctorId, startDate, endDate, appointment_status, session_id)
 	if err != nil {
 		return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
@@ -55,7 +55,7 @@ func CreateRdv(patientId string, doctorId string, startDate int, endDate int, se
 			EndDate:           rdv.CreateRdv.End_date,
 			CancelationReason: &rdv.CreateRdv.Cancelation_reason,
 			AppointmentStatus: model.AppointmentStatus(rdv.CreateRdv.Appointment_status),
-			SessionsIds:       rdv.CreateRdv.Sessions_ids,
+			SessionID:         rdv.CreateRdv.Session_id,
 		},
 		Doctor: model.Doctor{
 			ID:            updatedDoctor.UpdateDoctor.Id,
