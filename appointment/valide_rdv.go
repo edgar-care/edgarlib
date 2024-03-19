@@ -42,6 +42,12 @@ func ValidateRdv(appointmentId string, input ReviewInput) EditRdvResponse {
 		return EditRdvResponse{Rdv: model.Rdv{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
 
+	var new_appointment_status = graphql.AppointmentStatusOpened
+	_, err = graphql.CreateRdv(context.Background(), gqlClient, "", appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, new_appointment_status, "")
+	if err != nil {
+		return EditRdvResponse{Rdv: model.Rdv{}, Code: 500, Err: errors.New("unable to create appointment")}
+	}
+
 	return EditRdvResponse{
 		Rdv: model.Rdv{
 			ID:                updatedRdv.UpdateRdv.Id,
