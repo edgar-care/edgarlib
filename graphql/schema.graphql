@@ -153,7 +153,7 @@ type Rdv {
     end_date: Int!
     cancelation_reason: String
     appointment_status: AppointmentStatus!
-    sessions_ids: [String!]
+    sessions_ids: String!
 }
 
 type Document {
@@ -492,10 +492,10 @@ type Mutation {
     deleteNotification(id: String!): Boolean
 
     # Create a new Rdv.
-    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, sessions_ids: [String!]): Rdv
+    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, sessions_ids: String!): Rdv
 
     # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, sessions_ids: [String!]): Rdv
+    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, sessions_ids: String): Rdv
 
     # Delete a Rdv.
     deleteRdv(id: String!): Boolean
