@@ -24,6 +24,7 @@ func CancelRdv(id string, reason string) CancelRdvResponse {
 	}
 
 	var appointment_status = graphql.AppointmentStatusCanceled
+<<<<<<< HEAD
 	_, err = graphql.UpdateRdv(context.Background(), gqlClient, id, rdv.GetRdvById.Id_patient, rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, reason, appointment_status, rdv.GetRdvById.Session_id)
 	if err != nil {
 		return CancelRdvResponse{Reason: "", Code: 500, Err: errors.New("unable to update appointment")}
@@ -31,6 +32,9 @@ func CancelRdv(id string, reason string) CancelRdvResponse {
 
 	var new_appointment_status = graphql.AppointmentStatusOpened
 	_, err = graphql.CreateRdv(context.Background(), gqlClient, "", rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, new_appointment_status, "")
+=======
+	_, err = graphql.UpdateRdv(context.Background(), gqlClient, id, "", rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, reason, appointment_status, rdv.GetRdvById.Session_id)
+>>>>>>> 8496ff2 (fix)
 	if err != nil {
 		return CancelRdvResponse{Reason: "", Code: 500, Err: errors.New("unable to update appointment")}
 	}

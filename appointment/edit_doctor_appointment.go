@@ -33,7 +33,12 @@ func UpdateDoctorAppointment(newAppointmentId string, appointmentId string) Upda
 	if err != nil {
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
+<<<<<<< HEAD
 	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, oldAppointment.GetRdvById.Id_patient, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason, oldAppointment.GetRdvById.Appointment_status, oldAppointment.GetRdvById.Session_id)
+=======
+
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, oldAppointment.GetRdvById.Id_patient, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason, appointment.GetRdvById.Appointment_status, appointment.GetRdvById.Session_id)
+>>>>>>> 8496ff2 (fix)
 	if err != nil {
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
@@ -42,8 +47,12 @@ func UpdateDoctorAppointment(newAppointmentId string, appointmentId string) Upda
 	if err != nil {
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
 	}
+<<<<<<< HEAD
 	var appointment_status = graphql.AppointmentStatusOpened
 	_, err = graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, "", oldAppointment.GetRdvById.Doctor_id, oldAppointment.GetRdvById.Start_date, oldAppointment.GetRdvById.End_date, oldAppointment.GetRdvById.Cancelation_reason, appointment_status, oldAppointment.GetRdvById.Session_id)
+=======
+	_, err = graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, "", oldAppointment.GetRdvById.Doctor_id, oldAppointment.GetRdvById.Start_date, oldAppointment.GetRdvById.End_date, oldAppointment.GetRdvById.Cancelation_reason, oldAppointment.GetRdvById.Appointment_status, oldAppointment.GetRdvById.Session_id)
+>>>>>>> 8496ff2 (fix)
 	if err != nil {
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
