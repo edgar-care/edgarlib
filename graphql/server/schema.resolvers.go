@@ -1847,8 +1847,8 @@ func (r *queryResolver) GetRdvByID(ctx context.Context, id string) (*model.Rdv, 
 	}
 
 	filter := bson.M{
-		"_id":        objId,
-		"id_patient": bson.M{"$ne": ""},
+		"_id":                objId,
+		"appointment_status": "waitingForReview",
 	}
 
 	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)

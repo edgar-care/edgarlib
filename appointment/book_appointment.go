@@ -3,7 +3,6 @@ package appointment
 import (
 	"context"
 	"errors"
-
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
