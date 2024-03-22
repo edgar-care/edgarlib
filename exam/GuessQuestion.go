@@ -63,7 +63,7 @@ func calculCoverage(context []model.SessionSymptom, disease graphql.GetDiseasesG
 
 func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptomsSymptom) string {
 	for _, symptom := range symptoms {
-		if symptomName == symptom.Name {
+		if symptomName == symptom.Code {
 			return symptom.Question
 		}
 	}

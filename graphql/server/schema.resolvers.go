@@ -997,32 +997,34 @@ func (r *mutationResolver) DeleteAnteChir(ctx context.Context, id string) (*bool
 }
 
 // CreateAnteDisease is the resolver for the createAnteDisease field.
-func (r *mutationResolver) CreateAnteDisease(ctx context.Context, name string, chronicity float64, chir *string, treatment []string, symptoms []string) (*model.AnteDisease, error) {
+func (r *mutationResolver) CreateAnteDisease(ctx context.Context, name string, chronicity float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) (*model.AnteDisease, error) {
 	newAnteDisease := bson.M{
-		"name":       name,
-		"chronicity": chronicity,
-		"chir":       chir,
-		"treatment":  treatment,
-		"symptoms":   symptoms,
+		"name":           name,
+		"chronicity":     chronicity,
+		"surgery_ids":    surgeryIds,
+		"symptoms":       symptoms,
+		"treatment_ids":  treatmentIds,
+		"still_relevant": stillRelevant,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").InsertOne(ctx, newAnteDisease)
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").InsertOne(ctx, newAnteDisease)
 	if err != nil {
 		return nil, err
 	}
 	entity := model.AnteDisease{
-		ID:         res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:       name,
-		Chronicity: chronicity,
-		Chir:       chir,
-		Treatment:  treatment,
-		Symptoms:   symptoms,
+		ID:            res.InsertedID.(primitive.ObjectID).Hex(),
+		Name:          name,
+		Chronicity:    chronicity,
+		SurgeryIds:    surgeryIds,
+		Symptoms:      symptoms,
+		TreatmentIds:  treatmentIds,
+		StillRelevant: stillRelevant,
 	}
 	return &entity, err
 }
 
 // UpdateAnteDisease is the resolver for the updateAnteDisease field.
-func (r *mutationResolver) UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, chir *string, treatment []string, symptoms []string) (*model.AnteDisease, error) {
+func (r *mutationResolver) UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) (*model.AnteDisease, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -1030,22 +1032,24 @@ func (r *mutationResolver) UpdateAnteDisease(ctx context.Context, id string, nam
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":        objId,
-		"name":       name,
-		"chronicity": chronicity,
-		"chir":       chir,
-		"treatment":  treatment,
-		"symptoms":   symptoms,
+		"_id":            objId,
+		"name":           name,
+		"chronicity":     chronicity,
+		"surgery_ids":    surgeryIds,
+		"symptoms":       symptoms,
+		"treatment_ids":  treatmentIds,
+		"still_relevant": stillRelevant,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").ReplaceOne(ctx, filter, updated)
 
 	return &model.AnteDisease{
-		ID:         id,
-		Name:       *name,
-		Chronicity: *chronicity,
-		Chir:       chir,
-		Treatment:  treatment,
-		Symptoms:   symptoms,
+		ID:            id,
+		Name:          *name,
+		Chronicity:    *chronicity,
+		SurgeryIds:    surgeryIds,
+		Symptoms:      symptoms,
+		TreatmentIds:  treatmentIds,
+		StillRelevant: *stillRelevant,
 	}, err
 }
 
