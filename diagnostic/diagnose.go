@@ -92,7 +92,13 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 			Answer:   log.Answer,
 		})
 	}
-	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Treatments, session.GetSessionById.Last_question, logs, session.GetSessionById.Alerts)
+
+	var diseasesinput []graphql.SessionDiseasesInput
+	if exam.Done == true {
+		diseasesinput = utils.GetSessionDiseases(symptoms)
+	}
+
+	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, diseasesinput, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Treatments, session.GetSessionById.Last_question, logs, session.GetSessionById.Alerts)
 	edgarlib.CheckError(err)
 	return DiagnoseResponse{
 		Done:     exam.Done,
