@@ -34,6 +34,16 @@ input LogsInput {
     answer: String!
 }
 
+type SessionDiseases {
+    name: String!
+    presence: Float!
+}
+
+input SessionDiseasesInput {
+    name: String!
+    presence: Float!
+}
+
 ##  Entities  ----------------------------------------------------------------------------------------------------------
 
 # Patient entity
@@ -84,6 +94,7 @@ type Admin {
 # Session entity
 type Session {
     id: ID!
+    diseases: [SessionDiseases!]!
     symptoms: [SessionSymptom!]!
     age: Int!
     height: Int!
@@ -188,9 +199,10 @@ type AnteDisease {
     id: ID!
     name: String!
     chronicity: Float!
-    chir: String
-    treatment: [String!]
+    surgery_ids: [String!]
     symptoms: [String!]
+    treatment_ids: [String!]
+    still_relevant: Boolean!
 }
 
 type AnteFamily {
@@ -455,10 +467,10 @@ type Mutation {
     deleteTestAccount(id: String!): Boolean
 
     # Create a new session.
-    createSession(symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, treatments: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
+    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, treatments: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
 
     # Update a new session.
-    updateSession(id: String!, symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], treatments: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
+    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], treatments: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
 
     # Delete a session.
     deleteSession(id: String!): Boolean
@@ -521,10 +533,10 @@ type Mutation {
     deleteAnteChir(id: String!): Boolean
 
     # Create a new antedisease.
-    createAnteDisease(name: String!, chronicity: Float!, chir: String, treatment: [String!], symptoms: [String!]): AnteDisease
+    createAnteDisease(name: String!, chronicity: Float!, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean!): AnteDisease
 
     # Update a new antedisease.
-    updateAnteDisease(id: String!, name: String, chronicity: Float, chir: String, treatment: [String!], symptoms: [String!]): AnteDisease
+    updateAnteDisease(id: String!, name: String, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean): AnteDisease
 
     # Delete a antedisease.
     deleteAnteDisease(id: String!): Boolean

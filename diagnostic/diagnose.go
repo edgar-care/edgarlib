@@ -69,9 +69,22 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		ns.Duration = 0
 		symptomsinput = append(symptomsinput, ns)
 	}
-	if len(exam.Symptoms) > 0 {
-		session.GetSessionById.Last_question = exam.Symptoms[0]
+
+	if len(session.GetSessionById.Ante_diseases) > 0 {
+		anteSymptomQuestion, anteSymptom := utils.CheckAnteDiseaseInSymptoms(session.GetSessionById)
+		if anteSymptom != "" {
+			exam.Question = anteSymptomQuestion
+			session.GetSessionById.Last_question = anteSymptom
+		} else if len(exam.Symptoms) > 0 {
+			session.GetSessionById.Last_question = exam.Symptoms[0]
+		}
 	}
+
+	if len(exam.Symptoms) == 0 {
+		session.GetSessionById.Last_question = ""
+		exam.Question = ""
+	}
+
 	var logs []graphql.LogsInput
 	for _, log := range session.GetSessionById.Logs {
 		logs = append(logs, graphql.LogsInput{
@@ -79,7 +92,13 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 			Answer:   log.Answer,
 		})
 	}
-	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Treatments, session.GetSessionById.Last_question, logs, session.GetSessionById.Alerts)
+
+	var diseasesinput []graphql.SessionDiseasesInput
+	if exam.Done == true {
+		diseasesinput = utils.GetSessionDiseases(symptoms)
+	}
+
+	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, diseasesinput, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Treatments, session.GetSessionById.Last_question, logs, session.GetSessionById.Alerts)
 	edgarlib.CheckError(err)
 	return DiagnoseResponse{
 		Done:     exam.Done,

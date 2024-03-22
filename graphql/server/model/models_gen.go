@@ -48,12 +48,13 @@ type AnteChir struct {
 }
 
 type AnteDisease struct {
-	ID         string   `json:"id" bson:"_id"`
-	Name       string   `json:"name" bson:"name"`
-	Chronicity float64  `json:"chronicity" bson:"chronicity"`
-	Chir       *string  `json:"chir,omitempty" bson:"chir"`
-	Treatment  []string `json:"treatment,omitempty" bson:"treatment"`
-	Symptoms   []string `json:"symptoms,omitempty" bson:"symptoms"`
+	ID            string   `json:"id" bson:"_id"`
+	Name          string   `json:"name" bson:"name"`
+	Chronicity    float64  `json:"chronicity" bson:"chronicity"`
+	SurgeryIds    []string `json:"surgery_ids,omitempty" bson:"surgery_ids"`
+	Symptoms      []string `json:"symptoms,omitempty" bson:"symptoms"`
+	TreatmentIds  []string `json:"treatment_ids,omitempty" bson:"treatment_ids"`
+	StillRelevant bool     `json:"still_relevant" bson:"still_relevant"`
 }
 
 type AnteFamily struct {
@@ -199,18 +200,29 @@ type Rdv struct {
 }
 
 type Session struct {
-	ID           string            `json:"id" bson:"_id"`
-	Symptoms     []*SessionSymptom `json:"symptoms" bson:"symptoms"`
-	Age          int               `json:"age" bson:"age"`
-	Height       int               `json:"height" bson:"height"`
-	Weight       int               `json:"weight" bson:"weight"`
-	Sex          string            `json:"sex" bson:"sex"`
-	AnteChirs    []string          `json:"ante_chirs" bson:"ante_chirs"`
-	AnteDiseases []string          `json:"ante_diseases" bson:"ante_diseases"`
-	Treatments   []string          `json:"treatments" bson:"treatments"`
-	LastQuestion string            `json:"last_question" bson:"last_question"`
-	Logs         []*Logs           `json:"logs" bson:"logs"`
-	Alerts       []string          `json:"alerts" bson:"alerts"`
+	ID           string             `json:"id" bson:"_id"`
+	Diseases     []*SessionDiseases `json:"diseases" bson:"diseases"`
+	Symptoms     []*SessionSymptom  `json:"symptoms" bson:"symptoms"`
+	Age          int                `json:"age" bson:"age"`
+	Height       int                `json:"height" bson:"height"`
+	Weight       int                `json:"weight" bson:"weight"`
+	Sex          string             `json:"sex" bson:"sex"`
+	AnteChirs    []string           `json:"ante_chirs" bson:"ante_chirs"`
+	AnteDiseases []string           `json:"ante_diseases" bson:"ante_diseases"`
+	Treatments   []string           `json:"treatments" bson:"treatments"`
+	LastQuestion string             `json:"last_question" bson:"last_question"`
+	Logs         []*Logs            `json:"logs" bson:"logs"`
+	Alerts       []string           `json:"alerts" bson:"alerts"`
+}
+
+type SessionDiseases struct {
+	Name     string  `json:"name" bson:"name"`
+	Presence float64 `json:"presence" bson:"presence"`
+}
+
+type SessionDiseasesInput struct {
+	Name     string  `json:"name" bson:"name"`
+	Presence float64 `json:"presence" bson:"presence"`
 }
 
 type SessionSymptom struct {

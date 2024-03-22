@@ -148,12 +148,13 @@ func (v *CreateAnteChirResponse) GetCreateAnteChir() CreateAnteChirCreateAnteChi
 
 // CreateAnteDiseaseCreateAnteDisease includes the requested fields of the GraphQL type AnteDisease.
 type CreateAnteDiseaseCreateAnteDisease struct {
-	Id         string   `json:"id"`
-	Name       string   `json:"name"`
-	Chronicity float64  `json:"chronicity"`
-	Chir       string   `json:"chir"`
-	Treatment  []string `json:"treatment"`
-	Symptoms   []string `json:"symptoms"`
+	Id             string   `json:"id"`
+	Name           string   `json:"name"`
+	Chronicity     float64  `json:"chronicity"`
+	Surgery_ids    []string `json:"surgery_ids"`
+	Symptoms       []string `json:"symptoms"`
+	Treatment_ids  []string `json:"treatment_ids"`
+	Still_relevant bool     `json:"still_relevant"`
 }
 
 // GetId returns CreateAnteDiseaseCreateAnteDisease.Id, and is useful for accessing the field via an interface.
@@ -165,14 +166,17 @@ func (v *CreateAnteDiseaseCreateAnteDisease) GetName() string { return v.Name }
 // GetChronicity returns CreateAnteDiseaseCreateAnteDisease.Chronicity, and is useful for accessing the field via an interface.
 func (v *CreateAnteDiseaseCreateAnteDisease) GetChronicity() float64 { return v.Chronicity }
 
-// GetChir returns CreateAnteDiseaseCreateAnteDisease.Chir, and is useful for accessing the field via an interface.
-func (v *CreateAnteDiseaseCreateAnteDisease) GetChir() string { return v.Chir }
-
-// GetTreatment returns CreateAnteDiseaseCreateAnteDisease.Treatment, and is useful for accessing the field via an interface.
-func (v *CreateAnteDiseaseCreateAnteDisease) GetTreatment() []string { return v.Treatment }
+// GetSurgery_ids returns CreateAnteDiseaseCreateAnteDisease.Surgery_ids, and is useful for accessing the field via an interface.
+func (v *CreateAnteDiseaseCreateAnteDisease) GetSurgery_ids() []string { return v.Surgery_ids }
 
 // GetSymptoms returns CreateAnteDiseaseCreateAnteDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *CreateAnteDiseaseCreateAnteDisease) GetSymptoms() []string { return v.Symptoms }
+
+// GetTreatment_ids returns CreateAnteDiseaseCreateAnteDisease.Treatment_ids, and is useful for accessing the field via an interface.
+func (v *CreateAnteDiseaseCreateAnteDisease) GetTreatment_ids() []string { return v.Treatment_ids }
+
+// GetStill_relevant returns CreateAnteDiseaseCreateAnteDisease.Still_relevant, and is useful for accessing the field via an interface.
+func (v *CreateAnteDiseaseCreateAnteDisease) GetStill_relevant() bool { return v.Still_relevant }
 
 // CreateAnteDiseaseResponse is returned by CreateAnteDisease on success.
 type CreateAnteDiseaseResponse struct {
@@ -679,6 +683,7 @@ func (v *CreateRdvResponse) GetCreateRdv() CreateRdvCreateRdv { return v.CreateR
 // CreateSessionCreateSession includes the requested fields of the GraphQL type Session.
 type CreateSessionCreateSession struct {
 	Id            string                                             `json:"id"`
+	Diseases      []CreateSessionCreateSessionDiseases               `json:"diseases"`
 	Symptoms      []CreateSessionCreateSessionSymptomsSessionSymptom `json:"symptoms"`
 	Age           int                                                `json:"age"`
 	Height        int                                                `json:"height"`
@@ -694,6 +699,11 @@ type CreateSessionCreateSession struct {
 
 // GetId returns CreateSessionCreateSession.Id, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSession) GetId() string { return v.Id }
+
+// GetDiseases returns CreateSessionCreateSession.Diseases, and is useful for accessing the field via an interface.
+func (v *CreateSessionCreateSession) GetDiseases() []CreateSessionCreateSessionDiseases {
+	return v.Diseases
+}
 
 // GetSymptoms returns CreateSessionCreateSession.Symptoms, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSession) GetSymptoms() []CreateSessionCreateSessionSymptomsSessionSymptom {
@@ -729,6 +739,18 @@ func (v *CreateSessionCreateSession) GetLogs() []CreateSessionCreateSessionLogs 
 
 // GetAlerts returns CreateSessionCreateSession.Alerts, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSession) GetAlerts() []string { return v.Alerts }
+
+// CreateSessionCreateSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
+type CreateSessionCreateSessionDiseases struct {
+	Name     string  `json:"name"`
+	Presence float64 `json:"presence"`
+}
+
+// GetName returns CreateSessionCreateSessionDiseases.Name, and is useful for accessing the field via an interface.
+func (v *CreateSessionCreateSessionDiseases) GetName() string { return v.Name }
+
+// GetPresence returns CreateSessionCreateSessionDiseases.Presence, and is useful for accessing the field via an interface.
+func (v *CreateSessionCreateSessionDiseases) GetPresence() float64 { return v.Presence }
 
 // CreateSessionCreateSessionLogs includes the requested fields of the GraphQL type Logs.
 type CreateSessionCreateSessionLogs struct {
@@ -1297,12 +1319,13 @@ func (v *GetAnteChirsResponse) GetGetAnteChirs() []GetAnteChirsGetAnteChirsAnteC
 
 // GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease includes the requested fields of the GraphQL type AnteDisease.
 type GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease struct {
-	Id         string   `json:"id"`
-	Name       string   `json:"name"`
-	Chronicity float64  `json:"chronicity"`
-	Chir       string   `json:"chir"`
-	Treatment  []string `json:"treatment"`
-	Symptoms   []string `json:"symptoms"`
+	Id             string   `json:"id"`
+	Name           string   `json:"name"`
+	Chronicity     float64  `json:"chronicity"`
+	Surgery_ids    []string `json:"surgery_ids"`
+	Symptoms       []string `json:"symptoms"`
+	Treatment_ids  []string `json:"treatment_ids"`
+	Still_relevant bool     `json:"still_relevant"`
 }
 
 // GetId returns GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease.Id, and is useful for accessing the field via an interface.
@@ -1316,14 +1339,23 @@ func (v *GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease) GetChronicity() float6
 	return v.Chronicity
 }
 
-// GetChir returns GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease.Chir, and is useful for accessing the field via an interface.
-func (v *GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease) GetChir() string { return v.Chir }
-
-// GetTreatment returns GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease.Treatment, and is useful for accessing the field via an interface.
-func (v *GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease) GetTreatment() []string { return v.Treatment }
+// GetSurgery_ids returns GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease.Surgery_ids, and is useful for accessing the field via an interface.
+func (v *GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease) GetSurgery_ids() []string {
+	return v.Surgery_ids
+}
 
 // GetSymptoms returns GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease) GetSymptoms() []string { return v.Symptoms }
+
+// GetTreatment_ids returns GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease.Treatment_ids, and is useful for accessing the field via an interface.
+func (v *GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease) GetTreatment_ids() []string {
+	return v.Treatment_ids
+}
+
+// GetStill_relevant returns GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease.Still_relevant, and is useful for accessing the field via an interface.
+func (v *GetAnteDiseaseByIDGetAnteDiseaseByIDAnteDisease) GetStill_relevant() bool {
+	return v.Still_relevant
+}
 
 // GetAnteDiseaseByIDResponse is returned by GetAnteDiseaseByID on success.
 type GetAnteDiseaseByIDResponse struct {
@@ -1337,12 +1369,13 @@ func (v *GetAnteDiseaseByIDResponse) GetGetAnteDiseaseByID() GetAnteDiseaseByIDG
 
 // GetAnteDiseasesGetAnteDiseasesAnteDisease includes the requested fields of the GraphQL type AnteDisease.
 type GetAnteDiseasesGetAnteDiseasesAnteDisease struct {
-	Id         string   `json:"id"`
-	Name       string   `json:"name"`
-	Chronicity float64  `json:"chronicity"`
-	Chir       string   `json:"chir"`
-	Treatment  []string `json:"treatment"`
-	Symptoms   []string `json:"symptoms"`
+	Id             string   `json:"id"`
+	Name           string   `json:"name"`
+	Chronicity     float64  `json:"chronicity"`
+	Surgery_ids    []string `json:"surgery_ids"`
+	Symptoms       []string `json:"symptoms"`
+	Treatment_ids  []string `json:"treatment_ids"`
+	Still_relevant bool     `json:"still_relevant"`
 }
 
 // GetId returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Id, and is useful for accessing the field via an interface.
@@ -1354,14 +1387,19 @@ func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetName() string { return v.
 // GetChronicity returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Chronicity, and is useful for accessing the field via an interface.
 func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetChronicity() float64 { return v.Chronicity }
 
-// GetChir returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Chir, and is useful for accessing the field via an interface.
-func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetChir() string { return v.Chir }
-
-// GetTreatment returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Treatment, and is useful for accessing the field via an interface.
-func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetTreatment() []string { return v.Treatment }
+// GetSurgery_ids returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Surgery_ids, and is useful for accessing the field via an interface.
+func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetSurgery_ids() []string { return v.Surgery_ids }
 
 // GetSymptoms returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetSymptoms() []string { return v.Symptoms }
+
+// GetTreatment_ids returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Treatment_ids, and is useful for accessing the field via an interface.
+func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetTreatment_ids() []string {
+	return v.Treatment_ids
+}
+
+// GetStill_relevant returns GetAnteDiseasesGetAnteDiseasesAnteDisease.Still_relevant, and is useful for accessing the field via an interface.
+func (v *GetAnteDiseasesGetAnteDiseasesAnteDisease) GetStill_relevant() bool { return v.Still_relevant }
 
 // GetAnteDiseasesResponse is returned by GetAnteDiseases on success.
 type GetAnteDiseasesResponse struct {
@@ -2688,6 +2726,7 @@ func (v *GetRdvByIdResponse) GetGetRdvById() GetRdvByIdGetRdvByIdRdv { return v.
 // GetSessionByIdGetSessionByIdSession includes the requested fields of the GraphQL type Session.
 type GetSessionByIdGetSessionByIdSession struct {
 	Id            string                                                      `json:"id"`
+	Diseases      []GetSessionByIdGetSessionByIdSessionDiseases               `json:"diseases"`
 	Symptoms      []GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom `json:"symptoms"`
 	Age           int                                                         `json:"age"`
 	Height        int                                                         `json:"height"`
@@ -2703,6 +2742,11 @@ type GetSessionByIdGetSessionByIdSession struct {
 
 // GetId returns GetSessionByIdGetSessionByIdSession.Id, and is useful for accessing the field via an interface.
 func (v *GetSessionByIdGetSessionByIdSession) GetId() string { return v.Id }
+
+// GetDiseases returns GetSessionByIdGetSessionByIdSession.Diseases, and is useful for accessing the field via an interface.
+func (v *GetSessionByIdGetSessionByIdSession) GetDiseases() []GetSessionByIdGetSessionByIdSessionDiseases {
+	return v.Diseases
+}
 
 // GetSymptoms returns GetSessionByIdGetSessionByIdSession.Symptoms, and is useful for accessing the field via an interface.
 func (v *GetSessionByIdGetSessionByIdSession) GetSymptoms() []GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom {
@@ -2740,6 +2784,18 @@ func (v *GetSessionByIdGetSessionByIdSession) GetLogs() []GetSessionByIdGetSessi
 
 // GetAlerts returns GetSessionByIdGetSessionByIdSession.Alerts, and is useful for accessing the field via an interface.
 func (v *GetSessionByIdGetSessionByIdSession) GetAlerts() []string { return v.Alerts }
+
+// GetSessionByIdGetSessionByIdSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
+type GetSessionByIdGetSessionByIdSessionDiseases struct {
+	Name     string  `json:"name"`
+	Presence float64 `json:"presence"`
+}
+
+// GetName returns GetSessionByIdGetSessionByIdSessionDiseases.Name, and is useful for accessing the field via an interface.
+func (v *GetSessionByIdGetSessionByIdSessionDiseases) GetName() string { return v.Name }
+
+// GetPresence returns GetSessionByIdGetSessionByIdSessionDiseases.Presence, and is useful for accessing the field via an interface.
+func (v *GetSessionByIdGetSessionByIdSessionDiseases) GetPresence() float64 { return v.Presence }
 
 // GetSessionByIdGetSessionByIdSessionLogs includes the requested fields of the GraphQL type Logs.
 type GetSessionByIdGetSessionByIdSessionLogs struct {
@@ -2786,6 +2842,7 @@ func (v *GetSessionByIdResponse) GetGetSessionById() GetSessionByIdGetSessionByI
 // GetSessionsGetSessionsSession includes the requested fields of the GraphQL type Session.
 type GetSessionsGetSessionsSession struct {
 	Id            string                                                `json:"id"`
+	Diseases      []GetSessionsGetSessionsSessionDiseases               `json:"diseases"`
 	Symptoms      []GetSessionsGetSessionsSessionSymptomsSessionSymptom `json:"symptoms"`
 	Age           int                                                   `json:"age"`
 	Height        int                                                   `json:"height"`
@@ -2801,6 +2858,11 @@ type GetSessionsGetSessionsSession struct {
 
 // GetId returns GetSessionsGetSessionsSession.Id, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSession) GetId() string { return v.Id }
+
+// GetDiseases returns GetSessionsGetSessionsSession.Diseases, and is useful for accessing the field via an interface.
+func (v *GetSessionsGetSessionsSession) GetDiseases() []GetSessionsGetSessionsSessionDiseases {
+	return v.Diseases
+}
 
 // GetSymptoms returns GetSessionsGetSessionsSession.Symptoms, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSession) GetSymptoms() []GetSessionsGetSessionsSessionSymptomsSessionSymptom {
@@ -2836,6 +2898,18 @@ func (v *GetSessionsGetSessionsSession) GetLogs() []GetSessionsGetSessionsSessio
 
 // GetAlerts returns GetSessionsGetSessionsSession.Alerts, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSession) GetAlerts() []string { return v.Alerts }
+
+// GetSessionsGetSessionsSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
+type GetSessionsGetSessionsSessionDiseases struct {
+	Name     string  `json:"name"`
+	Presence float64 `json:"presence"`
+}
+
+// GetName returns GetSessionsGetSessionsSessionDiseases.Name, and is useful for accessing the field via an interface.
+func (v *GetSessionsGetSessionsSessionDiseases) GetName() string { return v.Name }
+
+// GetPresence returns GetSessionsGetSessionsSessionDiseases.Presence, and is useful for accessing the field via an interface.
+func (v *GetSessionsGetSessionsSessionDiseases) GetPresence() float64 { return v.Presence }
 
 // GetSessionsGetSessionsSessionLogs includes the requested fields of the GraphQL type Logs.
 type GetSessionsGetSessionsSessionLogs struct {
@@ -3340,6 +3414,17 @@ const (
 	PeriodNight   Period = "NIGHT"
 )
 
+type SessionDiseasesInput struct {
+	Name     string  `json:"name"`
+	Presence float64 `json:"presence"`
+}
+
+// GetName returns SessionDiseasesInput.Name, and is useful for accessing the field via an interface.
+func (v *SessionDiseasesInput) GetName() string { return v.Name }
+
+// GetPresence returns SessionDiseasesInput.Presence, and is useful for accessing the field via an interface.
+func (v *SessionDiseasesInput) GetPresence() float64 { return v.Presence }
+
 type SessionSymptomInput struct {
 	Name     string `json:"name"`
 	Presence bool   `json:"presence"`
@@ -3488,12 +3573,13 @@ func (v *UpdateAnteDiseaseResponse) GetUpdateAnteDisease() UpdateAnteDiseaseUpda
 
 // UpdateAnteDiseaseUpdateAnteDisease includes the requested fields of the GraphQL type AnteDisease.
 type UpdateAnteDiseaseUpdateAnteDisease struct {
-	Id         string   `json:"id"`
-	Name       string   `json:"name"`
-	Chronicity float64  `json:"chronicity"`
-	Chir       string   `json:"chir"`
-	Treatment  []string `json:"treatment"`
-	Symptoms   []string `json:"symptoms"`
+	Id             string   `json:"id"`
+	Name           string   `json:"name"`
+	Chronicity     float64  `json:"chronicity"`
+	Surgery_ids    []string `json:"surgery_ids"`
+	Symptoms       []string `json:"symptoms"`
+	Treatment_ids  []string `json:"treatment_ids"`
+	Still_relevant bool     `json:"still_relevant"`
 }
 
 // GetId returns UpdateAnteDiseaseUpdateAnteDisease.Id, and is useful for accessing the field via an interface.
@@ -3505,14 +3591,17 @@ func (v *UpdateAnteDiseaseUpdateAnteDisease) GetName() string { return v.Name }
 // GetChronicity returns UpdateAnteDiseaseUpdateAnteDisease.Chronicity, and is useful for accessing the field via an interface.
 func (v *UpdateAnteDiseaseUpdateAnteDisease) GetChronicity() float64 { return v.Chronicity }
 
-// GetChir returns UpdateAnteDiseaseUpdateAnteDisease.Chir, and is useful for accessing the field via an interface.
-func (v *UpdateAnteDiseaseUpdateAnteDisease) GetChir() string { return v.Chir }
-
-// GetTreatment returns UpdateAnteDiseaseUpdateAnteDisease.Treatment, and is useful for accessing the field via an interface.
-func (v *UpdateAnteDiseaseUpdateAnteDisease) GetTreatment() []string { return v.Treatment }
+// GetSurgery_ids returns UpdateAnteDiseaseUpdateAnteDisease.Surgery_ids, and is useful for accessing the field via an interface.
+func (v *UpdateAnteDiseaseUpdateAnteDisease) GetSurgery_ids() []string { return v.Surgery_ids }
 
 // GetSymptoms returns UpdateAnteDiseaseUpdateAnteDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *UpdateAnteDiseaseUpdateAnteDisease) GetSymptoms() []string { return v.Symptoms }
+
+// GetTreatment_ids returns UpdateAnteDiseaseUpdateAnteDisease.Treatment_ids, and is useful for accessing the field via an interface.
+func (v *UpdateAnteDiseaseUpdateAnteDisease) GetTreatment_ids() []string { return v.Treatment_ids }
+
+// GetStill_relevant returns UpdateAnteDiseaseUpdateAnteDisease.Still_relevant, and is useful for accessing the field via an interface.
+func (v *UpdateAnteDiseaseUpdateAnteDisease) GetStill_relevant() bool { return v.Still_relevant }
 
 // UpdateAnteFamilyResponse is returned by UpdateAnteFamily on success.
 type UpdateAnteFamilyResponse struct {
@@ -3979,11 +4068,15 @@ func (v *UpdateSessionResponse) GetUpdateSession() UpdateSessionUpdateSession { 
 // UpdateSessionUpdateSession includes the requested fields of the GraphQL type Session.
 type UpdateSessionUpdateSession struct {
 	Id            string                                             `json:"id"`
+	Diseases      []UpdateSessionUpdateSessionDiseases               `json:"diseases"`
 	Symptoms      []UpdateSessionUpdateSessionSymptomsSessionSymptom `json:"symptoms"`
 	Age           int                                                `json:"age"`
 	Height        int                                                `json:"height"`
 	Weight        int                                                `json:"weight"`
 	Sex           string                                             `json:"sex"`
+	Ante_chirs    []string                                           `json:"ante_chirs"`
+	Ante_diseases []string                                           `json:"ante_diseases"`
+	Treatments    []string                                           `json:"treatments"`
 	Last_question string                                             `json:"last_question"`
 	Logs          []UpdateSessionUpdateSessionLogs                   `json:"logs"`
 	Alerts        []string                                           `json:"alerts"`
@@ -3991,6 +4084,11 @@ type UpdateSessionUpdateSession struct {
 
 // GetId returns UpdateSessionUpdateSession.Id, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSession) GetId() string { return v.Id }
+
+// GetDiseases returns UpdateSessionUpdateSession.Diseases, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSession) GetDiseases() []UpdateSessionUpdateSessionDiseases {
+	return v.Diseases
+}
 
 // GetSymptoms returns UpdateSessionUpdateSession.Symptoms, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSession) GetSymptoms() []UpdateSessionUpdateSessionSymptomsSessionSymptom {
@@ -4009,6 +4107,15 @@ func (v *UpdateSessionUpdateSession) GetWeight() int { return v.Weight }
 // GetSex returns UpdateSessionUpdateSession.Sex, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSession) GetSex() string { return v.Sex }
 
+// GetAnte_chirs returns UpdateSessionUpdateSession.Ante_chirs, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSession) GetAnte_chirs() []string { return v.Ante_chirs }
+
+// GetAnte_diseases returns UpdateSessionUpdateSession.Ante_diseases, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSession) GetAnte_diseases() []string { return v.Ante_diseases }
+
+// GetTreatments returns UpdateSessionUpdateSession.Treatments, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSession) GetTreatments() []string { return v.Treatments }
+
 // GetLast_question returns UpdateSessionUpdateSession.Last_question, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSession) GetLast_question() string { return v.Last_question }
 
@@ -4017,6 +4124,18 @@ func (v *UpdateSessionUpdateSession) GetLogs() []UpdateSessionUpdateSessionLogs 
 
 // GetAlerts returns UpdateSessionUpdateSession.Alerts, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSession) GetAlerts() []string { return v.Alerts }
+
+// UpdateSessionUpdateSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
+type UpdateSessionUpdateSessionDiseases struct {
+	Name     string  `json:"name"`
+	Presence float64 `json:"presence"`
+}
+
+// GetName returns UpdateSessionUpdateSessionDiseases.Name, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSessionDiseases) GetName() string { return v.Name }
+
+// GetPresence returns UpdateSessionUpdateSessionDiseases.Presence, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSessionDiseases) GetPresence() float64 { return v.Presence }
 
 // UpdateSessionUpdateSessionLogs includes the requested fields of the GraphQL type Logs.
 type UpdateSessionUpdateSessionLogs struct {
@@ -4228,11 +4347,12 @@ func (v *__CreateAnteChirInput) GetInduced_symptoms() []string { return v.Induce
 
 // __CreateAnteDiseaseInput is used internally by genqlient
 type __CreateAnteDiseaseInput struct {
-	Name       string   `json:"name"`
-	Chronicity float64  `json:"chronicity"`
-	Chir       string   `json:"chir"`
-	Treatment  []string `json:"treatment"`
-	Symptoms   []string `json:"symptoms"`
+	Name           string   `json:"name"`
+	Chronicity     float64  `json:"chronicity"`
+	Surgery_ids    []string `json:"surgery_ids"`
+	Symptoms       []string `json:"symptoms"`
+	Treatment_ids  []string `json:"treatment_ids"`
+	Still_relevant bool     `json:"still_relevant"`
 }
 
 // GetName returns __CreateAnteDiseaseInput.Name, and is useful for accessing the field via an interface.
@@ -4241,14 +4361,17 @@ func (v *__CreateAnteDiseaseInput) GetName() string { return v.Name }
 // GetChronicity returns __CreateAnteDiseaseInput.Chronicity, and is useful for accessing the field via an interface.
 func (v *__CreateAnteDiseaseInput) GetChronicity() float64 { return v.Chronicity }
 
-// GetChir returns __CreateAnteDiseaseInput.Chir, and is useful for accessing the field via an interface.
-func (v *__CreateAnteDiseaseInput) GetChir() string { return v.Chir }
-
-// GetTreatment returns __CreateAnteDiseaseInput.Treatment, and is useful for accessing the field via an interface.
-func (v *__CreateAnteDiseaseInput) GetTreatment() []string { return v.Treatment }
+// GetSurgery_ids returns __CreateAnteDiseaseInput.Surgery_ids, and is useful for accessing the field via an interface.
+func (v *__CreateAnteDiseaseInput) GetSurgery_ids() []string { return v.Surgery_ids }
 
 // GetSymptoms returns __CreateAnteDiseaseInput.Symptoms, and is useful for accessing the field via an interface.
 func (v *__CreateAnteDiseaseInput) GetSymptoms() []string { return v.Symptoms }
+
+// GetTreatment_ids returns __CreateAnteDiseaseInput.Treatment_ids, and is useful for accessing the field via an interface.
+func (v *__CreateAnteDiseaseInput) GetTreatment_ids() []string { return v.Treatment_ids }
+
+// GetStill_relevant returns __CreateAnteDiseaseInput.Still_relevant, and is useful for accessing the field via an interface.
+func (v *__CreateAnteDiseaseInput) GetStill_relevant() bool { return v.Still_relevant }
 
 // __CreateAnteFamilyInput is used internally by genqlient
 type __CreateAnteFamilyInput struct {
@@ -4484,18 +4607,22 @@ func (v *__CreateRdvInput) GetSession_id() string { return v.Session_id }
 
 // __CreateSessionInput is used internally by genqlient
 type __CreateSessionInput struct {
-	Symptoms      []SessionSymptomInput `json:"symptoms"`
-	Age           int                   `json:"age"`
-	Height        int                   `json:"height"`
-	Weight        int                   `json:"weight"`
-	Sex           string                `json:"sex"`
-	Ante_chirs    []string              `json:"ante_chirs"`
-	Ante_diseases []string              `json:"ante_diseases"`
-	Treatments    []string              `json:"treatments"`
-	Last_question string                `json:"last_question"`
-	Logs          []LogsInput           `json:"logs"`
-	Alerts        []string              `json:"alerts"`
+	Diseases      []SessionDiseasesInput `json:"diseases"`
+	Symptoms      []SessionSymptomInput  `json:"symptoms"`
+	Age           int                    `json:"age"`
+	Height        int                    `json:"height"`
+	Weight        int                    `json:"weight"`
+	Sex           string                 `json:"sex"`
+	Ante_chirs    []string               `json:"ante_chirs"`
+	Ante_diseases []string               `json:"ante_diseases"`
+	Treatments    []string               `json:"treatments"`
+	Last_question string                 `json:"last_question"`
+	Logs          []LogsInput            `json:"logs"`
+	Alerts        []string               `json:"alerts"`
 }
+
+// GetDiseases returns __CreateSessionInput.Diseases, and is useful for accessing the field via an interface.
+func (v *__CreateSessionInput) GetDiseases() []SessionDiseasesInput { return v.Diseases }
 
 // GetSymptoms returns __CreateSessionInput.Symptoms, and is useful for accessing the field via an interface.
 func (v *__CreateSessionInput) GetSymptoms() []SessionSymptomInput { return v.Symptoms }
@@ -5076,12 +5203,13 @@ func (v *__UpdateAnteChirInput) GetInduced_symptoms() []string { return v.Induce
 
 // __UpdateAnteDiseaseInput is used internally by genqlient
 type __UpdateAnteDiseaseInput struct {
-	Id         string   `json:"id"`
-	Name       string   `json:"name"`
-	Chronicity float64  `json:"chronicity"`
-	Chir       string   `json:"chir"`
-	Treatment  []string `json:"treatment"`
-	Symptoms   []string `json:"symptoms"`
+	Id             string   `json:"id"`
+	Name           string   `json:"name"`
+	Chronicity     float64  `json:"chronicity"`
+	Surgery_ids    []string `json:"surgery_ids"`
+	Symptoms       []string `json:"symptoms"`
+	Treatment_ids  []string `json:"treatment_ids"`
+	Still_relevant bool     `json:"still_relevant"`
 }
 
 // GetId returns __UpdateAnteDiseaseInput.Id, and is useful for accessing the field via an interface.
@@ -5093,14 +5221,17 @@ func (v *__UpdateAnteDiseaseInput) GetName() string { return v.Name }
 // GetChronicity returns __UpdateAnteDiseaseInput.Chronicity, and is useful for accessing the field via an interface.
 func (v *__UpdateAnteDiseaseInput) GetChronicity() float64 { return v.Chronicity }
 
-// GetChir returns __UpdateAnteDiseaseInput.Chir, and is useful for accessing the field via an interface.
-func (v *__UpdateAnteDiseaseInput) GetChir() string { return v.Chir }
-
-// GetTreatment returns __UpdateAnteDiseaseInput.Treatment, and is useful for accessing the field via an interface.
-func (v *__UpdateAnteDiseaseInput) GetTreatment() []string { return v.Treatment }
+// GetSurgery_ids returns __UpdateAnteDiseaseInput.Surgery_ids, and is useful for accessing the field via an interface.
+func (v *__UpdateAnteDiseaseInput) GetSurgery_ids() []string { return v.Surgery_ids }
 
 // GetSymptoms returns __UpdateAnteDiseaseInput.Symptoms, and is useful for accessing the field via an interface.
 func (v *__UpdateAnteDiseaseInput) GetSymptoms() []string { return v.Symptoms }
+
+// GetTreatment_ids returns __UpdateAnteDiseaseInput.Treatment_ids, and is useful for accessing the field via an interface.
+func (v *__UpdateAnteDiseaseInput) GetTreatment_ids() []string { return v.Treatment_ids }
+
+// GetStill_relevant returns __UpdateAnteDiseaseInput.Still_relevant, and is useful for accessing the field via an interface.
+func (v *__UpdateAnteDiseaseInput) GetStill_relevant() bool { return v.Still_relevant }
 
 // __UpdateAnteFamilyInput is used internally by genqlient
 type __UpdateAnteFamilyInput struct {
@@ -5356,22 +5487,26 @@ func (v *__UpdateRdvInput) GetSession_id() string { return v.Session_id }
 
 // __UpdateSessionInput is used internally by genqlient
 type __UpdateSessionInput struct {
-	Id            string                `json:"id"`
-	Symptoms      []SessionSymptomInput `json:"symptoms"`
-	Age           int                   `json:"age"`
-	Height        int                   `json:"height"`
-	Weight        int                   `json:"weight"`
-	Sex           string                `json:"sex"`
-	Ante_chirs    []string              `json:"ante_chirs"`
-	Ante_diseases []string              `json:"ante_diseases"`
-	Treatments    []string              `json:"treatments"`
-	Last_question string                `json:"last_question"`
-	Logs          []LogsInput           `json:"logs"`
-	Alerts        []string              `json:"alerts"`
+	Id            string                 `json:"id"`
+	Diseases      []SessionDiseasesInput `json:"diseases"`
+	Symptoms      []SessionSymptomInput  `json:"symptoms"`
+	Age           int                    `json:"age"`
+	Height        int                    `json:"height"`
+	Weight        int                    `json:"weight"`
+	Sex           string                 `json:"sex"`
+	Ante_chirs    []string               `json:"ante_chirs"`
+	Ante_diseases []string               `json:"ante_diseases"`
+	Treatments    []string               `json:"treatments"`
+	Last_question string                 `json:"last_question"`
+	Logs          []LogsInput            `json:"logs"`
+	Alerts        []string               `json:"alerts"`
 }
 
 // GetId returns __UpdateSessionInput.Id, and is useful for accessing the field via an interface.
 func (v *__UpdateSessionInput) GetId() string { return v.Id }
+
+// GetDiseases returns __UpdateSessionInput.Diseases, and is useful for accessing the field via an interface.
+func (v *__UpdateSessionInput) GetDiseases() []SessionDiseasesInput { return v.Diseases }
 
 // GetSymptoms returns __UpdateSessionInput.Symptoms, and is useful for accessing the field via an interface.
 func (v *__UpdateSessionInput) GetSymptoms() []SessionSymptomInput { return v.Symptoms }
@@ -5634,14 +5769,15 @@ func CreateAnteChir(
 
 // The query or mutation executed by CreateAnteDisease.
 const CreateAnteDisease_Operation = `
-mutation CreateAnteDisease ($name: String!, $chronicity: Float!, $chir: String, $treatment: [String!], $symptoms: [String!]) {
-	createAnteDisease(name: $name, chronicity: $chronicity, chir: $chir, treatment: $treatment, symptoms: $symptoms) {
+mutation CreateAnteDisease ($name: String!, $chronicity: Float!, $surgery_ids: [String!], $symptoms: [String!], $treatment_ids: [String!], $still_relevant: Boolean!) {
+	createAnteDisease(name: $name, chronicity: $chronicity, surgery_ids: $surgery_ids, symptoms: $symptoms, treatment_ids: $treatment_ids, still_relevant: $still_relevant) {
 		id
 		name
 		chronicity
-		chir
-		treatment
+		surgery_ids
 		symptoms
+		treatment_ids
+		still_relevant
 	}
 }
 `
@@ -5651,19 +5787,21 @@ func CreateAnteDisease(
 	client graphql.Client,
 	name string,
 	chronicity float64,
-	chir string,
-	treatment []string,
+	surgery_ids []string,
 	symptoms []string,
+	treatment_ids []string,
+	still_relevant bool,
 ) (*CreateAnteDiseaseResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateAnteDisease",
 		Query:  CreateAnteDisease_Operation,
 		Variables: &__CreateAnteDiseaseInput{
-			Name:       name,
-			Chronicity: chronicity,
-			Chir:       chir,
-			Treatment:  treatment,
-			Symptoms:   symptoms,
+			Name:           name,
+			Chronicity:     chronicity,
+			Surgery_ids:    surgery_ids,
+			Symptoms:       symptoms,
+			Treatment_ids:  treatment_ids,
+			Still_relevant: still_relevant,
 		},
 	}
 	var err error
@@ -6180,9 +6318,13 @@ func CreateRdv(
 
 // The query or mutation executed by CreateSession.
 const CreateSession_Operation = `
-mutation CreateSession ($symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $treatments: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!) {
-	createSession(symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts) {
+mutation CreateSession ($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $treatments: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!) {
+	createSession(diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts) {
 		id
+		diseases {
+			name
+			presence
+		}
 		symptoms {
 			name
 			presence
@@ -6208,6 +6350,7 @@ mutation CreateSession ($symptoms: [SessionSymptomInput!]!, $age: Int!, $height:
 func CreateSession(
 	ctx context.Context,
 	client graphql.Client,
+	diseases []SessionDiseasesInput,
 	symptoms []SessionSymptomInput,
 	age int,
 	height int,
@@ -6224,6 +6367,7 @@ func CreateSession(
 		OpName: "CreateSession",
 		Query:  CreateSession_Operation,
 		Variables: &__CreateSessionInput{
+			Diseases:      diseases,
 			Symptoms:      symptoms,
 			Age:           age,
 			Height:        height,
@@ -7295,9 +7439,10 @@ query GetAnteDiseaseByID ($id: String!) {
 		id
 		name
 		chronicity
-		chir
-		treatment
+		surgery_ids
 		symptoms
+		treatment_ids
+		still_relevant
 	}
 }
 `
@@ -7335,9 +7480,10 @@ query GetAnteDiseases {
 		id
 		name
 		chronicity
-		chir
-		treatment
+		surgery_ids
 		symptoms
+		treatment_ids
+		still_relevant
 	}
 }
 `
@@ -8430,6 +8576,10 @@ const GetSessionById_Operation = `
 query GetSessionById ($id: String!) {
 	getSessionById(id: $id) {
 		id
+		diseases {
+			name
+			presence
+		}
 		symptoms {
 			name
 			presence
@@ -8483,6 +8633,10 @@ const GetSessions_Operation = `
 query GetSessions {
 	getSessions {
 		id
+		diseases {
+			name
+			presence
+		}
 		symptoms {
 			name
 			presence
@@ -9066,14 +9220,15 @@ func UpdateAnteChir(
 
 // The query or mutation executed by UpdateAnteDisease.
 const UpdateAnteDisease_Operation = `
-mutation UpdateAnteDisease ($id: String!, $name: String, $chronicity: Float, $chir: String, $treatment: [String!], $symptoms: [String!]) {
-	updateAnteDisease(id: $id, name: $name, chronicity: $chronicity, chir: $chir, treatment: $treatment, symptoms: $symptoms) {
+mutation UpdateAnteDisease ($id: String!, $name: String, $chronicity: Float, $surgery_ids: [String!], $symptoms: [String!], $treatment_ids: [String!], $still_relevant: Boolean) {
+	updateAnteDisease(id: $id, name: $name, chronicity: $chronicity, surgery_ids: $surgery_ids, symptoms: $symptoms, treatment_ids: $treatment_ids, still_relevant: $still_relevant) {
 		id
 		name
 		chronicity
-		chir
-		treatment
+		surgery_ids
 		symptoms
+		treatment_ids
+		still_relevant
 	}
 }
 `
@@ -9084,20 +9239,22 @@ func UpdateAnteDisease(
 	id string,
 	name string,
 	chronicity float64,
-	chir string,
-	treatment []string,
+	surgery_ids []string,
 	symptoms []string,
+	treatment_ids []string,
+	still_relevant bool,
 ) (*UpdateAnteDiseaseResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateAnteDisease",
 		Query:  UpdateAnteDisease_Operation,
 		Variables: &__UpdateAnteDiseaseInput{
-			Id:         id,
-			Name:       name,
-			Chronicity: chronicity,
-			Chir:       chir,
-			Treatment:  treatment,
-			Symptoms:   symptoms,
+			Id:             id,
+			Name:           name,
+			Chronicity:     chronicity,
+			Surgery_ids:    surgery_ids,
+			Symptoms:       symptoms,
+			Treatment_ids:  treatment_ids,
+			Still_relevant: still_relevant,
 		},
 	}
 	var err error
@@ -9588,9 +9745,13 @@ func UpdateRdv(
 
 // The query or mutation executed by UpdateSession.
 const UpdateSession_Operation = `
-mutation UpdateSession ($id: String!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $treatments: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!) {
-	updateSession(id: $id, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts) {
+mutation UpdateSession ($id: String!, $diseases: [SessionDiseasesInput!], $symptoms: [SessionSymptomInput!], $age: Int, $height: Int, $weight: Int, $sex: String, $ante_chirs: [String!], $ante_diseases: [String!], $treatments: [String!], $last_question: String, $logs: [LogsInput!], $alerts: [String!]) {
+	updateSession(id: $id, diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts) {
 		id
+		diseases {
+			name
+			presence
+		}
 		symptoms {
 			name
 			presence
@@ -9600,6 +9761,9 @@ mutation UpdateSession ($id: String!, $symptoms: [SessionSymptomInput!]!, $age: 
 		height
 		weight
 		sex
+		ante_chirs
+		ante_diseases
+		treatments
 		last_question
 		logs {
 			question
@@ -9614,6 +9778,7 @@ func UpdateSession(
 	ctx context.Context,
 	client graphql.Client,
 	id string,
+	diseases []SessionDiseasesInput,
 	symptoms []SessionSymptomInput,
 	age int,
 	height int,
@@ -9631,6 +9796,7 @@ func UpdateSession(
 		Query:  UpdateSession_Operation,
 		Variables: &__UpdateSessionInput{
 			Id:            id,
+			Diseases:      diseases,
 			Symptoms:      symptoms,
 			Age:           age,
 			Height:        height,

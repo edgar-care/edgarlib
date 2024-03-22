@@ -1,4 +1,4 @@
-package exam
+package utils
 
 import (
 	"context"
@@ -61,38 +61,21 @@ func calculCoverage(context []model.SessionSymptom, disease graphql.GetDiseasesG
 	return diseaseCoverage{disease: disease.Code, coverage: coverage * 100 / total, present: present * 100 / total, absent: absent * 100 / total, potentialQuestion: potentialquestionSymptom}
 }
 
-func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptomsSymptom) string {
-	for _, symptom := range symptoms {
-		if symptomName == symptom.Code {
-			return symptom.Question
-		}
-	}
-	return "Est-ce que vous avez ce symptôme: " + symptomName + " ?"
-}
-
-func GuessQuestion(patientContext []model.SessionSymptom) (string, []string, bool) {
+func GetSessionDiseases(sessionContext []model.SessionSymptom) []graphql.SessionDiseasesInput {
 	gqlClient := graphql.CreateClient()
 	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
-	symptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
 	mapped := make([]diseaseCoverage, len(diseases.GetDiseases))
+	sortedDiseases := []graphql.SessionDiseasesInput{}
 	for i, e := range diseases.GetDiseases {
-		mapped[i] = calculCoverage(patientContext, e)
+		mapped[i] = calculCoverage(sessionContext, e)
 	}
-
-	if len(patientContext) == 0 {
-		return "Pourriez-vous décrire vos symptomes ?", []string{}, false
-	}
-
 	sort.Sort(ByCoverage(mapped))
 
 	for _, disease := range mapped {
-		if disease.absent >= 40 {
-			continue
+		if disease.present >= 30 {
+			newsorted := graphql.SessionDiseasesInput{Name: disease.disease, Presence: float64(disease.present) / 100}
+			sortedDiseases = append(sortedDiseases, newsorted)
 		}
-		if disease.present >= 70 {
-			return "", []string{}, true
-		}
-		return getTheQuestion(disease.potentialQuestion, symptoms.GetSymptoms), []string{disease.potentialQuestion}, false
 	}
-	return "", []string{}, true
+	return sortedDiseases
 }
