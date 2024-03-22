@@ -20,7 +20,7 @@ func Initiate(id string) InitiateResponse {
 	patientInfos, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, patient.GetPatientById.Medical_info_id)
 
 	var input model.Session
-	input.Age = 0
+	input.Age = patientInfos.GetMedicalFolderById.Birthdate
 	input.Height = patientInfos.GetMedicalFolderById.Height
 	input.Weight = patientInfos.GetMedicalFolderById.Weight
 	if patientInfos.GetMedicalFolderById.Sex == graphql.SexMale {

@@ -1,0 +1,35 @@
+package utils
+
+import (
+	"context"
+	"github.com/edgar-care/edgarlib/graphql"
+)
+
+func CheckAnteDiseaseInSymptoms(session graphql.GetSessionByIdGetSessionByIdSession) (string, string) {
+	gqlClient := graphql.CreateClient()
+	var question string
+	var questionSymptomName string
+
+	for _, anteId := range session.Ante_diseases {
+		ante, _ := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, anteId)
+		if ante.GetAnteDiseaseByID.Still_relevant == true && len(ante.GetGetAnteDiseaseByID().Symptoms) > 0 {
+			for _, anteSymptomId := range ante.GetAnteDiseaseByID.Symptoms {
+				anteSymptom, _ := graphql.GetSymptomById(context.Background(), gqlClient, anteSymptomId)
+				if anteSymptom.GetSymptomById.Code != session.Last_question {
+					question = "Ressentez-vous " + anteSymptom.GetSymptomById.Code + " plus intensément récemment ?"
+					questionSymptomName = anteSymptom.GetSymptomById.Code
+				}
+				for _, sessionSymptom := range session.Symptoms {
+					if anteSymptom.GetSymptomById.Code == sessionSymptom.Name || anteSymptom.GetSymptomById.Code == session.Last_question {
+						question = ""
+						questionSymptomName = ""
+					}
+				}
+				if question != "" {
+					return question, questionSymptomName
+				}
+			}
+		}
+	}
+	return question, questionSymptomName
+}

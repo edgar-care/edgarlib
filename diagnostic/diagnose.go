@@ -69,9 +69,22 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		ns.Duration = 0
 		symptomsinput = append(symptomsinput, ns)
 	}
-	if len(exam.Symptoms) > 0 {
-		session.GetSessionById.Last_question = exam.Symptoms[0]
+
+	if len(session.GetSessionById.Ante_diseases) > 0 {
+		anteSymptomQuestion, anteSymptom := utils.CheckAnteDiseaseInSymptoms(session.GetSessionById)
+		if anteSymptom != "" {
+			exam.Question = anteSymptomQuestion
+			session.GetSessionById.Last_question = anteSymptom
+		} else if len(exam.Symptoms) > 0 {
+			session.GetSessionById.Last_question = exam.Symptoms[0]
+		}
 	}
+
+	if len(exam.Symptoms) == 0 {
+		session.GetSessionById.Last_question = ""
+		exam.Question = ""
+	}
+
 	var logs []graphql.LogsInput
 	for _, log := range session.GetSessionById.Logs {
 		logs = append(logs, graphql.LogsInput{
