@@ -21,11 +21,11 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment id is required")}
 	}
 
-	appointment, err := graphql.GetRdvById(context.Background(), gqlClient, newAppointmentId)
+	appointment, err := graphql.GetSlotById(context.Background(), gqlClient, newAppointmentId)
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
-	if appointment.GetRdvById.Id_patient != "" {
+	if appointment.GetSlotById.Id_patient != "" {
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment is booked, cannot be edited")}
 	}
 
@@ -34,7 +34,7 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
 	}
 
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, patientId, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, appointment.GetRdvById.Cancelation_reason, appointment.GetRdvById.Appointment_status, appointment.GetRdvById.Session_id)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, patientId, appointment.GetSlotById.Doctor_id, appointment.GetSlotById.Start_date, appointment.GetSlotById.End_date, appointment.GetSlotById.Cancelation_reason, appointment.GetSlotById.Appointment_status, appointment.GetSlotById.Session_id)
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
