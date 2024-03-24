@@ -3,73 +3,107 @@ package medical_folder
 import (
 	"context"
 	"errors"
-
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
 
-type GetMedicalInfoByIdResponse struct {
-	MedicalInfo model.MedicalInfo
-	Code        int
-	Err         error
+type AnteDiseaseWithTreatments struct {
+	AnteDisease model.AnteDisease
+	Treatments  []model.Treatment
 }
 
-func GetMedicalInfosById(id string) GetMedicalInfoByIdResponse {
+type MedicalInfoResponse struct {
+	MedicalInfo                model.MedicalInfo
+	AnteDiseasesWithTreatments []AnteDiseaseWithTreatments
+	Code                       int
+	Err                        error
+}
+
+func GetMedicalInfo(patientID string) MedicalInfoResponse {
 	gqlClient := graphql.CreateClient()
-	var res model.MedicalInfo
 
-	id_med, err := graphql.GetPatientById(context.Background(), gqlClient, id)
+	control, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
 	if err != nil {
-		return GetMedicalInfoByIdResponse{model.MedicalInfo{}, 400, errors.New("ID does not correspond to patient")}
+		return MedicalInfoResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
 	}
 
-	if id_med.GetPatientById.Medical_info_id == "" {
-		return GetMedicalInfoByIdResponse{model.MedicalInfo{}, 400, errors.New("ID not found")}
+	if control.GetPatientById.Medical_info_id == "" {
+		return MedicalInfoResponse{Code: 404, Err: errors.New("medical folder not found for the patient")}
 	}
 
-	medical, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, id_med.GetPatientById.Medical_info_id)
+	medical, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, control.GetPatientById.Medical_info_id)
 	if err != nil {
-		return GetMedicalInfoByIdResponse{model.MedicalInfo{}, 400, errors.New("ID does not correspond to any medical information")}
+		return MedicalInfoResponse{Code: 400, Err: errors.New("unable to fetch medical folder: " + err.Error())}
 	}
 
-	medicalAntecedentsResp := make([]*model.MedicalAntecedents, len(medical.GetMedicalFolderById.Medical_antecedents))
-	for i, antecedent := range medical.GetMedicalFolderById.Medical_antecedents {
-		medicines := make([]*model.Medicines, len(antecedent.Medicines))
-		for j, med := range antecedent.Medicines {
-			periods := make([]*model.Period, len(med.Period))
-			for k, p := range med.Period {
-				period := model.Period(p)
-				periods[k] = &period
-			}
-			days := make([]*model.Day, len(med.Day))
-			for k, d := range med.Day {
-				day := model.Day(d)
-				days[k] = &day
-			}
-			medicines[j] = &model.Medicines{
-				Period:   periods,
-				Day:      days,
-				Quantity: med.Quantity,
-			}
+	var treatments []model.Treatment
+	var antediseasesWithTreatments []AnteDiseaseWithTreatments
+	for _, antediseaseID := range medical.GetMedicalFolderById.Antecedent_disease_ids {
+		antedisease, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, antediseaseID)
+		if err != nil {
+			return MedicalInfoResponse{Code: 400, Err: errors.New("unable to fetch antedisease: " + err.Error())}
 		}
-		medicalAntecedentsResp[i] = &model.MedicalAntecedents{
-			Name:          antecedent.Name,
-			Medicines:     medicines,
-			StillRelevant: antecedent.Still_relevant,
+
+		var antediseaseTreatments []model.Treatment
+		for _, treatmentID := range antedisease.GetAnteDiseaseByID.Treatment_ids {
+			treatment, err := graphql.GetTreatmentByID(context.Background(), gqlClient, treatmentID)
+			if err != nil {
+				return MedicalInfoResponse{Code: 400, Err: errors.New("unable to fetch treatment: " + err.Error())}
+			}
+
+			var periods []model.Period
+			for _, period := range treatment.GetTreatmentByID.Period {
+				periods = append(periods, model.Period(period))
+			}
+
+			var days []model.Day
+			for _, day := range treatment.GetTreatmentByID.Day {
+				days = append(days, model.Day(day))
+			}
+
+			treatmentToAdd := model.Treatment{
+				ID:         treatment.GetTreatmentByID.Id,
+				Period:     periods,
+				Day:        days,
+				Quantity:   treatment.GetTreatmentByID.Quantity,
+				MedicineID: treatment.GetTreatmentByID.Medicine_id,
+			}
+
+			antediseaseTreatments = append(antediseaseTreatments, treatmentToAdd)
+			treatments = append(treatments, treatmentToAdd)
 		}
+
+		antediseaseWithTreatments := AnteDiseaseWithTreatments{
+			AnteDisease: model.AnteDisease{
+				ID:            antedisease.GetAnteDiseaseByID.Id,
+				Name:          antedisease.GetAnteDiseaseByID.Name,
+				Chronicity:    antedisease.GetAnteDiseaseByID.Chronicity,
+				SurgeryIds:    antedisease.GetAnteDiseaseByID.Surgery_ids,
+				Symptoms:      antedisease.GetAnteDiseaseByID.Symptoms,
+				TreatmentIds:  antedisease.GetAnteDiseaseByID.Treatment_ids,
+				StillRelevant: antedisease.GetAnteDiseaseByID.Still_relevant,
+			},
+			Treatments: antediseaseTreatments,
+		}
+
+		antediseasesWithTreatments = append(antediseasesWithTreatments, antediseaseWithTreatments)
 	}
 
-	res = model.MedicalInfo{
-		ID:                 medical.GetMedicalFolderById.Id,
-		Name:               medical.GetMedicalFolderById.Name,
-		Firstname:          medical.GetMedicalFolderById.Firstname,
-		Birthdate:          medical.GetMedicalFolderById.Birthdate,
-		Sex:                model.Sex(medical.GetMedicalFolderById.Sex),
-		Weight:             medical.GetMedicalFolderById.Weight,
-		Height:             medical.GetMedicalFolderById.Height,
-		PrimaryDoctorID:    medical.GetMedicalFolderById.Primary_doctor_id,
-		MedicalAntecedents: medicalAntecedentsResp,
-		OnboardingStatus:   model.OnboardingStatus(medical.GetMedicalFolderById.Onboarding_status),
+	return MedicalInfoResponse{
+		MedicalInfo: model.MedicalInfo{
+			ID:                   medical.GetMedicalFolderById.Id,
+			Name:                 medical.GetMedicalFolderById.Name,
+			Firstname:            medical.GetMedicalFolderById.Firstname,
+			Birthdate:            medical.GetMedicalFolderById.Birthdate,
+			Sex:                  model.Sex(medical.GetMedicalFolderById.Sex),
+			Weight:               medical.GetMedicalFolderById.Weight,
+			Height:               medical.GetMedicalFolderById.Height,
+			PrimaryDoctorID:      medical.GetMedicalFolderById.Primary_doctor_id,
+			OnboardingStatus:     model.OnboardingStatus(medical.GetMedicalFolderById.Onboarding_status),
+			AntecedentDiseaseIds: medical.GetMedicalFolderById.Antecedent_disease_ids,
+		},
+		AnteDiseasesWithTreatments: antediseasesWithTreatments,
+		Code:                       200,
+		Err:                        nil,
 	}
-	return GetMedicalInfoByIdResponse{res, 200, nil}
 }

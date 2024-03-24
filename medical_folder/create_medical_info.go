@@ -33,14 +33,16 @@ type CreateMedicineInput struct {
 
 type CreateMedicalInfoResponse struct {
 	MedicalInfo model.MedicalInfo
-	Treatments  []model.Treatment
-	Code        int
-	Err         error
+	//Treatments                 []model.Treatment
+	AnteDiseasesWithTreatments []AnteDiseaseWithTreatments
+	Code                       int
+	Err                        error
 }
 
 func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMedicalInfoResponse {
 	var antdediseaseids []string
 	var res []model.Treatment
+	var antediseasesWithTreatments []AnteDiseaseWithTreatments
 
 	gqlClient := graphql.CreateClient()
 
@@ -55,6 +57,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 
 	for _, antecedent := range input.MedicalAntecedents {
 		var treatmentIDsPerAnte []string
+		var antediseaseTreatments []model.Treatment
 
 		for _, medicine := range antecedent.Medicines {
 			periods := make([]graphql.Period, len(medicine.Period))
@@ -84,13 +87,16 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 				treatmentDays[i] = model.Day(d)
 			}
 
-			res = append(res, model.Treatment{
+			treatmentToAdd := model.Treatment{
 				ID:         treatmentRes.CreateTreatment.Id,
 				Period:     treatmentPeriods,
 				Day:        treatmentDays,
 				Quantity:   treatmentRes.CreateTreatment.Quantity,
 				MedicineID: treatmentRes.CreateTreatment.Medicine_id,
-			})
+			}
+
+			antediseaseTreatments = append(antediseaseTreatments, treatmentToAdd)
+			res = append(res, treatmentToAdd)
 		}
 
 		antedisease, err := graphql.CreateAnteDisease(context.Background(), gqlClient, antecedent.Name, 0, []string{""}, nil, treatmentIDsPerAnte, antecedent.StillRelevant)
@@ -99,6 +105,21 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 		}
 
 		antdediseaseids = append(antdediseaseids, antedisease.CreateAnteDisease.Id)
+
+		antediseaseWithTreatments := AnteDiseaseWithTreatments{
+			AnteDisease: model.AnteDisease{
+				ID:            antedisease.CreateAnteDisease.Id,
+				Name:          antedisease.CreateAnteDisease.Name,
+				Chronicity:    antedisease.CreateAnteDisease.Chronicity,
+				SurgeryIds:    antedisease.CreateAnteDisease.Surgery_ids,
+				Symptoms:      antedisease.CreateAnteDisease.Symptoms,
+				TreatmentIds:  antedisease.CreateAnteDisease.Treatment_ids,
+				StillRelevant: antedisease.CreateAnteDisease.Still_relevant,
+			},
+			Treatments: antediseaseTreatments,
+		}
+
+		antediseasesWithTreatments = append(antediseasesWithTreatments, antediseaseWithTreatments)
 	}
 
 	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, antdediseaseids, "DONE")
@@ -124,8 +145,9 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 			OnboardingStatus:     model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
 			AntecedentDiseaseIds: antdediseaseids,
 		},
-		Treatments: res,
-		Code:       201,
-		Err:        nil,
+		//Treatments:                 res,
+		AnteDiseasesWithTreatments: antediseasesWithTreatments,
+		Code:                       201,
+		Err:                        nil,
 	}
 }
