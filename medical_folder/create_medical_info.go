@@ -8,128 +8,124 @@ import (
 )
 
 type CreateMedicalInfoInput struct {
-	Name               string                    `json:"name"`
-	Firstname          string                    `json:"firstname"`
-	Birthdate          int                       `json:"birthdate"`
-	Sex                string                    `json:"sex"`
-	Weight             int                       `json:"weight"`
-	Height             int                       `json:"height"`
-	PrimaryDoctorID    string                    `json:"primary_doctor_id"`
-	MedicalAntecedents []CreateMedicalAntecedent `json:"medical_antecedents"`
-	OnboardingStatus   string                    `json:"onboarding_status"`
+	Name               string                         `json:"name"`
+	Firstname          string                         `json:"firstname"`
+	Birthdate          int                            `json:"birthdate"`
+	Sex                string                         `json:"sex"`
+	Weight             int                            `json:"weight"`
+	Height             int                            `json:"height"`
+	PrimaryDoctorID    string                         `json:"primaryDoctorId,omitempty"`
+	MedicalAntecedents []CreateMedicalAntecedentInput `json:"medicalAntecedents"`
 }
 
-type CreateMedicalAntecedent struct {
-	Name          string           `json:"name"`
-	Medicines     []CreateMedicine `json:"medicines"`
-	StillRelevant bool             `json:"still_relevant"`
+type CreateMedicalAntecedentInput struct {
+	Name          string                `json:"name"`
+	Medicines     []CreateMedicineInput `json:"medicines"`
+	StillRelevant bool                  `json:"stillRelevant"`
 }
 
-type CreateMedicine struct {
-	Period   []string `json:"period"`
-	Day      []string `json:"day"`
-	Quantity int      `json:"quantity"`
+type CreateMedicineInput struct {
+	MedicineID string   `json:"id"`
+	Period     []string `json:"period"`
+	Day        []string `json:"day"`
+	Quantity   int      `json:"quantity"`
 }
 
 type CreateMedicalInfoResponse struct {
 	MedicalInfo model.MedicalInfo
-	Patient     model.Patient
+	Treatments  []model.Treatment
 	Code        int
 	Err         error
 }
 
 func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMedicalInfoResponse {
+	var antdediseaseids []string
+	var res []model.Treatment
+
 	gqlClient := graphql.CreateClient()
 
-	medicalAntecedents := make([]graphql.MedicalAntecedentsInput, len(input.MedicalAntecedents))
-	for i, antecedent := range input.MedicalAntecedents {
-		medicines := make([]graphql.MedicinesInput, len(antecedent.Medicines))
-		for j, med := range antecedent.Medicines {
-			periods := make([]graphql.Period, len(med.Period))
-			for k, p := range med.Period {
-				periods[k] = graphql.Period(p)
-			}
-			days := make([]graphql.Day, len(med.Day))
-			for k, d := range med.Day {
-				days[k] = graphql.Day(d)
-			}
-			medicines[j] = graphql.MedicinesInput{
-				Period:   periods,
-				Day:      days,
-				Quantity: med.Quantity,
-			}
-		}
-		medicalAntecedents[i] = graphql.MedicalAntecedentsInput{
-			Name:           antecedent.Name,
-			Medicines:      medicines,
-			Still_relevant: antecedent.StillRelevant,
-		}
-	}
 	control, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
 	if err != nil {
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
 	}
 
 	if control.GetPatientById.Medical_info_id != "" {
-		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("medical folder has already been create")}
+		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("medical folder has already been created")}
 	}
 
-	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, medicalAntecedents, input.OnboardingStatus)
+	for _, antecedent := range input.MedicalAntecedents {
+		var treatmentIDsPerAnte []string
+
+		for _, medicine := range antecedent.Medicines {
+			periods := make([]graphql.Period, len(medicine.Period))
+			for i, p := range medicine.Period {
+				periods[i] = graphql.Period(p)
+			}
+
+			days := make([]graphql.Day, len(medicine.Day))
+			for i, d := range medicine.Day {
+				days[i] = graphql.Day(d)
+			}
+
+			treatmentRes, err := graphql.CreateTreatment(context.Background(), gqlClient, periods, days, medicine.Quantity, medicine.MedicineID)
+			if err != nil {
+				return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create treatment: " + err.Error())}
+			}
+
+			treatmentIDsPerAnte = append(treatmentIDsPerAnte, treatmentRes.CreateTreatment.Id)
+
+			treatmentPeriods := make([]model.Period, len(treatmentRes.CreateTreatment.Period))
+			for i, p := range treatmentRes.CreateTreatment.Period {
+				treatmentPeriods[i] = model.Period(p)
+			}
+
+			treatmentDays := make([]model.Day, len(treatmentRes.CreateTreatment.Day))
+			for i, d := range treatmentRes.CreateTreatment.Day {
+				treatmentDays[i] = model.Day(d)
+			}
+
+			res = append(res, model.Treatment{
+				ID:         treatmentRes.CreateTreatment.Id,
+				Period:     treatmentPeriods,
+				Day:        treatmentDays,
+				Quantity:   treatmentRes.CreateTreatment.Quantity,
+				MedicineID: treatmentRes.CreateTreatment.Medicine_id,
+			})
+		}
+
+		antedisease, err := graphql.CreateAnteDisease(context.Background(), gqlClient, antecedent.Name, 0, []string{""}, nil, treatmentIDsPerAnte, antecedent.StillRelevant)
+		if err != nil {
+			return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create antedisease: " + err.Error())}
+		}
+
+		antdediseaseids = append(antdediseaseids, antedisease.CreateAnteDisease.Id)
+	}
+
+	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, antdediseaseids, "DONE")
 	if err != nil {
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
 	}
 
-	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
-	if err != nil {
-		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
-	}
-
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.GetPatientById.Email, patient.GetPatientById.Password, medical.CreateMedicalFolder.Id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids)
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, control.GetPatientById.Email, control.GetPatientById.Password, medical.CreateMedicalFolder.Id, control.GetPatientById.Rendez_vous_ids, control.GetPatientById.Document_ids)
 	if err != nil {
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to update patient: " + err.Error())}
 	}
 
-	medicalAntecedentsResp := make([]*model.MedicalAntecedents, len(medical.CreateMedicalFolder.Medical_antecedents))
-	for i, antecedent := range medical.CreateMedicalFolder.Medical_antecedents {
-		medicines := make([]*model.Medicines, len(antecedent.Medicines))
-		for j, med := range antecedent.Medicines {
-			periods := make([]*model.Period, len(med.Period))
-			for k, p := range med.Period {
-				period := model.Period(p)
-				periods[k] = &period
-			}
-			days := make([]*model.Day, len(med.Day))
-			for k, d := range med.Day {
-				day := model.Day(d)
-				days[k] = &day
-			}
-			medicines[j] = &model.Medicines{
-				Period:   periods,
-				Day:      days,
-				Quantity: med.Quantity,
-			}
-		}
-		medicalAntecedentsResp[i] = &model.MedicalAntecedents{
-			Name:          antecedent.Name,
-			Medicines:     medicines,
-			StillRelevant: antecedent.Still_relevant,
-		}
-	}
-
 	return CreateMedicalInfoResponse{
 		MedicalInfo: model.MedicalInfo{
-			ID:                 medical.CreateMedicalFolder.Id,
-			Name:               medical.CreateMedicalFolder.Name,
-			Firstname:          medical.CreateMedicalFolder.Firstname,
-			Birthdate:          medical.CreateMedicalFolder.Birthdate,
-			Sex:                model.Sex(medical.CreateMedicalFolder.Sex),
-			Weight:             medical.CreateMedicalFolder.Weight,
-			Height:             medical.CreateMedicalFolder.Height,
-			PrimaryDoctorID:    medical.CreateMedicalFolder.Primary_doctor_id,
-			MedicalAntecedents: medicalAntecedentsResp,
-			OnboardingStatus:   model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
+			ID:                   medical.CreateMedicalFolder.Id,
+			Name:                 medical.CreateMedicalFolder.Name,
+			Firstname:            medical.CreateMedicalFolder.Firstname,
+			Birthdate:            medical.CreateMedicalFolder.Birthdate,
+			Sex:                  model.Sex(medical.CreateMedicalFolder.Sex),
+			Weight:               medical.CreateMedicalFolder.Weight,
+			Height:               medical.CreateMedicalFolder.Height,
+			PrimaryDoctorID:      medical.CreateMedicalFolder.Primary_doctor_id,
+			OnboardingStatus:     model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
+			AntecedentDiseaseIds: antdediseaseids,
 		},
-		Code: 201,
-		Err:  nil,
+		Treatments: res,
+		Code:       201,
+		Err:        nil,
 	}
 }
