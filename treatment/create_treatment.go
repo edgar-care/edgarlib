@@ -89,7 +89,7 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 		if err != nil {
 			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to get medical folder: " + err.Error())}
 		}
-		_, err = graphql.UpdateMedicalFolder(context.Background(), gqlClient, control.GetPatientById.Medical_info_id, getMedic.GetMedicalFolderById.Name, getMedic.GetMedicalFolderById.Firstname, getMedic.GetMedicalFolderById.Birthdate, getMedic.GetMedicalFolderById.Sex, getMedic.GetMedicalFolderById.Height, getMedic.GetMedicalFolderById.Weight, getMedic.GetMedicalFolderById.Primary_doctor_id, []string{anteDisease.CreateAnteDisease.Id}, getMedic.GetMedicalFolderById.Onboarding_status)
+		_, err = graphql.UpdateMedicalFolder(context.Background(), gqlClient, control.GetPatientById.Medical_info_id, getMedic.GetMedicalFolderById.Name, getMedic.GetMedicalFolderById.Firstname, getMedic.GetMedicalFolderById.Birthdate, string(getMedic.GetMedicalFolderById.Sex), getMedic.GetMedicalFolderById.Height, getMedic.GetMedicalFolderById.Weight, getMedic.GetMedicalFolderById.Primary_doctor_id, []string{anteDisease.CreateAnteDisease.Id}, getMedic.GetMedicalFolderById.Onboarding_status)
 		if err != nil {
 			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to update medical folder: " + err.Error())}
 		}
