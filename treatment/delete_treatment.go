@@ -54,9 +54,7 @@ func DeleteTreatment(treatmentID string, patientID string) DeleteTreatmentRespon
 
 		updatedTreatmentIDs := remElement(ad.GetAnteDiseaseByID.Treatment_ids, treatmentID)
 
-		stillRelevant := len(updatedTreatmentIDs) > 0
-
-		_, err = graphql.UpdateAnteDisease(context.Background(), gqlClient, adID, ad.GetAnteDiseaseByID.Name, ad.GetAnteDiseaseByID.Chronicity, ad.GetAnteDiseaseByID.Surgery_ids, []string{""}, updatedTreatmentIDs, stillRelevant)
+		_, err = graphql.UpdateAnteDisease(context.Background(), gqlClient, adID, ad.GetAnteDiseaseByID.Name, ad.GetAnteDiseaseByID.Chronicity, ad.GetAnteDiseaseByID.Surgery_ids, ad.GetAnteDiseaseByID.Symptoms, updatedTreatmentIDs, ad.GetAnteDiseaseByID.Still_relevant)
 		if err != nil {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating antedisease: " + err.Error())}
 		}
