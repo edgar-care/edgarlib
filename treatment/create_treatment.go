@@ -11,7 +11,7 @@ type CreateNewTreatmentInput struct {
 	Name          string             `json:"name"`
 	DiseaseId     string             `json:"disease_id"`
 	Treatments    []CreateTreatInput `json:"treatments"`
-	StillRelevant bool               `json:"stillRelevant"`
+	StillRelevant bool               `json:"still_relevant"`
 }
 
 type CreateTreatInput struct {
