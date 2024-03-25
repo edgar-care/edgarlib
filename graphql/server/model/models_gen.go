@@ -48,12 +48,13 @@ type AnteChir struct {
 }
 
 type AnteDisease struct {
-	ID         string   `json:"id" bson:"_id"`
-	Name       string   `json:"name" bson:"name"`
-	Chronicity float64  `json:"chronicity" bson:"chronicity"`
-	Chir       *string  `json:"chir,omitempty" bson:"chir"`
-	Treatment  []string `json:"treatment,omitempty" bson:"treatment"`
-	Symptoms   []string `json:"symptoms,omitempty" bson:"symptoms"`
+	ID            string   `json:"id" bson:"_id"`
+	Name          string   `json:"name" bson:"name"`
+	Chronicity    float64  `json:"chronicity" bson:"chronicity"`
+	SurgeryIds    []string `json:"surgery_ids,omitempty" bson:"surgery_ids"`
+	Symptoms      []string `json:"symptoms,omitempty" bson:"symptoms"`
+	TreatmentIds  []string `json:"treatment_ids,omitempty" bson:"treatment_ids"`
+	StillRelevant bool     `json:"still_relevant" bson:"still_relevant"`
 }
 
 type AnteFamily struct {
@@ -113,27 +114,27 @@ type LogsInput struct {
 type MedicalAntecedents struct {
 	ID            string       `json:"id" bson:"_id"`
 	Name          string       `json:"name" bson:"name"`
-	Medicines     []*Medicines `json:"medicines" bson:"medicines"`
+	Medicines     []*Treatment `json:"medicines" bson:"medicines"`
 	StillRelevant bool         `json:"still_relevant" bson:"still_relevant"`
 }
 
 type MedicalAntecedentsInput struct {
 	Name          string            `json:"name" bson:"name"`
-	Medicines     []*MedicinesInput `json:"medicines" bson:"medicines"`
+	Medicines     []*TreatmentInput `json:"medicines" bson:"medicines"`
 	StillRelevant bool              `json:"still_relevant" bson:"still_relevant"`
 }
 
 type MedicalInfo struct {
-	ID                 string                `json:"id" bson:"_id"`
-	Name               string                `json:"name" bson:"name"`
-	Firstname          string                `json:"firstname" bson:"firstname"`
-	Birthdate          int                   `json:"birthdate" bson:"birthdate"`
-	Sex                Sex                   `json:"sex" bson:"sex"`
-	Height             int                   `json:"height" bson:"height"`
-	Weight             int                   `json:"weight" bson:"weight"`
-	PrimaryDoctorID    string                `json:"primary_doctor_id" bson:"primary_doctor_id"`
-	OnboardingStatus   OnboardingStatus      `json:"onboarding_status" bson:"onboarding_status"`
-	MedicalAntecedents []*MedicalAntecedents `json:"medical_antecedents" bson:"medical_antecedents"`
+	ID                   string           `json:"id" bson:"_id"`
+	Name                 string           `json:"name" bson:"name"`
+	Firstname            string           `json:"firstname" bson:"firstname"`
+	Birthdate            int              `json:"birthdate" bson:"birthdate"`
+	Sex                  Sex              `json:"sex" bson:"sex"`
+	Height               int              `json:"height" bson:"height"`
+	Weight               int              `json:"weight" bson:"weight"`
+	PrimaryDoctorID      string           `json:"primary_doctor_id" bson:"primary_doctor_id"`
+	AntecedentDiseaseIds []string         `json:"antecedent_disease_ids" bson:"antecedent_disease_ids"`
+	OnboardingStatus     OnboardingStatus `json:"onboarding_status" bson:"onboarding_status"`
 }
 
 type Medicament struct {
@@ -151,18 +152,6 @@ type MedicamentInput struct {
 	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
 	TreatedSymptoms []string     `json:"treated_symptoms" bson:"treated_symptoms"`
 	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
-}
-
-type Medicines struct {
-	Period   []*Period `json:"period" bson:"period"`
-	Day      []*Day    `json:"day" bson:"day"`
-	Quantity int       `json:"quantity" bson:"quantity"`
-}
-
-type MedicinesInput struct {
-	Period   []*Period `json:"period" bson:"period"`
-	Day      []*Day    `json:"day" bson:"day"`
-	Quantity int       `json:"quantity" bson:"quantity"`
 }
 
 type Mutation struct {
@@ -256,11 +245,18 @@ type TestAccount struct {
 }
 
 type Treatment struct {
-	ID          string   `json:"id" bson:"_id"`
-	Name        string   `json:"name" bson:"name"`
-	Disease     string   `json:"disease" bson:"disease"`
-	Symptoms    []string `json:"symptoms,omitempty" bson:"symptoms"`
-	SideEffects []string `json:"side_effects,omitempty" bson:"side_effects"`
+	ID         string   `json:"id" bson:"_id"`
+	Period     []Period `json:"period" bson:"period"`
+	Day        []Day    `json:"day" bson:"day"`
+	Quantity   int      `json:"quantity" bson:"quantity"`
+	MedicineID string   `json:"medicine_id" bson:"medicine_id"`
+}
+
+type TreatmentInput struct {
+	Period     []Period `json:"period" bson:"period"`
+	Day        []Day    `json:"day" bson:"day"`
+	Quantity   int      `json:"quantity" bson:"quantity"`
+	MedicineID string   `json:"medicine_id" bson:"medicine_id"`
 }
 
 type AppointmentStatus string
