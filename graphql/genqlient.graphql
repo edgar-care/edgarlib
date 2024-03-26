@@ -193,18 +193,18 @@ mutation CreateTestAccount($email: String!, $password: String!){
     }
 }
 
-mutation CreateTreatment($name: String!, $disease: String!, $symptoms: [String!], $side_effects: [String!]){
-    createTreatment(name: $name, disease: $disease, symptoms: $symptoms, side_effects: $side_effects){
+mutation CreateTreatment($periods: [Period!]!, $day: [Day!]!, $quantity: Int!, $medicine_id: String!){
+    createTreatment(period: $periods, day: $day, quantity: $quantity, medicine_id: $medicine_id){
         id
-        name
-        disease
-        symptoms
-        side_effects
+        period
+        day
+        quantity
+        medicine_id
     }
 }
 
-mutation CreateMedicalFolder($name: String!, $firstname: String!, $birthdate: Int!, $sex: String!, $height: Int!, $weight: Int!, $primary_doctor_id: String!, $medical_antecedents: [MedicalAntecedentsInput!]!, $onboarding_status: String!){
-    createMedicalFolder(name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, medical_antecedents: $medical_antecedents, onboarding_status: $onboarding_status){
+mutation CreateMedicalFolder($name: String!, $firstname: String!, $birthdate: Int!, $sex: String!, $height: Int!, $weight: Int!, $primary_doctor_id: String!, $antecedent_disease_ids: [String!]!, $onboarding_status: String!){
+    createMedicalFolder(name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status){
         id
         name
         firstname
@@ -213,15 +213,7 @@ mutation CreateMedicalFolder($name: String!, $firstname: String!, $birthdate: In
         height
         weight
         primary_doctor_id
-        medical_antecedents {
-            name
-		    medicines {
-			    period
-			    day
-			    quantity
-            }
-            still_relevant
-        }
+        antecedent_disease_ids
         onboarding_status
     }
 }
@@ -498,18 +490,18 @@ mutation UpdateTestAccount($id: String!, $email: String, $password: String){
     }
 }
 
-mutation UpdateTreatment($id: String!, $name: String, $disease: String, $symptoms: [String!], $side_effects: [String!]){
-    updateTreatment(id: $id, name: $name, disease: $disease, symptoms: $symptoms, side_effects: $side_effects){
+mutation UpdateTreatment($id: String!, $period: [Period!], $day: [Day!], $quantity: Int, $medicine_id: String){
+    updateTreatment(id: $id, period: $period, day: $day, quantity: $quantity, medicine_id: $medicine_id){
         id
-        name
-        disease
-        symptoms
-        side_effects
+        period
+        day
+        quantity
+        medicine_id
     }
 }
 
-mutation UpdateMedicalFolder($id: String!, $name: String, $firstname: String, $birthdate: Int, $sex: String, $height: Int, $weight: Int, $primary_doctor_id: String, $medical_antecedents: [MedicalAntecedentsInput!], $onboarding_status: String){
-    updateMedicalFolder(id:$id, name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, medical_antecedents: $medical_antecedents, onboarding_status: $onboarding_status){
+mutation UpdateMedicalFolder($id: String!, $name: String, $firstname: String, $birthdate: Int, $sex: String, $height: Int, $weight: Int, $primary_doctor_id: String, $antecedent_disease_ids: [String!], $onboarding_status: OnboardingStatus){
+    updateMedicalFolder(id:$id, name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status){
         id
         name
         firstname
@@ -518,15 +510,7 @@ mutation UpdateMedicalFolder($id: String!, $name: String, $firstname: String, $b
         height
         weight
         primary_doctor_id
-        medical_antecedents {
-            name
-		    medicines {
-			    period
-			    day
-			    quantity
-            }
-            still_relevant
-        }
+        antecedent_disease_ids
         onboarding_status
     }
 }
@@ -1006,20 +990,20 @@ query GetTestAccounts{
 query GetTreatmentByID($id: String!){
     getTreatmentByID(id: $id){
         id
-        name
-        disease
-        symptoms
-        side_effects
+        period
+        day
+        quantity
+        medicine_id
     }
 }
 
 query GetTreatments{
     getTreatments{
         id
-        name
-        disease
-        symptoms
-        side_effects
+        period
+        day
+        quantity
+        medicine_id
     }
 }
 
@@ -1066,15 +1050,7 @@ query GetMedicalFolderByID($id: String!){
         height
         weight
         primary_doctor_id
-        medical_antecedents {
-            name
-		    medicines {
-			    period
-			    day
-			    quantity
-            }
-            still_relevant
-        }
+        antecedent_disease_ids
         onboarding_status
     }
 }
@@ -1089,15 +1065,7 @@ query GetMedicalFolder{
         height
         weight
         primary_doctor_id
-        medical_antecedents {
-            name
-		    medicines {
-			    period
-			    day
-			    quantity
-            }
-            still_relevant
-        }
+        antecedent_disease_ids
         onboarding_status
     }
 }

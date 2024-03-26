@@ -36,8 +36,8 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 	if err != nil {
 		return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
 	}
-	if control.GetPatientById.Medical_info_id != "" {
-		return CreateTreatmentResponse{Code: 400, Err: errors.New("medical folder has already been created")}
+	if control.GetPatientById.Medical_info_id == "" {
+		return CreateTreatmentResponse{Code: 400, Err: errors.New("medical folder has not been created")}
 	}
 
 	for _, treat := range input.Treatments {
@@ -75,25 +75,52 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 		})
 
 	}
-
-	anteDisease, err := graphql.CreateAnteDisease(context.Background(), gqlClient, input.Name, 0, []string{""}, []string{""}, []string{""}, input.StillRelevant)
-	if err != nil {
-		return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to create ante disease: " + err.Error())}
-	}
-
 	var treatmentIds []string
 	for _, treatment := range res {
 		treatmentIds = append(treatmentIds, treatment.ID)
 	}
 
-	return CreateTreatmentResponse{
-		AnteDisease: model.AnteDisease{
-			Name:          anteDisease.CreateAnteDisease.Name,
-			StillRelevant: anteDisease.CreateAnteDisease.Still_relevant,
-			TreatmentIds:  treatmentIds,
-		},
-		Treatment: res,
-		Code:      201,
-		Err:       nil,
+	if input.DiseaseId == "" {
+		anteDisease, err := graphql.CreateAnteDisease(context.Background(), gqlClient, input.Name, 0, []string{""}, []string{""}, treatmentIds, input.StillRelevant)
+		if err != nil {
+			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to create ante disease: " + err.Error())}
+		}
+		getMedic, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, control.GetPatientById.Medical_info_id)
+		if err != nil {
+			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to get medical folder: " + err.Error())}
+		}
+		_, err = graphql.UpdateMedicalFolder(context.Background(), gqlClient, control.GetPatientById.Medical_info_id, getMedic.GetMedicalFolderById.Name, getMedic.GetMedicalFolderById.Firstname, getMedic.GetMedicalFolderById.Birthdate, string(getMedic.GetMedicalFolderById.Sex), getMedic.GetMedicalFolderById.Height, getMedic.GetMedicalFolderById.Weight, getMedic.GetMedicalFolderById.Primary_doctor_id, append(getMedic.GetMedicalFolderById.Antecedent_disease_ids, anteDisease.CreateAnteDisease.Id), getMedic.GetMedicalFolderById.Onboarding_status)
+		if err != nil {
+			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to update medical folder: " + err.Error())}
+		}
+		return CreateTreatmentResponse{
+			AnteDisease: model.AnteDisease{
+				Name:          anteDisease.CreateAnteDisease.Name,
+				StillRelevant: anteDisease.CreateAnteDisease.Still_relevant,
+				TreatmentIds:  treatmentIds,
+			},
+			Treatment: res,
+			Code:      201,
+			Err:       nil,
+		}
+	} else {
+		checkAnte, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, input.DiseaseId)
+		if err != nil {
+			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to get ante disease: " + err.Error())}
+		}
+		anteDisease, err := graphql.UpdateAnteDisease(context.Background(), gqlClient, input.DiseaseId, input.Name, checkAnte.GetAnteDiseaseByID.Chronicity, checkAnte.GetAnteDiseaseByID.Surgery_ids, checkAnte.GetAnteDiseaseByID.Symptoms, append(checkAnte.GetAnteDiseaseByID.Treatment_ids, treatmentIds...), input.StillRelevant)
+		if err != nil {
+			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to update ante disease: " + err.Error())}
+		}
+		return CreateTreatmentResponse{
+			AnteDisease: model.AnteDisease{
+				Name:          anteDisease.UpdateAnteDisease.Name,
+				StillRelevant: anteDisease.UpdateAnteDisease.Still_relevant,
+				TreatmentIds:  treatmentIds,
+			},
+			Treatment: res,
+			Code:      201,
+			Err:       nil,
+		}
 	}
 }

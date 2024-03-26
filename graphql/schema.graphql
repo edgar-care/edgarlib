@@ -145,7 +145,7 @@ type MedicalInfo {
     weight: Int!
     primary_doctor_id: String!
     onboarding_status: OnboardingStatus!
-    medical_antecedents: [MedicalAntecedents!]!
+    antecedent_disease_ids: [String!]!
 }
 
 type Notification {
@@ -213,10 +213,10 @@ type AnteFamily {
 
 type Treatment {
     id: ID!
-    name: String!
-    disease: String!
-    symptoms: [String!]
-    side_effects: [String!]
+    period: [Period!]!
+    day: [Day!]!
+    quantity: Int!
+    medicine_id: String!
 }
 
 type Alert {
@@ -232,26 +232,27 @@ type Alert {
 type MedicalAntecedents {
     id: ID!
     name: String!
-    medicines: [Medicines!]!
+    medicines: [Treatment!]!
     still_relevant: Boolean!
 }
 
-type Medicines {
-    period: [Period]!
-    day: [Day]!
-    quantity: Int!
-}
+#type Medicines {
+#    period: [Period]!
+#    day: [Day]!
+#    quantity: Int!
+#}
 
 input MedicalAntecedentsInput {
     name: String!
-    medicines: [MedicinesInput!]!
+    medicines: [TreatmentInput!]!
     still_relevant: Boolean!
 }
 
-input MedicinesInput {
+input TreatmentInput {
     period: [Period]!
     day: [Day]!
     quantity: Int!
+    medicine_id: String!
 }
 
 type Medicament {
@@ -533,11 +534,9 @@ type Mutation {
     deleteAnteChir(id: String!): Boolean
 
     # Create a new antedisease.
-    createAnteDisease(name: String!, chronicity: Float!, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean!): AnteDisease
-
+    createAnteDisease(name: String!, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean!): AnteDisease
     # Update a new antedisease.
     updateAnteDisease(id: String!, name: String, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean): AnteDisease
-
     # Delete a antedisease.
     deleteAnteDisease(id: String!): Boolean
 
@@ -551,11 +550,9 @@ type Mutation {
     deleteAnteFamily(id: String!): Boolean
 
     # Create a new treatment.
-    createTreatment(name: String!, disease: String!, symptoms: [String!], side_effects: [String!]): Treatment
-
+    createTreatment(period: [Period!]!, day: [Day!]!, quantity: Int!, medicine_id: String!): Treatment
     # Update a new treatment.
-    updateTreatment(id: String!, name: String, disease: String, symptoms: [String!], side_effects: [String!]): Treatment
-
+    updateTreatment(id: String!, period: [Period!], day: [Day!], quantity: Int, medicine_id: String): Treatment
     # Delete a treatment.
     deleteTreatment(id: String!): Boolean
 
@@ -578,11 +575,9 @@ type Mutation {
 
 
     # Create a new MedicalFolder.!
-    createMedicalFolder(name: String!, firstname: String!, birthdate: Int!, sex: String!, height: Int!, weight: Int!, primary_doctor_id: String!, medical_antecedents: [MedicalAntecedentsInput!]!, onboarding_status: String!): MedicalInfo
-
+    createMedicalFolder(name: String!, firstname: String!, birthdate: Int!, sex: String!, height: Int!, weight: Int!, primary_doctor_id: String!, antecedent_disease_ids: [String!], onboarding_status: String!): MedicalInfo
     # Update a new MedicalFolder.
-    updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, medical_antecedents: [MedicalAntecedentsInput!], onboarding_status: String): MedicalInfo
-
+    updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus): MedicalInfo
     # Delete an MedicalFolder.
     deleteMedicalFolder(id: String!): Boolean
 
