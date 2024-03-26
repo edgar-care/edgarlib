@@ -25,7 +25,7 @@ func GetTreatmentById(id string) GetTreatmentByIdResponse {
 
 	treatment, err := graphql.GetTreatmentByID(context.Background(), gqlClient, id)
 	if err != nil {
-		return GetTreatmentByIdResponse{model.Treatment{}, 400, errors.New("id does not correspond to a Treatment")}
+		return GetTreatmentByIdResponse{Treatment: model.Treatment{}, Code: 400, Err: errors.New("id does not correspond to a Treatment")}
 	}
 
 	treatmentPeriods := make([]model.Period, len(treatment.GetTreatmentByID.Period))
@@ -45,35 +45,58 @@ func GetTreatmentById(id string) GetTreatmentByIdResponse {
 		Quantity:   treatment.GetTreatmentByID.Quantity,
 		MedicineID: treatment.GetTreatmentByID.Medicine_id,
 	}
-	return GetTreatmentByIdResponse{res, 200, nil}
+	return GetTreatmentByIdResponse{Treatment: res, Code: 200, Err: nil}
 }
 
-func GetTreatments() GetTreatmentsResponse {
+func GetTreatments(patientID string) GetTreatmentsResponse {
 	gqlClient := graphql.CreateClient()
 	var res []model.Treatment
 
-	treatments, err := graphql.GetTreatments(context.Background(), gqlClient)
+	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
 	if err != nil {
-		return GetTreatmentsResponse{[]model.Treatment{}, 400, errors.New("invalid input: " + err.Error())}
+		return GetTreatmentsResponse{Treatments: []model.Treatment{}, Code: 400, Err: errors.New("unable to get patient with id: " + err.Error())}
 	}
 
-	for _, Treatment := range treatments.GetTreatments {
-		treatmentPeriods := make([]model.Period, len(treatments.GetTreatments.Period))
-		for i, p := range treatments.GetTreatments.Period {
-			treatmentPeriods[i] = model.Period(p)
+	medicalInfo, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, patient.GetPatientById.Medical_info_id)
+	if err != nil {
+		return GetTreatmentsResponse{Treatments: []model.Treatment{}, Code: 400, Err: errors.New("unable to get medical_info with id: " + err.Error())}
+	}
+
+	antediseasesIDs := medicalInfo.GetMedicalFolderById.Antecedent_disease_ids
+
+	for _, antediseaseID := range antediseasesIDs {
+		antedisease, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, antediseaseID)
+		if err != nil {
+			return GetTreatmentsResponse{Treatments: []model.Treatment{}, Code: 400, Err: errors.New("unable to get antedisease with id: " + err.Error())}
 		}
 
-		treatmentDays := make([]model.Day, len(treatments.GetTreatments.Day))
-		for i, d := range treatments.GetTreatments.Day {
-			treatmentDays[i] = model.Day(d)
+		treatmentIDs := antedisease.GetAnteDiseaseByID.Treatment_ids
+
+		for _, treatmentID := range treatmentIDs {
+			treatment, err := graphql.GetTreatmentByID(context.Background(), gqlClient, treatmentID)
+			if err != nil {
+				return GetTreatmentsResponse{Treatments: []model.Treatment{}, Code: 400, Err: errors.New("invalid input: " + err.Error())}
+			}
+
+			treatmentPeriods := make([]model.Period, len(treatment.GetTreatmentByID.Period))
+			for i, p := range treatment.GetTreatmentByID.Period {
+				treatmentPeriods[i] = model.Period(p)
+			}
+
+			treatmentDays := make([]model.Day, len(treatment.GetTreatmentByID.Day))
+			for i, d := range treatment.GetTreatmentByID.Day {
+				treatmentDays[i] = model.Day(d)
+			}
+
+			res = append(res, model.Treatment{
+				ID:         treatment.GetTreatmentByID.Id,
+				Period:     treatmentPeriods,
+				Day:        treatmentDays,
+				Quantity:   treatment.GetTreatmentByID.Quantity,
+				MedicineID: treatment.GetTreatmentByID.Medicine_id,
+			})
 		}
-		res = append(res, model.Treatment{
-			ID:         Treatment.Id,
-			Period:     treatmentPeriods,
-			Day:        treatmentDays,
-			Quantity:   Treatment.Quantity,
-			MedicineID: Treatment.Medicine_id,
-		})
 	}
-	return GetTreatmentsResponse{res, 200, nil}
+
+	return GetTreatmentsResponse{Treatments: res, Code: 200, Err: nil}
 }

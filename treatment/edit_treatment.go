@@ -8,6 +8,11 @@ import (
 )
 
 type UpdateTreatmentInput struct {
+	Treatments []TreatmentsInput `json:"treatments"`
+}
+
+type TreatmentsInput struct {
+	ID         string   `json:"id"`
 	MedicineId string   `json:"medicine_id"`
 	Period     []string `json:"period"`
 	Day        []string `json:"day"`
@@ -20,7 +25,7 @@ type UpdateTreatmentResponse struct {
 	Err       error
 }
 
-func UpdateTreatment(input UpdateTreatmentInput, idTreatment string, patientID string) UpdateTreatmentResponse {
+func UpdateTreatment(input UpdateTreatmentInput, patientID string) UpdateTreatmentResponse {
 	gqlClient := graphql.CreateClient()
 	var res []model.Treatment
 
@@ -28,11 +33,11 @@ func UpdateTreatment(input UpdateTreatmentInput, idTreatment string, patientID s
 	if err != nil {
 		return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
 	}
-	if control.GetPatientById.Medical_info_id != "" {
-		return UpdateTreatmentResponse{Code: 400, Err: errors.New("medical folder has already been created")}
+	if control.GetPatientById.Medical_info_id == "" {
+		return UpdateTreatmentResponse{Code: 400, Err: errors.New("medical folder has not been created")}
 	}
 
-	for _, treat := range []UpdateTreatmentInput{input} {
+	for _, treat := range input.Treatments {
 		periods := make([]graphql.Period, len(treat.Period))
 		for i, p := range treat.Period {
 			periods[i] = graphql.Period(p)
@@ -43,11 +48,17 @@ func UpdateTreatment(input UpdateTreatmentInput, idTreatment string, patientID s
 			days[i] = graphql.Day(d)
 		}
 
-		treatment, err := graphql.UpdateTreatment(context.Background(), gqlClient, idTreatment, periods, days, treat.Quantity, treat.MedicineId)
+		_, err = graphql.GetTreatmentByID(context.Background(), gqlClient, treat.ID)
 		if err != nil {
-			return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to create treatment: " + err.Error())}
+			return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to get treatment by id: " + err.Error())}
 		}
 
+		treatment, err := graphql.UpdateTreatment(context.Background(), gqlClient, treat.ID, periods, days, treat.Quantity, treat.MedicineId)
+		if err != nil {
+			return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to update treatment: " + err.Error())}
+		}
+
+		// Convert periods and days to model types
 		treatmentPeriods := make([]model.Period, len(treatment.UpdateTreatment.Period))
 		for i, p := range treatment.UpdateTreatment.Period {
 			treatmentPeriods[i] = model.Period(p)
@@ -65,12 +76,11 @@ func UpdateTreatment(input UpdateTreatmentInput, idTreatment string, patientID s
 			Quantity:   treatment.UpdateTreatment.Quantity,
 			MedicineID: treatment.UpdateTreatment.Medicine_id,
 		})
-
 	}
 
 	return UpdateTreatmentResponse{
 		Treatment: res,
-		Code:      201,
+		Code:      200,
 		Err:       nil,
 	}
 }

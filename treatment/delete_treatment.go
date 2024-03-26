@@ -22,37 +22,56 @@ func remElement(slice []string, element string) []string {
 	return result
 }
 
-func DeleteTreatment(treatmentId string, patientID string) DeleteTreatmentResponse {
-	if treatmentId == "" {
-		return DeleteTreatmentResponse{Deleted: false, Code: 400, Err: errors.New("slot id is required")}
+func DeleteTreatment(treatmentID string, patientID string) DeleteTreatmentResponse {
+	if treatmentID == "" {
+		return DeleteTreatmentResponse{Deleted: false, Code: 400, Err: errors.New("treatment id is required")}
 	}
 	gqlClient := graphql.CreateClient()
 
-	control, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
+	deleted, err := graphql.DeleteTreatment(context.Background(), gqlClient, treatmentID)
 	if err != nil {
-		return DeleteTreatmentResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
-	}
-	if control.GetPatientById.Medical_info_id != "" {
-		return DeleteTreatmentResponse{Code: 400, Err: errors.New("medical folder has already been created")}
+		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error while deleting treatment: " + err.Error())}
 	}
 
-	deleted, err := graphql.DeleteTreatment(context.Background(), gqlClient, treatmentId)
+	antediseases, err := graphql.GetAnteDiseases(context.Background(), gqlClient)
 	if err != nil {
-		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error while deleting slot: " + err.Error())}
+		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antediseases: " + err.Error())}
 	}
 
-	getAnte, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, treatmentId)
-	if err != nil {
-		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating patient: " + err.Error())}
+	var affectedAntediseases []string
+
+	for _, ad := range antediseases.GetAnteDiseases {
+		if contains(ad.Treatment_ids, treatmentID) {
+			affectedAntediseases = append(affectedAntediseases, ad.Id)
+		}
 	}
 
-	_, err = graphql.UpdateAnteDisease(context.Background(), gqlClient, treatmentId, getAnte.GetAnteDiseaseByID.Name, getAnte.GetAnteDiseaseByID.Chronicity, getAnte.GetAnteDiseaseByID.Surgery_ids, []string{""}, remElement(getAnte.GetAnteDiseaseByID.Treatment_ids, treatmentId), getAnte.GetAnteDiseaseByID.Still_relevant)
-	if err != nil {
-		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating patient: " + err.Error())}
+	for _, adID := range affectedAntediseases {
+		ad, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, adID)
+		if err != nil {
+			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antedisease by ID: " + err.Error())}
+		}
+
+		updatedTreatmentIDs := remElement(ad.GetAnteDiseaseByID.Treatment_ids, treatmentID)
+
+		_, err = graphql.UpdateAnteDisease(context.Background(), gqlClient, adID, ad.GetAnteDiseaseByID.Name, ad.GetAnteDiseaseByID.Chronicity, ad.GetAnteDiseaseByID.Surgery_ids, ad.GetAnteDiseaseByID.Symptoms, updatedTreatmentIDs, ad.GetAnteDiseaseByID.Still_relevant)
+		if err != nil {
+			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating antedisease: " + err.Error())}
+		}
 	}
 
 	return DeleteTreatmentResponse{
 		Deleted: deleted.DeleteTreatment,
 		Code:    200,
-		Err:     nil}
+		Err:     nil,
+	}
+}
+
+func contains(slice []string, element string) bool {
+	for _, e := range slice {
+		if e == element {
+			return true
+		}
+	}
+	return false
 }

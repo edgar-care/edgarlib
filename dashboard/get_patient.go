@@ -3,6 +3,7 @@ package dashboard
 import (
 	"context"
 	"errors"
+	"github.com/edgar-care/edgarlib/medical_folder"
 
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
@@ -51,40 +52,10 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		return GetPatientByIdResponse{Code: 401, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	if patient.GetPatientById.Medical_info_id == "" {
-		return GetPatientByIdResponse{Code: 400, Err: errors.New("onboarding not started")}
-	}
-
-	medicalInfo, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, patient.GetPatientById.Medical_info_id)
-	if err != nil {
-		return GetPatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to an medical table")}
-	}
 	var patients PatientWithMedicalInfo
-	medicalAntecedentsResp := make([]*model.MedicalAntecedents, len(medicalInfo.GetMedicalFolderById.Medical_antecedents))
-	for i, antecedent := range medicalInfo.GetMedicalFolderById.Medical_antecedents {
-		medicines := make([]*model.Medicines, len(antecedent.Medicines))
-		for j, med := range antecedent.Medicines {
-			periods := make([]*model.Period, len(med.Period))
-			for k, p := range med.Period {
-				period := model.Period(p)
-				periods[k] = &period
-			}
-			days := make([]*model.Day, len(med.Day))
-			for k, d := range med.Day {
-				day := model.Day(d)
-				days[k] = &day
-			}
-			medicines[j] = &model.Medicines{
-				Period:   periods,
-				Day:      days,
-				Quantity: med.Quantity,
-			}
-		}
-		medicalAntecedentsResp[i] = &model.MedicalAntecedents{
-			Name:          antecedent.Name,
-			Medicines:     medicines,
-			StillRelevant: antecedent.Still_relevant,
-		}
+	medicalInfo := medical_folder.GetMedicalInfo(id)
+	if medicalInfo.Err != nil {
+		return GetPatientByIdResponse{Code: 401, Err: errors.New("error get medical info by id")}
 	}
 
 	patients = PatientWithMedicalInfo{
@@ -92,22 +63,13 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		Email:         patient.GetPatientById.Email,
 		RendezVousIds: patient.GetPatientById.Rendez_vous_ids,
 		DocumentsIds:  patient.GetPatientById.Document_ids,
-		MedicalInfo: model.MedicalInfo{
-			ID:                 medicalInfo.GetMedicalFolderById.Id,
-			Name:               medicalInfo.GetMedicalFolderById.Name,
-			Firstname:          medicalInfo.GetMedicalFolderById.Firstname,
-			Birthdate:          medicalInfo.GetMedicalFolderById.Birthdate,
-			Sex:                model.Sex(medicalInfo.GetMedicalFolderById.Sex),
-			Weight:             medicalInfo.GetMedicalFolderById.Weight,
-			Height:             medicalInfo.GetMedicalFolderById.Height,
-			PrimaryDoctorID:    medicalInfo.GetMedicalFolderById.Primary_doctor_id,
-			OnboardingStatus:   model.OnboardingStatus(medicalInfo.GetMedicalFolderById.Onboarding_status),
-			MedicalAntecedents: medicalAntecedentsResp,
-		},
+		MedicalInfo:   medicalInfo.MedicalInfo,
 	}
 
 	return GetPatientByIdResponse{
 		PatientInfo: patients,
+		Code:        200,
+		Err:         nil,
 	}
 }
 
@@ -122,57 +84,21 @@ func GetPatients(doctorId string) GetPatientsResponse {
 	var patients []PatientWithMedicalInfo
 	for _, patient := range patientDoctor.GetPatientsFromDoctorById {
 		patientId := patient.Medical_info_id
-		medicalInfo, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, patientId)
-		if err != nil {
-			return GetPatientsResponse{Code: 400, Err: errors.New("id does not correspond to an medical table")}
-		}
-
-		medicalAntecedentsResp := make([]*model.MedicalAntecedents, len(medicalInfo.GetMedicalFolderById.Medical_antecedents))
-		for i, antecedent := range medicalInfo.GetMedicalFolderById.Medical_antecedents {
-			medicines := make([]*model.Medicines, len(antecedent.Medicines))
-			for j, med := range antecedent.Medicines {
-				periods := make([]*model.Period, len(med.Period))
-				for k, p := range med.Period {
-					period := model.Period(p)
-					periods[k] = &period
-				}
-				days := make([]*model.Day, len(med.Day))
-				for k, d := range med.Day {
-					day := model.Day(d)
-					days[k] = &day
-				}
-				medicines[j] = &model.Medicines{
-					Period:   periods,
-					Day:      days,
-					Quantity: med.Quantity,
-				}
-			}
-			medicalAntecedentsResp[i] = &model.MedicalAntecedents{
-				Name:          antecedent.Name,
-				Medicines:     medicines,
-				StillRelevant: antecedent.Still_relevant,
-			}
+		medicalInfo := medical_folder.GetMedicalInfo(patientId)
+		if medicalInfo.Err != nil {
+			return GetPatientsResponse{Code: 401, Err: errors.New("error get medical info bu id")}
 		}
 		patients = append(patients, PatientWithMedicalInfo{
 			ID:            patient.Id,
 			Email:         patient.Email,
 			RendezVousIds: patient.Rendez_vous_ids,
 			DocumentsIds:  patient.Document_ids,
-			MedicalInfo: model.MedicalInfo{
-				ID:                 medicalInfo.GetMedicalFolderById.Id,
-				Name:               medicalInfo.GetMedicalFolderById.Name,
-				Firstname:          medicalInfo.GetMedicalFolderById.Firstname,
-				Birthdate:          medicalInfo.GetMedicalFolderById.Birthdate,
-				Sex:                model.Sex(medicalInfo.GetMedicalFolderById.Sex),
-				Height:             medicalInfo.GetMedicalFolderById.Height,
-				Weight:             medicalInfo.GetMedicalFolderById.Weight,
-				PrimaryDoctorID:    medicalInfo.GetMedicalFolderById.Primary_doctor_id,
-				OnboardingStatus:   model.OnboardingStatus(medicalInfo.GetMedicalFolderById.Onboarding_status),
-				MedicalAntecedents: medicalAntecedentsResp,
-			},
+			MedicalInfo:   medicalInfo.MedicalInfo,
 		})
 	}
 	return GetPatientsResponse{
 		PatientsInfo: patients,
+		Code:         200,
+		Err:          nil,
 	}
 }

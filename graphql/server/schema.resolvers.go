@@ -1011,7 +1011,7 @@ func (r *mutationResolver) DeleteAnteChir(ctx context.Context, id string) (*bool
 }
 
 // CreateAnteDisease is the resolver for the createAnteDisease field.
-func (r *mutationResolver) CreateAnteDisease(ctx context.Context, name string, chronicity float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) (*model.AnteDisease, error) {
+func (r *mutationResolver) CreateAnteDisease(ctx context.Context, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) (*model.AnteDisease, error) {
 	newAnteDisease := bson.M{
 		"name":           name,
 		"chronicity":     chronicity,
@@ -1028,7 +1028,7 @@ func (r *mutationResolver) CreateAnteDisease(ctx context.Context, name string, c
 	entity := model.AnteDisease{
 		ID:            res.InsertedID.(primitive.ObjectID).Hex(),
 		Name:          name,
-		Chronicity:    chronicity,
+		Chronicity:    *chronicity,
 		SurgeryIds:    surgeryIds,
 		Symptoms:      symptoms,
 		TreatmentIds:  treatmentIds,
@@ -1141,12 +1141,12 @@ func (r *mutationResolver) DeleteAnteFamily(ctx context.Context, id string) (*bo
 }
 
 // CreateTreatment is the resolver for the createTreatment field.
-func (r *mutationResolver) CreateTreatment(ctx context.Context, name string, disease string, symptoms []string, sideEffects []string) (*model.Treatment, error) {
+func (r *mutationResolver) CreateTreatment(ctx context.Context, period []model.Period, day []model.Day, quantity int, medicineID string) (*model.Treatment, error) {
 	newTreatment := bson.M{
-		"name":         name,
-		"disease":      disease,
-		"symptoms":     symptoms,
-		"side_effects": sideEffects,
+		"period":      period,
+		"day":         day,
+		"quantity":    quantity,
+		"medicine_id": medicineID,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").InsertOne(ctx, newTreatment)
@@ -1154,17 +1154,17 @@ func (r *mutationResolver) CreateTreatment(ctx context.Context, name string, dis
 		return nil, err
 	}
 	entity := model.Treatment{
-		ID:          res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:        name,
-		Disease:     disease,
-		Symptoms:    symptoms,
-		SideEffects: sideEffects,
+		ID:         res.InsertedID.(primitive.ObjectID).Hex(),
+		Period:     period,
+		Day:        day,
+		Quantity:   quantity,
+		MedicineID: medicineID,
 	}
 	return &entity, err
 }
 
 // UpdateTreatment is the resolver for the updateTreatment field.
-func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, name *string, disease *string, symptoms []string, sideEffects []string) (*model.Treatment, error) {
+func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) (*model.Treatment, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -1172,16 +1172,20 @@ func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, name 
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":     objId,
-		"name":    name,
-		"disease": disease,
+		"_id":         objId,
+		"period":      period,
+		"day":         day,
+		"quantity":    quantity,
+		"medicine_id": medicineID,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").ReplaceOne(ctx, filter, updated)
 
 	return &model.Treatment{
-		ID:      id,
-		Name:    *name,
-		Disease: *disease,
+		ID:         id,
+		Period:     period,
+		Day:        day,
+		Quantity:   *quantity,
+		MedicineID: *medicineID,
 	}, err
 }
 
@@ -1317,18 +1321,17 @@ func (r *mutationResolver) DeleteMedicament(ctx context.Context, id string) (*bo
 }
 
 // CreateMedicalFolder is the resolver for the createMedicalFolder field.
-func (r *mutationResolver) CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus string) (*model.MedicalInfo, error) {
-	// Créer une nouvelle instance de MedicalInfo avec les données fournies
+func (r *mutationResolver) CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) (*model.MedicalInfo, error) {
 	newMedicalInfo := bson.M{
-		"name":                name,
-		"firstname":           firstname,
-		"birthdate":           birthdate,
-		"sex":                 sex,
-		"height":              height,
-		"weight":              weight,
-		"primary_doctor_id":   primaryDoctorID,
-		"medical_antecedents": medicalAntecedents,
-		"onboarding_status":   onboardingStatus,
+		"name":                   name,
+		"firstname":              firstname,
+		"birthdate":              birthdate,
+		"sex":                    sex,
+		"height":                 height,
+		"weight":                 weight,
+		"primary_doctor_id":      primaryDoctorID,
+		"antecedent_disease_ids": antecedentDiseaseIds,
+		"onboarding_status":      onboardingStatus,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").InsertOne(ctx, newMedicalInfo)
@@ -1336,47 +1339,23 @@ func (r *mutationResolver) CreateMedicalFolder(ctx context.Context, name string,
 		return nil, err
 	}
 
-	var convertedMedicalAntecedents []*model.MedicalAntecedents
-	for _, antecedent := range medicalAntecedents {
-		convertedMedicines := make([]*model.Medicines, len(antecedent.Medicines))
-		for i, med := range antecedent.Medicines {
-			convertedMedicines[i] = &model.Medicines{
-				Period:   med.Period,
-				Day:      med.Day,
-				Quantity: med.Quantity,
-			}
-		}
-		convertedMedicalAntecedents = append(convertedMedicalAntecedents, &model.MedicalAntecedents{
-			Name:          antecedent.Name,
-			Medicines:     convertedMedicines,
-			StillRelevant: antecedent.StillRelevant,
-		})
-	}
-
-	res, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").InsertOne(ctx, newMedicalInfo)
-	if err != nil {
-		return nil, err
-	}
-
 	entity := model.MedicalInfo{
-		ID:                 res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:               name,
-		Firstname:          firstname,
-		Birthdate:          birthdate,
-		Sex:                model.Sex(sex),
-		Height:             height,
-		Weight:             weight,
-		PrimaryDoctorID:    primaryDoctorID,
-		MedicalAntecedents: convertedMedicalAntecedents,
-		OnboardingStatus:   model.OnboardingStatus(onboardingStatus),
+		ID:                   res.InsertedID.(primitive.ObjectID).Hex(),
+		Name:                 name,
+		Firstname:            firstname,
+		Birthdate:            birthdate,
+		Sex:                  model.Sex(sex),
+		Height:               height,
+		Weight:               weight,
+		PrimaryDoctorID:      primaryDoctorID,
+		AntecedentDiseaseIds: antecedentDiseaseIds,
+		OnboardingStatus:     model.OnboardingStatus(onboardingStatus),
 	}
-
-	// Renvoyer la nouvelle instance de MedicalInfo créée avec succès
 	return &entity, err
 }
 
 // UpdateMedicalFolder is the resolver for the updateMedicalFolder field.
-func (r *mutationResolver) UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, medicalAntecedents []*model.MedicalAntecedentsInput, onboardingStatus *string) (*model.MedicalInfo, error) {
+func (r *mutationResolver) UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) (*model.MedicalInfo, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -1384,47 +1363,31 @@ func (r *mutationResolver) UpdateMedicalFolder(ctx context.Context, id string, n
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":                 objId,
-		"name":                name,
-		"firstname":           firstname,
-		"birthdate":           birthdate,
-		"sex":                 sex,
-		"height":              height,
-		"weight":              weight,
-		"primary_doctor_id":   primaryDoctorID,
-		"medical_antecedents": medicalAntecedents,
-		"onboarding_status":   onboardingStatus,
+		"_id":                    objId,
+		"name":                   name,
+		"firstname":              firstname,
+		"birthdate":              birthdate,
+		"sex":                    sex,
+		"height":                 height,
+		"weight":                 weight,
+		"primary_doctor_id":      primaryDoctorID,
+		"antecedent_disease_ids": antecedentDiseaseIds,
+		"onboarding_status":      onboardingStatus,
 	}
 
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").ReplaceOne(ctx, filter, updated)
 
-	var convertedMedicalAntecedents []*model.MedicalAntecedents
-	for _, antecedent := range medicalAntecedents {
-		convertedMedicines := make([]*model.Medicines, len(antecedent.Medicines))
-		for i, med := range antecedent.Medicines {
-			convertedMedicines[i] = &model.Medicines{
-				Period:   med.Period,
-				Day:      med.Day,
-				Quantity: med.Quantity,
-			}
-		}
-		convertedMedicalAntecedents = append(convertedMedicalAntecedents, &model.MedicalAntecedents{
-			Name:          antecedent.Name,
-			Medicines:     convertedMedicines,
-			StillRelevant: antecedent.StillRelevant,
-		})
-	}
 	return &model.MedicalInfo{
-		ID:                 id,
-		Name:               *name,
-		Firstname:          *firstname,
-		Birthdate:          *birthdate,
-		Sex:                model.Sex(*sex),
-		Height:             *height,
-		Weight:             *weight,
-		PrimaryDoctorID:    *primaryDoctorID,
-		MedicalAntecedents: convertedMedicalAntecedents,
-		OnboardingStatus:   model.OnboardingStatus(*onboardingStatus),
+		ID:                   id,
+		Name:                 *name,
+		Firstname:            *firstname,
+		Birthdate:            *birthdate,
+		Sex:                  model.Sex(*sex),
+		Height:               *height,
+		Weight:               *weight,
+		PrimaryDoctorID:      *primaryDoctorID,
+		AntecedentDiseaseIds: antecedentDiseaseIds,
+		OnboardingStatus:     model.OnboardingStatus(*onboardingStatus),
 	}, err
 }
 
