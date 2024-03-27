@@ -56,6 +56,7 @@ type Patient {
     rendez_vous_ids: [String]
     medical_info_id: String
     document_ids: [String]
+    treatment_follow_up_ids: [String]
 }
 
 # Doctor entity
@@ -274,6 +275,13 @@ input MedicineInput {
     side_effects: [String!]!
 }
 
+type TreatmentsFollowUp {
+    id: ID!
+    treatment_id: String!
+    date: Int!
+    period: [Period!]!
+}
+
 ## Query  --------------------------------------------------------------------------------------------------------------
 
 type Query {
@@ -419,6 +427,13 @@ type Query {
     # Get all patient from doctor with id.
     getPatientsFromDoctorById(id: String!): [Patient]
 
+
+    # Get TreatmentsFollowUp by its id
+    getTreatmentsFollowUpById(id: String!): TreatmentsFollowUp
+
+    # Get all TreatmentsFollowUp
+    getTreatmentsFollowUps(id: String!): [TreatmentsFollowUp]
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
@@ -428,7 +443,7 @@ type Mutation {
     createPatient(email: String!, password: String!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String]): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String]): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -582,6 +597,14 @@ type Mutation {
     updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus): MedicalInfo
     # Delete an MedicalFolder.
     deleteMedicalFolder(id: String!): Boolean
+
+
+    # Create TreatmentsFollowUp
+    createTreatmentsFollowUp(treatment_id: String!, date: Int!, period: [Period!]!): TreatmentsFollowUp
+    #Update TreatmentsFollowUp
+    updateTreatmentsFollowUp(id: String!, treatment_id: String, date: Int, period: [Period!]): TreatmentsFollowUp
+    # Delete TreatmentsFollowUp
+    deleteTreatmentsFollowUp(id: String!): Boolean
 
 }
 

@@ -165,12 +165,13 @@ type Notification struct {
 }
 
 type Patient struct {
-	ID            string    `json:"id" bson:"_id"`
-	Email         string    `json:"email" bson:"email"`
-	Password      string    `json:"password" bson:"password"`
-	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
-	MedicalInfoID *string   `json:"medical_info_id,omitempty" bson:"medical_info_id"`
-	DocumentIds   []*string `json:"document_ids,omitempty" bson:"document_ids"`
+	ID                   string    `json:"id" bson:"_id"`
+	Email                string    `json:"email" bson:"email"`
+	Password             string    `json:"password" bson:"password"`
+	RendezVousIds        []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+	MedicalInfoID        *string   `json:"medical_info_id,omitempty" bson:"medical_info_id"`
+	DocumentIds          []*string `json:"document_ids,omitempty" bson:"document_ids"`
+	TreatmentFollowUpIds []*string `json:"treatment_follow_up_ids,omitempty" bson:"treatment_follow_up_ids"`
 }
 
 type Query struct {
@@ -270,6 +271,13 @@ type TreatmentInput struct {
 	Day        []*Day    `json:"day" bson:"day"`
 	Quantity   int       `json:"quantity" bson:"quantity"`
 	MedicineID string    `json:"medicine_id" bson:"medicine_id"`
+}
+
+type TreatmentsFollowUp struct {
+	ID          string   `json:"id" bson:"_id"`
+	TreatmentID string   `json:"treatment_id" bson:"treatment_id"`
+	Date        int      `json:"date" bson:"date"`
+	Period      []Period `json:"period" bson:"period"`
 }
 
 type AppointmentStatus string

@@ -167,60 +167,63 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateAdmin         func(childComplexity int, email string, password string, name string, lastName string) int
-		CreateAlert         func(childComplexity int, name string, sex *string, height *int, weight *int, symptoms []string, comment string) int
-		CreateAnteChir      func(childComplexity int, name string, localisation string, inducedSymptoms []string) int
-		CreateAnteDisease   func(childComplexity int, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) int
-		CreateAnteFamily    func(childComplexity int, name string, disease []string) int
-		CreateDemoAccount   func(childComplexity int, email string, password string) int
-		CreateDisease       func(childComplexity int, code string, name string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
-		CreateDoctor        func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
-		CreateDocument      func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
-		CreateMedicalFolder func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) int
-		CreateMedicine      func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
-		CreateNotification  func(childComplexity int, token string, message string, title string) int
-		CreatePatient       func(childComplexity int, email string, password string) int
-		CreateRdv           func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
-		CreateSession       func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
-		CreateSymptom       func(childComplexity int, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) int
-		CreateTestAccount   func(childComplexity int, email string, password string) int
-		CreateTreatment     func(childComplexity int, period []model.Period, day []model.Day, quantity int, medicineID string) int
-		DeleteAdmin         func(childComplexity int, id string) int
-		DeleteAlert         func(childComplexity int, id string) int
-		DeleteAnteChir      func(childComplexity int, id string) int
-		DeleteAnteDisease   func(childComplexity int, id string) int
-		DeleteAnteFamily    func(childComplexity int, id string) int
-		DeleteDemoAccount   func(childComplexity int, id string) int
-		DeleteDisease       func(childComplexity int, id string) int
-		DeleteDoctor        func(childComplexity int, id string) int
-		DeleteDocument      func(childComplexity int, id string) int
-		DeleteMedicalFolder func(childComplexity int, id string) int
-		DeleteMedicine      func(childComplexity int, id string) int
-		DeleteNotification  func(childComplexity int, id string) int
-		DeletePatient       func(childComplexity int, id string) int
-		DeleteRdv           func(childComplexity int, id string) int
-		DeleteSession       func(childComplexity int, id string) int
-		DeleteSlot          func(childComplexity int, id string) int
-		DeleteSymptom       func(childComplexity int, id string) int
-		DeleteTestAccount   func(childComplexity int, id string) int
-		DeleteTreatment     func(childComplexity int, id string) int
-		UpdateAdmin         func(childComplexity int, id string, email *string, password *string, name *string, lastName *string) int
-		UpdateAlert         func(childComplexity int, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) int
-		UpdateAnteChir      func(childComplexity int, id string, name *string, localisation *string, inducedSymptoms []string) int
-		UpdateAnteDisease   func(childComplexity int, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) int
-		UpdateAnteFamily    func(childComplexity int, id string, name *string, disease []string) int
-		UpdateDemoAccount   func(childComplexity int, id string, email *string, password *string) int
-		UpdateDisease       func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
-		UpdateDoctor        func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) int
-		UpdateDocument      func(childComplexity int, id string, name *string, isFavorite *bool) int
-		UpdateMedicalFolder func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) int
-		UpdateNotification  func(childComplexity int, id string, token string, message string, title string) int
-		UpdatePatient       func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) int
-		UpdateRdv           func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) int
-		UpdateSession       func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
-		UpdateSymptom       func(childComplexity int, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) int
-		UpdateTestAccount   func(childComplexity int, id string, email *string, password *string) int
-		UpdateTreatment     func(childComplexity int, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) int
+		CreateAdmin              func(childComplexity int, email string, password string, name string, lastName string) int
+		CreateAlert              func(childComplexity int, name string, sex *string, height *int, weight *int, symptoms []string, comment string) int
+		CreateAnteChir           func(childComplexity int, name string, localisation string, inducedSymptoms []string) int
+		CreateAnteDisease        func(childComplexity int, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) int
+		CreateAnteFamily         func(childComplexity int, name string, disease []string) int
+		CreateDemoAccount        func(childComplexity int, email string, password string) int
+		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
+		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
+		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
+		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) int
+		CreateMedicine           func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
+		CreateNotification       func(childComplexity int, token string, message string, title string) int
+		CreatePatient            func(childComplexity int, email string, password string) int
+		CreateRdv                func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
+		CreateSession            func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, alerts []string) int
+		CreateSymptom            func(childComplexity int, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) int
+		CreateTestAccount        func(childComplexity int, email string, password string) int
+		CreateTreatment          func(childComplexity int, period []model.Period, day []model.Day, quantity int, medicineID string) int
+		CreateTreatmentsFollowUp func(childComplexity int, treatmentID string, date int, period []model.Period) int
+		DeleteAdmin              func(childComplexity int, id string) int
+		DeleteAlert              func(childComplexity int, id string) int
+		DeleteAnteChir           func(childComplexity int, id string) int
+		DeleteAnteDisease        func(childComplexity int, id string) int
+		DeleteAnteFamily         func(childComplexity int, id string) int
+		DeleteDemoAccount        func(childComplexity int, id string) int
+		DeleteDisease            func(childComplexity int, id string) int
+		DeleteDoctor             func(childComplexity int, id string) int
+		DeleteDocument           func(childComplexity int, id string) int
+		DeleteMedicalFolder      func(childComplexity int, id string) int
+		DeleteMedicine           func(childComplexity int, id string) int
+		DeleteNotification       func(childComplexity int, id string) int
+		DeletePatient            func(childComplexity int, id string) int
+		DeleteRdv                func(childComplexity int, id string) int
+		DeleteSession            func(childComplexity int, id string) int
+		DeleteSlot               func(childComplexity int, id string) int
+		DeleteSymptom            func(childComplexity int, id string) int
+		DeleteTestAccount        func(childComplexity int, id string) int
+		DeleteTreatment          func(childComplexity int, id string) int
+		DeleteTreatmentsFollowUp func(childComplexity int, id string) int
+		UpdateAdmin              func(childComplexity int, id string, email *string, password *string, name *string, lastName *string) int
+		UpdateAlert              func(childComplexity int, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) int
+		UpdateAnteChir           func(childComplexity int, id string, name *string, localisation *string, inducedSymptoms []string) int
+		UpdateAnteDisease        func(childComplexity int, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) int
+		UpdateAnteFamily         func(childComplexity int, id string, name *string, disease []string) int
+		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
+		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
+		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) int
+		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
+		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) int
+		UpdateNotification       func(childComplexity int, id string, token string, message string, title string) int
+		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string) int
+		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) int
+		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
+		UpdateSymptom            func(childComplexity int, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) int
+		UpdateTestAccount        func(childComplexity int, id string, email *string, password *string) int
+		UpdateTreatment          func(childComplexity int, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) int
+		UpdateTreatmentsFollowUp func(childComplexity int, id string, treatmentID *string, date *int, period []model.Period) int
 	}
 
 	Notification struct {
@@ -231,12 +234,13 @@ type ComplexityRoot struct {
 	}
 
 	Patient struct {
-		DocumentIds   func(childComplexity int) int
-		Email         func(childComplexity int) int
-		ID            func(childComplexity int) int
-		MedicalInfoID func(childComplexity int) int
-		Password      func(childComplexity int) int
-		RendezVousIds func(childComplexity int) int
+		DocumentIds          func(childComplexity int) int
+		Email                func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		MedicalInfoID        func(childComplexity int) int
+		Password             func(childComplexity int) int
+		RendezVousIds        func(childComplexity int) int
+		TreatmentFollowUpIds func(childComplexity int) int
 	}
 
 	Query struct {
@@ -286,6 +290,8 @@ type ComplexityRoot struct {
 		GetTestAccounts           func(childComplexity int) int
 		GetTreatmentByID          func(childComplexity int, id string) int
 		GetTreatments             func(childComplexity int) int
+		GetTreatmentsFollowUpByID func(childComplexity int, id string) int
+		GetTreatmentsFollowUps    func(childComplexity int, id string) int
 		GetWaitingRdv             func(childComplexity int, doctorID string) int
 	}
 
@@ -360,11 +366,18 @@ type ComplexityRoot struct {
 		Period     func(childComplexity int) int
 		Quantity   func(childComplexity int) int
 	}
+
+	TreatmentsFollowUp struct {
+		Date        func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Period      func(childComplexity int) int
+		TreatmentID func(childComplexity int) int
+	}
 }
 
 type MutationResolver interface {
 	CreatePatient(ctx context.Context, email string, password string) (*model.Patient, error)
-	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) (*model.Patient, error)
+	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error)
 	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) (*model.Doctor, error)
@@ -417,6 +430,9 @@ type MutationResolver interface {
 	CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) (*model.MedicalInfo, error)
 	UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) (*model.MedicalInfo, error)
 	DeleteMedicalFolder(ctx context.Context, id string) (*bool, error)
+	CreateTreatmentsFollowUp(ctx context.Context, treatmentID string, date int, period []model.Period) (*model.TreatmentsFollowUp, error)
+	UpdateTreatmentsFollowUp(ctx context.Context, id string, treatmentID *string, date *int, period []model.Period) (*model.TreatmentsFollowUp, error)
+	DeleteTreatmentsFollowUp(ctx context.Context, id string) (*bool, error)
 }
 type QueryResolver interface {
 	GetPatients(ctx context.Context) ([]*model.Patient, error)
@@ -466,6 +482,8 @@ type QueryResolver interface {
 	GetMedicines(ctx context.Context) ([]*model.Medicine, error)
 	GetMedicineByID(ctx context.Context, id string) (*model.Medicine, error)
 	GetPatientsFromDoctorByID(ctx context.Context, id string) ([]*model.Patient, error)
+	GetTreatmentsFollowUpByID(ctx context.Context, id string) (*model.TreatmentsFollowUp, error)
+	GetTreatmentsFollowUps(ctx context.Context, id string) ([]*model.TreatmentsFollowUp, error)
 }
 
 type executableSchema struct {
@@ -1249,6 +1267,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateTreatment(childComplexity, args["period"].([]model.Period), args["day"].([]model.Day), args["quantity"].(int), args["medicine_id"].(string)), true
 
+	case "Mutation.createTreatmentsFollowUp":
+		if e.complexity.Mutation.CreateTreatmentsFollowUp == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTreatmentsFollowUp_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTreatmentsFollowUp(childComplexity, args["treatment_id"].(string), args["date"].(int), args["period"].([]model.Period)), true
+
 	case "Mutation.deleteAdmin":
 		if e.complexity.Mutation.DeleteAdmin == nil {
 			break
@@ -1477,6 +1507,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteTreatment(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteTreatmentsFollowUp":
+		if e.complexity.Mutation.DeleteTreatmentsFollowUp == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTreatmentsFollowUp_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTreatmentsFollowUp(childComplexity, args["id"].(string)), true
+
 	case "Mutation.updateAdmin":
 		if e.complexity.Mutation.UpdateAdmin == nil {
 			break
@@ -1619,7 +1661,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string)), true
+		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string)), true
 
 	case "Mutation.updateRdv":
 		if e.complexity.Mutation.UpdateRdv == nil {
@@ -1680,6 +1722,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateTreatment(childComplexity, args["id"].(string), args["period"].([]model.Period), args["day"].([]model.Day), args["quantity"].(*int), args["medicine_id"].(*string)), true
+
+	case "Mutation.updateTreatmentsFollowUp":
+		if e.complexity.Mutation.UpdateTreatmentsFollowUp == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTreatmentsFollowUp_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTreatmentsFollowUp(childComplexity, args["id"].(string), args["treatment_id"].(*string), args["date"].(*int), args["period"].([]model.Period)), true
 
 	case "Notification.id":
 		if e.complexity.Notification.ID == nil {
@@ -1750,6 +1804,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Patient.RendezVousIds(childComplexity), true
+
+	case "Patient.treatment_follow_up_ids":
+		if e.complexity.Patient.TreatmentFollowUpIds == nil {
+			break
+		}
+
+		return e.complexity.Patient.TreatmentFollowUpIds(childComplexity), true
 
 	case "Query.getAdminByEmail":
 		if e.complexity.Query.GetAdminByEmail == nil {
@@ -2218,6 +2279,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetTreatments(childComplexity), true
 
+	case "Query.getTreatmentsFollowUpById":
+		if e.complexity.Query.GetTreatmentsFollowUpByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getTreatmentsFollowUpById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetTreatmentsFollowUpByID(childComplexity, args["id"].(string)), true
+
+	case "Query.getTreatmentsFollowUps":
+		if e.complexity.Query.GetTreatmentsFollowUps == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getTreatmentsFollowUps_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetTreatmentsFollowUps(childComplexity, args["id"].(string)), true
+
 	case "Query.getWaitingRdv":
 		if e.complexity.Query.GetWaitingRdv == nil {
 			break
@@ -2566,6 +2651,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Treatment.Quantity(childComplexity), true
 
+	case "TreatmentsFollowUp.date":
+		if e.complexity.TreatmentsFollowUp.Date == nil {
+			break
+		}
+
+		return e.complexity.TreatmentsFollowUp.Date(childComplexity), true
+
+	case "TreatmentsFollowUp.id":
+		if e.complexity.TreatmentsFollowUp.ID == nil {
+			break
+		}
+
+		return e.complexity.TreatmentsFollowUp.ID(childComplexity), true
+
+	case "TreatmentsFollowUp.period":
+		if e.complexity.TreatmentsFollowUp.Period == nil {
+			break
+		}
+
+		return e.complexity.TreatmentsFollowUp.Period(childComplexity), true
+
+	case "TreatmentsFollowUp.treatment_id":
+		if e.complexity.TreatmentsFollowUp.TreatmentID == nil {
+			break
+		}
+
+		return e.complexity.TreatmentsFollowUp.TreatmentID(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -2737,6 +2850,7 @@ type Patient {
     rendez_vous_ids: [String]
     medical_info_id: String
     document_ids: [String]
+    treatment_follow_up_ids: [String]
 }
 
 # Doctor entity
@@ -2955,6 +3069,13 @@ input MedicineInput {
     side_effects: [String!]!
 }
 
+type TreatmentsFollowUp {
+    id: ID!
+    treatment_id: String!
+    date: Int!
+    period: [Period!]!
+}
+
 ## Query  --------------------------------------------------------------------------------------------------------------
 
 type Query {
@@ -3100,6 +3221,13 @@ type Query {
     # Get all patient from doctor with id.
     getPatientsFromDoctorById(id: String!): [Patient]
 
+
+    # Get TreatmentsFollowUp by its id
+    getTreatmentsFollowUpById(id: String!): TreatmentsFollowUp
+
+    # Get all TreatmentsFollowUp
+    getTreatmentsFollowUps(id: String!): [TreatmentsFollowUp]
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
@@ -3109,7 +3237,7 @@ type Mutation {
     createPatient(email: String!, password: String!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String]): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String]): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -3263,6 +3391,14 @@ type Mutation {
     updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus): MedicalInfo
     # Delete an MedicalFolder.
     deleteMedicalFolder(id: String!): Boolean
+
+
+    # Create TreatmentsFollowUp
+    createTreatmentsFollowUp(treatment_id: String!, date: Int!, period: [Period!]!): TreatmentsFollowUp
+    #Update TreatmentsFollowUp
+    updateTreatmentsFollowUp(id: String!, treatment_id: String, date: Int, period: [Period!]): TreatmentsFollowUp
+    # Delete TreatmentsFollowUp
+    deleteTreatmentsFollowUp(id: String!): Boolean
 
 }
 
@@ -4284,6 +4420,39 @@ func (ec *executionContext) field_Mutation_createTreatment_args(ctx context.Cont
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createTreatmentsFollowUp_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["treatment_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["treatment_id"] = arg0
+	var arg1 int
+	if tmp, ok := rawArgs["date"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+		arg1, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["date"] = arg1
+	var arg2 []model.Period
+	if tmp, ok := rawArgs["period"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
+		arg2, err = ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["period"] = arg2
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteAdmin_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -4555,6 +4724,21 @@ func (ec *executionContext) field_Mutation_deleteTestAccount_args(ctx context.Co
 }
 
 func (ec *executionContext) field_Mutation_deleteTreatment_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteTreatmentsFollowUp_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -5250,6 +5434,15 @@ func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Contex
 		}
 	}
 	args["document_ids"] = arg5
+	var arg6 []*string
+	if tmp, ok := rawArgs["treatment_follow_up_ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_follow_up_ids"))
+		arg6, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["treatment_follow_up_ids"] = arg6
 	return args, nil
 }
 
@@ -5640,6 +5833,48 @@ func (ec *executionContext) field_Mutation_updateTreatment_args(ctx context.Cont
 		}
 	}
 	args["medicine_id"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateTreatmentsFollowUp_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["treatment_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_id"))
+		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["treatment_id"] = arg1
+	var arg2 *int
+	if tmp, ok := rawArgs["date"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["date"] = arg2
+	var arg3 []model.Period
+	if tmp, ok := rawArgs["period"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
+		arg3, err = ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["period"] = arg3
 	return args, nil
 }
 
@@ -6079,6 +6314,36 @@ func (ec *executionContext) field_Query_getTestAccountById_args(ctx context.Cont
 }
 
 func (ec *executionContext) field_Query_getTreatmentByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTreatmentsFollowUpById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTreatmentsFollowUps_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -9627,6 +9892,8 @@ func (ec *executionContext) fieldContext_Mutation_createPatient(ctx context.Cont
 				return ec.fieldContext_Patient_medical_info_id(ctx, field)
 			case "document_ids":
 				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -9659,7 +9926,7 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string))
+		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -9693,6 +9960,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Cont
 				return ec.fieldContext_Patient_medical_info_id(ctx, field)
 			case "document_ids":
 				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -12917,6 +13186,182 @@ func (ec *executionContext) fieldContext_Mutation_deleteMedicalFolder(ctx contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createTreatmentsFollowUp(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateTreatmentsFollowUp(rctx, fc.Args["treatment_id"].(string), fc.Args["date"].(int), fc.Args["period"].([]model.Period))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.TreatmentsFollowUp)
+	fc.Result = res
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_TreatmentsFollowUp_id(ctx, field)
+			case "treatment_id":
+				return ec.fieldContext_TreatmentsFollowUp_treatment_id(ctx, field)
+			case "date":
+				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
+			case "period":
+				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createTreatmentsFollowUp_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateTreatmentsFollowUp(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateTreatmentsFollowUp(rctx, fc.Args["id"].(string), fc.Args["treatment_id"].(*string), fc.Args["date"].(*int), fc.Args["period"].([]model.Period))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.TreatmentsFollowUp)
+	fc.Result = res
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_TreatmentsFollowUp_id(ctx, field)
+			case "treatment_id":
+				return ec.fieldContext_TreatmentsFollowUp_treatment_id(ctx, field)
+			case "date":
+				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
+			case "period":
+				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateTreatmentsFollowUp_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteTreatmentsFollowUp(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteTreatmentsFollowUp(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteTreatmentsFollowUp_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Notification_id(ctx context.Context, field graphql.CollectedField, obj *model.Notification) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Notification_id(ctx, field)
 	if err != nil {
@@ -13348,6 +13793,47 @@ func (ec *executionContext) fieldContext_Patient_document_ids(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Patient_treatment_follow_up_ids(ctx context.Context, field graphql.CollectedField, obj *model.Patient) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TreatmentFollowUpIds, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Patient_treatment_follow_up_ids(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Patient",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_getPatients(ctx, field)
 	if err != nil {
@@ -13396,6 +13882,8 @@ func (ec *executionContext) fieldContext_Query_getPatients(ctx context.Context, 
 				return ec.fieldContext_Patient_medical_info_id(ctx, field)
 			case "document_ids":
 				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -13451,6 +13939,8 @@ func (ec *executionContext) fieldContext_Query_getPatientById(ctx context.Contex
 				return ec.fieldContext_Patient_medical_info_id(ctx, field)
 			case "document_ids":
 				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -13517,6 +14007,8 @@ func (ec *executionContext) fieldContext_Query_getPatientByEmail(ctx context.Con
 				return ec.fieldContext_Patient_medical_info_id(ctx, field)
 			case "document_ids":
 				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -16293,6 +16785,8 @@ func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx con
 				return ec.fieldContext_Patient_medical_info_id(ctx, field)
 			case "document_ids":
 				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -16305,6 +16799,130 @@ func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getPatientsFromDoctorById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTreatmentsFollowUpById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getTreatmentsFollowUpById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetTreatmentsFollowUpByID(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.TreatmentsFollowUp)
+	fc.Result = res
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUpById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_TreatmentsFollowUp_id(ctx, field)
+			case "treatment_id":
+				return ec.fieldContext_TreatmentsFollowUp_treatment_id(ctx, field)
+			case "date":
+				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
+			case "period":
+				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTreatmentsFollowUpById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getTreatmentsFollowUps(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getTreatmentsFollowUps(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetTreatmentsFollowUps(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.TreatmentsFollowUp)
+	fc.Result = res
+	return ec.marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUps(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_TreatmentsFollowUp_id(ctx, field)
+			case "treatment_id":
+				return ec.fieldContext_TreatmentsFollowUp_treatment_id(ctx, field)
+			case "date":
+				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
+			case "period":
+				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTreatmentsFollowUps_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -18539,6 +19157,182 @@ func (ec *executionContext) fieldContext_Treatment_medicine_id(ctx context.Conte
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TreatmentsFollowUp_id(ctx context.Context, field graphql.CollectedField, obj *model.TreatmentsFollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TreatmentsFollowUp_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TreatmentsFollowUp_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TreatmentsFollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TreatmentsFollowUp_treatment_id(ctx context.Context, field graphql.CollectedField, obj *model.TreatmentsFollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TreatmentsFollowUp_treatment_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TreatmentID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TreatmentsFollowUp_treatment_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TreatmentsFollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TreatmentsFollowUp_date(ctx context.Context, field graphql.CollectedField, obj *model.TreatmentsFollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Date, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TreatmentsFollowUp_date(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TreatmentsFollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TreatmentsFollowUp_period(ctx context.Context, field graphql.CollectedField, obj *model.TreatmentsFollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Period, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]model.Period)
+	fc.Result = res
+	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TreatmentsFollowUp_period(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TreatmentsFollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Period does not have child fields")
 		},
 	}
 	return fc, nil
@@ -21729,6 +22523,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteMedicalFolder(ctx, field)
 			})
+		case "createTreatmentsFollowUp":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createTreatmentsFollowUp(ctx, field)
+			})
+		case "updateTreatmentsFollowUp":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateTreatmentsFollowUp(ctx, field)
+			})
+		case "deleteTreatmentsFollowUp":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteTreatmentsFollowUp(ctx, field)
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -21838,6 +22644,8 @@ func (ec *executionContext) _Patient(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Patient_medical_info_id(ctx, field, obj)
 		case "document_ids":
 			out.Values[i] = ec._Patient_document_ids(ctx, field, obj)
+		case "treatment_follow_up_ids":
+			out.Values[i] = ec._Patient_treatment_follow_up_ids(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -22773,6 +23581,44 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getTreatmentsFollowUpById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getTreatmentsFollowUpById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getTreatmentsFollowUps":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getTreatmentsFollowUps(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -23260,6 +24106,60 @@ func (ec *executionContext) _Treatment(ctx context.Context, sel ast.SelectionSet
 			}
 		case "medicine_id":
 			out.Values[i] = ec._Treatment_medicine_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var treatmentsFollowUpImplementors = []string{"TreatmentsFollowUp"}
+
+func (ec *executionContext) _TreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, obj *model.TreatmentsFollowUp) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, treatmentsFollowUpImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TreatmentsFollowUp")
+		case "id":
+			out.Values[i] = ec._TreatmentsFollowUp_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "treatment_id":
+			out.Values[i] = ec._TreatmentsFollowUp_treatment_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "date":
+			out.Values[i] = ec._TreatmentsFollowUp_date(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "period":
+			out.Values[i] = ec._TreatmentsFollowUp_period(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -25957,6 +26857,54 @@ func (ec *executionContext) marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋe
 		return graphql.Null
 	}
 	return ec._Treatment(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v []*model.TreatmentsFollowUp) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v *model.TreatmentsFollowUp) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TreatmentsFollowUp(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

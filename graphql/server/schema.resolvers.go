@@ -43,7 +43,7 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string) (*model.Patient, error) {
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -51,21 +51,23 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":             objId,
-		"email":           email,
-		"password":        password,
-		"rendez_vous_ids": rendezVousIds,
-		"medical_info_id": medicalInfoID,
-		"document_ids":    documentIds,
+		"_id":                     objId,
+		"email":                   email,
+		"password":                password,
+		"rendez_vous_ids":         rendezVousIds,
+		"medical_info_id":         medicalInfoID,
+		"document_ids":            documentIds,
+		"treatment_follow_up_ids": treatmentFollowUpIds,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
 	return &model.Patient{
-		ID:            id,
-		Email:         *email,
-		Password:      *password,
-		RendezVousIds: rendezVousIds,
-		MedicalInfoID: medicalInfoID,
-		DocumentIds:   documentIds,
+		ID:                   id,
+		Email:                *email,
+		Password:             *password,
+		RendezVousIds:        rendezVousIds,
+		MedicalInfoID:        medicalInfoID,
+		DocumentIds:          documentIds,
+		TreatmentFollowUpIds: treatmentFollowUpIds,
 	}, err
 }
 
@@ -1408,6 +1410,68 @@ func (r *mutationResolver) DeleteMedicalFolder(ctx context.Context, id string) (
 	return &resp, nil
 }
 
+// CreateTreatmentsFollowUp is the resolver for the createTreatmentsFollowUp field.
+func (r *mutationResolver) CreateTreatmentsFollowUp(ctx context.Context, treatmentID string, date int, period []model.Period) (*model.TreatmentsFollowUp, error) {
+	newFollowUp := bson.M{
+		"treatment_id": treatmentID,
+		"date":         date,
+		"period":       period,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").InsertOne(ctx, newFollowUp)
+	if err != nil {
+		return nil, err
+	}
+	entity := model.TreatmentsFollowUp{
+		ID:          res.InsertedID.(primitive.ObjectID).Hex(),
+		TreatmentID: treatmentID,
+		Date:        date,
+		Period:      period,
+	}
+	return &entity, err
+}
+
+// UpdateTreatmentsFollowUp is the resolver for the updateTreatmentsFollowUp field.
+func (r *mutationResolver) UpdateTreatmentsFollowUp(ctx context.Context, id string, treatmentID *string, date *int, period []model.Period) (*model.TreatmentsFollowUp, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":          objId,
+		"treatment_id": treatmentID,
+		"date":         date,
+		"period":       period,
+	}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").ReplaceOne(ctx, filter, updated)
+
+	return &model.TreatmentsFollowUp{
+		ID:          id,
+		TreatmentID: *treatmentID,
+		Date:        *date,
+		Period:      period,
+	}, err
+}
+
+// DeleteTreatmentsFollowUp is the resolver for the deleteTreatmentsFollowUp field.
+func (r *mutationResolver) DeleteTreatmentsFollowUp(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+
+	return &resp, nil
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -2258,6 +2322,56 @@ func (r *queryResolver) GetPatientsFromDoctorByID(ctx context.Context, id string
 		patients = append(patients, &patient)
 	}
 	return patients, nil
+}
+
+// GetTreatmentsFollowUpByID is the resolver for the getTreatmentsFollowUpById field.
+func (r *queryResolver) GetTreatmentsFollowUpByID(ctx context.Context, id string) (*model.TreatmentsFollowUp, error) {
+	var result model.TreatmentsFollowUp
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetTreatmentsFollowUps is the resolver for the getTreatmentsFollowUps field.
+func (r *queryResolver) GetTreatmentsFollowUps(ctx context.Context, id string) ([]*model.TreatmentsFollowUp, error) {
+	var patient model.Patient
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	patientFilter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, patientFilter).Decode(&patient)
+	if err != nil {
+		return nil, err
+	}
+
+	var followUp []*model.TreatmentsFollowUp
+	for _, treatmentFollowUpIds := range patient.TreatmentFollowUpIds {
+		var treatmentFollowUp model.TreatmentsFollowUp
+		objId, err := primitive.ObjectIDFromHex(*treatmentFollowUpIds)
+		if err != nil {
+			return nil, err
+		}
+
+		filter := bson.M{"_id": objId}
+		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").FindOne(ctx, filter).Decode(&treatmentFollowUp)
+		if err != nil {
+			return nil, err
+		}
+		followUp = append(followUp, &treatmentFollowUp)
+	}
+	return followUp, nil
 }
 
 // Mutation returns MutationResolver implementation.
