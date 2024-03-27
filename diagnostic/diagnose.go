@@ -82,7 +82,6 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	if len(exam.Symptoms) == 0 {
 		session.GetSessionById.Last_question = ""
-		exam.Question = ""
 	}
 
 	var logs []graphql.LogsInput

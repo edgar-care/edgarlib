@@ -33,6 +33,14 @@ func Initiate(id string) InitiateResponse {
 	input.AnteChirs = []string{}
 	input.AnteDiseases = []string{}
 	input.Treatments = []string{}
+	input.Treatments = append(input.Treatments, "CanonFlesh")
+
+	// TODO: uncomment when treatment is implemented in back
+	//for _, medical_antecedent := range patientInfos.GetMedicalFolderById.Medical_antecedents {
+	//	if medical_antecedent.Still_relevant == true {
+	//		input.Treatments = append(input.Treatments, medical_antecedent.Name)
+	//	}
+	//}
 
 	utils.WakeNlpUp()
 
