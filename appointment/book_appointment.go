@@ -15,10 +15,10 @@ type BookAppointmentResponse struct {
 }
 
 func BookAppointment(appointmentId string, patientId string, session_id string) BookAppointmentResponse {
-	gqlClient := graphql.CreateClient()
 	if appointmentId == "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment id is required")}
 	}
+	gqlClient := graphql.CreateClient()
 
 	if session_id == "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("session id is required")}

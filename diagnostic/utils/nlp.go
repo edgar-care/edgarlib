@@ -23,6 +23,12 @@ func CallNlp(sentence string, symptoms []string) nlpResponseBody {
 		Symptoms: symptoms,
 	}
 
+	var respBody nlpResponseBody
+
+	if sentence == "" {
+		return respBody
+	}
+
 	var buf = new(bytes.Buffer)
 	err := json.NewEncoder(buf).Encode(rBody)
 	edgarlib.CheckError(err)
@@ -30,7 +36,6 @@ func CallNlp(sentence string, symptoms []string) nlpResponseBody {
 	resp, err := http.Post(os.Getenv("NLP_URL"), "application/json", buf)
 	edgarlib.CheckError(err)
 
-	var respBody nlpResponseBody
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
 	edgarlib.CheckError(err)
 
