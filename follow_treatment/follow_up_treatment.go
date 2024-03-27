@@ -9,7 +9,7 @@ import (
 
 type CreateNewFollowUpInput struct {
 	TreatmentId string   `json:"treatment_id"`
-	Date        int      `json:"disease_id"`
+	Date        int      `json:"date"`
 	Period      []string `json:"period"`
 }
 

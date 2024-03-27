@@ -16,11 +16,12 @@ type GetPatientByIdResponse struct {
 }
 
 type PatientWithMedicalInfo struct {
-	ID            string            `json:"id"`
-	Email         string            `json:"email"`
-	MedicalInfo   model.MedicalInfo `json:"medical_info"`
-	RendezVousIds []string          `json:"rendez_vous_ids"`
-	DocumentsIds  []string          `json:"documents_ids"`
+	ID                string            `json:"id"`
+	Email             string            `json:"email"`
+	MedicalInfo       model.MedicalInfo `json:"medical_info"`
+	RendezVousIds     []string          `json:"rendez_vous_ids"`
+	DocumentsIds      []string          `json:"documents_ids"`
+	TreatmentFollowUp []string          `json:"treatment_follow_up"`
 }
 
 type GetPatientsResponse struct {
@@ -59,11 +60,12 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 	}
 
 	patients = PatientWithMedicalInfo{
-		ID:            patient.GetPatientById.Id,
-		Email:         patient.GetPatientById.Email,
-		RendezVousIds: patient.GetPatientById.Rendez_vous_ids,
-		DocumentsIds:  patient.GetPatientById.Document_ids,
-		MedicalInfo:   medicalInfo.MedicalInfo,
+		ID:                patient.GetPatientById.Id,
+		Email:             patient.GetPatientById.Email,
+		RendezVousIds:     patient.GetPatientById.Rendez_vous_ids,
+		DocumentsIds:      patient.GetPatientById.Document_ids,
+		MedicalInfo:       medicalInfo.MedicalInfo,
+		TreatmentFollowUp: patient.GetPatientById.Treatment_follow_up_ids,
 	}
 
 	return GetPatientByIdResponse{
@@ -89,11 +91,12 @@ func GetPatients(doctorId string) GetPatientsResponse {
 			return GetPatientsResponse{Code: 401, Err: errors.New("error while retrieving medical info by id")}
 		}
 		patients = append(patients, PatientWithMedicalInfo{
-			ID:            patient.Id,
-			Email:         patient.Email,
-			RendezVousIds: patient.Rendez_vous_ids,
-			DocumentsIds:  patient.Document_ids,
-			MedicalInfo:   medicalInfo.MedicalInfo,
+			ID:                patient.Id,
+			Email:             patient.Email,
+			RendezVousIds:     patient.Rendez_vous_ids,
+			DocumentsIds:      patient.Document_ids,
+			MedicalInfo:       medicalInfo.MedicalInfo,
+			TreatmentFollowUp: patient.Treatment_follow_up_ids,
 		})
 	}
 	return GetPatientsResponse{

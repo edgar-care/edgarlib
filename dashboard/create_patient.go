@@ -52,11 +52,12 @@ func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) Pat
 
 	return PatientByIdResponse{
 		Patient: model.Patient{
-			ID:            getPatient.GetPatientById.Id,
-			Email:         getPatient.GetPatientById.Email,
-			MedicalInfoID: &getPatient.GetPatientById.Medical_info_id,
-			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Rendez_vous_ids),
-			DocumentIds:   graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Document_ids),
+			ID:                   getPatient.GetPatientById.Id,
+			Email:                getPatient.GetPatientById.Email,
+			MedicalInfoID:        &getPatient.GetPatientById.Medical_info_id,
+			RendezVousIds:        graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Rendez_vous_ids),
+			DocumentIds:          graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Document_ids),
+			TreatmentFollowUpIds: graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Treatment_follow_up_ids),
 		},
 		MedicalInfo: medicalInfo.MedicalInfo,
 		Code:        201,
