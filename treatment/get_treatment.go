@@ -8,18 +8,20 @@ import (
 )
 
 type GetTreatmentByIdResponse struct {
-	Treatment model.Treatment
-	Code      int
-	Err       error
+	Treatment   model.Treatment
+	Antedisease model.AnteDisease
+	Code        int
+	Err         error
 }
 
 type GetTreatmentsResponse struct {
-	Treatments []model.Treatment
-	Code       int
-	Err        error
+	Antedisease model.AnteDisease
+	Treatments  []model.Treatment
+	Code        int
+	Err         error
 }
 
-func GetTreatmentById(id string) GetTreatmentByIdResponse {
+func GetTreatmentById(id string, patientID string) GetTreatmentByIdResponse {
 	gqlClient := graphql.CreateClient()
 	var res model.Treatment
 
@@ -38,6 +40,36 @@ func GetTreatmentById(id string) GetTreatmentByIdResponse {
 		treatmentDays[i] = model.Day(d)
 	}
 
+	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
+	if err != nil {
+		return GetTreatmentByIdResponse{Treatment: model.Treatment{}, Code: 400, Err: errors.New("unable to get patient with id: " + err.Error())}
+	}
+
+	medicalInfo, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, patient.GetPatientById.Medical_info_id)
+	if err != nil {
+		return GetTreatmentByIdResponse{Treatment: model.Treatment{}, Code: 400, Err: errors.New("unable to get medical_info with id: " + err.Error())}
+	}
+
+	antediseasesIDs := medicalInfo.GetMedicalFolderById.Antecedent_disease_ids
+	antecedentTreatment := model.AnteDisease{}
+
+	for _, antediseaseID := range antediseasesIDs {
+		antedisease, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, antediseaseID)
+		if err != nil {
+			return GetTreatmentByIdResponse{Treatment: model.Treatment{}, Code: 400, Err: errors.New("unable to get antedisease with id: " + err.Error())}
+		}
+		for _, treatmentID := range antedisease.GetAnteDiseaseByID.Treatment_ids {
+			if treatmentID == id {
+				antecedentTreatment = model.AnteDisease{
+					ID:            antedisease.GetAnteDiseaseByID.Id,
+					Name:          antedisease.GetAnteDiseaseByID.Name,
+					StillRelevant: antedisease.GetAnteDiseaseByID.Still_relevant,
+				}
+				break
+			}
+		}
+	}
+
 	res = model.Treatment{
 		ID:         treatment.GetTreatmentByID.Id,
 		Period:     treatmentPeriods,
@@ -45,12 +77,13 @@ func GetTreatmentById(id string) GetTreatmentByIdResponse {
 		Quantity:   treatment.GetTreatmentByID.Quantity,
 		MedicineID: treatment.GetTreatmentByID.Medicine_id,
 	}
-	return GetTreatmentByIdResponse{Treatment: res, Code: 200, Err: nil}
+	return GetTreatmentByIdResponse{Treatment: res, Antedisease: antecedentTreatment, Code: 200, Err: nil}
 }
 
 func GetTreatments(patientID string) GetTreatmentsResponse {
 	gqlClient := graphql.CreateClient()
 	var res []model.Treatment
+	var anteDisease model.AnteDisease
 
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
 	if err != nil {
@@ -96,7 +129,12 @@ func GetTreatments(patientID string) GetTreatmentsResponse {
 				MedicineID: treatment.GetTreatmentByID.Medicine_id,
 			})
 		}
+		anteDisease := model.AnteDisease{
+			ID:            antedisease.GetAnteDiseaseByID.Id,
+			Name:          antedisease.GetAnteDiseaseByID.Name,
+			StillRelevant: antedisease.GetAnteDiseaseByID.Still_relevant,
+		}
+		return GetTreatmentsResponse{Treatments: res, Antedisease: anteDisease, Code: 200, Err: nil}
 	}
-
-	return GetTreatmentsResponse{Treatments: res, Code: 200, Err: nil}
+	return GetTreatmentsResponse{Treatments: res, Antedisease: anteDisease, Code: 200, Err: nil}
 }

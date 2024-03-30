@@ -95,6 +95,7 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 		}
 		return CreateTreatmentResponse{
 			AnteDisease: model.AnteDisease{
+				ID:            anteDisease.CreateAnteDisease.Id,
 				Name:          anteDisease.CreateAnteDisease.Name,
 				StillRelevant: anteDisease.CreateAnteDisease.Still_relevant,
 				TreatmentIds:  treatmentIds,
@@ -114,6 +115,7 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 		}
 		return CreateTreatmentResponse{
 			AnteDisease: model.AnteDisease{
+				ID:            anteDisease.UpdateAnteDisease.Id,
 				Name:          anteDisease.UpdateAnteDisease.Name,
 				StillRelevant: anteDisease.UpdateAnteDisease.Still_relevant,
 				TreatmentIds:  treatmentIds,
