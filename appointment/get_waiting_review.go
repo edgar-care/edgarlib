@@ -19,7 +19,7 @@ func GetWaitingReview(doctorId string) GetWaitingReviewResponse {
 	rdv, err := graphql.GetWaitingRdv(context.Background(), gqlClient, doctorId)
 
 	if err != nil {
-		return GetWaitingReviewResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a patient")}
+		return GetWaitingReviewResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a doctor")}
 	}
 	for _, appointment := range rdv.GetWaitingRdv {
 		temp := appointment.Cancelation_reason

@@ -44,18 +44,18 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		}
 	}
 	if !idFound {
-		return GetPatientByIdResponse{Code: 400, Err: errors.New("unauthorized to access to this account")}
+		return GetPatientByIdResponse{Code: 401, Err: errors.New("unauthorized to access to this account")}
 	}
 
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
 	if err != nil {
-		return GetPatientByIdResponse{Code: 401, Err: errors.New("id does not correspond to a patient")}
+		return GetPatientByIdResponse{Code: 404, Err: errors.New("id does not correspond to a patient")}
 	}
 
 	var patients PatientWithMedicalInfo
 	medicalInfo := medical_folder.GetMedicalInfo(id)
 	if medicalInfo.Err != nil {
-		return GetPatientByIdResponse{Code: 401, Err: errors.New("error get medical info by id")}
+		return GetPatientByIdResponse{Code: 404, Err: errors.New("error while retrieving medical info by id")}
 	}
 
 	patients = PatientWithMedicalInfo{
@@ -78,7 +78,7 @@ func GetPatients(doctorId string) GetPatientsResponse {
 
 	patientDoctor, err := graphql.GetPatientsFromDoctorById(context.Background(), gqlClient, doctorId)
 	if err != nil {
-		return GetPatientsResponse{Code: 400, Err: errors.New("id does not correspond to a patient")}
+		return GetPatientsResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
 	var patients []PatientWithMedicalInfo
@@ -86,7 +86,7 @@ func GetPatients(doctorId string) GetPatientsResponse {
 		patientId := patient.Medical_info_id
 		medicalInfo := medical_folder.GetMedicalInfo(patientId)
 		if medicalInfo.Err != nil {
-			return GetPatientsResponse{Code: 401, Err: errors.New("error get medical info bu id")}
+			return GetPatientsResponse{Code: 401, Err: errors.New("error while retrieving medical info by id")}
 		}
 		patients = append(patients, PatientWithMedicalInfo{
 			ID:            patient.Id,
