@@ -32,8 +32,7 @@ type CreateMedicineInput struct {
 }
 
 type CreateMedicalInfoResponse struct {
-	MedicalInfo model.MedicalInfo
-	//Treatments                 []model.Treatment
+	MedicalInfo                model.MedicalInfo
 	AnteDiseasesWithTreatments []AnteDiseaseWithTreatments
 	Code                       int
 	Err                        error
@@ -145,7 +144,6 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 			OnboardingStatus:     model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
 			AntecedentDiseaseIds: antdediseaseids,
 		},
-		//Treatments:                 res,
 		AnteDiseasesWithTreatments: antediseasesWithTreatments,
 		Code:                       201,
 		Err:                        nil,
