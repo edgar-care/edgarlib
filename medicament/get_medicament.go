@@ -9,47 +9,47 @@ import (
 )
 
 type GetMedicamentByIdResponse struct {
-	Medicament model.Medicament
-	Code       int
-	Err        error
+	Medicine model.Medicine
+	Code     int
+	Err      error
 }
 
 type GetMedicamentsResponse struct {
-	Medicaments []model.Medicament
-	Code        int
-	Err         error
+	Medicines []model.Medicine
+	Code      int
+	Err       error
 }
 
 func GetMedicamentById(id string) GetMedicamentByIdResponse {
 	gqlClient := graphql.CreateClient()
-	var res model.Medicament
+	var res model.Medicine
 
-	medicament, err := graphql.GetMedicamentByID(context.Background(), gqlClient, id)
+	medicament, err := graphql.GetMedicineByID(context.Background(), gqlClient, id)
 	if err != nil {
-		return GetMedicamentByIdResponse{model.Medicament{}, 400, errors.New("id does not correspond to a medicament")}
+		return GetMedicamentByIdResponse{model.Medicine{}, 400, errors.New("id does not correspond to a medicament")}
 	}
-	res = model.Medicament{
-		ID:              medicament.GetMedicamentByID.Id,
-		Name:            medicament.GetMedicamentByID.Name,
-		Unit:            model.MedicineUnit(medicament.GetMedicamentByID.Unit),
-		TargetDiseases:  medicament.GetMedicamentByID.Target_diseases,
-		TreatedSymptoms: medicament.GetMedicamentByID.Treated_symptoms,
-		SideEffects:     medicament.GetMedicamentByID.Side_effects,
+	res = model.Medicine{
+		ID:              medicament.GetMedicineByID.Id,
+		Name:            medicament.GetMedicineByID.Name,
+		Unit:            model.MedicineUnit(medicament.GetMedicineByID.Unit),
+		TargetDiseases:  medicament.GetMedicineByID.Target_diseases,
+		TreatedSymptoms: medicament.GetMedicineByID.Treated_symptoms,
+		SideEffects:     medicament.GetMedicineByID.Side_effects,
 	}
 	return GetMedicamentByIdResponse{res, 200, nil}
 }
 
 func GetMedicaments() GetMedicamentsResponse {
 	gqlClient := graphql.CreateClient()
-	var res []model.Medicament
+	var res []model.Medicine
 
-	medicaments, err := graphql.GetMedicaments(context.Background(), gqlClient)
+	medicaments, err := graphql.GetMedicines(context.Background(), gqlClient)
 	if err != nil {
-		return GetMedicamentsResponse{[]model.Medicament{}, 400, errors.New("invalid input: " + err.Error())}
+		return GetMedicamentsResponse{[]model.Medicine{}, 400, errors.New("invalid input: " + err.Error())}
 	}
 
-	for _, medicament := range medicaments.GetMedicaments {
-		res = append(res, model.Medicament{
+	for _, medicament := range medicaments.GetMedicines {
+		res = append(res, model.Medicine{
 			ID:              medicament.Id,
 			Name:            medicament.Name,
 			Unit:            model.MedicineUnit(medicament.Unit),

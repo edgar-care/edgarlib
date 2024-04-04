@@ -35,7 +35,7 @@ func DeleteRdv(rdvId string, patientId string) DeleteRdvResponse {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, removeElement(patient.GetPatientById.Rendez_vous_ids, rdvId), patient.GetPatientById.Document_ids)
+	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, removeElement(patient.GetPatientById.Rendez_vous_ids, rdvId), patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids)
 	return DeleteRdvResponse{
 		UpdatedPatient: model.Patient{
 			ID:            updatedPatient.UpdatePatient.Id,

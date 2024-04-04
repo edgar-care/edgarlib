@@ -3,3 +3,4 @@
 testing
 .idea
 server.go
+coverage.out

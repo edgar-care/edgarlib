@@ -125,6 +125,7 @@ mutation CreatePatient($email: String!, $password: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -415,14 +416,15 @@ mutation UpdateNotification($id: String!, $token: String!, $message: String!, $t
     }
 }
 
-mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String]){
-    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids){
+mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String]){
+    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids){
         id
         email
         password
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -814,6 +816,7 @@ query GetPatientByEmail($email: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -825,6 +828,7 @@ query GetPatientById($id: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -861,6 +865,7 @@ query GetPatients{
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -1082,6 +1087,7 @@ query GetPatientsFromDoctorById($id: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -1121,5 +1127,52 @@ query GetSlots($id: String!){
         cancelation_reason
         appointment_status
         session_id
+    }
+}
+
+
+#==============================================================================
+#Treatment Follow up
+
+
+mutation  CreateTreatmentsFollowUp($treatment_id: String!, $date: Int!, $period: [Period!]!){
+    createTreatmentsFollowUp(treatment_id: $treatment_id, date: $date, period: $period){
+        id
+        treatment_id
+        date
+        period
+    }
+}
+
+mutation  UpdateTreatmentsFollowUp($id: String!, $treatment_id: String, $date: Int, $period: [Period!]){
+    updateTreatmentsFollowUp(id:$id, treatment_id: $treatment_id, date: $date, period: $period){
+        id
+        treatment_id
+        date
+        period
+    }
+}
+
+mutation DeleteTreatmentsFollowUp($id: String!){
+    deleteTreatmentsFollowUp(id: $id)
+}
+
+
+
+query GetTreatmentsFollowUpByID($id: String!){
+    getTreatmentsFollowUpById(id: $id){
+        id
+        treatment_id
+        date
+        period
+    }
+}
+
+query GetTreatmentsFollowUp($id: String!){
+    getTreatmentsFollowUps(id:$id){
+        id
+        treatment_id
+        date
+        period
     }
 }
