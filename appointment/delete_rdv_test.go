@@ -2,9 +2,10 @@ package appointment
 
 import (
 	"context"
-	"github.com/joho/godotenv"
 	"log"
 	"testing"
+
+	"github.com/joho/godotenv"
 
 	"github.com/edgar-care/edgarlib/graphql"
 )

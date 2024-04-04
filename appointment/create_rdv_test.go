@@ -2,10 +2,11 @@ package appointment
 
 import (
 	"context"
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/joho/godotenv"
 	"log"
 	"testing"
+
+	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/joho/godotenv"
 )
 
 func TestCreateRdv(t *testing.T) {
@@ -18,7 +19,7 @@ func TestCreateRdv(t *testing.T) {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_patient_appointment@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_patient_create_appointment@edgar-sante.fr", "password")
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}

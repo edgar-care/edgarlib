@@ -2,10 +2,11 @@ package follow_treatment
 
 import (
 	"context"
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/joho/godotenv"
 	"log"
 	"testing"
+
+	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/joho/godotenv"
 )
 
 func TestCreateTreatmentFollowUp(t *testing.T) {
@@ -14,7 +15,7 @@ func TestCreateTreatmentFollowUp(t *testing.T) {
 	}
 	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_patient_appointment@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_patient_create_treatment_follow_up@edgar-sante.fr", "password")
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
