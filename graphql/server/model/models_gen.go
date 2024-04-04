@@ -137,7 +137,7 @@ type MedicalInfo struct {
 	AntecedentDiseaseIds []string         `json:"antecedent_disease_ids" bson:"antecedent_disease_ids"`
 }
 
-type Medicament struct {
+type Medicine struct {
 	ID              string       `json:"id" bson:"_id"`
 	Name            string       `json:"name" bson:"name"`
 	Unit            MedicineUnit `json:"unit" bson:"unit"`
@@ -146,7 +146,7 @@ type Medicament struct {
 	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
 }
 
-type MedicamentInput struct {
+type MedicineInput struct {
 	Name            string       `json:"name" bson:"name"`
 	Unit            MedicineUnit `json:"unit" bson:"unit"`
 	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
@@ -165,12 +165,13 @@ type Notification struct {
 }
 
 type Patient struct {
-	ID            string    `json:"id" bson:"_id"`
-	Email         string    `json:"email" bson:"email"`
-	Password      string    `json:"password" bson:"password"`
-	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
-	MedicalInfoID *string   `json:"medical_info_id,omitempty" bson:"medical_info_id"`
-	DocumentIds   []*string `json:"document_ids,omitempty" bson:"document_ids"`
+	ID                   string    `json:"id" bson:"_id"`
+	Email                string    `json:"email" bson:"email"`
+	Password             string    `json:"password" bson:"password"`
+	RendezVousIds        []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+	MedicalInfoID        *string   `json:"medical_info_id,omitempty" bson:"medical_info_id"`
+	DocumentIds          []*string `json:"document_ids,omitempty" bson:"document_ids"`
+	TreatmentFollowUpIds []*string `json:"treatment_follow_up_ids,omitempty" bson:"treatment_follow_up_ids"`
 }
 
 type Query struct {
@@ -197,7 +198,7 @@ type Session struct {
 	Sex          string             `json:"sex" bson:"sex"`
 	AnteChirs    []string           `json:"ante_chirs" bson:"ante_chirs"`
 	AnteDiseases []string           `json:"ante_diseases" bson:"ante_diseases"`
-	Treatments   []string           `json:"treatments" bson:"treatments"`
+	Medicine     []string           `json:"medicine" bson:"medicine"`
 	LastQuestion string             `json:"last_question" bson:"last_question"`
 	Logs         []*Logs            `json:"logs" bson:"logs"`
 	Alerts       []string           `json:"alerts" bson:"alerts"`
@@ -214,15 +215,17 @@ type SessionDiseasesInput struct {
 }
 
 type SessionSymptom struct {
-	Name     string `json:"name" bson:"name"`
-	Presence *bool  `json:"presence,omitempty" bson:"presence"`
-	Duration *int   `json:"duration,omitempty" bson:"duration"`
+	Name     string   `json:"name" bson:"name"`
+	Presence *bool    `json:"presence,omitempty" bson:"presence"`
+	Duration *int     `json:"duration,omitempty" bson:"duration"`
+	Treated  []string `json:"treated,omitempty" bson:"treated"`
 }
 
 type SessionSymptomInput struct {
-	Name     string `json:"name" bson:"name"`
-	Presence *bool  `json:"presence,omitempty" bson:"presence"`
-	Duration *int   `json:"duration,omitempty" bson:"duration"`
+	Name     string   `json:"name" bson:"name"`
+	Presence *bool    `json:"presence,omitempty" bson:"presence"`
+	Duration *int     `json:"duration,omitempty" bson:"duration"`
+	Treated  []string `json:"treated,omitempty" bson:"treated"`
 }
 
 type Symptom struct {
@@ -268,6 +271,13 @@ type TreatmentInput struct {
 	Day        []*Day    `json:"day" bson:"day"`
 	Quantity   int       `json:"quantity" bson:"quantity"`
 	MedicineID string    `json:"medicine_id" bson:"medicine_id"`
+}
+
+type TreatmentsFollowUp struct {
+	ID          string   `json:"id" bson:"_id"`
+	TreatmentID string   `json:"treatment_id" bson:"treatment_id"`
+	Date        int      `json:"date" bson:"date"`
+	Period      []Period `json:"period" bson:"period"`
 }
 
 type AppointmentStatus string

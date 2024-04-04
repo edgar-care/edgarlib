@@ -38,7 +38,7 @@ func CreateDocument(newdoc UploadDocumentInput, id string) CreateDocumentRespons
 		return CreateDocumentResponse{Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	_, _ = graphql.UpdatePatient(context.Background(), gqlClient, id, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, append(patient.GetPatientById.Document_ids, document.CreateDocument.Id))
+	_, _ = graphql.UpdatePatient(context.Background(), gqlClient, id, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, append(patient.GetPatientById.Document_ids, document.CreateDocument.Id), patient.GetPatientById.Treatment_follow_up_ids)
 
 	return CreateDocumentResponse{
 		Document: model.Document{

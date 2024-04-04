@@ -1,4 +1,6 @@
 .env
+.env.test
 testing
 .idea
 server.go
+coverage.out

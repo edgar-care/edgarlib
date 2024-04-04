@@ -9,7 +9,7 @@ type examRequestBody struct {
 	Context []model.SessionSymptom `json:"context"`
 }
 
-type examResponseBody struct {
+type ExamResponseBody struct {
 	Context  []model.SessionSymptom `json:"context"`
 	Done     bool                   `json:"done"`
 	Question string                 `json:"question"`
@@ -17,7 +17,7 @@ type examResponseBody struct {
 	Alert    []string               `json:"alert"`
 }
 
-func CallExam(context []model.SessionSymptom) examResponseBody {
+func CallExam(context []model.SessionSymptom) ExamResponseBody {
 	//var rBody = examRequestBody{
 	//	Context: context,
 	//}
@@ -35,7 +35,7 @@ func CallExam(context []model.SessionSymptom) examResponseBody {
 
 	examr := exam.Exam(context)
 
-	var respBody examResponseBody
+	var respBody ExamResponseBody
 	respBody.Context = examr.Context
 	respBody.Done = examr.Done
 	respBody.Question = examr.Question

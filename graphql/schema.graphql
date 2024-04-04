@@ -16,12 +16,14 @@ type SessionSymptom {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 input SessionSymptomInput {
     name: String!
     presence: Boolean
     duration: Int
+    treated: [String!]
 }
 
 type Logs {
@@ -54,6 +56,7 @@ type Patient {
     rendez_vous_ids: [String]
     medical_info_id: String
     document_ids: [String]
+    treatment_follow_up_ids: [String]
 }
 
 # Doctor entity
@@ -102,7 +105,7 @@ type Session {
     sex: String!
     ante_chirs: [String!]!
     ante_diseases: [String!]!
-    treatments: [String!]!
+    medicine: [String!]!
     last_question: String!
     logs: [Logs!]!
     alerts: [String!]!
@@ -255,7 +258,7 @@ input TreatmentInput {
     medicine_id: String!
 }
 
-type Medicament {
+type Medicine {
     id: ID!
     name: String!
     unit: MedicineUnit!
@@ -264,12 +267,19 @@ type Medicament {
     side_effects: [String!]!
 }
 
-input MedicamentInput {
+input MedicineInput {
     name: String!
     unit: MedicineUnit!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
+}
+
+type TreatmentsFollowUp {
+    id: ID!
+    treatment_id: String!
+    date: Int!
+    period: [Period!]!
 }
 
 ## Query  --------------------------------------------------------------------------------------------------------------
@@ -405,17 +415,24 @@ type Query {
     # Get the entire list of Medicament.
     getMedicalFolder: [MedicalInfo]
 
-    # Get an Medicament by its id.
+    # Get a Medicine by its id.
     getMedicalFolderById(id: String!): MedicalInfo
 
-    # Get the entire list of Medicament.
-    getMedicaments: [Medicament]
+    # Get the entire list of Medicine.
+    getMedicines: [Medicine]
 
-    # Get an Medicament by its id.
-    getMedicamentByID(id: String!): Medicament
+    # Get an Medicine by its id.
+    getMedicineByID(id: String!): Medicine
 
     # Get all patient from doctor with id.
     getPatientsFromDoctorById(id: String!): [Patient]
+
+
+    # Get TreatmentsFollowUp by its id
+    getTreatmentsFollowUpById(id: String!): TreatmentsFollowUp
+
+    # Get all TreatmentsFollowUp
+    getTreatmentsFollowUps(id: String!): [TreatmentsFollowUp]
 
 }
 
@@ -426,7 +443,7 @@ type Mutation {
     createPatient(email: String!, password: String!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String]): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String]): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -468,10 +485,10 @@ type Mutation {
     deleteTestAccount(id: String!): Boolean
 
     # Create a new session.
-    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, treatments: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
+    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, medicine: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
 
     # Update a new session.
-    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], treatments: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
+    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], medicine: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
 
     # Delete a session.
     deleteSession(id: String!): Boolean
@@ -567,11 +584,11 @@ type Mutation {
 
 # ================================================ #
 
-    # Create a new Medicament.
-    createMedicament(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicament
+    # Create a new Medicine.
+    createMedicine(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicine
 
-    # Delete an Medicament.
-    deleteMedicament(id: String!): Boolean
+    # Delete an Medicine.
+    deleteMedicine(id: String!): Boolean
 
 
     # Create a new MedicalFolder.!
@@ -580,6 +597,14 @@ type Mutation {
     updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus): MedicalInfo
     # Delete an MedicalFolder.
     deleteMedicalFolder(id: String!): Boolean
+
+
+    # Create TreatmentsFollowUp
+    createTreatmentsFollowUp(treatment_id: String!, date: Int!, period: [Period!]!): TreatmentsFollowUp
+    #Update TreatmentsFollowUp
+    updateTreatmentsFollowUp(id: String!, treatment_id: String, date: Int, period: [Period!]): TreatmentsFollowUp
+    # Delete TreatmentsFollowUp
+    deleteTreatmentsFollowUp(id: String!): Boolean
 
 }
 

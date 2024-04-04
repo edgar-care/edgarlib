@@ -125,6 +125,7 @@ mutation CreatePatient($email: String!, $password: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -141,8 +142,8 @@ mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!,
     }
 }
 
-mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $treatments: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!){
-    createSession(diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts){
+mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $medicine: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!){
+    createSession(diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, alerts: $alerts){
         id
         diseases {
             name
@@ -152,6 +153,7 @@ mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionS
             name
             presence
             duration
+            treated
         }
         age
         height
@@ -159,7 +161,7 @@ mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionS
         sex
         ante_chirs
         ante_diseases
-        treatments
+        medicine
         last_question
         logs{
             question
@@ -218,8 +220,8 @@ mutation CreateMedicalFolder($name: String!, $firstname: String!, $birthdate: In
     }
 }
 
-mutation DeleteMedicament($id: String!){
-    deleteMedicament(id: $id)
+mutation DeleteMedicine($id: String!){
+    deleteMedicine(id: $id)
 }
 
 
@@ -414,14 +416,15 @@ mutation UpdateNotification($id: String!, $token: String!, $message: String!, $t
     }
 }
 
-mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String]){
-    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids){
+mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String]){
+    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids){
         id
         email
         password
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -438,8 +441,8 @@ mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start
     }
 }
 
-mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $symptoms: [SessionSymptomInput!], $age: Int, $height: Int, $weight: Int, $sex: String, $ante_chirs: [String!], $ante_diseases: [String!], $treatments: [String!], $last_question: String, $logs: [LogsInput!], $alerts: [String!]){
-    updateSession(id: $id, diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, treatments: $treatments, last_question: $last_question, logs: $logs, alerts: $alerts){
+mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $symptoms: [SessionSymptomInput!], $age: Int, $height: Int, $weight: Int, $sex: String, $ante_chirs: [String!], $ante_diseases: [String!], $medicine: [String!], $last_question: String, $logs: [LogsInput!], $alerts: [String!]){
+    updateSession(id: $id, diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, alerts: $alerts){
         id
         diseases {
             name
@@ -449,6 +452,7 @@ mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $sympto
             name
             presence
             duration
+            treated
         }
         age
         height
@@ -456,7 +460,7 @@ mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $sympto
         sex
         ante_chirs
         ante_diseases
-        treatments
+        medicine
         last_question
         logs{
             question
@@ -812,6 +816,7 @@ query GetPatientByEmail($email: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -823,6 +828,7 @@ query GetPatientById($id: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -859,6 +865,7 @@ query GetPatients{
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -886,6 +893,7 @@ query GetSessionById($id: String!){
             name
             presence
             duration
+            treated
         }
         age
         height
@@ -893,7 +901,7 @@ query GetSessionById($id: String!){
         sex
         ante_chirs
         ante_diseases
-        treatments
+        medicine
         last_question
         logs{
             question
@@ -914,6 +922,7 @@ query GetSessions{
             name
             presence
             duration
+            treated
         }
         age
         height
@@ -921,7 +930,7 @@ query GetSessions{
         sex
         ante_chirs
         ante_diseases
-        treatments
+        medicine
         last_question
         logs{
             question
@@ -1007,8 +1016,8 @@ query GetTreatments{
     }
 }
 
-mutation CreateMedicament($name: String!, $unit: String, $target_diseases: [String!]!, $treated_symptoms: [String!]!, $side_effects: [String!]!){
-    createMedicament(name: $name, unit: $unit, target_diseases: $target_diseases, treated_symptoms: $treated_symptoms, side_effects: $side_effects){
+mutation CreateMedicine($name: String!, $unit: String, $target_diseases: [String!]!, $treated_symptoms: [String!]!, $side_effects: [String!]!){
+    createMedicine(name: $name, unit: $unit, target_diseases: $target_diseases, treated_symptoms: $treated_symptoms, side_effects: $side_effects){
         id
         name
         unit
@@ -1018,8 +1027,8 @@ mutation CreateMedicament($name: String!, $unit: String, $target_diseases: [Stri
     }
 }
 
-query GetMedicamentByID($id: String!){
-    getMedicamentByID(id: $id){
+query GetMedicineByID($id: String!){
+    getMedicineByID(id: $id){
         id
         name
         unit
@@ -1029,8 +1038,8 @@ query GetMedicamentByID($id: String!){
     }
 }
 
-query GetMedicaments{
-    getMedicaments{
+query GetMedicines{
+    getMedicines{
         id
         name
         unit
@@ -1078,6 +1087,7 @@ query GetPatientsFromDoctorById($id: String!){
         rendez_vous_ids
         medical_info_id
         document_ids
+        treatment_follow_up_ids
     }
 }
 
@@ -1117,5 +1127,52 @@ query GetSlots($id: String!){
         cancelation_reason
         appointment_status
         session_id
+    }
+}
+
+
+#==============================================================================
+#Treatment Follow up
+
+
+mutation  CreateTreatmentsFollowUp($treatment_id: String!, $date: Int!, $period: [Period!]!){
+    createTreatmentsFollowUp(treatment_id: $treatment_id, date: $date, period: $period){
+        id
+        treatment_id
+        date
+        period
+    }
+}
+
+mutation  UpdateTreatmentsFollowUp($id: String!, $treatment_id: String, $date: Int, $period: [Period!]){
+    updateTreatmentsFollowUp(id:$id, treatment_id: $treatment_id, date: $date, period: $period){
+        id
+        treatment_id
+        date
+        period
+    }
+}
+
+mutation DeleteTreatmentsFollowUp($id: String!){
+    deleteTreatmentsFollowUp(id: $id)
+}
+
+
+
+query GetTreatmentsFollowUpByID($id: String!){
+    getTreatmentsFollowUpById(id: $id){
+        id
+        treatment_id
+        date
+        period
+    }
+}
+
+query GetTreatmentsFollowUp($id: String!){
+    getTreatmentsFollowUps(id:$id){
+        id
+        treatment_id
+        date
+        period
     }
 }
