@@ -16,19 +16,19 @@ type UpdateMedicalInfoInput struct {
 	Weight             int                            `json:"weight"`
 	Height             int                            `json:"height"`
 	PrimaryDoctorID    string                         `json:"primary_doctor_id,omitempty"`
-	MedicalAntecedents []UpdateMedicalAntecedentInput `json:"medicalAntecedents"`
+	MedicalAntecedents []UpdateMedicalAntecedentInput `json:"medical_antecedents"`
 }
 
 type UpdateMedicalAntecedentInput struct {
 	ID            string                `json:"antedisease_id"`
 	Name          string                `json:"name"`
-	Medicines     []UpdateMedicineInput `json:"medicines"`
+	Medicines     []UpdateMedicineInput `json:"treatments"`
 	StillRelevant bool                  `json:"still_relevant"`
 }
 
 type UpdateMedicineInput struct {
 	ID         string   `json:"treatment_id"`
-	MedicineID string   `json:"id"`
+	MedicineID string   `json:"medicine_id"`
 	Period     []string `json:"period"`
 	Day        []string `json:"day"`
 	Quantity   int      `json:"quantity"`
