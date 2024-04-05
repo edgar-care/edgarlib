@@ -600,15 +600,13 @@ func (r *mutationResolver) DeleteSymptom(ctx context.Context, id string) (*bool,
 }
 
 // CreateDisease is the resolver for the createDisease field.
-func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) (*model.Disease, error) {
+func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error) {
 	newDisease := bson.M{
-		"code":             code,
-		"name":             name,
-		"symptoms":         symptoms,
-		"symptomsAcute":    symptomsAcute,
-		"symptomsSubacute": symptomsSubacute,
-		"symptomsChronic":  symptomsChronic,
-		"advice":           advice,
+		"code":            code,
+		"name":            name,
+		"symptoms":        symptoms,
+		"symptoms_weight": symptomsWeight,
+		"advice":          advice,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").InsertOne(ctx, newDisease)
@@ -616,43 +614,27 @@ func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name 
 		return nil, err
 	}
 
-	var convertedAcute []*model.SymptomWeight
-	for _, acute := range symptomsAcute {
-		convertedAcute = append(convertedAcute, &model.SymptomWeight{
-			Key:   acute.Key,
-			Value: acute.Value,
-		})
-	}
-	var convertedSubAcute []*model.SymptomWeight
-	for _, sub := range symptomsSubacute {
-		convertedSubAcute = append(convertedSubAcute, &model.SymptomWeight{
-			Key:   sub.Key,
-			Value: sub.Value,
-		})
-	}
-	var convertedChronic []*model.SymptomWeight
-	for _, chronic := range symptomsChronic {
-		convertedChronic = append(convertedChronic, &model.SymptomWeight{
-			Key:   chronic.Key,
-			Value: chronic.Value,
+	var convertedSymptomsWeight []*model.SymptomsWeight
+	for _, acute := range symptomsWeight {
+		convertedSymptomsWeight = append(convertedSymptomsWeight, &model.SymptomsWeight{
+			Symptom: acute.Symptom,
+			Value:   acute.Value,
 		})
 	}
 
 	entity := model.Disease{
-		ID:               res.InsertedID.(primitive.ObjectID).Hex(),
-		Code:             code,
-		Name:             name,
-		Symptoms:         symptoms,
-		SymptomsAcute:    convertedAcute,
-		SymptomsSubacute: convertedSubAcute,
-		SymptomsChronic:  convertedChronic,
-		Advice:           advice,
+		ID:             res.InsertedID.(primitive.ObjectID).Hex(),
+		Code:           code,
+		Name:           name,
+		Symptoms:       symptoms,
+		SymptomsWeight: convertedSymptomsWeight,
+		Advice:         advice,
 	}
 	return &entity, err
 }
 
 // UpdateDisease is the resolver for the updateDisease field.
-func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) (*model.Disease, error) {
+func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -660,47 +642,30 @@ func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, code *s
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":              objId,
-		"code":             code,
-		"name":             name,
-		"symptoms":         symptoms,
-		"symptomsAcute":    symptomsAcute,
-		"symptomsSubacute": symptomsSubacute,
-		"symptomsChronic":  symptomsChronic,
-		"advice":           advice,
+		"_id":             objId,
+		"code":            code,
+		"name":            name,
+		"symptoms":        symptoms,
+		"symptoms_weight": symptomsWeight,
+		"advice":          advice,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").ReplaceOne(ctx, filter, updated)
 
-	var convertedAcute []*model.SymptomWeight
-	for _, acute := range symptomsAcute {
-		convertedAcute = append(convertedAcute, &model.SymptomWeight{
-			Key:   acute.Key,
-			Value: acute.Value,
+	var convertedSymptomsWeight []*model.SymptomsWeight
+	for _, acute := range symptomsWeight {
+		convertedSymptomsWeight = append(convertedSymptomsWeight, &model.SymptomsWeight{
+			Symptom: acute.Symptom,
+			Value:   acute.Value,
 		})
 	}
-	var convertedSubAcute []*model.SymptomWeight
-	for _, sub := range symptomsSubacute {
-		convertedSubAcute = append(convertedSubAcute, &model.SymptomWeight{
-			Key:   sub.Key,
-			Value: sub.Value,
-		})
-	}
-	var convertedChronic []*model.SymptomWeight
-	for _, chronic := range symptomsChronic {
-		convertedChronic = append(convertedChronic, &model.SymptomWeight{
-			Key:   chronic.Key,
-			Value: chronic.Value,
-		})
-	}
+
 	return &model.Disease{
-		ID:               id,
-		Code:             *code,
-		Name:             *name,
-		Symptoms:         symptoms,
-		SymptomsAcute:    convertedAcute,
-		SymptomsSubacute: convertedSubAcute,
-		SymptomsChronic:  convertedChronic,
-		Advice:           advice,
+		ID:             id,
+		Code:           *code,
+		Name:           *name,
+		Symptoms:       symptoms,
+		SymptomsWeight: convertedSymptomsWeight,
+		Advice:         advice,
 	}, err
 }
 

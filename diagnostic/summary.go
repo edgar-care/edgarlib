@@ -8,20 +8,14 @@ import (
 )
 
 type GetSummaryResponse struct {
-	SessionId   string
-	Diseases    []model.SessionDiseases
-	Symptoms    []model.SessionSymptom
-	Age         int
-	Height      int
-	Weight      int
-	Sex         string
-	AnteChirs   []model.AnteChir
-	AnteDisease []model.AnteDisease
-	Medicines   []model.Treatment
-	Logs        []graphql.LogsInput
-	Alerts      []model.Alert
-	Code        int
-	Err         error
+	SessionId string
+	Diseases  []model.SessionDiseases
+	Fiability float64
+	Symptoms  []model.SessionSymptom
+	Logs      []graphql.LogsInput
+	Alerts    []model.Alert
+	Code      int
+	Err       error
 }
 
 func GetSummary(id string) GetSummaryResponse {
@@ -42,6 +36,9 @@ func GetSummary(id string) GetSummaryResponse {
 		sessionDiseases = append(sessionDiseases, nSD)
 	}
 
+	var fiability float64
+	fiability = 0.42 //todo: Add a fiability system
+
 	var sessionSymptoms []model.SessionSymptom
 	for _, sessionSymptom := range session.GetSessionById.Symptoms {
 		var nSS model.SessionSymptom
@@ -49,44 +46,6 @@ func GetSummary(id string) GetSummaryResponse {
 		nSS.Presence = &sessionSymptom.Presence
 		nSS.Duration = &sessionSymptom.Duration
 		sessionSymptoms = append(sessionSymptoms, nSS)
-	}
-
-	var anteChirs []model.AnteChir
-	for _, anteChirId := range session.GetSessionById.Ante_chirs {
-		anteChir, _ := graphql.GetAnteChirByID(context.Background(), gqlClient, anteChirId)
-		var nAC model.AnteChir
-		nAC.ID = anteChir.GetAnteChirByID.Id
-		nAC.Name = anteChir.GetAnteChirByID.Name
-		nAC.Localisation = anteChir.GetAnteChirByID.Localisation
-		nAC.InducedSymptoms = anteChir.GetAnteChirByID.Induced_symptoms
-		anteChirs = append(anteChirs, nAC)
-	}
-
-	var anteDiseases []model.AnteDisease
-	for _, anteDiseaseId := range session.GetSessionById.Ante_diseases {
-		anteDisease, _ := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, anteDiseaseId)
-		var nAD model.AnteDisease
-		nAD.ID = anteDisease.GetAnteDiseaseByID.Id
-		nAD.Name = anteDisease.GetAnteDiseaseByID.Name
-		nAD.Chronicity = anteDisease.GetAnteDiseaseByID.Chronicity
-		nAD.SurgeryIds = anteDisease.GetAnteDiseaseByID.Surgery_ids
-		nAD.Symptoms = anteDisease.GetAnteDiseaseByID.Symptoms
-		nAD.TreatmentIds = anteDisease.GetAnteDiseaseByID.Treatment_ids
-		nAD.StillRelevant = anteDisease.GetAnteDiseaseByID.Still_relevant
-		anteDiseases = append(anteDiseases, nAD)
-	}
-
-	var medicines []model.Treatment
-	for _, medicineId := range session.GetSessionById.Medicine {
-		treatment, _ := graphql.GetTreatmentByID(context.Background(), gqlClient, medicineId)
-		var nT model.Treatment
-		nT.ID = treatment.GetTreatmentByID.Id
-		// TODO: fix le summary de traitement
-		//nT.Name = treatment.GetTreatmentByID.Name
-		//nT.Disease = treatment.GetTreatmentByID.Disease
-		//nT.Symptoms = treatment.GetTreatmentByID.Symptoms
-		//nT.SideEffects = treatment.GetTreatmentByID.Side_effects
-		medicines = append(medicines, nT)
 	}
 
 	var logs []graphql.LogsInput
@@ -112,19 +71,13 @@ func GetSummary(id string) GetSummaryResponse {
 	}
 
 	return GetSummaryResponse{
-		SessionId:   session.GetSessionById.Id,
-		Diseases:    sessionDiseases,
-		Symptoms:    sessionSymptoms,
-		Age:         session.GetSessionById.Age,
-		Height:      session.GetSessionById.Height,
-		Weight:      session.GetSessionById.Weight,
-		Sex:         session.GetSessionById.Sex,
-		AnteChirs:   anteChirs,
-		AnteDisease: anteDiseases,
-		Medicines:   medicines,
-		Logs:        logs,
-		Alerts:      alerts,
-		Code:        200,
-		Err:         nil,
+		SessionId: session.GetSessionById.Id,
+		Diseases:  sessionDiseases,
+		Fiability: fiability,
+		Symptoms:  sessionSymptoms,
+		Logs:      logs,
+		Alerts:    alerts,
+		Code:      200,
+		Err:       nil,
 	}
 }

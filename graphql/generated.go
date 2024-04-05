@@ -242,14 +242,12 @@ func (v *CreateDemoAccountResponse) GetCreateDemoAccount() CreateDemoAccountCrea
 
 // CreateDiseaseCreateDisease includes the requested fields of the GraphQL type Disease.
 type CreateDiseaseCreateDisease struct {
-	Id                string                                                     `json:"id"`
-	Code              string                                                     `json:"code"`
-	Name              string                                                     `json:"name"`
-	Symptoms          []string                                                   `json:"symptoms"`
-	Symptoms_acute    []CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight    `json:"symptoms_acute"`
-	Symptoms_subacute []CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight `json:"symptoms_subacute"`
-	Symptoms_chronic  []CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight  `json:"symptoms_chronic"`
-	Advice            string                                                     `json:"advice"`
+	Id              string                                                    `json:"id"`
+	Code            string                                                    `json:"code"`
+	Name            string                                                    `json:"name"`
+	Symptoms        []string                                                  `json:"symptoms"`
+	Symptoms_weight []CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Advice          string                                                    `json:"advice"`
 }
 
 // GetId returns CreateDiseaseCreateDisease.Id, and is useful for accessing the field via an interface.
@@ -264,59 +262,27 @@ func (v *CreateDiseaseCreateDisease) GetName() string { return v.Name }
 // GetSymptoms returns CreateDiseaseCreateDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *CreateDiseaseCreateDisease) GetSymptoms() []string { return v.Symptoms }
 
-// GetSymptoms_acute returns CreateDiseaseCreateDisease.Symptoms_acute, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDisease) GetSymptoms_acute() []CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight {
-	return v.Symptoms_acute
-}
-
-// GetSymptoms_subacute returns CreateDiseaseCreateDisease.Symptoms_subacute, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDisease) GetSymptoms_subacute() []CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight {
-	return v.Symptoms_subacute
-}
-
-// GetSymptoms_chronic returns CreateDiseaseCreateDisease.Symptoms_chronic, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDisease) GetSymptoms_chronic() []CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight {
-	return v.Symptoms_chronic
+// GetSymptoms_weight returns CreateDiseaseCreateDisease.Symptoms_weight, and is useful for accessing the field via an interface.
+func (v *CreateDiseaseCreateDisease) GetSymptoms_weight() []CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight {
+	return v.Symptoms_weight
 }
 
 // GetAdvice returns CreateDiseaseCreateDisease.Advice, and is useful for accessing the field via an interface.
 func (v *CreateDiseaseCreateDisease) GetAdvice() string { return v.Advice }
 
-// CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+// CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight includes the requested fields of the GraphQL type SymptomsWeight.
+type CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight struct {
+	Symptom string  `json:"symptom"`
+	Value   float64 `json:"value"`
 }
 
-// GetKey returns CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDiseaseSymptoms_acuteSymptomWeight) GetValue() float64 { return v.Value }
-
-// CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+// GetSymptom returns CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
+func (v *CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight) GetSymptom() string {
+	return v.Symptom
 }
 
-// GetKey returns CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDiseaseSymptoms_chronicSymptomWeight) GetValue() float64 { return v.Value }
-
-// CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
-}
-
-// GetKey returns CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *CreateDiseaseCreateDiseaseSymptoms_subacuteSymptomWeight) GetValue() float64 { return v.Value }
+// GetValue returns CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
+func (v *CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 { return v.Value }
 
 // CreateDiseaseResponse is returned by CreateDisease on success.
 type CreateDiseaseResponse struct {
@@ -1553,14 +1519,12 @@ func (v *GetDemoAccountsResponse) GetGetDemoAccounts() []GetDemoAccountsGetDemoA
 
 // GetDiseaseByIdGetDiseaseByIdDisease includes the requested fields of the GraphQL type Disease.
 type GetDiseaseByIdGetDiseaseByIdDisease struct {
-	Id                string                                                              `json:"id"`
-	Code              string                                                              `json:"code"`
-	Name              string                                                              `json:"name"`
-	Symptoms          []string                                                            `json:"symptoms"`
-	Symptoms_acute    []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight    `json:"symptoms_acute"`
-	Symptoms_subacute []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight `json:"symptoms_subacute"`
-	Symptoms_chronic  []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight  `json:"symptoms_chronic"`
-	Advice            string                                                              `json:"advice"`
+	Id              string                                                             `json:"id"`
+	Code            string                                                             `json:"code"`
+	Name            string                                                             `json:"name"`
+	Symptoms        []string                                                           `json:"symptoms"`
+	Symptoms_weight []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Advice          string                                                             `json:"advice"`
 }
 
 // GetId returns GetDiseaseByIdGetDiseaseByIdDisease.Id, and is useful for accessing the field via an interface.
@@ -1575,69 +1539,27 @@ func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetName() string { return v.Name }
 // GetSymptoms returns GetDiseaseByIdGetDiseaseByIdDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms() []string { return v.Symptoms }
 
-// GetSymptoms_acute returns GetDiseaseByIdGetDiseaseByIdDisease.Symptoms_acute, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms_acute() []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight {
-	return v.Symptoms_acute
-}
-
-// GetSymptoms_subacute returns GetDiseaseByIdGetDiseaseByIdDisease.Symptoms_subacute, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms_subacute() []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight {
-	return v.Symptoms_subacute
-}
-
-// GetSymptoms_chronic returns GetDiseaseByIdGetDiseaseByIdDisease.Symptoms_chronic, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms_chronic() []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight {
-	return v.Symptoms_chronic
+// GetSymptoms_weight returns GetDiseaseByIdGetDiseaseByIdDisease.Symptoms_weight, and is useful for accessing the field via an interface.
+func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms_weight() []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight {
+	return v.Symptoms_weight
 }
 
 // GetAdvice returns GetDiseaseByIdGetDiseaseByIdDisease.Advice, and is useful for accessing the field via an interface.
 func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetAdvice() string { return v.Advice }
 
-// GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+// GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight includes the requested fields of the GraphQL type SymptomsWeight.
+type GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight struct {
+	Symptom string  `json:"symptom"`
+	Value   float64 `json:"value"`
 }
 
-// GetKey returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight) GetKey() string {
-	return v.Key
+// GetSymptom returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
+func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight) GetSymptom() string {
+	return v.Symptom
 }
 
-// GetValue returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_acuteSymptomWeight) GetValue() float64 {
-	return v.Value
-}
-
-// GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
-}
-
-// GetKey returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight) GetKey() string {
-	return v.Key
-}
-
-// GetValue returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_chronicSymptomWeight) GetValue() float64 {
-	return v.Value
-}
-
-// GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
-}
-
-// GetKey returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight) GetKey() string {
-	return v.Key
-}
-
-// GetValue returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_subacuteSymptomWeight) GetValue() float64 {
+// GetValue returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
+func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 {
 	return v.Value
 }
 
@@ -1653,14 +1575,12 @@ func (v *GetDiseaseByIdResponse) GetGetDiseaseById() GetDiseaseByIdGetDiseaseByI
 
 // GetDiseasesGetDiseasesDisease includes the requested fields of the GraphQL type Disease.
 type GetDiseasesGetDiseasesDisease struct {
-	Id                string                                                        `json:"id"`
-	Code              string                                                        `json:"code"`
-	Name              string                                                        `json:"name"`
-	Symptoms          []string                                                      `json:"symptoms"`
-	Symptoms_acute    []GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight    `json:"symptoms_acute"`
-	Symptoms_subacute []GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight `json:"symptoms_subacute"`
-	Symptoms_chronic  []GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight  `json:"symptoms_chronic"`
-	Advice            string                                                        `json:"advice"`
+	Id              string                                                       `json:"id"`
+	Code            string                                                       `json:"code"`
+	Name            string                                                       `json:"name"`
+	Symptoms        []string                                                     `json:"symptoms"`
+	Symptoms_weight []GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Advice          string                                                       `json:"advice"`
 }
 
 // GetId returns GetDiseasesGetDiseasesDisease.Id, and is useful for accessing the field via an interface.
@@ -1675,61 +1595,27 @@ func (v *GetDiseasesGetDiseasesDisease) GetName() string { return v.Name }
 // GetSymptoms returns GetDiseasesGetDiseasesDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *GetDiseasesGetDiseasesDisease) GetSymptoms() []string { return v.Symptoms }
 
-// GetSymptoms_acute returns GetDiseasesGetDiseasesDisease.Symptoms_acute, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDisease) GetSymptoms_acute() []GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight {
-	return v.Symptoms_acute
-}
-
-// GetSymptoms_subacute returns GetDiseasesGetDiseasesDisease.Symptoms_subacute, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDisease) GetSymptoms_subacute() []GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight {
-	return v.Symptoms_subacute
-}
-
-// GetSymptoms_chronic returns GetDiseasesGetDiseasesDisease.Symptoms_chronic, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDisease) GetSymptoms_chronic() []GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight {
-	return v.Symptoms_chronic
+// GetSymptoms_weight returns GetDiseasesGetDiseasesDisease.Symptoms_weight, and is useful for accessing the field via an interface.
+func (v *GetDiseasesGetDiseasesDisease) GetSymptoms_weight() []GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight {
+	return v.Symptoms_weight
 }
 
 // GetAdvice returns GetDiseasesGetDiseasesDisease.Advice, and is useful for accessing the field via an interface.
 func (v *GetDiseasesGetDiseasesDisease) GetAdvice() string { return v.Advice }
 
-// GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+// GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight includes the requested fields of the GraphQL type SymptomsWeight.
+type GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight struct {
+	Symptom string  `json:"symptom"`
+	Value   float64 `json:"value"`
 }
 
-// GetKey returns GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDiseaseSymptoms_acuteSymptomWeight) GetValue() float64 { return v.Value }
-
-// GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+// GetSymptom returns GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
+func (v *GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight) GetSymptom() string {
+	return v.Symptom
 }
 
-// GetKey returns GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDiseaseSymptoms_chronicSymptomWeight) GetValue() float64 {
-	return v.Value
-}
-
-// GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
-}
-
-// GetKey returns GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *GetDiseasesGetDiseasesDiseaseSymptoms_subacuteSymptomWeight) GetValue() float64 {
+// GetValue returns GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
+func (v *GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 {
 	return v.Value
 }
 
@@ -3567,16 +3453,16 @@ const (
 	SexOther  Sex = "OTHER"
 )
 
-type SymptomWeightInput struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+type SymptomsWeightInput struct {
+	Symptom string  `json:"symptom"`
+	Value   float64 `json:"value"`
 }
 
-// GetKey returns SymptomWeightInput.Key, and is useful for accessing the field via an interface.
-func (v *SymptomWeightInput) GetKey() string { return v.Key }
+// GetSymptom returns SymptomsWeightInput.Symptom, and is useful for accessing the field via an interface.
+func (v *SymptomsWeightInput) GetSymptom() string { return v.Symptom }
 
-// GetValue returns SymptomWeightInput.Value, and is useful for accessing the field via an interface.
-func (v *SymptomWeightInput) GetValue() float64 { return v.Value }
+// GetValue returns SymptomsWeightInput.Value, and is useful for accessing the field via an interface.
+func (v *SymptomsWeightInput) GetValue() float64 { return v.Value }
 
 // UpdateAdminResponse is returned by UpdateAdmin on success.
 type UpdateAdminResponse struct {
@@ -3784,14 +3670,12 @@ func (v *UpdateDiseaseResponse) GetUpdateDisease() UpdateDiseaseUpdateDisease { 
 
 // UpdateDiseaseUpdateDisease includes the requested fields of the GraphQL type Disease.
 type UpdateDiseaseUpdateDisease struct {
-	Id                string                                                     `json:"id"`
-	Code              string                                                     `json:"code"`
-	Name              string                                                     `json:"name"`
-	Symptoms          []string                                                   `json:"symptoms"`
-	Symptoms_acute    []UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight    `json:"symptoms_acute"`
-	Symptoms_subacute []UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight `json:"symptoms_subacute"`
-	Symptoms_chronic  []UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight  `json:"symptoms_chronic"`
-	Advice            string                                                     `json:"advice"`
+	Id              string                                                    `json:"id"`
+	Code            string                                                    `json:"code"`
+	Name            string                                                    `json:"name"`
+	Symptoms        []string                                                  `json:"symptoms"`
+	Symptoms_weight []UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Advice          string                                                    `json:"advice"`
 }
 
 // GetId returns UpdateDiseaseUpdateDisease.Id, and is useful for accessing the field via an interface.
@@ -3806,59 +3690,27 @@ func (v *UpdateDiseaseUpdateDisease) GetName() string { return v.Name }
 // GetSymptoms returns UpdateDiseaseUpdateDisease.Symptoms, and is useful for accessing the field via an interface.
 func (v *UpdateDiseaseUpdateDisease) GetSymptoms() []string { return v.Symptoms }
 
-// GetSymptoms_acute returns UpdateDiseaseUpdateDisease.Symptoms_acute, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDisease) GetSymptoms_acute() []UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight {
-	return v.Symptoms_acute
-}
-
-// GetSymptoms_subacute returns UpdateDiseaseUpdateDisease.Symptoms_subacute, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDisease) GetSymptoms_subacute() []UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight {
-	return v.Symptoms_subacute
-}
-
-// GetSymptoms_chronic returns UpdateDiseaseUpdateDisease.Symptoms_chronic, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDisease) GetSymptoms_chronic() []UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight {
-	return v.Symptoms_chronic
+// GetSymptoms_weight returns UpdateDiseaseUpdateDisease.Symptoms_weight, and is useful for accessing the field via an interface.
+func (v *UpdateDiseaseUpdateDisease) GetSymptoms_weight() []UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight {
+	return v.Symptoms_weight
 }
 
 // GetAdvice returns UpdateDiseaseUpdateDisease.Advice, and is useful for accessing the field via an interface.
 func (v *UpdateDiseaseUpdateDisease) GetAdvice() string { return v.Advice }
 
-// UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+// UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight includes the requested fields of the GraphQL type SymptomsWeight.
+type UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight struct {
+	Symptom string  `json:"symptom"`
+	Value   float64 `json:"value"`
 }
 
-// GetKey returns UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDiseaseSymptoms_acuteSymptomWeight) GetValue() float64 { return v.Value }
-
-// UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
+// GetSymptom returns UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
+func (v *UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight) GetSymptom() string {
+	return v.Symptom
 }
 
-// GetKey returns UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDiseaseSymptoms_chronicSymptomWeight) GetValue() float64 { return v.Value }
-
-// UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight includes the requested fields of the GraphQL type SymptomWeight.
-type UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight struct {
-	Key   string  `json:"key"`
-	Value float64 `json:"value"`
-}
-
-// GetKey returns UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight.Key, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight) GetKey() string { return v.Key }
-
-// GetValue returns UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight.Value, and is useful for accessing the field via an interface.
-func (v *UpdateDiseaseUpdateDiseaseSymptoms_subacuteSymptomWeight) GetValue() float64 { return v.Value }
+// GetValue returns UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
+func (v *UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 { return v.Value }
 
 // UpdateDoctorResponse is returned by UpdateDoctor on success.
 type UpdateDoctorResponse struct {
@@ -4516,13 +4368,11 @@ func (v *__CreateDemoAccountInput) GetPassword() string { return v.Password }
 
 // __CreateDiseaseInput is used internally by genqlient
 type __CreateDiseaseInput struct {
-	Code              string               `json:"code"`
-	Name              string               `json:"name"`
-	Symptoms          []string             `json:"symptoms"`
-	Symptoms_acute    []SymptomWeightInput `json:"symptoms_acute"`
-	Symptoms_subacute []SymptomWeightInput `json:"symptoms_subacute"`
-	Symptoms_chronic  []SymptomWeightInput `json:"symptoms_chronic"`
-	Advice            string               `json:"advice"`
+	Code            string                `json:"code"`
+	Name            string                `json:"name"`
+	Symptoms        []string              `json:"symptoms"`
+	Symptoms_weight []SymptomsWeightInput `json:"symptoms_weight"`
+	Advice          string                `json:"advice"`
 }
 
 // GetCode returns __CreateDiseaseInput.Code, and is useful for accessing the field via an interface.
@@ -4534,16 +4384,8 @@ func (v *__CreateDiseaseInput) GetName() string { return v.Name }
 // GetSymptoms returns __CreateDiseaseInput.Symptoms, and is useful for accessing the field via an interface.
 func (v *__CreateDiseaseInput) GetSymptoms() []string { return v.Symptoms }
 
-// GetSymptoms_acute returns __CreateDiseaseInput.Symptoms_acute, and is useful for accessing the field via an interface.
-func (v *__CreateDiseaseInput) GetSymptoms_acute() []SymptomWeightInput { return v.Symptoms_acute }
-
-// GetSymptoms_subacute returns __CreateDiseaseInput.Symptoms_subacute, and is useful for accessing the field via an interface.
-func (v *__CreateDiseaseInput) GetSymptoms_subacute() []SymptomWeightInput {
-	return v.Symptoms_subacute
-}
-
-// GetSymptoms_chronic returns __CreateDiseaseInput.Symptoms_chronic, and is useful for accessing the field via an interface.
-func (v *__CreateDiseaseInput) GetSymptoms_chronic() []SymptomWeightInput { return v.Symptoms_chronic }
+// GetSymptoms_weight returns __CreateDiseaseInput.Symptoms_weight, and is useful for accessing the field via an interface.
+func (v *__CreateDiseaseInput) GetSymptoms_weight() []SymptomsWeightInput { return v.Symptoms_weight }
 
 // GetAdvice returns __CreateDiseaseInput.Advice, and is useful for accessing the field via an interface.
 func (v *__CreateDiseaseInput) GetAdvice() string { return v.Advice }
@@ -5432,14 +5274,12 @@ func (v *__UpdateDemoAccountInput) GetPassword() string { return v.Password }
 
 // __UpdateDiseaseInput is used internally by genqlient
 type __UpdateDiseaseInput struct {
-	Id                string               `json:"id"`
-	Code              string               `json:"code"`
-	Name              string               `json:"name"`
-	Symptoms          []string             `json:"symptoms"`
-	Symptoms_acute    []SymptomWeightInput `json:"symptoms_acute"`
-	Symptoms_subacute []SymptomWeightInput `json:"symptoms_subacute"`
-	Symptoms_chronic  []SymptomWeightInput `json:"symptoms_chronic"`
-	Advice            string               `json:"advice"`
+	Id              string                `json:"id"`
+	Code            string                `json:"code"`
+	Name            string                `json:"name"`
+	Symptoms        []string              `json:"symptoms"`
+	Symptoms_weight []SymptomsWeightInput `json:"symptoms_weight"`
+	Advice          string                `json:"advice"`
 }
 
 // GetId returns __UpdateDiseaseInput.Id, and is useful for accessing the field via an interface.
@@ -5454,16 +5294,8 @@ func (v *__UpdateDiseaseInput) GetName() string { return v.Name }
 // GetSymptoms returns __UpdateDiseaseInput.Symptoms, and is useful for accessing the field via an interface.
 func (v *__UpdateDiseaseInput) GetSymptoms() []string { return v.Symptoms }
 
-// GetSymptoms_acute returns __UpdateDiseaseInput.Symptoms_acute, and is useful for accessing the field via an interface.
-func (v *__UpdateDiseaseInput) GetSymptoms_acute() []SymptomWeightInput { return v.Symptoms_acute }
-
-// GetSymptoms_subacute returns __UpdateDiseaseInput.Symptoms_subacute, and is useful for accessing the field via an interface.
-func (v *__UpdateDiseaseInput) GetSymptoms_subacute() []SymptomWeightInput {
-	return v.Symptoms_subacute
-}
-
-// GetSymptoms_chronic returns __UpdateDiseaseInput.Symptoms_chronic, and is useful for accessing the field via an interface.
-func (v *__UpdateDiseaseInput) GetSymptoms_chronic() []SymptomWeightInput { return v.Symptoms_chronic }
+// GetSymptoms_weight returns __UpdateDiseaseInput.Symptoms_weight, and is useful for accessing the field via an interface.
+func (v *__UpdateDiseaseInput) GetSymptoms_weight() []SymptomsWeightInput { return v.Symptoms_weight }
 
 // GetAdvice returns __UpdateDiseaseInput.Advice, and is useful for accessing the field via an interface.
 func (v *__UpdateDiseaseInput) GetAdvice() string { return v.Advice }
@@ -6167,22 +5999,14 @@ func CreateDemoAccount(
 
 // The query or mutation executed by CreateDisease.
 const CreateDisease_Operation = `
-mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_acute: [SymptomWeightInput!], $symptoms_subacute: [SymptomWeightInput!], $symptoms_chronic: [SymptomWeightInput!], $advice: String) {
-	createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_acute: $symptoms_acute, symptoms_subacute: $symptoms_subacute, symptoms_chronic: $symptoms_chronic, advice: $advice) {
+mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $advice: String) {
+	createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice) {
 		id
 		code
 		name
 		symptoms
-		symptoms_acute {
-			key
-			value
-		}
-		symptoms_subacute {
-			key
-			value
-		}
-		symptoms_chronic {
-			key
+		symptoms_weight {
+			symptom
 			value
 		}
 		advice
@@ -6196,22 +6020,18 @@ func CreateDisease(
 	code string,
 	name string,
 	symptoms []string,
-	symptoms_acute []SymptomWeightInput,
-	symptoms_subacute []SymptomWeightInput,
-	symptoms_chronic []SymptomWeightInput,
+	symptoms_weight []SymptomsWeightInput,
 	advice string,
 ) (*CreateDiseaseResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateDisease",
 		Query:  CreateDisease_Operation,
 		Variables: &__CreateDiseaseInput{
-			Code:              code,
-			Name:              name,
-			Symptoms:          symptoms,
-			Symptoms_acute:    symptoms_acute,
-			Symptoms_subacute: symptoms_subacute,
-			Symptoms_chronic:  symptoms_chronic,
-			Advice:            advice,
+			Code:            code,
+			Name:            name,
+			Symptoms:        symptoms,
+			Symptoms_weight: symptoms_weight,
+			Advice:          advice,
 		},
 	}
 	var err error
@@ -8033,16 +7853,8 @@ query GetDiseaseById ($id: String!) {
 		code
 		name
 		symptoms
-		symptoms_acute {
-			key
-			value
-		}
-		symptoms_subacute {
-			key
-			value
-		}
-		symptoms_chronic {
-			key
+		symptoms_weight {
+			symptom
 			value
 		}
 		advice
@@ -8084,16 +7896,8 @@ query GetDiseases {
 		code
 		name
 		symptoms
-		symptoms_acute {
-			key
-			value
-		}
-		symptoms_subacute {
-			key
-			value
-		}
-		symptoms_chronic {
-			key
+		symptoms_weight {
+			symptom
 			value
 		}
 		advice
@@ -9841,22 +9645,14 @@ func UpdateDemoAccount(
 
 // The query or mutation executed by UpdateDisease.
 const UpdateDisease_Operation = `
-mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_acute: [SymptomWeightInput!], $symptoms_subacute: [SymptomWeightInput!], $symptoms_chronic: [SymptomWeightInput!], $advice: String) {
-	updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_acute: $symptoms_acute, symptoms_subacute: $symptoms_subacute, symptoms_chronic: $symptoms_chronic, advice: $advice) {
+mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $advice: String) {
+	updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice) {
 		id
 		code
 		name
 		symptoms
-		symptoms_acute {
-			key
-			value
-		}
-		symptoms_subacute {
-			key
-			value
-		}
-		symptoms_chronic {
-			key
+		symptoms_weight {
+			symptom
 			value
 		}
 		advice
@@ -9871,23 +9667,19 @@ func UpdateDisease(
 	code string,
 	name string,
 	symptoms []string,
-	symptoms_acute []SymptomWeightInput,
-	symptoms_subacute []SymptomWeightInput,
-	symptoms_chronic []SymptomWeightInput,
+	symptoms_weight []SymptomsWeightInput,
 	advice string,
 ) (*UpdateDiseaseResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateDisease",
 		Query:  UpdateDisease_Operation,
 		Variables: &__UpdateDiseaseInput{
-			Id:                id,
-			Code:              code,
-			Name:              name,
-			Symptoms:          symptoms,
-			Symptoms_acute:    symptoms_acute,
-			Symptoms_subacute: symptoms_subacute,
-			Symptoms_chronic:  symptoms_chronic,
-			Advice:            advice,
+			Id:              id,
+			Code:            code,
+			Name:            name,
+			Symptoms:        symptoms,
+			Symptoms_weight: symptoms_weight,
+			Advice:          advice,
 		},
 	}
 	var err error
