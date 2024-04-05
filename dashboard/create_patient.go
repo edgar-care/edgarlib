@@ -15,10 +15,11 @@ type CreatePatientInput struct {
 }
 
 type PatientByIdResponse struct {
-	Patient     model.Patient
-	MedicalInfo model.MedicalInfo
-	Code        int
-	Err         error
+	Patient                    model.Patient
+	MedicalInfo                model.MedicalInfo
+	AnteDiseasesWithTreatments []medical_folder.AnteDiseaseWithTreatments
+	Code                       int
+	Err                        error
 }
 
 func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) PatientByIdResponse {
@@ -54,13 +55,14 @@ func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) Pat
 		Patient: model.Patient{
 			ID:                   getPatient.GetPatientById.Id,
 			Email:                getPatient.GetPatientById.Email,
-			MedicalInfoID:        &getPatient.GetPatientById.Medical_info_id,
+			MedicalInfoID:        &medicalInfo.MedicalInfo.ID,
 			RendezVousIds:        graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Rendez_vous_ids),
 			DocumentIds:          graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Document_ids),
 			TreatmentFollowUpIds: graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Treatment_follow_up_ids),
 		},
-		MedicalInfo: medicalInfo.MedicalInfo,
-		Code:        201,
-		Err:         nil,
+		MedicalInfo:                medicalInfo.MedicalInfo,
+		AnteDiseasesWithTreatments: medicalInfo.AnteDiseasesWithTreatments,
+		Code:                       201,
+		Err:                        nil,
 	}
 }
