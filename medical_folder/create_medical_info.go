@@ -14,18 +14,18 @@ type CreateMedicalInfoInput struct {
 	Sex                string                         `json:"sex"`
 	Weight             int                            `json:"weight"`
 	Height             int                            `json:"height"`
-	PrimaryDoctorID    string                         `json:"primaryDoctorId,omitempty"`
-	MedicalAntecedents []CreateMedicalAntecedentInput `json:"medicalAntecedents"`
+	PrimaryDoctorID    string                         `json:"primary_doctor_id,omitempty"`
+	MedicalAntecedents []CreateMedicalAntecedentInput `json:"medical_antecedents"`
 }
 
 type CreateMedicalAntecedentInput struct {
 	Name          string                `json:"name"`
-	Medicines     []CreateMedicineInput `json:"medicines"`
-	StillRelevant bool                  `json:"stillRelevant"`
+	Medicines     []CreateMedicineInput `json:"treatments"`
+	StillRelevant bool                  `json:"still_relevant"`
 }
 
 type CreateMedicineInput struct {
-	MedicineID string   `json:"id"`
+	MedicineID string   `json:"medicine_id"`
 	Period     []string `json:"period"`
 	Day        []string `json:"day"`
 	Quantity   int      `json:"quantity"`

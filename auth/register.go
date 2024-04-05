@@ -88,12 +88,13 @@ func RegisterPatient(email string, password string) (model.Patient, error) {
 		return model.Patient{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
 	return model.Patient{
-		ID:            patient.CreatePatient.Id,
-		Email:         patient.CreatePatient.Email,
-		Password:      patient.CreatePatient.Password,
-		MedicalInfoID: &patient.CreatePatient.Medical_info_id,
-		RendezVousIds: graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Rendez_vous_ids),
-		DocumentIds:   graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Document_ids),
+		ID:                   patient.CreatePatient.Id,
+		Email:                patient.CreatePatient.Email,
+		Password:             patient.CreatePatient.Password,
+		MedicalInfoID:        &patient.CreatePatient.Medical_info_id,
+		RendezVousIds:        graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Rendez_vous_ids),
+		DocumentIds:          graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Document_ids),
+		TreatmentFollowUpIds: graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Treatment_follow_up_ids),
 	}, nil
 }
 
