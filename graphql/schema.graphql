@@ -46,6 +46,16 @@ input SessionDiseasesInput {
     presence: Float!
 }
 
+type NlpReportOutput {
+    symptom: String!
+    present: Boolean!
+}
+
+input NlpReportOutputInput {
+    symptom: String!
+    present: Boolean!
+}
+
 ##  Entities  ----------------------------------------------------------------------------------------------------------
 
 # Patient entity
@@ -282,6 +292,15 @@ type TreatmentsFollowUp {
     period: [Period!]!
 }
 
+type NlpReport {
+    id: ID!
+    version: Int!
+    input_symptoms: [String!]!
+    input_sentence: String!
+    output: [NlpReportOutput!]!
+    computation_time: Int!
+}
+
 ## Query  --------------------------------------------------------------------------------------------------------------
 
 type Query {
@@ -433,6 +452,12 @@ type Query {
 
     # Get all TreatmentsFollowUp
     getTreatmentsFollowUps(id: String!): [TreatmentsFollowUp]
+
+    # Get NlpReports
+    getNlpReports: [NlpReport]
+
+    # Get NlpReports by version
+    getNlpReportsByVersion(version: Int!): [NlpReport]
 
 }
 
@@ -606,7 +631,10 @@ type Mutation {
     # Delete TreatmentsFollowUp
     deleteTreatmentsFollowUp(id: String!): Boolean
 
+    # Create a new NlpReport
+    createNlpReport(version: Int!, input_symptoms: [String!]!, input_sentence: String!, output: [NlpReportOutputInput!]!, computation_time: Int!): NlpReport
 }
+
 
 ##  Enums  -------------------------------------------------------------------------------------------------------------
 

@@ -2277,6 +2277,120 @@ func (v *GetMedicinesResponse) GetGetMedicines() []GetMedicinesGetMedicinesMedic
 	return v.GetMedicines
 }
 
+// GetNlpReportsByVersionGetNlpReportsByVersionNlpReport includes the requested fields of the GraphQL type NlpReport.
+type GetNlpReportsByVersionGetNlpReportsByVersionNlpReport struct {
+	Id               string                                                        `json:"id"`
+	Version          int                                                           `json:"version"`
+	Input_symptoms   []string                                                      `json:"input_symptoms"`
+	Input_sentence   string                                                        `json:"input_sentence"`
+	Output           []GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput `json:"output"`
+	Computation_time int                                                           `json:"computation_time"`
+}
+
+// GetId returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReport.Id, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReport) GetId() string { return v.Id }
+
+// GetVersion returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReport.Version, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReport) GetVersion() int { return v.Version }
+
+// GetInput_symptoms returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReport.Input_symptoms, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReport) GetInput_symptoms() []string {
+	return v.Input_symptoms
+}
+
+// GetInput_sentence returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReport.Input_sentence, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReport) GetInput_sentence() string {
+	return v.Input_sentence
+}
+
+// GetOutput returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReport.Output, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReport) GetOutput() []GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput {
+	return v.Output
+}
+
+// GetComputation_time returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReport.Computation_time, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReport) GetComputation_time() int {
+	return v.Computation_time
+}
+
+// GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput includes the requested fields of the GraphQL type NlpReportOutput.
+type GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput struct {
+	Symptom string `json:"symptom"`
+	Present bool   `json:"present"`
+}
+
+// GetSymptom returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput.Symptom, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput) GetSymptom() string {
+	return v.Symptom
+}
+
+// GetPresent returns GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput.Present, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionGetNlpReportsByVersionNlpReportOutput) GetPresent() bool {
+	return v.Present
+}
+
+// GetNlpReportsByVersionResponse is returned by GetNlpReportsByVersion on success.
+type GetNlpReportsByVersionResponse struct {
+	GetNlpReportsByVersion []GetNlpReportsByVersionGetNlpReportsByVersionNlpReport `json:"getNlpReportsByVersion"`
+}
+
+// GetGetNlpReportsByVersion returns GetNlpReportsByVersionResponse.GetNlpReportsByVersion, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsByVersionResponse) GetGetNlpReportsByVersion() []GetNlpReportsByVersionGetNlpReportsByVersionNlpReport {
+	return v.GetNlpReportsByVersion
+}
+
+// GetNlpReportsGetNlpReportsNlpReport includes the requested fields of the GraphQL type NlpReport.
+type GetNlpReportsGetNlpReportsNlpReport struct {
+	Id               string                                      `json:"id"`
+	Version          int                                         `json:"version"`
+	Input_symptoms   []string                                    `json:"input_symptoms"`
+	Input_sentence   string                                      `json:"input_sentence"`
+	Output           []GetNlpReportsGetNlpReportsNlpReportOutput `json:"output"`
+	Computation_time int                                         `json:"computation_time"`
+}
+
+// GetId returns GetNlpReportsGetNlpReportsNlpReport.Id, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReport) GetId() string { return v.Id }
+
+// GetVersion returns GetNlpReportsGetNlpReportsNlpReport.Version, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReport) GetVersion() int { return v.Version }
+
+// GetInput_symptoms returns GetNlpReportsGetNlpReportsNlpReport.Input_symptoms, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReport) GetInput_symptoms() []string { return v.Input_symptoms }
+
+// GetInput_sentence returns GetNlpReportsGetNlpReportsNlpReport.Input_sentence, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReport) GetInput_sentence() string { return v.Input_sentence }
+
+// GetOutput returns GetNlpReportsGetNlpReportsNlpReport.Output, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReport) GetOutput() []GetNlpReportsGetNlpReportsNlpReportOutput {
+	return v.Output
+}
+
+// GetComputation_time returns GetNlpReportsGetNlpReportsNlpReport.Computation_time, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReport) GetComputation_time() int { return v.Computation_time }
+
+// GetNlpReportsGetNlpReportsNlpReportOutput includes the requested fields of the GraphQL type NlpReportOutput.
+type GetNlpReportsGetNlpReportsNlpReportOutput struct {
+	Symptom string `json:"symptom"`
+	Present bool   `json:"present"`
+}
+
+// GetSymptom returns GetNlpReportsGetNlpReportsNlpReportOutput.Symptom, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReportOutput) GetSymptom() string { return v.Symptom }
+
+// GetPresent returns GetNlpReportsGetNlpReportsNlpReportOutput.Present, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsGetNlpReportsNlpReportOutput) GetPresent() bool { return v.Present }
+
+// GetNlpReportsResponse is returned by GetNlpReports on success.
+type GetNlpReportsResponse struct {
+	GetNlpReports []GetNlpReportsGetNlpReportsNlpReport `json:"getNlpReports"`
+}
+
+// GetGetNlpReports returns GetNlpReportsResponse.GetNlpReports, and is useful for accessing the field via an interface.
+func (v *GetNlpReportsResponse) GetGetNlpReports() []GetNlpReportsGetNlpReportsNlpReport {
+	return v.GetNlpReports
+}
+
 // GetNotificationByIdGetNotificationByIdNotification includes the requested fields of the GraphQL type Notification.
 type GetNotificationByIdGetNotificationByIdNotification struct {
 	Id      string `json:"id"`
@@ -3386,6 +3500,17 @@ const (
 	MedicineUnitTablespoon  MedicineUnit = "TABLESPOON"
 	MedicineUnitCoffeespoon MedicineUnit = "COFFEESPOON"
 )
+
+type NlpReportOutputInput struct {
+	Symptom string `json:"symptom"`
+	Present bool   `json:"present"`
+}
+
+// GetSymptom returns NlpReportOutputInput.Symptom, and is useful for accessing the field via an interface.
+func (v *NlpReportOutputInput) GetSymptom() string { return v.Symptom }
+
+// GetPresent returns NlpReportOutputInput.Present, and is useful for accessing the field via an interface.
+func (v *NlpReportOutputInput) GetPresent() bool { return v.Present }
 
 type OnboardingStatus string
 
@@ -5021,6 +5146,14 @@ type __GetMedicineByIDInput struct {
 // GetId returns __GetMedicineByIDInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetMedicineByIDInput) GetId() string { return v.Id }
 
+// __GetNlpReportsByVersionInput is used internally by genqlient
+type __GetNlpReportsByVersionInput struct {
+	Version int `json:"version"`
+}
+
+// GetVersion returns __GetNlpReportsByVersionInput.Version, and is useful for accessing the field via an interface.
+func (v *__GetNlpReportsByVersionInput) GetVersion() int { return v.Version }
+
 // __GetNotificationByIdInput is used internally by genqlient
 type __GetNotificationByIdInput struct {
 	Id string `json:"id"`
@@ -5688,6 +5821,82 @@ func (v *__UpdateTreatmentsFollowUpInput) GetDate() int { return v.Date }
 
 // GetPeriod returns __UpdateTreatmentsFollowUpInput.Period, and is useful for accessing the field via an interface.
 func (v *__UpdateTreatmentsFollowUpInput) GetPeriod() []Period { return v.Period }
+
+// __createNlpReportInput is used internally by genqlient
+type __createNlpReportInput struct {
+	Version          int                    `json:"version"`
+	Input_symptoms   []string               `json:"input_symptoms"`
+	Input_sentence   string                 `json:"input_sentence"`
+	Output           []NlpReportOutputInput `json:"output"`
+	Computation_time int                    `json:"computation_time"`
+}
+
+// GetVersion returns __createNlpReportInput.Version, and is useful for accessing the field via an interface.
+func (v *__createNlpReportInput) GetVersion() int { return v.Version }
+
+// GetInput_symptoms returns __createNlpReportInput.Input_symptoms, and is useful for accessing the field via an interface.
+func (v *__createNlpReportInput) GetInput_symptoms() []string { return v.Input_symptoms }
+
+// GetInput_sentence returns __createNlpReportInput.Input_sentence, and is useful for accessing the field via an interface.
+func (v *__createNlpReportInput) GetInput_sentence() string { return v.Input_sentence }
+
+// GetOutput returns __createNlpReportInput.Output, and is useful for accessing the field via an interface.
+func (v *__createNlpReportInput) GetOutput() []NlpReportOutputInput { return v.Output }
+
+// GetComputation_time returns __createNlpReportInput.Computation_time, and is useful for accessing the field via an interface.
+func (v *__createNlpReportInput) GetComputation_time() int { return v.Computation_time }
+
+// createNlpReportCreateNlpReport includes the requested fields of the GraphQL type NlpReport.
+type createNlpReportCreateNlpReport struct {
+	Id               string                                 `json:"id"`
+	Version          int                                    `json:"version"`
+	Input_symptoms   []string                               `json:"input_symptoms"`
+	Input_sentence   string                                 `json:"input_sentence"`
+	Output           []createNlpReportCreateNlpReportOutput `json:"output"`
+	Computation_time int                                    `json:"computation_time"`
+}
+
+// GetId returns createNlpReportCreateNlpReport.Id, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReport) GetId() string { return v.Id }
+
+// GetVersion returns createNlpReportCreateNlpReport.Version, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReport) GetVersion() int { return v.Version }
+
+// GetInput_symptoms returns createNlpReportCreateNlpReport.Input_symptoms, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReport) GetInput_symptoms() []string { return v.Input_symptoms }
+
+// GetInput_sentence returns createNlpReportCreateNlpReport.Input_sentence, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReport) GetInput_sentence() string { return v.Input_sentence }
+
+// GetOutput returns createNlpReportCreateNlpReport.Output, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReport) GetOutput() []createNlpReportCreateNlpReportOutput {
+	return v.Output
+}
+
+// GetComputation_time returns createNlpReportCreateNlpReport.Computation_time, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReport) GetComputation_time() int { return v.Computation_time }
+
+// createNlpReportCreateNlpReportOutput includes the requested fields of the GraphQL type NlpReportOutput.
+type createNlpReportCreateNlpReportOutput struct {
+	Symptom string `json:"symptom"`
+	Present bool   `json:"present"`
+}
+
+// GetSymptom returns createNlpReportCreateNlpReportOutput.Symptom, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReportOutput) GetSymptom() string { return v.Symptom }
+
+// GetPresent returns createNlpReportCreateNlpReportOutput.Present, and is useful for accessing the field via an interface.
+func (v *createNlpReportCreateNlpReportOutput) GetPresent() bool { return v.Present }
+
+// createNlpReportResponse is returned by createNlpReport on success.
+type createNlpReportResponse struct {
+	CreateNlpReport createNlpReportCreateNlpReport `json:"createNlpReport"`
+}
+
+// GetCreateNlpReport returns createNlpReportResponse.CreateNlpReport, and is useful for accessing the field via an interface.
+func (v *createNlpReportResponse) GetCreateNlpReport() createNlpReportCreateNlpReport {
+	return v.CreateNlpReport
+}
 
 // The query or mutation executed by CreateAdmin.
 const CreateAdmin_Operation = `
@@ -8331,6 +8540,88 @@ func GetMedicines(
 	return &data, err
 }
 
+// The query or mutation executed by GetNlpReports.
+const GetNlpReports_Operation = `
+query GetNlpReports {
+	getNlpReports {
+		id
+		version
+		input_symptoms
+		input_sentence
+		output {
+			symptom
+			present
+		}
+		computation_time
+	}
+}
+`
+
+func GetNlpReports(
+	ctx context.Context,
+	client graphql.Client,
+) (*GetNlpReportsResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetNlpReports",
+		Query:  GetNlpReports_Operation,
+	}
+	var err error
+
+	var data GetNlpReportsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetNlpReportsByVersion.
+const GetNlpReportsByVersion_Operation = `
+query GetNlpReportsByVersion ($version: Int!) {
+	getNlpReportsByVersion(version: $version) {
+		id
+		version
+		input_symptoms
+		input_sentence
+		output {
+			symptom
+			present
+		}
+		computation_time
+	}
+}
+`
+
+func GetNlpReportsByVersion(
+	ctx context.Context,
+	client graphql.Client,
+	version int,
+) (*GetNlpReportsByVersionResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetNlpReportsByVersion",
+		Query:  GetNlpReportsByVersion_Operation,
+		Variables: &__GetNlpReportsByVersionInput{
+			Version: version,
+		},
+	}
+	var err error
+
+	var data GetNlpReportsByVersionResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 // The query or mutation executed by GetNotificationById.
 const GetNotificationById_Operation = `
 query GetNotificationById ($id: String!) {
@@ -10201,6 +10492,57 @@ func UpdateTreatmentsFollowUp(
 	var err error
 
 	var data UpdateTreatmentsFollowUpResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by createNlpReport.
+const createNlpReport_Operation = `
+mutation createNlpReport ($version: Int!, $input_symptoms: [String!]!, $input_sentence: String!, $output: [NlpReportOutputInput!]!, $computation_time: Int!) {
+	createNlpReport(version: $version, input_symptoms: $input_symptoms, input_sentence: $input_sentence, output: $output, computation_time: $computation_time) {
+		id
+		version
+		input_symptoms
+		input_sentence
+		output {
+			symptom
+			present
+		}
+		computation_time
+	}
+}
+`
+
+func createNlpReport(
+	ctx context.Context,
+	client graphql.Client,
+	version int,
+	input_symptoms []string,
+	input_sentence string,
+	output []NlpReportOutputInput,
+	computation_time int,
+) (*createNlpReportResponse, error) {
+	req := &graphql.Request{
+		OpName: "createNlpReport",
+		Query:  createNlpReport_Operation,
+		Variables: &__createNlpReportInput{
+			Version:          version,
+			Input_symptoms:   input_symptoms,
+			Input_sentence:   input_sentence,
+			Output:           output,
+			Computation_time: computation_time,
+		},
+	}
+	var err error
+
+	var data createNlpReportResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

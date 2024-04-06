@@ -157,6 +157,25 @@ type MedicineInput struct {
 type Mutation struct {
 }
 
+type NlpReport struct {
+	ID              string             `json:"id" bson:"_id"`
+	Version         int                `json:"version" bson:"version"`
+	InputSymptoms   []string           `json:"input_symptoms" bson:"input_symptoms"`
+	InputSentence   string             `json:"input_sentence" bson:"input_sentence"`
+	Output          []*NlpReportOutput `json:"output" bson:"output"`
+	ComputationTime int                `json:"computation_time" bson:"computation_time"`
+}
+
+type NlpReportOutput struct {
+	Symptom string `json:"symptom" bson:"symptom"`
+	Present bool   `json:"present" bson:"present"`
+}
+
+type NlpReportOutputInput struct {
+	Symptom string `json:"symptom" bson:"symptom"`
+	Present bool   `json:"present" bson:"present"`
+}
+
 type Notification struct {
 	ID      string `json:"id" bson:"_id"`
 	Token   string `json:"token" bson:"token"`
