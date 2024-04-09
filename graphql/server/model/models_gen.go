@@ -251,10 +251,6 @@ type Symptom struct {
 	ID               string   `json:"id" bson:"_id"`
 	Code             string   `json:"code" bson:"code"`
 	Name             string   `json:"name" bson:"name"`
-	Location         *string  `json:"location,omitempty" bson:"location"`
-	Duration         *int     `json:"duration,omitempty" bson:"duration"`
-	Acute            *int     `json:"acute,omitempty" bson:"acute"`
-	Subacute         *int     `json:"subacute,omitempty" bson:"subacute"`
 	Chronic          *int     `json:"chronic,omitempty" bson:"chronic"`
 	Symptom          []string `json:"symptom" bson:"symptom"`
 	Advice           *string  `json:"advice,omitempty" bson:"advice"`
@@ -267,11 +263,13 @@ type Symptom struct {
 type SymptomsWeight struct {
 	Symptom string  `json:"symptom" bson:"symptom"`
 	Value   float64 `json:"value" bson:"value"`
+	Chronic bool    `json:"chronic" bson:"chronic"`
 }
 
 type SymptomsWeightInput struct {
 	Symptom string  `json:"symptom" bson:"symptom"`
 	Value   float64 `json:"value" bson:"value"`
+	Chronic bool    `json:"chronic" bson:"chronic"`
 }
 
 type TestAccount struct {

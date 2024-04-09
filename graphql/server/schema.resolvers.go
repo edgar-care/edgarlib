@@ -511,14 +511,10 @@ func (r *mutationResolver) DeleteSession(ctx context.Context, id string) (*bool,
 }
 
 // CreateSymptom is the resolver for the createSymptom field.
-func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error) {
+func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error) {
 	newSymptom := bson.M{
 		"code":              code,
 		"name":              name,
-		"location":          location,
-		"duration":          duration,
-		"acute":             acute,
-		"subacute":          subacute,
 		"chronic":           chronic,
 		"symptom":           symptom,
 		"advice":            advice,
@@ -536,10 +532,6 @@ func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name 
 		ID:               res.InsertedID.(primitive.ObjectID).Hex(),
 		Code:             code,
 		Name:             name,
-		Location:         location,
-		Duration:         duration,
-		Acute:            acute,
-		Subacute:         subacute,
 		Chronic:          chronic,
 		Symptom:          symptom,
 		Advice:           advice,
@@ -552,7 +544,7 @@ func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name 
 }
 
 // UpdateSymptom is the resolver for the updateSymptom field.
-func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) (*model.Symptom, error) {
+func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) (*model.Symptom, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -563,10 +555,6 @@ func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *s
 		"_id":               objId,
 		"code":              code,
 		"name":              name,
-		"location":          location,
-		"duration":          duration,
-		"acute":             acute,
-		"subacute":          subacute,
 		"chronic":           chronic,
 		"symptom":           symptom,
 		"advice":            advice,
@@ -581,10 +569,6 @@ func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *s
 		ID:               id,
 		Code:             *code,
 		Name:             *name,
-		Location:         location,
-		Duration:         duration,
-		Acute:            acute,
-		Subacute:         subacute,
 		Chronic:          chronic,
 		Symptom:          symptom,
 		Advice:           advice,

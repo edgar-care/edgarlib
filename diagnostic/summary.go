@@ -24,6 +24,8 @@ func GetSummary(id string) GetSummaryResponse {
 	}
 	gqlClient := graphql.CreateClient()
 	session, err := graphql.GetSessionById(context.Background(), gqlClient, id)
+	symptoms, err := graphql.GetSymptoms(context.Background(), gqlClient)
+	diseases, err := graphql.GetDiseases(context.Background(), gqlClient)
 	if err != nil {
 		return GetSummaryResponse{Code: 400, Err: errors.New("id does not correspond to a session")}
 	}
@@ -31,7 +33,14 @@ func GetSummary(id string) GetSummaryResponse {
 	var sessionDiseases []model.SessionDiseases
 	for _, sessionDisease := range session.GetSessionById.Diseases {
 		var nSD model.SessionDiseases
-		nSD.Name = sessionDisease.Name
+		for _, d := range diseases.GetDiseases {
+			if sessionDisease.Name == d.Code && d.Name != "" {
+				nSD.Name = d.Name
+				break
+			} else {
+				nSD.Name = sessionDisease.Name
+			}
+		}
 		nSD.Presence = sessionDisease.Presence
 		sessionDiseases = append(sessionDiseases, nSD)
 	}
@@ -42,7 +51,14 @@ func GetSummary(id string) GetSummaryResponse {
 	var sessionSymptoms []model.SessionSymptom
 	for _, sessionSymptom := range session.GetSessionById.Symptoms {
 		var nSS model.SessionSymptom
-		nSS.Name = sessionSymptom.Name
+		for _, s := range symptoms.GetSymptoms {
+			if sessionSymptom.Name == s.Code && s.Name != "" {
+				nSS.Name = s.Name
+				break
+			} else {
+				nSS.Name = sessionSymptom.Name
+			}
+		}
 		nSS.Presence = &sessionSymptom.Presence
 		nSS.Duration = &sessionSymptom.Duration
 		sessionSymptoms = append(sessionSymptoms, nSS)
