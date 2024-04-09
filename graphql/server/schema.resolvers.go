@@ -1472,6 +1472,39 @@ func (r *mutationResolver) DeleteTreatmentsFollowUp(ctx context.Context, id stri
 	return &resp, nil
 }
 
+// CreateNlpReport is the resolver for the createNlpReport field.
+func (r *mutationResolver) CreateNlpReport(ctx context.Context, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) (*model.NlpReport, error) {
+	newNlpReport := bson.M{
+		"version":          version,
+		"input_symptoms":   inputSymptoms,
+		"input_sentence":   inputSentence,
+		"output":           output,
+		"computation_time": computationTime,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").InsertOne(ctx, newNlpReport)
+	if err != nil {
+		return nil, err
+	}
+
+	var transformedOutput []*model.NlpReportOutput
+	for _, val := range output {
+		transformedOutput = append(transformedOutput, &model.NlpReportOutput{
+			Symptom: val.Symptom,
+			Present: val.Present,
+		})
+	}
+	entity := model.NlpReport{
+		ID:              res.InsertedID.(primitive.ObjectID).Hex(),
+		Version:         version,
+		InputSymptoms:   inputSymptoms,
+		InputSentence:   inputSentence,
+		Output:          transformedOutput,
+		ComputationTime: computationTime,
+	}
+	return &entity, err
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -2372,6 +2405,42 @@ func (r *queryResolver) GetTreatmentsFollowUps(ctx context.Context, id string) (
 		followUp = append(followUp, &treatmentFollowUp)
 	}
 	return followUp, nil
+}
+
+// GetNlpReports is the resolver for the getNlpReports field.
+func (r *queryResolver) GetNlpReports(ctx context.Context) ([]*model.NlpReport, error) {
+	var report []*model.NlpReport
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+// GetNlpReportsByVersion is the resolver for the getNlpReportsByVersion field.
+func (r *queryResolver) GetNlpReportsByVersion(ctx context.Context, version int) ([]*model.NlpReport, error) {
+	var report []*model.NlpReport
+	filter := bson.M{"version": version}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
 }
 
 // Mutation returns MutationResolver implementation.

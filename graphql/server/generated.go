@@ -178,6 +178,7 @@ type ComplexityRoot struct {
 		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
 		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) int
 		CreateMedicine           func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
+		CreateNlpReport          func(childComplexity int, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) int
 		CreateNotification       func(childComplexity int, token string, message string, title string) int
 		CreatePatient            func(childComplexity int, email string, password string) int
 		CreateRdv                func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
@@ -226,6 +227,20 @@ type ComplexityRoot struct {
 		UpdateTreatmentsFollowUp func(childComplexity int, id string, treatmentID *string, date *int, period []model.Period) int
 	}
 
+	NlpReport struct {
+		ComputationTime func(childComplexity int) int
+		ID              func(childComplexity int) int
+		InputSentence   func(childComplexity int) int
+		InputSymptoms   func(childComplexity int) int
+		Output          func(childComplexity int) int
+		Version         func(childComplexity int) int
+	}
+
+	NlpReportOutput struct {
+		Present func(childComplexity int) int
+		Symptom func(childComplexity int) int
+	}
+
 	Notification struct {
 		ID      func(childComplexity int) int
 		Message func(childComplexity int) int
@@ -270,6 +285,8 @@ type ComplexityRoot struct {
 		GetMedicalFolderByID      func(childComplexity int, id string) int
 		GetMedicineByID           func(childComplexity int, id string) int
 		GetMedicines              func(childComplexity int) int
+		GetNlpReports             func(childComplexity int) int
+		GetNlpReportsByVersion    func(childComplexity int, version int) int
 		GetNotificationByID       func(childComplexity int, id string) int
 		GetNotifications          func(childComplexity int) int
 		GetPatientByEmail         func(childComplexity int, email string) int
@@ -433,6 +450,7 @@ type MutationResolver interface {
 	CreateTreatmentsFollowUp(ctx context.Context, treatmentID string, date int, period []model.Period) (*model.TreatmentsFollowUp, error)
 	UpdateTreatmentsFollowUp(ctx context.Context, id string, treatmentID *string, date *int, period []model.Period) (*model.TreatmentsFollowUp, error)
 	DeleteTreatmentsFollowUp(ctx context.Context, id string) (*bool, error)
+	CreateNlpReport(ctx context.Context, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) (*model.NlpReport, error)
 }
 type QueryResolver interface {
 	GetPatients(ctx context.Context) ([]*model.Patient, error)
@@ -484,6 +502,8 @@ type QueryResolver interface {
 	GetPatientsFromDoctorByID(ctx context.Context, id string) ([]*model.Patient, error)
 	GetTreatmentsFollowUpByID(ctx context.Context, id string) (*model.TreatmentsFollowUp, error)
 	GetTreatmentsFollowUps(ctx context.Context, id string) ([]*model.TreatmentsFollowUp, error)
+	GetNlpReports(ctx context.Context) ([]*model.NlpReport, error)
+	GetNlpReportsByVersion(ctx context.Context, version int) ([]*model.NlpReport, error)
 }
 
 type executableSchema struct {
@@ -1183,6 +1203,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateMedicine(childComplexity, args["name"].(string), args["unit"].(*string), args["target_diseases"].([]string), args["treated_symptoms"].([]string), args["side_effects"].([]string)), true
 
+	case "Mutation.createNlpReport":
+		if e.complexity.Mutation.CreateNlpReport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createNlpReport_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateNlpReport(childComplexity, args["version"].(int), args["input_symptoms"].([]string), args["input_sentence"].(string), args["output"].([]*model.NlpReportOutputInput), args["computation_time"].(int)), true
+
 	case "Mutation.createNotification":
 		if e.complexity.Mutation.CreateNotification == nil {
 			break
@@ -1735,6 +1767,62 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateTreatmentsFollowUp(childComplexity, args["id"].(string), args["treatment_id"].(*string), args["date"].(*int), args["period"].([]model.Period)), true
 
+	case "NlpReport.computation_time":
+		if e.complexity.NlpReport.ComputationTime == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.ComputationTime(childComplexity), true
+
+	case "NlpReport.id":
+		if e.complexity.NlpReport.ID == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.ID(childComplexity), true
+
+	case "NlpReport.input_sentence":
+		if e.complexity.NlpReport.InputSentence == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.InputSentence(childComplexity), true
+
+	case "NlpReport.input_symptoms":
+		if e.complexity.NlpReport.InputSymptoms == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.InputSymptoms(childComplexity), true
+
+	case "NlpReport.output":
+		if e.complexity.NlpReport.Output == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.Output(childComplexity), true
+
+	case "NlpReport.version":
+		if e.complexity.NlpReport.Version == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.Version(childComplexity), true
+
+	case "NlpReportOutput.present":
+		if e.complexity.NlpReportOutput.Present == nil {
+			break
+		}
+
+		return e.complexity.NlpReportOutput.Present(childComplexity), true
+
+	case "NlpReportOutput.symptom":
+		if e.complexity.NlpReportOutput.Symptom == nil {
+			break
+		}
+
+		return e.complexity.NlpReportOutput.Symptom(childComplexity), true
+
 	case "Notification.id":
 		if e.complexity.Notification.ID == nil {
 			break
@@ -2068,6 +2156,25 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetMedicines(childComplexity), true
+
+	case "Query.getNlpReports":
+		if e.complexity.Query.GetNlpReports == nil {
+			break
+		}
+
+		return e.complexity.Query.GetNlpReports(childComplexity), true
+
+	case "Query.getNlpReportsByVersion":
+		if e.complexity.Query.GetNlpReportsByVersion == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getNlpReportsByVersion_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetNlpReportsByVersion(childComplexity, args["version"].(int)), true
 
 	case "Query.getNotificationById":
 		if e.complexity.Query.GetNotificationByID == nil {
@@ -2691,6 +2798,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputLogsInput,
 		ec.unmarshalInputMedicalAntecedentsInput,
 		ec.unmarshalInputMedicineInput,
+		ec.unmarshalInputNlpReportOutputInput,
 		ec.unmarshalInputSessionDiseasesInput,
 		ec.unmarshalInputSessionSymptomInput,
 		ec.unmarshalInputSymptomWeightInput,
@@ -2838,6 +2946,16 @@ type SessionDiseases {
 input SessionDiseasesInput {
     name: String!
     presence: Float!
+}
+
+type NlpReportOutput {
+    symptom: String!
+    present: Boolean!
+}
+
+input NlpReportOutputInput {
+    symptom: String!
+    present: Boolean!
 }
 
 ##  Entities  ----------------------------------------------------------------------------------------------------------
@@ -3076,6 +3194,15 @@ type TreatmentsFollowUp {
     period: [Period!]!
 }
 
+type NlpReport {
+    id: ID!
+    version: Int!
+    input_symptoms: [String!]!
+    input_sentence: String!
+    output: [NlpReportOutput!]!
+    computation_time: Int!
+}
+
 ## Query  --------------------------------------------------------------------------------------------------------------
 
 type Query {
@@ -3227,6 +3354,12 @@ type Query {
 
     # Get all TreatmentsFollowUp
     getTreatmentsFollowUps(id: String!): [TreatmentsFollowUp]
+
+    # Get NlpReports
+    getNlpReports: [NlpReport]
+
+    # Get NlpReports by version
+    getNlpReportsByVersion(version: Int!): [NlpReport]
 
 }
 
@@ -3400,7 +3533,10 @@ type Mutation {
     # Delete TreatmentsFollowUp
     deleteTreatmentsFollowUp(id: String!): Boolean
 
+    # Create a new NlpReport
+    createNlpReport(version: Int!, input_symptoms: [String!]!, input_sentence: String!, output: [NlpReportOutputInput!]!, computation_time: Int!): NlpReport
 }
+
 
 ##  Enums  -------------------------------------------------------------------------------------------------------------
 
@@ -4024,6 +4160,57 @@ func (ec *executionContext) field_Mutation_createMedicine_args(ctx context.Conte
 		}
 	}
 	args["side_effects"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createNlpReport_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["version"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("version"))
+		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["version"] = arg0
+	var arg1 []string
+	if tmp, ok := rawArgs["input_symptoms"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input_symptoms"))
+		arg1, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input_symptoms"] = arg1
+	var arg2 string
+	if tmp, ok := rawArgs["input_sentence"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input_sentence"))
+		arg2, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input_sentence"] = arg2
+	var arg3 []*model.NlpReportOutputInput
+	if tmp, ok := rawArgs["output"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("output"))
+		arg3, err = ec.unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInputᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["output"] = arg3
+	var arg4 int
+	if tmp, ok := rawArgs["computation_time"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("computation_time"))
+		arg4, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["computation_time"] = arg4
 	return args, nil
 }
 
@@ -6115,6 +6302,21 @@ func (ec *executionContext) field_Query_getMedicineByID_args(ctx context.Context
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getNlpReportsByVersion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["version"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("version"))
+		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["version"] = arg0
 	return args, nil
 }
 
@@ -13362,6 +13564,430 @@ func (ec *executionContext) fieldContext_Mutation_deleteTreatmentsFollowUp(ctx c
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createNlpReport(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createNlpReport(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateNlpReport(rctx, fc.Args["version"].(int), fc.Args["input_symptoms"].([]string), fc.Args["input_sentence"].(string), fc.Args["output"].([]*model.NlpReportOutputInput), fc.Args["computation_time"].(int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.NlpReport)
+	fc.Result = res
+	return ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createNlpReport(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_NlpReport_id(ctx, field)
+			case "version":
+				return ec.fieldContext_NlpReport_version(ctx, field)
+			case "input_symptoms":
+				return ec.fieldContext_NlpReport_input_symptoms(ctx, field)
+			case "input_sentence":
+				return ec.fieldContext_NlpReport_input_sentence(ctx, field)
+			case "output":
+				return ec.fieldContext_NlpReport_output(ctx, field)
+			case "computation_time":
+				return ec.fieldContext_NlpReport_computation_time(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NlpReport", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createNlpReport_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_id(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_version(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_version(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Version, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_version(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_input_symptoms(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_input_symptoms(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InputSymptoms, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_input_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_input_sentence(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_input_sentence(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InputSentence, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_input_sentence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_output(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_output(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Output, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.NlpReportOutput)
+	fc.Result = res
+	return ec.marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "symptom":
+				return ec.fieldContext_NlpReportOutput_symptom(ctx, field)
+			case "present":
+				return ec.fieldContext_NlpReportOutput_present(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NlpReportOutput", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_computation_time(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_computation_time(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ComputationTime, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_computation_time(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReportOutput_symptom(ctx context.Context, field graphql.CollectedField, obj *model.NlpReportOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReportOutput_symptom(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Symptom, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReportOutput_symptom(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReportOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReportOutput_present(ctx context.Context, field graphql.CollectedField, obj *model.NlpReportOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReportOutput_present(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Present, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReportOutput_present(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReportOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Notification_id(ctx context.Context, field graphql.CollectedField, obj *model.Notification) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Notification_id(ctx, field)
 	if err != nil {
@@ -16923,6 +17549,127 @@ func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUps(ctx contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getTreatmentsFollowUps_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getNlpReports(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getNlpReports(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetNlpReports(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.NlpReport)
+	fc.Result = res
+	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getNlpReports(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_NlpReport_id(ctx, field)
+			case "version":
+				return ec.fieldContext_NlpReport_version(ctx, field)
+			case "input_symptoms":
+				return ec.fieldContext_NlpReport_input_symptoms(ctx, field)
+			case "input_sentence":
+				return ec.fieldContext_NlpReport_input_sentence(ctx, field)
+			case "output":
+				return ec.fieldContext_NlpReport_output(ctx, field)
+			case "computation_time":
+				return ec.fieldContext_NlpReport_computation_time(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NlpReport", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getNlpReportsByVersion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getNlpReportsByVersion(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetNlpReportsByVersion(rctx, fc.Args["version"].(int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.NlpReport)
+	fc.Result = res
+	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getNlpReportsByVersion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_NlpReport_id(ctx, field)
+			case "version":
+				return ec.fieldContext_NlpReport_version(ctx, field)
+			case "input_symptoms":
+				return ec.fieldContext_NlpReport_input_symptoms(ctx, field)
+			case "input_sentence":
+				return ec.fieldContext_NlpReport_input_sentence(ctx, field)
+			case "output":
+				return ec.fieldContext_NlpReport_output(ctx, field)
+			case "computation_time":
+				return ec.fieldContext_NlpReport_computation_time(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NlpReport", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getNlpReportsByVersion_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -21289,6 +22036,40 @@ func (ec *executionContext) unmarshalInputMedicineInput(ctx context.Context, obj
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputNlpReportOutputInput(ctx context.Context, obj interface{}) (model.NlpReportOutputInput, error) {
+	var it model.NlpReportOutputInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"symptom", "present"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "symptom":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptom"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptom = data
+		case "present":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("present"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Present = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputSessionDiseasesInput(ctx context.Context, obj interface{}) (model.SessionDiseasesInput, error) {
 	var it model.SessionDiseasesInput
 	asMap := map[string]interface{}{}
@@ -22535,6 +23316,118 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteTreatmentsFollowUp(ctx, field)
 			})
+		case "createNlpReport":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createNlpReport(ctx, field)
+			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var nlpReportImplementors = []string{"NlpReport"}
+
+func (ec *executionContext) _NlpReport(ctx context.Context, sel ast.SelectionSet, obj *model.NlpReport) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, nlpReportImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NlpReport")
+		case "id":
+			out.Values[i] = ec._NlpReport_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "version":
+			out.Values[i] = ec._NlpReport_version(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "input_symptoms":
+			out.Values[i] = ec._NlpReport_input_symptoms(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "input_sentence":
+			out.Values[i] = ec._NlpReport_input_sentence(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "output":
+			out.Values[i] = ec._NlpReport_output(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "computation_time":
+			out.Values[i] = ec._NlpReport_computation_time(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var nlpReportOutputImplementors = []string{"NlpReportOutput"}
+
+func (ec *executionContext) _NlpReportOutput(ctx context.Context, sel ast.SelectionSet, obj *model.NlpReportOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, nlpReportOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("NlpReportOutput")
+		case "symptom":
+			out.Values[i] = ec._NlpReportOutput_symptom(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "present":
+			out.Values[i] = ec._NlpReportOutput_present(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -23610,6 +24503,44 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getTreatmentsFollowUps(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getNlpReports":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getNlpReports(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getNlpReportsByVersion":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getNlpReportsByVersion(ctx, field)
 				return res
 			}
 
@@ -24827,6 +25758,82 @@ func (ec *executionContext) unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcare�
 
 func (ec *executionContext) marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx context.Context, sel ast.SelectionSet, v model.MedicineUnit) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReportOutput) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutput(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutput(ctx context.Context, sel ast.SelectionSet, v *model.NlpReportOutput) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._NlpReportOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInputᚄ(ctx context.Context, v interface{}) ([]*model.NlpReportOutputInput, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.NlpReportOutputInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInput(ctx context.Context, v interface{}) (*model.NlpReportOutputInput, error) {
+	res, err := ec.unmarshalInputNlpReportOutputInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (model.OnboardingStatus, error) {
@@ -26229,6 +27236,54 @@ func (ec *executionContext) marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋed
 		return graphql.Null
 	}
 	return ec._Medicine(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReport) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v *model.NlpReport) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._NlpReport(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
