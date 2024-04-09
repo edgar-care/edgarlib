@@ -36,6 +36,25 @@ func GetMedicalInfo(patientID string) MedicalInfoResponse {
 		return MedicalInfoResponse{Code: 400, Err: errors.New("unable to fetch medical folder: " + err.Error())}
 	}
 
+	if len(medical.GetMedicalFolderById.Antecedent_disease_ids) == 1 && medical.GetMedicalFolderById.Antecedent_disease_ids[0] == "" {
+		return MedicalInfoResponse{
+			MedicalInfo: model.MedicalInfo{
+				ID:                   medical.GetMedicalFolderById.Id,
+				Name:                 medical.GetMedicalFolderById.Name,
+				Firstname:            medical.GetMedicalFolderById.Firstname,
+				Birthdate:            medical.GetMedicalFolderById.Birthdate,
+				Sex:                  model.Sex(medical.GetMedicalFolderById.Sex),
+				Weight:               medical.GetMedicalFolderById.Weight,
+				Height:               medical.GetMedicalFolderById.Height,
+				PrimaryDoctorID:      medical.GetMedicalFolderById.Primary_doctor_id,
+				OnboardingStatus:     model.OnboardingStatus(medical.GetMedicalFolderById.Onboarding_status),
+				AntecedentDiseaseIds: medical.GetMedicalFolderById.Antecedent_disease_ids,
+			},
+			Code: 200,
+			Err:  nil,
+		}
+	}
+
 	var treatments []model.Treatment
 	var antediseasesWithTreatments []AnteDiseaseWithTreatments
 	for _, antediseaseID := range medical.GetMedicalFolderById.Antecedent_disease_ids {
