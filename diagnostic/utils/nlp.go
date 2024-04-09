@@ -11,22 +11,31 @@ import (
 type nlpRequestBody struct {
 	Input    string   `json:"input"`
 	Symptoms []string `json:"symptoms"`
+	IsTime   bool     `json:"isTime"`
 }
 
 type NlpResponseBody struct {
 	Context []Symptom `json:"context"`
 }
 
-func CallNlp(sentence string, symptoms []string) NlpResponseBody {
+func CallNlp(sentence string, symptoms []string, durSymptom *string) (NlpResponseBody, int) {
 	var rBody = nlpRequestBody{
 		Input:    sentence,
 		Symptoms: symptoms,
+		IsTime:   false,
 	}
 
 	var respBody NlpResponseBody
 
 	if sentence == "" {
-		return respBody
+		return respBody, 200
+	}
+
+	if durSymptom != nil {
+		if len(symptoms) != 0 {
+			symptoms[0] = *durSymptom
+		}
+		rBody.IsTime = true
 	}
 
 	var buf = new(bytes.Buffer)
@@ -39,13 +48,14 @@ func CallNlp(sentence string, symptoms []string) NlpResponseBody {
 	err = json.NewDecoder(resp.Body).Decode(&respBody)
 	edgarlib.CheckError(err)
 
-	return respBody
+	return respBody, resp.StatusCode
 }
 
 func WakeNlpUp() {
 	var rBody = nlpRequestBody{
 		Input:    "wake up",
 		Symptoms: []string{},
+		IsTime:   false,
 	}
 
 	var buf = new(bytes.Buffer)
