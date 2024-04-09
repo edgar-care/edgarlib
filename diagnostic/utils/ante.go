@@ -18,6 +18,9 @@ func CheckAnteDiseaseInSymptoms(session graphql.GetSessionByIdGetSessionByIdSess
 			}
 			if ante.GetAnteDiseaseByID.Still_relevant == true && len(ante.GetGetAnteDiseaseByID().Symptoms) > 0 {
 				for _, anteSymptomId := range ante.GetAnteDiseaseByID.Symptoms {
+					if anteSymptomId == "" {
+						continue
+					}
 					anteSymptom, err := graphql.GetSymptomById(context.Background(), gqlClient, anteSymptomId)
 					if err != nil {
 						return "", "", err
