@@ -87,8 +87,7 @@ func GetPatients(doctorId string) GetPatientsResponse {
 
 	var patients []PatientWithMedicalInfo
 	for _, patient := range patientDoctor.GetPatientsFromDoctorById {
-		patientId := patient.Medical_info_id
-		medicalInfo := medical_folder.GetMedicalInfo(patientId)
+		medicalInfo := medical_folder.GetMedicalInfo(patient.Id)
 		if medicalInfo.Err != nil {
 			return GetPatientsResponse{Code: 401, Err: errors.New("error while retrieving medical info by id")}
 		}

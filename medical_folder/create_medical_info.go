@@ -54,6 +54,35 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("medical folder has already been created")}
 	}
 
+	if len(input.MedicalAntecedents) == 0 {
+		medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, []string{""}, "DONE")
+		if err != nil {
+			return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
+		}
+
+		_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, control.GetPatientById.Email, control.GetPatientById.Password, medical.CreateMedicalFolder.Id, control.GetPatientById.Rendez_vous_ids, control.GetPatientById.Document_ids, control.GetPatientById.Treatment_follow_up_ids)
+		if err != nil {
+			return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to update patient: " + err.Error())}
+		}
+
+		return CreateMedicalInfoResponse{
+			MedicalInfo: model.MedicalInfo{
+				ID:                   medical.CreateMedicalFolder.Id,
+				Name:                 medical.CreateMedicalFolder.Name,
+				Firstname:            medical.CreateMedicalFolder.Firstname,
+				Birthdate:            medical.CreateMedicalFolder.Birthdate,
+				Sex:                  model.Sex(medical.CreateMedicalFolder.Sex),
+				Weight:               medical.CreateMedicalFolder.Weight,
+				Height:               medical.CreateMedicalFolder.Height,
+				PrimaryDoctorID:      medical.CreateMedicalFolder.Primary_doctor_id,
+				OnboardingStatus:     model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
+				AntecedentDiseaseIds: medical.CreateMedicalFolder.Antecedent_disease_ids,
+			},
+			Code: 201,
+			Err:  nil,
+		}
+	}
+
 	for _, antecedent := range input.MedicalAntecedents {
 		var treatmentIDsPerAnte []string
 		var antediseaseTreatments []model.Treatment
