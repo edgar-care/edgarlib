@@ -16,12 +16,13 @@ type GetPatientByIdResponse struct {
 }
 
 type PatientWithMedicalInfo struct {
-	ID                string            `json:"id"`
-	Email             string            `json:"email"`
-	MedicalInfo       model.MedicalInfo `json:"medical_info"`
-	RendezVousIds     []string          `json:"rendez_vous_ids"`
-	DocumentsIds      []string          `json:"documents_ids"`
-	TreatmentFollowUp []string          `json:"treatment_follow_up"`
+	ID                string                                     `json:"id"`
+	Email             string                                     `json:"email"`
+	MedicalInfo       model.MedicalInfo                          `json:"medical_info"`
+	Antedisease       []medical_folder.AnteDiseaseWithTreatments `json:"antedisease"`
+	RendezVousIds     []string                                   `json:"rendez_vous_ids"`
+	DocumentsIds      []string                                   `json:"documents_ids"`
+	TreatmentFollowUp []string                                   `json:"treatment_follow_up"`
 }
 
 type GetPatientsResponse struct {
@@ -66,6 +67,7 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		DocumentsIds:      patient.GetPatientById.Document_ids,
 		MedicalInfo:       medicalInfo.MedicalInfo,
 		TreatmentFollowUp: patient.GetPatientById.Treatment_follow_up_ids,
+		Antedisease:       medicalInfo.AnteDiseasesWithTreatments,
 	}
 
 	return GetPatientByIdResponse{
@@ -97,6 +99,7 @@ func GetPatients(doctorId string) GetPatientsResponse {
 			DocumentsIds:      patient.Document_ids,
 			MedicalInfo:       medicalInfo.MedicalInfo,
 			TreatmentFollowUp: patient.Treatment_follow_up_ids,
+			Antedisease:       medicalInfo.AnteDiseasesWithTreatments,
 		})
 	}
 	return GetPatientsResponse{
