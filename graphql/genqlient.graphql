@@ -1176,3 +1176,45 @@ query GetTreatmentsFollowUp($id: String!){
         period
     }
 }
+
+query GetNlpReports{
+    getNlpReports{
+        id
+        version
+        input_symptoms
+        input_sentence
+        output {
+            symptom
+            present
+        }
+        computation_time
+   }
+}
+
+query GetNlpReportsByVersion($version: Int!){
+    getNlpReportsByVersion(version: $version){
+        id
+        version
+        input_symptoms
+        input_sentence
+        output {
+            symptom
+            present
+        }
+        computation_time
+   }
+}
+
+mutation createNlpReport($version: Int!, $input_symptoms: [String!]!, $input_sentence: String!, $output: [NlpReportOutputInput!]!, $computation_time: Int!) {
+    createNlpReport(version: $version, input_symptoms: $input_symptoms, input_sentence: $input_sentence, output: $output, computation_time: $computation_time) {
+        id
+        version
+        input_symptoms
+        input_sentence
+        output {
+            symptom
+            present
+        }
+        computation_time
+    }
+}
