@@ -66,6 +66,7 @@ mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $s
         symptoms_weight{
             symptom
             value
+            chronic
         }
         advice
     }
@@ -163,15 +164,12 @@ mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionS
     }
 }
 
-mutation CreateSymptom($code: String!, $name: String!, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!]!, $advice: String, $question: String!, $question_basic: String!, $question_duration: String!, $question_ante: String!){
-    createSymptom(code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante){
+
+mutation CreateSymptom($code: String!, $name: String!, $chronic: Int, $symptom: [String!]!, $advice: String, $question: String!, $question_basic: String!, $question_duration: String!, $question_ante: String!){
+    createSymptom(code: $code, name: $name, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante){
         id
         code
         name
-        location
-        duration
-        acute
-        subacute
         chronic
         symptom
         advice
@@ -360,6 +358,7 @@ mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [S
         symptoms_weight{
             symptom
             value
+            chronic
         }
         advice
     }
@@ -457,15 +456,12 @@ mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $sympto
     }
 }
 
-mutation UpdateSymptom($id: String!, $code: String, $name: String, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!], $advice: String, $question: String!, $question_basic: String, $question_duration: String, $question_ante: String){
-    updateSymptom(id: $id, code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante){
+
+mutation UpdateSymptom($id: String!, $code: String, $name: String, $chronic: Int, $symptom: [String!], $advice: String, $question: String, $question_basic: String, $question_duration: String, $question_ante: String){
+    updateSymptom(id: $id, code: $code, name: $name, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante){
         id
         code
         name
-        location
-        duration
-        acute
-        subacute
         chronic
         symptom
         advice
@@ -654,6 +650,7 @@ query GetDiseaseById($id: String!){
         symptoms_weight{
             symptom
             value
+            chronic
         }
         advice
     }
@@ -668,6 +665,7 @@ query GetDiseases{
         symptoms_weight{
             symptom
             value
+            chronic
         }
         advice
     }
@@ -919,10 +917,6 @@ query GetSymptomById($id: String!){
         id
         code
         name
-        location
-        duration
-        acute
-        subacute
         chronic
         symptom
         advice
@@ -938,10 +932,6 @@ query GetSymptoms{
         id
         code
         name
-        location
-        duration
-        acute
-        subacute
         chronic
         symptom
         advice

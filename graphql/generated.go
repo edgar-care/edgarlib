@@ -274,6 +274,7 @@ func (v *CreateDiseaseCreateDisease) GetAdvice() string { return v.Advice }
 type CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight struct {
 	Symptom string  `json:"symptom"`
 	Value   float64 `json:"value"`
+	Chronic bool    `json:"chronic"`
 }
 
 // GetSymptom returns CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
@@ -283,6 +284,9 @@ func (v *CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight) GetSymptom() s
 
 // GetValue returns CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
 func (v *CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 { return v.Value }
+
+// GetChronic returns CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight.Chronic, and is useful for accessing the field via an interface.
+func (v *CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight) GetChronic() bool { return v.Chronic }
 
 // CreateDiseaseResponse is returned by CreateDisease on success.
 type CreateDiseaseResponse struct {
@@ -725,10 +729,6 @@ type CreateSymptomCreateSymptom struct {
 	Id                string   `json:"id"`
 	Code              string   `json:"code"`
 	Name              string   `json:"name"`
-	Location          string   `json:"location"`
-	Duration          int      `json:"duration"`
-	Acute             int      `json:"acute"`
-	Subacute          int      `json:"subacute"`
 	Chronic           int      `json:"chronic"`
 	Symptom           []string `json:"symptom"`
 	Advice            string   `json:"advice"`
@@ -746,18 +746,6 @@ func (v *CreateSymptomCreateSymptom) GetCode() string { return v.Code }
 
 // GetName returns CreateSymptomCreateSymptom.Name, and is useful for accessing the field via an interface.
 func (v *CreateSymptomCreateSymptom) GetName() string { return v.Name }
-
-// GetLocation returns CreateSymptomCreateSymptom.Location, and is useful for accessing the field via an interface.
-func (v *CreateSymptomCreateSymptom) GetLocation() string { return v.Location }
-
-// GetDuration returns CreateSymptomCreateSymptom.Duration, and is useful for accessing the field via an interface.
-func (v *CreateSymptomCreateSymptom) GetDuration() int { return v.Duration }
-
-// GetAcute returns CreateSymptomCreateSymptom.Acute, and is useful for accessing the field via an interface.
-func (v *CreateSymptomCreateSymptom) GetAcute() int { return v.Acute }
-
-// GetSubacute returns CreateSymptomCreateSymptom.Subacute, and is useful for accessing the field via an interface.
-func (v *CreateSymptomCreateSymptom) GetSubacute() int { return v.Subacute }
 
 // GetChronic returns CreateSymptomCreateSymptom.Chronic, and is useful for accessing the field via an interface.
 func (v *CreateSymptomCreateSymptom) GetChronic() int { return v.Chronic }
@@ -1563,6 +1551,7 @@ func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetAdvice() string { return v.Advi
 type GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight struct {
 	Symptom string  `json:"symptom"`
 	Value   float64 `json:"value"`
+	Chronic bool    `json:"chronic"`
 }
 
 // GetSymptom returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
@@ -1573,6 +1562,11 @@ func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight) GetSy
 // GetValue returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
 func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 {
 	return v.Value
+}
+
+// GetChronic returns GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight.Chronic, and is useful for accessing the field via an interface.
+func (v *GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight) GetChronic() bool {
+	return v.Chronic
 }
 
 // GetDiseaseByIdResponse is returned by GetDiseaseById on success.
@@ -1619,6 +1613,7 @@ func (v *GetDiseasesGetDiseasesDisease) GetAdvice() string { return v.Advice }
 type GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight struct {
 	Symptom string  `json:"symptom"`
 	Value   float64 `json:"value"`
+	Chronic bool    `json:"chronic"`
 }
 
 // GetSymptom returns GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
@@ -1629,6 +1624,11 @@ func (v *GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight) GetSymptom(
 // GetValue returns GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
 func (v *GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 {
 	return v.Value
+}
+
+// GetChronic returns GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight.Chronic, and is useful for accessing the field via an interface.
+func (v *GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight) GetChronic() bool {
+	return v.Chronic
 }
 
 // GetDiseasesResponse is returned by GetDiseases on success.
@@ -3002,10 +3002,6 @@ type GetSymptomByIdGetSymptomByIdSymptom struct {
 	Id                string   `json:"id"`
 	Code              string   `json:"code"`
 	Name              string   `json:"name"`
-	Location          string   `json:"location"`
-	Duration          int      `json:"duration"`
-	Acute             int      `json:"acute"`
-	Subacute          int      `json:"subacute"`
 	Chronic           int      `json:"chronic"`
 	Symptom           []string `json:"symptom"`
 	Advice            string   `json:"advice"`
@@ -3023,18 +3019,6 @@ func (v *GetSymptomByIdGetSymptomByIdSymptom) GetCode() string { return v.Code }
 
 // GetName returns GetSymptomByIdGetSymptomByIdSymptom.Name, and is useful for accessing the field via an interface.
 func (v *GetSymptomByIdGetSymptomByIdSymptom) GetName() string { return v.Name }
-
-// GetLocation returns GetSymptomByIdGetSymptomByIdSymptom.Location, and is useful for accessing the field via an interface.
-func (v *GetSymptomByIdGetSymptomByIdSymptom) GetLocation() string { return v.Location }
-
-// GetDuration returns GetSymptomByIdGetSymptomByIdSymptom.Duration, and is useful for accessing the field via an interface.
-func (v *GetSymptomByIdGetSymptomByIdSymptom) GetDuration() int { return v.Duration }
-
-// GetAcute returns GetSymptomByIdGetSymptomByIdSymptom.Acute, and is useful for accessing the field via an interface.
-func (v *GetSymptomByIdGetSymptomByIdSymptom) GetAcute() int { return v.Acute }
-
-// GetSubacute returns GetSymptomByIdGetSymptomByIdSymptom.Subacute, and is useful for accessing the field via an interface.
-func (v *GetSymptomByIdGetSymptomByIdSymptom) GetSubacute() int { return v.Subacute }
 
 // GetChronic returns GetSymptomByIdGetSymptomByIdSymptom.Chronic, and is useful for accessing the field via an interface.
 func (v *GetSymptomByIdGetSymptomByIdSymptom) GetChronic() int { return v.Chronic }
@@ -3074,10 +3058,6 @@ type GetSymptomsGetSymptomsSymptom struct {
 	Id                string   `json:"id"`
 	Code              string   `json:"code"`
 	Name              string   `json:"name"`
-	Location          string   `json:"location"`
-	Duration          int      `json:"duration"`
-	Acute             int      `json:"acute"`
-	Subacute          int      `json:"subacute"`
 	Chronic           int      `json:"chronic"`
 	Symptom           []string `json:"symptom"`
 	Advice            string   `json:"advice"`
@@ -3095,18 +3075,6 @@ func (v *GetSymptomsGetSymptomsSymptom) GetCode() string { return v.Code }
 
 // GetName returns GetSymptomsGetSymptomsSymptom.Name, and is useful for accessing the field via an interface.
 func (v *GetSymptomsGetSymptomsSymptom) GetName() string { return v.Name }
-
-// GetLocation returns GetSymptomsGetSymptomsSymptom.Location, and is useful for accessing the field via an interface.
-func (v *GetSymptomsGetSymptomsSymptom) GetLocation() string { return v.Location }
-
-// GetDuration returns GetSymptomsGetSymptomsSymptom.Duration, and is useful for accessing the field via an interface.
-func (v *GetSymptomsGetSymptomsSymptom) GetDuration() int { return v.Duration }
-
-// GetAcute returns GetSymptomsGetSymptomsSymptom.Acute, and is useful for accessing the field via an interface.
-func (v *GetSymptomsGetSymptomsSymptom) GetAcute() int { return v.Acute }
-
-// GetSubacute returns GetSymptomsGetSymptomsSymptom.Subacute, and is useful for accessing the field via an interface.
-func (v *GetSymptomsGetSymptomsSymptom) GetSubacute() int { return v.Subacute }
 
 // GetChronic returns GetSymptomsGetSymptomsSymptom.Chronic, and is useful for accessing the field via an interface.
 func (v *GetSymptomsGetSymptomsSymptom) GetChronic() int { return v.Chronic }
@@ -3498,6 +3466,7 @@ const (
 type SymptomsWeightInput struct {
 	Symptom string  `json:"symptom"`
 	Value   float64 `json:"value"`
+	Chronic bool    `json:"chronic"`
 }
 
 // GetSymptom returns SymptomsWeightInput.Symptom, and is useful for accessing the field via an interface.
@@ -3505,6 +3474,9 @@ func (v *SymptomsWeightInput) GetSymptom() string { return v.Symptom }
 
 // GetValue returns SymptomsWeightInput.Value, and is useful for accessing the field via an interface.
 func (v *SymptomsWeightInput) GetValue() float64 { return v.Value }
+
+// GetChronic returns SymptomsWeightInput.Chronic, and is useful for accessing the field via an interface.
+func (v *SymptomsWeightInput) GetChronic() bool { return v.Chronic }
 
 // UpdateAdminResponse is returned by UpdateAdmin on success.
 type UpdateAdminResponse struct {
@@ -3744,6 +3716,7 @@ func (v *UpdateDiseaseUpdateDisease) GetAdvice() string { return v.Advice }
 type UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight struct {
 	Symptom string  `json:"symptom"`
 	Value   float64 `json:"value"`
+	Chronic bool    `json:"chronic"`
 }
 
 // GetSymptom returns UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight.Symptom, and is useful for accessing the field via an interface.
@@ -3753,6 +3726,9 @@ func (v *UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight) GetSymptom() s
 
 // GetValue returns UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight.Value, and is useful for accessing the field via an interface.
 func (v *UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight) GetValue() float64 { return v.Value }
+
+// GetChronic returns UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight.Chronic, and is useful for accessing the field via an interface.
+func (v *UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight) GetChronic() bool { return v.Chronic }
 
 // UpdateDoctorResponse is returned by UpdateDoctor on success.
 type UpdateDoctorResponse struct {
@@ -4157,10 +4133,6 @@ type UpdateSymptomUpdateSymptom struct {
 	Id                string   `json:"id"`
 	Code              string   `json:"code"`
 	Name              string   `json:"name"`
-	Location          string   `json:"location"`
-	Duration          int      `json:"duration"`
-	Acute             int      `json:"acute"`
-	Subacute          int      `json:"subacute"`
 	Chronic           int      `json:"chronic"`
 	Symptom           []string `json:"symptom"`
 	Advice            string   `json:"advice"`
@@ -4178,18 +4150,6 @@ func (v *UpdateSymptomUpdateSymptom) GetCode() string { return v.Code }
 
 // GetName returns UpdateSymptomUpdateSymptom.Name, and is useful for accessing the field via an interface.
 func (v *UpdateSymptomUpdateSymptom) GetName() string { return v.Name }
-
-// GetLocation returns UpdateSymptomUpdateSymptom.Location, and is useful for accessing the field via an interface.
-func (v *UpdateSymptomUpdateSymptom) GetLocation() string { return v.Location }
-
-// GetDuration returns UpdateSymptomUpdateSymptom.Duration, and is useful for accessing the field via an interface.
-func (v *UpdateSymptomUpdateSymptom) GetDuration() int { return v.Duration }
-
-// GetAcute returns UpdateSymptomUpdateSymptom.Acute, and is useful for accessing the field via an interface.
-func (v *UpdateSymptomUpdateSymptom) GetAcute() int { return v.Acute }
-
-// GetSubacute returns UpdateSymptomUpdateSymptom.Subacute, and is useful for accessing the field via an interface.
-func (v *UpdateSymptomUpdateSymptom) GetSubacute() int { return v.Subacute }
 
 // GetChronic returns UpdateSymptomUpdateSymptom.Chronic, and is useful for accessing the field via an interface.
 func (v *UpdateSymptomUpdateSymptom) GetChronic() int { return v.Chronic }
@@ -4674,10 +4634,6 @@ func (v *__CreateSessionInput) GetAlerts() []string { return v.Alerts }
 type __CreateSymptomInput struct {
 	Code              string   `json:"code"`
 	Name              string   `json:"name"`
-	Location          string   `json:"location"`
-	Duration          int      `json:"duration"`
-	Acute             int      `json:"acute"`
-	Subacute          int      `json:"subacute"`
 	Chronic           int      `json:"chronic"`
 	Symptom           []string `json:"symptom"`
 	Advice            string   `json:"advice"`
@@ -4692,18 +4648,6 @@ func (v *__CreateSymptomInput) GetCode() string { return v.Code }
 
 // GetName returns __CreateSymptomInput.Name, and is useful for accessing the field via an interface.
 func (v *__CreateSymptomInput) GetName() string { return v.Name }
-
-// GetLocation returns __CreateSymptomInput.Location, and is useful for accessing the field via an interface.
-func (v *__CreateSymptomInput) GetLocation() string { return v.Location }
-
-// GetDuration returns __CreateSymptomInput.Duration, and is useful for accessing the field via an interface.
-func (v *__CreateSymptomInput) GetDuration() int { return v.Duration }
-
-// GetAcute returns __CreateSymptomInput.Acute, and is useful for accessing the field via an interface.
-func (v *__CreateSymptomInput) GetAcute() int { return v.Acute }
-
-// GetSubacute returns __CreateSymptomInput.Subacute, and is useful for accessing the field via an interface.
-func (v *__CreateSymptomInput) GetSubacute() int { return v.Subacute }
 
 // GetChronic returns __CreateSymptomInput.Chronic, and is useful for accessing the field via an interface.
 func (v *__CreateSymptomInput) GetChronic() int { return v.Chronic }
@@ -5617,10 +5561,6 @@ type __UpdateSymptomInput struct {
 	Id                string   `json:"id"`
 	Code              string   `json:"code"`
 	Name              string   `json:"name"`
-	Location          string   `json:"location"`
-	Duration          int      `json:"duration"`
-	Acute             int      `json:"acute"`
-	Subacute          int      `json:"subacute"`
 	Chronic           int      `json:"chronic"`
 	Symptom           []string `json:"symptom"`
 	Advice            string   `json:"advice"`
@@ -5638,18 +5578,6 @@ func (v *__UpdateSymptomInput) GetCode() string { return v.Code }
 
 // GetName returns __UpdateSymptomInput.Name, and is useful for accessing the field via an interface.
 func (v *__UpdateSymptomInput) GetName() string { return v.Name }
-
-// GetLocation returns __UpdateSymptomInput.Location, and is useful for accessing the field via an interface.
-func (v *__UpdateSymptomInput) GetLocation() string { return v.Location }
-
-// GetDuration returns __UpdateSymptomInput.Duration, and is useful for accessing the field via an interface.
-func (v *__UpdateSymptomInput) GetDuration() int { return v.Duration }
-
-// GetAcute returns __UpdateSymptomInput.Acute, and is useful for accessing the field via an interface.
-func (v *__UpdateSymptomInput) GetAcute() int { return v.Acute }
-
-// GetSubacute returns __UpdateSymptomInput.Subacute, and is useful for accessing the field via an interface.
-func (v *__UpdateSymptomInput) GetSubacute() int { return v.Subacute }
 
 // GetChronic returns __UpdateSymptomInput.Chronic, and is useful for accessing the field via an interface.
 func (v *__UpdateSymptomInput) GetChronic() int { return v.Chronic }
@@ -6086,6 +6014,7 @@ mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $
 		symptoms_weight {
 			symptom
 			value
+			chronic
 		}
 		advice
 	}
@@ -6558,15 +6487,11 @@ func CreateSession(
 
 // The query or mutation executed by CreateSymptom.
 const CreateSymptom_Operation = `
-mutation CreateSymptom ($code: String!, $name: String!, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!]!, $advice: String, $question: String!, $question_basic: String!, $question_duration: String!, $question_ante: String!) {
-	createSymptom(code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante) {
+mutation CreateSymptom ($code: String!, $name: String!, $chronic: Int, $symptom: [String!]!, $advice: String, $question: String!, $question_basic: String!, $question_duration: String!, $question_ante: String!) {
+	createSymptom(code: $code, name: $name, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante) {
 		id
 		code
 		name
-		location
-		duration
-		acute
-		subacute
 		chronic
 		symptom
 		advice
@@ -6583,10 +6508,6 @@ func CreateSymptom(
 	client graphql.Client,
 	code string,
 	name string,
-	location string,
-	duration int,
-	acute int,
-	subacute int,
 	chronic int,
 	symptom []string,
 	advice string,
@@ -6601,10 +6522,6 @@ func CreateSymptom(
 		Variables: &__CreateSymptomInput{
 			Code:              code,
 			Name:              name,
-			Location:          location,
-			Duration:          duration,
-			Acute:             acute,
-			Subacute:          subacute,
 			Chronic:           chronic,
 			Symptom:           symptom,
 			Advice:            advice,
@@ -7943,6 +7860,7 @@ query GetDiseaseById ($id: String!) {
 		symptoms_weight {
 			symptom
 			value
+			chronic
 		}
 		advice
 	}
@@ -7986,6 +7904,7 @@ query GetDiseases {
 		symptoms_weight {
 			symptom
 			value
+			chronic
 		}
 		advice
 	}
@@ -9073,10 +8992,6 @@ query GetSymptomById ($id: String!) {
 		id
 		code
 		name
-		location
-		duration
-		acute
-		subacute
 		chronic
 		symptom
 		advice
@@ -9121,10 +9036,6 @@ query GetSymptoms {
 		id
 		code
 		name
-		location
-		duration
-		acute
-		subacute
 		chronic
 		symptom
 		advice
@@ -9747,6 +9658,7 @@ mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [
 		symptoms_weight {
 			symptom
 			value
+			chronic
 		}
 		advice
 	}
@@ -10193,15 +10105,11 @@ func UpdateSession(
 
 // The query or mutation executed by UpdateSymptom.
 const UpdateSymptom_Operation = `
-mutation UpdateSymptom ($id: String!, $code: String, $name: String, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!], $advice: String, $question: String!, $question_basic: String, $question_duration: String, $question_ante: String) {
-	updateSymptom(id: $id, code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante) {
+mutation UpdateSymptom ($id: String!, $code: String, $name: String, $chronic: Int, $symptom: [String!], $advice: String, $question: String, $question_basic: String, $question_duration: String, $question_ante: String) {
+	updateSymptom(id: $id, code: $code, name: $name, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante) {
 		id
 		code
 		name
-		location
-		duration
-		acute
-		subacute
 		chronic
 		symptom
 		advice
@@ -10219,10 +10127,6 @@ func UpdateSymptom(
 	id string,
 	code string,
 	name string,
-	location string,
-	duration int,
-	acute int,
-	subacute int,
 	chronic int,
 	symptom []string,
 	advice string,
@@ -10238,10 +10142,6 @@ func UpdateSymptom(
 			Id:                id,
 			Code:              code,
 			Name:              name,
-			Location:          location,
-			Duration:          duration,
-			Acute:             acute,
-			Subacute:          subacute,
 			Chronic:           chronic,
 			Symptom:           symptom,
 			Advice:            advice,
