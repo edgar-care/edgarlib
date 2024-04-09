@@ -27,18 +27,20 @@ func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDisease
 	for _, symptomWeight := range disease.Symptoms_weight {
 		lock := 1
 		for _, contextSymptom := range context {
-			if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == true {
-				percentage += symptomWeight.Value
-				lock = 0
-				break
-			} else if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == false {
-				if contextSymptom.Treated != nil && len(contextSymptom.Treated) != 0 {
-					percentage += symptomWeight.Value / 2
+			if contextSymptom.Presence != nil {
+				if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == true {
+					percentage += symptomWeight.Value
+					lock = 0
+					break
+				} else if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == false {
+					if contextSymptom.Treated != nil && len(contextSymptom.Treated) != 0 {
+						percentage += symptomWeight.Value / 2
+					}
+					lock = 0
+					break
+				} else {
+					buf = symptomWeight.Symptom
 				}
-				lock = 0
-				break
-			} else {
-				buf = symptomWeight.Symptom
 			}
 		}
 		if lock == 1 {

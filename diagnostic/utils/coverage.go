@@ -14,9 +14,12 @@ func (a ByCoverage) Len() int           { return len(a) }
 func (a ByCoverage) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByCoverage) Less(i, j int) bool { return a[i].Percentage > a[j].Percentage }
 
-func GetSessionDiseases(sessionContext []model.SessionSymptom) []graphql.SessionDiseasesInput {
+func GetSessionDiseases(sessionContext []model.SessionSymptom) ([]graphql.SessionDiseasesInput, error) {
 	gqlClient := graphql.CreateClient()
-	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
+	diseases, err := graphql.GetDiseases(context.Background(), gqlClient)
+	if err != nil {
+		return nil, err
+	}
 	mapped := make([]exam.DiseaseCoverage, len(diseases.GetDiseases))
 	var sortedDiseases []graphql.SessionDiseasesInput
 	for i, e := range diseases.GetDiseases {
@@ -30,5 +33,5 @@ func GetSessionDiseases(sessionContext []model.SessionSymptom) []graphql.Session
 			sortedDiseases = append(sortedDiseases, newsorted)
 		}
 	}
-	return sortedDiseases
+	return sortedDiseases, nil
 }

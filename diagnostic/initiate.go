@@ -41,14 +41,26 @@ func Initiate(id string) InitiateResponse {
 	input.AnteDiseases = patientInfos.GetMedicalFolderById.Antecedent_disease_ids
 
 	input.Medicine = []string{}
-	input.Medicine = append(input.Medicine, "CanonFlesh")
+	//input.Medicine = append(input.Medicine, "CanonFlesh")
 
 	for _, antecedentDiseaseId := range input.AnteDiseases {
-		antecedentDisease, _ := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, antecedentDiseaseId)
-		if antecedentDisease.GetAnteDiseaseByID.Still_relevant == true {
-			for _, treatmentIds := range antecedentDisease.GetAnteDiseaseByID.Treatment_ids {
-				treatment, _ := graphql.GetTreatmentByID(context.Background(), gqlClient, treatmentIds)
-				input.Medicine = append(input.Medicine, treatment.GetTreatmentByID.Medicine_id)
+		{
+			if antecedentDiseaseId != "" {
+				antecedentDisease, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, antecedentDiseaseId)
+				if err != nil {
+					return InitiateResponse{"", 500, errors.New("problem with antedisease ID")}
+				}
+				if antecedentDisease.GetAnteDiseaseByID.Still_relevant == true {
+					for _, treatmentIds := range antecedentDisease.GetAnteDiseaseByID.Treatment_ids {
+						treatment, err := graphql.GetTreatmentByID(context.Background(), gqlClient, treatmentIds)
+						if err != nil {
+							return InitiateResponse{"", 500, errors.New("problem with treatment ID")}
+						}
+						if treatment.GetTreatmentByID.Medicine_id != "" {
+							input.Medicine = append(input.Medicine, treatment.GetTreatmentByID.Medicine_id)
+						}
+					}
+				}
 			}
 		}
 	}

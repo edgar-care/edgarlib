@@ -14,12 +14,18 @@ func isSymptomTreated(symptom graphql.SessionSymptomInput, treatmentName string)
 	return false
 }
 
-func CheckTreatments(symptoms []graphql.SessionSymptomInput, medicines []string) []graphql.SessionSymptomInput {
+func CheckTreatments(symptoms []graphql.SessionSymptomInput, medicines []string) ([]graphql.SessionSymptomInput, error) {
 	gqlClient := graphql.CreateClient()
 	for _, medicineId := range medicines {
-		medicine, _ := graphql.GetMedicineByID(context.Background(), gqlClient, medicineId)
+		medicine, err := graphql.GetMedicineByID(context.Background(), gqlClient, medicineId)
+		if err != nil {
+			return nil, err
+		}
 		for _, symptomId := range medicine.GetMedicineByID.Treated_symptoms {
-			symptomT, _ := graphql.GetSymptomById(context.Background(), gqlClient, symptomId)
+			symptomT, err := graphql.GetSymptomById(context.Background(), gqlClient, symptomId)
+			if err != nil {
+				return nil, err
+			}
 			for i, symptomSy := range symptoms {
 				if symptomSy.Name == symptomT.GetSymptomById.Code && !isSymptomTreated(symptomSy, symptomT.GetSymptomById.Code) {
 					symptoms[i].Treated = append(symptoms[i].Treated, medicine.GetMedicineByID.Name)
@@ -27,5 +33,5 @@ func CheckTreatments(symptoms []graphql.SessionSymptomInput, medicines []string)
 			}
 		}
 	}
-	return symptoms
+	return symptoms, nil
 }
