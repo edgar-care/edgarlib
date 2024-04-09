@@ -3,13 +3,13 @@ package utils
 import (
 	"fmt"
 	"github.com/edgar-care/edgarlib/graphql"
-	"strconv"
 	"strings"
 )
 
 type Symptom struct {
 	Name    string `json:"symptom"`
 	Present *bool  `json:"present"`
+	Days    *int   `json:"days"`
 }
 
 func SymptomsToString(symptoms []Symptom) []string {
@@ -47,23 +47,23 @@ func StringToSymptoms(strings []string) []Symptom {
 func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion string, sentence string) ([]graphql.SessionSymptomInput, string, string) {
 
 	list := strings.Split(lastQuestion, " ")
-	var duration int
+	//var duration int
 	question := ""
 	nextLastQuestion := ""
 	var symptomName string
 
 	if list[0] == "duration" {
 		symptomName = list[1]
-		duration, _ = strconv.Atoi(sentence)
+		//duration, _ = strconv.Atoi(sentence)
 	}
-	for i, symptom := range symptoms {
+	for _, symptom := range symptoms {
 		if symptom.Duration == 0 && symptom.Presence == true && symptomName != symptom.Name {
 			question = "Depuis combien de jours souffrez-vous de " + symptom.Name
 			nextLastQuestion = "duration " + symptom.Name
 		}
-		if symptom.Name == symptomName {
-			symptoms[i].Duration = duration
-		}
+		//if symptom.Name == symptomName { // ICI
+		//	symptoms[i].Duration = duration
+		//}
 
 	}
 

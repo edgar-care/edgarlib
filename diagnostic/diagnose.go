@@ -17,13 +17,13 @@ type DiagnoseResponse struct {
 	Err      error
 }
 
-func nameInList(s utils.Symptom, symptoms []model.SessionSymptom) bool {
-	for _, symptom := range symptoms {
+func nameInList(s utils.Symptom, symptoms []model.SessionSymptom) (bool, int) {
+	for i, symptom := range symptoms {
 		if symptom.Name == s.Name {
-			return true
+			return true, i
 		}
 	}
-	return false
+	return false, 0
 }
 
 func Diagnose(id string, sentence string) DiagnoseResponse {
@@ -66,17 +66,34 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		questionSymptom = []string{}
 	}
 
-	if (len(questionSymptom) == 0) || (len(questionSymptom) != 0 && len(strings.Split(questionSymptom[0], " ")) == 1) {
-		newSymptoms = utils.CallNlp(sentence, questionSymptom)
+	var durSymptom *string
+	if session.GetSessionById.Last_question != "" && strings.Split(session.GetSessionById.Last_question, " ")[0] == "duration" {
+		durSymptom = &strings.Split(session.GetSessionById.Last_question, " ")[1]
+	}
+	var errCode int
+	newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom)
+	if errCode != 200 {
+		return DiagnoseResponse{
+			Code: errCode,
+			Err:  errors.New("NLP error, please try again"),
+		}
 	}
 
 	for _, s := range newSymptoms.Context {
-		if nameInList(s, symptoms) {
+		pres, ite := nameInList(s, symptoms)
+		if pres == true {
+			symptoms[ite].Duration = s.Days
 			continue
 		}
 		var newSessionSymptom model.SessionSymptom
 		newSessionSymptom.Name = s.Name
-		newSessionSymptom.Presence = s.Present
+		if s.Present == nil { // todo: temporaire le temps de changer les fonction graphql
+			f := false
+			newSessionSymptom.Presence = &f
+		} else {
+			newSessionSymptom.Presence = s.Present
+		}
+		newSessionSymptom.Duration = s.Days
 		symptoms = append(symptoms, newSessionSymptom)
 	}
 
@@ -110,14 +127,14 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		exam.Symptoms = []string{}
 		exam.Alert = []string{}
 		session.GetSessionById.Last_question = "describe symptoms"
-	} else if len(session.GetSessionById.Medicine) != 0 && session.GetSessionById.Medicine[0] == "CanonFlesh" {
-		exam.Question = "Avez-vous pris des médicaments récemment ?"
-		session.GetSessionById.Last_question = "describe medicines"
-		if len(session.GetSessionById.Medicine) > 1 {
-			session.GetSessionById.Medicine = session.GetSessionById.Medicine[1:]
-		} else {
-			session.GetSessionById.Medicine = []string{}
-		}
+		//} else if len(session.GetSessionById.Medicine) != 0 && session.GetSessionById.Medicine[0] == "CanonFlesh" { todo: uncomment CannonFlesh when this is enabled
+		//	exam.Question = "Avez-vous pris des médicaments récemment ?"
+		//	session.GetSessionById.Last_question = "describe medicines"
+		//	if len(session.GetSessionById.Medicine) > 1 {
+		//		session.GetSessionById.Medicine = session.GetSessionById.Medicine[1:]
+		//	} else {
+		//		session.GetSessionById.Medicine = []string{}
+		//	}
 
 	} else if exam.Question == "" && session.GetSessionById.Last_question == "" {
 		exam = utils.CallExam(symptoms)
@@ -129,12 +146,24 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		}
 
 		if len(session.GetSessionById.Medicine) > 0 {
-			symptomsinput = utils.CheckTreatments(symptomsinput, session.GetSessionById.Medicine)
+			symptomsinput, err = utils.CheckTreatments(symptomsinput, session.GetSessionById.Medicine)
+			if err != nil {
+				return DiagnoseResponse{
+					Code: 500,
+					Err:  errors.New("error during checkTreatment"),
+				}
+			}
 		}
 
 		if len(session.GetSessionById.Ante_diseases) > 0 {
 			var anteSymptomQuestion string
-			anteSymptomQuestion, anteSymptom = utils.CheckAnteDiseaseInSymptoms(session.GetSessionById)
+			anteSymptomQuestion, anteSymptom, err = utils.CheckAnteDiseaseInSymptoms(session.GetSessionById)
+			if err != nil {
+				return DiagnoseResponse{
+					Code: 400, //metter un code correct
+					Err:  errors.New("error during checkAnteDiseaseInSymptoms"),
+				}
+			}
 			if anteSymptom != "" {
 				exam.Question = anteSymptomQuestion
 				session.GetSessionById.Last_question = anteSymptom
@@ -160,7 +189,13 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	var diseasesinput []graphql.SessionDiseasesInput
 	if exam.Done == true {
-		diseasesinput = utils.GetSessionDiseases(symptoms)
+		diseasesinput, err = utils.GetSessionDiseases(symptoms)
+		if err != nil {
+			return DiagnoseResponse{
+				Code: 500,
+				Err:  errors.New("error during getSessionDiseases"),
+			}
+		}
 	}
 	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, diseasesinput, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Medicine, session.GetSessionById.Last_question, logs, session.GetSessionById.Alerts)
 	edgarlib.CheckError(err)
