@@ -4,11 +4,13 @@
 type SymptomsWeight {
     symptom: String!
     value: Float!
+    chronic: Boolean!
 }
 
 input SymptomsWeightInput {
     symptom: String!
     value: Float!
+    chronic: Boolean!
 }
 
 #  Session
@@ -128,10 +130,6 @@ type Symptom {
     id: ID!
     code: String!
     name: String!
-    location: String
-    duration: Int
-    acute: Int
-    subacute: Int
     chronic: Int
     symptom: [String!]!
     advice: String
@@ -522,10 +520,11 @@ type Mutation {
     deleteSession(id: String!): Boolean
 
     # Create a new symptom.
-    createSymptom(code: String!, name: String!, location: String, duration: Int, acute: Int, subacute: Int, chronic: Int, symptom: [String!]! ,advice: String, question: String!, question_basic: String!, question_duration: String!, question_ante: String!): Symptom
+
+    createSymptom(code: String!, name: String!, chronic: Int, symptom: [String!]! ,advice: String, question: String!, question_basic: String!, question_duration: String!, question_ante: String!): Symptom
 
     # Update a new symptom.
-    updateSymptom(id: String!, code: String, name: String, location: String, duration: Int, acute: Int, subacute: Int, chronic: Int, symptom: [String!], advice: String, question: String, question_basic: String, question_duration: String, question_ante: String): Symptom
+    updateSymptom(id: String!, code: String, name: String, chronic: Int, symptom: [String!], advice: String, question: String, question_basic: String, question_duration: String, question_ante: String): Symptom
 
     # Delete a symptom.
     deleteSymptom(id: String!): Boolean

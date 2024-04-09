@@ -511,21 +511,14 @@ func (r *mutationResolver) DeleteSession(ctx context.Context, id string) (*bool,
 }
 
 // CreateSymptom is the resolver for the createSymptom field.
-func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error) {
+func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error) {
 	newSymptom := bson.M{
-		"code":              code,
-		"name":              name,
-		"location":          location,
-		"duration":          duration,
-		"acute":             acute,
-		"subacute":          subacute,
-		"chronic":           chronic,
-		"symptom":           symptom,
-		"advice":            advice,
-		"question":          question,
-		"question_basic":    questionBasic,
-		"question_duration": questionDuration,
-		"question_ante":     questionAnte,
+		"code":     code,
+		"name":     name,
+		"chronic":  chronic,
+		"symptom":  symptom,
+		"advice":   advice,
+		"question": question,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").InsertOne(ctx, newSymptom)
@@ -533,26 +526,19 @@ func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name 
 		return nil, err
 	}
 	entity := model.Symptom{
-		ID:               res.InsertedID.(primitive.ObjectID).Hex(),
-		Code:             code,
-		Name:             name,
-		Location:         location,
-		Duration:         duration,
-		Acute:            acute,
-		Subacute:         subacute,
-		Chronic:          chronic,
-		Symptom:          symptom,
-		Advice:           advice,
-		Question:         question,
-		QuestionBasic:    questionBasic,
-		QuestionDuration: questionDuration,
-		QuestionAnte:     questionAnte,
+		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
+		Code:     code,
+		Name:     name,
+		Chronic:  chronic,
+		Symptom:  symptom,
+		Advice:   advice,
+		Question: question,
 	}
 	return &entity, err
 }
 
 // UpdateSymptom is the resolver for the updateSymptom field.
-func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) (*model.Symptom, error) {
+func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) (*model.Symptom, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -560,38 +546,24 @@ func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *s
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":               objId,
-		"code":              code,
-		"name":              name,
-		"location":          location,
-		"duration":          duration,
-		"acute":             acute,
-		"subacute":          subacute,
-		"chronic":           chronic,
-		"symptom":           symptom,
-		"advice":            advice,
-		"question":          question,
-		"question_basic":    questionBasic,
-		"question_duration": questionDuration,
-		"question_ante":     questionAnte,
+		"_id":      objId,
+		"code":     code,
+		"name":     name,
+		"chronic":  chronic,
+		"symptom":  symptom,
+		"advice":   advice,
+		"question": question,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").ReplaceOne(ctx, filter, updated)
 
 	return &model.Symptom{
-		ID:               id,
-		Code:             *code,
-		Name:             *name,
-		Location:         location,
-		Duration:         duration,
-		Acute:            acute,
-		Subacute:         subacute,
-		Chronic:          chronic,
-		Symptom:          symptom,
-		Advice:           advice,
-		Question:         *question,
-		QuestionBasic:    *questionBasic,
-		QuestionDuration: *questionDuration,
-		QuestionAnte:     *questionAnte,
+		ID:       id,
+		Code:     *code,
+		Name:     *name,
+		Chronic:  chronic,
+		Symptom:  symptom,
+		Advice:   advice,
+		Question: *question,
 	}, err
 }
 
