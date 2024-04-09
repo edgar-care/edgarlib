@@ -2942,13 +2942,13 @@ input SessionDiseasesInput {
 
 type NlpReportOutput {
     symptom: String!
-    present: Boolean!
+    present: Boolean
     days: Int
 }
 
 input NlpReportOutputInput {
     symptom: String!
-    present: Boolean!
+    present: Boolean
     days: Int
 }
 
@@ -13821,14 +13821,11 @@ func (ec *executionContext) _NlpReportOutput_present(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*bool)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_NlpReportOutput_present(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21948,7 +21945,7 @@ func (ec *executionContext) unmarshalInputNlpReportOutputInput(ctx context.Conte
 			it.Symptom = data
 		case "present":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("present"))
-			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -23317,9 +23314,6 @@ func (ec *executionContext) _NlpReportOutput(ctx context.Context, sel ast.Select
 			}
 		case "present":
 			out.Values[i] = ec._NlpReportOutput_present(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "days":
 			out.Values[i] = ec._NlpReportOutput_days(ctx, field, obj)
 		default:
