@@ -60,6 +60,29 @@ input NlpReportOutputInput {
     days: Int
 }
 
+type ChatParticipants {
+    participant_id: String!
+    last_seen: Int!
+}
+
+type ChatMessages {
+    owner_id: String!
+    message: String!
+    sended_time: Int!
+}
+
+input ChatParticipantsInput {
+    participant_id: String!
+    last_seen: Int!
+}
+
+input ChatMessagesInput {
+    owner_id: String!
+    message: String!
+    sended_time: Int!
+}
+
+
 ##  Entities  ----------------------------------------------------------------------------------------------------------
 
 # Patient entity
@@ -71,6 +94,7 @@ type Patient {
     medical_info_id: String
     document_ids: [String]
     treatment_follow_up_ids: [String]
+    chat_ids: [String]
 }
 
 # Doctor entity
@@ -83,6 +107,7 @@ type Doctor {
     address: Address!
     rendez_vous_ids: [String]
     patient_ids: [String]
+    chat_ids: [String]
 }
 
 type Address {
@@ -302,6 +327,13 @@ type NlpReport {
     computation_time: Int!
 }
 
+type Chat {
+    id: ID!
+    participants: [ChatParticipants!]!
+    messages: [ChatMessages!]!
+}
+
+
 ## Query  --------------------------------------------------------------------------------------------------------------
 
 type Query {
@@ -460,6 +492,12 @@ type Query {
     # Get NlpReports by version
     getNlpReportsByVersion(version: Int!): [NlpReport]
 
+    # Get Chats
+    getChats(id: String!): [Chat]
+
+    # Get chat by its id
+    getChatById(id: String!): Chat
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
@@ -469,7 +507,7 @@ type Mutation {
     createPatient(email: String!, password: String!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String]): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String]): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -478,7 +516,7 @@ type Mutation {
     createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!): Doctor
 
     # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput): Doctor #rendez_vous_id: String , slot_ids: [String]
+    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String]): Doctor #rendez_vous_id: String , slot_ids: [String]
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
@@ -635,6 +673,15 @@ type Mutation {
 
     # Create a new NlpReport
     createNlpReport(version: Int!, input_symptoms: [String!]!, input_sentence: String!, output: [NlpReportOutputInput!]!, computation_time: Int!): NlpReport
+
+    # Create a new Chat
+    createChat(participants: [ChatParticipantsInput!]!, messages: [ChatMessagesInput!]!): Chat
+
+    #Update a Chat
+    updateChat(id: String!, participants: [ChatParticipantsInput!], messages: [ChatMessagesInput!]): Chat
+
+    #Delete a Chat
+    deleteChat(id: String!): Boolean
 }
 
 

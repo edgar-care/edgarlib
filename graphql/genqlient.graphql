@@ -86,6 +86,7 @@ mutation CreateDoctor($email: String!, $password: String!, $name: String!, $firs
         }
         rendez_vous_ids
         patient_ids
+        chat_ids
     }
 }
 
@@ -119,6 +120,7 @@ mutation CreatePatient($email: String!, $password: String!){
         medical_info_id
         document_ids
         treatment_follow_up_ids
+        chat_ids
     }
 }
 
@@ -364,8 +366,8 @@ mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [S
     }
 }
 
-mutation UpdateDoctor($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!){
-    updateDoctor(id: $id, email: $email, password: $password, name:$name, firstname:$firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address){
+mutation UpdateDoctor($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!, $chat_ids: [String]){
+    updateDoctor(id: $id, email: $email, password: $password, name:$name, firstname:$firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address, chat_ids:$chat_ids){
         id
         email
         password
@@ -373,6 +375,7 @@ mutation UpdateDoctor($id: String!, $email: String, $password: String, $name: St
         firstname
         rendez_vous_ids
         patient_ids
+        chat_ids
         address {
             street
             zip_code
@@ -402,8 +405,8 @@ mutation UpdateNotification($id: String!, $token: String!, $message: String!, $t
     }
 }
 
-mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String]){
-    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids){
+mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String]){
+    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids, chat_ids:$chat_ids){
         id
         email
         password
@@ -411,6 +414,7 @@ mutation UpdatePatient($id: String!, $email: String, $password: String, $medical
         medical_info_id
         document_ids
         treatment_follow_up_ids
+        chat_ids
     }
 }
 
@@ -686,6 +690,7 @@ query GetDoctorByEmail($email: String!){
         }
         rendez_vous_ids
         patient_ids
+        chat_ids
     }
 }
 
@@ -704,6 +709,7 @@ query GetDoctorById($id: String!){
         }
         rendez_vous_ids
         patient_ids
+        chat_ids
     }
 }
 
@@ -735,6 +741,7 @@ query GetDoctors{
         }
         rendez_vous_ids
         patient_ids
+        chat_ids
     }
 }
 
@@ -789,6 +796,7 @@ query GetPatientByEmail($email: String!){
         medical_info_id
         document_ids
         treatment_follow_up_ids
+        chat_ids
     }
 }
 
@@ -801,6 +809,7 @@ query GetPatientById($id: String!){
         medical_info_id
         document_ids
         treatment_follow_up_ids
+        chat_ids
     }
 }
 
@@ -838,6 +847,7 @@ query GetPatients{
         medical_info_id
         document_ids
         treatment_follow_up_ids
+        chat_ids
     }
 }
 
@@ -1058,6 +1068,7 @@ query GetPatientsFromDoctorById($id: String!){
         medical_info_id
         document_ids
         treatment_follow_up_ids
+        chat_ids
     }
 }
 
@@ -1187,4 +1198,70 @@ mutation createNlpReport($version: Int!, $input_symptoms: [String!]!, $input_sen
         }
         computation_time
     }
+}
+
+
+query GetChats($id: String!){
+    getChats(id:$id){
+        id
+        participants {
+            participant_id
+            last_seen
+        }
+        messages {
+            owner_id
+            message
+            sended_time
+        }
+    }
+}
+
+query GetChatById($id: String!){
+    getChatById(id:$id){
+        id
+        participants {
+            participant_id
+            last_seen
+        }
+        messages {
+            owner_id
+            message
+            sended_time
+        }
+    }
+}
+
+
+mutation CreateChat($participants: [ChatParticipantsInput!]!, $messages: [ChatMessagesInput!]!) {
+    createChat(participants: $participants, messages: $messages) {
+        id
+        participants {
+            participant_id
+            last_seen
+        }
+        messages {
+            owner_id
+            message
+            sended_time
+        }
+    }
+}
+
+mutation UpdateChat($id: String!, $participants: [ChatParticipantsInput!], $messages: [ChatMessagesInput!]) {
+    updateChat(id: $id, participants: $participants, messages: $messages) {
+        id
+        participants {
+            participant_id
+            last_seen
+        }
+        messages {
+            owner_id
+            message
+            sended_time
+        }
+    }
+}
+
+mutation DeleteChat($id: String!){
+    deleteChat(id: $id)
 }

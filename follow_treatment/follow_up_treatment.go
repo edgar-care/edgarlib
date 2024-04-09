@@ -37,7 +37,7 @@ func CreateTreatmentFollowUp(input CreateNewFollowUpInput, patientID string) Cre
 		return CreateTreatmentFollowUpResponse{TreatmentFollowUp: model.TreatmentsFollowUp{}, Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, append(patient.GetPatientById.Treatment_follow_up_ids, followUp.CreateTreatmentsFollowUp.Id))
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, append(patient.GetPatientById.Treatment_follow_up_ids, followUp.CreateTreatmentsFollowUp.Id), patient.GetPatientById.Chat_ids)
 	if err != nil {
 		return CreateTreatmentFollowUpResponse{TreatmentFollowUp: model.TreatmentsFollowUp{}, Code: 500, Err: errors.New("unable to update patient")}
 	}
