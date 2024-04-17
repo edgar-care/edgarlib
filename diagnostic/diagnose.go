@@ -2,7 +2,6 @@ package diagnostic
 
 import (
 	"context"
-
 	"github.com/edgar-care/edgarlib"
 	"github.com/edgar-care/edgarlib/diagnostic/utils"
 	"github.com/edgar-care/edgarlib/graphql"
@@ -16,6 +15,15 @@ type DiagnoseResponse struct {
 	Err      error
 }
 
+func nameInList(s utils.Symptom, symptoms []model.SessionSymptom) bool {
+	for _, symptom := range symptoms {
+		if symptom.Name == s.Name {
+			return true
+		}
+	}
+	return false
+}
+
 func Diagnose(id string, sentence string) DiagnoseResponse {
 	gqlClient := graphql.CreateClient()
 	session, err := graphql.GetSessionById(context.Background(), gqlClient, id)
@@ -24,7 +32,13 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	for _, s := range session.GetSessionById.Symptoms {
 		var ns model.SessionSymptom
 		ns.Name = s.Name
-		ns.Presence = &s.Presence
+		var b bool
+		if s.Presence == true {
+			b = true
+		} else {
+			b = false
+		}
+		ns.Presence = &b
 		ns.Duration = &s.Duration
 		ns.Treated = s.Treated
 		symptoms = append(symptoms, ns)
@@ -47,6 +61,9 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	//todo: change the message when sentence has been sent to nlp but nothing has been found
 
 	for _, s := range newSymptoms.Context {
+		if nameInList(s, symptoms) {
+			continue
+		}
 		var newSessionSymptom model.SessionSymptom
 		newSessionSymptom.Name = s.Name
 		newSessionSymptom.Presence = s.Present

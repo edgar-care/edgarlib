@@ -57,22 +57,14 @@ mutation CreateDemoAccount($email: String!, $password: String!){
     }
 }
 
-mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_acute: [SymptomWeightInput!], $symptoms_subacute: [SymptomWeightInput!], $symptoms_chronic: [SymptomWeightInput!], $advice: String){
-    createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_acute: $symptoms_acute, symptoms_subacute: $symptoms_subacute, symptoms_chronic: $symptoms_chronic, advice: $advice){
+mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $advice: String){
+    createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice){
         id
         code
         name
         symptoms
-        symptoms_acute{
-            key
-            value
-        }
-        symptoms_subacute{
-            key
-            value
-        }
-        symptoms_chronic{
-            key
+        symptoms_weight{
+            symptom
             value
         }
         advice
@@ -356,22 +348,14 @@ mutation UpdateDemoAccount($id: String!, $email: String, $password: String){
     }
 }
 
-mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_acute: [SymptomWeightInput!], $symptoms_subacute: [SymptomWeightInput!], $symptoms_chronic: [SymptomWeightInput!], $advice: String){
-    updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_acute: $symptoms_acute, symptoms_subacute: $symptoms_subacute, symptoms_chronic: $symptoms_chronic, advice: $advice){
+mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $advice: String){
+    updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice){
         id
         code
         name
         symptoms
-        symptoms_acute{
-            key
-            value
-        }
-        symptoms_subacute{
-            key
-            value
-        }
-        symptoms_chronic{
-            key
+        symptoms_weight{
+            symptom
             value
         }
         advice
@@ -661,16 +645,8 @@ query GetDiseaseById($id: String!){
         code
         name
         symptoms
-        symptoms_acute{
-            key
-            value
-        }
-        symptoms_subacute{
-            key
-            value
-        }
-        symptoms_chronic{
-            key
+        symptoms_weight{
+            symptom
             value
         }
         advice
@@ -683,16 +659,8 @@ query GetDiseases{
         code
         name
         symptoms
-        symptoms_acute{
-            key
-            value
-        }
-        symptoms_subacute{
-            key
-            value
-        }
-        symptoms_chronic{
-            key
+        symptoms_weight{
+            symptom
             value
         }
         advice

@@ -101,14 +101,12 @@ type ComplexityRoot struct {
 	}
 
 	Disease struct {
-		Advice           func(childComplexity int) int
-		Code             func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Symptoms         func(childComplexity int) int
-		SymptomsAcute    func(childComplexity int) int
-		SymptomsChronic  func(childComplexity int) int
-		SymptomsSubacute func(childComplexity int) int
+		Advice         func(childComplexity int) int
+		Code           func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Name           func(childComplexity int) int
+		Symptoms       func(childComplexity int) int
+		SymptomsWeight func(childComplexity int) int
 	}
 
 	Doctor struct {
@@ -173,7 +171,7 @@ type ComplexityRoot struct {
 		CreateAnteDisease        func(childComplexity int, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) int
 		CreateAnteFamily         func(childComplexity int, name string, disease []string) int
 		CreateDemoAccount        func(childComplexity int, email string, password string) int
-		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
+		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) int
 		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
 		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
 		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) int
@@ -213,7 +211,7 @@ type ComplexityRoot struct {
 		UpdateAnteDisease        func(childComplexity int, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) int
 		UpdateAnteFamily         func(childComplexity int, id string, name *string, disease []string) int
 		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
-		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) int
+		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) int
 		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) int
 		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
 		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) int
@@ -365,9 +363,9 @@ type ComplexityRoot struct {
 		Symptom  func(childComplexity int) int
 	}
 
-	SymptomWeight struct {
-		Key   func(childComplexity int) int
-		Value func(childComplexity int) int
+	SymptomsWeight struct {
+		Symptom func(childComplexity int) int
+		Value   func(childComplexity int) int
 	}
 
 	TestAccount struct {
@@ -414,8 +412,8 @@ type MutationResolver interface {
 	CreateSymptom(ctx context.Context, code string, name string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question string) (*model.Symptom, error)
 	UpdateSymptom(ctx context.Context, id string, code *string, name *string, location *string, duration *int, acute *int, subacute *int, chronic *int, symptom []string, advice *string, question *string) (*model.Symptom, error)
 	DeleteSymptom(ctx context.Context, id string) (*bool, error)
-	CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) (*model.Disease, error)
-	UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsAcute []*model.SymptomWeightInput, symptomsSubacute []*model.SymptomWeightInput, symptomsChronic []*model.SymptomWeightInput, advice *string) (*model.Disease, error)
+	CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error)
+	UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error)
 	DeleteDisease(ctx context.Context, id string) (*bool, error)
 	CreateNotification(ctx context.Context, token string, message string, title string) (*model.Notification, error)
 	UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error)
@@ -791,26 +789,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Disease.Symptoms(childComplexity), true
 
-	case "Disease.symptoms_acute":
-		if e.complexity.Disease.SymptomsAcute == nil {
+	case "Disease.symptoms_weight":
+		if e.complexity.Disease.SymptomsWeight == nil {
 			break
 		}
 
-		return e.complexity.Disease.SymptomsAcute(childComplexity), true
-
-	case "Disease.symptoms_chronic":
-		if e.complexity.Disease.SymptomsChronic == nil {
-			break
-		}
-
-		return e.complexity.Disease.SymptomsChronic(childComplexity), true
-
-	case "Disease.symptoms_subacute":
-		if e.complexity.Disease.SymptomsSubacute == nil {
-			break
-		}
-
-		return e.complexity.Disease.SymptomsSubacute(childComplexity), true
+		return e.complexity.Disease.SymptomsWeight(childComplexity), true
 
 	case "Doctor.address":
 		if e.complexity.Doctor.Address == nil {
@@ -1153,7 +1137,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDisease(childComplexity, args["code"].(string), args["name"].(string), args["symptoms"].([]string), args["symptoms_acute"].([]*model.SymptomWeightInput), args["symptoms_subacute"].([]*model.SymptomWeightInput), args["symptoms_chronic"].([]*model.SymptomWeightInput), args["advice"].(*string)), true
+		return e.complexity.Mutation.CreateDisease(childComplexity, args["code"].(string), args["name"].(string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["advice"].(*string)), true
 
 	case "Mutation.createDoctor":
 		if e.complexity.Mutation.CreateDoctor == nil {
@@ -1633,7 +1617,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDisease(childComplexity, args["id"].(string), args["code"].(*string), args["name"].(*string), args["symptoms"].([]string), args["symptoms_acute"].([]*model.SymptomWeightInput), args["symptoms_subacute"].([]*model.SymptomWeightInput), args["symptoms_chronic"].([]*model.SymptomWeightInput), args["advice"].(*string)), true
+		return e.complexity.Mutation.UpdateDisease(childComplexity, args["id"].(string), args["code"].(*string), args["name"].(*string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["advice"].(*string)), true
 
 	case "Mutation.updateDoctor":
 		if e.complexity.Mutation.UpdateDoctor == nil {
@@ -2688,19 +2672,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Symptom.Symptom(childComplexity), true
 
-	case "SymptomWeight.key":
-		if e.complexity.SymptomWeight.Key == nil {
+	case "SymptomsWeight.symptom":
+		if e.complexity.SymptomsWeight.Symptom == nil {
 			break
 		}
 
-		return e.complexity.SymptomWeight.Key(childComplexity), true
+		return e.complexity.SymptomsWeight.Symptom(childComplexity), true
 
-	case "SymptomWeight.value":
-		if e.complexity.SymptomWeight.Value == nil {
+	case "SymptomsWeight.value":
+		if e.complexity.SymptomsWeight.Value == nil {
 			break
 		}
 
-		return e.complexity.SymptomWeight.Value(childComplexity), true
+		return e.complexity.SymptomsWeight.Value(childComplexity), true
 
 	case "TestAccount.email":
 		if e.complexity.TestAccount.Email == nil {
@@ -2801,7 +2785,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputNlpReportOutputInput,
 		ec.unmarshalInputSessionDiseasesInput,
 		ec.unmarshalInputSessionSymptomInput,
-		ec.unmarshalInputSymptomWeightInput,
+		ec.unmarshalInputSymptomsWeightInput,
 		ec.unmarshalInputTreatmentInput,
 	)
 	first := true
@@ -2903,13 +2887,13 @@ var sources = []*ast.Source{
 	{Name: "../schema.graphql", Input: `##  Substructures  -----------------------------------------------------------------------------------------------------
 
 #  Disease
-type SymptomWeight {
-    key: String!
+type SymptomsWeight {
+    symptom: String!
     value: Float!
 }
 
-input SymptomWeightInput {
-    key: String!
+input SymptomsWeightInput {
+    symptom: String!
     value: Float!
 }
 
@@ -3044,9 +3028,7 @@ type Disease {
 	code: String!
     name: String!
     symptoms: [String!]!
-    symptoms_acute: [SymptomWeight!]
-    symptoms_subacute: [SymptomWeight!]
-    symptoms_chronic: [SymptomWeight!]
+    symptoms_weight: [SymptomsWeight!]
     advice: String
 }
 
@@ -3430,10 +3412,10 @@ type Mutation {
     deleteSymptom(id: String!): Boolean
 
     # Create a new disease.
-    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_acute: [SymptomWeightInput!], symptoms_subacute: [SymptomWeightInput!], symptoms_chronic: [SymptomWeightInput!], advice: String): Disease
+    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], advice: String): Disease
 
     # Update a new disease.
-    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_acute: [SymptomWeightInput!], symptoms_subacute: [SymptomWeightInput!], symptoms_chronic: [SymptomWeightInput!], advice: String): Disease
+    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], advice: String): Disease
 
     # Delete a disease.
     deleteDisease(id: String!): Boolean
@@ -3875,42 +3857,24 @@ func (ec *executionContext) field_Mutation_createDisease_args(ctx context.Contex
 		}
 	}
 	args["symptoms"] = arg2
-	var arg3 []*model.SymptomWeightInput
-	if tmp, ok := rawArgs["symptoms_acute"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_acute"))
-		arg3, err = ec.unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInputᚄ(ctx, tmp)
+	var arg3 []*model.SymptomsWeightInput
+	if tmp, ok := rawArgs["symptoms_weight"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
+		arg3, err = ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["symptoms_acute"] = arg3
-	var arg4 []*model.SymptomWeightInput
-	if tmp, ok := rawArgs["symptoms_subacute"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_subacute"))
-		arg4, err = ec.unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms_subacute"] = arg4
-	var arg5 []*model.SymptomWeightInput
-	if tmp, ok := rawArgs["symptoms_chronic"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_chronic"))
-		arg5, err = ec.unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms_chronic"] = arg5
-	var arg6 *string
+	args["symptoms_weight"] = arg3
+	var arg4 *string
 	if tmp, ok := rawArgs["advice"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["advice"] = arg6
+	args["advice"] = arg4
 	return args, nil
 }
 
@@ -5276,42 +5240,24 @@ func (ec *executionContext) field_Mutation_updateDisease_args(ctx context.Contex
 		}
 	}
 	args["symptoms"] = arg3
-	var arg4 []*model.SymptomWeightInput
-	if tmp, ok := rawArgs["symptoms_acute"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_acute"))
-		arg4, err = ec.unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInputᚄ(ctx, tmp)
+	var arg4 []*model.SymptomsWeightInput
+	if tmp, ok := rawArgs["symptoms_weight"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
+		arg4, err = ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["symptoms_acute"] = arg4
-	var arg5 []*model.SymptomWeightInput
-	if tmp, ok := rawArgs["symptoms_subacute"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_subacute"))
-		arg5, err = ec.unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms_subacute"] = arg5
-	var arg6 []*model.SymptomWeightInput
-	if tmp, ok := rawArgs["symptoms_chronic"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_chronic"))
-		arg6, err = ec.unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms_chronic"] = arg6
-	var arg7 *string
+	args["symptoms_weight"] = arg4
+	var arg5 *string
 	if tmp, ok := rawArgs["advice"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["advice"] = arg7
+	args["advice"] = arg5
 	return args, nil
 }
 
@@ -8220,8 +8166,8 @@ func (ec *executionContext) fieldContext_Disease_symptoms(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Disease_symptoms_acute(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Disease_symptoms_acute(ctx, field)
+func (ec *executionContext) _Disease_symptoms_weight(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Disease_symptoms_weight(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -8234,7 +8180,7 @@ func (ec *executionContext) _Disease_symptoms_acute(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.SymptomsAcute, nil
+		return obj.SymptomsWeight, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8243,12 +8189,12 @@ func (ec *executionContext) _Disease_symptoms_acute(ctx context.Context, field g
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.SymptomWeight)
+	res := resTmp.([]*model.SymptomsWeight)
 	fc.Result = res
-	return ec.marshalOSymptomWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightᚄ(ctx, field.Selections, res)
+	return ec.marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Disease_symptoms_acute(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Disease_symptoms_weight(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Disease",
 		Field:      field,
@@ -8256,106 +8202,12 @@ func (ec *executionContext) fieldContext_Disease_symptoms_acute(ctx context.Cont
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "key":
-				return ec.fieldContext_SymptomWeight_key(ctx, field)
+			case "symptom":
+				return ec.fieldContext_SymptomsWeight_symptom(ctx, field)
 			case "value":
-				return ec.fieldContext_SymptomWeight_value(ctx, field)
+				return ec.fieldContext_SymptomsWeight_value(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type SymptomWeight", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Disease_symptoms_subacute(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Disease_symptoms_subacute(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.SymptomsSubacute, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.SymptomWeight)
-	fc.Result = res
-	return ec.marshalOSymptomWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Disease_symptoms_subacute(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Disease",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "key":
-				return ec.fieldContext_SymptomWeight_key(ctx, field)
-			case "value":
-				return ec.fieldContext_SymptomWeight_value(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SymptomWeight", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Disease_symptoms_chronic(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Disease_symptoms_chronic(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.SymptomsChronic, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.SymptomWeight)
-	fc.Result = res
-	return ec.marshalOSymptomWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Disease_symptoms_chronic(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Disease",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "key":
-				return ec.fieldContext_SymptomWeight_key(ctx, field)
-			case "value":
-				return ec.fieldContext_SymptomWeight_value(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SymptomWeight", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type SymptomsWeight", field.Name)
 		},
 	}
 	return fc, nil
@@ -11380,7 +11232,7 @@ func (ec *executionContext) _Mutation_createDisease(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDisease(rctx, fc.Args["code"].(string), fc.Args["name"].(string), fc.Args["symptoms"].([]string), fc.Args["symptoms_acute"].([]*model.SymptomWeightInput), fc.Args["symptoms_subacute"].([]*model.SymptomWeightInput), fc.Args["symptoms_chronic"].([]*model.SymptomWeightInput), fc.Args["advice"].(*string))
+		return ec.resolvers.Mutation().CreateDisease(rctx, fc.Args["code"].(string), fc.Args["name"].(string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["advice"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11410,12 +11262,8 @@ func (ec *executionContext) fieldContext_Mutation_createDisease(ctx context.Cont
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Disease_symptoms(ctx, field)
-			case "symptoms_acute":
-				return ec.fieldContext_Disease_symptoms_acute(ctx, field)
-			case "symptoms_subacute":
-				return ec.fieldContext_Disease_symptoms_subacute(ctx, field)
-			case "symptoms_chronic":
-				return ec.fieldContext_Disease_symptoms_chronic(ctx, field)
+			case "symptoms_weight":
+				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -11450,7 +11298,7 @@ func (ec *executionContext) _Mutation_updateDisease(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDisease(rctx, fc.Args["id"].(string), fc.Args["code"].(*string), fc.Args["name"].(*string), fc.Args["symptoms"].([]string), fc.Args["symptoms_acute"].([]*model.SymptomWeightInput), fc.Args["symptoms_subacute"].([]*model.SymptomWeightInput), fc.Args["symptoms_chronic"].([]*model.SymptomWeightInput), fc.Args["advice"].(*string))
+		return ec.resolvers.Mutation().UpdateDisease(rctx, fc.Args["id"].(string), fc.Args["code"].(*string), fc.Args["name"].(*string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["advice"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11480,12 +11328,8 @@ func (ec *executionContext) fieldContext_Mutation_updateDisease(ctx context.Cont
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Disease_symptoms(ctx, field)
-			case "symptoms_acute":
-				return ec.fieldContext_Disease_symptoms_acute(ctx, field)
-			case "symptoms_subacute":
-				return ec.fieldContext_Disease_symptoms_subacute(ctx, field)
-			case "symptoms_chronic":
-				return ec.fieldContext_Disease_symptoms_chronic(ctx, field)
+			case "symptoms_weight":
+				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -15640,12 +15484,8 @@ func (ec *executionContext) fieldContext_Query_getDiseaseById(ctx context.Contex
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Disease_symptoms(ctx, field)
-			case "symptoms_acute":
-				return ec.fieldContext_Disease_symptoms_acute(ctx, field)
-			case "symptoms_subacute":
-				return ec.fieldContext_Disease_symptoms_subacute(ctx, field)
-			case "symptoms_chronic":
-				return ec.fieldContext_Disease_symptoms_chronic(ctx, field)
+			case "symptoms_weight":
+				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -15775,12 +15615,8 @@ func (ec *executionContext) fieldContext_Query_getDiseases(ctx context.Context, 
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
 				return ec.fieldContext_Disease_symptoms(ctx, field)
-			case "symptoms_acute":
-				return ec.fieldContext_Disease_symptoms_acute(ctx, field)
-			case "symptoms_subacute":
-				return ec.fieldContext_Disease_symptoms_subacute(ctx, field)
-			case "symptoms_chronic":
-				return ec.fieldContext_Disease_symptoms_chronic(ctx, field)
+			case "symptoms_weight":
+				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -19469,8 +19305,8 @@ func (ec *executionContext) fieldContext_Symptom_question(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _SymptomWeight_key(ctx context.Context, field graphql.CollectedField, obj *model.SymptomWeight) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SymptomWeight_key(ctx, field)
+func (ec *executionContext) _SymptomsWeight_symptom(ctx context.Context, field graphql.CollectedField, obj *model.SymptomsWeight) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SymptomsWeight_symptom(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -19483,7 +19319,7 @@ func (ec *executionContext) _SymptomWeight_key(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Key, nil
+		return obj.Symptom, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -19500,9 +19336,9 @@ func (ec *executionContext) _SymptomWeight_key(ctx context.Context, field graphq
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SymptomWeight_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_SymptomsWeight_symptom(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SymptomWeight",
+		Object:     "SymptomsWeight",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -19513,8 +19349,8 @@ func (ec *executionContext) fieldContext_SymptomWeight_key(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _SymptomWeight_value(ctx context.Context, field graphql.CollectedField, obj *model.SymptomWeight) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SymptomWeight_value(ctx, field)
+func (ec *executionContext) _SymptomsWeight_value(ctx context.Context, field graphql.CollectedField, obj *model.SymptomsWeight) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SymptomsWeight_value(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -19544,9 +19380,9 @@ func (ec *executionContext) _SymptomWeight_value(ctx context.Context, field grap
 	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SymptomWeight_value(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_SymptomsWeight_value(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SymptomWeight",
+		Object:     "SymptomsWeight",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -22152,27 +21988,27 @@ func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Contex
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputSymptomWeightInput(ctx context.Context, obj interface{}) (model.SymptomWeightInput, error) {
-	var it model.SymptomWeightInput
+func (ec *executionContext) unmarshalInputSymptomsWeightInput(ctx context.Context, obj interface{}) (model.SymptomsWeightInput, error) {
+	var it model.SymptomsWeightInput
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"key", "value"}
+	fieldsInOrder := [...]string{"symptom", "value"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "key":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
+		case "symptom":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptom"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Key = data
+			it.Symptom = data
 		case "value":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
 			data, err := ec.unmarshalNFloat2float64(ctx, v)
@@ -22655,12 +22491,8 @@ func (ec *executionContext) _Disease(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "symptoms_acute":
-			out.Values[i] = ec._Disease_symptoms_acute(ctx, field, obj)
-		case "symptoms_subacute":
-			out.Values[i] = ec._Disease_symptoms_subacute(ctx, field, obj)
-		case "symptoms_chronic":
-			out.Values[i] = ec._Disease_symptoms_chronic(ctx, field, obj)
+		case "symptoms_weight":
+			out.Values[i] = ec._Disease_symptoms_weight(ctx, field, obj)
 		case "advice":
 			out.Values[i] = ec._Disease_advice(ctx, field, obj)
 		default:
@@ -24911,24 +24743,24 @@ func (ec *executionContext) _Symptom(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
-var symptomWeightImplementors = []string{"SymptomWeight"}
+var symptomsWeightImplementors = []string{"SymptomsWeight"}
 
-func (ec *executionContext) _SymptomWeight(ctx context.Context, sel ast.SelectionSet, obj *model.SymptomWeight) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, symptomWeightImplementors)
+func (ec *executionContext) _SymptomsWeight(ctx context.Context, sel ast.SelectionSet, obj *model.SymptomsWeight) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, symptomsWeightImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("SymptomWeight")
-		case "key":
-			out.Values[i] = ec._SymptomWeight_key(ctx, field, obj)
+			out.Values[i] = graphql.MarshalString("SymptomsWeight")
+		case "symptom":
+			out.Values[i] = ec._SymptomsWeight_symptom(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "value":
-			out.Values[i] = ec._SymptomWeight_value(ctx, field, obj)
+			out.Values[i] = ec._SymptomsWeight_value(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -26181,18 +26013,18 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) marshalNSymptomWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeight(ctx context.Context, sel ast.SelectionSet, v *model.SymptomWeight) graphql.Marshaler {
+func (ec *executionContext) marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeight(ctx context.Context, sel ast.SelectionSet, v *model.SymptomsWeight) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._SymptomWeight(ctx, sel, v)
+	return ec._SymptomsWeight(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSymptomWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInput(ctx context.Context, v interface{}) (*model.SymptomWeightInput, error) {
-	res, err := ec.unmarshalInputSymptomWeightInput(ctx, v)
+func (ec *executionContext) unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInput(ctx context.Context, v interface{}) (*model.SymptomsWeightInput, error) {
+	res, err := ec.unmarshalInputSymptomsWeightInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -27751,7 +27583,7 @@ func (ec *executionContext) marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedg
 	return ec._Symptom(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSymptomWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SymptomWeight) graphql.Marshaler {
+func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SymptomsWeight) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -27778,7 +27610,7 @@ func (ec *executionContext) marshalOSymptomWeight2ᚕᚖgithubᚗcomᚋedgarᚑc
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSymptomWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeight(ctx, sel, v[i])
+			ret[i] = ec.marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeight(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -27798,7 +27630,7 @@ func (ec *executionContext) marshalOSymptomWeight2ᚕᚖgithubᚗcomᚋedgarᚑc
 	return ret
 }
 
-func (ec *executionContext) unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInputᚄ(ctx context.Context, v interface{}) ([]*model.SymptomWeightInput, error) {
+func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInputᚄ(ctx context.Context, v interface{}) ([]*model.SymptomsWeightInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -27807,10 +27639,10 @@ func (ec *executionContext) unmarshalOSymptomWeightInput2ᚕᚖgithubᚗcomᚋed
 		vSlice = graphql.CoerceList(v)
 	}
 	var err error
-	res := make([]*model.SymptomWeightInput, len(vSlice))
+	res := make([]*model.SymptomsWeightInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSymptomWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomWeightInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
