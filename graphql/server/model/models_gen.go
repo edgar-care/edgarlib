@@ -70,14 +70,12 @@ type DemoAccount struct {
 }
 
 type Disease struct {
-	ID               string           `json:"id" bson:"_id"`
-	Code             string           `json:"code" bson:"code"`
-	Name             string           `json:"name" bson:"name"`
-	Symptoms         []string         `json:"symptoms" bson:"symptoms"`
-	SymptomsAcute    []*SymptomWeight `json:"symptoms_acute,omitempty" bson:"symptoms_acute"`
-	SymptomsSubacute []*SymptomWeight `json:"symptoms_subacute,omitempty" bson:"symptoms_subacute"`
-	SymptomsChronic  []*SymptomWeight `json:"symptoms_chronic,omitempty" bson:"symptoms_chronic"`
-	Advice           *string          `json:"advice,omitempty" bson:"advice"`
+	ID             string            `json:"id" bson:"_id"`
+	Code           string            `json:"code" bson:"code"`
+	Name           string            `json:"name" bson:"name"`
+	Symptoms       []string          `json:"symptoms" bson:"symptoms"`
+	SymptomsWeight []*SymptomsWeight `json:"symptoms_weight,omitempty" bson:"symptoms_weight"`
+	Advice         *string           `json:"advice,omitempty" bson:"advice"`
 }
 
 type Doctor struct {
@@ -261,14 +259,14 @@ type Symptom struct {
 	Question string   `json:"question" bson:"question"`
 }
 
-type SymptomWeight struct {
-	Key   string  `json:"key" bson:"key"`
-	Value float64 `json:"value" bson:"value"`
+type SymptomsWeight struct {
+	Symptom string  `json:"symptom" bson:"symptom"`
+	Value   float64 `json:"value" bson:"value"`
 }
 
-type SymptomWeightInput struct {
-	Key   string  `json:"key" bson:"key"`
-	Value float64 `json:"value" bson:"value"`
+type SymptomsWeightInput struct {
+	Symptom string  `json:"symptom" bson:"symptom"`
+	Value   float64 `json:"value" bson:"value"`
 }
 
 type TestAccount struct {

@@ -13,7 +13,12 @@ type ExamResponse struct {
 }
 
 func Exam(context []model.SessionSymptom) ExamResponse {
-	question, possibleSymptoms, isDone := GuessQuestion(context)
+	var question string
+	var possibleSymptoms []string
+	mappedDiseaseCoverage, isDone := Calculi(context)
+	if isDone == false {
+		question, possibleSymptoms = GuessQuestion(mappedDiseaseCoverage)
+	}
 	alert, err := CheckAlerts(context)
 	if err != nil {
 		return ExamResponse{Code: 500, Err: err}
