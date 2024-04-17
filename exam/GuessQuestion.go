@@ -7,19 +7,19 @@ import (
 	"sort"
 )
 
-type diseaseCoverage struct {
-	disease           string
-	percentage        float64
-	potentialQuestion string
+type DiseaseCoverage struct {
+	Disease           string
+	Percentage        float64
+	PotentialQuestion string
 }
 
-type ByCoverage []diseaseCoverage
+type ByCoverage []DiseaseCoverage
 
 func (a ByCoverage) Len() int           { return len(a) }
 func (a ByCoverage) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByCoverage) Less(i, j int) bool { return a[i].percentage > a[j].percentage }
+func (a ByCoverage) Less(i, j int) bool { return a[i].Percentage > a[j].Percentage }
 
-func calculPercentage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease) diseaseCoverage {
+func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease) DiseaseCoverage {
 	var potentialQuestionSymptom string
 	var buf string
 	percentage := 0.0
@@ -46,7 +46,7 @@ func calculPercentage(context []model.SessionSymptom, disease graphql.GetDisease
 		}
 	}
 
-	return diseaseCoverage{disease: disease.Code, percentage: percentage, potentialQuestion: potentialQuestionSymptom}
+	return DiseaseCoverage{Disease: disease.Code, Percentage: percentage, PotentialQuestion: potentialQuestionSymptom}
 }
 
 func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptomsSymptom) string {
@@ -58,29 +58,29 @@ func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptom
 	return "Est-ce que vous avez ce symptôme: " + symptomName + " ?"
 }
 
-func GuessQuestion(mapped []diseaseCoverage) (string, []string) {
+func GuessQuestion(mapped []DiseaseCoverage) (string, []string) {
 	gqlClient := graphql.CreateClient()
 	symptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
 	i := 0
 
-	for mapped[i].potentialQuestion == "" {
+	for mapped[i].PotentialQuestion == "" {
 		i++
 	}
 
-	return getTheQuestion(mapped[i].potentialQuestion, symptoms.GetSymptoms), []string{mapped[i].potentialQuestion}
+	return getTheQuestion(mapped[i].PotentialQuestion, symptoms.GetSymptoms), []string{mapped[i].PotentialQuestion}
 }
 
-func Calculi(sessionContext []model.SessionSymptom) ([]diseaseCoverage, bool) {
+func Calculi(sessionContext []model.SessionSymptom) ([]DiseaseCoverage, bool) {
 	gqlClient := graphql.CreateClient()
 	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
-	mapped := make([]diseaseCoverage, len(diseases.GetDiseases))
+	mapped := make([]DiseaseCoverage, len(diseases.GetDiseases))
 	for i, e := range diseases.GetDiseases {
-		mapped[i] = calculPercentage(sessionContext, e)
+		mapped[i] = CalculPercentage(sessionContext, e)
 	}
 	sort.Sort(ByCoverage(mapped))
 
 	for _, disease := range mapped {
-		if disease.percentage > 0.7 {
+		if disease.Percentage > 0.7 {
 			return mapped, true
 		}
 	}
