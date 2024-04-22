@@ -13,17 +13,17 @@ type nlpRequestBody struct {
 	Symptoms []string `json:"symptoms"`
 }
 
-type nlpResponseBody struct {
+type NlpResponseBody struct {
 	Context []Symptom `json:"context"`
 }
 
-func CallNlp(sentence string, symptoms []string) nlpResponseBody {
+func CallNlp(sentence string, symptoms []string) NlpResponseBody {
 	var rBody = nlpRequestBody{
 		Input:    sentence,
 		Symptoms: symptoms,
 	}
 
-	var respBody nlpResponseBody
+	var respBody NlpResponseBody
 
 	if sentence == "" {
 		return respBody

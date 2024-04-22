@@ -1,6 +1,11 @@
 package utils
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/edgar-care/edgarlib/graphql"
+	"strconv"
+	"strings"
+)
 
 type Symptom struct {
 	Name    string `json:"symptom"`
@@ -37,4 +42,30 @@ func StringToSymptoms(strings []string) []Symptom {
 		}
 	}
 	return newSymptoms
+}
+
+func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion string, sentence string) ([]graphql.SessionSymptomInput, string, string) {
+
+	list := strings.Split(lastQuestion, " ")
+	var duration int
+	question := ""
+	nextLastQuestion := ""
+	var symptomName string
+
+	if list[0] == "duration" {
+		symptomName = list[1]
+		duration, _ = strconv.Atoi(sentence)
+	}
+	for i, symptom := range symptoms {
+		if symptom.Duration == 0 && symptom.Presence == true && symptomName != symptom.Name {
+			question = "Depuis combien de jours souffrez-vous de " + symptom.Name
+			nextLastQuestion = "duration " + symptom.Name
+		}
+		if symptom.Name == symptomName {
+			symptoms[i].Duration = duration
+		}
+
+	}
+
+	return symptoms, question, nextLastQuestion
 }
