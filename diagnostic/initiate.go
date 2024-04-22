@@ -17,7 +17,14 @@ type InitiateResponse struct {
 func Initiate(id string) InitiateResponse {
 	gqlClient := graphql.CreateClient()
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
+	if err != nil {
+		return InitiateResponse{"", 400, errors.New("unable to get patient")}
+	}
+
 	patientInfos, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, patient.GetPatientById.Medical_info_id)
+	if err != nil {
+		return InitiateResponse{"", 400, errors.New("unable to get patient medical infos")}
+	}
 
 	var input model.Session
 	input.Age = patientInfos.GetMedicalFolderById.Birthdate
