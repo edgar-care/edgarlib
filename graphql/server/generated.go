@@ -235,6 +235,7 @@ type ComplexityRoot struct {
 	}
 
 	NlpReportOutput struct {
+		Days    func(childComplexity int) int
 		Present func(childComplexity int) int
 		Symptom func(childComplexity int) int
 	}
@@ -1793,6 +1794,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NlpReport.Version(childComplexity), true
 
+	case "NlpReportOutput.days":
+		if e.complexity.NlpReportOutput.Days == nil {
+			break
+		}
+
+		return e.complexity.NlpReportOutput.Days(childComplexity), true
+
 	case "NlpReportOutput.present":
 		if e.complexity.NlpReportOutput.Present == nil {
 			break
@@ -2935,11 +2943,13 @@ input SessionDiseasesInput {
 type NlpReportOutput {
     symptom: String!
     present: Boolean!
+    days: Int
 }
 
 input NlpReportOutputInput {
     symptom: String!
     present: Boolean!
+    days: Int
 }
 
 ##  Entities  ----------------------------------------------------------------------------------------------------------
@@ -13693,6 +13703,8 @@ func (ec *executionContext) fieldContext_NlpReport_output(ctx context.Context, f
 				return ec.fieldContext_NlpReportOutput_symptom(ctx, field)
 			case "present":
 				return ec.fieldContext_NlpReportOutput_present(ctx, field)
+			case "days":
+				return ec.fieldContext_NlpReportOutput_days(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NlpReportOutput", field.Name)
 		},
@@ -13827,6 +13839,47 @@ func (ec *executionContext) fieldContext_NlpReportOutput_present(ctx context.Con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReportOutput_days(ctx context.Context, field graphql.CollectedField, obj *model.NlpReportOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReportOutput_days(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Days, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReportOutput_days(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReportOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -21879,7 +21932,7 @@ func (ec *executionContext) unmarshalInputNlpReportOutputInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"symptom", "present"}
+	fieldsInOrder := [...]string{"symptom", "present", "days"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -21900,6 +21953,13 @@ func (ec *executionContext) unmarshalInputNlpReportOutputInput(ctx context.Conte
 				return it, err
 			}
 			it.Present = data
+		case "days":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("days"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Days = data
 		}
 	}
 
@@ -23260,6 +23320,8 @@ func (ec *executionContext) _NlpReportOutput(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "days":
+			out.Values[i] = ec._NlpReportOutput_days(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

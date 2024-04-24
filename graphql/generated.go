@@ -3390,6 +3390,7 @@ const (
 type NlpReportOutputInput struct {
 	Symptom string `json:"symptom"`
 	Present bool   `json:"present"`
+	Days    int    `json:"days"`
 }
 
 // GetSymptom returns NlpReportOutputInput.Symptom, and is useful for accessing the field via an interface.
@@ -3397,6 +3398,9 @@ func (v *NlpReportOutputInput) GetSymptom() string { return v.Symptom }
 
 // GetPresent returns NlpReportOutputInput.Present, and is useful for accessing the field via an interface.
 func (v *NlpReportOutputInput) GetPresent() bool { return v.Present }
+
+// GetDays returns NlpReportOutputInput.Days, and is useful for accessing the field via an interface.
+func (v *NlpReportOutputInput) GetDays() int { return v.Days }
 
 type OnboardingStatus string
 
