@@ -167,11 +167,13 @@ type NlpReport struct {
 type NlpReportOutput struct {
 	Symptom string `json:"symptom" bson:"symptom"`
 	Present bool   `json:"present" bson:"present"`
+	Days    *int   `json:"days,omitempty" bson:"days"`
 }
 
 type NlpReportOutputInput struct {
 	Symptom string `json:"symptom" bson:"symptom"`
 	Present bool   `json:"present" bson:"present"`
+	Days    *int   `json:"days,omitempty" bson:"days"`
 }
 
 type Notification struct {
