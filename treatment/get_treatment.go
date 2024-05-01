@@ -15,7 +15,7 @@ type GetTreatmentByIdResponse struct {
 }
 
 type GetTreatmentsResponse struct {
-	Antedisease model.AnteDisease
+	Antedisease []model.AnteDisease
 	Treatments  []model.Treatment
 	Code        int
 	Err         error
@@ -83,7 +83,7 @@ func GetTreatmentById(id string, patientID string) GetTreatmentByIdResponse {
 func GetTreatments(patientID string) GetTreatmentsResponse {
 	gqlClient := graphql.CreateClient()
 	var res []model.Treatment
-	var anteDisease model.AnteDisease
+	var anteDisease []model.AnteDisease
 
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
 	if err != nil {
@@ -129,12 +129,11 @@ func GetTreatments(patientID string) GetTreatmentsResponse {
 				MedicineID: treatment.GetTreatmentByID.Medicine_id,
 			})
 		}
-		anteDisease := model.AnteDisease{
+		anteDisease = append(anteDisease, model.AnteDisease{
 			ID:            antedisease.GetAnteDiseaseByID.Id,
 			Name:          antedisease.GetAnteDiseaseByID.Name,
 			StillRelevant: antedisease.GetAnteDiseaseByID.Still_relevant,
-		}
-		return GetTreatmentsResponse{Treatments: res, Antedisease: anteDisease, Code: 200, Err: nil}
+		})
 	}
 	return GetTreatmentsResponse{Treatments: res, Antedisease: anteDisease, Code: 200, Err: nil}
 }
