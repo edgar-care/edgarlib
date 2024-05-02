@@ -2,6 +2,7 @@ package diagnostic
 
 import (
 	"context"
+	"errors"
 	"github.com/edgar-care/edgarlib"
 	"github.com/edgar-care/edgarlib/diagnostic/utils"
 	"github.com/edgar-care/edgarlib/graphql"
@@ -28,6 +29,12 @@ func nameInList(s utils.Symptom, symptoms []model.SessionSymptom) bool {
 func Diagnose(id string, sentence string) DiagnoseResponse {
 	gqlClient := graphql.CreateClient()
 	session, err := graphql.GetSessionById(context.Background(), gqlClient, id)
+	if err != nil {
+		return DiagnoseResponse{
+			Code: 400,
+			Err:  errors.New("id does not correspond to a session"),
+		}
+	}
 
 	var symptoms []model.SessionSymptom
 	for _, s := range session.GetSessionById.Symptoms {
@@ -103,7 +110,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		exam.Symptoms = []string{}
 		exam.Alert = []string{}
 		session.GetSessionById.Last_question = "describe symptoms"
-	} else if session.GetSessionById.Medicine[0] == "CanonFlesh" {
+	} else if len(session.GetSessionById.Medicine) != 0 && session.GetSessionById.Medicine[0] == "CanonFlesh" {
 		exam.Question = "Avez-vous pris des médicaments récemment ?"
 		session.GetSessionById.Last_question = "describe medicines"
 		if len(session.GetSessionById.Medicine) > 1 {
@@ -155,7 +162,6 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	if exam.Done == true {
 		diseasesinput = utils.GetSessionDiseases(symptoms)
 	}
-
 	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, diseasesinput, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Medicine, session.GetSessionById.Last_question, logs, session.GetSessionById.Alerts)
 	edgarlib.CheckError(err)
 	return DiagnoseResponse{
