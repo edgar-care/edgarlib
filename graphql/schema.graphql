@@ -48,13 +48,13 @@ input SessionDiseasesInput {
 
 type NlpReportOutput {
     symptom: String!
-    present: Boolean!
+    present: Boolean
     days: Int
 }
 
 input NlpReportOutputInput {
     symptom: String!
-    present: Boolean!
+    present: Boolean
     days: Int
 }
 
