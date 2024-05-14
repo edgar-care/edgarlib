@@ -1,6 +1,8 @@
 package exam
 
-import "github.com/edgar-care/edgarlib/graphql/server/model"
+import (
+	"github.com/edgar-care/edgarlib/graphql/server/model"
+)
 
 type ExamResponse struct {
 	Context  []model.SessionSymptom
@@ -17,7 +19,11 @@ func Exam(context []model.SessionSymptom) ExamResponse {
 	var possibleSymptoms []string
 	mappedDiseaseCoverage, isDone := Calculi(context)
 	if isDone == false {
-		question, possibleSymptoms = GuessQuestion(mappedDiseaseCoverage)
+		var err error
+		question, possibleSymptoms, err = GuessQuestion(mappedDiseaseCoverage)
+		if err != nil {
+			return ExamResponse{Code: 500, Err: err}
+		}
 	}
 	alert, err := CheckAlerts(context)
 	if err != nil {
