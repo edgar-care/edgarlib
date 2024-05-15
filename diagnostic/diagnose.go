@@ -53,10 +53,8 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		symptoms = append(symptoms, ns)
 	}
 
-	if session.GetSessionById.Last_question != "" {
-		tmp := graphql.GetSessionByIdGetSessionByIdSessionLogs{Question: session.GetSessionById.Last_question, Answer: sentence}
-		session.GetSessionById.Logs = append(session.GetSessionById.Logs, tmp)
-		edgarlib.CheckError(err)
+	if len(session.GetSessionById.Logs) > 0 {
+		session.GetSessionById.Logs[len(session.GetSessionById.Logs)-1].Answer = sentence
 	}
 
 	questionSymptom := []string{session.GetSessionById.Last_question}
@@ -138,6 +136,14 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	} else if exam.Question == "" && session.GetSessionById.Last_question == "" {
 		exam = utils.CallExam(symptoms)
+		if exam.Err != nil {
+			if exam.Err != nil {
+				return DiagnoseResponse{
+					Code: 500,
+					Err:  exam.Err,
+				}
+			}
+		}
 
 		if len(exam.Alert) > 0 {
 			for _, alert := range exam.Alert {
@@ -179,11 +185,17 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		}
 	}
 
-	var logs []graphql.LogsInput
+	var logs []graphql.LogsInput //
 	for _, log := range session.GetSessionById.Logs {
 		logs = append(logs, graphql.LogsInput{
 			Question: log.Question,
 			Answer:   log.Answer,
+		})
+	}
+	if !exam.Done {
+		logs = append(logs, graphql.LogsInput{
+			Question: exam.Question,
+			Answer:   "",
 		})
 	}
 

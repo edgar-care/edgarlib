@@ -136,6 +136,9 @@ type Symptom {
     symptom: [String!]!
     advice: String
     question: String!
+    question_basic: String!
+    question_duration: String!
+    question_ante: String!
 }
 
 # Disease entity
@@ -519,10 +522,10 @@ type Mutation {
     deleteSession(id: String!): Boolean
 
     # Create a new symptom.
-    createSymptom(code: String!, name: String!, location: String, duration: Int, acute: Int, subacute: Int, chronic: Int, symptom: [String!]! ,advice: String, question: String!): Symptom
+    createSymptom(code: String!, name: String!, location: String, duration: Int, acute: Int, subacute: Int, chronic: Int, symptom: [String!]! ,advice: String, question: String!, question_basic: String!, question_duration: String!, question_ante: String!): Symptom
 
     # Update a new symptom.
-    updateSymptom(id: String!, code: String, name: String, location: String, duration: Int, acute: Int, subacute: Int, chronic: Int, symptom: [String!], advice: String, question: String): Symptom
+    updateSymptom(id: String!, code: String, name: String, location: String, duration: Int, acute: Int, subacute: Int, chronic: Int, symptom: [String!], advice: String, question: String, question_basic: String, question_duration: String, question_ante: String): Symptom
 
     # Delete a symptom.
     deleteSymptom(id: String!): Boolean
