@@ -722,17 +722,20 @@ func (v *CreateSessionResponse) GetCreateSession() CreateSessionCreateSession { 
 
 // CreateSymptomCreateSymptom includes the requested fields of the GraphQL type Symptom.
 type CreateSymptomCreateSymptom struct {
-	Id       string   `json:"id"`
-	Code     string   `json:"code"`
-	Name     string   `json:"name"`
-	Location string   `json:"location"`
-	Duration int      `json:"duration"`
-	Acute    int      `json:"acute"`
-	Subacute int      `json:"subacute"`
-	Chronic  int      `json:"chronic"`
-	Symptom  []string `json:"symptom"`
-	Advice   string   `json:"advice"`
-	Question string   `json:"question"`
+	Id                string   `json:"id"`
+	Code              string   `json:"code"`
+	Name              string   `json:"name"`
+	Location          string   `json:"location"`
+	Duration          int      `json:"duration"`
+	Acute             int      `json:"acute"`
+	Subacute          int      `json:"subacute"`
+	Chronic           int      `json:"chronic"`
+	Symptom           []string `json:"symptom"`
+	Advice            string   `json:"advice"`
+	Question          string   `json:"question"`
+	Question_basic    string   `json:"question_basic"`
+	Question_duration string   `json:"question_duration"`
+	Question_ante     string   `json:"question_ante"`
 }
 
 // GetId returns CreateSymptomCreateSymptom.Id, and is useful for accessing the field via an interface.
@@ -767,6 +770,15 @@ func (v *CreateSymptomCreateSymptom) GetAdvice() string { return v.Advice }
 
 // GetQuestion returns CreateSymptomCreateSymptom.Question, and is useful for accessing the field via an interface.
 func (v *CreateSymptomCreateSymptom) GetQuestion() string { return v.Question }
+
+// GetQuestion_basic returns CreateSymptomCreateSymptom.Question_basic, and is useful for accessing the field via an interface.
+func (v *CreateSymptomCreateSymptom) GetQuestion_basic() string { return v.Question_basic }
+
+// GetQuestion_duration returns CreateSymptomCreateSymptom.Question_duration, and is useful for accessing the field via an interface.
+func (v *CreateSymptomCreateSymptom) GetQuestion_duration() string { return v.Question_duration }
+
+// GetQuestion_ante returns CreateSymptomCreateSymptom.Question_ante, and is useful for accessing the field via an interface.
+func (v *CreateSymptomCreateSymptom) GetQuestion_ante() string { return v.Question_ante }
 
 // CreateSymptomResponse is returned by CreateSymptom on success.
 type CreateSymptomResponse struct {
@@ -2987,17 +2999,20 @@ func (v *GetSlotsResponse) GetGetSlots() []GetSlotsGetSlotsRdv { return v.GetSlo
 
 // GetSymptomByIdGetSymptomByIdSymptom includes the requested fields of the GraphQL type Symptom.
 type GetSymptomByIdGetSymptomByIdSymptom struct {
-	Id       string   `json:"id"`
-	Code     string   `json:"code"`
-	Name     string   `json:"name"`
-	Location string   `json:"location"`
-	Duration int      `json:"duration"`
-	Acute    int      `json:"acute"`
-	Subacute int      `json:"subacute"`
-	Chronic  int      `json:"chronic"`
-	Symptom  []string `json:"symptom"`
-	Advice   string   `json:"advice"`
-	Question string   `json:"question"`
+	Id                string   `json:"id"`
+	Code              string   `json:"code"`
+	Name              string   `json:"name"`
+	Location          string   `json:"location"`
+	Duration          int      `json:"duration"`
+	Acute             int      `json:"acute"`
+	Subacute          int      `json:"subacute"`
+	Chronic           int      `json:"chronic"`
+	Symptom           []string `json:"symptom"`
+	Advice            string   `json:"advice"`
+	Question          string   `json:"question"`
+	Question_basic    string   `json:"question_basic"`
+	Question_duration string   `json:"question_duration"`
+	Question_ante     string   `json:"question_ante"`
 }
 
 // GetId returns GetSymptomByIdGetSymptomByIdSymptom.Id, and is useful for accessing the field via an interface.
@@ -3033,6 +3048,17 @@ func (v *GetSymptomByIdGetSymptomByIdSymptom) GetAdvice() string { return v.Advi
 // GetQuestion returns GetSymptomByIdGetSymptomByIdSymptom.Question, and is useful for accessing the field via an interface.
 func (v *GetSymptomByIdGetSymptomByIdSymptom) GetQuestion() string { return v.Question }
 
+// GetQuestion_basic returns GetSymptomByIdGetSymptomByIdSymptom.Question_basic, and is useful for accessing the field via an interface.
+func (v *GetSymptomByIdGetSymptomByIdSymptom) GetQuestion_basic() string { return v.Question_basic }
+
+// GetQuestion_duration returns GetSymptomByIdGetSymptomByIdSymptom.Question_duration, and is useful for accessing the field via an interface.
+func (v *GetSymptomByIdGetSymptomByIdSymptom) GetQuestion_duration() string {
+	return v.Question_duration
+}
+
+// GetQuestion_ante returns GetSymptomByIdGetSymptomByIdSymptom.Question_ante, and is useful for accessing the field via an interface.
+func (v *GetSymptomByIdGetSymptomByIdSymptom) GetQuestion_ante() string { return v.Question_ante }
+
 // GetSymptomByIdResponse is returned by GetSymptomById on success.
 type GetSymptomByIdResponse struct {
 	GetSymptomById GetSymptomByIdGetSymptomByIdSymptom `json:"getSymptomById"`
@@ -3045,17 +3071,20 @@ func (v *GetSymptomByIdResponse) GetGetSymptomById() GetSymptomByIdGetSymptomByI
 
 // GetSymptomsGetSymptomsSymptom includes the requested fields of the GraphQL type Symptom.
 type GetSymptomsGetSymptomsSymptom struct {
-	Id       string   `json:"id"`
-	Code     string   `json:"code"`
-	Name     string   `json:"name"`
-	Location string   `json:"location"`
-	Duration int      `json:"duration"`
-	Acute    int      `json:"acute"`
-	Subacute int      `json:"subacute"`
-	Chronic  int      `json:"chronic"`
-	Symptom  []string `json:"symptom"`
-	Advice   string   `json:"advice"`
-	Question string   `json:"question"`
+	Id                string   `json:"id"`
+	Code              string   `json:"code"`
+	Name              string   `json:"name"`
+	Location          string   `json:"location"`
+	Duration          int      `json:"duration"`
+	Acute             int      `json:"acute"`
+	Subacute          int      `json:"subacute"`
+	Chronic           int      `json:"chronic"`
+	Symptom           []string `json:"symptom"`
+	Advice            string   `json:"advice"`
+	Question          string   `json:"question"`
+	Question_basic    string   `json:"question_basic"`
+	Question_duration string   `json:"question_duration"`
+	Question_ante     string   `json:"question_ante"`
 }
 
 // GetId returns GetSymptomsGetSymptomsSymptom.Id, and is useful for accessing the field via an interface.
@@ -3090,6 +3119,15 @@ func (v *GetSymptomsGetSymptomsSymptom) GetAdvice() string { return v.Advice }
 
 // GetQuestion returns GetSymptomsGetSymptomsSymptom.Question, and is useful for accessing the field via an interface.
 func (v *GetSymptomsGetSymptomsSymptom) GetQuestion() string { return v.Question }
+
+// GetQuestion_basic returns GetSymptomsGetSymptomsSymptom.Question_basic, and is useful for accessing the field via an interface.
+func (v *GetSymptomsGetSymptomsSymptom) GetQuestion_basic() string { return v.Question_basic }
+
+// GetQuestion_duration returns GetSymptomsGetSymptomsSymptom.Question_duration, and is useful for accessing the field via an interface.
+func (v *GetSymptomsGetSymptomsSymptom) GetQuestion_duration() string { return v.Question_duration }
+
+// GetQuestion_ante returns GetSymptomsGetSymptomsSymptom.Question_ante, and is useful for accessing the field via an interface.
+func (v *GetSymptomsGetSymptomsSymptom) GetQuestion_ante() string { return v.Question_ante }
 
 // GetSymptomsResponse is returned by GetSymptoms on success.
 type GetSymptomsResponse struct {
@@ -4116,17 +4154,20 @@ func (v *UpdateSymptomResponse) GetUpdateSymptom() UpdateSymptomUpdateSymptom { 
 
 // UpdateSymptomUpdateSymptom includes the requested fields of the GraphQL type Symptom.
 type UpdateSymptomUpdateSymptom struct {
-	Id       string   `json:"id"`
-	Code     string   `json:"code"`
-	Name     string   `json:"name"`
-	Location string   `json:"location"`
-	Duration int      `json:"duration"`
-	Acute    int      `json:"acute"`
-	Subacute int      `json:"subacute"`
-	Chronic  int      `json:"chronic"`
-	Symptom  []string `json:"symptom"`
-	Advice   string   `json:"advice"`
-	Question string   `json:"question"`
+	Id                string   `json:"id"`
+	Code              string   `json:"code"`
+	Name              string   `json:"name"`
+	Location          string   `json:"location"`
+	Duration          int      `json:"duration"`
+	Acute             int      `json:"acute"`
+	Subacute          int      `json:"subacute"`
+	Chronic           int      `json:"chronic"`
+	Symptom           []string `json:"symptom"`
+	Advice            string   `json:"advice"`
+	Question          string   `json:"question"`
+	Question_basic    string   `json:"question_basic"`
+	Question_duration string   `json:"question_duration"`
+	Question_ante     string   `json:"question_ante"`
 }
 
 // GetId returns UpdateSymptomUpdateSymptom.Id, and is useful for accessing the field via an interface.
@@ -4161,6 +4202,15 @@ func (v *UpdateSymptomUpdateSymptom) GetAdvice() string { return v.Advice }
 
 // GetQuestion returns UpdateSymptomUpdateSymptom.Question, and is useful for accessing the field via an interface.
 func (v *UpdateSymptomUpdateSymptom) GetQuestion() string { return v.Question }
+
+// GetQuestion_basic returns UpdateSymptomUpdateSymptom.Question_basic, and is useful for accessing the field via an interface.
+func (v *UpdateSymptomUpdateSymptom) GetQuestion_basic() string { return v.Question_basic }
+
+// GetQuestion_duration returns UpdateSymptomUpdateSymptom.Question_duration, and is useful for accessing the field via an interface.
+func (v *UpdateSymptomUpdateSymptom) GetQuestion_duration() string { return v.Question_duration }
+
+// GetQuestion_ante returns UpdateSymptomUpdateSymptom.Question_ante, and is useful for accessing the field via an interface.
+func (v *UpdateSymptomUpdateSymptom) GetQuestion_ante() string { return v.Question_ante }
 
 // UpdateTestAccountResponse is returned by UpdateTestAccount on success.
 type UpdateTestAccountResponse struct {
@@ -4622,16 +4672,19 @@ func (v *__CreateSessionInput) GetAlerts() []string { return v.Alerts }
 
 // __CreateSymptomInput is used internally by genqlient
 type __CreateSymptomInput struct {
-	Code     string   `json:"code"`
-	Name     string   `json:"name"`
-	Location string   `json:"location"`
-	Duration int      `json:"duration"`
-	Acute    int      `json:"acute"`
-	Subacute int      `json:"subacute"`
-	Chronic  int      `json:"chronic"`
-	Symptom  []string `json:"symptom"`
-	Advice   string   `json:"advice"`
-	Question string   `json:"question"`
+	Code              string   `json:"code"`
+	Name              string   `json:"name"`
+	Location          string   `json:"location"`
+	Duration          int      `json:"duration"`
+	Acute             int      `json:"acute"`
+	Subacute          int      `json:"subacute"`
+	Chronic           int      `json:"chronic"`
+	Symptom           []string `json:"symptom"`
+	Advice            string   `json:"advice"`
+	Question          string   `json:"question"`
+	Question_basic    string   `json:"question_basic"`
+	Question_duration string   `json:"question_duration"`
+	Question_ante     string   `json:"question_ante"`
 }
 
 // GetCode returns __CreateSymptomInput.Code, and is useful for accessing the field via an interface.
@@ -4663,6 +4716,15 @@ func (v *__CreateSymptomInput) GetAdvice() string { return v.Advice }
 
 // GetQuestion returns __CreateSymptomInput.Question, and is useful for accessing the field via an interface.
 func (v *__CreateSymptomInput) GetQuestion() string { return v.Question }
+
+// GetQuestion_basic returns __CreateSymptomInput.Question_basic, and is useful for accessing the field via an interface.
+func (v *__CreateSymptomInput) GetQuestion_basic() string { return v.Question_basic }
+
+// GetQuestion_duration returns __CreateSymptomInput.Question_duration, and is useful for accessing the field via an interface.
+func (v *__CreateSymptomInput) GetQuestion_duration() string { return v.Question_duration }
+
+// GetQuestion_ante returns __CreateSymptomInput.Question_ante, and is useful for accessing the field via an interface.
+func (v *__CreateSymptomInput) GetQuestion_ante() string { return v.Question_ante }
 
 // __CreateTestAccountInput is used internally by genqlient
 type __CreateTestAccountInput struct {
@@ -5552,17 +5614,20 @@ func (v *__UpdateSessionInput) GetAlerts() []string { return v.Alerts }
 
 // __UpdateSymptomInput is used internally by genqlient
 type __UpdateSymptomInput struct {
-	Id       string   `json:"id"`
-	Code     string   `json:"code"`
-	Name     string   `json:"name"`
-	Location string   `json:"location"`
-	Duration int      `json:"duration"`
-	Acute    int      `json:"acute"`
-	Subacute int      `json:"subacute"`
-	Chronic  int      `json:"chronic"`
-	Symptom  []string `json:"symptom"`
-	Advice   string   `json:"advice"`
-	Question string   `json:"question"`
+	Id                string   `json:"id"`
+	Code              string   `json:"code"`
+	Name              string   `json:"name"`
+	Location          string   `json:"location"`
+	Duration          int      `json:"duration"`
+	Acute             int      `json:"acute"`
+	Subacute          int      `json:"subacute"`
+	Chronic           int      `json:"chronic"`
+	Symptom           []string `json:"symptom"`
+	Advice            string   `json:"advice"`
+	Question          string   `json:"question"`
+	Question_basic    string   `json:"question_basic"`
+	Question_duration string   `json:"question_duration"`
+	Question_ante     string   `json:"question_ante"`
 }
 
 // GetId returns __UpdateSymptomInput.Id, and is useful for accessing the field via an interface.
@@ -5597,6 +5662,15 @@ func (v *__UpdateSymptomInput) GetAdvice() string { return v.Advice }
 
 // GetQuestion returns __UpdateSymptomInput.Question, and is useful for accessing the field via an interface.
 func (v *__UpdateSymptomInput) GetQuestion() string { return v.Question }
+
+// GetQuestion_basic returns __UpdateSymptomInput.Question_basic, and is useful for accessing the field via an interface.
+func (v *__UpdateSymptomInput) GetQuestion_basic() string { return v.Question_basic }
+
+// GetQuestion_duration returns __UpdateSymptomInput.Question_duration, and is useful for accessing the field via an interface.
+func (v *__UpdateSymptomInput) GetQuestion_duration() string { return v.Question_duration }
+
+// GetQuestion_ante returns __UpdateSymptomInput.Question_ante, and is useful for accessing the field via an interface.
+func (v *__UpdateSymptomInput) GetQuestion_ante() string { return v.Question_ante }
 
 // __UpdateTestAccountInput is used internally by genqlient
 type __UpdateTestAccountInput struct {
@@ -6484,8 +6558,8 @@ func CreateSession(
 
 // The query or mutation executed by CreateSymptom.
 const CreateSymptom_Operation = `
-mutation CreateSymptom ($code: String!, $name: String!, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!]!, $advice: String, $question: String!) {
-	createSymptom(code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question) {
+mutation CreateSymptom ($code: String!, $name: String!, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!]!, $advice: String, $question: String!, $question_basic: String!, $question_duration: String!, $question_ante: String!) {
+	createSymptom(code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante) {
 		id
 		code
 		name
@@ -6497,6 +6571,9 @@ mutation CreateSymptom ($code: String!, $name: String!, $location: String, $dura
 		symptom
 		advice
 		question
+		question_basic
+		question_duration
+		question_ante
 	}
 }
 `
@@ -6514,21 +6591,27 @@ func CreateSymptom(
 	symptom []string,
 	advice string,
 	question string,
+	question_basic string,
+	question_duration string,
+	question_ante string,
 ) (*CreateSymptomResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateSymptom",
 		Query:  CreateSymptom_Operation,
 		Variables: &__CreateSymptomInput{
-			Code:     code,
-			Name:     name,
-			Location: location,
-			Duration: duration,
-			Acute:    acute,
-			Subacute: subacute,
-			Chronic:  chronic,
-			Symptom:  symptom,
-			Advice:   advice,
-			Question: question,
+			Code:              code,
+			Name:              name,
+			Location:          location,
+			Duration:          duration,
+			Acute:             acute,
+			Subacute:          subacute,
+			Chronic:           chronic,
+			Symptom:           symptom,
+			Advice:            advice,
+			Question:          question,
+			Question_basic:    question_basic,
+			Question_duration: question_duration,
+			Question_ante:     question_ante,
 		},
 	}
 	var err error
@@ -8998,6 +9081,9 @@ query GetSymptomById ($id: String!) {
 		symptom
 		advice
 		question
+		question_basic
+		question_duration
+		question_ante
 	}
 }
 `
@@ -9043,6 +9129,9 @@ query GetSymptoms {
 		symptom
 		advice
 		question
+		question_basic
+		question_duration
+		question_ante
 	}
 }
 `
@@ -10104,8 +10193,8 @@ func UpdateSession(
 
 // The query or mutation executed by UpdateSymptom.
 const UpdateSymptom_Operation = `
-mutation UpdateSymptom ($id: String!, $code: String, $name: String, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!], $advice: String, $question: String) {
-	updateSymptom(id: $id, code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question) {
+mutation UpdateSymptom ($id: String!, $code: String, $name: String, $location: String, $duration: Int, $acute: Int, $subacute: Int, $chronic: Int, $symptom: [String!], $advice: String, $question: String!, $question_basic: String, $question_duration: String, $question_ante: String) {
+	updateSymptom(id: $id, code: $code, name: $name, location: $location, duration: $duration, acute: $acute, subacute: $subacute, chronic: $chronic, symptom: $symptom, advice: $advice, question: $question, question_basic: $question_basic, question_duration: $question_duration, question_ante: $question_ante) {
 		id
 		code
 		name
@@ -10117,6 +10206,9 @@ mutation UpdateSymptom ($id: String!, $code: String, $name: String, $location: S
 		symptom
 		advice
 		question
+		question_basic
+		question_duration
+		question_ante
 	}
 }
 `
@@ -10135,22 +10227,28 @@ func UpdateSymptom(
 	symptom []string,
 	advice string,
 	question string,
+	question_basic string,
+	question_duration string,
+	question_ante string,
 ) (*UpdateSymptomResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateSymptom",
 		Query:  UpdateSymptom_Operation,
 		Variables: &__UpdateSymptomInput{
-			Id:       id,
-			Code:     code,
-			Name:     name,
-			Location: location,
-			Duration: duration,
-			Acute:    acute,
-			Subacute: subacute,
-			Chronic:  chronic,
-			Symptom:  symptom,
-			Advice:   advice,
-			Question: question,
+			Id:                id,
+			Code:              code,
+			Name:              name,
+			Location:          location,
+			Duration:          duration,
+			Acute:             acute,
+			Subacute:          subacute,
+			Chronic:           chronic,
+			Symptom:           symptom,
+			Advice:            advice,
+			Question:          question,
+			Question_basic:    question_basic,
+			Question_duration: question_duration,
+			Question_ante:     question_ante,
 		},
 	}
 	var err error

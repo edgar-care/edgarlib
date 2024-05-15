@@ -248,17 +248,20 @@ type SessionSymptomInput struct {
 }
 
 type Symptom struct {
-	ID       string   `json:"id" bson:"_id"`
-	Code     string   `json:"code" bson:"code"`
-	Name     string   `json:"name" bson:"name"`
-	Location *string  `json:"location,omitempty" bson:"location"`
-	Duration *int     `json:"duration,omitempty" bson:"duration"`
-	Acute    *int     `json:"acute,omitempty" bson:"acute"`
-	Subacute *int     `json:"subacute,omitempty" bson:"subacute"`
-	Chronic  *int     `json:"chronic,omitempty" bson:"chronic"`
-	Symptom  []string `json:"symptom" bson:"symptom"`
-	Advice   *string  `json:"advice,omitempty" bson:"advice"`
-	Question string   `json:"question" bson:"question"`
+	ID               string   `json:"id" bson:"_id"`
+	Code             string   `json:"code" bson:"code"`
+	Name             string   `json:"name" bson:"name"`
+	Location         *string  `json:"location,omitempty" bson:"location"`
+	Duration         *int     `json:"duration,omitempty" bson:"duration"`
+	Acute            *int     `json:"acute,omitempty" bson:"acute"`
+	Subacute         *int     `json:"subacute,omitempty" bson:"subacute"`
+	Chronic          *int     `json:"chronic,omitempty" bson:"chronic"`
+	Symptom          []string `json:"symptom" bson:"symptom"`
+	Advice           *string  `json:"advice,omitempty" bson:"advice"`
+	Question         string   `json:"question" bson:"question"`
+	QuestionBasic    string   `json:"question_basic" bson:"question_basic"`
+	QuestionDuration string   `json:"question_duration" bson:"question_duration"`
+	QuestionAnte     string   `json:"question_ante" bson:"question_ante"`
 }
 
 type SymptomsWeight struct {

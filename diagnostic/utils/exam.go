@@ -15,6 +15,7 @@ type ExamResponseBody struct {
 	Question string                 `json:"question"`
 	Symptoms []string               `json:"symptoms"`
 	Alert    []string               `json:"alert"`
+	Err      error                  `json:"err"`
 }
 
 func CallExam(context []model.SessionSymptom) ExamResponseBody {
@@ -34,6 +35,9 @@ func CallExam(context []model.SessionSymptom) ExamResponseBody {
 	//edgarlib.CheckError(err)
 
 	examr := exam.Exam(context)
+	if examr.Err != nil {
+		return ExamResponseBody{Err: examr.Err}
+	}
 
 	var respBody ExamResponseBody
 	respBody.Context = examr.Context
@@ -41,6 +45,7 @@ func CallExam(context []model.SessionSymptom) ExamResponseBody {
 	respBody.Question = examr.Question
 	respBody.Symptoms = examr.Symptoms
 	respBody.Alert = examr.Alert
+	respBody.Err = nil
 
 	return respBody
 }

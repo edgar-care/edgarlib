@@ -54,22 +54,29 @@ func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDisease
 func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptomsSymptom) string {
 	for _, symptom := range symptoms {
 		if symptomName == symptom.Code {
-			return symptom.Question
+			if symptom.Question != "" {
+				return symptom.Question
+			} else {
+				return "Est-ce que vous avez ce symptôme: " + symptom.Code + " ?"
+			}
 		}
 	}
 	return "Est-ce que vous avez ce symptôme: " + symptomName + " ?"
 }
 
-func GuessQuestion(mapped []DiseaseCoverage) (string, []string) {
+func GuessQuestion(mapped []DiseaseCoverage) (string, []string, error) {
 	gqlClient := graphql.CreateClient()
-	symptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
+	symptoms, err := graphql.GetSymptoms(context.Background(), gqlClient)
+	if err != nil {
+		return "", nil, err
+	}
 	i := 0
 
 	for mapped[i].PotentialQuestion == "" {
 		i++
 	}
 
-	return getTheQuestion(mapped[i].PotentialQuestion, symptoms.GetSymptoms), []string{mapped[i].PotentialQuestion}
+	return getTheQuestion(mapped[i].PotentialQuestion, symptoms.GetSymptoms), []string{mapped[i].PotentialQuestion}, nil
 }
 
 func Calculi(sessionContext []model.SessionSymptom) ([]DiseaseCoverage, bool) {
