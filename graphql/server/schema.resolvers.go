@@ -513,12 +513,15 @@ func (r *mutationResolver) DeleteSession(ctx context.Context, id string) (*bool,
 // CreateSymptom is the resolver for the createSymptom field.
 func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error) {
 	newSymptom := bson.M{
-		"code":     code,
-		"name":     name,
-		"chronic":  chronic,
-		"symptom":  symptom,
-		"advice":   advice,
-		"question": question,
+		"code":              code,
+		"name":              name,
+		"chronic":           chronic,
+		"symptom":           symptom,
+		"advice":            advice,
+		"question":          question,
+		"question_basic":    questionBasic,
+		"question_duration": questionDuration,
+		"question_ante":     questionAnte,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").InsertOne(ctx, newSymptom)
@@ -526,13 +529,16 @@ func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name 
 		return nil, err
 	}
 	entity := model.Symptom{
-		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
-		Code:     code,
-		Name:     name,
-		Chronic:  chronic,
-		Symptom:  symptom,
-		Advice:   advice,
-		Question: question,
+		ID:               res.InsertedID.(primitive.ObjectID).Hex(),
+		Code:             code,
+		Name:             name,
+		Chronic:          chronic,
+		Symptom:          symptom,
+		Advice:           advice,
+		Question:         question,
+		QuestionBasic:    questionBasic,
+		QuestionDuration: questionDuration,
+		QuestionAnte:     questionAnte,
 	}
 	return &entity, err
 }
@@ -546,24 +552,30 @@ func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *s
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":      objId,
-		"code":     code,
-		"name":     name,
-		"chronic":  chronic,
-		"symptom":  symptom,
-		"advice":   advice,
-		"question": question,
+		"_id":               objId,
+		"code":              code,
+		"name":              name,
+		"chronic":           chronic,
+		"symptom":           symptom,
+		"advice":            advice,
+		"question":          question,
+		"question_basic":    questionBasic,
+		"question_duration": questionDuration,
+		"question_ante":     questionAnte,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").ReplaceOne(ctx, filter, updated)
 
 	return &model.Symptom{
-		ID:       id,
-		Code:     *code,
-		Name:     *name,
-		Chronic:  chronic,
-		Symptom:  symptom,
-		Advice:   advice,
-		Question: *question,
+		ID:               id,
+		Code:             *code,
+		Name:             *name,
+		Chronic:          chronic,
+		Symptom:          symptom,
+		Advice:           advice,
+		Question:         *question,
+		QuestionBasic:    *questionBasic,
+		QuestionDuration: *questionDuration,
+		QuestionAnte:     *questionAnte,
 	}, err
 }
 
