@@ -44,6 +44,32 @@ const (
 	CategoryFinance Category = "FINANCE"
 )
 
+type ChatMessagesInput struct {
+	Owner_id    string `json:"owner_id"`
+	Message     string `json:"message"`
+	Sended_time int    `json:"sended_time"`
+}
+
+// GetOwner_id returns ChatMessagesInput.Owner_id, and is useful for accessing the field via an interface.
+func (v *ChatMessagesInput) GetOwner_id() string { return v.Owner_id }
+
+// GetMessage returns ChatMessagesInput.Message, and is useful for accessing the field via an interface.
+func (v *ChatMessagesInput) GetMessage() string { return v.Message }
+
+// GetSended_time returns ChatMessagesInput.Sended_time, and is useful for accessing the field via an interface.
+func (v *ChatMessagesInput) GetSended_time() int { return v.Sended_time }
+
+type ChatParticipantsInput struct {
+	Participant_id string `json:"participant_id"`
+	Last_seen      int    `json:"last_seen"`
+}
+
+// GetParticipant_id returns ChatParticipantsInput.Participant_id, and is useful for accessing the field via an interface.
+func (v *ChatParticipantsInput) GetParticipant_id() string { return v.Participant_id }
+
+// GetLast_seen returns ChatParticipantsInput.Last_seen, and is useful for accessing the field via an interface.
+func (v *ChatParticipantsInput) GetLast_seen() int { return v.Last_seen }
+
 // CreateAdminCreateAdmin includes the requested fields of the GraphQL type Admin.
 type CreateAdminCreateAdmin struct {
 	Id        string `json:"id"`
@@ -214,6 +240,60 @@ func (v *CreateAnteFamilyResponse) GetCreateAnteFamily() CreateAnteFamilyCreateA
 	return v.CreateAnteFamily
 }
 
+// CreateChatCreateChat includes the requested fields of the GraphQL type Chat.
+type CreateChatCreateChat struct {
+	Id           string                             `json:"id"`
+	Participants []CreateChatCreateChatParticipants `json:"participants"`
+	Messages     []CreateChatCreateChatMessages     `json:"messages"`
+}
+
+// GetId returns CreateChatCreateChat.Id, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChat) GetId() string { return v.Id }
+
+// GetParticipants returns CreateChatCreateChat.Participants, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChat) GetParticipants() []CreateChatCreateChatParticipants {
+	return v.Participants
+}
+
+// GetMessages returns CreateChatCreateChat.Messages, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChat) GetMessages() []CreateChatCreateChatMessages { return v.Messages }
+
+// CreateChatCreateChatMessages includes the requested fields of the GraphQL type ChatMessages.
+type CreateChatCreateChatMessages struct {
+	Owner_id    string `json:"owner_id"`
+	Message     string `json:"message"`
+	Sended_time int    `json:"sended_time"`
+}
+
+// GetOwner_id returns CreateChatCreateChatMessages.Owner_id, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChatMessages) GetOwner_id() string { return v.Owner_id }
+
+// GetMessage returns CreateChatCreateChatMessages.Message, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChatMessages) GetMessage() string { return v.Message }
+
+// GetSended_time returns CreateChatCreateChatMessages.Sended_time, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChatMessages) GetSended_time() int { return v.Sended_time }
+
+// CreateChatCreateChatParticipants includes the requested fields of the GraphQL type ChatParticipants.
+type CreateChatCreateChatParticipants struct {
+	Participant_id string `json:"participant_id"`
+	Last_seen      int    `json:"last_seen"`
+}
+
+// GetParticipant_id returns CreateChatCreateChatParticipants.Participant_id, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChatParticipants) GetParticipant_id() string { return v.Participant_id }
+
+// GetLast_seen returns CreateChatCreateChatParticipants.Last_seen, and is useful for accessing the field via an interface.
+func (v *CreateChatCreateChatParticipants) GetLast_seen() int { return v.Last_seen }
+
+// CreateChatResponse is returned by CreateChat on success.
+type CreateChatResponse struct {
+	CreateChat CreateChatCreateChat `json:"createChat"`
+}
+
+// GetCreateChat returns CreateChatResponse.CreateChat, and is useful for accessing the field via an interface.
+func (v *CreateChatResponse) GetCreateChat() CreateChatCreateChat { return v.CreateChat }
+
 // CreateDemoAccountCreateDemoAccount includes the requested fields of the GraphQL type DemoAccount.
 type CreateDemoAccountCreateDemoAccount struct {
 	Id       string `json:"id"`
@@ -306,6 +386,7 @@ type CreateDoctorCreateDoctor struct {
 	Address         CreateDoctorCreateDoctorAddress `json:"address"`
 	Rendez_vous_ids []string                        `json:"rendez_vous_ids"`
 	Patient_ids     []string                        `json:"patient_ids"`
+	Chat_ids        []string                        `json:"chat_ids"`
 }
 
 // GetId returns CreateDoctorCreateDoctor.Id, and is useful for accessing the field via an interface.
@@ -331,6 +412,9 @@ func (v *CreateDoctorCreateDoctor) GetRendez_vous_ids() []string { return v.Rend
 
 // GetPatient_ids returns CreateDoctorCreateDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *CreateDoctorCreateDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetChat_ids returns CreateDoctorCreateDoctor.Chat_ids, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctor) GetChat_ids() []string { return v.Chat_ids }
 
 // CreateDoctorCreateDoctorAddress includes the requested fields of the GraphQL type Address.
 type CreateDoctorCreateDoctorAddress struct {
@@ -535,6 +619,7 @@ type CreatePatientCreatePatient struct {
 	Medical_info_id         string   `json:"medical_info_id"`
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
+	Chat_ids                []string `json:"chat_ids"`
 }
 
 // GetId returns CreatePatientCreatePatient.Id, and is useful for accessing the field via an interface.
@@ -559,6 +644,9 @@ func (v *CreatePatientCreatePatient) GetDocument_ids() []string { return v.Docum
 func (v *CreatePatientCreatePatient) GetTreatment_follow_up_ids() []string {
 	return v.Treatment_follow_up_ids
 }
+
+// GetChat_ids returns CreatePatientCreatePatient.Chat_ids, and is useful for accessing the field via an interface.
+func (v *CreatePatientCreatePatient) GetChat_ids() []string { return v.Chat_ids }
 
 // CreatePatientResponse is returned by CreatePatient on success.
 type CreatePatientResponse struct {
@@ -919,6 +1007,14 @@ type DeleteAnteFamilyResponse struct {
 
 // GetDeleteAnteFamily returns DeleteAnteFamilyResponse.DeleteAnteFamily, and is useful for accessing the field via an interface.
 func (v *DeleteAnteFamilyResponse) GetDeleteAnteFamily() bool { return v.DeleteAnteFamily }
+
+// DeleteChatResponse is returned by DeleteChat on success.
+type DeleteChatResponse struct {
+	DeleteChat bool `json:"deleteChat"`
+}
+
+// GetDeleteChat returns DeleteChatResponse.DeleteChat, and is useful for accessing the field via an interface.
+func (v *DeleteChatResponse) GetDeleteChat() bool { return v.DeleteChat }
 
 // DeleteDemoAccountResponse is returned by DeleteDemoAccount on success.
 type DeleteDemoAccountResponse struct {
@@ -1437,6 +1533,116 @@ func (v *GetAnteFamilyByIDResponse) GetGetAnteFamilyByID() GetAnteFamilyByIDGetA
 	return v.GetAnteFamilyByID
 }
 
+// GetChatByIdGetChatByIdChat includes the requested fields of the GraphQL type Chat.
+type GetChatByIdGetChatByIdChat struct {
+	Id           string                                   `json:"id"`
+	Participants []GetChatByIdGetChatByIdChatParticipants `json:"participants"`
+	Messages     []GetChatByIdGetChatByIdChatMessages     `json:"messages"`
+}
+
+// GetId returns GetChatByIdGetChatByIdChat.Id, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChat) GetId() string { return v.Id }
+
+// GetParticipants returns GetChatByIdGetChatByIdChat.Participants, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChat) GetParticipants() []GetChatByIdGetChatByIdChatParticipants {
+	return v.Participants
+}
+
+// GetMessages returns GetChatByIdGetChatByIdChat.Messages, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChat) GetMessages() []GetChatByIdGetChatByIdChatMessages {
+	return v.Messages
+}
+
+// GetChatByIdGetChatByIdChatMessages includes the requested fields of the GraphQL type ChatMessages.
+type GetChatByIdGetChatByIdChatMessages struct {
+	Owner_id    string `json:"owner_id"`
+	Message     string `json:"message"`
+	Sended_time int    `json:"sended_time"`
+}
+
+// GetOwner_id returns GetChatByIdGetChatByIdChatMessages.Owner_id, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChatMessages) GetOwner_id() string { return v.Owner_id }
+
+// GetMessage returns GetChatByIdGetChatByIdChatMessages.Message, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChatMessages) GetMessage() string { return v.Message }
+
+// GetSended_time returns GetChatByIdGetChatByIdChatMessages.Sended_time, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChatMessages) GetSended_time() int { return v.Sended_time }
+
+// GetChatByIdGetChatByIdChatParticipants includes the requested fields of the GraphQL type ChatParticipants.
+type GetChatByIdGetChatByIdChatParticipants struct {
+	Participant_id string `json:"participant_id"`
+	Last_seen      int    `json:"last_seen"`
+}
+
+// GetParticipant_id returns GetChatByIdGetChatByIdChatParticipants.Participant_id, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChatParticipants) GetParticipant_id() string { return v.Participant_id }
+
+// GetLast_seen returns GetChatByIdGetChatByIdChatParticipants.Last_seen, and is useful for accessing the field via an interface.
+func (v *GetChatByIdGetChatByIdChatParticipants) GetLast_seen() int { return v.Last_seen }
+
+// GetChatByIdResponse is returned by GetChatById on success.
+type GetChatByIdResponse struct {
+	GetChatById GetChatByIdGetChatByIdChat `json:"getChatById"`
+}
+
+// GetGetChatById returns GetChatByIdResponse.GetChatById, and is useful for accessing the field via an interface.
+func (v *GetChatByIdResponse) GetGetChatById() GetChatByIdGetChatByIdChat { return v.GetChatById }
+
+// GetChatsGetChatsChat includes the requested fields of the GraphQL type Chat.
+type GetChatsGetChatsChat struct {
+	Id           string                             `json:"id"`
+	Participants []GetChatsGetChatsChatParticipants `json:"participants"`
+	Messages     []GetChatsGetChatsChatMessages     `json:"messages"`
+}
+
+// GetId returns GetChatsGetChatsChat.Id, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChat) GetId() string { return v.Id }
+
+// GetParticipants returns GetChatsGetChatsChat.Participants, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChat) GetParticipants() []GetChatsGetChatsChatParticipants {
+	return v.Participants
+}
+
+// GetMessages returns GetChatsGetChatsChat.Messages, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChat) GetMessages() []GetChatsGetChatsChatMessages { return v.Messages }
+
+// GetChatsGetChatsChatMessages includes the requested fields of the GraphQL type ChatMessages.
+type GetChatsGetChatsChatMessages struct {
+	Owner_id    string `json:"owner_id"`
+	Message     string `json:"message"`
+	Sended_time int    `json:"sended_time"`
+}
+
+// GetOwner_id returns GetChatsGetChatsChatMessages.Owner_id, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChatMessages) GetOwner_id() string { return v.Owner_id }
+
+// GetMessage returns GetChatsGetChatsChatMessages.Message, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChatMessages) GetMessage() string { return v.Message }
+
+// GetSended_time returns GetChatsGetChatsChatMessages.Sended_time, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChatMessages) GetSended_time() int { return v.Sended_time }
+
+// GetChatsGetChatsChatParticipants includes the requested fields of the GraphQL type ChatParticipants.
+type GetChatsGetChatsChatParticipants struct {
+	Participant_id string `json:"participant_id"`
+	Last_seen      int    `json:"last_seen"`
+}
+
+// GetParticipant_id returns GetChatsGetChatsChatParticipants.Participant_id, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChatParticipants) GetParticipant_id() string { return v.Participant_id }
+
+// GetLast_seen returns GetChatsGetChatsChatParticipants.Last_seen, and is useful for accessing the field via an interface.
+func (v *GetChatsGetChatsChatParticipants) GetLast_seen() int { return v.Last_seen }
+
+// GetChatsResponse is returned by GetChats on success.
+type GetChatsResponse struct {
+	GetChats []GetChatsGetChatsChat `json:"getChats"`
+}
+
+// GetGetChats returns GetChatsResponse.GetChats, and is useful for accessing the field via an interface.
+func (v *GetChatsResponse) GetGetChats() []GetChatsGetChatsChat { return v.GetChats }
+
 // GetDemoAccountByEmailGetDemoAccountByEmailDemoAccount includes the requested fields of the GraphQL type DemoAccount.
 type GetDemoAccountByEmailGetDemoAccountByEmailDemoAccount struct {
 	Id       string `json:"id"`
@@ -1649,6 +1855,7 @@ type GetDoctorByEmailGetDoctorByEmailDoctor struct {
 	Address         GetDoctorByEmailGetDoctorByEmailDoctorAddress `json:"address"`
 	Rendez_vous_ids []string                                      `json:"rendez_vous_ids"`
 	Patient_ids     []string                                      `json:"patient_ids"`
+	Chat_ids        []string                                      `json:"chat_ids"`
 }
 
 // GetId returns GetDoctorByEmailGetDoctorByEmailDoctor.Id, and is useful for accessing the field via an interface.
@@ -1678,6 +1885,9 @@ func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetRendez_vous_ids() []string {
 
 // GetPatient_ids returns GetDoctorByEmailGetDoctorByEmailDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetChat_ids returns GetDoctorByEmailGetDoctorByEmailDoctor.Chat_ids, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetChat_ids() []string { return v.Chat_ids }
 
 // GetDoctorByEmailGetDoctorByEmailDoctorAddress includes the requested fields of the GraphQL type Address.
 type GetDoctorByEmailGetDoctorByEmailDoctorAddress struct {
@@ -1719,6 +1929,7 @@ type GetDoctorByIdGetDoctorByIdDoctor struct {
 	Address         GetDoctorByIdGetDoctorByIdDoctorAddress `json:"address"`
 	Rendez_vous_ids []string                                `json:"rendez_vous_ids"`
 	Patient_ids     []string                                `json:"patient_ids"`
+	Chat_ids        []string                                `json:"chat_ids"`
 }
 
 // GetId returns GetDoctorByIdGetDoctorByIdDoctor.Id, and is useful for accessing the field via an interface.
@@ -1746,6 +1957,9 @@ func (v *GetDoctorByIdGetDoctorByIdDoctor) GetRendez_vous_ids() []string { retur
 
 // GetPatient_ids returns GetDoctorByIdGetDoctorByIdDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByIdGetDoctorByIdDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetChat_ids returns GetDoctorByIdGetDoctorByIdDoctor.Chat_ids, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctor) GetChat_ids() []string { return v.Chat_ids }
 
 // GetDoctorByIdGetDoctorByIdDoctorAddress includes the requested fields of the GraphQL type Address.
 type GetDoctorByIdGetDoctorByIdDoctorAddress struct {
@@ -1833,6 +2047,7 @@ type GetDoctorsGetDoctorsDoctor struct {
 	Address         GetDoctorsGetDoctorsDoctorAddress `json:"address"`
 	Rendez_vous_ids []string                          `json:"rendez_vous_ids"`
 	Patient_ids     []string                          `json:"patient_ids"`
+	Chat_ids        []string                          `json:"chat_ids"`
 }
 
 // GetId returns GetDoctorsGetDoctorsDoctor.Id, and is useful for accessing the field via an interface.
@@ -1858,6 +2073,9 @@ func (v *GetDoctorsGetDoctorsDoctor) GetRendez_vous_ids() []string { return v.Re
 
 // GetPatient_ids returns GetDoctorsGetDoctorsDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorsGetDoctorsDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetChat_ids returns GetDoctorsGetDoctorsDoctor.Chat_ids, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctor) GetChat_ids() []string { return v.Chat_ids }
 
 // GetDoctorsGetDoctorsDoctorAddress includes the requested fields of the GraphQL type Address.
 type GetDoctorsGetDoctorsDoctorAddress struct {
@@ -2358,6 +2576,7 @@ type GetPatientByEmailGetPatientByEmailPatient struct {
 	Medical_info_id         string   `json:"medical_info_id"`
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
+	Chat_ids                []string `json:"chat_ids"`
 }
 
 // GetId returns GetPatientByEmailGetPatientByEmailPatient.Id, and is useful for accessing the field via an interface.
@@ -2387,6 +2606,9 @@ func (v *GetPatientByEmailGetPatientByEmailPatient) GetTreatment_follow_up_ids()
 	return v.Treatment_follow_up_ids
 }
 
+// GetChat_ids returns GetPatientByEmailGetPatientByEmailPatient.Chat_ids, and is useful for accessing the field via an interface.
+func (v *GetPatientByEmailGetPatientByEmailPatient) GetChat_ids() []string { return v.Chat_ids }
+
 // GetPatientByEmailResponse is returned by GetPatientByEmail on success.
 type GetPatientByEmailResponse struct {
 	GetPatientByEmail GetPatientByEmailGetPatientByEmailPatient `json:"getPatientByEmail"`
@@ -2406,6 +2628,7 @@ type GetPatientByIdGetPatientByIdPatient struct {
 	Medical_info_id         string   `json:"medical_info_id"`
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
+	Chat_ids                []string `json:"chat_ids"`
 }
 
 // GetId returns GetPatientByIdGetPatientByIdPatient.Id, and is useful for accessing the field via an interface.
@@ -2430,6 +2653,9 @@ func (v *GetPatientByIdGetPatientByIdPatient) GetDocument_ids() []string { retur
 func (v *GetPatientByIdGetPatientByIdPatient) GetTreatment_follow_up_ids() []string {
 	return v.Treatment_follow_up_ids
 }
+
+// GetChat_ids returns GetPatientByIdGetPatientByIdPatient.Chat_ids, and is useful for accessing the field via an interface.
+func (v *GetPatientByIdGetPatientByIdPatient) GetChat_ids() []string { return v.Chat_ids }
 
 // GetPatientByIdResponse is returned by GetPatientById on success.
 type GetPatientByIdResponse struct {
@@ -2542,6 +2768,7 @@ type GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient struct {
 	Medical_info_id         string   `json:"medical_info_id"`
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
+	Chat_ids                []string `json:"chat_ids"`
 }
 
 // GetId returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Id, and is useful for accessing the field via an interface.
@@ -2575,6 +2802,11 @@ func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetTreatment
 	return v.Treatment_follow_up_ids
 }
 
+// GetChat_ids returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Chat_ids, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetChat_ids() []string {
+	return v.Chat_ids
+}
+
 // GetPatientsFromDoctorByIdResponse is returned by GetPatientsFromDoctorById on success.
 type GetPatientsFromDoctorByIdResponse struct {
 	GetPatientsFromDoctorById []GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient `json:"getPatientsFromDoctorById"`
@@ -2594,6 +2826,7 @@ type GetPatientsGetPatientsPatient struct {
 	Medical_info_id         string   `json:"medical_info_id"`
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
+	Chat_ids                []string `json:"chat_ids"`
 }
 
 // GetId returns GetPatientsGetPatientsPatient.Id, and is useful for accessing the field via an interface.
@@ -2618,6 +2851,9 @@ func (v *GetPatientsGetPatientsPatient) GetDocument_ids() []string { return v.Do
 func (v *GetPatientsGetPatientsPatient) GetTreatment_follow_up_ids() []string {
 	return v.Treatment_follow_up_ids
 }
+
+// GetChat_ids returns GetPatientsGetPatientsPatient.Chat_ids, and is useful for accessing the field via an interface.
+func (v *GetPatientsGetPatientsPatient) GetChat_ids() []string { return v.Chat_ids }
 
 // GetPatientsResponse is returned by GetPatients on success.
 type GetPatientsResponse struct {
@@ -3648,6 +3884,60 @@ func (v *UpdateAnteFamilyUpdateAnteFamily) GetName() string { return v.Name }
 // GetDisease returns UpdateAnteFamilyUpdateAnteFamily.Disease, and is useful for accessing the field via an interface.
 func (v *UpdateAnteFamilyUpdateAnteFamily) GetDisease() []string { return v.Disease }
 
+// UpdateChatResponse is returned by UpdateChat on success.
+type UpdateChatResponse struct {
+	UpdateChat UpdateChatUpdateChat `json:"updateChat"`
+}
+
+// GetUpdateChat returns UpdateChatResponse.UpdateChat, and is useful for accessing the field via an interface.
+func (v *UpdateChatResponse) GetUpdateChat() UpdateChatUpdateChat { return v.UpdateChat }
+
+// UpdateChatUpdateChat includes the requested fields of the GraphQL type Chat.
+type UpdateChatUpdateChat struct {
+	Id           string                             `json:"id"`
+	Participants []UpdateChatUpdateChatParticipants `json:"participants"`
+	Messages     []UpdateChatUpdateChatMessages     `json:"messages"`
+}
+
+// GetId returns UpdateChatUpdateChat.Id, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChat) GetId() string { return v.Id }
+
+// GetParticipants returns UpdateChatUpdateChat.Participants, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChat) GetParticipants() []UpdateChatUpdateChatParticipants {
+	return v.Participants
+}
+
+// GetMessages returns UpdateChatUpdateChat.Messages, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChat) GetMessages() []UpdateChatUpdateChatMessages { return v.Messages }
+
+// UpdateChatUpdateChatMessages includes the requested fields of the GraphQL type ChatMessages.
+type UpdateChatUpdateChatMessages struct {
+	Owner_id    string `json:"owner_id"`
+	Message     string `json:"message"`
+	Sended_time int    `json:"sended_time"`
+}
+
+// GetOwner_id returns UpdateChatUpdateChatMessages.Owner_id, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChatMessages) GetOwner_id() string { return v.Owner_id }
+
+// GetMessage returns UpdateChatUpdateChatMessages.Message, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChatMessages) GetMessage() string { return v.Message }
+
+// GetSended_time returns UpdateChatUpdateChatMessages.Sended_time, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChatMessages) GetSended_time() int { return v.Sended_time }
+
+// UpdateChatUpdateChatParticipants includes the requested fields of the GraphQL type ChatParticipants.
+type UpdateChatUpdateChatParticipants struct {
+	Participant_id string `json:"participant_id"`
+	Last_seen      int    `json:"last_seen"`
+}
+
+// GetParticipant_id returns UpdateChatUpdateChatParticipants.Participant_id, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChatParticipants) GetParticipant_id() string { return v.Participant_id }
+
+// GetLast_seen returns UpdateChatUpdateChatParticipants.Last_seen, and is useful for accessing the field via an interface.
+func (v *UpdateChatUpdateChatParticipants) GetLast_seen() int { return v.Last_seen }
+
 // UpdateDemoAccountResponse is returned by UpdateDemoAccount on success.
 type UpdateDemoAccountResponse struct {
 	UpdateDemoAccount UpdateDemoAccountUpdateDemoAccount `json:"updateDemoAccount"`
@@ -3747,6 +4037,7 @@ type UpdateDoctorUpdateDoctor struct {
 	Firstname       string                          `json:"firstname"`
 	Rendez_vous_ids []string                        `json:"rendez_vous_ids"`
 	Patient_ids     []string                        `json:"patient_ids"`
+	Chat_ids        []string                        `json:"chat_ids"`
 	Address         UpdateDoctorUpdateDoctorAddress `json:"address"`
 }
 
@@ -3770,6 +4061,9 @@ func (v *UpdateDoctorUpdateDoctor) GetRendez_vous_ids() []string { return v.Rend
 
 // GetPatient_ids returns UpdateDoctorUpdateDoctor.Patient_ids, and is useful for accessing the field via an interface.
 func (v *UpdateDoctorUpdateDoctor) GetPatient_ids() []string { return v.Patient_ids }
+
+// GetChat_ids returns UpdateDoctorUpdateDoctor.Chat_ids, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctor) GetChat_ids() []string { return v.Chat_ids }
 
 // GetAddress returns UpdateDoctorUpdateDoctor.Address, and is useful for accessing the field via an interface.
 func (v *UpdateDoctorUpdateDoctor) GetAddress() UpdateDoctorUpdateDoctorAddress { return v.Address }
@@ -3939,6 +4233,7 @@ type UpdatePatientUpdatePatient struct {
 	Medical_info_id         string   `json:"medical_info_id"`
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
+	Chat_ids                []string `json:"chat_ids"`
 }
 
 // GetId returns UpdatePatientUpdatePatient.Id, and is useful for accessing the field via an interface.
@@ -3963,6 +4258,9 @@ func (v *UpdatePatientUpdatePatient) GetDocument_ids() []string { return v.Docum
 func (v *UpdatePatientUpdatePatient) GetTreatment_follow_up_ids() []string {
 	return v.Treatment_follow_up_ids
 }
+
+// GetChat_ids returns UpdatePatientUpdatePatient.Chat_ids, and is useful for accessing the field via an interface.
+func (v *UpdatePatientUpdatePatient) GetChat_ids() []string { return v.Chat_ids }
 
 // UpdateRdvResponse is returned by UpdateRdv on success.
 type UpdateRdvResponse struct {
@@ -4368,6 +4666,18 @@ func (v *__CreateAnteFamilyInput) GetName() string { return v.Name }
 // GetDisease returns __CreateAnteFamilyInput.Disease, and is useful for accessing the field via an interface.
 func (v *__CreateAnteFamilyInput) GetDisease() []string { return v.Disease }
 
+// __CreateChatInput is used internally by genqlient
+type __CreateChatInput struct {
+	Participants []ChatParticipantsInput `json:"participants"`
+	Messages     []ChatMessagesInput     `json:"messages"`
+}
+
+// GetParticipants returns __CreateChatInput.Participants, and is useful for accessing the field via an interface.
+func (v *__CreateChatInput) GetParticipants() []ChatParticipantsInput { return v.Participants }
+
+// GetMessages returns __CreateChatInput.Messages, and is useful for accessing the field via an interface.
+func (v *__CreateChatInput) GetMessages() []ChatMessagesInput { return v.Messages }
+
 // __CreateDemoAccountInput is used internally by genqlient
 type __CreateDemoAccountInput struct {
 	Email    string `json:"email"`
@@ -4758,6 +5068,14 @@ type __DeleteAnteFamilyInput struct {
 // GetId returns __DeleteAnteFamilyInput.Id, and is useful for accessing the field via an interface.
 func (v *__DeleteAnteFamilyInput) GetId() string { return v.Id }
 
+// __DeleteChatInput is used internally by genqlient
+type __DeleteChatInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __DeleteChatInput.Id, and is useful for accessing the field via an interface.
+func (v *__DeleteChatInput) GetId() string { return v.Id }
+
 // __DeleteDemoAccountInput is used internally by genqlient
 type __DeleteDemoAccountInput struct {
 	Id string `json:"id"`
@@ -4925,6 +5243,22 @@ type __GetAnteFamilyByIDInput struct {
 
 // GetId returns __GetAnteFamilyByIDInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetAnteFamilyByIDInput) GetId() string { return v.Id }
+
+// __GetChatByIdInput is used internally by genqlient
+type __GetChatByIdInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __GetChatByIdInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetChatByIdInput) GetId() string { return v.Id }
+
+// __GetChatsInput is used internally by genqlient
+type __GetChatsInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __GetChatsInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetChatsInput) GetId() string { return v.Id }
 
 // __GetDemoAccountByEmailInput is used internally by genqlient
 type __GetDemoAccountByEmailInput struct {
@@ -5266,6 +5600,22 @@ func (v *__UpdateAnteFamilyInput) GetName() string { return v.Name }
 // GetDisease returns __UpdateAnteFamilyInput.Disease, and is useful for accessing the field via an interface.
 func (v *__UpdateAnteFamilyInput) GetDisease() []string { return v.Disease }
 
+// __UpdateChatInput is used internally by genqlient
+type __UpdateChatInput struct {
+	Id           string                  `json:"id"`
+	Participants []ChatParticipantsInput `json:"participants"`
+	Messages     []ChatMessagesInput     `json:"messages"`
+}
+
+// GetId returns __UpdateChatInput.Id, and is useful for accessing the field via an interface.
+func (v *__UpdateChatInput) GetId() string { return v.Id }
+
+// GetParticipants returns __UpdateChatInput.Participants, and is useful for accessing the field via an interface.
+func (v *__UpdateChatInput) GetParticipants() []ChatParticipantsInput { return v.Participants }
+
+// GetMessages returns __UpdateChatInput.Messages, and is useful for accessing the field via an interface.
+func (v *__UpdateChatInput) GetMessages() []ChatMessagesInput { return v.Messages }
+
 // __UpdateDemoAccountInput is used internally by genqlient
 type __UpdateDemoAccountInput struct {
 	Id       string `json:"id"`
@@ -5320,6 +5670,7 @@ type __UpdateDoctorInput struct {
 	Rendez_vous_ids []string     `json:"rendez_vous_ids"`
 	Patient_ids     []string     `json:"patient_ids"`
 	Address         AddressInput `json:"address"`
+	Chat_ids        []string     `json:"chat_ids"`
 }
 
 // GetId returns __UpdateDoctorInput.Id, and is useful for accessing the field via an interface.
@@ -5345,6 +5696,9 @@ func (v *__UpdateDoctorInput) GetPatient_ids() []string { return v.Patient_ids }
 
 // GetAddress returns __UpdateDoctorInput.Address, and is useful for accessing the field via an interface.
 func (v *__UpdateDoctorInput) GetAddress() AddressInput { return v.Address }
+
+// GetChat_ids returns __UpdateDoctorInput.Chat_ids, and is useful for accessing the field via an interface.
+func (v *__UpdateDoctorInput) GetChat_ids() []string { return v.Chat_ids }
 
 // __UpdateDocumentInput is used internally by genqlient
 type __UpdateDocumentInput struct {
@@ -5439,6 +5793,7 @@ type __UpdatePatientInput struct {
 	Rendez_vous_ids         []string `json:"rendez_vous_ids"`
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
+	Chat_ids                []string `json:"chat_ids"`
 }
 
 // GetId returns __UpdatePatientInput.Id, and is useful for accessing the field via an interface.
@@ -5463,6 +5818,9 @@ func (v *__UpdatePatientInput) GetDocument_ids() []string { return v.Document_id
 func (v *__UpdatePatientInput) GetTreatment_follow_up_ids() []string {
 	return v.Treatment_follow_up_ids
 }
+
+// GetChat_ids returns __UpdatePatientInput.Chat_ids, and is useful for accessing the field via an interface.
+func (v *__UpdatePatientInput) GetChat_ids() []string { return v.Chat_ids }
 
 // __UpdateRdvInput is used internally by genqlient
 type __UpdateRdvInput struct {
@@ -5964,6 +6322,52 @@ func CreateAnteFamily(
 	return &data, err
 }
 
+// The query or mutation executed by CreateChat.
+const CreateChat_Operation = `
+mutation CreateChat ($participants: [ChatParticipantsInput!]!, $messages: [ChatMessagesInput!]!) {
+	createChat(participants: $participants, messages: $messages) {
+		id
+		participants {
+			participant_id
+			last_seen
+		}
+		messages {
+			owner_id
+			message
+			sended_time
+		}
+	}
+}
+`
+
+func CreateChat(
+	ctx context.Context,
+	client graphql.Client,
+	participants []ChatParticipantsInput,
+	messages []ChatMessagesInput,
+) (*CreateChatResponse, error) {
+	req := &graphql.Request{
+		OpName: "CreateChat",
+		Query:  CreateChat_Operation,
+		Variables: &__CreateChatInput{
+			Participants: participants,
+			Messages:     messages,
+		},
+	}
+	var err error
+
+	var data CreateChatResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 // The query or mutation executed by CreateDemoAccount.
 const CreateDemoAccount_Operation = `
 mutation CreateDemoAccount ($email: String!, $password: String!) {
@@ -6071,6 +6475,7 @@ mutation CreateDoctor ($email: String!, $password: String!, $name: String!, $fir
 		}
 		rendez_vous_ids
 		patient_ids
+		chat_ids
 	}
 }
 `
@@ -6321,6 +6726,7 @@ mutation CreatePatient ($email: String!, $password: String!) {
 		medical_info_id
 		document_ids
 		treatment_follow_up_ids
+		chat_ids
 	}
 }
 `
@@ -6825,6 +7231,39 @@ func DeleteAnteFamily(
 	var err error
 
 	var data DeleteAnteFamilyResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by DeleteChat.
+const DeleteChat_Operation = `
+mutation DeleteChat ($id: String!) {
+	deleteChat(id: $id)
+}
+`
+
+func DeleteChat(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*DeleteChatResponse, error) {
+	req := &graphql.Request{
+		OpName: "DeleteChat",
+		Query:  DeleteChat_Operation,
+		Variables: &__DeleteChatInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data DeleteChatResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -7742,6 +8181,94 @@ func GetAnteFamilyByID(
 	return &data, err
 }
 
+// The query or mutation executed by GetChatById.
+const GetChatById_Operation = `
+query GetChatById ($id: String!) {
+	getChatById(id: $id) {
+		id
+		participants {
+			participant_id
+			last_seen
+		}
+		messages {
+			owner_id
+			message
+			sended_time
+		}
+	}
+}
+`
+
+func GetChatById(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*GetChatByIdResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetChatById",
+		Query:  GetChatById_Operation,
+		Variables: &__GetChatByIdInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetChatByIdResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetChats.
+const GetChats_Operation = `
+query GetChats ($id: String!) {
+	getChats(id: $id) {
+		id
+		participants {
+			participant_id
+			last_seen
+		}
+		messages {
+			owner_id
+			message
+			sended_time
+		}
+	}
+}
+`
+
+func GetChats(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*GetChatsResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetChats",
+		Query:  GetChats_Operation,
+		Variables: &__GetChatsInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetChatsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 // The query or mutation executed by GetDemoAccountByEmail.
 const GetDemoAccountByEmail_Operation = `
 query GetDemoAccountByEmail ($email: String!) {
@@ -7950,6 +8477,7 @@ query GetDoctorByEmail ($email: String!) {
 		}
 		rendez_vous_ids
 		patient_ids
+		chat_ids
 	}
 }
 `
@@ -7997,6 +8525,7 @@ query GetDoctorById ($id: String!) {
 		}
 		rendez_vous_ids
 		patient_ids
+		chat_ids
 	}
 }
 `
@@ -8086,6 +8615,7 @@ query GetDoctors {
 		}
 		rendez_vous_ids
 		patient_ids
+		chat_ids
 	}
 }
 `
@@ -8515,6 +9045,7 @@ query GetPatientByEmail ($email: String!) {
 		medical_info_id
 		document_ids
 		treatment_follow_up_ids
+		chat_ids
 	}
 }
 `
@@ -8556,6 +9087,7 @@ query GetPatientById ($id: String!) {
 		medical_info_id
 		document_ids
 		treatment_follow_up_ids
+		chat_ids
 	}
 }
 `
@@ -8680,6 +9212,7 @@ query GetPatients {
 		medical_info_id
 		document_ids
 		treatment_follow_up_ids
+		chat_ids
 	}
 }
 `
@@ -8717,6 +9250,7 @@ query GetPatientsFromDoctorById ($id: String!) {
 		medical_info_id
 		document_ids
 		treatment_follow_up_ids
+		chat_ids
 	}
 }
 `
@@ -9606,6 +10140,54 @@ func UpdateAnteFamily(
 	return &data, err
 }
 
+// The query or mutation executed by UpdateChat.
+const UpdateChat_Operation = `
+mutation UpdateChat ($id: String!, $participants: [ChatParticipantsInput!], $messages: [ChatMessagesInput!]) {
+	updateChat(id: $id, participants: $participants, messages: $messages) {
+		id
+		participants {
+			participant_id
+			last_seen
+		}
+		messages {
+			owner_id
+			message
+			sended_time
+		}
+	}
+}
+`
+
+func UpdateChat(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+	participants []ChatParticipantsInput,
+	messages []ChatMessagesInput,
+) (*UpdateChatResponse, error) {
+	req := &graphql.Request{
+		OpName: "UpdateChat",
+		Query:  UpdateChat_Operation,
+		Variables: &__UpdateChatInput{
+			Id:           id,
+			Participants: participants,
+			Messages:     messages,
+		},
+	}
+	var err error
+
+	var data UpdateChatResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 // The query or mutation executed by UpdateDemoAccount.
 const UpdateDemoAccount_Operation = `
 mutation UpdateDemoAccount ($id: String!, $email: String, $password: String) {
@@ -9703,8 +10285,8 @@ func UpdateDisease(
 
 // The query or mutation executed by UpdateDoctor.
 const UpdateDoctor_Operation = `
-mutation UpdateDoctor ($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!) {
-	updateDoctor(id: $id, email: $email, password: $password, name: $name, firstname: $firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address) {
+mutation UpdateDoctor ($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!, $chat_ids: [String]) {
+	updateDoctor(id: $id, email: $email, password: $password, name: $name, firstname: $firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address, chat_ids: $chat_ids) {
 		id
 		email
 		password
@@ -9712,6 +10294,7 @@ mutation UpdateDoctor ($id: String!, $email: String, $password: String, $name: S
 		firstname
 		rendez_vous_ids
 		patient_ids
+		chat_ids
 		address {
 			street
 			zip_code
@@ -9732,6 +10315,7 @@ func UpdateDoctor(
 	rendez_vous_ids []string,
 	patient_ids []string,
 	address AddressInput,
+	chat_ids []string,
 ) (*UpdateDoctorResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateDoctor",
@@ -9745,6 +10329,7 @@ func UpdateDoctor(
 			Rendez_vous_ids: rendez_vous_ids,
 			Patient_ids:     patient_ids,
 			Address:         address,
+			Chat_ids:        chat_ids,
 		},
 	}
 	var err error
@@ -9914,8 +10499,8 @@ func UpdateNotification(
 
 // The query or mutation executed by UpdatePatient.
 const UpdatePatient_Operation = `
-mutation UpdatePatient ($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String]) {
-	updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids: $treatment_follow_up_ids) {
+mutation UpdatePatient ($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String]) {
+	updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids: $treatment_follow_up_ids, chat_ids: $chat_ids) {
 		id
 		email
 		password
@@ -9923,6 +10508,7 @@ mutation UpdatePatient ($id: String!, $email: String, $password: String, $medica
 		medical_info_id
 		document_ids
 		treatment_follow_up_ids
+		chat_ids
 	}
 }
 `
@@ -9937,6 +10523,7 @@ func UpdatePatient(
 	rendez_vous_ids []string,
 	document_ids []string,
 	treatment_follow_up_ids []string,
+	chat_ids []string,
 ) (*UpdatePatientResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdatePatient",
@@ -9949,6 +10536,7 @@ func UpdatePatient(
 			Rendez_vous_ids:         rendez_vous_ids,
 			Document_ids:            document_ids,
 			Treatment_follow_up_ids: treatment_follow_up_ids,
+			Chat_ids:                chat_ids,
 		},
 	}
 	var err error

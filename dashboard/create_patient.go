@@ -46,7 +46,7 @@ func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) Pat
 		return PatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, append(doctor.GetDoctorById.Patient_ids, patient.Id), graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country})
+	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, append(doctor.GetDoctorById.Patient_ids, patient.Id), graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country}, doctor.GetDoctorById.Chat_ids)
 	if err != nil {
 		return PatientByIdResponse{Code: 400, Err: errors.New("update failed" + err.Error())}
 	}

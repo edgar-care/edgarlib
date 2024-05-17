@@ -63,6 +63,34 @@ type AnteFamily struct {
 	Disease []string `json:"disease" bson:"disease"`
 }
 
+type Chat struct {
+	ID           string              `json:"id" bson:"_id"`
+	Participants []*ChatParticipants `json:"participants" bson:"participants"`
+	Messages     []*ChatMessages     `json:"messages" bson:"messages"`
+}
+
+type ChatMessages struct {
+	OwnerID    string `json:"owner_id" bson:"owner_id"`
+	Message    string `json:"message" bson:"message"`
+	SendedTime int    `json:"sended_time" bson:"sended_time"`
+}
+
+type ChatMessagesInput struct {
+	OwnerID    string `json:"owner_id" bson:"owner_id"`
+	Message    string `json:"message" bson:"message"`
+	SendedTime int    `json:"sended_time" bson:"sended_time"`
+}
+
+type ChatParticipants struct {
+	ParticipantID string `json:"participant_id" bson:"participant_id"`
+	LastSeen      int    `json:"last_seen" bson:"last_seen"`
+}
+
+type ChatParticipantsInput struct {
+	ParticipantID string `json:"participant_id" bson:"participant_id"`
+	LastSeen      int    `json:"last_seen" bson:"last_seen"`
+}
+
 type DemoAccount struct {
 	ID       string `json:"id" bson:"_id"`
 	Email    string `json:"email" bson:"email"`
@@ -87,6 +115,7 @@ type Doctor struct {
 	Address       *Address  `json:"address" bson:"address"`
 	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
 	PatientIds    []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
+	ChatIds       []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
 }
 
 type Document struct {
@@ -191,6 +220,7 @@ type Patient struct {
 	MedicalInfoID        *string   `json:"medical_info_id,omitempty" bson:"medical_info_id"`
 	DocumentIds          []*string `json:"document_ids,omitempty" bson:"document_ids"`
 	TreatmentFollowUpIds []*string `json:"treatment_follow_up_ids,omitempty" bson:"treatment_follow_up_ids"`
+	ChatIds              []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
 }
 
 type Query struct {

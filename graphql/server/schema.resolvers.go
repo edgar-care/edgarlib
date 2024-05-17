@@ -43,7 +43,7 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string) (*model.Patient, error) {
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -58,6 +58,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		"medical_info_id":         medicalInfoID,
 		"document_ids":            documentIds,
 		"treatment_follow_up_ids": treatmentFollowUpIds,
+		"chat_ids":                chatIds,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
 	return &model.Patient{
@@ -68,6 +69,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		MedicalInfoID:        medicalInfoID,
 		DocumentIds:          documentIds,
 		TreatmentFollowUpIds: treatmentFollowUpIds,
+		ChatIds:              chatIds,
 	}, err
 }
 
@@ -130,7 +132,7 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 }
 
 // UpdateDoctor is the resolver for the updateDoctor field.
-func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput) (*model.Doctor, error) {
+func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) (*model.Doctor, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -146,6 +148,7 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 		"rendez_vous_ids": rendezVousIds,
 		"patient_ids":     patientIds,
 		"address":         address,
+		"chat_ids":        chatIds,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").ReplaceOne(ctx, filter, updated)
 	return &model.Doctor{
@@ -162,6 +165,7 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 		},
 		RendezVousIds: rendezVousIds,
 		PatientIds:    patientIds,
+		ChatIds:       chatIds,
 	}, err
 }
 
@@ -1466,6 +1470,105 @@ func (r *mutationResolver) CreateNlpReport(ctx context.Context, version int, inp
 	return &entity, err
 }
 
+// CreateChat is the resolver for the createChat field.
+func (r *mutationResolver) CreateChat(ctx context.Context, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error) {
+	chat := bson.M{
+		"participants": participants,
+		"messages":     messages,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").InsertOne(ctx, chat)
+	if err != nil {
+		return nil, err
+	}
+
+	var transformedParticipantsOutput []*model.ChatParticipants
+	for _, val := range participants {
+		transformedParticipantsOutput = append(transformedParticipantsOutput, &model.ChatParticipants{
+			ParticipantID: val.ParticipantID,
+			LastSeen:      val.LastSeen,
+		})
+	}
+
+	var transformedMessagesOutput []*model.ChatMessages
+	for _, val := range messages {
+		transformedMessagesOutput = append(transformedMessagesOutput, &model.ChatMessages{
+			OwnerID:    val.OwnerID,
+			Message:    val.Message,
+			SendedTime: val.SendedTime,
+		})
+	}
+	entity := model.Chat{
+		ID:           res.InsertedID.(primitive.ObjectID).Hex(),
+		Participants: transformedParticipantsOutput,
+		Messages:     transformedMessagesOutput,
+	}
+	return &entity, err
+}
+
+// UpdateChat is the resolver for the updateChat field.
+func (r *mutationResolver) UpdateChat(ctx context.Context, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error) {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objID}
+	update := bson.M{
+		"$set": bson.M{
+			"participants": participants,
+			"messages":     messages,
+		},
+	}
+
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").UpdateOne(ctx, filter, update)
+	if err != nil {
+		return nil, err
+	}
+
+	// Transform the inputs to the desired model types
+	var transformedParticipants []*model.ChatParticipants
+	for _, p := range participants {
+		transformedParticipants = append(transformedParticipants, &model.ChatParticipants{
+			ParticipantID: p.ParticipantID,
+			LastSeen:      p.LastSeen,
+		})
+	}
+
+	var transformedMessages []*model.ChatMessages
+	for _, m := range messages {
+		transformedMessages = append(transformedMessages, &model.ChatMessages{
+			OwnerID:    m.OwnerID,
+			Message:    m.Message,
+			SendedTime: m.SendedTime,
+		})
+	}
+
+	entity := model.Chat{
+		ID:           id,
+		Participants: transformedParticipants,
+		Messages:     transformedMessages,
+	}
+
+	return &entity, nil
+}
+
+// DeleteChat is the resolver for the deleteChat field.
+func (r *mutationResolver) DeleteChat(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -2402,6 +2505,56 @@ func (r *queryResolver) GetNlpReportsByVersion(ctx context.Context, version int)
 	}
 
 	return report, nil
+}
+
+// GetChats is the resolver for the getChats field.
+func (r *queryResolver) GetChats(ctx context.Context, id string) ([]*model.Chat, error) {
+	var patient model.Patient
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	patientFilter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, patientFilter).Decode(&patient)
+	if err != nil {
+		return nil, err
+	}
+
+	var followUp []*model.Chat
+	for _, chat_ids := range patient.ChatIds {
+		var chat model.Chat
+		objId, err := primitive.ObjectIDFromHex(*chat_ids)
+		if err != nil {
+			return nil, err
+		}
+
+		filter := bson.M{"_id": objId}
+		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").FindOne(ctx, filter).Decode(&chat)
+		if err != nil {
+			return nil, err
+		}
+		followUp = append(followUp, &chat)
+	}
+	return followUp, nil
+}
+
+// GetChatByID is the resolver for the getChatById field.
+func (r *queryResolver) GetChatByID(ctx context.Context, id string) (*model.Chat, error) {
+	var result model.Chat
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
 
 // Mutation returns MutationResolver implementation.
