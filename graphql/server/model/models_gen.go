@@ -98,12 +98,13 @@ type DemoAccount struct {
 }
 
 type Disease struct {
-	ID             string            `json:"id" bson:"_id"`
-	Code           string            `json:"code" bson:"code"`
-	Name           string            `json:"name" bson:"name"`
-	Symptoms       []string          `json:"symptoms" bson:"symptoms"`
-	SymptomsWeight []*SymptomsWeight `json:"symptoms_weight,omitempty" bson:"symptoms_weight"`
-	Advice         *string           `json:"advice,omitempty" bson:"advice"`
+	ID               string            `json:"id" bson:"_id"`
+	Code             string            `json:"code" bson:"code"`
+	Name             string            `json:"name" bson:"name"`
+	Symptoms         []string          `json:"symptoms" bson:"symptoms"`
+	SymptomsWeight   []*SymptomsWeight `json:"symptoms_weight,omitempty" bson:"symptoms_weight"`
+	OverweightFactor float64           `json:"overweight_factor" bson:"overweight_factor"`
+	Advice           *string           `json:"advice,omitempty" bson:"advice"`
 }
 
 type Doctor struct {

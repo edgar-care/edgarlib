@@ -600,7 +600,7 @@ func (r *mutationResolver) DeleteSymptom(ctx context.Context, id string) (*bool,
 }
 
 // CreateDisease is the resolver for the createDisease field.
-func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error) {
+func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, advice *string) (*model.Disease, error) {
 	newDisease := bson.M{
 		"code":            code,
 		"name":            name,
@@ -634,7 +634,7 @@ func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name 
 }
 
 // UpdateDisease is the resolver for the updateDisease field.
-func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error) {
+func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, advice *string) (*model.Disease, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err

@@ -171,6 +171,7 @@ type Disease {
     name: String!
     symptoms: [String!]!
     symptoms_weight: [SymptomsWeight!]
+    overweight_factor: Float!
     advice: String
 }
 
@@ -568,10 +569,10 @@ type Mutation {
     deleteSymptom(id: String!): Boolean
 
     # Create a new disease.
-    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], advice: String): Disease
+    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float!, advice: String): Disease
 
     # Update a new disease.
-    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], advice: String): Disease
+    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float, advice: String): Disease
 
     # Delete a disease.
     deleteDisease(id: String!): Boolean
