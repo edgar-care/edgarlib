@@ -58,7 +58,7 @@ func GetDocuments(id string) GetDocumentsResponse {
 	}
 
 	for _, document := range documents.GetPatientDocument {
-		signedURL, err := generateSignedURL("document-patient", document.Download_url)
+		signedURL, err := generateSignedURL("document-patient", document.Name)
 		if err != nil {
 			return GetDocumentsResponse{[]model.Document{}, 500, fmt.Errorf("error generating signed URL: %v", err)}
 		}
