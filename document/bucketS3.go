@@ -14,9 +14,9 @@ import (
 )
 
 func UploadToS3(file multipart.File, filename string) (string, string, error) {
-	awsAccessKeyID := os.Getenv("AWS_ACCESS_KEY_ID")
-	awsSecretAccessKey := os.Getenv("AWS_SECRET_ACCESS_KEY")
-	region := os.Getenv("AWS_REGION")
+	awsAccessKeyID := os.Getenv("EDGAR_ACCESS_KEY_ID")
+	awsSecretAccessKey := os.Getenv("EDGAR_SECRET_ACCESS_KEY")
+	region := os.Getenv("EDGAR_REGION")
 	bucketName := "document-patient"
 
 	sess, err := session.NewSession(&aws.Config{
