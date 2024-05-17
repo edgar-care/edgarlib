@@ -30,7 +30,7 @@ func GetDocument(id string) GetDocumentByIdResponse {
 		return GetDocumentByIdResponse{model.Document{}, 400, errors.New("id does not correspond to a document")}
 	}
 
-	signedURL, err := generateSignedURL("document-patient", document.GetDocumentById.Download_url)
+	signedURL, err := generateSignedURL("document-patient", document.GetDocumentById.Name)
 	if err != nil {
 		return GetDocumentByIdResponse{model.Document{}, 500, fmt.Errorf("error generating signed URL: %v", err)}
 	}
