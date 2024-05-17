@@ -19,7 +19,7 @@ func generateSignedURL(bucketName, objectKey string) (string, error) {
 		Key:    aws.String(objectKey),
 	})
 
-	url, err := req.Presign(5 * time.Minute)
+	url, err := req.Presign(20 * time.Minute)
 	if err != nil {
 		return "", err
 	}
