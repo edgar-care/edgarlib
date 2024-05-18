@@ -19,6 +19,19 @@ func (a ByCoverage) Len() int           { return len(a) }
 func (a ByCoverage) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByCoverage) Less(i, j int) bool { return a[i].Percentage > a[j].Percentage }
 
+func isChronic(sessionSymptom model.SessionSymptom) bool {
+	gqlClient := graphql.CreateClient()
+	symptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
+
+	for _, symptom := range symptoms.GetSymptoms {
+		if symptom.Code == sessionSymptom.Name && *sessionSymptom.Duration >= symptom.Chronic {
+			return true
+		}
+	}
+
+	return false
+}
+
 func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease) DiseaseCoverage {
 	var potentialQuestionSymptom string
 	var buf string
@@ -29,12 +42,18 @@ func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDisease
 		for _, contextSymptom := range context {
 			if contextSymptom.Presence != nil {
 				if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == true {
-					percentage += symptomWeight.Value
+					if symptomWeight.Chronic && !isChronic(contextSymptom) {
+						percentage += symptomWeight.Value * 0.75
+					} else if !symptomWeight.Chronic && isChronic(contextSymptom) {
+						percentage += symptomWeight.Value * 0.75
+					} else {
+						percentage += symptomWeight.Value
+					}
 					lock = 0
 					break
 				} else if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == false {
 					if contextSymptom.Treated != nil && len(contextSymptom.Treated) != 0 {
-						percentage += symptomWeight.Value / 2
+						percentage += symptomWeight.Value * 0.5
 					}
 					lock = 0
 					break
