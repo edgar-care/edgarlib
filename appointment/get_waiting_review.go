@@ -17,8 +17,8 @@ type SessionSummary struct {
 }
 
 type RdvSessionPair struct {
-	Rdv     model.Rdv
-	Session SessionSummary
+	Rdv     model.Rdv      `json:"rdv"`
+	Session SessionSummary `json:"session"`
 }
 
 type GetWaitingReviewResponse struct {
