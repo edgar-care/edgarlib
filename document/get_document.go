@@ -37,7 +37,6 @@ func GetDocument(id string) GetDocumentByIdResponse {
 	}
 
 	filename := document.GetDocumentById.Id + ext
-	fmt.Print(filename)
 
 	signedURL, err := generateURL("document-patient", filename, document.GetDocumentById.Name)
 	if err != nil {
