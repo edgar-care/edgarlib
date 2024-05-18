@@ -201,7 +201,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	var diseasesinput []graphql.SessionDiseasesInput
 	if exam.Done == true {
-		diseasesinput, err = utils.GetSessionDiseases(symptoms)
+		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)))
 		if err != nil {
 			return DiagnoseResponse{
 				Code: 500,
