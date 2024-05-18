@@ -57,8 +57,8 @@ mutation CreateDemoAccount($email: String!, $password: String!){
     }
 }
 
-mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $advice: String){
-    createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice){
+mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float!, $advice: String){
+    createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice){
         id
         code
         name
@@ -68,6 +68,7 @@ mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $s
             value
             chronic
         }
+        overweight_factor
         advice
     }
 }
@@ -351,8 +352,8 @@ mutation UpdateDemoAccount($id: String!, $email: String, $password: String){
     }
 }
 
-mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $advice: String){
-    updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice){
+mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float, $advice: String){
+    updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice){
         id
         code
         name
@@ -362,6 +363,7 @@ mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [S
             value
             chronic
         }
+        overweight_factor
         advice
     }
 }
@@ -656,6 +658,7 @@ query GetDiseaseById($id: String!){
             value
             chronic
         }
+        overweight_factor
         advice
     }
 }
@@ -671,6 +674,7 @@ query GetDiseases{
             value
             chronic
         }
+        overweight_factor
         advice
     }
 }
