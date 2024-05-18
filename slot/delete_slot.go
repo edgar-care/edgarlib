@@ -31,11 +31,11 @@ func DeleteSlot(slotId string, doctorId string) DeleteSlotResponse {
 	}
 	gqlClient := graphql.CreateClient()
 
-	check_id, err := graphql.GetRdvById(context.Background(), gqlClient, slotId)
+	check_id, err := graphql.GetSlotById(context.Background(), gqlClient, slotId)
 	if err != nil {
 		return DeleteSlotResponse{Deleted: false, UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a slot")}
 	}
-	if check_id.GetRdvById.Id_patient != "" {
+	if check_id.GetSlotById.Id_patient != "" {
 		return DeleteSlotResponse{Deleted: false, UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("this slot is booked, you cannot delete it")}
 	}
 
