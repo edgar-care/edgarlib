@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"path/filepath"
 
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
@@ -30,7 +31,15 @@ func GetDocument(id string) GetDocumentByIdResponse {
 		return GetDocumentByIdResponse{model.Document{}, 400, errors.New("id does not correspond to a document")}
 	}
 
-	signedURL, err := generateURL("document-patient", document.GetDocumentById.Id)
+	ext := filepath.Ext(document.GetDocumentById.Name)
+	if ext == "" {
+		return GetDocumentByIdResponse{model.Document{}, 500, errors.New("invalid file extension")}
+	}
+
+	filename := document.GetDocumentById.Id + ext
+	fmt.Print(filename)
+
+	signedURL, err := generateURL("document-patient", filename, document.GetDocumentById.Name)
 	if err != nil {
 		return GetDocumentByIdResponse{model.Document{}, 500, fmt.Errorf("error generating signed URL: %v", err)}
 	}
@@ -58,7 +67,13 @@ func GetDocuments(id string) GetDocumentsResponse {
 	}
 
 	for _, document := range documents.GetPatientDocument {
-		signedURL, err := generateURL("document-patient", document.Id)
+		ext := filepath.Ext(document.Name)
+		if ext == "" {
+			return GetDocumentsResponse{[]model.Document{}, 500, errors.New("invalid file extension")}
+		}
+
+		filename := document.Id + ext
+		signedURL, err := generateURL("document-patient", filename, document.Name)
 		if err != nil {
 			return GetDocumentsResponse{[]model.Document{}, 500, fmt.Errorf("error generating signed URL: %v", err)}
 		}
