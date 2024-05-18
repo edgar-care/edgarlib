@@ -1,42 +1,30 @@
 package document
 
 import (
-	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/joho/godotenv"
-	"os"
 	"time"
 )
 
-func generateSignedURL(bucketName, objectKey string) (string, error) {
-	err := godotenv.Load()
+func generateURL(bucket string, key string) (string, error) {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("eu-west-3")},
+	)
 	if err != nil {
-		return "", fmt.Errorf("erreur lors du chargement du fichier .env: %w", err)
+		return "", err
 	}
-
-	sess := session.Must(session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("EDGAR_REGION")),
-		Credentials: credentials.NewStaticCredentials(
-			os.Getenv("EDGAR_ACCESS_KEY_ID"),
-			os.Getenv("EDGAR_SECRET_ACCESS_KEY"),
-			"",
-		),
-	}))
 
 	svc := s3.New(sess)
 
 	req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
-		Bucket: aws.String(bucketName),
-		Key:    aws.String(objectKey),
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
 	})
-
-	url, err := req.Presign(20 * time.Minute)
+	urlStr, err := req.Presign(15 * time.Minute)
 	if err != nil {
-		return "", fmt.Errorf("erreur lors de la génération de l'URL signée: %w", err)
+		return "", err
 	}
 
-	return url, nil
+	return urlStr, nil
 }
