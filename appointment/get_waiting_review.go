@@ -8,9 +8,17 @@ import (
 	"github.com/edgar-care/edgarlib/graphql/server/model"
 )
 
+type SessionSummary struct {
+	Diseases  []model.SessionDiseases `json:"diseases"`
+	Fiability float64                 `json:"fiability"`
+	Symptoms  []model.SessionSymptom  `json:"symptoms"`
+	Logs      []graphql.LogsInput     `json:"logs"`
+	Alerts    []model.Alert           `json:"alerts"`
+}
+
 type RdvSessionPair struct {
-	Rdv     model.Rdv
-	Session diagnos.GetSummaryResponse
+	Rdv     model.Rdv      `json:"rdv"`
+	Session SessionSummary `json:"session"`
 }
 
 type GetWaitingReviewResponse struct {
@@ -47,7 +55,13 @@ func GetWaitingReview(doctorId string) GetWaitingReviewResponse {
 				AppointmentStatus: model.AppointmentStatus(appointment.Appointment_status),
 				SessionID:         sessionResponse.SessionId,
 			},
-			Session: sessionResponse,
+			Session: SessionSummary{
+				Diseases:  sessionResponse.Diseases,
+				Fiability: sessionResponse.Fiability,
+				Symptoms:  sessionResponse.Symptoms,
+				Logs:      sessionResponse.Logs,
+				Alerts:    sessionResponse.Alerts,
+			},
 		})
 	}
 
