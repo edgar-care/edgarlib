@@ -35,15 +35,22 @@
             margin-top: 20px;
         }
 
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
+        .link-text {
+            font-size: 18px;
+            color: #333333;
             margin-top: 20px;
-            text-align: center;
+        }
+
+        .link-url {
+            display: inline-block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .link-url:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -51,7 +58,8 @@
 <div class="container">
     <img class="logo" src="https://document-patient.s3.amazonaws.com/Full%20width%20-%20color.png" alt="Logo">
     <p class="body-content">{{.Body}}</p>
-    <a href="{{.ButtonUrl}}" class="button">{{.ButtonTitle}}</a>
+    <div class="link-text">{{.ButtonTitle}}</div>
+    <p class="body-content">{{.ButtonUrl}}</p>
 </div>
 </body>
 </html>
