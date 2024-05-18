@@ -118,12 +118,13 @@ type ComplexityRoot struct {
 	}
 
 	Disease struct {
-		Advice         func(childComplexity int) int
-		Code           func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Name           func(childComplexity int) int
-		Symptoms       func(childComplexity int) int
-		SymptomsWeight func(childComplexity int) int
+		Advice           func(childComplexity int) int
+		Code             func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Name             func(childComplexity int) int
+		OverweightFactor func(childComplexity int) int
+		Symptoms         func(childComplexity int) int
+		SymptomsWeight   func(childComplexity int) int
 	}
 
 	Doctor struct {
@@ -190,7 +191,7 @@ type ComplexityRoot struct {
 		CreateAnteFamily         func(childComplexity int, name string, disease []string) int
 		CreateChat               func(childComplexity int, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
 		CreateDemoAccount        func(childComplexity int, email string, password string) int
-		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) int
+		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, advice *string) int
 		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
 		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
 		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string) int
@@ -232,7 +233,7 @@ type ComplexityRoot struct {
 		UpdateAnteFamily         func(childComplexity int, id string, name *string, disease []string) int
 		UpdateChat               func(childComplexity int, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
 		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
-		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) int
+		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, advice *string) int
 		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) int
 		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
 		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) int
@@ -437,8 +438,8 @@ type MutationResolver interface {
 	CreateSymptom(ctx context.Context, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error)
 	UpdateSymptom(ctx context.Context, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) (*model.Symptom, error)
 	DeleteSymptom(ctx context.Context, id string) (*bool, error)
-	CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error)
-	UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, advice *string) (*model.Disease, error)
+	CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, advice *string) (*model.Disease, error)
+	UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, advice *string) (*model.Disease, error)
 	DeleteDisease(ctx context.Context, id string) (*bool, error)
 	CreateNotification(ctx context.Context, token string, message string, title string) (*model.Notification, error)
 	UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error)
@@ -868,6 +869,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Disease.Name(childComplexity), true
 
+	case "Disease.overweight_factor":
+		if e.complexity.Disease.OverweightFactor == nil {
+			break
+		}
+
+		return e.complexity.Disease.OverweightFactor(childComplexity), true
+
 	case "Disease.symptoms":
 		if e.complexity.Disease.Symptoms == nil {
 			break
@@ -1242,7 +1250,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDisease(childComplexity, args["code"].(string), args["name"].(string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["advice"].(*string)), true
+		return e.complexity.Mutation.CreateDisease(childComplexity, args["code"].(string), args["name"].(string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["overweight_factor"].(float64), args["advice"].(*string)), true
 
 	case "Mutation.createDoctor":
 		if e.complexity.Mutation.CreateDoctor == nil {
@@ -1746,7 +1754,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDisease(childComplexity, args["id"].(string), args["code"].(*string), args["name"].(*string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["advice"].(*string)), true
+		return e.complexity.Mutation.UpdateDisease(childComplexity, args["id"].(string), args["code"].(*string), args["name"].(*string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["overweight_factor"].(*float64), args["advice"].(*string)), true
 
 	case "Mutation.updateDoctor":
 		if e.complexity.Mutation.UpdateDoctor == nil {
@@ -3226,6 +3234,7 @@ type Disease {
     name: String!
     symptoms: [String!]!
     symptoms_weight: [SymptomsWeight!]
+    overweight_factor: Float!
     advice: String
 }
 
@@ -3623,10 +3632,10 @@ type Mutation {
     deleteSymptom(id: String!): Boolean
 
     # Create a new disease.
-    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], advice: String): Disease
+    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float!, advice: String): Disease
 
     # Update a new disease.
-    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], advice: String): Disease
+    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float, advice: String): Disease
 
     # Delete a disease.
     deleteDisease(id: String!): Boolean
@@ -4110,15 +4119,24 @@ func (ec *executionContext) field_Mutation_createDisease_args(ctx context.Contex
 		}
 	}
 	args["symptoms_weight"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["advice"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg4 float64
+	if tmp, ok := rawArgs["overweight_factor"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overweight_factor"))
+		arg4, err = ec.unmarshalNFloat2float64(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["advice"] = arg4
+	args["overweight_factor"] = arg4
+	var arg5 *string
+	if tmp, ok := rawArgs["advice"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
+		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["advice"] = arg5
 	return args, nil
 }
 
@@ -5532,15 +5550,24 @@ func (ec *executionContext) field_Mutation_updateDisease_args(ctx context.Contex
 		}
 	}
 	args["symptoms_weight"] = arg4
-	var arg5 *string
-	if tmp, ok := rawArgs["advice"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg5 *float64
+	if tmp, ok := rawArgs["overweight_factor"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overweight_factor"))
+		arg5, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["advice"] = arg5
+	args["overweight_factor"] = arg5
+	var arg6 *string
+	if tmp, ok := rawArgs["advice"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
+		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["advice"] = arg6
 	return args, nil
 }
 
@@ -8903,6 +8930,50 @@ func (ec *executionContext) fieldContext_Disease_symptoms_weight(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Disease_overweight_factor(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Disease_overweight_factor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OverweightFactor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Disease_overweight_factor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Disease",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Disease_advice(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Disease_advice(ctx, field)
 	if err != nil {
@@ -11967,7 +12038,7 @@ func (ec *executionContext) _Mutation_createDisease(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDisease(rctx, fc.Args["code"].(string), fc.Args["name"].(string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["advice"].(*string))
+		return ec.resolvers.Mutation().CreateDisease(rctx, fc.Args["code"].(string), fc.Args["name"].(string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["overweight_factor"].(float64), fc.Args["advice"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -11999,6 +12070,8 @@ func (ec *executionContext) fieldContext_Mutation_createDisease(ctx context.Cont
 				return ec.fieldContext_Disease_symptoms(ctx, field)
 			case "symptoms_weight":
 				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
+			case "overweight_factor":
+				return ec.fieldContext_Disease_overweight_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -12033,7 +12106,7 @@ func (ec *executionContext) _Mutation_updateDisease(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDisease(rctx, fc.Args["id"].(string), fc.Args["code"].(*string), fc.Args["name"].(*string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["advice"].(*string))
+		return ec.resolvers.Mutation().UpdateDisease(rctx, fc.Args["id"].(string), fc.Args["code"].(*string), fc.Args["name"].(*string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["overweight_factor"].(*float64), fc.Args["advice"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12065,6 +12138,8 @@ func (ec *executionContext) fieldContext_Mutation_updateDisease(ctx context.Cont
 				return ec.fieldContext_Disease_symptoms(ctx, field)
 			case "symptoms_weight":
 				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
+			case "overweight_factor":
+				return ec.fieldContext_Disease_overweight_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -16484,6 +16559,8 @@ func (ec *executionContext) fieldContext_Query_getDiseaseById(ctx context.Contex
 				return ec.fieldContext_Disease_symptoms(ctx, field)
 			case "symptoms_weight":
 				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
+			case "overweight_factor":
+				return ec.fieldContext_Disease_overweight_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -16613,6 +16690,8 @@ func (ec *executionContext) fieldContext_Query_getDiseases(ctx context.Context, 
 				return ec.fieldContext_Disease_symptoms(ctx, field)
 			case "symptoms_weight":
 				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
+			case "overweight_factor":
+				return ec.fieldContext_Disease_overweight_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
 			}
@@ -23854,6 +23933,11 @@ func (ec *executionContext) _Disease(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "symptoms_weight":
 			out.Values[i] = ec._Disease_symptoms_weight(ctx, field, obj)
+		case "overweight_factor":
+			out.Values[i] = ec._Disease_overweight_factor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "advice":
 			out.Values[i] = ec._Disease_advice(ctx, field, obj)
 		default:

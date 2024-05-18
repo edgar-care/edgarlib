@@ -135,7 +135,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		//	}
 
 	} else if exam.Question == "" && session.GetSessionById.Last_question == "" {
-		exam = utils.CallExam(symptoms)
+		exam = utils.CallExam(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)))
 		if exam.Err != nil {
 			if exam.Err != nil {
 				return DiagnoseResponse{

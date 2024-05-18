@@ -32,7 +32,7 @@ func isChronic(sessionSymptom model.SessionSymptom) bool {
 	return false
 }
 
-func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease) DiseaseCoverage {
+func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease, imc float64) DiseaseCoverage {
 	var potentialQuestionSymptom string
 	var buf string
 	percentage := 0.0
@@ -66,6 +66,9 @@ func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDisease
 			potentialQuestionSymptom = buf
 		}
 	}
+	if disease.Overweight_factor != 0 && imc > 25.0 {
+		percentage *= disease.Overweight_factor
+	}
 
 	return DiseaseCoverage{Disease: disease.Code, Percentage: percentage, PotentialQuestion: potentialQuestionSymptom}
 }
@@ -98,12 +101,12 @@ func GuessQuestion(mapped []DiseaseCoverage) (string, []string, error) {
 	return getTheQuestion(mapped[i].PotentialQuestion, symptoms.GetSymptoms), []string{mapped[i].PotentialQuestion}, nil
 }
 
-func Calculi(sessionContext []model.SessionSymptom) ([]DiseaseCoverage, bool) {
+func Calculi(sessionContext []model.SessionSymptom, imc float64) ([]DiseaseCoverage, bool) {
 	gqlClient := graphql.CreateClient()
 	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
 	mapped := make([]DiseaseCoverage, len(diseases.GetDiseases))
 	for i, e := range diseases.GetDiseases {
-		mapped[i] = CalculPercentage(sessionContext, e)
+		mapped[i] = CalculPercentage(sessionContext, e, imc)
 	}
 	sort.Sort(ByCoverage(mapped))
 

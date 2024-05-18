@@ -322,12 +322,13 @@ func (v *CreateDemoAccountResponse) GetCreateDemoAccount() CreateDemoAccountCrea
 
 // CreateDiseaseCreateDisease includes the requested fields of the GraphQL type Disease.
 type CreateDiseaseCreateDisease struct {
-	Id              string                                                    `json:"id"`
-	Code            string                                                    `json:"code"`
-	Name            string                                                    `json:"name"`
-	Symptoms        []string                                                  `json:"symptoms"`
-	Symptoms_weight []CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
-	Advice          string                                                    `json:"advice"`
+	Id                string                                                    `json:"id"`
+	Code              string                                                    `json:"code"`
+	Name              string                                                    `json:"name"`
+	Symptoms          []string                                                  `json:"symptoms"`
+	Symptoms_weight   []CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Overweight_factor float64                                                   `json:"overweight_factor"`
+	Advice            string                                                    `json:"advice"`
 }
 
 // GetId returns CreateDiseaseCreateDisease.Id, and is useful for accessing the field via an interface.
@@ -346,6 +347,9 @@ func (v *CreateDiseaseCreateDisease) GetSymptoms() []string { return v.Symptoms 
 func (v *CreateDiseaseCreateDisease) GetSymptoms_weight() []CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight {
 	return v.Symptoms_weight
 }
+
+// GetOverweight_factor returns CreateDiseaseCreateDisease.Overweight_factor, and is useful for accessing the field via an interface.
+func (v *CreateDiseaseCreateDisease) GetOverweight_factor() float64 { return v.Overweight_factor }
 
 // GetAdvice returns CreateDiseaseCreateDisease.Advice, and is useful for accessing the field via an interface.
 func (v *CreateDiseaseCreateDisease) GetAdvice() string { return v.Advice }
@@ -1725,12 +1729,13 @@ func (v *GetDemoAccountsResponse) GetGetDemoAccounts() []GetDemoAccountsGetDemoA
 
 // GetDiseaseByIdGetDiseaseByIdDisease includes the requested fields of the GraphQL type Disease.
 type GetDiseaseByIdGetDiseaseByIdDisease struct {
-	Id              string                                                             `json:"id"`
-	Code            string                                                             `json:"code"`
-	Name            string                                                             `json:"name"`
-	Symptoms        []string                                                           `json:"symptoms"`
-	Symptoms_weight []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
-	Advice          string                                                             `json:"advice"`
+	Id                string                                                             `json:"id"`
+	Code              string                                                             `json:"code"`
+	Name              string                                                             `json:"name"`
+	Symptoms          []string                                                           `json:"symptoms"`
+	Symptoms_weight   []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Overweight_factor float64                                                            `json:"overweight_factor"`
+	Advice            string                                                             `json:"advice"`
 }
 
 // GetId returns GetDiseaseByIdGetDiseaseByIdDisease.Id, and is useful for accessing the field via an interface.
@@ -1748,6 +1753,11 @@ func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms() []string { return v.
 // GetSymptoms_weight returns GetDiseaseByIdGetDiseaseByIdDisease.Symptoms_weight, and is useful for accessing the field via an interface.
 func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms_weight() []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight {
 	return v.Symptoms_weight
+}
+
+// GetOverweight_factor returns GetDiseaseByIdGetDiseaseByIdDisease.Overweight_factor, and is useful for accessing the field via an interface.
+func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetOverweight_factor() float64 {
+	return v.Overweight_factor
 }
 
 // GetAdvice returns GetDiseaseByIdGetDiseaseByIdDisease.Advice, and is useful for accessing the field via an interface.
@@ -1787,12 +1797,13 @@ func (v *GetDiseaseByIdResponse) GetGetDiseaseById() GetDiseaseByIdGetDiseaseByI
 
 // GetDiseasesGetDiseasesDisease includes the requested fields of the GraphQL type Disease.
 type GetDiseasesGetDiseasesDisease struct {
-	Id              string                                                       `json:"id"`
-	Code            string                                                       `json:"code"`
-	Name            string                                                       `json:"name"`
-	Symptoms        []string                                                     `json:"symptoms"`
-	Symptoms_weight []GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
-	Advice          string                                                       `json:"advice"`
+	Id                string                                                       `json:"id"`
+	Code              string                                                       `json:"code"`
+	Name              string                                                       `json:"name"`
+	Symptoms          []string                                                     `json:"symptoms"`
+	Symptoms_weight   []GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Overweight_factor float64                                                      `json:"overweight_factor"`
+	Advice            string                                                       `json:"advice"`
 }
 
 // GetId returns GetDiseasesGetDiseasesDisease.Id, and is useful for accessing the field via an interface.
@@ -1811,6 +1822,9 @@ func (v *GetDiseasesGetDiseasesDisease) GetSymptoms() []string { return v.Sympto
 func (v *GetDiseasesGetDiseasesDisease) GetSymptoms_weight() []GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight {
 	return v.Symptoms_weight
 }
+
+// GetOverweight_factor returns GetDiseasesGetDiseasesDisease.Overweight_factor, and is useful for accessing the field via an interface.
+func (v *GetDiseasesGetDiseasesDisease) GetOverweight_factor() float64 { return v.Overweight_factor }
 
 // GetAdvice returns GetDiseasesGetDiseasesDisease.Advice, and is useful for accessing the field via an interface.
 func (v *GetDiseasesGetDiseasesDisease) GetAdvice() string { return v.Advice }
@@ -3974,12 +3988,13 @@ func (v *UpdateDiseaseResponse) GetUpdateDisease() UpdateDiseaseUpdateDisease { 
 
 // UpdateDiseaseUpdateDisease includes the requested fields of the GraphQL type Disease.
 type UpdateDiseaseUpdateDisease struct {
-	Id              string                                                    `json:"id"`
-	Code            string                                                    `json:"code"`
-	Name            string                                                    `json:"name"`
-	Symptoms        []string                                                  `json:"symptoms"`
-	Symptoms_weight []UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
-	Advice          string                                                    `json:"advice"`
+	Id                string                                                    `json:"id"`
+	Code              string                                                    `json:"code"`
+	Name              string                                                    `json:"name"`
+	Symptoms          []string                                                  `json:"symptoms"`
+	Symptoms_weight   []UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
+	Overweight_factor float64                                                   `json:"overweight_factor"`
+	Advice            string                                                    `json:"advice"`
 }
 
 // GetId returns UpdateDiseaseUpdateDisease.Id, and is useful for accessing the field via an interface.
@@ -3998,6 +4013,9 @@ func (v *UpdateDiseaseUpdateDisease) GetSymptoms() []string { return v.Symptoms 
 func (v *UpdateDiseaseUpdateDisease) GetSymptoms_weight() []UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight {
 	return v.Symptoms_weight
 }
+
+// GetOverweight_factor returns UpdateDiseaseUpdateDisease.Overweight_factor, and is useful for accessing the field via an interface.
+func (v *UpdateDiseaseUpdateDisease) GetOverweight_factor() float64 { return v.Overweight_factor }
 
 // GetAdvice returns UpdateDiseaseUpdateDisease.Advice, and is useful for accessing the field via an interface.
 func (v *UpdateDiseaseUpdateDisease) GetAdvice() string { return v.Advice }
@@ -4692,11 +4710,12 @@ func (v *__CreateDemoAccountInput) GetPassword() string { return v.Password }
 
 // __CreateDiseaseInput is used internally by genqlient
 type __CreateDiseaseInput struct {
-	Code            string                `json:"code"`
-	Name            string                `json:"name"`
-	Symptoms        []string              `json:"symptoms"`
-	Symptoms_weight []SymptomsWeightInput `json:"symptoms_weight"`
-	Advice          string                `json:"advice"`
+	Code              string                `json:"code"`
+	Name              string                `json:"name"`
+	Symptoms          []string              `json:"symptoms"`
+	Symptoms_weight   []SymptomsWeightInput `json:"symptoms_weight"`
+	Overweight_factor float64               `json:"overweight_factor"`
+	Advice            string                `json:"advice"`
 }
 
 // GetCode returns __CreateDiseaseInput.Code, and is useful for accessing the field via an interface.
@@ -4710,6 +4729,9 @@ func (v *__CreateDiseaseInput) GetSymptoms() []string { return v.Symptoms }
 
 // GetSymptoms_weight returns __CreateDiseaseInput.Symptoms_weight, and is useful for accessing the field via an interface.
 func (v *__CreateDiseaseInput) GetSymptoms_weight() []SymptomsWeightInput { return v.Symptoms_weight }
+
+// GetOverweight_factor returns __CreateDiseaseInput.Overweight_factor, and is useful for accessing the field via an interface.
+func (v *__CreateDiseaseInput) GetOverweight_factor() float64 { return v.Overweight_factor }
 
 // GetAdvice returns __CreateDiseaseInput.Advice, and is useful for accessing the field via an interface.
 func (v *__CreateDiseaseInput) GetAdvice() string { return v.Advice }
@@ -5634,12 +5656,13 @@ func (v *__UpdateDemoAccountInput) GetPassword() string { return v.Password }
 
 // __UpdateDiseaseInput is used internally by genqlient
 type __UpdateDiseaseInput struct {
-	Id              string                `json:"id"`
-	Code            string                `json:"code"`
-	Name            string                `json:"name"`
-	Symptoms        []string              `json:"symptoms"`
-	Symptoms_weight []SymptomsWeightInput `json:"symptoms_weight"`
-	Advice          string                `json:"advice"`
+	Id                string                `json:"id"`
+	Code              string                `json:"code"`
+	Name              string                `json:"name"`
+	Symptoms          []string              `json:"symptoms"`
+	Symptoms_weight   []SymptomsWeightInput `json:"symptoms_weight"`
+	Overweight_factor float64               `json:"overweight_factor"`
+	Advice            string                `json:"advice"`
 }
 
 // GetId returns __UpdateDiseaseInput.Id, and is useful for accessing the field via an interface.
@@ -5656,6 +5679,9 @@ func (v *__UpdateDiseaseInput) GetSymptoms() []string { return v.Symptoms }
 
 // GetSymptoms_weight returns __UpdateDiseaseInput.Symptoms_weight, and is useful for accessing the field via an interface.
 func (v *__UpdateDiseaseInput) GetSymptoms_weight() []SymptomsWeightInput { return v.Symptoms_weight }
+
+// GetOverweight_factor returns __UpdateDiseaseInput.Overweight_factor, and is useful for accessing the field via an interface.
+func (v *__UpdateDiseaseInput) GetOverweight_factor() float64 { return v.Overweight_factor }
 
 // GetAdvice returns __UpdateDiseaseInput.Advice, and is useful for accessing the field via an interface.
 func (v *__UpdateDiseaseInput) GetAdvice() string { return v.Advice }
@@ -6409,8 +6435,8 @@ func CreateDemoAccount(
 
 // The query or mutation executed by CreateDisease.
 const CreateDisease_Operation = `
-mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $advice: String) {
-	createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice) {
+mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float!, $advice: String) {
+	createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice) {
 		id
 		code
 		name
@@ -6420,6 +6446,7 @@ mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $
 			value
 			chronic
 		}
+		overweight_factor
 		advice
 	}
 }
@@ -6432,17 +6459,19 @@ func CreateDisease(
 	name string,
 	symptoms []string,
 	symptoms_weight []SymptomsWeightInput,
+	overweight_factor float64,
 	advice string,
 ) (*CreateDiseaseResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateDisease",
 		Query:  CreateDisease_Operation,
 		Variables: &__CreateDiseaseInput{
-			Code:            code,
-			Name:            name,
-			Symptoms:        symptoms,
-			Symptoms_weight: symptoms_weight,
-			Advice:          advice,
+			Code:              code,
+			Name:              name,
+			Symptoms:          symptoms,
+			Symptoms_weight:   symptoms_weight,
+			Overweight_factor: overweight_factor,
+			Advice:            advice,
 		},
 	}
 	var err error
@@ -8389,6 +8418,7 @@ query GetDiseaseById ($id: String!) {
 			value
 			chronic
 		}
+		overweight_factor
 		advice
 	}
 }
@@ -8433,6 +8463,7 @@ query GetDiseases {
 			value
 			chronic
 		}
+		overweight_factor
 		advice
 	}
 }
@@ -10231,8 +10262,8 @@ func UpdateDemoAccount(
 
 // The query or mutation executed by UpdateDisease.
 const UpdateDisease_Operation = `
-mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $advice: String) {
-	updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, advice: $advice) {
+mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float, $advice: String) {
+	updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice) {
 		id
 		code
 		name
@@ -10242,6 +10273,7 @@ mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [
 			value
 			chronic
 		}
+		overweight_factor
 		advice
 	}
 }
@@ -10255,18 +10287,20 @@ func UpdateDisease(
 	name string,
 	symptoms []string,
 	symptoms_weight []SymptomsWeightInput,
+	overweight_factor float64,
 	advice string,
 ) (*UpdateDiseaseResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateDisease",
 		Query:  UpdateDisease_Operation,
 		Variables: &__UpdateDiseaseInput{
-			Id:              id,
-			Code:            code,
-			Name:            name,
-			Symptoms:        symptoms,
-			Symptoms_weight: symptoms_weight,
-			Advice:          advice,
+			Id:                id,
+			Code:              code,
+			Name:              name,
+			Symptoms:          symptoms,
+			Symptoms_weight:   symptoms_weight,
+			Overweight_factor: overweight_factor,
+			Advice:            advice,
 		},
 	}
 	var err error
