@@ -2509,23 +2509,29 @@ func (r *queryResolver) GetNlpReportsByVersion(ctx context.Context, version int)
 
 // GetChats is the resolver for the getChats field.
 func (r *queryResolver) GetChats(ctx context.Context, id string) ([]*model.Chat, error) {
-	var patient model.Patient
+	var user struct {
+		ChatIds []*string `bson:"chat_ids"`
+	}
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
 
-	patientFilter := bson.M{"_id": objId}
-
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, patientFilter).Decode(&patient)
+	// Attempt to find the user in the "Patient" collection
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
 	if err != nil {
-		return nil, err
+		// If not found in "Patient", attempt to find in the "Doctor" collection
+		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
+		if err != nil {
+			// If not found in either collection, return an error
+			return nil, errors.New("user not found in either Patient or Doctor collection")
+		}
 	}
 
 	var followUp []*model.Chat
-	for _, chat_ids := range patient.ChatIds {
+	for _, chatID := range user.ChatIds {
 		var chat model.Chat
-		objId, err := primitive.ObjectIDFromHex(*chat_ids)
+		objId, err := primitive.ObjectIDFromHex(*chatID)
 		if err != nil {
 			return nil, err
 		}
