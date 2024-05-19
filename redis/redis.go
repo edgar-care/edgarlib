@@ -59,3 +59,13 @@ func SetKey(key string, value string, expire *int) (string, error) {
 	return resp, nil
 
 }
+
+func DeleteKey(key string) (string, error) {
+	client, err := CreateClient()
+	edgarlib.CheckError(err)
+
+	resp, err := ExecuteCommand(client, fmt.Sprintf("redis-cli DEL %s", key))
+	edgarlib.CheckError(err)
+
+	return resp, nil
+}
