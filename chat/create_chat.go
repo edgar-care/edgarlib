@@ -33,35 +33,50 @@ type CreateChatResponse struct {
 func CreateChat(patientID string, content ContentInput) CreateChatResponse {
 	gqlClient := graphql.CreateClient()
 
+	time := int(time.Now().Unix())
+
 	var chatParticipants []graphql.ChatParticipantsInput
 	recipientIDs := content.RecipientIds
 	for i := 0; i < len(recipientIDs); i++ {
 		recipientID := recipientIDs[i]
 		lastSeen := 0
 		if recipientID == patientID {
-			lastSeen = int(time.Now().Unix())
+			lastSeen = time
 		}
 		chatParticipants = append(chatParticipants, graphql.ChatParticipantsInput{Participant_id: recipientID, Last_seen: lastSeen})
 	}
 
-	// Créer le message pour le patientID
 	chatMessages := []graphql.ChatMessagesInput{
-		{Owner_id: patientID, Message: content.Message, Sended_time: int(time.Now().Unix())},
+		{Owner_id: patientID, Message: content.Message, Sended_time: time},
 	}
 
 	newChat, err := graphql.CreateChat(context.Background(), gqlClient, chatParticipants, chatMessages)
 	if err != nil {
-		return CreateChatResponse{Chat: model.Chat{}, Code: 400, Err: errors.New("update failed" + err.Error())}
+		return CreateChatResponse{Chat: model.Chat{}, Code: 400, Err: errors.New("Creation failed" + err.Error())}
 	}
 
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
 	if err != nil {
-		return CreateChatResponse{Chat: model.Chat{}, Code: 400, Err: errors.New("id does not correspond to a patient")}
+		return CreateChatResponse{Chat: model.Chat{}, Code: 400, Err: errors.New("Id does not correspond to a patient")}
 	}
 
 	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, append(patient.GetPatientById.Chat_ids, newChat.CreateChat.Id))
 	if err != nil {
-		return CreateChatResponse{Chat: model.Chat{}, Code: 500, Err: errors.New("unable to update patient")}
+		return CreateChatResponse{Chat: model.Chat{}, Code: 500, Err: errors.New("Unable to update patient")}
+	}
+
+	for _, chatParticipant := range chatParticipants {
+		if chatParticipant.Participant_id == patientID {
+			continue
+		}
+		doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, chatParticipant.Participant_id)
+		if err != nil {
+			return CreateChatResponse{Chat: model.Chat{}, Code: 500, Err: errors.New("Unable to update doctor")}
+		}
+		_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.GetDoctorById.Id, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country}, append(doctor.GetDoctorById.Chat_ids, newChat.CreateChat.Id))
+		if err != nil {
+			return CreateChatResponse{Chat: model.Chat{}, Code: 500, Err: errors.New("Unable to update doctor")}
+		}
 	}
 
 	participantReturn := make([]*model.ChatParticipants, len(newChat.CreateChat.Participants))
