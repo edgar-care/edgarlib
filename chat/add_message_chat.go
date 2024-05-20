@@ -22,11 +22,6 @@ type UpdateChatResponse struct {
 func AddMessageChat(patientID string, content ContentMessage) UpdateChatResponse {
 	gqlClient := graphql.CreateClient()
 
-	_, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
-	if err != nil {
-		return UpdateChatResponse{Chat: model.Chat{}, Code: 400, Err: errors.New("id does not correspond to a patient")}
-	}
-
 	chat, err := graphql.GetChatById(context.Background(), gqlClient, content.ChatId)
 	if err != nil {
 		return UpdateChatResponse{Chat: model.Chat{}, Code: 400, Err: errors.New("id does not correspond to a chat")}

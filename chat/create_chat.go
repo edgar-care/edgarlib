@@ -46,7 +46,6 @@ func CreateChat(patientID string, content ContentInput) CreateChatResponse {
 		chatParticipants = append(chatParticipants, graphql.ChatParticipantsInput{Participant_id: recipientID, Last_seen: lastSeen})
 	}
 
-	// Créer le message pour le patientID
 	chatMessages := []graphql.ChatMessagesInput{
 		{Owner_id: patientID, Message: content.Message, Sended_time: time},
 	}
