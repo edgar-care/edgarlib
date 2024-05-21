@@ -239,7 +239,7 @@ type ComplexityRoot struct {
 		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) int
 		UpdateNotification       func(childComplexity int, id string, token string, message string, title string) int
 		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string) int
-		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) int
+		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) int
 		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
 		UpdateSymptom            func(childComplexity int, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) int
 		UpdateTestAccount        func(childComplexity int, id string, email *string, password *string) int
@@ -341,6 +341,7 @@ type ComplexityRoot struct {
 		CancelationReason func(childComplexity int) int
 		DoctorID          func(childComplexity int) int
 		EndDate           func(childComplexity int) int
+		HealthMethod      func(childComplexity int) int
 		ID                func(childComplexity int) int
 		IDPatient         func(childComplexity int) int
 		SessionID         func(childComplexity int) int
@@ -445,7 +446,7 @@ type MutationResolver interface {
 	UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error)
 	DeleteNotification(ctx context.Context, id string) (*bool, error)
 	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) (*model.Rdv, error)
-	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) (*model.Rdv, error)
+	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) (*model.Rdv, error)
 	DeleteRdv(ctx context.Context, id string) (*bool, error)
 	DeleteSlot(ctx context.Context, id string) (*bool, error)
 	CreateDocument(ctx context.Context, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) (*model.Document, error)
@@ -1826,7 +1827,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["session_id"].(*string)), true
+		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["session_id"].(*string), args["health_method"].(*string)), true
 
 	case "Mutation.updateSession":
 		if e.complexity.Mutation.UpdateSession == nil {
@@ -2609,6 +2610,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Rdv.EndDate(childComplexity), true
 
+	case "Rdv.health_method":
+		if e.complexity.Rdv.HealthMethod == nil {
+			break
+		}
+
+		return e.complexity.Rdv.HealthMethod(childComplexity), true
+
 	case "Rdv.id":
 		if e.complexity.Rdv.ID == nil {
 			break
@@ -3267,6 +3275,7 @@ type Rdv {
     cancelation_reason: String
     appointment_status: AppointmentStatus!
     session_id: String!
+    health_method: String
 }
 
 type Document {
@@ -3653,7 +3662,7 @@ type Mutation {
     createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, session_id: String!): Rdv
 
     # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, session_id: String): Rdv
+    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, session_id: String, health_method: String): Rdv
 
     # Delete a Rdv.
     deleteRdv(id: String!): Boolean
@@ -5982,6 +5991,15 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 		}
 	}
 	args["session_id"] = arg7
+	var arg8 *string
+	if tmp, ok := rawArgs["health_method"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("health_method"))
+		arg8, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["health_method"] = arg8
 	return args, nil
 }
 
@@ -12440,6 +12458,8 @@ func (ec *executionContext) fieldContext_Mutation_createRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -12472,7 +12492,7 @@ func (ec *executionContext) _Mutation_updateRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["session_id"].(*string))
+		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["session_id"].(*string), fc.Args["health_method"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12510,6 +12530,8 @@ func (ec *executionContext) fieldContext_Mutation_updateRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -16866,6 +16888,8 @@ func (ec *executionContext) fieldContext_Query_getPatientRdv(ctx context.Context
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -16936,6 +16960,8 @@ func (ec *executionContext) fieldContext_Query_getDoctorRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -17006,6 +17032,8 @@ func (ec *executionContext) fieldContext_Query_getRdvById(ctx context.Context, f
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -17076,6 +17104,8 @@ func (ec *executionContext) fieldContext_Query_getSlotById(ctx context.Context, 
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -17146,6 +17176,8 @@ func (ec *executionContext) fieldContext_Query_getSlots(ctx context.Context, fie
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -17216,6 +17248,8 @@ func (ec *executionContext) fieldContext_Query_getWaitingRdv(ctx context.Context
 				return ec.fieldContext_Rdv_appointment_status(ctx, field)
 			case "session_id":
 				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -19175,6 +19209,47 @@ func (ec *executionContext) _Rdv_session_id(ctx context.Context, field graphql.C
 }
 
 func (ec *executionContext) fieldContext_Rdv_session_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Rdv",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Rdv_health_method(ctx context.Context, field graphql.CollectedField, obj *model.Rdv) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Rdv_health_method(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HealthMethod, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Rdv_health_method(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Rdv",
 		Field:      field,
@@ -25959,6 +26034,8 @@ func (ec *executionContext) _Rdv(ctx context.Context, sel ast.SelectionSet, obj 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "health_method":
+			out.Values[i] = ec._Rdv_health_method(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

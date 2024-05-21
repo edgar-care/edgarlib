@@ -39,7 +39,7 @@ func BookAppointment(appointmentId string, patientId string, session_id string) 
 	}
 	var appointment_status = graphql.AppointmentStatusWaitingForReview
 
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, patientId, appointment.GetSlotById.Doctor_id, appointment.GetSlotById.Start_date, appointment.GetSlotById.End_date, appointment.GetSlotById.Cancelation_reason, appointment_status, session_id)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, patientId, appointment.GetSlotById.Doctor_id, appointment.GetSlotById.Start_date, appointment.GetSlotById.End_date, appointment.GetSlotById.Cancelation_reason, appointment_status, session_id, "")
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}

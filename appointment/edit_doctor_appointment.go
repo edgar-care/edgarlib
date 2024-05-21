@@ -34,7 +34,7 @@ func UpdateDoctorAppointment(newAppointmentId string, appointmentId string) Upda
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
 
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, oldAppointment.GetRdvById.Id_patient, appointment.GetSlotById.Doctor_id, appointment.GetSlotById.Start_date, appointment.GetSlotById.End_date, appointment.GetSlotById.Cancelation_reason, oldAppointment.GetRdvById.Appointment_status, oldAppointment.GetRdvById.Session_id)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, newAppointmentId, oldAppointment.GetRdvById.Id_patient, appointment.GetSlotById.Doctor_id, appointment.GetSlotById.Start_date, appointment.GetSlotById.End_date, appointment.GetSlotById.Cancelation_reason, oldAppointment.GetRdvById.Appointment_status, oldAppointment.GetRdvById.Session_id, oldAppointment.GetRdvById.Health_method)
 
 	if err != nil {
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
@@ -46,7 +46,7 @@ func UpdateDoctorAppointment(newAppointmentId string, appointmentId string) Upda
 	}
 
 	var appointment_status = graphql.AppointmentStatusOpened
-	_, err = graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, "", oldAppointment.GetRdvById.Doctor_id, oldAppointment.GetRdvById.Start_date, oldAppointment.GetRdvById.End_date, "", appointment_status, "")
+	_, err = graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, "", oldAppointment.GetRdvById.Doctor_id, oldAppointment.GetRdvById.Start_date, oldAppointment.GetRdvById.End_date, "", appointment_status, "", "")
 
 	if err != nil {
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
