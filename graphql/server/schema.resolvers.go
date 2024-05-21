@@ -768,6 +768,7 @@ func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doct
 		StartDate:         startDate,
 		EndDate:           endDate,
 		CancelationReason: nil,
+		HealthMethod:      nil,
 		AppointmentStatus: appointmentStatus,
 		SessionID:         sessionID,
 	}
@@ -775,7 +776,7 @@ func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doct
 }
 
 // UpdateRdv is the resolver for the updateRdv field.
-func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string) (*model.Rdv, error) {
+func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) (*model.Rdv, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -791,6 +792,7 @@ func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *
 		"cancelation_reason": cancelationReason,
 		"appointment_status": appointmentStatus,
 		"session_id":         sessionID,
+		"healh_method":       healthMethod,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").ReplaceOne(ctx, filter, updated)
 
@@ -803,6 +805,7 @@ func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *
 		CancelationReason: cancelationReason,
 		AppointmentStatus: *appointmentStatus,
 		SessionID:         *sessionID,
+		HealthMethod:      healthMethod,
 	}, err
 }
 

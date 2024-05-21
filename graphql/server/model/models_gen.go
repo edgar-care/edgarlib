@@ -236,6 +236,7 @@ type Rdv struct {
 	CancelationReason *string           `json:"cancelation_reason,omitempty" bson:"cancelation_reason"`
 	AppointmentStatus AppointmentStatus `json:"appointment_status" bson:"appointment_status"`
 	SessionID         string            `json:"session_id" bson:"session_id"`
+	HealthMethod      *string           `json:"health_method,omitempty" bson:"health_method"`
 }
 
 type Session struct {
