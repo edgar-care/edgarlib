@@ -17,7 +17,7 @@ type ValidateRdvResponse struct {
 type ReviewInput struct {
 	Reason        string `json:"reason,omitempty"`
 	Validation    bool   `json:"validation"`
-	HealthMethode string `json:"health_methode"`
+	HealthMethode string `json:"health_method"`
 }
 
 func ValidateRdv(appointmentId string, input ReviewInput) EditRdvResponse {
