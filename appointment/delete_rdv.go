@@ -25,7 +25,7 @@ func DeleteRdv(rdvId string, patientId string) DeleteRdvResponse {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
 	var appointment_status = graphql.AppointmentStatusCanceled
-	_, err = graphql.UpdateRdv(context.Background(), gqlClient, rdv.GetRdvById.Id, rdv.GetRdvById.Id_patient, rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, rdv.GetRdvById.Cancelation_reason, appointment_status, rdv.GetRdvById.Session_id)
+	_, err = graphql.UpdateRdv(context.Background(), gqlClient, rdv.GetRdvById.Id, rdv.GetRdvById.Id_patient, rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, rdv.GetRdvById.Cancelation_reason, appointment_status, rdv.GetRdvById.Session_id, rdv.GetRdvById.Health_method)
 	if err != nil {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 500, Err: errors.New("could not update appointment")}
 	}

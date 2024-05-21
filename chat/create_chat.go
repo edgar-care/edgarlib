@@ -77,6 +77,14 @@ func CreateChat(patientID string, content ContentInput) CreateChatResponse {
 		if err != nil {
 			return CreateChatResponse{Chat: model.Chat{}, Code: 500, Err: errors.New("Unable to update doctor")}
 		}
+
+		if !containsPatientID(doctor.GetDoctorById.Patient_ids, patientID) {
+			_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.GetDoctorById.Id, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, append(doctor.GetDoctorById.Patient_ids, patientID), graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country}, append(doctor.GetDoctorById.Chat_ids, newChat.CreateChat.Id))
+			if err != nil {
+				return CreateChatResponse{Chat: model.Chat{}, Code: 500, Err: errors.New("Unable to update doctor")}
+			}
+		}
+
 	}
 
 	participantReturn := make([]*model.ChatParticipants, len(newChat.CreateChat.Participants))
@@ -105,4 +113,13 @@ func CreateChat(patientID string, content ContentInput) CreateChatResponse {
 		Code: 201,
 		Err:  nil,
 	}
+}
+
+func containsPatientID(patientIDs []string, patientID string) bool {
+	for _, id := range patientIDs {
+		if id == patientID {
+			return true
+		}
+	}
+	return false
 }
