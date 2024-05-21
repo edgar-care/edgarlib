@@ -15,8 +15,9 @@ type ValidateRdvResponse struct {
 }
 
 type ReviewInput struct {
-	Reason     string `json:"reason,omitempty"`
-	Validation bool   `json:"validation"`
+	Reason        string `json:"reason,omitempty"`
+	Validation    bool   `json:"validation"`
+	HealthMethode string `json:"health_methode"`
 }
 
 func ValidateRdv(appointmentId string, input ReviewInput) EditRdvResponse {
@@ -37,15 +38,17 @@ func ValidateRdv(appointmentId string, input ReviewInput) EditRdvResponse {
 	} else {
 		appointment_status = graphql.AppointmentStatusCanceledDueToReview
 	}
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, appointment.GetRdvById.Id_patient, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, input.Reason, appointment_status, appointment.GetRdvById.Session_id)
+	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, appointment.GetRdvById.Id_patient, appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, input.Reason, appointment_status, appointment.GetRdvById.Session_id, input.HealthMethode)
 	if err != nil {
 		return EditRdvResponse{Rdv: model.Rdv{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
 
-	var new_appointment_status = graphql.AppointmentStatusOpened
-	_, err = graphql.CreateRdv(context.Background(), gqlClient, "", appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, new_appointment_status, "")
-	if err != nil {
-		return EditRdvResponse{Rdv: model.Rdv{}, Code: 500, Err: errors.New("unable to create appointment")}
+	if input.Validation == false {
+		var new_appointment_status = graphql.AppointmentStatusOpened
+		_, err = graphql.CreateRdv(context.Background(), gqlClient, "", appointment.GetRdvById.Doctor_id, appointment.GetRdvById.Start_date, appointment.GetRdvById.End_date, new_appointment_status, "")
+		if err != nil {
+			return EditRdvResponse{Rdv: model.Rdv{}, Code: 500, Err: errors.New("unable to create appointment")}
+		}
 	}
 
 	return EditRdvResponse{
@@ -58,6 +61,7 @@ func ValidateRdv(appointmentId string, input ReviewInput) EditRdvResponse {
 			CancelationReason: &updatedRdv.UpdateRdv.Cancelation_reason,
 			AppointmentStatus: model.AppointmentStatus(updatedRdv.UpdateRdv.Appointment_status),
 			SessionID:         updatedRdv.UpdateRdv.Session_id,
+			HealthMethod:      &updatedRdv.UpdateRdv.Health_method,
 		},
 		Code: 200,
 		Err:  nil,

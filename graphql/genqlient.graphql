@@ -135,6 +135,7 @@ mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!,
         cancelation_reason
         appointment_status
         session_id
+        health_method
     }
 }
 
@@ -420,8 +421,8 @@ mutation UpdatePatient($id: String!, $email: String, $password: String, $medical
     }
 }
 
-mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $session_id: String){
-   updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason, appointment_status: $appointment_status, session_id: $session_id){
+mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start_date: Int, $end_date: Int, $cancelation_reason: String, $appointment_status: AppointmentStatus, $session_id: String, $health_method: String){
+   updateRdv(id: $id, id_patient: $id_patient, doctor_id: $doctor_id, start_date: $start_date, end_date: $end_date, cancelation_reason: $cancelation_reason, appointment_status: $appointment_status, session_id: $session_id, health_method: $health_method){
         id
         doctor_id
         id_patient
@@ -430,6 +431,7 @@ mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start
         cancelation_reason
         appointment_status
         session_id
+        health_method
     }
 }
 
@@ -727,6 +729,7 @@ query GetDoctorRdv($doctor_id: String!){
         cancelation_reason
         appointment_status
         session_id
+        health_method
     }
 }
 
@@ -839,6 +842,7 @@ query GetPatientRdv($id_patient: String!){
         cancelation_reason
         appointment_status
         session_id
+        health_method
     }
 }
 
@@ -865,6 +869,7 @@ query GetRdvById($id: String!){
         cancelation_reason
         appointment_status
         session_id
+        health_method
     }
 }
 
@@ -1086,6 +1091,7 @@ query GetWaitingRdv($doctor_id: String!) {
         cancelation_reason
         appointment_status
         session_id
+        health_method
     }
 }
 
