@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"context"
 	"fmt"
 	"github.com/edgar-care/edgarlib/graphql"
 	"strings"
@@ -44,26 +45,33 @@ func StringToSymptoms(strings []string) []Symptom {
 	return newSymptoms
 }
 
-func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion string, sentence string) ([]graphql.SessionSymptomInput, string, string) {
-
+func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion string) ([]graphql.SessionSymptomInput, string, string) {
+	gqlClient := graphql.CreateClient()
+	allSymptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
 	list := strings.Split(lastQuestion, " ")
-	//var duration int
 	question := ""
 	nextLastQuestion := ""
 	var symptomName string
 
 	if list[0] == "duration" {
 		symptomName = list[1]
-		//duration, _ = strconv.Atoi(sentence)
 	}
 	for _, symptom := range symptoms {
 		if symptom.Duration == 0 && symptom.Presence == true && symptomName != symptom.Name {
-			question = "Depuis combien de jours souffrez-vous de " + symptom.Name
+			if len(allSymptoms.GetSymptoms) > 0 {
+				for _, s := range allSymptoms.GetSymptoms {
+					if s.Code == symptom.Name && s.Question_duration != "" {
+						question = s.Question_duration
+						break
+					} else {
+						question = "Depuis combien de jours souffrez-vous de " + symptom.Name
+					}
+				}
+			} else {
+				question = "Depuis combien de jours souffrez-vous de " + symptom.Name
+			}
 			nextLastQuestion = "duration " + symptom.Name
 		}
-		//if symptom.Name == symptomName { // ICI
-		//	symptoms[i].Duration = duration
-		//}
 
 	}
 

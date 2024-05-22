@@ -26,7 +26,11 @@ func CheckAnteDiseaseInSymptoms(session graphql.GetSessionByIdGetSessionByIdSess
 						return "", "", err
 					}
 					if anteSymptom.GetSymptomById.Code != session.Last_question {
-						question = "Ressentez-vous " + anteSymptom.GetSymptomById.Code + " plus intensément récemment ?"
+						if anteSymptom.GetSymptomById.Question_ante != "" {
+							question = anteSymptom.GetSymptomById.Question_ante
+						} else {
+							question = "Ressentez-vous " + anteSymptom.GetSymptomById.Name + " plus intensément récemment ?"
+						}
 						questionSymptomName = anteSymptom.GetSymptomById.Code
 					}
 					for _, sessionSymptom := range session.Symptoms {
