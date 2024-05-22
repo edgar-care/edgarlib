@@ -18,7 +18,11 @@ func TestGetWaitingReview(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "patientId", doctor.CreateDoctor.Id, 0, 10, "WAITING_FOR_REVIEW", "")
+	session, err := graphql.CreateSession(context.Background(), gqlClient, []graphql.SessionDiseasesInput{}, []graphql.SessionSymptomInput{}, 3, 10, 10, "M", []string{}, []string{}, []string{}, "", []graphql.LogsInput{}, []string{})
+	if err != nil {
+		t.Errorf("Error while creating session: %v", err)
+	}
+	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "patientId", doctor.CreateDoctor.Id, 0, 10, "WAITING_FOR_REVIEW", session.CreateSession.Id)
 	if err != nil {
 		t.Errorf("Error creating appointment: %v", err)
 	}
@@ -33,11 +37,11 @@ func TestGetWaitingReview(t *testing.T) {
 		t.Errorf("Expected code 200, got %d", response.Code)
 	}
 
-	if len(response.Rdv) == 0 {
+	if len(response.RdvWithSession) == 0 {
 		t.Errorf("Expected non-empty Rdv slice, got empty slice")
 	}
-	if response.Rdv[0].ID != appointment.CreateRdv.Id {
-		t.Errorf("Expected first Rdv slice to have it's ID=%s but go ID=%s", response.Rdv[0].ID, appointment.CreateRdv.Id)
+	if response.RdvWithSession[0].Rdv.ID != appointment.CreateRdv.Id {
+		t.Errorf("Expected first Rdv slice to have it's ID=%s but go ID=%s", response.RdvWithSession[0].Rdv.ID, appointment.CreateRdv.Id)
 	}
 }
 

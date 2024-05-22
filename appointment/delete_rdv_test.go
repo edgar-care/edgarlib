@@ -20,14 +20,18 @@ func TestDeleteRdv(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, patient.CreatePatient.Id, "doctorId", 0, 10, "WAITING_FOR_REVIEW", "")
+	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, "test_delete_rdv_doctor@edgar-sante.fr", "password", "name", "first", graphql.AddressInput{"", "", "", ""})
+	if err != nil {
+		t.Errorf("Error while creating doctor: %v", err)
+	}
+	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, patient.CreatePatient.Id, doctor.CreateDoctor.Id, 0, 10, "WAITING_FOR_REVIEW", "")
 	if err != nil {
 		t.Errorf("Error while creating appointment: %v", err)
 	}
 	appointmentID := appointment.CreateRdv.Id
 	patientID := patient.CreatePatient.Id
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.CreatePatient.Email, patient.CreatePatient.Password, patient.CreatePatient.Medical_info_id, append(patient.CreatePatient.Rendez_vous_ids, "test", appointmentID), patient.CreatePatient.Document_ids, patient.CreatePatient.Treatment_follow_up_ids)
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.CreatePatient.Email, patient.CreatePatient.Password, patient.CreatePatient.Medical_info_id, append(patient.CreatePatient.Rendez_vous_ids, "test", appointmentID), patient.CreatePatient.Document_ids, patient.CreatePatient.Treatment_follow_up_ids, patient.CreatePatient.Chat_ids)
 	if err != nil {
 		t.Errorf("Error while updating patient: %v", err)
 	}
