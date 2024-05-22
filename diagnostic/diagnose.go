@@ -125,14 +125,14 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		exam.Symptoms = []string{}
 		exam.Alert = []string{}
 		session.GetSessionById.Last_question = "describe symptoms"
-		//} else if len(session.GetSessionById.Medicine) != 0 && session.GetSessionById.Medicine[0] == "CanonFlesh" { todo: uncomment CannonFlesh when this is enabled
-		//	exam.Question = "Avez-vous pris des médicaments récemment ?"
-		//	session.GetSessionById.Last_question = "describe medicines"
-		//	if len(session.GetSessionById.Medicine) > 1 {
-		//		session.GetSessionById.Medicine = session.GetSessionById.Medicine[1:]
-		//	} else {
-		//		session.GetSessionById.Medicine = []string{}
-		//	}
+	} else if len(session.GetSessionById.Medicine) != 0 && session.GetSessionById.Medicine[0] == "CanonFlesh" { //todo: uncomment CannonFlesh when this is enabled
+		exam.Question = "Avez-vous pris des médicaments récemment ?"
+		session.GetSessionById.Last_question = "describe medicines"
+		if len(session.GetSessionById.Medicine) > 1 {
+			session.GetSessionById.Medicine = session.GetSessionById.Medicine[1:]
+		} else {
+			session.GetSessionById.Medicine = []string{}
+		}
 
 	} else if exam.Question == "" && session.GetSessionById.Last_question == "" {
 		exam = utils.CallExam(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs)

@@ -60,7 +60,7 @@ func Initiate(id string) InitiateResponse {
 	}
 
 	input.Medicine = []string{}
-	//input.Medicine = append(input.Medicine, "CanonFlesh")
+	input.Medicine = append(input.Medicine, "CanonFlesh")
 
 	for _, antecedentDiseaseId := range input.AnteDiseases {
 		{
