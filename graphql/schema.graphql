@@ -1,5 +1,17 @@
 ##  Substructures  -----------------------------------------------------------------------------------------------------
 
+#  AnteChir
+
+type ChirInducedSymptom {
+    symptom: String!
+    factor: Float!
+}
+
+input ChirInducedSymptomInput {
+    symptom: String!
+    factor: Float!
+}
+
 #  Disease
 type SymptomsWeight {
     symptom: String!
@@ -232,8 +244,7 @@ type DemoAccount {
 type AnteChir {
     id: ID!
     name: String!
-    localisation: String!
-    induced_symptoms: [String!]
+    induced_symptoms: [ChirInducedSymptom!]
 }
 
 type AnteDisease {
@@ -609,10 +620,10 @@ type Mutation {
     deleteDocument(id: String!): Boolean
 
     # Create a new antechir.
-    createAnteChir(name: String!, localisation: String!, induced_symptoms: [String!]): AnteChir
+    createAnteChir(name: String!, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
 
     # Update a new antechir.
-    updateAnteChir(id: String!, name: String, localisation: String, induced_symptoms: [String!]): AnteChir
+    updateAnteChir(id: String!, name: String, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
 
     # Delete a antechir.
     deleteAnteChir(id: String!): Boolean

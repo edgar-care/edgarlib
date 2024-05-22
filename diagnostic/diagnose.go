@@ -135,7 +135,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		//	}
 
 	} else if exam.Question == "" && session.GetSessionById.Last_question == "" {
-		exam = utils.CallExam(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)))
+		exam = utils.CallExam(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs)
 		if exam.Err != nil {
 			if exam.Err != nil {
 				return DiagnoseResponse{
@@ -207,7 +207,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	var diseasesinput []graphql.SessionDiseasesInput
 	if exam.Done == true {
-		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)))
+		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs)
 		if err != nil {
 			return DiagnoseResponse{
 				Code: 500,

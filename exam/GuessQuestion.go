@@ -32,22 +32,51 @@ func isChronic(sessionSymptom model.SessionSymptom) bool {
 	return false
 }
 
-func CalculPercentage(context []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease, imc float64) DiseaseCoverage {
+func isAnteChir(symptomName string, anteChirs []model.AnteChir) float64 {
+	for _, anteChir := range anteChirs {
+		for _, iS := range anteChir.InducedSymptoms {
+			if iS.Symptom == symptomName {
+				return iS.Factor
+			}
+		}
+	}
+	return 1.0
+}
+
+func CalculPercentage(context_ []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease, imc float64, anteChirIds []string) DiseaseCoverage {
+	gqlClient := graphql.CreateClient()
+	var anteChirs []model.AnteChir
 	var potentialQuestionSymptom string
 	var buf string
 	percentage := 0.0
 
+	if anteChirIds != nil && len(anteChirIds) > 0 {
+		for _, chirId := range anteChirIds {
+			var nAC model.AnteChir
+			anteChir, _ := graphql.GetAnteChirByID(context.Background(), gqlClient, chirId)
+			nAC.ID = anteChir.GetAnteChirByID.Id
+			nAC.Name = anteChir.GetAnteChirByID.Name
+			for _, iS := range anteChir.GetAnteChirByID.Induced_symptoms {
+				var nIS model.ChirInducedSymptom
+				nIS.Symptom = iS.Symptom
+				nIS.Factor = iS.Factor
+				nAC.InducedSymptoms = append(nAC.InducedSymptoms, &nIS)
+			}
+			anteChirs = append(anteChirs, nAC)
+		}
+	}
+
 	for _, symptomWeight := range disease.Symptoms_weight {
 		lock := 1
-		for _, contextSymptom := range context {
+		for _, contextSymptom := range context_ {
 			if contextSymptom.Presence != nil {
 				if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == true {
 					if symptomWeight.Chronic && !isChronic(contextSymptom) {
-						percentage += symptomWeight.Value * 0.75
+						percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
 					} else if !symptomWeight.Chronic && isChronic(contextSymptom) {
-						percentage += symptomWeight.Value * 0.75
+						percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
 					} else {
-						percentage += symptomWeight.Value
+						percentage += symptomWeight.Value * isAnteChir(contextSymptom.Name, anteChirs)
 					}
 					lock = 0
 					break
@@ -101,12 +130,12 @@ func GuessQuestion(mapped []DiseaseCoverage) (string, []string, error) {
 	return getTheQuestion(mapped[i].PotentialQuestion, symptoms.GetSymptoms), []string{mapped[i].PotentialQuestion}, nil
 }
 
-func Calculi(sessionContext []model.SessionSymptom, imc float64) ([]DiseaseCoverage, bool) {
+func Calculi(sessionContext []model.SessionSymptom, imc float64, anteChirIds []string) ([]DiseaseCoverage, bool) {
 	gqlClient := graphql.CreateClient()
 	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
 	mapped := make([]DiseaseCoverage, len(diseases.GetDiseases))
 	for i, e := range diseases.GetDiseases {
-		mapped[i] = CalculPercentage(sessionContext, e, imc)
+		mapped[i] = CalculPercentage(sessionContext, e, imc, anteChirIds)
 	}
 	sort.Sort(ByCoverage(mapped))
 

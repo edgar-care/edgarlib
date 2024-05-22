@@ -20,16 +20,18 @@ mutation CreateAlert($name: String!, $sex: String, $height: Int, $weight: Int, $
     }
 }
 
-mutation CreateAnteChir($name: String!, $localisation: String!, $induced_symptoms: [String!]){
-    createAnteChir(name: $name, localisation: $localisation, induced_symptoms: $induced_symptoms){
+mutation CreateAnteChir($name: String!, $induced_symptoms: [ChirInducedSymptomInput!]){
+    createAnteChir(name: $name, induced_symptoms: $induced_symptoms){
         id
         name
-        localisation
-        induced_symptoms
+        induced_symptoms {
+            symptom
+            factor
+        }
     }
 }
 
-    mutation CreateAnteDisease($name: String!, $chronicity: Float!, $surgery_ids: [String!], $symptoms: [String!], $treatment_ids: [String!], $still_relevant: Boolean!){
+mutation CreateAnteDisease($name: String!, $chronicity: Float!, $surgery_ids: [String!], $symptoms: [String!], $treatment_ids: [String!], $still_relevant: Boolean!){
     createAnteDisease(name: $name, chronicity: $chronicity, surgery_ids: $surgery_ids, symptoms: $symptoms, treatment_ids: $treatment_ids, still_relevant: $still_relevant){
         id
         name
@@ -316,12 +318,14 @@ mutation UpdateAlert($id: String!, $name: String, $sex: String, $height: Int, $w
     }
 }
 
-mutation UpdateAnteChir($id: String!, $name: String, $localisation: String, $induced_symptoms: [String!]){
-    updateAnteChir(id: $id, name: $name, localisation: $localisation, induced_symptoms: $induced_symptoms){
+mutation UpdateAnteChir($id: String!, $name: String, $induced_symptoms: [ChirInducedSymptomInput!]){
+    updateAnteChir(id: $id, name: $name, induced_symptoms: $induced_symptoms){
         id
         name
-        localisation
-        induced_symptoms
+        induced_symptoms {
+            symptom
+            factor
+        }
     }
 }
 
@@ -571,8 +575,10 @@ query GetAnteChirByID($id: String!){
     getAnteChirByID(id: $id){
         id
         name
-        localisation
-        induced_symptoms
+        induced_symptoms {
+            symptom
+            factor
+        }
     }
 }
 
@@ -580,8 +586,10 @@ query GetAnteChirs{
     getAnteChirs{
         id
         name
-        localisation
-        induced_symptoms
+        induced_symptoms {
+            symptom
+            factor
+        }
     }
 }
 

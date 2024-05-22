@@ -74,7 +74,6 @@ type ComplexityRoot struct {
 	AnteChir struct {
 		ID              func(childComplexity int) int
 		InducedSymptoms func(childComplexity int) int
-		Localisation    func(childComplexity int) int
 		Name            func(childComplexity int) int
 	}
 
@@ -109,6 +108,11 @@ type ComplexityRoot struct {
 	ChatParticipants struct {
 		LastSeen      func(childComplexity int) int
 		ParticipantID func(childComplexity int) int
+	}
+
+	ChirInducedSymptom struct {
+		Factor  func(childComplexity int) int
+		Symptom func(childComplexity int) int
 	}
 
 	DemoAccount struct {
@@ -186,7 +190,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		CreateAdmin              func(childComplexity int, email string, password string, name string, lastName string) int
 		CreateAlert              func(childComplexity int, name string, sex *string, height *int, weight *int, symptoms []string, comment string) int
-		CreateAnteChir           func(childComplexity int, name string, localisation string, inducedSymptoms []string) int
+		CreateAnteChir           func(childComplexity int, name string, inducedSymptoms []*model.ChirInducedSymptomInput) int
 		CreateAnteDisease        func(childComplexity int, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) int
 		CreateAnteFamily         func(childComplexity int, name string, disease []string) int
 		CreateChat               func(childComplexity int, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
@@ -228,7 +232,7 @@ type ComplexityRoot struct {
 		DeleteTreatmentsFollowUp func(childComplexity int, id string) int
 		UpdateAdmin              func(childComplexity int, id string, email *string, password *string, name *string, lastName *string) int
 		UpdateAlert              func(childComplexity int, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) int
-		UpdateAnteChir           func(childComplexity int, id string, name *string, localisation *string, inducedSymptoms []string) int
+		UpdateAnteChir           func(childComplexity int, id string, name *string, inducedSymptoms []*model.ChirInducedSymptomInput) int
 		UpdateAnteDisease        func(childComplexity int, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) int
 		UpdateAnteFamily         func(childComplexity int, id string, name *string, disease []string) int
 		UpdateChat               func(childComplexity int, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
@@ -452,8 +456,8 @@ type MutationResolver interface {
 	CreateDocument(ctx context.Context, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) (*model.Document, error)
 	UpdateDocument(ctx context.Context, id string, name *string, isFavorite *bool) (*model.Document, error)
 	DeleteDocument(ctx context.Context, id string) (*bool, error)
-	CreateAnteChir(ctx context.Context, name string, localisation string, inducedSymptoms []string) (*model.AnteChir, error)
-	UpdateAnteChir(ctx context.Context, id string, name *string, localisation *string, inducedSymptoms []string) (*model.AnteChir, error)
+	CreateAnteChir(ctx context.Context, name string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error)
+	UpdateAnteChir(ctx context.Context, id string, name *string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error)
 	DeleteAnteChir(ctx context.Context, id string) (*bool, error)
 	CreateAnteDisease(ctx context.Context, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) (*model.AnteDisease, error)
 	UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) (*model.AnteDisease, error)
@@ -681,13 +685,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AnteChir.InducedSymptoms(childComplexity), true
 
-	case "AnteChir.localisation":
-		if e.complexity.AnteChir.Localisation == nil {
-			break
-		}
-
-		return e.complexity.AnteChir.Localisation(childComplexity), true
-
 	case "AnteChir.name":
 		if e.complexity.AnteChir.Name == nil {
 			break
@@ -820,6 +817,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ChatParticipants.ParticipantID(childComplexity), true
+
+	case "ChirInducedSymptom.factor":
+		if e.complexity.ChirInducedSymptom.Factor == nil {
+			break
+		}
+
+		return e.complexity.ChirInducedSymptom.Factor(childComplexity), true
+
+	case "ChirInducedSymptom.symptom":
+		if e.complexity.ChirInducedSymptom.Symptom == nil {
+			break
+		}
+
+		return e.complexity.ChirInducedSymptom.Symptom(childComplexity), true
 
 	case "DemoAccount.email":
 		if e.complexity.DemoAccount.Email == nil {
@@ -1191,7 +1202,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAnteChir(childComplexity, args["name"].(string), args["localisation"].(string), args["induced_symptoms"].([]string)), true
+		return e.complexity.Mutation.CreateAnteChir(childComplexity, args["name"].(string), args["induced_symptoms"].([]*model.ChirInducedSymptomInput)), true
 
 	case "Mutation.createAnteDisease":
 		if e.complexity.Mutation.CreateAnteDisease == nil {
@@ -1695,7 +1706,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAnteChir(childComplexity, args["id"].(string), args["name"].(*string), args["localisation"].(*string), args["induced_symptoms"].([]string)), true
+		return e.complexity.Mutation.UpdateAnteChir(childComplexity, args["id"].(string), args["name"].(*string), args["induced_symptoms"].([]*model.ChirInducedSymptomInput)), true
 
 	case "Mutation.updateAnteDisease":
 		if e.complexity.Mutation.UpdateAnteDisease == nil {
@@ -2964,6 +2975,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAddressInput,
 		ec.unmarshalInputChatMessagesInput,
 		ec.unmarshalInputChatParticipantsInput,
+		ec.unmarshalInputChirInducedSymptomInput,
 		ec.unmarshalInputLogsInput,
 		ec.unmarshalInputMedicalAntecedentsInput,
 		ec.unmarshalInputMedicineInput,
@@ -3070,6 +3082,18 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	{Name: "../schema.graphql", Input: `##  Substructures  -----------------------------------------------------------------------------------------------------
+
+#  AnteChir
+
+type ChirInducedSymptom {
+    symptom: String!
+    factor: Float!
+}
+
+input ChirInducedSymptomInput {
+    symptom: String!
+    factor: Float!
+}
 
 #  Disease
 type SymptomsWeight {
@@ -3303,8 +3327,7 @@ type DemoAccount {
 type AnteChir {
     id: ID!
     name: String!
-    localisation: String!
-    induced_symptoms: [String!]
+    induced_symptoms: [ChirInducedSymptom!]
 }
 
 type AnteDisease {
@@ -3680,10 +3703,10 @@ type Mutation {
     deleteDocument(id: String!): Boolean
 
     # Create a new antechir.
-    createAnteChir(name: String!, localisation: String!, induced_symptoms: [String!]): AnteChir
+    createAnteChir(name: String!, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
 
     # Update a new antechir.
-    updateAnteChir(id: String!, name: String, localisation: String, induced_symptoms: [String!]): AnteChir
+    updateAnteChir(id: String!, name: String, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
 
     # Delete a antechir.
     deleteAnteChir(id: String!): Boolean
@@ -3936,24 +3959,15 @@ func (ec *executionContext) field_Mutation_createAnteChir_args(ctx context.Conte
 		}
 	}
 	args["name"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["localisation"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("localisation"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["localisation"] = arg1
-	var arg2 []string
+	var arg1 []*model.ChirInducedSymptomInput
 	if tmp, ok := rawArgs["induced_symptoms"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
-		arg2, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		arg1, err = ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["induced_symptoms"] = arg2
+	args["induced_symptoms"] = arg1
 	return args, nil
 }
 
@@ -5322,24 +5336,15 @@ func (ec *executionContext) field_Mutation_updateAnteChir_args(ctx context.Conte
 		}
 	}
 	args["name"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["localisation"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("localisation"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["localisation"] = arg2
-	var arg3 []string
+	var arg2 []*model.ChirInducedSymptomInput
 	if tmp, ok := rawArgs["induced_symptoms"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
-		arg3, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		arg2, err = ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInputᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["induced_symptoms"] = arg3
+	args["induced_symptoms"] = arg2
 	return args, nil
 }
 
@@ -7709,50 +7714,6 @@ func (ec *executionContext) fieldContext_AnteChir_name(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _AnteChir_localisation(ctx context.Context, field graphql.CollectedField, obj *model.AnteChir) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AnteChir_localisation(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Localisation, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_AnteChir_localisation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AnteChir",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _AnteChir_induced_symptoms(ctx context.Context, field graphql.CollectedField, obj *model.AnteChir) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
 	if err != nil {
@@ -7776,9 +7737,9 @@ func (ec *executionContext) _AnteChir_induced_symptoms(ctx context.Context, fiel
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]string)
+	res := resTmp.([]*model.ChirInducedSymptom)
 	fc.Result = res
-	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+	return ec.marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AnteChir_induced_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7788,7 +7749,13 @@ func (ec *executionContext) fieldContext_AnteChir_induced_symptoms(ctx context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			switch field.Name {
+			case "symptom":
+				return ec.fieldContext_ChirInducedSymptom_symptom(ctx, field)
+			case "factor":
+				return ec.fieldContext_ChirInducedSymptom_factor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ChirInducedSymptom", field.Name)
 		},
 	}
 	return fc, nil
@@ -8586,6 +8553,94 @@ func (ec *executionContext) fieldContext_ChatParticipants_last_seen(ctx context.
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ChirInducedSymptom_symptom(ctx context.Context, field graphql.CollectedField, obj *model.ChirInducedSymptom) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ChirInducedSymptom_symptom(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Symptom, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ChirInducedSymptom_symptom(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ChirInducedSymptom",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ChirInducedSymptom_factor(ctx context.Context, field graphql.CollectedField, obj *model.ChirInducedSymptom) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ChirInducedSymptom_factor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Factor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ChirInducedSymptom_factor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ChirInducedSymptom",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -12856,7 +12911,7 @@ func (ec *executionContext) _Mutation_createAnteChir(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAnteChir(rctx, fc.Args["name"].(string), fc.Args["localisation"].(string), fc.Args["induced_symptoms"].([]string))
+		return ec.resolvers.Mutation().CreateAnteChir(rctx, fc.Args["name"].(string), fc.Args["induced_symptoms"].([]*model.ChirInducedSymptomInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12882,8 +12937,6 @@ func (ec *executionContext) fieldContext_Mutation_createAnteChir(ctx context.Con
 				return ec.fieldContext_AnteChir_id(ctx, field)
 			case "name":
 				return ec.fieldContext_AnteChir_name(ctx, field)
-			case "localisation":
-				return ec.fieldContext_AnteChir_localisation(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
 			}
@@ -12918,7 +12971,7 @@ func (ec *executionContext) _Mutation_updateAnteChir(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAnteChir(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["localisation"].(*string), fc.Args["induced_symptoms"].([]string))
+		return ec.resolvers.Mutation().UpdateAnteChir(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["induced_symptoms"].([]*model.ChirInducedSymptomInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12944,8 +12997,6 @@ func (ec *executionContext) fieldContext_Mutation_updateAnteChir(ctx context.Con
 				return ec.fieldContext_AnteChir_id(ctx, field)
 			case "name":
 				return ec.fieldContext_AnteChir_name(ctx, field)
-			case "localisation":
-				return ec.fieldContext_AnteChir_localisation(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
 			}
@@ -17501,8 +17552,6 @@ func (ec *executionContext) fieldContext_Query_getAnteChirs(ctx context.Context,
 				return ec.fieldContext_AnteChir_id(ctx, field)
 			case "name":
 				return ec.fieldContext_AnteChir_name(ctx, field)
-			case "localisation":
-				return ec.fieldContext_AnteChir_localisation(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
 			}
@@ -17552,8 +17601,6 @@ func (ec *executionContext) fieldContext_Query_getAnteChirByID(ctx context.Conte
 				return ec.fieldContext_AnteChir_id(ctx, field)
 			case "name":
 				return ec.fieldContext_AnteChir_name(ctx, field)
-			case "localisation":
-				return ec.fieldContext_AnteChir_localisation(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
 			}
@@ -23101,6 +23148,40 @@ func (ec *executionContext) unmarshalInputChatParticipantsInput(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputChirInducedSymptomInput(ctx context.Context, obj interface{}) (model.ChirInducedSymptomInput, error) {
+	var it model.ChirInducedSymptomInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"symptom", "factor"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "symptom":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptom"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptom = data
+		case "factor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("factor"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Factor = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputLogsInput(ctx context.Context, obj interface{}) (model.LogsInput, error) {
 	var it model.LogsInput
 	asMap := map[string]interface{}{}
@@ -23645,11 +23726,6 @@ func (ec *executionContext) _AnteChir(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "localisation":
-			out.Values[i] = ec._AnteChir_localisation(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "induced_symptoms":
 			out.Values[i] = ec._AnteChir_induced_symptoms(ctx, field, obj)
 		default:
@@ -23900,6 +23976,50 @@ func (ec *executionContext) _ChatParticipants(ctx context.Context, sel ast.Selec
 			}
 		case "last_seen":
 			out.Values[i] = ec._ChatParticipants_last_seen(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var chirInducedSymptomImplementors = []string{"ChirInducedSymptom"}
+
+func (ec *executionContext) _ChirInducedSymptom(ctx context.Context, sel ast.SelectionSet, obj *model.ChirInducedSymptom) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, chirInducedSymptomImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ChirInducedSymptom")
+		case "symptom":
+			out.Values[i] = ec._ChirInducedSymptom_symptom(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "factor":
+			out.Values[i] = ec._ChirInducedSymptom_factor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -27064,6 +27184,21 @@ func (ec *executionContext) unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋed
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptom(ctx context.Context, sel ast.SelectionSet, v *model.ChirInducedSymptom) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ChirInducedSymptom(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInput(ctx context.Context, v interface{}) (*model.ChirInducedSymptomInput, error) {
+	res, err := ec.unmarshalInputChirInducedSymptomInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx context.Context, v interface{}) (model.Day, error) {
 	var res model.Day
 	err := res.UnmarshalGQL(v)
@@ -28467,6 +28602,73 @@ func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcom�
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChirInducedSymptom) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptom(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.ChirInducedSymptomInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.ChirInducedSymptomInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
