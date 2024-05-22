@@ -41,10 +41,9 @@ type Alert struct {
 }
 
 type AnteChir struct {
-	ID              string   `json:"id" bson:"_id"`
-	Name            string   `json:"name" bson:"name"`
-	Localisation    string   `json:"localisation" bson:"localisation"`
-	InducedSymptoms []string `json:"induced_symptoms,omitempty" bson:"induced_symptoms"`
+	ID              string                `json:"id" bson:"_id"`
+	Name            string                `json:"name" bson:"name"`
+	InducedSymptoms []*ChirInducedSymptom `json:"induced_symptoms,omitempty" bson:"induced_symptoms"`
 }
 
 type AnteDisease struct {
@@ -89,6 +88,16 @@ type ChatParticipants struct {
 type ChatParticipantsInput struct {
 	ParticipantID string `json:"participant_id" bson:"participant_id"`
 	LastSeen      int    `json:"last_seen" bson:"last_seen"`
+}
+
+type ChirInducedSymptom struct {
+	Symptom string  `json:"symptom" bson:"symptom"`
+	Factor  float64 `json:"factor" bson:"factor"`
+}
+
+type ChirInducedSymptomInput struct {
+	Symptom string  `json:"symptom" bson:"symptom"`
+	Factor  float64 `json:"factor" bson:"factor"`
 }
 
 type DemoAccount struct {

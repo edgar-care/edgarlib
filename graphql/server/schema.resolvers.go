@@ -920,10 +920,9 @@ func (r *mutationResolver) DeleteDocument(ctx context.Context, id string) (*bool
 }
 
 // CreateAnteChir is the resolver for the createAnteChir field.
-func (r *mutationResolver) CreateAnteChir(ctx context.Context, name string, localisation string, inducedSymptoms []string) (*model.AnteChir, error) {
+func (r *mutationResolver) CreateAnteChir(ctx context.Context, name string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error) {
 	newAnteChir := bson.M{
 		"name":             name,
-		"localisation":     localisation,
 		"induced_symptoms": inducedSymptoms,
 	}
 
@@ -931,17 +930,25 @@ func (r *mutationResolver) CreateAnteChir(ctx context.Context, name string, loca
 	if err != nil {
 		return nil, err
 	}
+
+	var convertedInducedSymptom []*model.ChirInducedSymptom
+	for _, symptom := range inducedSymptoms {
+		convertedInducedSymptom = append(convertedInducedSymptom, &model.ChirInducedSymptom{
+			Symptom: symptom.Symptom,
+			Factor:  symptom.Factor,
+		})
+	}
+
 	entity := model.AnteChir{
 		ID:              res.InsertedID.(primitive.ObjectID).Hex(),
 		Name:            name,
-		Localisation:    localisation,
-		InducedSymptoms: inducedSymptoms,
+		InducedSymptoms: convertedInducedSymptom,
 	}
 	return &entity, err
 }
 
 // UpdateAnteChir is the resolver for the updateAnteChir field.
-func (r *mutationResolver) UpdateAnteChir(ctx context.Context, id string, name *string, localisation *string, inducedSymptoms []string) (*model.AnteChir, error) {
+func (r *mutationResolver) UpdateAnteChir(ctx context.Context, id string, name *string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -951,16 +958,22 @@ func (r *mutationResolver) UpdateAnteChir(ctx context.Context, id string, name *
 	updated := bson.M{
 		"_id":              objId,
 		"name":             name,
-		"localisation":     localisation,
 		"induced_symptoms": inducedSymptoms,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").ReplaceOne(ctx, filter, updated)
 
+	var convertedInducedSymptom []*model.ChirInducedSymptom
+	for _, symptom := range inducedSymptoms {
+		convertedInducedSymptom = append(convertedInducedSymptom, &model.ChirInducedSymptom{
+			Symptom: symptom.Symptom,
+			Factor:  symptom.Factor,
+		})
+	}
+
 	return &model.AnteChir{
 		ID:              id,
 		Name:            *name,
-		Localisation:    *localisation,
-		InducedSymptoms: inducedSymptoms,
+		InducedSymptoms: convertedInducedSymptom,
 	}, err
 }
 
