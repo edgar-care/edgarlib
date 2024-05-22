@@ -70,6 +70,17 @@ func (v *ChatParticipantsInput) GetParticipant_id() string { return v.Participan
 // GetLast_seen returns ChatParticipantsInput.Last_seen, and is useful for accessing the field via an interface.
 func (v *ChatParticipantsInput) GetLast_seen() int { return v.Last_seen }
 
+type ChirInducedSymptomInput struct {
+	Symptom string  `json:"symptom"`
+	Factor  float64 `json:"factor"`
+}
+
+// GetSymptom returns ChirInducedSymptomInput.Symptom, and is useful for accessing the field via an interface.
+func (v *ChirInducedSymptomInput) GetSymptom() string { return v.Symptom }
+
+// GetFactor returns ChirInducedSymptomInput.Factor, and is useful for accessing the field via an interface.
+func (v *ChirInducedSymptomInput) GetFactor() float64 { return v.Factor }
+
 // CreateAdminCreateAdmin includes the requested fields of the GraphQL type Admin.
 type CreateAdminCreateAdmin struct {
 	Id        string `json:"id"`
@@ -144,10 +155,9 @@ func (v *CreateAlertResponse) GetCreateAlert() CreateAlertCreateAlert { return v
 
 // CreateAnteChirCreateAnteChir includes the requested fields of the GraphQL type AnteChir.
 type CreateAnteChirCreateAnteChir struct {
-	Id               string   `json:"id"`
-	Name             string   `json:"name"`
-	Localisation     string   `json:"localisation"`
-	Induced_symptoms []string `json:"induced_symptoms"`
+	Id               string                                                           `json:"id"`
+	Name             string                                                           `json:"name"`
+	Induced_symptoms []CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom `json:"induced_symptoms"`
 }
 
 // GetId returns CreateAnteChirCreateAnteChir.Id, and is useful for accessing the field via an interface.
@@ -156,11 +166,26 @@ func (v *CreateAnteChirCreateAnteChir) GetId() string { return v.Id }
 // GetName returns CreateAnteChirCreateAnteChir.Name, and is useful for accessing the field via an interface.
 func (v *CreateAnteChirCreateAnteChir) GetName() string { return v.Name }
 
-// GetLocalisation returns CreateAnteChirCreateAnteChir.Localisation, and is useful for accessing the field via an interface.
-func (v *CreateAnteChirCreateAnteChir) GetLocalisation() string { return v.Localisation }
-
 // GetInduced_symptoms returns CreateAnteChirCreateAnteChir.Induced_symptoms, and is useful for accessing the field via an interface.
-func (v *CreateAnteChirCreateAnteChir) GetInduced_symptoms() []string { return v.Induced_symptoms }
+func (v *CreateAnteChirCreateAnteChir) GetInduced_symptoms() []CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom {
+	return v.Induced_symptoms
+}
+
+// CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom includes the requested fields of the GraphQL type ChirInducedSymptom.
+type CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom struct {
+	Symptom string  `json:"symptom"`
+	Factor  float64 `json:"factor"`
+}
+
+// GetSymptom returns CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom.Symptom, and is useful for accessing the field via an interface.
+func (v *CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom) GetSymptom() string {
+	return v.Symptom
+}
+
+// GetFactor returns CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom.Factor, and is useful for accessing the field via an interface.
+func (v *CreateAnteChirCreateAnteChirInduced_symptomsChirInducedSymptom) GetFactor() float64 {
+	return v.Factor
+}
 
 // CreateAnteChirResponse is returned by CreateAnteChir on success.
 type CreateAnteChirResponse struct {
@@ -1335,10 +1360,9 @@ func (v *GetAlertsResponse) GetGetAlerts() []GetAlertsGetAlertsAlert { return v.
 
 // GetAnteChirByIDGetAnteChirByIDAnteChir includes the requested fields of the GraphQL type AnteChir.
 type GetAnteChirByIDGetAnteChirByIDAnteChir struct {
-	Id               string   `json:"id"`
-	Name             string   `json:"name"`
-	Localisation     string   `json:"localisation"`
-	Induced_symptoms []string `json:"induced_symptoms"`
+	Id               string                                                                     `json:"id"`
+	Name             string                                                                     `json:"name"`
+	Induced_symptoms []GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom `json:"induced_symptoms"`
 }
 
 // GetId returns GetAnteChirByIDGetAnteChirByIDAnteChir.Id, and is useful for accessing the field via an interface.
@@ -1347,12 +1371,25 @@ func (v *GetAnteChirByIDGetAnteChirByIDAnteChir) GetId() string { return v.Id }
 // GetName returns GetAnteChirByIDGetAnteChirByIDAnteChir.Name, and is useful for accessing the field via an interface.
 func (v *GetAnteChirByIDGetAnteChirByIDAnteChir) GetName() string { return v.Name }
 
-// GetLocalisation returns GetAnteChirByIDGetAnteChirByIDAnteChir.Localisation, and is useful for accessing the field via an interface.
-func (v *GetAnteChirByIDGetAnteChirByIDAnteChir) GetLocalisation() string { return v.Localisation }
-
 // GetInduced_symptoms returns GetAnteChirByIDGetAnteChirByIDAnteChir.Induced_symptoms, and is useful for accessing the field via an interface.
-func (v *GetAnteChirByIDGetAnteChirByIDAnteChir) GetInduced_symptoms() []string {
+func (v *GetAnteChirByIDGetAnteChirByIDAnteChir) GetInduced_symptoms() []GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom {
 	return v.Induced_symptoms
+}
+
+// GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom includes the requested fields of the GraphQL type ChirInducedSymptom.
+type GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom struct {
+	Symptom string  `json:"symptom"`
+	Factor  float64 `json:"factor"`
+}
+
+// GetSymptom returns GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom.Symptom, and is useful for accessing the field via an interface.
+func (v *GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom) GetSymptom() string {
+	return v.Symptom
+}
+
+// GetFactor returns GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom.Factor, and is useful for accessing the field via an interface.
+func (v *GetAnteChirByIDGetAnteChirByIDAnteChirInduced_symptomsChirInducedSymptom) GetFactor() float64 {
+	return v.Factor
 }
 
 // GetAnteChirByIDResponse is returned by GetAnteChirByID on success.
@@ -1367,10 +1404,9 @@ func (v *GetAnteChirByIDResponse) GetGetAnteChirByID() GetAnteChirByIDGetAnteChi
 
 // GetAnteChirsGetAnteChirsAnteChir includes the requested fields of the GraphQL type AnteChir.
 type GetAnteChirsGetAnteChirsAnteChir struct {
-	Id               string   `json:"id"`
-	Name             string   `json:"name"`
-	Localisation     string   `json:"localisation"`
-	Induced_symptoms []string `json:"induced_symptoms"`
+	Id               string                                                               `json:"id"`
+	Name             string                                                               `json:"name"`
+	Induced_symptoms []GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom `json:"induced_symptoms"`
 }
 
 // GetId returns GetAnteChirsGetAnteChirsAnteChir.Id, and is useful for accessing the field via an interface.
@@ -1379,11 +1415,26 @@ func (v *GetAnteChirsGetAnteChirsAnteChir) GetId() string { return v.Id }
 // GetName returns GetAnteChirsGetAnteChirsAnteChir.Name, and is useful for accessing the field via an interface.
 func (v *GetAnteChirsGetAnteChirsAnteChir) GetName() string { return v.Name }
 
-// GetLocalisation returns GetAnteChirsGetAnteChirsAnteChir.Localisation, and is useful for accessing the field via an interface.
-func (v *GetAnteChirsGetAnteChirsAnteChir) GetLocalisation() string { return v.Localisation }
-
 // GetInduced_symptoms returns GetAnteChirsGetAnteChirsAnteChir.Induced_symptoms, and is useful for accessing the field via an interface.
-func (v *GetAnteChirsGetAnteChirsAnteChir) GetInduced_symptoms() []string { return v.Induced_symptoms }
+func (v *GetAnteChirsGetAnteChirsAnteChir) GetInduced_symptoms() []GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom {
+	return v.Induced_symptoms
+}
+
+// GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom includes the requested fields of the GraphQL type ChirInducedSymptom.
+type GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom struct {
+	Symptom string  `json:"symptom"`
+	Factor  float64 `json:"factor"`
+}
+
+// GetSymptom returns GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom.Symptom, and is useful for accessing the field via an interface.
+func (v *GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom) GetSymptom() string {
+	return v.Symptom
+}
+
+// GetFactor returns GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom.Factor, and is useful for accessing the field via an interface.
+func (v *GetAnteChirsGetAnteChirsAnteChirInduced_symptomsChirInducedSymptom) GetFactor() float64 {
+	return v.Factor
+}
 
 // GetAnteChirsResponse is returned by GetAnteChirs on success.
 type GetAnteChirsResponse struct {
@@ -3832,10 +3883,9 @@ func (v *UpdateAnteChirResponse) GetUpdateAnteChir() UpdateAnteChirUpdateAnteChi
 
 // UpdateAnteChirUpdateAnteChir includes the requested fields of the GraphQL type AnteChir.
 type UpdateAnteChirUpdateAnteChir struct {
-	Id               string   `json:"id"`
-	Name             string   `json:"name"`
-	Localisation     string   `json:"localisation"`
-	Induced_symptoms []string `json:"induced_symptoms"`
+	Id               string                                                           `json:"id"`
+	Name             string                                                           `json:"name"`
+	Induced_symptoms []UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom `json:"induced_symptoms"`
 }
 
 // GetId returns UpdateAnteChirUpdateAnteChir.Id, and is useful for accessing the field via an interface.
@@ -3844,11 +3894,26 @@ func (v *UpdateAnteChirUpdateAnteChir) GetId() string { return v.Id }
 // GetName returns UpdateAnteChirUpdateAnteChir.Name, and is useful for accessing the field via an interface.
 func (v *UpdateAnteChirUpdateAnteChir) GetName() string { return v.Name }
 
-// GetLocalisation returns UpdateAnteChirUpdateAnteChir.Localisation, and is useful for accessing the field via an interface.
-func (v *UpdateAnteChirUpdateAnteChir) GetLocalisation() string { return v.Localisation }
-
 // GetInduced_symptoms returns UpdateAnteChirUpdateAnteChir.Induced_symptoms, and is useful for accessing the field via an interface.
-func (v *UpdateAnteChirUpdateAnteChir) GetInduced_symptoms() []string { return v.Induced_symptoms }
+func (v *UpdateAnteChirUpdateAnteChir) GetInduced_symptoms() []UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom {
+	return v.Induced_symptoms
+}
+
+// UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom includes the requested fields of the GraphQL type ChirInducedSymptom.
+type UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom struct {
+	Symptom string  `json:"symptom"`
+	Factor  float64 `json:"factor"`
+}
+
+// GetSymptom returns UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom.Symptom, and is useful for accessing the field via an interface.
+func (v *UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom) GetSymptom() string {
+	return v.Symptom
+}
+
+// GetFactor returns UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom.Factor, and is useful for accessing the field via an interface.
+func (v *UpdateAnteChirUpdateAnteChirInduced_symptomsChirInducedSymptom) GetFactor() float64 {
+	return v.Factor
+}
 
 // UpdateAnteDiseaseResponse is returned by UpdateAnteDisease on success.
 type UpdateAnteDiseaseResponse struct {
@@ -4654,19 +4719,17 @@ func (v *__CreateAlertInput) GetComment() string { return v.Comment }
 
 // __CreateAnteChirInput is used internally by genqlient
 type __CreateAnteChirInput struct {
-	Name             string   `json:"name"`
-	Localisation     string   `json:"localisation"`
-	Induced_symptoms []string `json:"induced_symptoms"`
+	Name             string                    `json:"name"`
+	Induced_symptoms []ChirInducedSymptomInput `json:"induced_symptoms"`
 }
 
 // GetName returns __CreateAnteChirInput.Name, and is useful for accessing the field via an interface.
 func (v *__CreateAnteChirInput) GetName() string { return v.Name }
 
-// GetLocalisation returns __CreateAnteChirInput.Localisation, and is useful for accessing the field via an interface.
-func (v *__CreateAnteChirInput) GetLocalisation() string { return v.Localisation }
-
 // GetInduced_symptoms returns __CreateAnteChirInput.Induced_symptoms, and is useful for accessing the field via an interface.
-func (v *__CreateAnteChirInput) GetInduced_symptoms() []string { return v.Induced_symptoms }
+func (v *__CreateAnteChirInput) GetInduced_symptoms() []ChirInducedSymptomInput {
+	return v.Induced_symptoms
+}
 
 // __CreateAnteDiseaseInput is used internally by genqlient
 type __CreateAnteDiseaseInput struct {
@@ -5580,10 +5643,9 @@ func (v *__UpdateAlertInput) GetComment() string { return v.Comment }
 
 // __UpdateAnteChirInput is used internally by genqlient
 type __UpdateAnteChirInput struct {
-	Id               string   `json:"id"`
-	Name             string   `json:"name"`
-	Localisation     string   `json:"localisation"`
-	Induced_symptoms []string `json:"induced_symptoms"`
+	Id               string                    `json:"id"`
+	Name             string                    `json:"name"`
+	Induced_symptoms []ChirInducedSymptomInput `json:"induced_symptoms"`
 }
 
 // GetId returns __UpdateAnteChirInput.Id, and is useful for accessing the field via an interface.
@@ -5592,11 +5654,10 @@ func (v *__UpdateAnteChirInput) GetId() string { return v.Id }
 // GetName returns __UpdateAnteChirInput.Name, and is useful for accessing the field via an interface.
 func (v *__UpdateAnteChirInput) GetName() string { return v.Name }
 
-// GetLocalisation returns __UpdateAnteChirInput.Localisation, and is useful for accessing the field via an interface.
-func (v *__UpdateAnteChirInput) GetLocalisation() string { return v.Localisation }
-
 // GetInduced_symptoms returns __UpdateAnteChirInput.Induced_symptoms, and is useful for accessing the field via an interface.
-func (v *__UpdateAnteChirInput) GetInduced_symptoms() []string { return v.Induced_symptoms }
+func (v *__UpdateAnteChirInput) GetInduced_symptoms() []ChirInducedSymptomInput {
+	return v.Induced_symptoms
+}
 
 // __UpdateAnteDiseaseInput is used internally by genqlient
 type __UpdateAnteDiseaseInput struct {
@@ -6246,12 +6307,14 @@ func CreateAlert(
 
 // The query or mutation executed by CreateAnteChir.
 const CreateAnteChir_Operation = `
-mutation CreateAnteChir ($name: String!, $localisation: String!, $induced_symptoms: [String!]) {
-	createAnteChir(name: $name, localisation: $localisation, induced_symptoms: $induced_symptoms) {
+mutation CreateAnteChir ($name: String!, $induced_symptoms: [ChirInducedSymptomInput!]) {
+	createAnteChir(name: $name, induced_symptoms: $induced_symptoms) {
 		id
 		name
-		localisation
-		induced_symptoms
+		induced_symptoms {
+			symptom
+			factor
+		}
 	}
 }
 `
@@ -6260,15 +6323,13 @@ func CreateAnteChir(
 	ctx context.Context,
 	client graphql.Client,
 	name string,
-	localisation string,
-	induced_symptoms []string,
+	induced_symptoms []ChirInducedSymptomInput,
 ) (*CreateAnteChirResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateAnteChir",
 		Query:  CreateAnteChir_Operation,
 		Variables: &__CreateAnteChirInput{
 			Name:             name,
-			Localisation:     localisation,
 			Induced_symptoms: induced_symptoms,
 		},
 	}
@@ -8025,8 +8086,10 @@ query GetAnteChirByID ($id: String!) {
 	getAnteChirByID(id: $id) {
 		id
 		name
-		localisation
-		induced_symptoms
+		induced_symptoms {
+			symptom
+			factor
+		}
 	}
 }
 `
@@ -8063,8 +8126,10 @@ query GetAnteChirs {
 	getAnteChirs {
 		id
 		name
-		localisation
-		induced_symptoms
+		induced_symptoms {
+			symptom
+			factor
+		}
 	}
 }
 `
@@ -10068,12 +10133,14 @@ func UpdateAlert(
 
 // The query or mutation executed by UpdateAnteChir.
 const UpdateAnteChir_Operation = `
-mutation UpdateAnteChir ($id: String!, $name: String, $localisation: String, $induced_symptoms: [String!]) {
-	updateAnteChir(id: $id, name: $name, localisation: $localisation, induced_symptoms: $induced_symptoms) {
+mutation UpdateAnteChir ($id: String!, $name: String, $induced_symptoms: [ChirInducedSymptomInput!]) {
+	updateAnteChir(id: $id, name: $name, induced_symptoms: $induced_symptoms) {
 		id
 		name
-		localisation
-		induced_symptoms
+		induced_symptoms {
+			symptom
+			factor
+		}
 	}
 }
 `
@@ -10083,8 +10150,7 @@ func UpdateAnteChir(
 	client graphql.Client,
 	id string,
 	name string,
-	localisation string,
-	induced_symptoms []string,
+	induced_symptoms []ChirInducedSymptomInput,
 ) (*UpdateAnteChirResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateAnteChir",
@@ -10092,7 +10158,6 @@ func UpdateAnteChir(
 		Variables: &__UpdateAnteChirInput{
 			Id:               id,
 			Name:             name,
-			Localisation:     localisation,
 			Induced_symptoms: induced_symptoms,
 		},
 	}

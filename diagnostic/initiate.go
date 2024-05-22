@@ -37,8 +37,27 @@ func Initiate(id string) InitiateResponse {
 	} else {
 		input.Sex = "O"
 	}
-	input.AnteChirs = []string{}
 	input.AnteDiseases = patientInfos.GetMedicalFolderById.Antecedent_disease_ids
+
+	if input.AnteDiseases != nil && len(input.AnteDiseases) > 0 {
+		for _, anteDiseaseID := range input.AnteDiseases {
+			if anteDiseaseID != "" {
+				ante, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, anteDiseaseID)
+				if err != nil {
+					return InitiateResponse{"", 500, errors.New("problem with anteDisease ID")}
+				}
+				if ante.GetAnteDiseaseByID.Surgery_ids != nil && len(ante.GetGetAnteDiseaseByID().Surgery_ids) > 0 && ante.GetAnteDiseaseByID.Still_relevant == true {
+					for _, anteChirId := range ante.GetAnteDiseaseByID.Surgery_ids {
+						input.AnteChirs = append(input.AnteChirs, anteChirId)
+					}
+				} else {
+					input.AnteChirs = []string{}
+				}
+			} else {
+				input.AnteChirs = []string{}
+			}
+		}
+	}
 
 	input.Medicine = []string{}
 	//input.Medicine = append(input.Medicine, "CanonFlesh")
