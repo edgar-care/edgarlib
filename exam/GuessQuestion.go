@@ -106,7 +106,7 @@ func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptom
 	for _, symptom := range symptoms {
 		if symptomName == symptom.Code {
 			if symptom.Question != "" {
-				return symptom.Question
+				return symptom.Question_basic
 			} else {
 				return "Est-ce que vous avez ce symptôme: " + symptom.Code + " ?"
 			}
