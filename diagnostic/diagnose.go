@@ -116,7 +116,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	var exam utils.ExamResponseBody
 	if len(symptomsinput) > 0 {
-		symptomsinput, exam.Question, session.GetSessionById.Last_question = utils.CheckSymptomDuration(symptomsinput, session.GetSessionById.Last_question, sentence)
+		symptomsinput, exam.Question, session.GetSessionById.Last_question = utils.CheckSymptomDuration(symptomsinput, session.GetSessionById.Last_question)
 	}
 	if len(symptoms) == 0 {
 		exam.Question = "Pourriez-vous décrire vos symptomes ?"
@@ -190,6 +190,12 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		logs = append(logs, graphql.LogsInput{
 			Question: log.Question,
 			Answer:   log.Answer,
+		})
+	}
+	if len(logs) == 0 && sentence != "" {
+		logs = append(logs, graphql.LogsInput{
+			Question: "Pourriez-vous décrire vos symptomes ?",
+			Answer:   sentence,
 		})
 	}
 	if !exam.Done {
