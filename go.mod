@@ -6,7 +6,9 @@ require (
 	github.com/99designs/gqlgen v0.17.43
 	github.com/Khan/genqlient v0.6.0
 	github.com/aws/aws-sdk-go v1.50.11
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/jwtauth/v5 v5.1.1
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lestrrat-go/jwx/v2 v2.0.11
