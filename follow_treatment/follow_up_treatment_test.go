@@ -1,7 +1,7 @@
 package follow_treatment
 
 import (
-	"context"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"log"
 	"testing"
 
@@ -13,9 +13,12 @@ func TestCreateTreatmentFollowUp(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_patient_create_treatment_follow_up@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_patient_create_treatment_follow_up@edgar-sante.fr",
+		Password: "password",
+		Status:   false,
+	})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
@@ -26,7 +29,7 @@ func TestCreateTreatmentFollowUp(t *testing.T) {
 		Period:      []string{"NIGHT"},
 	}
 
-	response := CreateTreatmentFollowUp(input, patient.CreatePatient.Id)
+	response := CreateTreatmentFollowUp(input, patient.ID)
 
 	if response.Code != 201 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
@@ -35,7 +38,7 @@ func TestCreateTreatmentFollowUp(t *testing.T) {
 		t.Errorf("Expected no error but got: %s", response.Err.Error())
 	}
 
-	_, err = graphql.GetTreatmentsFollowUpByID(context.Background(), gqlClient, response.TreatmentFollowUp.ID)
+	_, err = graphql.GetTreatmentsFollowUpById(response.TreatmentFollowUp.ID)
 
 	if err != nil {
 		t.Errorf("Error while retrieving created appointment: %s", err.Error())

@@ -1,6 +1,9 @@
 package auth
 
 import (
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"net/http"
 	"os"
 	"strconv"
@@ -69,16 +72,71 @@ func AuthMiddleware(w http.ResponseWriter, r *http.Request) string {
 	return GetAuthenticatedUser(w, r)
 }
 
-func GetAccountType(r *http.Request) string {
-	_, claims, _ := jwtauth.FromContext(r.Context())
+//func AuthMiddlewareGetAccountType(r *http.Request) string {
+//	reqToken := r.Header.Get("Authorization")
+//	if reqToken == "" {
+//		return ""
+//	}
+//	splitToken := strings.Split(reqToken, "Bearer ")
+//	reqToken = splitToken[1]
+//
+//	if VerifyToken(reqToken) == false {
+//		return ""
+//	}
+//	return GetAccountType(r)
+//}
+//
+//func GetAccountType(r *http.Request) string {
+//	_, claims, _ := jwtauth.FromContext(r.Context())
+//
+//	_, valid := claims["patient"].(map[string]interface{})
+//	if valid {
+//		return "patient"
+//	}
+//	_, valid = claims["doctor"].(map[string]interface{})
+//	if valid {
+//		return "doctor"
+//	}
+//	return ""
+//}
 
-	_, valid := claims["patient"].(map[string]interface{})
-	if valid {
-		return "patient"
+func GetBearerToken(req *http.Request) string {
+	authHeader := req.Header.Get("Authorization")
+	if authHeader == "" {
+		return ""
 	}
-	_, valid = claims["doctor"].(map[string]interface{})
-	if valid {
-		return "doctor"
+
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		return ""
 	}
-	return ""
+	//checkTokenCode, _ := CheckAccountEnable(parts[1])
+	//if checkTokenCode == http.StatusUnauthorized || checkTokenCode == http.StatusInternalServerError {
+	//	return ""
+	//}
+
+	return parts[1]
+}
+
+func GetAccountType(token string) (string, error) {
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return "", errors.New("invalid token format")
+	}
+	payload, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return "", err
+	}
+	var claims map[string]interface{}
+	if err := json.Unmarshal(payload, &claims); err != nil {
+		return "", err
+	}
+	if _, valid := claims["patient"].(string); valid {
+		return "patient", nil
+	}
+	if _, valid := claims["doctor"].(string); valid {
+		return "doctor", nil
+	}
+
+	return "", errors.New("no account type found")
 }

@@ -1,11 +1,10 @@
 package medicament
 
 import (
-	"context"
 	"errors"
 
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type CreateMedicamentInput struct {
@@ -23,23 +22,20 @@ type CreateMedicamentResponse struct {
 }
 
 func CreateMedicament(input CreateMedicamentInput) CreateMedicamentResponse {
-	gqlClient := graphql.CreateClient()
-
-	medicament, err := graphql.CreateMedicine(context.Background(), gqlClient, input.Name, input.Unit, input.TargetDiseases, input.TreatedSymptoms, input.SideEffects)
+	medicament, err := graphql.CreateMedicine(model.CreateMedicineInput{
+		Name:            input.Name,
+		Unit:            &input.Unit,
+		TargetDiseases:  input.TargetDiseases,
+		TreatedSymptoms: input.TreatedSymptoms,
+		SideEffects:     input.SideEffects,
+	})
 	if err != nil {
 		return CreateMedicamentResponse{Medicament: model.Medicine{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
 
 	return CreateMedicamentResponse{
-		Medicament: model.Medicine{
-			ID:              medicament.CreateMedicine.Id,
-			Name:            medicament.CreateMedicine.Name,
-			Unit:            model.MedicineUnit(medicament.CreateMedicine.Unit),
-			TargetDiseases:  medicament.CreateMedicine.Target_diseases,
-			TreatedSymptoms: medicament.CreateMedicine.Treated_symptoms,
-			SideEffects:     medicament.CreateMedicine.Side_effects,
-		},
-		Code: 201,
-		Err:  nil,
+		Medicament: medicament,
+		Code:       201,
+		Err:        nil,
 	}
 }

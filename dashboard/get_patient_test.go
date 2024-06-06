@@ -1,8 +1,8 @@
 package dashboard
 
 import (
-	"context"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/edgar-care/edgarlib/medical_folder"
 	"github.com/joho/godotenv"
 	"log"
@@ -13,19 +13,31 @@ func TestGetPatientById(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_get_patient_by_id@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_get_patient_by_id@edgar-sante.fr",
+		Password: "password",
+	})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
 
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, "test_get_patient_by_id@edgar-sante.fr", "password", "name", "first", graphql.AddressInput{"", "", "", ""})
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_get_patient_by_id@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address:   &model.AddressInput{"", "", "", ""},
+		Status:    false,
+	})
 	if err != nil {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
 
-	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.CreateDoctor.Id, doctor.CreateDoctor.Email, doctor.CreateDoctor.Password, doctor.CreateDoctor.Name, doctor.CreateDoctor.Firstname, []string{}, []string{patient.CreatePatient.Id}, graphql.AddressInput{"", "", "", ""})
+	_, err = graphql.UpdateDoctor(doctor.ID, model.UpdateDoctorInput{
+		RendezVousIds: []*string{},
+		PatientIds:    []*string{&patient.ID},
+	})
 	if err != nil {
 		t.Errorf("Error while updating doctor: %v", err)
 	}
@@ -43,13 +55,14 @@ func TestGetPatientById(t *testing.T) {
 			Medicines:     nil,
 			StillRelevant: false,
 		}},
-	}, patient.CreatePatient.Id)
+		FamilyMembersMedInfoId: []string{},
+	}, patient.ID)
 
 	if medical_folder_resp.Err != nil {
 		t.Errorf("Unexpected error while creating medical info: %v", medical_folder_resp.Err)
 	}
 
-	response := GetPatientById(patient.GetCreatePatient().Id, doctor.CreateDoctor.Id)
+	response := GetPatientById(patient.ID, doctor.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
@@ -60,78 +73,148 @@ func TestGetPatientById(t *testing.T) {
 	}
 }
 
-//
-//func TestGetPatients(t *testing.T) {
-//	if err := godotenv.Load(".env.test"); err != nil {
-//		log.Fatalf("Error loading .env.test file: %v", err)
-//	}
-//	gqlClient := graphql.CreateClient()
-//
-//	patient1, err := graphql.CreatePatient(context.Background(), gqlClient, "test_get_patient_1@edgar-sante.fr", "password")
-//	if err != nil {
-//		t.Errorf("Error while creating patient: %v", err)
-//	}
-//	medical_folder_resp := medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
-//		Name:            "",
-//		Firstname:       "",
-//		Birthdate:       0,
-//		Sex:             "",
-//		Weight:          0,
-//		Height:          0,
-//		PrimaryDoctorID: "",
-//		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-//			Name:          "",
-//			Medicines:     nil,
-//			StillRelevant: false,
-//		}},
-//	}, patient1.CreatePatient.Id)
-//
-//	if medical_folder_resp.Err != nil {
-//		t.Errorf("Unexpected error while creating medical info: %v", medical_folder_resp.Err)
-//	}
-//	patient2, err := graphql.CreatePatient(context.Background(), gqlClient, "test_get_patient_2@edgar-sante.fr", "password")
-//	if err != nil {
-//		t.Errorf("Error while creating patient: %v", err)
-//	}
-//	medical_folder_resp = medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
-//		Name:            "",
-//		Firstname:       "",
-//		Birthdate:       0,
-//		Sex:             "",
-//		Weight:          0,
-//		Height:          0,
-//		PrimaryDoctorID: "",
-//		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-//			Name:          "",
-//			Medicines:     nil,
-//			StillRelevant: false,
-//		}},
-//	}, patient2.CreatePatient.Id)
-//
-//	if medical_folder_resp.Err != nil {
-//		t.Errorf("Unexpected error while creating medical info: %v", medical_folder_resp.Err)
-//	}
-//	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, "test_get_patients@edgar-sante.fr", "password", "name", "first", graphql.AddressInput{"", "", "", ""})
-//	if err != nil {
-//		t.Errorf("Error while creating doctor: %v", err)
-//	}
-//
-//	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.CreateDoctor.Id, doctor.CreateDoctor.Email, doctor.CreateDoctor.Password, doctor.CreateDoctor.Name, doctor.CreateDoctor.Firstname, []string{}, []string{patient1.CreatePatient.Id, patient2.CreatePatient.Id}, graphql.AddressInput{"", "", "", ""})
-//	if err != nil {
-//		t.Errorf("Error while updating doctor: %v", err)
-//	}
-//
-//	response := GetPatients(doctor.CreateDoctor.Id)
-//
-//	if response.Err != nil {
-//		t.Errorf("Unexpected error: %v", response.Err)
-//	}
-//
-//	if response.Code != 200 {
-//		t.Errorf("Expected code 200, got %d", response.Code)
-//	}
-//
-//	if len(response.PatientsInfo) != 2 {
-//		t.Errorf("Expected 2 patients, got %v", response.PatientsInfo)
-//	}
-//}
+func TestGetPatients(t *testing.T) {
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_get_patiets_by_doctor@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address:   &model.AddressInput{},
+	})
+	if err != nil {
+		t.Errorf("Failed to create doctor: %v", err)
+	}
+
+	patient1, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "patient1@example.com",
+		Password: "password1",
+		Status:   true,
+	})
+	if err != nil {
+		t.Errorf("Failed to create patient1: %v", err)
+	}
+
+	_ = medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
+		Name:            "first",
+		Firstname:       "first",
+		Birthdate:       0,
+		Sex:             "",
+		Weight:          0,
+		Height:          0,
+		PrimaryDoctorID: doctor.ID,
+		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
+			Name:          "",
+			Medicines:     nil,
+			StillRelevant: false,
+		}},
+		FamilyMembersMedInfoId: []string{},
+	}, patient1.ID)
+
+	patient2, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "patient2@example.com",
+		Password: "password2",
+		Status:   true,
+	})
+	if err != nil {
+		t.Errorf("Failed to create patient2: %v", err)
+	}
+
+	_ = medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
+		Name:            "second",
+		Firstname:       "second",
+		Birthdate:       0,
+		Sex:             "",
+		Weight:          0,
+		Height:          0,
+		PrimaryDoctorID: doctor.ID,
+		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
+			Name:          "",
+			Medicines:     nil,
+			StillRelevant: false,
+		}},
+		FamilyMembersMedInfoId: []string{},
+	}, patient2.ID)
+
+	_, err = graphql.UpdateDoctorsPatientIDs(doctor.ID, model.UpdateDoctorsPatientIDsInput{
+		PatientIds: []*string{&patient1.ID, &patient2.ID},
+	})
+	if err != nil {
+		t.Errorf("Failed to update doctor: %v", err)
+	}
+
+	response := GetPatients(doctor.ID)
+
+	if response.Code != 200 {
+		t.Errorf("Expected response code 200, got %v", response.Code)
+	}
+	if response.Err != nil {
+		t.Errorf("Unexpected error: %v", response.Err)
+	}
+
+	if len(response.PatientsInfo) != 2 {
+		t.Errorf("Expected 2 patients, got %v", len(response.PatientsInfo))
+	}
+
+	if response.PatientsInfo[0].ID != patient1.ID {
+		t.Errorf("Expected patient1 ID to be %v, got %v", patient1.ID, response.PatientsInfo[0].ID)
+	}
+
+	if response.PatientsInfo[1].ID != patient2.ID {
+		t.Errorf("Expected patient2 ID to be %v, got %v", patient2.ID, response.PatientsInfo[1].ID)
+	}
+}
+
+func TestGetPatientsWithInvalidDoctorID(t *testing.T) {
+	invalidDoctorID := "invalid-doctor-id"
+
+	response := GetPatients(invalidDoctorID)
+
+	if response.Code != 400 {
+		t.Errorf("Expected response code 400, got %v", response.Code)
+	}
+	if response.Err == nil {
+		t.Errorf("Expected an error in response, got nil")
+	} else if response.Err.Error() != "id does not correspond to a doctor" {
+		t.Errorf("Expected 'id does not correspond to a doctor' error, got %v", response.Err.Error())
+	}
+}
+
+func TestGetPatientsWithMedicalInfoError(t *testing.T) {
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_get_patients_with_medical_info_error@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address:   &model.AddressInput{},
+	})
+	if err != nil {
+		t.Errorf("Failed to create doctor: %v", err)
+	}
+
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "patient_with_error@example.com",
+		Password: "password1",
+		Status:   true,
+	})
+	if err != nil {
+		t.Errorf("Failed to create patient: %v", err)
+	}
+
+	_, err = graphql.UpdateDoctorsPatientIDs(doctor.ID, model.UpdateDoctorsPatientIDsInput{
+		PatientIds: []*string{&patient.ID},
+	})
+	if err != nil {
+		t.Errorf("Failed to update doctor: %v", err)
+	}
+
+	response := GetPatients(doctor.ID)
+
+	if response.Code != 401 {
+		t.Errorf("Expected response code 401 due to medical info error, got %v", response.Code)
+	}
+	if response.Err == nil {
+		t.Errorf("Expected an error in response, got nil")
+	} else if response.Err.Error() != "error while retrieving medical info by id" {
+		t.Errorf("Expected 'error while retrieving medical info by id', got %v", response.Err.Error())
+	}
+}

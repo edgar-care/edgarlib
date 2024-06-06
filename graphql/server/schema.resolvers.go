@@ -8,90 +8,106 @@ import (
 	"context"
 	"errors"
 	"os"
+	"time"
 
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // CreatePatient is the resolver for the createPatient field.
-func (r *mutationResolver) CreatePatient(ctx context.Context, email string, password string, status bool) (*model.Patient, error) {
-	var result model.Patient
+func (r *mutationResolver) CreatePatient(ctx context.Context, input model.CreatePatientInput) (*model.Patient, error) {
+	var existingPatient model.Patient
 
-	filter := bson.M{"email": email}
+	filter := bson.M{"email": input.Email}
 
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, filter).Decode(&existingPatient)
 	if err == nil {
 		return nil, errors.New("Email already exists")
 	}
 
-	newPatient := bson.M{
-		"email":    email,
-		"password": password,
-		"status":   status,
+	now := int(time.Now().Unix())
+	patient := &model.Patient{
+		ID:                  primitive.NewObjectID().Hex(),
+		Email:               input.Email,
+		Password:            input.Password,
+		Status:              input.Status,
+		DeviceConnect:       input.DeviceConnect,
+		DoubleAuthMethodsID: input.DoubleAuthMethodsID,
+		TrustDevices:        input.TrustDevices,
+		CreatedAt:           now,
+		UpdatedAt:           now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").InsertOne(ctx, newPatient)
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").InsertOne(ctx, patient)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Patient{
-		Email:    email,
-		Password: password,
-		Status:   status,
-		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
-	}
-	return &entity, err
+
+	return patient, nil
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Patient, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, input model.UpdatePatientInput) (*model.Patient, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Email != nil {
+		update["email"] = *input.Email
+	}
+	if input.Password != nil {
+		update["password"] = *input.Password
+	}
+	if input.MedicalInfoID != nil {
+		update["medical_info_id"] = *input.MedicalInfoID
+	}
+	if input.RendezVousIds != nil {
+		update["rendez_vous_ids"] = input.RendezVousIds
+	}
+	if input.DocumentIds != nil {
+		update["document_ids"] = input.DocumentIds
+	}
+	if input.TreatmentFollowUpIds != nil {
+		update["treatment_follow_up_ids"] = input.TreatmentFollowUpIds
+	}
+	if input.ChatIds != nil {
+		update["chat_ids"] = input.ChatIds
+	}
+	if input.Status != nil {
+		update["status"] = input.Status
+	}
+	if input.TrustDevices != nil {
+		update["trust_devices"] = input.TrustDevices
+	}
+	if input.DoubleAuthMethodsID != nil {
+		update["double_auth_methods_id"] = *input.DoubleAuthMethodsID
+	}
+	if input.DeviceConnect != nil {
+		update["device_connect"] = input.DeviceConnect
+	}
+
+	update["updatedAt"] = int(time.Now().Unix())
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedPatient model.Patient
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":                     objId,
-		"email":                   email,
-		"password":                password,
-		"rendez_vous_ids":         rendezVousIds,
-		"medical_info_id":         medicalInfoID,
-		"document_ids":            documentIds,
-		"treatment_follow_up_ids": treatmentFollowUpIds,
-		"chat_ids":                chatIds,
-		"device_connect":          deviceConnect,
-		"double_auth_methods_id":  doubleAuthMethodsID,
-		"trust_devices":           trustDevices,
-		"status":                  status,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
-	return &model.Patient{
-		ID:                   id,
-		Email:                *email,
-		Password:             *password,
-		RendezVousIds:        rendezVousIds,
-		MedicalInfoID:        medicalInfoID,
-		DocumentIds:          documentIds,
-		TreatmentFollowUpIds: treatmentFollowUpIds,
-		ChatIds:              chatIds,
-		DeviceConnect:        deviceConnect,
-		DoubleAuthMethodsID:  doubleAuthMethodsID,
-		TrustDevices:         trustDevices,
-		Status:               *status,
-	}, err
+	return &updatedPatient, nil
 }
 
 // DeletePatient is the resolver for the deletePatient field.
 func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -100,104 +116,115 @@ func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool,
 }
 
 // CreateDoctor is the resolver for the createDoctor field.
-func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput, status bool) (*model.Doctor, error) {
-	var result model.Doctor
+func (r *mutationResolver) CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error) {
+	var existingDoctor model.Doctor
 
-	filter := bson.M{"email": email}
+	filter := bson.M{"email": input.Email}
 
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, filter).Decode(&existingDoctor)
 	if err == nil {
 		return nil, errors.New("Email already exists")
 	}
 
-	newDoctor := bson.M{
-		"email":     email,
-		"password":  password,
-		"name":      name,
-		"firstname": firstname,
-		"address":   address,
-		"status":    status,
+	now := int(time.Now().Unix())
+	address := model.Address{
+		Street:  input.Address.Street,
+		ZipCode: input.Address.ZipCode,
+		Country: input.Address.Country,
+		City:    input.Address.City,
+	}
+	doctor := &model.Doctor{
+		ID:        primitive.NewObjectID().Hex(),
+		Email:     input.Email,
+		Password:  input.Password,
+		Address:   &address,
+		Name:      input.Name,
+		Firstname: input.Firstname,
+		Status:    input.Status,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").InsertOne(ctx, newDoctor)
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").InsertOne(ctx, doctor)
 	if err != nil {
 		return nil, err
 	}
 
-	listaddress := &model.Address{
-		Street:  address.Street,
-		ZipCode: address.ZipCode,
-		Country: address.Country,
-		City:    address.City,
-	}
-
-	entity := model.Doctor{
-		Email:     email,
-		Password:  password,
-		Name:      name,
-		Firstname: firstname,
-		Address:   listaddress,
-		Status:    status,
-		ID:        res.InsertedID.(primitive.ObjectID).Hex(),
-	}
-	return &entity, err
+	return doctor, nil
 }
 
 // UpdateDoctor is the resolver for the updateDoctor field.
-func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Doctor, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, input model.UpdateDoctorInput) (*model.Doctor, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Email != nil {
+		update["email"] = *input.Email
+	}
+	if input.Password != nil {
+		update["password"] = *input.Password
+	}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.Firstname != nil {
+		update["firstname"] = *input.Firstname
+	}
+	if input.RendezVousIds != nil {
+		update["rendez_vous_ids"] = input.RendezVousIds
+	}
+	if input.PatientIds != nil {
+		update["patient_ids"] = input.PatientIds
+	}
+	if input.Address != nil {
+		update["address"] = input.Address
+	}
+	if input.ChatIds != nil {
+		update["chat_ids"] = input.ChatIds
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDoctor model.Doctor
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDoctor)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":                    objId,
-		"email":                  email,
-		"password":               password,
-		"name":                   name,
-		"firstname":              firstname,
-		"rendez_vous_ids":        rendezVousIds,
-		"patient_ids":            patientIds,
-		"address":                address,
-		"chat_ids":               chatIds,
-		"device_connect":         deviceConnect,
-		"double_auth_methods_id": doubleAuthMethodsID,
-		"trust_devices":          trustDevices,
-		"status":                 status,
+	return &updatedDoctor, nil
+}
+
+// UpdateDoctorsPatientIDs is the resolver for the updateDoctorsPatientIDs field.
+func (r *mutationResolver) UpdateDoctorsPatientIDs(ctx context.Context, id string, input model.UpdateDoctorsPatientIDsInput) (*model.Doctor, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+	update["patient_ids"] = input.PatientIds
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDoctor model.Doctor
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDoctor)
+	if err != nil {
+		return nil, err
 	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").ReplaceOne(ctx, filter, updated)
-	return &model.Doctor{
-		ID:        id,
-		Email:     *email,
-		Password:  *password,
-		Name:      *name,
-		Firstname: *firstname,
-		Address: &model.Address{
-			Street:  address.Street,
-			ZipCode: address.ZipCode,
-			Country: address.Country,
-			City:    address.City,
-		},
-		RendezVousIds:       rendezVousIds,
-		PatientIds:          patientIds,
-		ChatIds:             chatIds,
-		DeviceConnect:       deviceConnect,
-		DoubleAuthMethodsID: doubleAuthMethodsID,
-		TrustDevices:        trustDevices,
-		Status:              *status,
-	}, err
+
+	return &updatedDoctor, nil
 }
 
 // DeleteDoctor is the resolver for the deleteDoctor field.
 func (r *mutationResolver) DeleteDoctor(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -206,201 +233,74 @@ func (r *mutationResolver) DeleteDoctor(ctx context.Context, id string) (*bool, 
 }
 
 // CreateAdmin is the resolver for the createAdmin field.
-func (r *mutationResolver) CreateAdmin(ctx context.Context, email string, password string, name string, lastName string) (*model.Admin, error) {
+func (r *mutationResolver) CreateAdmin(ctx context.Context, input model.CreateAdminInput) (*model.Admin, error) {
 	var result model.Admin
 
-	filter := bson.M{"email": email}
+	filter := bson.M{"email": input.Email}
 
 	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").FindOne(ctx, filter).Decode(&result)
 	if err == nil {
 		return nil, errors.New("Email already exists")
 	}
 
-	newAdmin := bson.M{
-		"email":     email,
-		"password":  password,
-		"name":      name,
-		"last_name": lastName,
+	now := int(time.Now().Unix())
+	admin := &model.Admin{
+		ID:        primitive.NewObjectID().Hex(),
+		Email:     input.Email,
+		Password:  input.Password,
+		Name:      input.Name,
+		LastName:  input.LastName,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").InsertOne(ctx, newAdmin)
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").InsertOne(ctx, admin)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Admin{
-		Email:    email,
-		Password: password,
-		Name:     name,
-		LastName: lastName,
-		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
-	}
-	return &entity, err
+
+	return admin, err
 }
 
 // UpdateAdmin is the resolver for the updateAdmin field.
-func (r *mutationResolver) UpdateAdmin(ctx context.Context, id string, email *string, password *string, name *string, lastName *string) (*model.Admin, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateAdmin(ctx context.Context, id string, input model.UpdateAdminInput) (*model.Admin, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Email != nil {
+		update["email"] = *input.Email
+	}
+	if input.Password != nil {
+		update["password"] = *input.Password
+	}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.LastName != nil {
+		update["last_name"] = *input.LastName
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedAdmin model.Admin
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedAdmin)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":       objId,
-		"email":     email,
-		"password":  password,
-		"name":      name,
-		"last_name": lastName,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").ReplaceOne(ctx, filter, updated)
-	return &model.Admin{
-		ID:       id,
-		Email:    *email,
-		Password: *password,
-		Name:     *name,
-		LastName: *lastName,
-	}, err
+	return &updatedAdmin, nil
 }
 
 // DeleteAdmin is the resolver for the deleteAdmin field.
 func (r *mutationResolver) DeleteAdmin(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").DeleteOne(ctx, filter)
-	if err != nil {
-		return &resp, err
-	}
-	resp = true
-	return &resp, err
-}
-
-// CreateDemoAccount is the resolver for the createDemoAccount field.
-func (r *mutationResolver) CreateDemoAccount(ctx context.Context, email string, password string) (*model.DemoAccount, error) {
-	var result model.DemoAccount
-
-	filter := bson.M{"email": email}
-
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").FindOne(ctx, filter).Decode(&result)
-	if err == nil {
-		return nil, errors.New("Email already exists")
-	}
-
-	newDemoAccount := bson.M{
-		"email":    email,
-		"password": password,
-	}
-
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").InsertOne(ctx, newDemoAccount)
-	if err != nil {
-		return nil, err
-	}
-	entity := model.DemoAccount{
-		Email:    email,
-		Password: password,
-		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
-	}
-	return &entity, err
-}
-
-// UpdateDemoAccount is the resolver for the updateDemoAccount field.
-func (r *mutationResolver) UpdateDemoAccount(ctx context.Context, id string, email *string, password *string) (*model.DemoAccount, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	filter := bson.M{"_id": objId}
-
-	updated := bson.M{
-		"_id":      objId,
-		"email":    email,
-		"password": password,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").ReplaceOne(ctx, filter, updated)
-	return &model.DemoAccount{
-		ID:       id,
-		Email:    *email,
-		Password: *password,
-	}, err
-}
-
-// DeleteDemoAccount is the resolver for the deleteDemoAccount field.
-func (r *mutationResolver) DeleteDemoAccount(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").DeleteOne(ctx, filter)
-	if err != nil {
-		return &resp, err
-	}
-	resp = true
-	return &resp, err
-}
-
-// CreateTestAccount is the resolver for the createTestAccount field.
-func (r *mutationResolver) CreateTestAccount(ctx context.Context, email string, password string) (*model.TestAccount, error) {
-	var result model.TestAccount
-
-	filter := bson.M{"email": email}
-
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").FindOne(ctx, filter).Decode(&result)
-	if err == nil {
-		return nil, errors.New("Email already exists")
-	}
-
-	newTestAccount := bson.M{
-		"email":    email,
-		"password": password,
-	}
-
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").InsertOne(ctx, newTestAccount)
-	if err != nil {
-		return nil, err
-	}
-	entity := model.TestAccount{
-		Email:    email,
-		Password: password,
-		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
-	}
-	return &entity, err
-}
-
-// UpdateTestAccount is the resolver for the updateTestAccount field.
-func (r *mutationResolver) UpdateTestAccount(ctx context.Context, id string, email *string, password *string) (*model.TestAccount, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-	filter := bson.M{"_id": objId}
-
-	updated := bson.M{
-		"_id":      objId,
-		"email":    email,
-		"password": password,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").ReplaceOne(ctx, filter, updated)
-	return &model.TestAccount{
-		ID:       id,
-		Email:    *email,
-		Password: *password,
-	}, err
-}
-
-// DeleteTestAccount is the resolver for the deleteTestAccount field.
-func (r *mutationResolver) DeleteTestAccount(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
-	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -409,128 +309,126 @@ func (r *mutationResolver) DeleteTestAccount(ctx context.Context, id string) (*b
 }
 
 // CreateSession is the resolver for the createSession field.
-func (r *mutationResolver) CreateSession(ctx context.Context, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) (*model.Session, error) {
-	newSession := bson.M{
-		"diseases":           diseases,
-		"symptoms":           symptoms,
-		"age":                age,
-		"height":             height,
-		"weight":             weight,
-		"sex":                sex,
-		"ante_chirs":         anteChirs,
-		"ante_diseases":      anteDiseases,
-		"medicine":           medicine,
-		"last_question":      lastQuestion,
-		"logs":               logs,
-		"hereditary_disease": hereditaryDisease,
-		"alerts":             alerts,
+func (r *mutationResolver) CreateSession(ctx context.Context, input model.CreateSessionInput) (*model.Session, error) {
+	now := int(time.Now().Unix())
+	var diseases []*model.SessionDiseases
+	var symptoms []*model.SessionSymptom
+	var logs []*model.Logs
+
+	for _, disease := range input.Diseases {
+		diseases = append(diseases, &model.SessionDiseases{
+			Name:     disease.Name,
+			Presence: disease.Presence,
+		})
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").InsertOne(ctx, newSession)
+	for _, symptom := range input.Symptoms {
+		symptoms = append(symptoms, &model.SessionSymptom{
+			Name:     symptom.Name,
+			Presence: symptom.Presence,
+			Duration: symptom.Duration,
+			Treated:  symptom.Treated,
+		})
+	}
+
+	for _, log := range input.Logs {
+		logs = append(logs, &model.Logs{
+			Question: log.Question,
+			Answer:   log.Answer,
+		})
+	}
+
+	session := &model.Session{
+		ID:                primitive.NewObjectID().Hex(),
+		Diseases:          diseases,
+		Symptoms:          symptoms,
+		Age:               input.Age,
+		Height:            input.Height,
+		Weight:            input.Weight,
+		Sex:               input.Sex,
+		AnteChirs:         input.AnteChirs,
+		AnteDiseases:      input.AnteDiseases,
+		Medicine:          input.Medicine,
+		LastQuestion:      input.LastQuestion,
+		Logs:              logs,
+		HereditaryDisease: input.HereditaryDisease,
+		Alerts:            input.Alerts,
+		CreatedAt:         now,
+		UpdatedAt:         now,
+	}
+
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").InsertOne(ctx, session)
 	if err != nil {
 		return nil, err
 	}
 
-	var convertedDiseases []*model.SessionDiseases
-	for _, disease := range diseases {
-		convertedDiseases = append(convertedDiseases, &model.SessionDiseases{Name: disease.Name, Presence: disease.Presence, UnknownPresence: disease.UnknownPresence})
-	}
-
-	var convertedSymptoms []*model.SessionSymptom
-	for _, symptom := range symptoms {
-		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration, Treated: symptom.Treated})
-	}
-
-	var convertedLogs []*model.Logs
-	for _, log := range logs {
-		convertedLogs = append(convertedLogs, &model.Logs{Question: log.Question, Answer: log.Answer})
-	}
-	entity := model.Session{
-		ID:                res.InsertedID.(primitive.ObjectID).Hex(),
-		Diseases:          convertedDiseases,
-		Symptoms:          convertedSymptoms,
-		Age:               age,
-		Height:            height,
-		Weight:            weight,
-		Sex:               sex,
-		AnteChirs:         anteChirs,
-		AnteDiseases:      anteDiseases,
-		Medicine:          medicine,
-		LastQuestion:      lastQuestion,
-		Logs:              convertedLogs,
-		HereditaryDisease: hereditaryDisease,
-		Alerts:            alerts,
-	}
-	return &entity, err
+	return session, err
 }
 
 // UpdateSession is the resolver for the updateSession field.
-func (r *mutationResolver) UpdateSession(ctx context.Context, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) (*model.Session, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateSession(ctx context.Context, id string, input model.UpdateSessionInput) (*model.Session, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Diseases != nil {
+		update["diseases"] = input.Diseases
+	}
+	if input.Symptoms != nil {
+		update["symptoms"] = input.Symptoms
+	}
+	if input.Age != nil {
+		update["age"] = *input.Age
+	}
+	if input.Height != nil {
+		update["height"] = *input.Height
+	}
+	if input.Weight != nil {
+		update["weight"] = *input.Weight
+	}
+	if input.Sex != nil {
+		update["sex"] = *input.Sex
+	}
+	if input.AnteChirs != nil {
+		update["ante_chirs"] = input.AnteChirs
+	}
+	if input.AnteDiseases != nil {
+		update["ante_diseases"] = input.AnteDiseases
+	}
+	if input.Medicine != nil {
+		update["medicine"] = input.Medicine
+	}
+	if input.LastQuestion != nil {
+		update["last_question"] = *input.LastQuestion
+	}
+	if input.Logs != nil {
+		update["logs"] = input.Logs
+	}
+	if input.Alerts != nil {
+		update["alerts"] = input.Alerts
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedSession model.Session
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedSession)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":                objId,
-		"diseases":           diseases,
-		"symptoms":           symptoms,
-		"age":                age,
-		"height":             height,
-		"weight":             weight,
-		"sex":                sex,
-		"ante_chirs":         anteChirs,
-		"ante_diseases":      anteDiseases,
-		"medicine":           medicine,
-		"last_question":      lastQuestion,
-		"logs":               logs,
-		"hereditary_disease": hereditaryDisease,
-		"alerts":             alerts,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").ReplaceOne(ctx, filter, updated)
-
-	var convertedDiseases []*model.SessionDiseases
-	for _, disease := range diseases {
-		convertedDiseases = append(convertedDiseases, &model.SessionDiseases{Name: disease.Name, Presence: disease.Presence, UnknownPresence: disease.UnknownPresence})
-	}
-
-	var convertedSymptoms []*model.SessionSymptom
-	for _, symptom := range symptoms {
-		convertedSymptoms = append(convertedSymptoms, &model.SessionSymptom{Name: symptom.Name, Presence: symptom.Presence, Duration: symptom.Duration, Treated: symptom.Treated})
-	}
-
-	var convertedLogs []*model.Logs
-	for _, log := range logs {
-		convertedLogs = append(convertedLogs, &model.Logs{Question: log.Question, Answer: log.Answer})
-	}
-	return &model.Session{
-		ID:                id,
-		Diseases:          convertedDiseases,
-		Symptoms:          convertedSymptoms,
-		Age:               *age,
-		Height:            *height,
-		Weight:            *weight,
-		Sex:               *sex,
-		AnteChirs:         anteChirs,
-		AnteDiseases:      anteDiseases,
-		Medicine:          medicine,
-		LastQuestion:      *lastQuestion,
-		Logs:              convertedLogs,
-		HereditaryDisease: hereditaryDisease,
-		Alerts:            alerts,
-	}, err
+	return &updatedSession, nil
 }
 
 // DeleteSession is the resolver for the deleteSession field.
 func (r *mutationResolver) DeleteSession(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -539,83 +437,85 @@ func (r *mutationResolver) DeleteSession(ctx context.Context, id string) (*bool,
 }
 
 // CreateSymptom is the resolver for the createSymptom field.
-func (r *mutationResolver) CreateSymptom(ctx context.Context, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error) {
-	newSymptom := bson.M{
-		"code":              code,
-		"name":              name,
-		"chronic":           chronic,
-		"symptom":           symptom,
-		"advice":            advice,
-		"question":          question,
-		"question_basic":    questionBasic,
-		"question_duration": questionDuration,
-		"question_ante":     questionAnte,
+func (r *mutationResolver) CreateSymptom(ctx context.Context, input model.CreateSymptomInput) (*model.Symptom, error) {
+	now := int(time.Now().Unix())
+	symptom := &model.Symptom{
+		ID:               primitive.NewObjectID().Hex(),
+		Code:             input.Code,
+		Name:             input.Name,
+		Chronic:          input.Chronic,
+		Symptom:          input.Symptom,
+		Advice:           input.Advice,
+		Question:         input.Question,
+		QuestionBasic:    input.QuestionBasic,
+		QuestionDuration: input.QuestionDuration,
+		QuestionAnte:     input.QuestionAnte,
+		CreatedAt:        now,
+		UpdatedAt:        now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").InsertOne(ctx, newSymptom)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").InsertOne(ctx, symptom)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Symptom{
-		ID:               res.InsertedID.(primitive.ObjectID).Hex(),
-		Code:             code,
-		Name:             name,
-		Chronic:          chronic,
-		Symptom:          symptom,
-		Advice:           advice,
-		Question:         question,
-		QuestionBasic:    questionBasic,
-		QuestionDuration: questionDuration,
-		QuestionAnte:     questionAnte,
-	}
-	return &entity, err
+	return symptom, err
 }
 
 // UpdateSymptom is the resolver for the updateSymptom field.
-func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) (*model.Symptom, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, input model.UpdateSymptomInput) (*model.Symptom, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Code != nil {
+		update["code"] = *input.Code
+	}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.Chronic != nil {
+		update["chronic"] = *input.Chronic
+	}
+	if input.Symptom != nil {
+		update["symptom"] = input.Symptom
+	}
+	if input.Advice != nil {
+		update["advice"] = *input.Advice
+	}
+	if input.Question != nil {
+		update["question"] = *input.Question
+	}
+	if input.QuestionBasic != nil {
+		update["question_basic"] = *input.QuestionBasic
+	}
+	if input.QuestionDuration != nil {
+		update["question_duration"] = *input.QuestionDuration
+	}
+	if input.QuestionAnte != nil {
+		update["question_ante"] = *input.QuestionAnte
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedSymptom model.Symptom
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedSymptom)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":               objId,
-		"code":              code,
-		"name":              name,
-		"chronic":           chronic,
-		"symptom":           symptom,
-		"advice":            advice,
-		"question":          question,
-		"question_basic":    questionBasic,
-		"question_duration": questionDuration,
-		"question_ante":     questionAnte,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").ReplaceOne(ctx, filter, updated)
-
-	return &model.Symptom{
-		ID:               id,
-		Code:             *code,
-		Name:             *name,
-		Chronic:          chronic,
-		Symptom:          symptom,
-		Advice:           advice,
-		Question:         *question,
-		QuestionBasic:    *questionBasic,
-		QuestionDuration: *questionDuration,
-		QuestionAnte:     *questionAnte,
-	}, err
+	return &updatedSymptom, nil
 }
 
 // DeleteSymptom is the resolver for the deleteSymptom field.
 func (r *mutationResolver) DeleteSymptom(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -624,92 +524,83 @@ func (r *mutationResolver) DeleteSymptom(ctx context.Context, id string) (*bool,
 }
 
 // CreateDisease is the resolver for the createDisease field.
-func (r *mutationResolver) CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, heredityFactor float64, advice *string) (*model.Disease, error) {
-	newDisease := bson.M{
-		"code":              code,
-		"name":              name,
-		"symptoms":          symptoms,
-		"symptoms_weight":   symptomsWeight,
-		"overweight_factor": overweightFactor,
-		"heredity_factor":   heredityFactor,
-		"advice":            advice,
+func (r *mutationResolver) CreateDisease(ctx context.Context, input model.CreateDiseaseInput) (*model.Disease, error) {
+	now := int(time.Now().Unix())
+	var symptomWeights []*model.SymptomsWeight
+	for _, symptomWeight := range input.SymptomsWeight {
+		symptomWeights = append(symptomWeights, &model.SymptomsWeight{
+			Symptom: symptomWeight.Symptom,
+			Value:   symptomWeight.Value,
+		})
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").InsertOne(ctx, newDisease)
+	disease := &model.Disease{
+		ID:               primitive.NewObjectID().Hex(),
+		Code:             input.Code,
+		Name:             input.Name,
+		Symptoms:         input.Symptoms,
+		SymptomsWeight:   symptomWeights,
+		OverweightFactor: input.OverweightFactor,
+		HeredityFactor:   input.HeredityFactor,
+		Advice:           input.Advice,
+		CreatedAt:        now,
+		UpdatedAt:        now,
+	}
+
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").InsertOne(ctx, disease)
 	if err != nil {
 		return nil, err
 	}
 
-	var convertedSymptomsWeight []*model.SymptomsWeight
-	for _, acute := range symptomsWeight {
-		convertedSymptomsWeight = append(convertedSymptomsWeight, &model.SymptomsWeight{
-			Symptom: acute.Symptom,
-			Value:   acute.Value,
-		})
-	}
-
-	entity := model.Disease{
-		ID:               res.InsertedID.(primitive.ObjectID).Hex(),
-		Code:             code,
-		Name:             name,
-		Symptoms:         symptoms,
-		SymptomsWeight:   convertedSymptomsWeight,
-		OverweightFactor: overweightFactor,
-		HeredityFactor:   heredityFactor,
-		Advice:           advice,
-	}
-	return &entity, err
+	return disease, err
 }
 
 // UpdateDisease is the resolver for the updateDisease field.
-func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, heredityFactor *float64, advice *string) (*model.Disease, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, input model.UpdateDiseaseInput) (*model.Disease, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Code != nil {
+		update["code"] = *input.Code
+	}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.Symptoms != nil {
+		update["symptoms"] = input.Symptoms
+	}
+	if input.SymptomsWeight != nil {
+		update["symptoms_weight"] = input.SymptomsWeight
+	}
+	if input.OverweightFactor != nil {
+		update["overweight_factor"] = *input.OverweightFactor
+	}
+	if input.Advice != nil {
+		update["advice"] = *input.Advice
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDisease model.Disease
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDisease)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":               objId,
-		"code":              code,
-		"name":              name,
-		"symptoms":          symptoms,
-		"symptoms_weight":   symptomsWeight,
-		"overweight_factor": overweightFactor,
-		"heredity_factor":   heredityFactor,
-		"advice":            advice,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").ReplaceOne(ctx, filter, updated)
-
-	var convertedSymptomsWeight []*model.SymptomsWeight
-	for _, acute := range symptomsWeight {
-		convertedSymptomsWeight = append(convertedSymptomsWeight, &model.SymptomsWeight{
-			Symptom: acute.Symptom,
-			Value:   acute.Value,
-		})
-	}
-
-	return &model.Disease{
-		ID:               id,
-		Code:             *code,
-		Name:             *name,
-		Symptoms:         symptoms,
-		SymptomsWeight:   convertedSymptomsWeight,
-		OverweightFactor: *overweightFactor,
-		HeredityFactor:   *heredityFactor,
-		Advice:           advice,
-	}, err
+	return &updatedDisease, nil
 }
 
 // DeleteDisease is the resolver for the deleteDisease field.
 func (r *mutationResolver) DeleteDisease(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -718,59 +609,56 @@ func (r *mutationResolver) DeleteDisease(ctx context.Context, id string) (*bool,
 }
 
 // CreateNotification is the resolver for the createNotification field.
-func (r *mutationResolver) CreateNotification(ctx context.Context, token string, message string, title string) (*model.Notification, error) {
-	newNotification := bson.M{
-		"token":   token,
-		"message": message,
-		"title":   title,
+func (r *mutationResolver) CreateNotification(ctx context.Context, input model.CreateNotificationInput) (*model.Notification, error) {
+	now := int(time.Now().Unix())
+	notification := &model.Notification{
+		ID:        primitive.NewObjectID().Hex(),
+		Token:     input.Token,
+		Title:     input.Title,
+		Message:   input.Message,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").InsertOne(ctx, newNotification)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").InsertOne(ctx, notification)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Notification{
-		ID:      res.InsertedID.(primitive.ObjectID).Hex(),
-		Token:   token,
-		Message: message,
-		Title:   title,
-	}
-	return &entity, err
+
+	return notification, err
 }
 
 // UpdateNotification is the resolver for the updateNotification field.
-func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, input model.UpdateNotificationInput) (*model.Notification, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	update["token"] = input.Token
+	update["message"] = input.Message
+	update["title"] = input.Title
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedNotification model.Notification
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedNotification)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":     objId,
-		"token":   token,
-		"message": message,
-		"title":   title,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").ReplaceOne(ctx, filter, updated)
-
-	return &model.Notification{
-		ID:      id,
-		Token:   token,
-		Title:   title,
-		Message: message,
-	}, err
+	return &updatedNotification, nil
 }
 
 // DeleteNotification is the resolver for the deleteNotification field.
 func (r *mutationResolver) DeleteNotification(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -779,77 +667,79 @@ func (r *mutationResolver) DeleteNotification(ctx context.Context, id string) (*
 }
 
 // CreateRdv is the resolver for the createRdv field.
-func (r *mutationResolver) CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) (*model.Rdv, error) {
-	newRdv := bson.M{
-		"id_patient":         idPatient,
-		"doctor_id":          doctorID,
-		"start_date":         startDate,
-		"end_date":           endDate,
-		"appointment_status": appointmentStatus,
-		"session_id":         sessionID,
+func (r *mutationResolver) CreateRdv(ctx context.Context, input model.CreateRdvInput) (*model.Rdv, error) {
+	now := int(time.Now().Unix())
+	rdv := &model.Rdv{
+		ID:                primitive.NewObjectID().Hex(),
+		DoctorID:          input.DoctorID,
+		IDPatient:         input.IDPatient,
+		StartDate:         input.StartDate,
+		EndDate:           input.EndDate,
+		AppointmentStatus: input.AppointmentStatus,
+		SessionID:         input.SessionID,
+		CreatedAt:         now,
+		UpdatedAt:         now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").InsertOne(ctx, newRdv)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").InsertOne(ctx, rdv)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Rdv{
-		ID:                res.InsertedID.(primitive.ObjectID).Hex(),
-		DoctorID:          doctorID,
-		IDPatient:         idPatient,
-		StartDate:         startDate,
-		EndDate:           endDate,
-		CancelationReason: nil,
-		HealthMethod:      nil,
-		AppointmentStatus: appointmentStatus,
-		SessionID:         sessionID,
-	}
-	return &entity, err
+	return rdv, err
 }
 
 // UpdateRdv is the resolver for the updateRdv field.
-func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) (*model.Rdv, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateRdv(ctx context.Context, id string, input model.UpdateRdvInput) (*model.Rdv, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.IDPatient != nil {
+		update["id_patient"] = *input.IDPatient
+	}
+	if input.DoctorID != nil {
+		update["doctor_id"] = *input.DoctorID
+	}
+	if input.StartDate != nil {
+		update["start_date"] = *input.StartDate
+	}
+	if input.EndDate != nil {
+		update["end_date"] = *input.EndDate
+	}
+	if input.CancelationReason != nil {
+		update["cancelation_reason"] = *input.CancelationReason
+	}
+	if input.AppointmentStatus != nil {
+		update["appointment_status"] = *input.AppointmentStatus
+	}
+	if input.SessionID != nil {
+		update["session_id"] = *input.SessionID
+	}
+	if input.HealthMethod != nil {
+		update["health_method"] = *input.HealthMethod
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedRdv model.Rdv
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedRdv)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":                objId,
-		"id_patient":         idPatient,
-		"doctor_id":          doctorID,
-		"start_date":         startDate,
-		"end_date":           endDate,
-		"cancelation_reason": cancelationReason,
-		"appointment_status": appointmentStatus,
-		"session_id":         sessionID,
-		"healh_method":       healthMethod,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").ReplaceOne(ctx, filter, updated)
-
-	return &model.Rdv{
-		ID:                id,
-		DoctorID:          *doctorID,
-		IDPatient:         *idPatient,
-		StartDate:         *startDate,
-		EndDate:           *endDate,
-		CancelationReason: cancelationReason,
-		AppointmentStatus: *appointmentStatus,
-		SessionID:         *sessionID,
-		HealthMethod:      healthMethod,
-	}, err
+	return &updatedRdv, nil
 }
 
 // DeleteRdv is the resolver for the deleteRdv field.
 func (r *mutationResolver) DeleteRdv(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -859,13 +749,10 @@ func (r *mutationResolver) DeleteRdv(ctx context.Context, id string) (*bool, err
 
 // DeleteSlot is the resolver for the deleteSlot field.
 func (r *mutationResolver) DeleteSlot(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -874,76 +761,61 @@ func (r *mutationResolver) DeleteSlot(ctx context.Context, id string) (*bool, er
 }
 
 // CreateDocument is the resolver for the createDocument field.
-func (r *mutationResolver) CreateDocument(ctx context.Context, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) (*model.Document, error) {
-	newDocument := bson.M{
-		"owner_id":      ownerID,
-		"name":          name,
-		"document_type": documentType,
-		"category":      category,
-		"is_favorite":   isFavorite,
-		"download_url":  downloadURL,
+func (r *mutationResolver) CreateDocument(ctx context.Context, input model.CreateDocumentInput) (*model.Document, error) {
+	now := int(time.Now().Unix())
+	document := &model.Document{
+		ID:           primitive.NewObjectID().Hex(),
+		OwnerID:      input.OwnerID,
+		Name:         input.Name,
+		DocumentType: model.DocumentType(input.DocumentType),
+		Category:     model.Category(input.Category),
+		IsFavorite:   input.IsFavorite,
+		DownloadURL:  input.DownloadURL,
+		CreatedAt:    now,
+		UpdatedAt:    now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").InsertOne(ctx, newDocument)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").InsertOne(ctx, document)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Document{
-		ID:           res.InsertedID.(primitive.ObjectID).Hex(),
-		OwnerID:      ownerID,
-		Name:         name,
-		DocumentType: model.DocumentType(documentType),
-		Category:     model.Category(category),
-		IsFavorite:   isFavorite,
-		DownloadURL:  downloadURL,
-	}
-	return &entity, err
+	return document, err
 }
 
 // UpdateDocument is the resolver for the updateDocument field.
-func (r *mutationResolver) UpdateDocument(ctx context.Context, id string, name *string, isFavorite *bool) (*model.Document, error) {
-	var replacement model.Document
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
+func (r *mutationResolver) UpdateDocument(ctx context.Context, id string, input model.UpdateDocumentInput) (*model.Document, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Name != nil {
+		update["name"] = *input.Name
 	}
-	filter := bson.M{"_id": objId}
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").FindOne(ctx, filter).Decode(&replacement)
+	if input.IsFavorite != nil {
+		update["is_favorite"] = *input.IsFavorite
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDocument model.Document
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDocument)
 	if err != nil {
 		return nil, err
 	}
 
-	updated := bson.M{
-		"_id":           objId,
-		"owner_id":      replacement.OwnerID,
-		"name":          name,
-		"document_type": replacement.DocumentType,
-		"category":      replacement.Category,
-		"is_favorite":   isFavorite,
-		"download_url":  replacement.DownloadURL,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").ReplaceOne(ctx, filter, updated)
-
-	return &model.Document{
-		ID:           id,
-		OwnerID:      replacement.OwnerID,
-		Name:         *name,
-		DocumentType: replacement.DocumentType,
-		Category:     replacement.Category,
-		IsFavorite:   *isFavorite,
-		DownloadURL:  replacement.DownloadURL,
-	}, err
+	return &updatedDocument, nil
 }
 
 // DeleteDocument is the resolver for the deleteDocument field.
 func (r *mutationResolver) DeleteDocument(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -952,72 +824,65 @@ func (r *mutationResolver) DeleteDocument(ctx context.Context, id string) (*bool
 }
 
 // CreateAnteChir is the resolver for the createAnteChir field.
-func (r *mutationResolver) CreateAnteChir(ctx context.Context, name string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error) {
-	newAnteChir := bson.M{
-		"name":             name,
-		"induced_symptoms": inducedSymptoms,
-	}
-
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").InsertOne(ctx, newAnteChir)
-	if err != nil {
-		return nil, err
-	}
-
-	var convertedInducedSymptom []*model.ChirInducedSymptom
-	for _, symptom := range inducedSymptoms {
-		convertedInducedSymptom = append(convertedInducedSymptom, &model.ChirInducedSymptom{
+func (r *mutationResolver) CreateAnteChir(ctx context.Context, input model.CreateAnteChirInput) (*model.AnteChir, error) {
+	now := int(time.Now().Unix())
+	var InducedSymptoms []*model.ChirInducedSymptom
+	for _, symptom := range input.InducedSymptoms {
+		InducedSymptoms = append(InducedSymptoms, &model.ChirInducedSymptom{
 			Symptom: symptom.Symptom,
 			Factor:  symptom.Factor,
 		})
 	}
-
-	entity := model.AnteChir{
-		ID:              res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:            name,
-		InducedSymptoms: convertedInducedSymptom,
+	antechir := &model.AnteChir{
+		ID:              primitive.NewObjectID().Hex(),
+		Name:            input.Name,
+		InducedSymptoms: InducedSymptoms,
+		CreatedAt:       now,
+		UpdatedAt:       now,
 	}
-	return &entity, err
+
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").InsertOne(ctx, antechir)
+	if err != nil {
+		return nil, err
+	}
+
+	return antechir, err
 }
 
 // UpdateAnteChir is the resolver for the updateAnteChir field.
-func (r *mutationResolver) UpdateAnteChir(ctx context.Context, id string, name *string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateAnteChir(ctx context.Context, id string, input model.UpdateAnteChirInput) (*model.AnteChir, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.InducedSymptoms != nil {
+		update["induced_symptoms"] = input.InducedSymptoms
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedAnteChir model.AnteChir
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedAnteChir)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":              objId,
-		"name":             name,
-		"induced_symptoms": inducedSymptoms,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").ReplaceOne(ctx, filter, updated)
-
-	var convertedInducedSymptom []*model.ChirInducedSymptom
-	for _, symptom := range inducedSymptoms {
-		convertedInducedSymptom = append(convertedInducedSymptom, &model.ChirInducedSymptom{
-			Symptom: symptom.Symptom,
-			Factor:  symptom.Factor,
-		})
-	}
-
-	return &model.AnteChir{
-		ID:              id,
-		Name:            *name,
-		InducedSymptoms: convertedInducedSymptom,
-	}, err
+	return &updatedAnteChir, nil
 }
 
 // DeleteAnteChir is the resolver for the deleteAnteChir field.
 func (r *mutationResolver) DeleteAnteChir(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1026,71 +891,78 @@ func (r *mutationResolver) DeleteAnteChir(ctx context.Context, id string) (*bool
 }
 
 // CreateAnteDisease is the resolver for the createAnteDisease field.
-func (r *mutationResolver) CreateAnteDisease(ctx context.Context, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) (*model.AnteDisease, error) {
-	newAnteDisease := bson.M{
-		"name":           name,
-		"chronicity":     chronicity,
-		"surgery_ids":    surgeryIds,
-		"symptoms":       symptoms,
-		"treatment_ids":  treatmentIds,
-		"still_relevant": stillRelevant,
+func (r *mutationResolver) CreateAnteDisease(ctx context.Context, input model.CreateAnteDiseaseInput) (*model.AnteDisease, error) {
+	now := int(time.Now().Unix())
+	chronicity := 0.0
+	if input.Chronicity != nil {
+		chronicity = *input.Chronicity
+	}
+	anteDisease := &model.AnteDisease{
+		ID:            primitive.NewObjectID().Hex(),
+		Name:          input.Name,
+		Chronicity:    chronicity,
+		SurgeryIds:    input.SurgeryIds,
+		Symptoms:      input.Symptoms,
+		TreatmentIds:  input.TreatmentIds,
+		StillRelevant: input.StillRelevant,
+		CreatedAt:     now,
+		UpdatedAt:     now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").InsertOne(ctx, newAnteDisease)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").InsertOne(ctx, anteDisease)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.AnteDisease{
-		ID:            res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:          name,
-		Chronicity:    *chronicity,
-		SurgeryIds:    surgeryIds,
-		Symptoms:      symptoms,
-		TreatmentIds:  treatmentIds,
-		StillRelevant: stillRelevant,
-	}
-	return &entity, err
+
+	return anteDisease, err
 }
 
 // UpdateAnteDisease is the resolver for the updateAnteDisease field.
-func (r *mutationResolver) UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) (*model.AnteDisease, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateAnteDisease(ctx context.Context, id string, input model.UpdateAnteDiseaseInput) (*model.AnteDisease, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.Chronicity != nil {
+		update["chronicity"] = *input.Chronicity
+	}
+	if input.SurgeryIds != nil {
+		update["surgery_ids"] = input.SurgeryIds
+	}
+	if input.Symptoms != nil {
+		update["symptoms"] = input.Symptoms
+	}
+	if input.TreatmentIds != nil {
+		update["treatment_ids"] = input.TreatmentIds
+	}
+	if input.StillRelevant != nil {
+		update["still_relevant"] = *input.StillRelevant
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedAnteDisease model.AnteDisease
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedAnteDisease)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":            objId,
-		"name":           name,
-		"chronicity":     chronicity,
-		"surgery_ids":    surgeryIds,
-		"symptoms":       symptoms,
-		"treatment_ids":  treatmentIds,
-		"still_relevant": stillRelevant,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").ReplaceOne(ctx, filter, updated)
-
-	return &model.AnteDisease{
-		ID:            id,
-		Name:          *name,
-		Chronicity:    *chronicity,
-		SurgeryIds:    surgeryIds,
-		Symptoms:      symptoms,
-		TreatmentIds:  treatmentIds,
-		StillRelevant: *stillRelevant,
-	}, err
+	return &updatedAnteDisease, nil
 }
 
 // DeleteAnteDisease is the resolver for the deleteAnteDisease field.
 func (r *mutationResolver) DeleteAnteDisease(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1099,55 +971,58 @@ func (r *mutationResolver) DeleteAnteDisease(ctx context.Context, id string) (*b
 }
 
 // CreateAnteFamily is the resolver for the createAnteFamily field.
-func (r *mutationResolver) CreateAnteFamily(ctx context.Context, name string, disease []string) (*model.AnteFamily, error) {
-	newAnteFamily := bson.M{
-		"name":    name,
-		"disease": disease,
+func (r *mutationResolver) CreateAnteFamily(ctx context.Context, input model.CreateAnteFamilyInput) (*model.AnteFamily, error) {
+	now := int(time.Now().Unix())
+	anteFamily := &model.AnteFamily{
+		ID:        primitive.NewObjectID().Hex(),
+		Name:      input.Name,
+		Disease:   input.Disease,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").InsertOne(ctx, newAnteFamily)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").InsertOne(ctx, anteFamily)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.AnteFamily{
-		ID:      res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:    "",
-		Disease: disease,
-	}
-	return &entity, err
+
+	return anteFamily, err
 }
 
 // UpdateAnteFamily is the resolver for the updateAnteFamily field.
-func (r *mutationResolver) UpdateAnteFamily(ctx context.Context, id string, name *string, disease []string) (*model.AnteFamily, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateAnteFamily(ctx context.Context, id string, input model.UpdateAnteFamilyInput) (*model.AnteFamily, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.Disease != nil {
+		update["disease"] = input.Disease
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedAnteFamily model.AnteFamily
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedAnteFamily)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":     objId,
-		"name":    name,
-		"disease": disease,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").ReplaceOne(ctx, filter, updated)
-
-	return &model.AnteFamily{
-		ID:      id,
-		Name:    *name,
-		Disease: disease,
-	}, err
+	return &updatedAnteFamily, nil
 }
 
 // DeleteAnteFamily is the resolver for the deleteAnteFamily field.
 func (r *mutationResolver) DeleteAnteFamily(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").DeleteOne(ctx, filter)
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1156,63 +1031,65 @@ func (r *mutationResolver) DeleteAnteFamily(ctx context.Context, id string) (*bo
 }
 
 // CreateTreatment is the resolver for the createTreatment field.
-func (r *mutationResolver) CreateTreatment(ctx context.Context, period []model.Period, day []model.Day, quantity int, medicineID string) (*model.Treatment, error) {
-	newTreatment := bson.M{
-		"period":      period,
-		"day":         day,
-		"quantity":    quantity,
-		"medicine_id": medicineID,
+func (r *mutationResolver) CreateTreatment(ctx context.Context, input model.CreateTreatmentInput) (*model.Treatment, error) {
+	now := int(time.Now().Unix())
+	treatment := &model.Treatment{
+		ID:         primitive.NewObjectID().Hex(),
+		Period:     input.Period,
+		Day:        input.Day,
+		Quantity:   input.Quantity,
+		MedicineID: input.MedicineID,
+		CreatedAt:  now,
+		UpdatedAt:  now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").InsertOne(ctx, newTreatment)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").InsertOne(ctx, treatment)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Treatment{
-		ID:         res.InsertedID.(primitive.ObjectID).Hex(),
-		Period:     period,
-		Day:        day,
-		Quantity:   quantity,
-		MedicineID: medicineID,
-	}
-	return &entity, err
+
+	return treatment, err
 }
 
 // UpdateTreatment is the resolver for the updateTreatment field.
-func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) (*model.Treatment, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, input model.UpdateTreatmentInput) (*model.Treatment, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Period != nil {
+		update["period"] = input.Period
+	}
+	if input.Day != nil {
+		update["day"] = input.Day
+	}
+	if input.Quantity != nil {
+		update["quantity"] = *input.Quantity
+	}
+	if input.MedicineID != nil {
+		update["medicine_id"] = *input.MedicineID
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedTreatment model.Treatment
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedTreatment)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":         objId,
-		"period":      period,
-		"day":         day,
-		"quantity":    quantity,
-		"medicine_id": medicineID,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").ReplaceOne(ctx, filter, updated)
-
-	return &model.Treatment{
-		ID:         id,
-		Period:     period,
-		Day:        day,
-		Quantity:   *quantity,
-		MedicineID: *medicineID,
-	}, err
+	return &updatedTreatment, nil
 }
 
 // DeleteTreatment is the resolver for the deleteTreatment field.
 func (r *mutationResolver) DeleteTreatment(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1221,71 +1098,73 @@ func (r *mutationResolver) DeleteTreatment(ctx context.Context, id string) (*boo
 }
 
 // CreateAlert is the resolver for the createAlert field.
-func (r *mutationResolver) CreateAlert(ctx context.Context, name string, sex *string, height *int, weight *int, symptoms []string, comment string) (*model.Alert, error) {
-	newAlert := bson.M{
-		"name":     name,
-		"sex":      sex,
-		"height":   height,
-		"weight":   weight,
-		"symptoms": symptoms,
-		"comment":  comment,
+func (r *mutationResolver) CreateAlert(ctx context.Context, input model.CreateAlertInput) (*model.Alert, error) {
+	now := int(time.Now().Unix())
+	alert := &model.Alert{
+		ID:        primitive.NewObjectID().Hex(),
+		Name:      input.Name,
+		Sex:       input.Sex,
+		Height:    input.Height,
+		Weight:    input.Weight,
+		Symptoms:  input.Symptoms,
+		Comment:   input.Comment,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").InsertOne(ctx, newAlert)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").InsertOne(ctx, alert)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Alert{
-		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:     name,
-		Sex:      sex,
-		Height:   height,
-		Weight:   weight,
-		Symptoms: symptoms,
-		Comment:  comment,
-	}
-	return &entity, err
+
+	return alert, err
 }
 
 // UpdateAlert is the resolver for the updateAlert field.
-func (r *mutationResolver) UpdateAlert(ctx context.Context, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) (*model.Alert, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateAlert(ctx context.Context, id string, input model.UpdateAlertInput) (*model.Alert, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.Sex != nil {
+		update["sex"] = *input.Sex
+	}
+	if input.Height != nil {
+		update["height"] = *input.Height
+	}
+	if input.Weight != nil {
+		update["weight"] = *input.Weight
+	}
+	if input.Symptoms != nil {
+		update["symptoms"] = input.Symptoms
+	}
+	if input.Comment != nil {
+		update["comment"] = *input.Comment
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedAlert model.Alert
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedAlert)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":      objId,
-		"name":     name,
-		"sex":      sex,
-		"height":   height,
-		"weight":   weight,
-		"symptoms": symptoms,
-		"comment":  comment,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").ReplaceOne(ctx, filter, updated)
-
-	return &model.Alert{
-		ID:       id,
-		Name:     *name,
-		Sex:      sex,
-		Height:   height,
-		Weight:   weight,
-		Symptoms: symptoms,
-		Comment:  *comment,
-	}, err
+	return &updatedAlert, nil
 }
 
 // DeleteAlert is the resolver for the deleteAlert field.
 func (r *mutationResolver) DeleteAlert(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1294,39 +1173,32 @@ func (r *mutationResolver) DeleteAlert(ctx context.Context, id string) (*bool, e
 }
 
 // CreateMedicine is the resolver for the createMedicine field.
-func (r *mutationResolver) CreateMedicine(ctx context.Context, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicine, error) {
-	newMedicine := bson.M{
-		"name":             name,
-		"unit":             unit,
-		"target_diseases":  targetDiseases,
-		"treated_symptoms": treatedSymptoms,
-		"side_effects":     sideEffects,
+func (r *mutationResolver) CreateMedicine(ctx context.Context, input model.CreateMedicineInput) (*model.Medicine, error) {
+	now := int(time.Now().Unix())
+	medicine := &model.Medicine{
+		ID:              primitive.NewObjectID().Hex(),
+		Name:            input.Name,
+		Unit:            model.MedicineUnit(*input.Unit),
+		TargetDiseases:  input.TargetDiseases,
+		TreatedSymptoms: input.TreatedSymptoms,
+		SideEffects:     input.SideEffects,
+		CreatedAt:       now,
+		UpdatedAt:       now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").InsertOne(ctx, newMedicine)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").InsertOne(ctx, medicine)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.Medicine{
-		ID:              res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:            name,
-		Unit:            model.MedicineUnit(*unit),
-		TargetDiseases:  targetDiseases,
-		TreatedSymptoms: treatedSymptoms,
-		SideEffects:     sideEffects,
-	}
-	return &entity, err
+
+	return medicine, err
 }
 
 // DeleteMedicine is the resolver for the deleteMedicine field.
 func (r *mutationResolver) DeleteMedicine(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1336,89 +1208,86 @@ func (r *mutationResolver) DeleteMedicine(ctx context.Context, id string) (*bool
 }
 
 // CreateMedicalFolder is the resolver for the createMedicalFolder field.
-func (r *mutationResolver) CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string, familyMembersMedInfoID []string) (*model.MedicalInfo, error) {
-	newMedicalInfo := bson.M{
-		"name":                       name,
-		"firstname":                  firstname,
-		"birthdate":                  birthdate,
-		"sex":                        sex,
-		"height":                     height,
-		"weight":                     weight,
-		"primary_doctor_id":          primaryDoctorID,
-		"antecedent_disease_ids":     antecedentDiseaseIds,
-		"onboarding_status":          onboardingStatus,
-		"family_members_med_info_id": familyMembersMedInfoID,
+func (r *mutationResolver) CreateMedicalFolder(ctx context.Context, input model.CreateMedicalFolderInput) (*model.MedicalInfo, error) {
+	now := int(time.Now().Unix())
+	medicalInfo := &model.MedicalInfo{
+		ID:                     primitive.NewObjectID().Hex(),
+		Name:                   input.Name,
+		Firstname:              input.Firstname,
+		Birthdate:              input.Birthdate,
+		Sex:                    model.Sex(input.Sex),
+		Height:                 input.Height,
+		Weight:                 input.Weight,
+		PrimaryDoctorID:        input.PrimaryDoctorID,
+		OnboardingStatus:       model.OnboardingStatus(input.OnboardingStatus),
+		AntecedentDiseaseIds:   input.AntecedentDiseaseIds,
+		FamilyMembersMedInfoID: input.FamilyMembersMedInfoID,
+		CreatedAt:              now,
+		UpdatedAt:              now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").InsertOne(ctx, newMedicalInfo)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").InsertOne(ctx, medicalInfo)
 	if err != nil {
 		return nil, err
 	}
 
-	entity := model.MedicalInfo{
-		ID:                     res.InsertedID.(primitive.ObjectID).Hex(),
-		Name:                   name,
-		Firstname:              firstname,
-		Birthdate:              birthdate,
-		Sex:                    model.Sex(sex),
-		Height:                 height,
-		Weight:                 weight,
-		PrimaryDoctorID:        primaryDoctorID,
-		AntecedentDiseaseIds:   antecedentDiseaseIds,
-		OnboardingStatus:       model.OnboardingStatus(onboardingStatus),
-		FamilyMembersMedInfoID: familyMembersMedInfoID,
-	}
-	return &entity, err
+	return medicalInfo, err
 }
 
 // UpdateMedicalFolder is the resolver for the updateMedicalFolder field.
-func (r *mutationResolver) UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus, familyMembersMedInfoID []string) (*model.MedicalInfo, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateMedicalFolder(ctx context.Context, id string, input model.UpdateMedicalFolderInput) (*model.MedicalInfo, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Name != nil {
+		update["name"] = *input.Name
+	}
+	if input.Firstname != nil {
+		update["firstname"] = *input.Firstname
+	}
+	if input.Birthdate != nil {
+		update["birthdate"] = *input.Birthdate
+	}
+	if input.Sex != nil {
+		update["sex"] = *input.Sex
+	}
+	if input.Height != nil {
+		update["height"] = *input.Height
+	}
+	if input.Weight != nil {
+		update["weight"] = *input.Weight
+	}
+	if input.PrimaryDoctorID != nil {
+		update["primary_doctor_id"] = *input.PrimaryDoctorID
+	}
+	if input.AntecedentDiseaseIds != nil {
+		update["antecedent_disease_ids"] = input.AntecedentDiseaseIds
+	}
+	if input.OnboardingStatus != nil {
+		update["onboarding_status"] = *input.OnboardingStatus
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedMedicalFolder model.MedicalInfo
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedMedicalFolder)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":                        objId,
-		"name":                       name,
-		"firstname":                  firstname,
-		"birthdate":                  birthdate,
-		"sex":                        sex,
-		"height":                     height,
-		"weight":                     weight,
-		"primary_doctor_id":          primaryDoctorID,
-		"antecedent_disease_ids":     antecedentDiseaseIds,
-		"onboarding_status":          onboardingStatus,
-		"family_members_med_info_id": familyMembersMedInfoID,
-	}
-
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").ReplaceOne(ctx, filter, updated)
-
-	return &model.MedicalInfo{
-		ID:                     id,
-		Name:                   *name,
-		Firstname:              *firstname,
-		Birthdate:              *birthdate,
-		Sex:                    model.Sex(*sex),
-		Height:                 *height,
-		Weight:                 *weight,
-		PrimaryDoctorID:        *primaryDoctorID,
-		AntecedentDiseaseIds:   antecedentDiseaseIds,
-		OnboardingStatus:       model.OnboardingStatus(*onboardingStatus),
-		FamilyMembersMedInfoID: familyMembersMedInfoID,
-	}, err
+	return &updatedMedicalFolder, nil
 }
 
 // DeleteMedicalFolder is the resolver for the deleteMedicalFolder field.
 func (r *mutationResolver) DeleteMedicalFolder(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1428,59 +1297,62 @@ func (r *mutationResolver) DeleteMedicalFolder(ctx context.Context, id string) (
 }
 
 // CreateTreatmentsFollowUp is the resolver for the createTreatmentsFollowUp field.
-func (r *mutationResolver) CreateTreatmentsFollowUp(ctx context.Context, treatmentID string, date int, period []model.Period) (*model.TreatmentsFollowUp, error) {
-	newFollowUp := bson.M{
-		"treatment_id": treatmentID,
-		"date":         date,
-		"period":       period,
+func (r *mutationResolver) CreateTreatmentsFollowUp(ctx context.Context, input model.CreateTreatmentsFollowUpInput) (*model.TreatmentsFollowUp, error) {
+	now := int(time.Now().Unix())
+	followUp := &model.TreatmentsFollowUp{
+		ID:          primitive.NewObjectID().Hex(),
+		TreatmentID: input.TreatmentID,
+		Date:        input.Date,
+		Period:      input.Period,
+		CreatedAt:   now,
+		UpdatedAt:   now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").InsertOne(ctx, newFollowUp)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").InsertOne(ctx, followUp)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.TreatmentsFollowUp{
-		ID:          res.InsertedID.(primitive.ObjectID).Hex(),
-		TreatmentID: treatmentID,
-		Date:        date,
-		Period:      period,
-	}
-	return &entity, err
+
+	return followUp, err
 }
 
 // UpdateTreatmentsFollowUp is the resolver for the updateTreatmentsFollowUp field.
-func (r *mutationResolver) UpdateTreatmentsFollowUp(ctx context.Context, id string, treatmentID *string, date *int, period []model.Period) (*model.TreatmentsFollowUp, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateTreatmentsFollowUp(ctx context.Context, id string, input model.UpdateTreatmentsFollowUpInput) (*model.TreatmentsFollowUp, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.TreatmentID != nil {
+		update["treatment_id"] = *input.TreatmentID
+	}
+	if input.Date != nil {
+		update["date"] = *input.Date
+	}
+	if input.Period != nil {
+		update["period"] = input.Period
+	}
+
+	// Update the updatedAt field
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedTreatmentsFollowUp model.TreatmentsFollowUp
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedTreatmentsFollowUp)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":          objId,
-		"treatment_id": treatmentID,
-		"date":         date,
-		"period":       period,
-	}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").ReplaceOne(ctx, filter, updated)
-
-	return &model.TreatmentsFollowUp{
-		ID:          id,
-		TreatmentID: *treatmentID,
-		Date:        *date,
-		Period:      period,
-	}, err
+	return &updatedTreatmentsFollowUp, nil
 }
 
 // DeleteTreatmentsFollowUp is the resolver for the deleteTreatmentsFollowUp field.
 func (r *mutationResolver) DeleteTreatmentsFollowUp(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1490,130 +1362,104 @@ func (r *mutationResolver) DeleteTreatmentsFollowUp(ctx context.Context, id stri
 }
 
 // CreateNlpReport is the resolver for the createNlpReport field.
-func (r *mutationResolver) CreateNlpReport(ctx context.Context, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) (*model.NlpReport, error) {
-	newNlpReport := bson.M{
-		"version":          version,
-		"input_symptoms":   inputSymptoms,
-		"input_sentence":   inputSentence,
-		"output":           output,
-		"computation_time": computationTime,
-	}
-
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").InsertOne(ctx, newNlpReport)
-	if err != nil {
-		return nil, err
-	}
-
-	var transformedOutput []*model.NlpReportOutput
-	for _, val := range output {
-		transformedOutput = append(transformedOutput, &model.NlpReportOutput{
+func (r *mutationResolver) CreateNlpReport(ctx context.Context, input model.CreateNlpReportInput) (*model.NlpReport, error) {
+	now := int(time.Now().Unix())
+	var outputs []*model.NlpReportOutput
+	for _, val := range input.Output {
+		outputs = append(outputs, &model.NlpReportOutput{
 			Symptom: val.Symptom,
 			Present: val.Present,
 		})
 	}
-	entity := model.NlpReport{
-		ID:              res.InsertedID.(primitive.ObjectID).Hex(),
-		Version:         version,
-		InputSymptoms:   inputSymptoms,
-		InputSentence:   inputSentence,
-		Output:          transformedOutput,
-		ComputationTime: computationTime,
-	}
-	return &entity, err
-}
-
-// CreateChat is the resolver for the createChat field.
-func (r *mutationResolver) CreateChat(ctx context.Context, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error) {
-	chat := bson.M{
-		"participants": participants,
-		"messages":     messages,
+	nlpReport := &model.NlpReport{
+		ID:              primitive.NewObjectID().Hex(),
+		Version:         input.Version,
+		InputSymptoms:   input.InputSymptoms,
+		InputSentence:   input.InputSentence,
+		Output:          outputs,
+		ComputationTime: input.ComputationTime,
+		CreatedAt:       now,
+		UpdatedAt:       now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").InsertOne(ctx, chat)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").InsertOne(ctx, nlpReport)
 	if err != nil {
 		return nil, err
 	}
 
-	var transformedParticipantsOutput []*model.ChatParticipants
-	for _, val := range participants {
-		transformedParticipantsOutput = append(transformedParticipantsOutput, &model.ChatParticipants{
+	return nlpReport, err
+}
+
+// CreateChat is the resolver for the createChat field.
+func (r *mutationResolver) CreateChat(ctx context.Context, input model.CreateChatInput) (*model.Chat, error) {
+	now := int(time.Now().Unix())
+
+	var participants []*model.ChatParticipants
+	for _, val := range input.Participants {
+		participants = append(participants, &model.ChatParticipants{
 			ParticipantID: val.ParticipantID,
 			LastSeen:      val.LastSeen,
 		})
 	}
 
-	var transformedMessagesOutput []*model.ChatMessages
-	for _, val := range messages {
-		transformedMessagesOutput = append(transformedMessagesOutput, &model.ChatMessages{
+	var messages []*model.ChatMessages
+	for _, val := range input.Messages {
+		messages = append(messages, &model.ChatMessages{
 			OwnerID:    val.OwnerID,
 			Message:    val.Message,
 			SendedTime: val.SendedTime,
 		})
 	}
-	entity := model.Chat{
-		ID:           res.InsertedID.(primitive.ObjectID).Hex(),
-		Participants: transformedParticipantsOutput,
-		Messages:     transformedMessagesOutput,
+
+	chat := &model.Chat{
+		ID:           primitive.NewObjectID().Hex(),
+		Participants: participants,
+		Messages:     messages,
+		CreatedAt:    now,
+		UpdatedAt:    now,
 	}
-	return &entity, err
+
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").InsertOne(ctx, chat)
+	if err != nil {
+		return nil, err
+	}
+
+	return chat, err
 }
 
 // UpdateChat is the resolver for the updateChat field.
-func (r *mutationResolver) UpdateChat(ctx context.Context, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error) {
-	objID, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateChat(ctx context.Context, id string, input model.UpdateChatInput) (*model.Chat, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Participants != nil {
+		update["participants"] = input.Participants
+	}
+	if input.Messages != nil {
+		update["messages"] = input.Messages
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedChat model.Chat
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedChat)
 	if err != nil {
 		return nil, err
 	}
 
-	filter := bson.M{"_id": objID}
-	update := bson.M{
-		"$set": bson.M{
-			"participants": participants,
-			"messages":     messages,
-		},
-	}
-
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").UpdateOne(ctx, filter, update)
-	if err != nil {
-		return nil, err
-	}
-
-	// Transform the inputs to the desired model types
-	var transformedParticipants []*model.ChatParticipants
-	for _, p := range participants {
-		transformedParticipants = append(transformedParticipants, &model.ChatParticipants{
-			ParticipantID: p.ParticipantID,
-			LastSeen:      p.LastSeen,
-		})
-	}
-
-	var transformedMessages []*model.ChatMessages
-	for _, m := range messages {
-		transformedMessages = append(transformedMessages, &model.ChatMessages{
-			OwnerID:    m.OwnerID,
-			Message:    m.Message,
-			SendedTime: m.SendedTime,
-		})
-	}
-
-	entity := model.Chat{
-		ID:           id,
-		Participants: transformedParticipants,
-		Messages:     transformedMessages,
-	}
-
-	return &entity, nil
+	return &updatedChat, nil
 }
 
 // DeleteChat is the resolver for the deleteChat field.
 func (r *mutationResolver) DeleteChat(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1622,72 +1468,72 @@ func (r *mutationResolver) DeleteChat(ctx context.Context, id string) (*bool, er
 }
 
 // CreateDeviceConnect is the resolver for the createDeviceConnect field.
-func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) (*model.DeviceConnect, error) {
-	newDevice := bson.M{
-		"device_name":  deviceName,
-		"ip_address":   ipAddress,
-		"latitude":     latitude,
-		"longitude":    longitude,
-		"date":         date,
-		"trust_device": trustDevice,
+func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, input model.CreateDeviceConnectInput) (*model.DeviceConnect, error) {
+	now := int(time.Now().Unix())
+	device := &model.DeviceConnect{
+		ID:          primitive.NewObjectID().Hex(),
+		DeviceName:  input.DeviceName,
+		IPAddress:   input.IPAddress,
+		Latitude:    input.Latitude,
+		Longitude:   input.Longitude,
+		Date:        input.Date,
+		TrustDevice: input.TrustDevice,
+		CreatedAt:   now,
+		UpdatedAt:   now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").InsertOne(ctx, newDevice)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").InsertOne(ctx, device)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.DeviceConnect{
-		ID:          res.InsertedID.(primitive.ObjectID).Hex(),
-		DeviceName:  deviceName,
-		IPAddress:   ipAddress,
-		Latitude:    latitude,
-		Longitude:   longitude,
-		Date:        date,
-		TrustDevice: trustDevice,
-	}
-	return &entity, err
+	return device, err
 }
 
 // UpdateDeviceConnect is the resolver for the updateDeviceConnect field.
-func (r *mutationResolver) UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) (*model.DeviceConnect, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateDeviceConnect(ctx context.Context, id string, input model.UpdateDeviceConnectInput) (*model.DeviceConnect, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.DeviceName != nil {
+		update["device_name"] = *input.DeviceName
+	}
+	if input.IPAddress != nil {
+		update["ip_address"] = *input.IPAddress
+	}
+	if input.Latitude != nil {
+		update["latitude"] = *input.Latitude
+	}
+	if input.Longitude != nil {
+		update["longitude"] = *input.Longitude
+	}
+	if input.Date != nil {
+		update["date"] = *input.Date
+	}
+	if input.TrustDevice != nil {
+		update["trust_device"] = *input.TrustDevice
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDeviceConnect model.DeviceConnect
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDeviceConnect)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":          objId,
-		"device_name":  deviceName,
-		"ip_address":   ipAddress,
-		"latitude":     latitude,
-		"longitude":    longitude,
-		"date":         date,
-		"trust_device": trustDevice,
-	}
-
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").ReplaceOne(ctx, filter, updated)
-
-	return &model.DeviceConnect{
-		ID:          id,
-		DeviceName:  *deviceName,
-		IPAddress:   *ipAddress,
-		Latitude:    *latitude,
-		Longitude:   *longitude,
-		Date:        *date,
-		TrustDevice: *trustDevice,
-	}, err
+	return &updatedDeviceConnect, nil
 }
 
 // DeleteDeviceConnect is the resolver for the deleteDeviceConnect field.
 func (r *mutationResolver) DeleteDeviceConnect(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1696,64 +1542,65 @@ func (r *mutationResolver) DeleteDeviceConnect(ctx context.Context, id string) (
 }
 
 // CreateDoubleAuth is the resolver for the createDoubleAuth field.
-func (r *mutationResolver) CreateDoubleAuth(ctx context.Context, methods []string, secret string, url string, trustDeviceID string) (*model.DoubleAuth, error) {
-	newDevice := bson.M{
-		"methods":         methods,
-		"secret":          secret,
-		"url":             url,
-		"trust_device_id": trustDeviceID,
+func (r *mutationResolver) CreateDoubleAuth(ctx context.Context, input model.CreateDoubleAuthInput) (*model.DoubleAuth, error) {
+	now := int(time.Now().Unix())
+	doubleAuth := &model.DoubleAuth{
+		ID:            primitive.NewObjectID().Hex(),
+		Methods:       input.Methods,
+		Secret:        input.Secret,
+		URL:           input.URL,
+		TrustDeviceID: input.TrustDeviceID,
+		CreatedAt:     now,
+		UpdatedAt:     now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").InsertOne(ctx, newDevice)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").InsertOne(ctx, doubleAuth)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.DoubleAuth{
-		ID:            res.InsertedID.(primitive.ObjectID).Hex(),
-		Methods:       methods,
-		Secret:        secret,
-		URL:           url,
-		TrustDeviceID: trustDeviceID,
-	}
-	return &entity, err
+
+	return doubleAuth, err
 }
 
 // UpdateDoubleAuth is the resolver for the updateDoubleAuth field.
-func (r *mutationResolver) UpdateDoubleAuth(ctx context.Context, id string, methods []string, secret *string, url *string, trustDeviceID *string) (*model.DoubleAuth, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateDoubleAuth(ctx context.Context, id string, input model.UpdateDoubleAuthInput) (*model.DoubleAuth, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Methods != nil {
+		update["methods"] = input.Methods
+	}
+	if input.Secret != nil {
+		update["secret"] = *input.Secret
+	}
+	if input.URL != nil {
+		update["url"] = *input.URL
+	}
+	if input.TrustDeviceID != nil {
+		update["trust_device_id"] = *input.TrustDeviceID
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDoubleAuth model.DoubleAuth
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDoubleAuth)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":             objId,
-		"methods":         methods,
-		"secret":          secret,
-		"url":             url,
-		"trust_device_id": trustDeviceID,
-	}
-
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").ReplaceOne(ctx, filter, updated)
-
-	return &model.DoubleAuth{
-		ID:            id,
-		Methods:       methods,
-		Secret:        *secret,
-		URL:           *url,
-		TrustDeviceID: *trustDeviceID,
-	}, err
+	return &updatedDoubleAuth, nil
 }
 
 // DeleteDoubleAuth is the resolver for the deleteDoubleAuth field.
 func (r *mutationResolver) DeleteDoubleAuth(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1762,52 +1609,53 @@ func (r *mutationResolver) DeleteDoubleAuth(ctx context.Context, id string) (*bo
 }
 
 // CreateBlackList is the resolver for the createBlackList field.
-func (r *mutationResolver) CreateBlackList(ctx context.Context, token []string) (*model.BlackList, error) {
-	newDevice := bson.M{
-		"token": token,
+func (r *mutationResolver) CreateBlackList(ctx context.Context, input model.CreateBlackListInput) (*model.BlackList, error) {
+	now := int(time.Now().Unix())
+	blackList := &model.BlackList{
+		ID:        primitive.NewObjectID().Hex(),
+		Token:     input.Token,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").InsertOne(ctx, newDevice)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").InsertOne(ctx, blackList)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.BlackList{
-		ID:    res.InsertedID.(primitive.ObjectID).Hex(),
-		Token: token,
-	}
-	return &entity, err
+
+	return blackList, err
 }
 
 // UpdateBlackList is the resolver for the updateBlackList field.
-func (r *mutationResolver) UpdateBlackList(ctx context.Context, id string, token []string) (*model.BlackList, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateBlackList(ctx context.Context, id string, input model.UpdateBlackListInput) (*model.BlackList, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Token != nil {
+		update["token"] = input.Token
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedBlackList model.BlackList
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedBlackList)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":   objId,
-		"token": token,
-	}
-
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").ReplaceOne(ctx, filter, updated)
-
-	return &model.BlackList{
-		ID:    id,
-		Token: token,
-	}, err
+	return &updatedBlackList, nil
 }
 
 // DeleteBlackList is the resolver for the deleteBlackList field.
 func (r *mutationResolver) DeleteBlackList(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1816,52 +1664,53 @@ func (r *mutationResolver) DeleteBlackList(ctx context.Context, id string) (*boo
 }
 
 // CreateSaveCode is the resolver for the createSaveCode field.
-func (r *mutationResolver) CreateSaveCode(ctx context.Context, code []string) (*model.SaveCode, error) {
-	newDevice := bson.M{
-		"code": code,
+func (r *mutationResolver) CreateSaveCode(ctx context.Context, input model.CreateSaveCodeInput) (*model.SaveCode, error) {
+	now := int(time.Now().Unix())
+	saveCode := &model.SaveCode{
+		ID:        primitive.NewObjectID().Hex(),
+		Code:      input.Code,
+		CreatedAt: now,
+		UpdatedAt: now,
 	}
 
-	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").InsertOne(ctx, newDevice)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").InsertOne(ctx, saveCode)
 	if err != nil {
 		return nil, err
 	}
-	entity := model.SaveCode{
-		ID:   res.InsertedID.(primitive.ObjectID).Hex(),
-		Code: code,
-	}
-	return &entity, err
+
+	return saveCode, err
 }
 
 // UpdateSaveCode is the resolver for the updateSaveCode field.
-func (r *mutationResolver) UpdateSaveCode(ctx context.Context, id string, code []string) (*model.SaveCode, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
+func (r *mutationResolver) UpdateSaveCode(ctx context.Context, id string, input model.UpdateSaveCodeInput) (*model.SaveCode, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Code != nil {
+		update["code"] = input.Code
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedSaveCode model.SaveCode
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedSaveCode)
 	if err != nil {
 		return nil, err
 	}
-	filter := bson.M{"_id": objId}
 
-	updated := bson.M{
-		"_id":  objId,
-		"code": code,
-	}
-
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").ReplaceOne(ctx, filter, updated)
-
-	return &model.SaveCode{
-		ID:   id,
-		Code: code,
-	}, err
+	return &updatedSaveCode, nil
 }
 
 // DeleteSaveCode is the resolver for the deleteSaveCode field.
 func (r *mutationResolver) DeleteSaveCode(ctx context.Context, id string) (*bool, error) {
-	objId, err := primitive.ObjectIDFromHex(id)
 	resp := false
-	if err != nil {
-		return &resp, err
-	}
-	filter := bson.M{"_id": objId}
-	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -1870,11 +1719,15 @@ func (r *mutationResolver) DeleteSaveCode(ctx context.Context, id string) (*bool
 }
 
 // GetPatients is the resolver for the getPatients field.
-func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
+func (r *queryResolver) GetPatients(ctx context.Context, option *model.Options) ([]*model.Patient, error) {
 	filter := bson.D{}
 	var results []*model.Patient
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -1889,14 +1742,10 @@ func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, erro
 // GetPatientByID is the resolver for the getPatientById field.
 func (r *queryResolver) GetPatientByID(ctx context.Context, id string) (*model.Patient, error) {
 	var result model.Patient
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -1917,11 +1766,15 @@ func (r *queryResolver) GetPatientByEmail(ctx context.Context, email string) (*m
 }
 
 // GetDoctors is the resolver for the getDoctors field.
-func (r *queryResolver) GetDoctors(ctx context.Context) ([]*model.Doctor, error) {
+func (r *queryResolver) GetDoctors(ctx context.Context, option *model.Options) ([]*model.Doctor, error) {
 	filter := bson.D{}
 	var results []*model.Doctor
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -1936,14 +1789,9 @@ func (r *queryResolver) GetDoctors(ctx context.Context) ([]*model.Doctor, error)
 // GetDoctorByID is the resolver for the getDoctorById field.
 func (r *queryResolver) GetDoctorByID(ctx context.Context, id string) (*model.Doctor, error) {
 	var result model.Doctor
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
+	filter := bson.M{"_id": id}
 
-	filter := bson.M{"_id": objId}
-
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -1964,11 +1812,15 @@ func (r *queryResolver) GetDoctorByEmail(ctx context.Context, email string) (*mo
 }
 
 // GetAdmins is the resolver for the getAdmins field.
-func (r *queryResolver) GetAdmins(ctx context.Context) ([]*model.Admin, error) {
+func (r *queryResolver) GetAdmins(ctx context.Context, option *model.Options) ([]*model.Admin, error) {
 	filter := bson.D{}
 	var results []*model.Admin
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -1983,14 +1835,10 @@ func (r *queryResolver) GetAdmins(ctx context.Context) ([]*model.Admin, error) {
 // GetAdminByID is the resolver for the getAdminById field.
 func (r *queryResolver) GetAdminByID(ctx context.Context, id string) (*model.Admin, error) {
 	var result model.Admin
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Admin").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2010,106 +1858,16 @@ func (r *queryResolver) GetAdminByEmail(ctx context.Context, email string) (*mod
 	return &result, nil
 }
 
-// GetDemoAccounts is the resolver for the getDemoAccounts field.
-func (r *queryResolver) GetDemoAccounts(ctx context.Context) ([]*model.DemoAccount, error) {
-	filter := bson.D{}
-	var results []*model.DemoAccount
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-// GetDemoAccountByID is the resolver for the getDemoAccountById field.
-func (r *queryResolver) GetDemoAccountByID(ctx context.Context, id string) (*model.DemoAccount, error) {
-	var result model.DemoAccount
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-
-	filter := bson.M{"_id": objId}
-
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// GetDemoAccountByEmail is the resolver for the getDemoAccountByEmail field.
-func (r *queryResolver) GetDemoAccountByEmail(ctx context.Context, email string) (*model.DemoAccount, error) {
-	var result model.DemoAccount
-
-	filter := bson.M{"email": email}
-
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DemoAccount").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// GetTestAccounts is the resolver for the getTestAccounts field.
-func (r *queryResolver) GetTestAccounts(ctx context.Context) ([]*model.TestAccount, error) {
-	filter := bson.D{}
-	var results []*model.TestAccount
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-// GetTestAccountByID is the resolver for the getTestAccountById field.
-func (r *queryResolver) GetTestAccountByID(ctx context.Context, id string) (*model.TestAccount, error) {
-	var result model.TestAccount
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-
-	filter := bson.M{"_id": objId}
-
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// GetTestAccountByEmail is the resolver for the getTestAccountByEmail field.
-func (r *queryResolver) GetTestAccountByEmail(ctx context.Context, email string) (*model.TestAccount, error) {
-	var result model.TestAccount
-
-	filter := bson.M{"email": email}
-
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TestAccount").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
 // GetSessions is the resolver for the getSessions field.
-func (r *queryResolver) GetSessions(ctx context.Context) ([]*model.Session, error) {
+func (r *queryResolver) GetSessions(ctx context.Context, option *model.Options) ([]*model.Session, error) {
 	filter := bson.D{}
 	var results []*model.Session
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2124,14 +1882,10 @@ func (r *queryResolver) GetSessions(ctx context.Context) ([]*model.Session, erro
 // GetSessionByID is the resolver for the getSessionById field.
 func (r *queryResolver) GetSessionByID(ctx context.Context, id string) (*model.Session, error) {
 	var result model.Session
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2141,69 +1895,14 @@ func (r *queryResolver) GetSessionByID(ctx context.Context, id string) (*model.S
 // GetSymptomByID is the resolver for the getSymptomById field.
 func (r *queryResolver) GetSymptomByID(ctx context.Context, id string) (*model.Symptom, error) {
 	var result model.Symptom
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
 	return &result, nil
-}
-
-// GetDiseaseByID is the resolver for the getDiseaseById field.
-func (r *queryResolver) GetDiseaseByID(ctx context.Context, id string) (*model.Disease, error) {
-	var result model.Disease
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-
-	filter := bson.M{"_id": objId}
-
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// GetSymptoms is the resolver for the getSymptoms field.
-func (r *queryResolver) GetSymptoms(ctx context.Context) ([]*model.Symptom, error) {
-	filter := bson.D{}
-	var results []*model.Symptom
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-// GetDiseases is the resolver for the getDiseases field.
-func (r *queryResolver) GetDiseases(ctx context.Context) ([]*model.Disease, error) {
-	filter := bson.D{}
-	var results []*model.Disease
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
 }
 
 // GetSymptomsByDiseaseName is the resolver for the getSymptomsByDiseaseName field.
@@ -2219,12 +1918,71 @@ func (r *queryResolver) GetSymptomsByDiseaseName(ctx context.Context, name strin
 	return &result, nil
 }
 
+// GetDiseaseByID is the resolver for the getDiseaseById field.
+func (r *queryResolver) GetDiseaseByID(ctx context.Context, id string) (*model.Disease, error) {
+	var result model.Disease
+
+	filter := bson.M{"_id": id}
+
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetSymptoms is the resolver for the getSymptoms field.
+func (r *queryResolver) GetSymptoms(ctx context.Context, option *model.Options) ([]*model.Symptom, error) {
+	filter := bson.D{}
+	var results []*model.Symptom
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").Find(ctx, filter, findOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+// GetDiseases is the resolver for the getDiseases field.
+func (r *queryResolver) GetDiseases(ctx context.Context, option *model.Options) ([]*model.Disease, error) {
+	filter := bson.D{}
+	var results []*model.Disease
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").Find(ctx, filter, findOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
 // GetNotifications is the resolver for the getNotifications field.
-func (r *queryResolver) GetNotifications(ctx context.Context) ([]*model.Notification, error) {
+func (r *queryResolver) GetNotifications(ctx context.Context, option *model.Options) ([]*model.Notification, error) {
 	filter := bson.D{}
 	var results []*model.Notification
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2239,14 +1997,10 @@ func (r *queryResolver) GetNotifications(ctx context.Context) ([]*model.Notifica
 // GetNotificationByID is the resolver for the getNotificationById field.
 func (r *queryResolver) GetNotificationByID(ctx context.Context, id string) (*model.Notification, error) {
 	var result model.Notification
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Notification").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2254,14 +2008,10 @@ func (r *queryResolver) GetNotificationByID(ctx context.Context, id string) (*mo
 }
 
 // GetPatientRdv is the resolver for the getPatientRdv field.
-func (r *queryResolver) GetPatientRdv(ctx context.Context, idPatient string) ([]*model.Rdv, error) {
+func (r *queryResolver) GetPatientRdv(ctx context.Context, idPatient string, option *model.Options) ([]*model.Rdv, error) {
 	var results []*model.Rdv
-	objId, err := primitive.ObjectIDFromHex(idPatient)
-	if err != nil {
-		return nil, err
-	}
 
-	patientFilter := bson.M{"_id": objId}
+	patientFilter := bson.M{"_id": idPatient}
 
 	test := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, patientFilter)
 
@@ -2270,8 +2020,12 @@ func (r *queryResolver) GetPatientRdv(ctx context.Context, idPatient string) ([]
 	}
 
 	filter := bson.M{"id_patient": idPatient}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2284,14 +2038,10 @@ func (r *queryResolver) GetPatientRdv(ctx context.Context, idPatient string) ([]
 }
 
 // GetDoctorRdv is the resolver for the getDoctorRdv field.
-func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error) {
+func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string, option *model.Options) ([]*model.Rdv, error) {
 	var results []*model.Rdv
-	objId, err := primitive.ObjectIDFromHex(doctorID)
-	if err != nil {
-		return nil, err
-	}
 
-	doctorFilter := bson.M{"_id": objId}
+	doctorFilter := bson.M{"_id": doctorID}
 
 	test := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, doctorFilter)
 
@@ -2302,8 +2052,11 @@ func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string) ([]*m
 		"doctor_id":          doctorID,
 		"appointment_status": bson.M{"$ne": "OPENED"},
 	}
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2318,17 +2071,13 @@ func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string) ([]*m
 // GetRdvByID is the resolver for the getRdvById field.
 func (r *queryResolver) GetRdvByID(ctx context.Context, id string) (*model.Rdv, error) {
 	var result model.Rdv
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
 	filter := bson.M{
-		"_id":                objId,
+		"_id":                id,
 		"appointment_status": bson.M{"$ne": "OPENED"},
 	}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2338,16 +2087,12 @@ func (r *queryResolver) GetRdvByID(ctx context.Context, id string) (*model.Rdv, 
 // GetSlotByID is the resolver for the getSlotById field.
 func (r *queryResolver) GetSlotByID(ctx context.Context, id string) (*model.Rdv, error) {
 	var result model.Rdv
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
 	filter := bson.M{
-		"_id": objId,
+		"_id": id,
 	}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2355,14 +2100,18 @@ func (r *queryResolver) GetSlotByID(ctx context.Context, id string) (*model.Rdv,
 }
 
 // GetSlots is the resolver for the getSlots field.
-func (r *queryResolver) GetSlots(ctx context.Context, id string) ([]*model.Rdv, error) {
+func (r *queryResolver) GetSlots(ctx context.Context, id string, option *model.Options) ([]*model.Rdv, error) {
 	var results []*model.Rdv
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
 	filter := bson.M{
 		"doctor_id": id,
 	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2375,14 +2124,14 @@ func (r *queryResolver) GetSlots(ctx context.Context, id string) ([]*model.Rdv, 
 }
 
 // GetWaitingRdv is the resolver for the getWaitingRdv field.
-func (r *queryResolver) GetWaitingRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error) {
+func (r *queryResolver) GetWaitingRdv(ctx context.Context, doctorID string, option *model.Options) ([]*model.Rdv, error) {
 	var results []*model.Rdv
-	objId, err := primitive.ObjectIDFromHex(doctorID)
-	if err != nil {
-		return nil, err
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
 	}
 
-	doctorFilter := bson.M{"_id": objId}
+	doctorFilter := bson.M{"_id": doctorID}
 
 	test := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, doctorFilter)
 
@@ -2395,7 +2144,7 @@ func (r *queryResolver) GetWaitingRdv(ctx context.Context, doctorID string) ([]*
 		"appointment_status": "WAITING_FOR_REVIEW",
 	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2408,11 +2157,15 @@ func (r *queryResolver) GetWaitingRdv(ctx context.Context, doctorID string) ([]*
 }
 
 // GetDocuments is the resolver for the getDocuments field.
-func (r *queryResolver) GetDocuments(ctx context.Context) ([]*model.Document, error) {
+func (r *queryResolver) GetDocuments(ctx context.Context, option *model.Options) ([]*model.Document, error) {
 	filter := bson.D{}
 	var results []*model.Document
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2427,14 +2180,10 @@ func (r *queryResolver) GetDocuments(ctx context.Context) ([]*model.Document, er
 // GetDocumentByID is the resolver for the getDocumentById field.
 func (r *queryResolver) GetDocumentByID(ctx context.Context, id string) (*model.Document, error) {
 	var result model.Document
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2442,12 +2191,16 @@ func (r *queryResolver) GetDocumentByID(ctx context.Context, id string) (*model.
 }
 
 // GetPatientDocument is the resolver for the getPatientDocument field.
-func (r *queryResolver) GetPatientDocument(ctx context.Context, id string) ([]*model.Document, error) {
+func (r *queryResolver) GetPatientDocument(ctx context.Context, id string, option *model.Options) ([]*model.Document, error) {
 	var results []*model.Document
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
 	filter := bson.M{"owner_id": id}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Document").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2460,11 +2213,15 @@ func (r *queryResolver) GetPatientDocument(ctx context.Context, id string) ([]*m
 }
 
 // GetAnteChirs is the resolver for the getAnteChirs field.
-func (r *queryResolver) GetAnteChirs(ctx context.Context) ([]*model.AnteChir, error) {
+func (r *queryResolver) GetAnteChirs(ctx context.Context, option *model.Options) ([]*model.AnteChir, error) {
 	filter := bson.D{}
 	var results []*model.AnteChir
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2479,14 +2236,10 @@ func (r *queryResolver) GetAnteChirs(ctx context.Context) ([]*model.AnteChir, er
 // GetAnteChirByID is the resolver for the getAnteChirByID field.
 func (r *queryResolver) GetAnteChirByID(ctx context.Context, id string) (*model.AnteChir, error) {
 	var result model.AnteChir
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteChir").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2494,11 +2247,14 @@ func (r *queryResolver) GetAnteChirByID(ctx context.Context, id string) (*model.
 }
 
 // GetAnteDiseases is the resolver for the getAnteDiseases field.
-func (r *queryResolver) GetAnteDiseases(ctx context.Context) ([]*model.AnteDisease, error) {
+func (r *queryResolver) GetAnteDiseases(ctx context.Context, option *model.Options) ([]*model.AnteDisease, error) {
 	filter := bson.D{}
 	var results []*model.AnteDisease
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").Find(ctx, filter)
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2513,14 +2269,10 @@ func (r *queryResolver) GetAnteDiseases(ctx context.Context) ([]*model.AnteDisea
 // GetAnteDiseaseByID is the resolver for the getAnteDiseaseByID field.
 func (r *queryResolver) GetAnteDiseaseByID(ctx context.Context, id string) (*model.AnteDisease, error) {
 	var result model.AnteDisease
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2528,11 +2280,15 @@ func (r *queryResolver) GetAnteDiseaseByID(ctx context.Context, id string) (*mod
 }
 
 // GetAnteFamilies is the resolver for the getAnteFamilies field.
-func (r *queryResolver) GetAnteFamilies(ctx context.Context) ([]*model.AnteFamily, error) {
+func (r *queryResolver) GetAnteFamilies(ctx context.Context, option *model.Options) ([]*model.AnteFamily, error) {
 	filter := bson.D{}
 	var results []*model.AnteFamily
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2547,14 +2303,10 @@ func (r *queryResolver) GetAnteFamilies(ctx context.Context) ([]*model.AnteFamil
 // GetAnteFamilyByID is the resolver for the getAnteFamilyByID field.
 func (r *queryResolver) GetAnteFamilyByID(ctx context.Context, id string) (*model.AnteFamily, error) {
 	var result model.AnteFamily
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteFamily").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2562,11 +2314,15 @@ func (r *queryResolver) GetAnteFamilyByID(ctx context.Context, id string) (*mode
 }
 
 // GetTreatments is the resolver for the getTreatments field.
-func (r *queryResolver) GetTreatments(ctx context.Context) ([]*model.Treatment, error) {
+func (r *queryResolver) GetTreatments(ctx context.Context, option *model.Options) ([]*model.Treatment, error) {
 	filter := bson.D{}
 	var results []*model.Treatment
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2581,14 +2337,10 @@ func (r *queryResolver) GetTreatments(ctx context.Context) ([]*model.Treatment, 
 // GetTreatmentByID is the resolver for the getTreatmentByID field.
 func (r *queryResolver) GetTreatmentByID(ctx context.Context, id string) (*model.Treatment, error) {
 	var result model.Treatment
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2596,11 +2348,15 @@ func (r *queryResolver) GetTreatmentByID(ctx context.Context, id string) (*model
 }
 
 // GetAlerts is the resolver for the getAlerts field.
-func (r *queryResolver) GetAlerts(ctx context.Context) ([]*model.Alert, error) {
+func (r *queryResolver) GetAlerts(ctx context.Context, option *model.Options) ([]*model.Alert, error) {
 	filter := bson.D{}
 	var results []*model.Alert
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2615,14 +2371,10 @@ func (r *queryResolver) GetAlerts(ctx context.Context) ([]*model.Alert, error) {
 // GetAlertByID is the resolver for the getAlertById field.
 func (r *queryResolver) GetAlertByID(ctx context.Context, id string) (*model.Alert, error) {
 	var result model.Alert
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Alert").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2630,11 +2382,15 @@ func (r *queryResolver) GetAlertByID(ctx context.Context, id string) (*model.Ale
 }
 
 // GetMedicalFolder is the resolver for the getMedicalFolder field.
-func (r *queryResolver) GetMedicalFolder(ctx context.Context) ([]*model.MedicalInfo, error) {
+func (r *queryResolver) GetMedicalFolder(ctx context.Context, option *model.Options) ([]*model.MedicalInfo, error) {
 	var results []*model.MedicalInfo
 	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2650,14 +2406,10 @@ func (r *queryResolver) GetMedicalFolder(ctx context.Context) ([]*model.MedicalI
 // GetMedicalFolderByID is the resolver for the getMedicalFolderById field.
 func (r *queryResolver) GetMedicalFolderByID(ctx context.Context, id string) (*model.MedicalInfo, error) {
 	var result model.MedicalInfo
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2666,11 +2418,15 @@ func (r *queryResolver) GetMedicalFolderByID(ctx context.Context, id string) (*m
 }
 
 // GetMedicines is the resolver for the getMedicines field.
-func (r *queryResolver) GetMedicines(ctx context.Context) ([]*model.Medicine, error) {
+func (r *queryResolver) GetMedicines(ctx context.Context, option *model.Options) ([]*model.Medicine, error) {
 	var results []*model.Medicine
 	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2686,14 +2442,10 @@ func (r *queryResolver) GetMedicines(ctx context.Context) ([]*model.Medicine, er
 // GetMedicineByID is the resolver for the getMedicineByID field.
 func (r *queryResolver) GetMedicineByID(ctx context.Context, id string) (*model.Medicine, error) {
 	var result model.Medicine
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Medicine").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2702,16 +2454,12 @@ func (r *queryResolver) GetMedicineByID(ctx context.Context, id string) (*model.
 }
 
 // GetPatientsFromDoctorByID is the resolver for the getPatientsFromDoctorById field.
-func (r *queryResolver) GetPatientsFromDoctorByID(ctx context.Context, id string) ([]*model.Patient, error) {
+func (r *queryResolver) GetPatientsFromDoctorByID(ctx context.Context, id string, option *model.Options) ([]*model.Patient, error) {
 	var doctor model.Doctor
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, filter).Decode(&doctor)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, filter).Decode(&doctor)
 	if err != nil {
 		return nil, err
 	}
@@ -2719,12 +2467,8 @@ func (r *queryResolver) GetPatientsFromDoctorByID(ctx context.Context, id string
 	var patients []*model.Patient
 	for _, patientId := range doctor.PatientIds {
 		var patient model.Patient
-		objId, err := primitive.ObjectIDFromHex(*patientId)
-		if err != nil {
-			return nil, err
-		}
 
-		filter := bson.M{"_id": objId}
+		filter := bson.M{"_id": patientId}
 		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, filter).Decode(&patient)
 		if err != nil {
 			return nil, err
@@ -2737,14 +2481,10 @@ func (r *queryResolver) GetPatientsFromDoctorByID(ctx context.Context, id string
 // GetTreatmentsFollowUpByID is the resolver for the getTreatmentsFollowUpById field.
 func (r *queryResolver) GetTreatmentsFollowUpByID(ctx context.Context, id string) (*model.TreatmentsFollowUp, error) {
 	var result model.TreatmentsFollowUp
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2752,16 +2492,12 @@ func (r *queryResolver) GetTreatmentsFollowUpByID(ctx context.Context, id string
 }
 
 // GetTreatmentsFollowUps is the resolver for the getTreatmentsFollowUps field.
-func (r *queryResolver) GetTreatmentsFollowUps(ctx context.Context, id string) ([]*model.TreatmentsFollowUp, error) {
+func (r *queryResolver) GetTreatmentsFollowUps(ctx context.Context, id string, option *model.Options) ([]*model.TreatmentsFollowUp, error) {
 	var patient model.Patient
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	patientFilter := bson.M{"_id": objId}
+	patientFilter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, patientFilter).Decode(&patient)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, patientFilter).Decode(&patient)
 	if err != nil {
 		return nil, err
 	}
@@ -2769,12 +2505,8 @@ func (r *queryResolver) GetTreatmentsFollowUps(ctx context.Context, id string) (
 	var followUp []*model.TreatmentsFollowUp
 	for _, treatmentFollowUpIds := range patient.TreatmentFollowUpIds {
 		var treatmentFollowUp model.TreatmentsFollowUp
-		objId, err := primitive.ObjectIDFromHex(*treatmentFollowUpIds)
-		if err != nil {
-			return nil, err
-		}
 
-		filter := bson.M{"_id": objId}
+		filter := bson.M{"_id": treatmentFollowUpIds}
 		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("TreatmentsFollowUp").FindOne(ctx, filter).Decode(&treatmentFollowUp)
 		if err != nil {
 			return nil, err
@@ -2785,11 +2517,15 @@ func (r *queryResolver) GetTreatmentsFollowUps(ctx context.Context, id string) (
 }
 
 // GetNlpReports is the resolver for the getNlpReports field.
-func (r *queryResolver) GetNlpReports(ctx context.Context) ([]*model.NlpReport, error) {
+func (r *queryResolver) GetNlpReports(ctx context.Context, option *model.Options) ([]*model.NlpReport, error) {
 	var report []*model.NlpReport
 	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2803,11 +2539,15 @@ func (r *queryResolver) GetNlpReports(ctx context.Context) ([]*model.NlpReport, 
 }
 
 // GetNlpReportsByVersion is the resolver for the getNlpReportsByVersion field.
-func (r *queryResolver) GetNlpReportsByVersion(ctx context.Context, version int) ([]*model.NlpReport, error) {
+func (r *queryResolver) GetNlpReportsByVersion(ctx context.Context, version int, option *model.Options) ([]*model.NlpReport, error) {
 	var report []*model.NlpReport
 	filter := bson.M{"version": version}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("NlpReport").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2821,20 +2561,16 @@ func (r *queryResolver) GetNlpReportsByVersion(ctx context.Context, version int)
 }
 
 // GetChats is the resolver for the getChats field.
-func (r *queryResolver) GetChats(ctx context.Context, id string) ([]*model.Chat, error) {
+func (r *queryResolver) GetChats(ctx context.Context, id string, option *model.Options) ([]*model.Chat, error) {
 	var user struct {
 		ChatIds []*string `bson:"chat_ids"`
 	}
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
 	// Attempt to find the user in the "Patient" collection
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, bson.M{"_id": id}).Decode(&user)
 	if err != nil {
 		// If not found in "Patient", attempt to find in the "Doctor" collection
-		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
+		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, bson.M{"_id": id}).Decode(&user)
 		if err != nil {
 			// If not found in either collection, return an error
 			return nil, errors.New("user not found in either Patient or Doctor collection")
@@ -2844,12 +2580,8 @@ func (r *queryResolver) GetChats(ctx context.Context, id string) ([]*model.Chat,
 	var followUp []*model.Chat
 	for _, chatID := range user.ChatIds {
 		var chat model.Chat
-		objId, err := primitive.ObjectIDFromHex(*chatID)
-		if err != nil {
-			return nil, err
-		}
 
-		filter := bson.M{"_id": objId}
+		filter := bson.M{"_id": chatID}
 		err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").FindOne(ctx, filter).Decode(&chat)
 		if err != nil {
 			return nil, err
@@ -2862,14 +2594,10 @@ func (r *queryResolver) GetChats(ctx context.Context, id string) ([]*model.Chat,
 // GetChatByID is the resolver for the getChatById field.
 func (r *queryResolver) GetChatByID(ctx context.Context, id string) (*model.Chat, error) {
 	var result model.Chat
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Chat").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2879,14 +2607,10 @@ func (r *queryResolver) GetChatByID(ctx context.Context, id string) (*model.Chat
 // GetDeviceConnectByID is the resolver for the getDeviceConnectById field.
 func (r *queryResolver) GetDeviceConnectByID(ctx context.Context, id string) (*model.DeviceConnect, error) {
 	var result model.DeviceConnect
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2894,11 +2618,15 @@ func (r *queryResolver) GetDeviceConnectByID(ctx context.Context, id string) (*m
 }
 
 // GetDevicesConnect is the resolver for the getDevicesConnect field.
-func (r *queryResolver) GetDevicesConnect(ctx context.Context) ([]*model.DeviceConnect, error) {
+func (r *queryResolver) GetDevicesConnect(ctx context.Context, option *model.Options) ([]*model.DeviceConnect, error) {
 	var report []*model.DeviceConnect
 	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2914,14 +2642,10 @@ func (r *queryResolver) GetDevicesConnect(ctx context.Context) ([]*model.DeviceC
 // GetDoubleAuthByID is the resolver for the getDoubleAuthById field.
 func (r *queryResolver) GetDoubleAuthByID(ctx context.Context, id string) (*model.DoubleAuth, error) {
 	var result model.DoubleAuth
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2929,11 +2653,15 @@ func (r *queryResolver) GetDoubleAuthByID(ctx context.Context, id string) (*mode
 }
 
 // GetDoubleAuths is the resolver for the getDoubleAuths field.
-func (r *queryResolver) GetDoubleAuths(ctx context.Context) ([]*model.DoubleAuth, error) {
+func (r *queryResolver) GetDoubleAuths(ctx context.Context, option *model.Options) ([]*model.DoubleAuth, error) {
 	var report []*model.DoubleAuth
 	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2949,14 +2677,10 @@ func (r *queryResolver) GetDoubleAuths(ctx context.Context) ([]*model.DoubleAuth
 // GetBlackListByID is the resolver for the getBlackListById field.
 func (r *queryResolver) GetBlackListByID(ctx context.Context, id string) (*model.BlackList, error) {
 	var result model.BlackList
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2964,11 +2688,15 @@ func (r *queryResolver) GetBlackListByID(ctx context.Context, id string) (*model
 }
 
 // GetBlackList is the resolver for the getBlackList field.
-func (r *queryResolver) GetBlackList(ctx context.Context) ([]*model.BlackList, error) {
+func (r *queryResolver) GetBlackList(ctx context.Context, option *model.Options) ([]*model.BlackList, error) {
 	var report []*model.BlackList
 	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2984,14 +2712,10 @@ func (r *queryResolver) GetBlackList(ctx context.Context) ([]*model.BlackList, e
 // GetSaveCodeByID is the resolver for the getSaveCodeById field.
 func (r *queryResolver) GetSaveCodeByID(ctx context.Context, id string) (*model.SaveCode, error) {
 	var result model.SaveCode
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 
-	filter := bson.M{"_id": objId}
+	filter := bson.M{"_id": id}
 
-	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
@@ -2999,11 +2723,15 @@ func (r *queryResolver) GetSaveCodeByID(ctx context.Context, id string) (*model.
 }
 
 // GetSaveCode is the resolver for the getSaveCode field.
-func (r *queryResolver) GetSaveCode(ctx context.Context) ([]*model.SaveCode, error) {
+func (r *queryResolver) GetSaveCode(ctx context.Context, option *model.Options) ([]*model.SaveCode, error) {
 	var report []*model.SaveCode
 	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").Find(ctx, filter)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}

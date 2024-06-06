@@ -57,7 +57,6 @@ func SetKey(key string, value string, expire *int) (string, error) {
 	edgarlib.CheckError(err)
 
 	return resp, nil
-
 }
 
 func DeleteKey(key string) (string, error) {

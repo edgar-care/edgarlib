@@ -1,62 +1,196 @@
 package auth
 
-//func TestTokenCheckValidToken(t *testing.T) {
-//	if err := godotenv.Load(".env.test"); err != nil {
-//		log.Fatalf("Error loading .env.test file: %v", err)
-//	}
-//
-//	token := "valid-token"
-//	_, err := redis.SetKey("user-tokens", token, nil)
-//	if err != nil {
-//		t.Fatalf("Failed to set token in Redis: %v", err)
-//	}
-//
-//	statusCode, message := TokenCheck(token)
-//
-//	if statusCode != http.StatusUnauthorized {
-//		t.Errorf("Expected status code %d but got %d", http.StatusUnauthorized, statusCode)
-//	}
-//
-//	if message != "Token is invalid" {
-//		t.Errorf("Expected message 'Token is invalid' but got '%s'", message)
-//	}
-//}
-//
-//func TestTokenCheckInvalidToken(t *testing.T) {
-//	if err := godotenv.Load(".env.test"); err != nil {
-//		log.Fatalf("Error loading .env.test file: %v", err)
-//	}
-//
-//	token := "invalid-token"
-//
-//	statusCode, message := TokenCheck(token)
-//
-//	if statusCode != http.StatusOK {
-//		t.Errorf("Expected status code %d but got %d", http.StatusOK, statusCode)
-//	}
-//
-//	if message != "Token is valid" {
-//		t.Errorf("Expected message 'Token is valid' but got '%s'", message)
-//	}
-//}
+import (
+	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/joho/godotenv"
+	"log"
+	"testing"
+)
 
-//func TestTokenCheckError(t *testing.T) {
-//	if err := godotenv.Load(".env.test"); err != nil {
-//		log.Fatalf("Error loading .env.test file: %v", err)
-//	}
-//	originalCheckTokenPresence := CheckTokenPresence
-//	CheckTokenPresence = func(token string) (bool, error) {
-//		return false, fmt.Errorf("mock error")
-//	}
-//	defer func() { CheckTokenPresence = originalCheckTokenPresence }()
-//
-//	statusCode, message := TokenCheck("error-token")
-//
-//	if statusCode != http.StatusInternalServerError {
-//		t.Errorf("Expected status code %d but got %d", http.StatusInternalServerError, statusCode)
-//	}
-//
-//	if message != "Error checking token: mock error" {
-//		t.Errorf("Expected message 'Error checking token: mock error' but got '%s'", message)
-//	}
-//}
+func TestModifyStatusAccountPatient(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_patient_disable_patient_code@edgar-sante.fr",
+		Password: "password",
+		Status:   true,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	response := ModifyStatusAccount(patient.ID, false)
+
+	if response.Code != 200 {
+		t.Errorf("Expected code 200 but got %d", response.Code)
+	}
+	if response.Err != nil {
+		t.Errorf("Expected no error but got: %s", response.Err.Error())
+	}
+
+}
+
+func TestModifyStatusAccountDoctor(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_doctor_eanble_doctor@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: false,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	response := ModifyStatusAccount(doctor.ID, true)
+
+	if response.Code != 200 {
+		t.Errorf("Expected code 200 but got %d", response.Code)
+	}
+	if response.Err != nil {
+		t.Errorf("Expected no error but got: %s", response.Err.Error())
+	}
+
+}
+
+func TestCheckAccountEnablePatientGood(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_patient_check_enable_code@edgar-sante.fr",
+		Password: "password",
+		Status:   true,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	response := CheckAccountEnable(patient.ID)
+	if response.Code != 200 {
+		t.Errorf("Expected code 200 but got %d", response.Code)
+	}
+
+	if response.Err != nil {
+		t.Errorf("Expected no error but got: %s", response.Err.Error())
+	}
+
+}
+
+func TestCheckAccountEnablePatientNotGood(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_patient_check_disable_code@edgar-sante.fr",
+		Password: "password",
+		Status:   false,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	response := CheckAccountEnable(patient.ID)
+	if response.Code != 409 {
+		t.Errorf("Expected code 409 but got %d", response.Code)
+	}
+
+	if response.Err == nil {
+		t.Errorf("Expected error but got none")
+	}
+
+}
+
+func TestCheckAccountEnableDoctorNotGood(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_doctor_enable_doctor_not_good@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: false,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	response := CheckAccountEnable(doctor.ID)
+	if response.Code != 409 {
+		t.Errorf("Expected code 200 but got %d", response.Code)
+	}
+
+	if response.Err == nil {
+		t.Errorf("Expected error but got none")
+	}
+
+}
+
+func TestCheckAccountEnableDoctorGood(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_doctor_enable_doctor_good@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: true,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	response := CheckAccountEnable(doctor.ID)
+	if response.Code != 200 {
+		t.Errorf("Expected code 200 but got %d", response.Code)
+	}
+
+	if response.Err != nil {
+		t.Errorf("Expected no error but got: %s", response.Err.Error())
+	}
+
+}
+
+func TestModifyStatusAccountInvalidId(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	response := ModifyStatusAccount("id", false)
+
+	if response.Code != 400 || response.Err == nil {
+		t.Errorf("Expected error and code 400 but got code %d and err: %s", response.Code, response.Err.Error())
+	}
+
+}

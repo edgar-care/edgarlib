@@ -1,9 +1,9 @@
 package appointment
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type CancelRdvResponse struct {
@@ -16,21 +16,30 @@ func CancelRdv(id string, reason string) CancelRdvResponse {
 	if id == "" {
 		return CancelRdvResponse{Reason: "", Code: 400, Err: errors.New("id is required")}
 	}
-	gqlClient := graphql.CreateClient()
 
-	rdv, err := graphql.GetRdvById(context.Background(), gqlClient, id)
+	rdv, err := graphql.GetRdvById(id)
 	if err != nil {
 		return CancelRdvResponse{Reason: "", Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
 
-	var appointment_status = graphql.AppointmentStatusCanceled
-	_, err = graphql.UpdateRdv(context.Background(), gqlClient, id, rdv.GetRdvById.Id_patient, rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, reason, appointment_status, rdv.GetRdvById.Session_id, rdv.GetRdvById.Health_method)
+	var appointment_status = model.AppointmentStatusCanceled
+	_, err = graphql.UpdateRdv(id, model.UpdateRdvInput{
+		CancelationReason: &reason,
+		AppointmentStatus: &appointment_status,
+	})
 	if err != nil {
 		return CancelRdvResponse{Reason: "", Code: 500, Err: errors.New("unable to update appointment")}
 	}
 
-	var new_appointment_status = graphql.AppointmentStatusOpened
-	_, err = graphql.CreateRdv(context.Background(), gqlClient, "", rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, new_appointment_status, "")
+	var new_appointment_status = model.AppointmentStatusOpened
+	_, err = graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "",
+		DoctorID:          rdv.DoctorID,
+		StartDate:         rdv.StartDate,
+		EndDate:           rdv.EndDate,
+		AppointmentStatus: new_appointment_status,
+		SessionID:         "",
+	})
 	if err != nil {
 		return CancelRdvResponse{Reason: "", Code: 500, Err: errors.New("unable to update appointment")}
 	}

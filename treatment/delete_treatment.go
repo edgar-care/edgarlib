@@ -1,9 +1,9 @@
 package treatment
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type DeleteTreatmentResponse struct {
@@ -22,46 +22,47 @@ func remElement(slice []string, element string) []string {
 	return result
 }
 
-func DeleteTreatment(treatmentID string, patientID string) DeleteTreatmentResponse {
+func DeleteTreatment(treatmentID string) DeleteTreatmentResponse {
 	if treatmentID == "" {
 		return DeleteTreatmentResponse{Deleted: false, Code: 400, Err: errors.New("treatment id is required")}
 	}
-	gqlClient := graphql.CreateClient()
 
-	deleted, err := graphql.DeleteTreatment(context.Background(), gqlClient, treatmentID)
+	deleted, err := graphql.DeleteTreatment(treatmentID)
 	if err != nil {
 		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error while deleting treatment: " + err.Error())}
 	}
 
-	antediseases, err := graphql.GetAnteDiseases(context.Background(), gqlClient)
+	antediseases, err := graphql.GetAnteDiseases(nil)
 	if err != nil {
 		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antediseases: " + err.Error())}
 	}
 
 	var affectedAntediseases []string
 
-	for _, ad := range antediseases.GetAnteDiseases {
-		if contains(ad.Treatment_ids, treatmentID) {
-			affectedAntediseases = append(affectedAntediseases, ad.Id)
+	for _, ad := range antediseases {
+		if contains(ad.TreatmentIds, treatmentID) {
+			affectedAntediseases = append(affectedAntediseases, ad.ID)
 		}
 	}
 
 	for _, adID := range affectedAntediseases {
-		ad, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, adID)
+		ad, err := graphql.GetAnteDiseaseByID(adID)
 		if err != nil {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antedisease by ID: " + err.Error())}
 		}
 
-		updatedTreatmentIDs := remElement(ad.GetAnteDiseaseByID.Treatment_ids, treatmentID)
+		updatedTreatmentIDs := remElement(ad.TreatmentIds, treatmentID)
 
-		_, err = graphql.UpdateAnteDisease(context.Background(), gqlClient, adID, ad.GetAnteDiseaseByID.Name, ad.GetAnteDiseaseByID.Chronicity, ad.GetAnteDiseaseByID.Surgery_ids, ad.GetAnteDiseaseByID.Symptoms, updatedTreatmentIDs, ad.GetAnteDiseaseByID.Still_relevant)
+		_, err = graphql.UpdateAnteDisease(adID, model.UpdateAnteDiseaseInput{
+			TreatmentIds: updatedTreatmentIDs,
+		})
 		if err != nil {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating antedisease: " + err.Error())}
 		}
 	}
 
 	return DeleteTreatmentResponse{
-		Deleted: deleted.DeleteTreatment,
+		Deleted: deleted,
 		Code:    200,
 		Err:     nil,
 	}

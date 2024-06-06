@@ -1,8 +1,8 @@
 package dashboard
 
 import (
-	"context"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/joho/godotenv"
 	"log"
 	"testing"
@@ -12,24 +12,43 @@ func TestDeletePatient(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_delete_patient@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_delete_patient@edgar-sante.fr",
+		Password: "password",
+		Status:   true,
+	})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, "test_delete_patient@edgar-sante.fr", "password", "name", "first", graphql.AddressInput{"", "", "", ""})
+
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_delete_patient@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: true,
+	})
 	if err != nil {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
 
-	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.CreateDoctor.Id, doctor.CreateDoctor.Email, doctor.CreateDoctor.Password, doctor.CreateDoctor.Name, doctor.CreateDoctor.Firstname, []string{}, []string{patient.CreatePatient.Id}, graphql.AddressInput{"", "", "", ""}, []string{}, []string{}, "", []string{})
+	patientsIds := []*string{&patient.ID}
+	_, err = graphql.UpdateDoctor(doctor.ID, model.UpdateDoctorInput{
+		PatientIds: patientsIds,
+	})
+
 	if err != nil {
 		t.Errorf("Error while updating doctor: %v", err)
 	}
 
-	response := DeletePatient(patient.CreatePatient.Id, doctor.CreateDoctor.Id)
-
+	response := DeletePatient(patient.ID, doctor.ID)
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
 	}
@@ -79,13 +98,16 @@ func TestDeletePatientInvalidDoctor(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_delete_patient_invalid_doc@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_delete_patient_invalid_doc@edgar-sante.fr",
+		Password: "password",
+		Status:   true,
+	})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
-	response := DeletePatient(patient.CreatePatient.Id, "invalid")
+	response := DeletePatient(patient.ID, "invalid")
 
 	if response.Err == nil {
 		t.Error("Unexpected null error")

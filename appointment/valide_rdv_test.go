@@ -1,8 +1,8 @@
 package appointment
 
 import (
-	"context"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/joho/godotenv"
 	"log"
 	"testing"
@@ -12,12 +12,18 @@ func TestValidateRdv(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "patientId", "doctorId", 0, 10, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "patientId",
+		DoctorID:          "doctorId",
+		StartDate:         0,
+		EndDate:           10,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error creating appointment: %v", err)
 	}
-	response := ValidateRdv(appointment.CreateRdv.Id, ReviewInput{
+	response := ValidateRdv(appointment.ID, ReviewInput{
 		Reason:     "testing",
 		Validation: true,
 	})
@@ -38,12 +44,18 @@ func TestValidateRdvRefuse(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "patientId", "doctorId", 0, 10, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "patientId",
+		DoctorID:          "doctorId",
+		StartDate:         0,
+		EndDate:           10,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error creating appointment: %v", err)
 	}
-	response := ValidateRdv(appointment.CreateRdv.Id, ReviewInput{
+	response := ValidateRdv(appointment.ID, ReviewInput{
 		Reason:     "testing",
 		Validation: false,
 	})

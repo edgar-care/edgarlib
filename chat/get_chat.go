@@ -1,10 +1,9 @@
 package chat
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"time"
 )
 
@@ -32,98 +31,49 @@ type GetChatsResponse struct {
 }
 
 func UpdateMessageRead(patientID string, id string) GetChatByIdResponse {
-	gqlClient := graphql.CreateClient()
-	var res model.Chat
-
-	chat, err := graphql.GetChatById(context.Background(), gqlClient, id)
+	chat, err := graphql.GetChatById(id)
 	if err != nil {
 		return GetChatByIdResponse{model.Chat{}, 400, errors.New("id does not correspond to a chat")}
 	}
 
-	for i, participant := range chat.GetChatById.Participants {
-		if participant.Participant_id == patientID {
-			chat.GetChatById.Participants[i].Last_seen = int(time.Now().Unix())
+	for i, participant := range chat.Participants {
+		if participant.ParticipantID == patientID {
+			chat.Participants[i].LastSeen = int(time.Now().Unix())
 			break
 		}
 	}
 
-	participants := make([]graphql.ChatParticipantsInput, len(chat.GetChatById.Participants))
-	for i, p := range chat.GetChatById.Participants {
-		participants[i] = graphql.ChatParticipantsInput{
-			Participant_id: p.Participant_id,
-			Last_seen:      p.Last_seen,
+	participants := make([]*model.ChatParticipantsInput, len(chat.Participants))
+	for i, p := range chat.Participants {
+		participants[i] = &model.ChatParticipantsInput{
+			ParticipantID: p.ParticipantID,
+			LastSeen:      p.LastSeen,
 		}
 	}
 
-	var messages []graphql.ChatMessagesInput
-	for _, m := range chat.GetChatById.Messages {
-		messages = append(messages, graphql.ChatMessagesInput{
-			Owner_id:    m.Owner_id,
-			Message:     m.Message,
-			Sended_time: m.Sended_time,
+	var messages []*model.ChatMessagesInput
+	for _, m := range chat.Messages {
+		messages = append(messages, &model.ChatMessagesInput{
+			OwnerID:    m.OwnerID,
+			Message:    m.Message,
+			SendedTime: m.SendedTime,
 		})
 	}
 
-	updatedChat, err := graphql.UpdateChat(context.Background(), gqlClient, chat.GetChatById.Id, participants, messages)
+	updatedChat, err := graphql.UpdateChat(chat.ID, model.UpdateChatInput{
+		Participants: participants,
+		Messages:     messages,
+	})
 	if err != nil {
 		return GetChatByIdResponse{model.Chat{}, 400, errors.New("update failed: " + err.Error())}
 	}
-
-	participantReturn := make([]*model.ChatParticipants, len(updatedChat.UpdateChat.Participants))
-	for i, p := range updatedChat.UpdateChat.Participants {
-		participantReturn[i] = &model.ChatParticipants{
-			ParticipantID: p.Participant_id,
-			LastSeen:      p.Last_seen,
-		}
-	}
-	messageReturn := make([]*model.ChatMessages, len(updatedChat.UpdateChat.Messages))
-	for i, m := range updatedChat.UpdateChat.Messages {
-		messageReturn[i] = &model.ChatMessages{
-			OwnerID:    m.Owner_id,
-			Message:    m.Message,
-			SendedTime: m.Sended_time,
-		}
-	}
-
-	res = model.Chat{
-		ID:           updatedChat.UpdateChat.Id,
-		Participants: participantReturn,
-		Messages:     messageReturn,
-	}
-	return GetChatByIdResponse{res, 200, nil}
+	return GetChatByIdResponse{updatedChat, 200, nil}
 }
 
 func GetChat(patientId string) GetChatsResponse {
-	gqlClient := graphql.CreateClient()
-	var res []model.Chat
-
-	chats, err := graphql.GetChats(context.Background(), gqlClient, patientId)
+	chats, err := graphql.GetChats(patientId, nil)
 	if err != nil {
 		return GetChatsResponse{[]model.Chat{}, 400, errors.New("invalid input: " + err.Error())}
 	}
-
-	for _, chat := range chats.GetChats {
-		var participants []*model.ChatParticipants
-		for _, p := range chat.Participants {
-			participants = append(participants, &model.ChatParticipants{
-				ParticipantID: p.Participant_id,
-				LastSeen:      p.Last_seen,
-			})
-		}
-		var messages []*model.ChatMessages
-		for _, m := range chat.Messages {
-			messages = append(messages, &model.ChatMessages{
-				OwnerID:    m.Owner_id,
-				Message:    m.Message,
-				SendedTime: m.Sended_time,
-			})
-		}
-
-		res = append(res, model.Chat{
-			ID:           chat.Id,
-			Participants: participants,
-			Messages:     messages,
-		})
-	}
-	return GetChatsResponse{res, 200, nil}
+	return GetChatsResponse{chats, 200, nil}
 }
