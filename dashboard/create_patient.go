@@ -1,11 +1,10 @@
 package dashboard
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/auth"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/edgar-care/edgarlib/medical_folder"
 )
 
@@ -54,34 +53,37 @@ func ConvertCreateToUpdateMedicalInfoInput(createInput medical_folder.CreateMedi
 }
 
 func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) PatientByIdResponse {
-	gqlClient := graphql.CreateClient()
-
-	existingPatient, err := graphql.GetPatientByEmail(context.Background(), gqlClient, newPatient.Email)
+	existingPatient, err := graphql.GetPatientByEmail(newPatient.Email)
 	if err == nil {
 		updateMedicalInfoInput := ConvertCreateToUpdateMedicalInfoInput(newPatient.MedicalInfo)
-		medicalInfo := medical_folder.UpdateMedicalFolder(updateMedicalInfoInput, existingPatient.GetPatientByEmail.Medical_info_id)
+		if existingPatient.MedicalInfoID == nil || *existingPatient.MedicalInfoID == "" {
+			return PatientByIdResponse{Code: 404, Err: errors.New("medical folder not found")}
+		}
+		medicalInfo := medical_folder.UpdateMedicalFolder(updateMedicalInfoInput, *existingPatient.MedicalInfoID)
 		if medicalInfo.Err != nil {
-			return PatientByIdResponse{Code: 400, Err: errors.New("unable to update medical information")}
+			return PatientByIdResponse{Code: 400, Err: errors.New("unable to update medical information" + medicalInfo.Err.Error())}
 		}
 
-		doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, doctorID)
+		doctor, err := graphql.GetDoctorById(doctorID)
 		if err != nil {
 			return PatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
 		}
 
-		_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, append(doctor.GetDoctorById.Patient_ids, existingPatient.GetPatientByEmail.Id), graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country}, doctor.GetDoctorById.Chat_ids, doctor.GetDoctorById.Device_connect, doctor.GetDoctorById.Double_auth_methods_id, doctor.GetDoctorById.Trust_devices)
+		_, err = graphql.UpdateDoctor(doctorID, model.UpdateDoctorInput{
+			PatientIds: append(doctor.PatientIds, &existingPatient.ID),
+		})
 		if err != nil {
 			return PatientByIdResponse{Code: 400, Err: errors.New("update failed: " + err.Error())}
 		}
 
 		return PatientByIdResponse{
 			Patient: model.Patient{
-				ID:                   existingPatient.GetPatientByEmail.Id,
-				Email:                existingPatient.GetPatientByEmail.Email,
+				ID:                   existingPatient.ID,
+				Email:                existingPatient.Email,
 				MedicalInfoID:        &medicalInfo.MedicalInfo.ID,
-				RendezVousIds:        graphql.ConvertStringSliceToPointerSlice(existingPatient.GetPatientByEmail.Rendez_vous_ids),
-				DocumentIds:          graphql.ConvertStringSliceToPointerSlice(existingPatient.GetPatientByEmail.Document_ids),
-				TreatmentFollowUpIds: graphql.ConvertStringSliceToPointerSlice(existingPatient.GetPatientByEmail.Treatment_follow_up_ids),
+				RendezVousIds:        existingPatient.RendezVousIds,
+				DocumentIds:          existingPatient.DocumentIds,
+				TreatmentFollowUpIds: existingPatient.TreatmentFollowUpIds,
 			},
 			MedicalInfo:                medicalInfo.MedicalInfo,
 			AnteDiseasesWithTreatments: medicalInfo.AnteDiseasesWithTreatments,
@@ -92,37 +94,39 @@ func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) Pat
 
 	patient := auth.CreatePatientAccount(newPatient.Email)
 	if patient.Err != nil {
-		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create a new account")}
+		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create a new account" + patient.Err.Error())}
 	}
 
-	getPatient, err := graphql.GetPatientById(context.Background(), gqlClient, patient.Id)
+	getPatient, err := graphql.GetPatientById(patient.Id)
 	if err != nil {
 		return PatientByIdResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
 	}
 
 	medicalInfo := medical_folder.CreateMedicalInfo(newPatient.MedicalInfo, patient.Id)
 	if medicalInfo.Err != nil {
-		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create medical information")}
+		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create medical information" + medicalInfo.Err.Error())}
 	}
 
-	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, doctorID)
+	doctor, err := graphql.GetDoctorById(doctorID)
 	if err != nil {
 		return PatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctorID, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, append(doctor.GetDoctorById.Patient_ids, patient.Id), graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country}, doctor.GetDoctorById.Chat_ids, doctor.GetDoctorById.Device_connect, doctor.GetDoctorById.Double_auth_methods_id, doctor.GetDoctorById.Trust_devices)
+	_, err = graphql.UpdateDoctor(doctorID, model.UpdateDoctorInput{
+		PatientIds: append(doctor.PatientIds, &patient.Id),
+	})
 	if err != nil {
 		return PatientByIdResponse{Code: 400, Err: errors.New("update failed: " + err.Error())}
 	}
 
 	return PatientByIdResponse{
 		Patient: model.Patient{
-			ID:                   getPatient.GetPatientById.Id,
-			Email:                getPatient.GetPatientById.Email,
+			ID:                   getPatient.ID,
+			Email:                getPatient.Email,
 			MedicalInfoID:        &medicalInfo.MedicalInfo.ID,
-			RendezVousIds:        graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Rendez_vous_ids),
-			DocumentIds:          graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Document_ids),
-			TreatmentFollowUpIds: graphql.ConvertStringSliceToPointerSlice(getPatient.GetPatientById.Treatment_follow_up_ids),
+			RendezVousIds:        getPatient.RendezVousIds,
+			DocumentIds:          getPatient.DocumentIds,
+			TreatmentFollowUpIds: getPatient.TreatmentFollowUpIds,
 		},
 		MedicalInfo:                medicalInfo.MedicalInfo,
 		AnteDiseasesWithTreatments: medicalInfo.AnteDiseasesWithTreatments,

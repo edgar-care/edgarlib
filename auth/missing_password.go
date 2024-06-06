@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"context"
 	"errors"
 	"fmt"
 
@@ -18,9 +17,7 @@ type MissingPasswordResponse struct {
 }
 
 func MissingPassword(email string) MissingPasswordResponse {
-	gqlClient := graphql.CreateClient()
-
-	_, err := graphql.GetPatientByEmail(context.Background(), gqlClient, email)
+	_, err := graphql.GetPatientByEmail(email)
 	if err != nil {
 		return MissingPasswordResponse{400, errors.New("no patient corresponds to this email")}
 	}

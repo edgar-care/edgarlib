@@ -1,7 +1,7 @@
 package appointment
 
 import (
-	"context"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/joho/godotenv"
 	"log"
 	"testing"
@@ -13,17 +13,35 @@ func TestGetWaitingReview(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, "test_doctor_get_wating4review_rdv@edgar-sante.fr", "password", "name", "first", graphql.AddressInput{"", "", "", ""})
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_doctor_get_wating4review_rdv@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: false,
+	})
 	if err != nil {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "patientId", doctor.CreateDoctor.Id, 0, 10, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "patientId",
+		DoctorID:          doctor.ID,
+		StartDate:         0,
+		EndDate:           10,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error creating appointment: %v", err)
 	}
 
-	response := GetWaitingReview(doctor.CreateDoctor.Id)
+	response := GetWaitingReview(doctor.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
@@ -33,11 +51,11 @@ func TestGetWaitingReview(t *testing.T) {
 		t.Errorf("Expected code 200, got %d", response.Code)
 	}
 
-	if len(response.Rdv) == 0 {
+	if len(response.RdvWithSession) == 0 {
 		t.Errorf("Expected non-empty Rdv slice, got empty slice")
 	}
-	if response.Rdv[0].ID != appointment.CreateRdv.Id {
-		t.Errorf("Expected first Rdv slice to have it's ID=%s but go ID=%s", response.Rdv[0].ID, appointment.CreateRdv.Id)
+	if response.RdvWithSession[0].Rdv.ID != appointment.ID {
+		t.Errorf("Expected first Rdv slice to have it's ID=%s but go ID=%s", response.RdvWithSession[0].Rdv.ID, appointment.ID)
 	}
 }
 

@@ -1,13 +1,12 @@
 package auth
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/edgar-care/edgarlib/auth/utils"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type DoctorInput struct {
@@ -45,68 +44,58 @@ type RegisterAndLoginResponse struct {
 }
 
 func RegisterDoctor(email string, password string, name string, firstname string, address AddressInput) (model.Doctor, error) {
-	gqlClient := graphql.CreateClient()
 	password = utils.HashPassword(password)
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, email, password, firstname, name, graphql.AddressInput{Street: address.Street, Zip_code: address.ZipCode, Country: address.Country, City: address.City}, true)
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     email,
+		Password:  password,
+		Name:      name,
+		Firstname: firstname,
+		Address: &model.AddressInput{
+			Street:  address.Street,
+			ZipCode: address.ZipCode,
+			Country: address.Country,
+			City:    address.City,
+		},
+		Status: true,
+	})
 	if err != nil {
 		return model.Doctor{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
-	doctorAddress := &model.Address{
-		Street:  address.Street,
-		ZipCode: address.ZipCode,
-		Country: address.Country,
-		City:    address.City,
-	}
-	return model.Doctor{
-		ID:            doctor.CreateDoctor.Id,
-		Email:         doctor.CreateDoctor.Email,
-		Password:      doctor.CreateDoctor.Password,
-		Name:          doctor.CreateDoctor.Name,
-		Firstname:     doctor.CreateDoctor.Firstname,
-		Address:       doctorAddress,
-		RendezVousIds: graphql.ConvertStringSliceToPointerSlice(doctor.CreateDoctor.Rendez_vous_ids),
-		PatientIds:    graphql.ConvertStringSliceToPointerSlice(doctor.CreateDoctor.Patient_ids),
-	}, nil
+
+	return doctor, nil
 }
 
-func RegisterAndLoginDoctor(email string, password string, name string, firstname string, address AddressInput) RegisterAndLoginResponse {
+func RegisterAndLoginDoctor(email string, password string, name string, firstname string, address AddressInput, nameDevice string) RegisterAndLoginResponse {
 	doctor, err := RegisterDoctor(email, password, name, firstname, address)
 	if err != nil {
 		return RegisterAndLoginResponse{"", http.StatusBadRequest, err}
 	}
 	token, err := utils.CreateToken(map[string]interface{}{
-		"doctor": doctor,
+		"doctor":      doctor.Email,
+		"id":          doctor.ID,
+		"name_device": nameDevice,
 	})
 	return RegisterAndLoginResponse{token, 200, err}
 }
 
 func RegisterPatient(email string, password string) (model.Patient, error) {
-	gqlClient := graphql.CreateClient()
 	password = utils.HashPassword(password)
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, email, password, true)
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{Email: email, Password: password, Status: true})
 	if err != nil {
 		return model.Patient{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
-	return model.Patient{
-		ID:                   patient.CreatePatient.Id,
-		Email:                patient.CreatePatient.Email,
-		Password:             patient.CreatePatient.Password,
-		MedicalInfoID:        &patient.CreatePatient.Medical_info_id,
-		RendezVousIds:        graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Rendez_vous_ids),
-		DocumentIds:          graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Document_ids),
-		TreatmentFollowUpIds: graphql.ConvertStringSliceToPointerSlice(patient.CreatePatient.Treatment_follow_up_ids),
-	}, nil
+	return patient, nil
 }
 
-func RegisterAndLoginPatient(email string, password string, ip string) RegisterAndLoginResponse {
+func RegisterAndLoginPatient(email string, password string, nameDevice string) RegisterAndLoginResponse {
 	patient, err := RegisterPatient(email, password)
 	if err != nil {
 		return RegisterAndLoginResponse{"", http.StatusBadRequest, err}
 	}
 	token, err := utils.CreateToken(map[string]interface{}{
-		"patient":   patient.Email,
-		"id":        patient.ID,
-		"ip_device": ip,
+		"patient":     patient.Email,
+		"id":          patient.ID,
+		"name_device": nameDevice,
 	})
 	return RegisterAndLoginResponse{token, 200, err}
 }
@@ -115,19 +104,17 @@ func RegisterAdmin(email string, password string, firstName string, lastName str
 	if utils.VerifyToken(token) == false {
 		return model.Admin{}, fmt.Errorf("Unable to create account: Invalid Token")
 	}
-	gqlClient := graphql.CreateClient()
 	password = utils.HashPassword(password)
-	admin, err := graphql.CreateAdmin(context.Background(), gqlClient, email, password, firstName, lastName)
+	admin, err := graphql.CreateAdmin(model.CreateAdminInput{
+		Email:    email,
+		Password: password,
+		Name:     firstName,
+		LastName: lastName,
+	})
 	if err != nil {
 		return model.Admin{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
-	return model.Admin{
-		ID:       admin.CreateAdmin.Id,
-		Email:    admin.CreateAdmin.Email,
-		Password: admin.CreateAdmin.Password,
-		Name:     admin.CreateAdmin.Name,
-		LastName: admin.CreateAdmin.Last_name,
-	}, nil
+	return admin, nil
 }
 
 func RegisterAndLoginAdmin(email string, password string, firstName string, lastName string, token string) RegisterAndLoginResponse {

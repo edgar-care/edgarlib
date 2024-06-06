@@ -1,11 +1,10 @@
 package document
 
 import (
-	"context"
 	"errors"
 
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type UploadDocumentInput struct {
@@ -26,31 +25,28 @@ type CreateDocumentResponse struct {
 }
 
 func CreateDocument(newdoc UploadDocumentInput, id string) CreateDocumentResponse {
-	gqlClient := graphql.CreateClient()
-
-	document, err := graphql.CreateDocument(context.Background(), gqlClient, id, newdoc.Name, newdoc.DocumentType, newdoc.Category, newdoc.IsFavorite, newdoc.DownloadURL)
+	document, err := graphql.CreateDocument(model.CreateDocumentInput{
+		OwnerID:      id,
+		Name:         newdoc.Name,
+		DocumentType: newdoc.DocumentType,
+		Category:     newdoc.Category,
+		IsFavorite:   newdoc.IsFavorite,
+		DownloadURL:  newdoc.DownloadURL,
+	})
 	if err != nil {
 		return CreateDocumentResponse{Document: model.Document{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
 
-	patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
+	patient, err := graphql.GetPatientById(id)
 	if err != nil {
 		return CreateDocumentResponse{Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	_, _ = graphql.UpdatePatient(context.Background(), gqlClient, id, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, append(patient.GetPatientById.Document_ids, document.CreateDocument.Id), patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id, patient.GetPatientById.Trust_devices)
+	_, _ = graphql.UpdatePatient(id, model.UpdatePatientInput{DocumentIds: append(patient.DocumentIds, &document.ID)})
 
 	return CreateDocumentResponse{
-		Document: model.Document{
-			ID:           document.CreateDocument.Id,
-			OwnerID:      document.CreateDocument.Owner_id,
-			Name:         document.CreateDocument.Name,
-			DocumentType: model.DocumentType(document.CreateDocument.Category),
-			Category:     model.Category(document.CreateDocument.Category),
-			IsFavorite:   document.CreateDocument.Is_favorite,
-			DownloadURL:  document.CreateDocument.Download_url,
-		},
-		Code: 201,
-		Err:  nil,
+		Document: document,
+		Code:     201,
+		Err:      nil,
 	}
 }

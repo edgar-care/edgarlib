@@ -1,104 +1,3 @@
-##  Substructures  -----------------------------------------------------------------------------------------------------
-
-#  AnteChir
-
-type ChirInducedSymptom {
-    symptom: String!
-    factor: Float!
-}
-
-input ChirInducedSymptomInput {
-    symptom: String!
-    factor: Float!
-}
-
-#  Disease
-type SymptomsWeight {
-    symptom: String!
-    value: Float!
-    chronic: Boolean!
-}
-
-input SymptomsWeightInput {
-    symptom: String!
-    value: Float!
-    chronic: Boolean!
-}
-
-#  Session
-type SessionSymptom {
-    name: String!
-    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
-    duration: Int
-    treated: [String!]
-}
-
-input SessionSymptomInput {
-    name: String!
-    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
-    duration: Int
-    treated: [String!]
-}
-
-type Logs {
-    question: String!
-    answer: String!
-}
-
-input LogsInput {
-    question: String!
-    answer: String!
-}
-
-type SessionDiseases {
-    name: String!
-    presence: Float!
-    unknown_presence: Float!
-}
-
-input SessionDiseasesInput {
-    name: String!
-    presence: Float!
-    unknown_presence: Float!
-}
-
-type NlpReportOutput {
-    symptom: String!
-    present: Boolean
-    days: Int
-}
-
-input NlpReportOutputInput {
-    symptom: String!
-    present: Boolean
-    days: Int
-}
-
-type ChatParticipants {
-    participant_id: String!
-    last_seen: Int!
-}
-
-type ChatMessages {
-    owner_id: String!
-    message: String!
-    sended_time: Int!
-}
-
-input ChatParticipantsInput {
-    participant_id: String!
-    last_seen: Int!
-}
-
-input ChatMessagesInput {
-    owner_id: String!
-    message: String!
-    sended_time: Int!
-}
-
-
-##  Entities  ----------------------------------------------------------------------------------------------------------
-
 # Patient entity
 type Patient {
     id: ID!
@@ -113,6 +12,8 @@ type Patient {
     device_connect: [String]
     trust_devices: [String]
     status: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Doctor entity
@@ -130,20 +31,8 @@ type Doctor {
     device_connect: [String]
     trust_devices: [String]
     status: Boolean!
-}
-
-type Address {
-    street: String!
-    zip_code: String!
-    country: String!
-    city: String!
-}
-
-input AddressInput {
-    street: String!
-    zip_code: String!
-    country: String!
-    city: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Admin entity
@@ -153,6 +42,8 @@ type Admin {
     password: String!
     name: String!
     last_name: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Session entity
@@ -171,6 +62,8 @@ type Session {
     logs: [Logs!]!
     hereditary_disease: [String!]!
     alerts: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Symptom entity
@@ -185,6 +78,8 @@ type Symptom {
     question_basic: String!
     question_duration: String!
     question_ante: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Disease entity
@@ -197,8 +92,11 @@ type Disease {
     overweight_factor: Float!
     heredity_factor: Float!
     advice: String
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# MedicalInfo entity
 type MedicalInfo {
     id: ID!
     name: String!
@@ -211,15 +109,21 @@ type MedicalInfo {
     onboarding_status: OnboardingStatus!
     antecedent_disease_ids: [String!]!
     family_members_med_info_id: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Notification entity
 type Notification {
 	id:	ID!
 	token: String!
 	title: String!
     message: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Rdv entity
 type Rdv {
     id: ID!
     doctor_id: String!
@@ -230,36 +134,33 @@ type Rdv {
     appointment_status: AppointmentStatus!
     session_id: String!
     health_method: String
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Document entity
 type Document {
-   id: ID!
-   owner_id: String!
-   name: String!
-   document_type: DocumentType!
-   category: Category!
-   is_favorite: Boolean!
-   download_url: String!
-}
-
-type TestAccount {
     id: ID!
-    email: String!
-    password: String!
+    owner_id: String!
+    name: String!
+    document_type: DocumentType!
+    category: Category!
+    is_favorite: Boolean!
+    download_url: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
-type DemoAccount {
-    id: ID!
-    email: String!
-    password: String!
-}
-
+# AnteChir entity
 type AnteChir {
     id: ID!
     name: String!
     induced_symptoms: [ChirInducedSymptom!]
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# AnteDisease entity
 type AnteDisease {
     id: ID!
     name: String!
@@ -268,22 +169,31 @@ type AnteDisease {
     symptoms: [String!]
     treatment_ids: [String!]
     still_relevant: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# AnteFamily entity
 type AnteFamily {
     id: ID!
     name: String!
     disease: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Treatment entity
 type Treatment {
     id: ID!
     period: [Period!]!
     day: [Day!]!
     quantity: Int!
     medicine_id: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Alert entity
 type Alert {
     id: ID!
     name: String!
@@ -292,20 +202,491 @@ type Alert {
     weight: Int
     symptoms: [String!]!
     comment: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# MedicalAntecedents entity
 type MedicalAntecedents {
     id: ID!
     name: String!
     medicines: [Treatment!]!
     still_relevant: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
-#type Medicines {
-#    period: [Period]!
-#    day: [Day]!
-#    quantity: Int!
-#}
+# Medicine entity
+type Medicine {
+    id: ID!
+    name: String!
+    unit: MedicineUnit!
+    target_diseases: [String!]!
+    treated_symptoms: [String!]!
+    side_effects: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+# TreatmentsFollowUp entity
+type TreatmentsFollowUp {
+    id: ID!
+    treatment_id: String!
+    date: Int!
+    period: [Period!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+# NlpReport entity
+type NlpReport {
+    id: ID!
+    version: Int!
+    input_symptoms: [String!]!
+    input_sentence: String!
+    output: [NlpReportOutput!]!
+    computation_time: Int!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+# Chat entity
+type Chat {
+    id: ID!
+    participants: [ChatParticipants!]!
+    messages: [ChatMessages!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type DoubleAuth {
+    id: ID!
+    methods: [String!]!
+    secret: String!
+    url: String!
+    trust_device_id: String!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type DeviceConnect {
+    id: ID!
+    device_name: String!
+    ip_address: String!
+    latitude: Float!
+    longitude: Float!
+    date: Int!
+    trust_device: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type BlackList {
+    id: ID!
+    token: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type SaveCode {
+    id: ID!
+    code: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+##  Substructure  ----------------------------------------------------------------------------------------------------
+
+type Address {
+    street: String!
+    zip_code: String!
+    country: String!
+    city: String!
+}
+
+type ChirInducedSymptom {
+    symptom: String!
+    factor: Float!
+}
+
+type SymptomsWeight {
+    symptom: String!
+    value: Float!
+    chronic: Boolean!
+}
+
+type SessionSymptom {
+    name: String!
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
+    duration: Int
+    treated: [String!]
+}
+
+type Logs {
+    question: String!
+    answer: String!
+}
+
+type SessionDiseases {
+    name: String!
+    presence: Float!
+    unknown_presence: Float!
+}
+
+type NlpReportOutput {
+    symptom: String!
+    present: Boolean
+    days: Int
+}
+
+type ChatParticipants {
+    participant_id: String!
+    last_seen: Int!
+}
+
+type ChatMessages {
+    owner_id: String!
+    message: String!
+    sended_time: Int!
+}
+
+## Inputs -------------------------------------------------------------------------------------------------------------
+
+input CreatePatientInput {
+    email: String!
+    password: String!
+    status: Boolean!
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
+}
+
+input UpdatePatientInput {
+    email: String
+    password: String
+    medical_info_id: String
+    rendez_vous_ids: [String]
+    document_ids: [String]
+    treatment_follow_up_ids: [String]
+    chat_ids: [String]
+    status: Boolean
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
+}
+
+input CreateDoctorInput {
+    email: String!
+    password: String!
+    name: String!
+    firstname: String!
+    address: AddressInput!
+    status: Boolean!
+}
+
+input UpdateDoctorInput {
+    email: String
+    password: String
+    name: String
+    firstname: String
+    rendez_vous_ids: [String]
+    patient_ids: [String]
+    address: AddressInput
+    chat_ids: [String]
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
+    status: Boolean
+}
+
+input UpdateDoctorsPatientIDsInput {
+    patient_ids: [String]
+}
+
+input AddressInput {
+    street: String!
+    zip_code: String!
+    country: String!
+    city: String!
+}
+
+input CreateAdminInput {
+    email: String!
+    password: String!
+    name: String!
+    last_name: String!
+}
+
+input UpdateAdminInput {
+    email: String
+    password: String
+    name: String
+    last_name: String
+}
+
+input CreateSessionInput {
+    diseases: [SessionDiseasesInput!]!
+    symptoms: [SessionSymptomInput!]!
+    age: Int!
+    height: Int!
+    weight: Int!
+    sex: String!
+    ante_chirs: [String!]!
+    ante_diseases: [String!]!
+    medicine: [String!]!
+    last_question: String!
+    logs: [LogsInput!]!
+    hereditary_disease: [String!]!
+    alerts: [String!]!
+}
+
+input UpdateSessionInput {
+    diseases: [SessionDiseasesInput!]
+    symptoms: [SessionSymptomInput!]
+    age: Int
+    height: Int
+    weight: Int
+    sex: String
+    ante_chirs: [String!]
+    ante_diseases: [String!]
+    medicine: [String!]
+    last_question: String
+    logs: [LogsInput!]
+    hereditary_disease: [String!]
+    alerts: [String!]
+}
+
+input SessionDiseasesInput {
+    name: String!
+    presence: Float!
+    unknown_presence: Float!
+}
+
+input CreateSymptomInput {
+    code: String!
+    name: String!
+    chronic: Int
+    symptom: [String!]!
+    advice: String
+    question: String!
+    question_basic: String!
+    question_duration: String!
+    question_ante: String!
+}
+
+input UpdateSymptomInput {
+    code: String
+    name: String
+    chronic: Int
+    symptom: [String!]
+    advice: String
+    question: String
+    question_basic: String
+    question_duration: String
+    question_ante: String
+}
+
+input CreateDiseaseInput {
+    code: String!
+    name: String!
+    symptoms: [String!]!
+    symptoms_weight: [SymptomsWeightInput!]
+    overweight_factor: Float!
+    heredity_factor: Float!
+    advice: String
+}
+
+input UpdateDiseaseInput {
+    code: String
+    name: String
+    symptoms: [String!]
+    symptoms_weight: [SymptomsWeightInput!]
+    overweight_factor: Float
+    heredity_factor: Float
+    advice: String
+}
+
+input CreateNotificationInput {
+    token: String!
+    message: String!
+    title: String!
+}
+
+input UpdateNotificationInput {
+    token: String!
+    message: String!
+    title: String!
+}
+
+input CreateRdvInput {
+    id_patient: String!
+    doctor_id: String!
+    start_date: Int!
+    end_date: Int!
+    appointment_status: AppointmentStatus!
+    session_id: String!
+}
+
+input UpdateRdvInput {
+    id_patient: String
+    doctor_id: String
+    start_date: Int
+    end_date: Int
+    cancelation_reason: String
+    appointment_status: AppointmentStatus
+    session_id: String
+    health_method: String
+}
+
+
+input CreateDocumentInput {
+    owner_id: String!
+    name: String!
+    document_type: String!
+    category: String!
+    is_favorite: Boolean!
+    download_url: String!
+}
+
+input UpdateDocumentInput {
+    name: String
+    is_favorite: Boolean
+}
+
+input CreateAnteChirInput {
+    name: String!
+    induced_symptoms: [ChirInducedSymptomInput!]
+}
+
+input UpdateAnteChirInput {
+    name: String
+    induced_symptoms: [ChirInducedSymptomInput!]
+}
+
+input CreateAnteDiseaseInput {
+    name: String!
+    chronicity: Float
+    surgery_ids: [String!]
+    symptoms: [String!]
+    treatment_ids: [String!]
+    still_relevant: Boolean!
+}
+
+input UpdateAnteDiseaseInput {
+    name: String
+    chronicity: Float
+    surgery_ids: [String!]
+    symptoms: [String!]
+    treatment_ids: [String!]
+    still_relevant: Boolean
+}
+
+input CreateAnteFamilyInput {
+    name: String!
+    disease: [String!]!
+}
+
+input UpdateAnteFamilyInput {
+    name: String
+    disease: [String!]
+}
+
+input CreateTreatmentInput {
+    period: [Period!]!
+    day: [Day!]!
+    quantity: Int!
+    medicine_id: String!
+}
+
+input UpdateTreatmentInput {
+    period: [Period!]
+    day: [Day!]
+    quantity: Int
+    medicine_id: String
+}
+
+input CreateAlertInput {
+    name: String!
+    sex: String
+    height: Int
+    weight: Int
+    symptoms: [String!]!
+    comment: String!
+}
+
+input UpdateAlertInput {
+    name: String
+    sex: String
+    height: Int
+    weight: Int
+    symptoms: [String!]
+    comment: String
+}
+
+input CreateMedicineInput {
+    name: String!
+    unit: String
+    target_diseases: [String!]!
+    treated_symptoms: [String!]!
+    side_effects: [String!]!
+}
+
+
+input CreateMedicalFolderInput {
+    name: String!
+    firstname: String!
+    birthdate: Int!
+    sex: String!
+    height: Int!
+    weight: Int!
+    primary_doctor_id: String!
+    antecedent_disease_ids: [String!]
+    onboarding_status: String!
+    family_members_med_info_id: [String!]!
+}
+
+input UpdateMedicalFolderInput {
+    name: String
+    firstname: String
+    birthdate: Int
+    sex: String
+    height: Int
+    weight: Int
+    primary_doctor_id: String
+    antecedent_disease_ids: [String!]
+    onboarding_status: OnboardingStatus
+    family_members_med_info_id: [String!]
+}
+
+input CreateTreatmentsFollowUpInput {
+    treatment_id: String!
+    date: Int!
+    period: [Period!]!
+}
+
+input UpdateTreatmentsFollowUpInput {
+    treatment_id: String
+    date: Int
+    period: [Period!]
+}
+
+input CreateNlpReportInput {
+    version: Int!
+    input_symptoms: [String!]!
+    input_sentence: String!
+    output: [NlpReportOutputInput!]!
+    computation_time: Int!
+}
+
+input CreateChatInput {
+    participants: [ChatParticipantsInput!]!
+    messages: [ChatMessagesInput!]!
+}
+
+input UpdateChatInput {
+    participants: [ChatParticipantsInput!]
+    messages: [ChatMessagesInput!]
+}
 
 input MedicalAntecedentsInput {
     name: String!
@@ -320,15 +701,6 @@ input TreatmentInput {
     medicine_id: String!
 }
 
-type Medicine {
-    id: ID!
-    name: String!
-    unit: MedicineUnit!
-    target_diseases: [String!]!
-    treated_symptoms: [String!]!
-    side_effects: [String!]!
-}
-
 input MedicineInput {
     name: String!
     unit: MedicineUnit!
@@ -337,38 +709,25 @@ input MedicineInput {
     side_effects: [String!]!
 }
 
-type TreatmentsFollowUp {
-    id: ID!
-    treatment_id: String!
-    date: Int!
-    period: [Period!]!
+input ChirInducedSymptomInput {
+    symptom: String!
+    factor: Float!
 }
 
-type NlpReport {
-    id: ID!
-    version: Int!
-    input_symptoms: [String!]!
-    input_sentence: String!
-    output: [NlpReportOutput!]!
-    computation_time: Int!
+input SymptomsWeightInput {
+    symptom: String!
+    value: Float!
+    chronic: Boolean!
 }
 
-type Chat {
-    id: ID!
-    participants: [ChatParticipants!]!
-    messages: [ChatMessages!]!
+input SessionSymptomInput {
+    name: String!
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
+    duration: Int
+    treated: [String!]
 }
 
-type DoubleAuth {
-    id: ID!
-    methods: [String!]!
-    secret: String!
-    url: String!
-    trust_device_id: String!
-}
-
-type DeviceConnect {
-    id: ID!
+input CreateDeviceConnectInput {
     device_name: String!
     ip_address: String!
     latitude: Float!
@@ -377,435 +736,68 @@ type DeviceConnect {
     trust_device: Boolean!
 }
 
-type BlackList {
-    id: ID!
+input UpdateDeviceConnectInput {
+    device_name: String
+    ip_address: String
+    latitude: Float
+    longitude: Float
+    date: Int
+    trust_device: Boolean
+}
+
+input CreateDoubleAuthInput {
+    methods: [String!]!
+    secret: String!
+    url: String!
+    trust_device_id: String!
+}
+
+input UpdateDoubleAuthInput {
+    methods: [String!]
+    secret: String
+    url: String
+    trust_device_id: String
+}
+
+input CreateBlackListInput {
     token: [String!]!
 }
 
-type SaveCode {
-    id: ID!
+input UpdateBlackListInput {
+    token: [String!]
+}
+
+input CreateSaveCodeInput {
     code: [String!]!
 }
 
-
-## Query  --------------------------------------------------------------------------------------------------------------
-
-type Query {
-    # Get the entire list of patients.
-    getPatients: [Patient]
-
-    # Find a patient using its id.
-    getPatientById(id: String!): Patient
-
-    # Find a patient using its email.
-    getPatientByEmail(email: String!): Patient
-
-    # Get the entire list of doctors.
-    getDoctors: [Doctor]
-
-    # Find a doctor using its id.
-    getDoctorById(id: String!): Doctor
-
-    # Find a doctor using its email.
-    getDoctorByEmail(email: String!): Doctor
-
-    # Get the entire list of admins.
-    getAdmins: [Admin]
-
-    # Find a admin using its id.
-    getAdminById(id: String!): Admin
-
-    # Find an admin using its email.
-    getAdminByEmail(email: String!): Admin
-
-    # Get the entire list of demo accounts.
-    getDemoAccounts: [DemoAccount]
-
-    # Find a demo account using its id.
-    getDemoAccountById(id: String!): DemoAccount
-
-    # Find an demo account using its email.
-    getDemoAccountByEmail(email: String!): DemoAccount
-
-    # Get the entire list of test accounts.
-    getTestAccounts: [TestAccount]
-
-    # Find a test account using its id.
-    getTestAccountById(id: String!): TestAccount
-
-    # Find an test account using its email.
-    getTestAccountByEmail(email: String!): TestAccount
-
-    # Get the entire list of sessions.
-    getSessions: [Session]
-
-    # Find a session using its id.
-    getSessionById(id: String!): Session
-
-    # Find a symptom using its id.
-    getSymptomById(id: String!): Symptom
-
-    # Find a disease using its id.
-    getDiseaseById(id: String!): Disease
-
-    # Get the entire list of symptoms
-    getSymptoms: [Symptom]
-
-    # Get the entire list of diseases
-    getDiseases: [Disease]
-
-    # Get a disease's symptoms its name
-    getSymptomsByDiseaseName(name: String!): Disease
-
-    # Get the entire list of notification.
-    getNotifications: [Notification]
-
-    # Find a Notification using its id.
-    getNotificationById(id: String!): Notification
-
-    # Get the entire list of rdv patients.
-    getPatientRdv(id_patient: String!): [Rdv]
-
-    #Get the entire list of rdv doctors.
-    getDoctorRdv(doctor_id: String!): [Rdv]
-
-    # Find a rdv using its id.
-    getRdvById(id: String!): Rdv
-
-    #Find a slot and rdv using its id.
-    getSlotById(id: String!): Rdv
-
-    #Find all rdv and slot.
-    getSlots(id: String!): [Rdv]
-
-    # Get the entire list of waiting review
-    getWaitingRdv(doctor_id: String!): [Rdv]
-
-    # Get the entire list of document patient
-    getDocuments: [Document]
-
-    # Find a doucment using its id.
-    getDocumentById(id: String!): Document
-
-    getPatientDocument(id: String!): [Document]
-
-    # Get the entire list of antechirs.
-    getAnteChirs: [AnteChir]
-
-    # Get an antechir by its id.
-    getAnteChirByID(id: String!): AnteChir
-
-    # Get the entire list of antediseases.
-    getAnteDiseases: [AnteDisease]
-
-    # Get an antedisease by its id.
-    getAnteDiseaseByID(id: String!): AnteDisease
-
-    # Get the entire list of .
-    getAnteFamilies: [AnteFamily]
-
-    # Get an antefamily by its id.
-    getAnteFamilyByID(id: String!): AnteFamily
-
-    # Get the entire list of treatments.
-    getTreatments: [Treatment]
-
-    # Get a treament by its id.
-    getTreatmentByID(id: String!): Treatment
-
-    # Get the entire list of alerts.
-    getAlerts: [Alert]
-
-    # Get an alert by its id.
-    getAlertById(id: String!): Alert
-
-# ========================================== #
-
-    # Get the entire list of Medicament.
-    getMedicalFolder: [MedicalInfo]
-
-    # Get a Medicine by its id.
-    getMedicalFolderById(id: String!): MedicalInfo
-
-    # Get the entire list of Medicine.
-    getMedicines: [Medicine]
-
-    # Get an Medicine by its id.
-    getMedicineByID(id: String!): Medicine
-
-    # Get all patient from doctor with id.
-    getPatientsFromDoctorById(id: String!): [Patient]
-
-
-    # Get TreatmentsFollowUp by its id
-    getTreatmentsFollowUpById(id: String!): TreatmentsFollowUp
-
-    # Get all TreatmentsFollowUp
-    getTreatmentsFollowUps(id: String!): [TreatmentsFollowUp]
-
-    # Get NlpReports
-    getNlpReports: [NlpReport]
-
-    # Get NlpReports by version
-    getNlpReportsByVersion(version: Int!): [NlpReport]
-
-    # Get Chats
-    getChats(id: String!): [Chat]
-
-    # Get chat by its id
-    getChatById(id: String!): Chat
-
-    #================================================
-    # Get device by its id
-    getDeviceConnectById(id: String!): DeviceConnect
-
-    # Get DeviceConnects
-    getDevicesConnect: [DeviceConnect]
-    #================================================
-    # Get double auth by its id
-    getDoubleAuthById(id: String!): DoubleAuth
-
-    #Get DoubleAuth
-    getDoubleAuths: [DoubleAuth]
-
-    # Get Black list
-    getBlackListById(id: String!): BlackList
-
-    getBlackList: [BlackList]
-
-    # Get Black list
-    getSaveCodeById(id: String!): SaveCode
-
-    getSaveCode: [SaveCode]
-
+input UpdateSaveCodeInput {
+    code: [String!]
 }
 
-##  Mutation  ----------------------------------------------------------------------------------------------------------
-
-type Mutation {
-    # Create a new patient.
-    createPatient(email: String!, password: String!, status: Boolean!): Patient
-
-    # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Patient
-
-    # Delete a patient.
-    deletePatient(id: String!): Boolean
-
-    # Create a new doctor.
-    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!, status: Boolean!): Doctor
-
-    # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Doctor #rendez_vous_id: String , slot_ids: [String] status: Boolean
-
-    # Delete a doctor.
-    deleteDoctor(id: String!): Boolean
-
-    # Create a new Admin.
-    createAdmin(email: String!, password: String!, name: String!, last_name: String!): Admin
-
-    # Update a Admin.
-    updateAdmin(id: String!, email: String, password: String, name: String, last_name: String): Admin
-
-    # Delete a Admin.
-    deleteAdmin(id: String!): Boolean
-
-    # Create a new DemoAccount.
-    createDemoAccount(email: String!, password: String!): DemoAccount
-
-    # Update a DemoAccount.
-    updateDemoAccount(id: String!, email: String, password: String): DemoAccount
-
-    # Delete a DemoAccount.
-    deleteDemoAccount(id: String!): Boolean
-
-    # Create a new TestAccount.
-    createTestAccount(email: String!, password: String!): TestAccount
-
-    # Update a TestAccount.
-    updateTestAccount(id: String!, email: String, password: String): TestAccount
-
-    # Delete a TestAccount.
-    deleteTestAccount(id: String!): Boolean
-
-    # Create a new session.
-    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, medicine: [String!]!, last_question: String!, logs: [LogsInput!]!, hereditary_disease: [String!]!, alerts: [String!]!): Session
-
-    # Update a new session.
-    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], medicine: [String!], last_question: String, logs: [LogsInput!], hereditary_disease: [String!], alerts: [String!]): Session
-
-    # Delete a session.
-    deleteSession(id: String!): Boolean
-
-    # Create a new symptom.
-
-    createSymptom(code: String!, name: String!, chronic: Int, symptom: [String!]! ,advice: String, question: String!, question_basic: String!, question_duration: String!, question_ante: String!): Symptom
-
-    # Update a new symptom.
-    updateSymptom(id: String!, code: String, name: String, chronic: Int, symptom: [String!], advice: String, question: String, question_basic: String, question_duration: String, question_ante: String): Symptom
-
-    # Delete a symptom.
-    deleteSymptom(id: String!): Boolean
-
-    # Create a new disease.
-    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float!, heredity_factor: Float!, advice: String): Disease
-
-    # Update a new disease.
-    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float, heredity_factor: Float, advice: String): Disease
-
-    # Delete a disease.
-    deleteDisease(id: String!): Boolean
-
-    # Create a new notification.
-    createNotification(token: String!, message: String!, title: String!): Notification
-
-    # Update a new notification.
-    updateNotification(id: String!, token: String!, message: String!, title: String!): Notification
-
-    # Delete a notification.
-    deleteNotification(id: String!): Boolean
-
-    # Create a new Rdv.
-    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, session_id: String!): Rdv
-
-    # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, session_id: String, health_method: String): Rdv
-
-    # Delete a Rdv.
-    deleteRdv(id: String!): Boolean
-
-    # Delete a Slot.
-    deleteSlot(id: String!): Boolean
-
-    #Create a new document.
-    createDocument(owner_id: String!, name: String!, document_type: String!, category: String!, is_favorite: Boolean!, download_url: String!): Document
-
-    # Update a new Slot.
-    updateDocument(id: String!, name: String, is_favorite: Boolean): Document
-
-    # Delete a Slot.
-    deleteDocument(id: String!): Boolean
-
-    # Create a new antechir.
-    createAnteChir(name: String!, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
-
-    # Update a new antechir.
-    updateAnteChir(id: String!, name: String, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
-
-    # Delete a antechir.
-    deleteAnteChir(id: String!): Boolean
-
-    # Create a new antedisease.
-    createAnteDisease(name: String!, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean!): AnteDisease
-    # Update a new antedisease.
-    updateAnteDisease(id: String!, name: String, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean): AnteDisease
-    # Delete a antedisease.
-    deleteAnteDisease(id: String!): Boolean
-
-    # Create a new antefamily.
-    createAnteFamily(name: String!, disease: [String!]!): AnteFamily
-
-    # Update a new antefamily.
-    updateAnteFamily(id: String!, name: String, disease: [String!]): AnteFamily
-
-    # Delete a antefamily.
-    deleteAnteFamily(id: String!): Boolean
-
-    # Create a new treatment.
-    createTreatment(period: [Period!]!, day: [Day!]!, quantity: Int!, medicine_id: String!): Treatment
-    # Update a new treatment.
-    updateTreatment(id: String!, period: [Period!], day: [Day!], quantity: Int, medicine_id: String): Treatment
-    # Delete a treatment.
-    deleteTreatment(id: String!): Boolean
-
-    # Create a new alert.
-    createAlert(name: String!, sex: String, height: Int, weight: Int, symptoms: [String!]!, comment: String!): Alert
-
-    # Update a new alert.
-    updateAlert(id: String!, name: String, sex: String, height: Int, weight: Int, symptoms: [String!], comment: String): Alert
-
-    # Delete an alert.
-    deleteAlert(id: String!): Boolean
-
-# ================================================ #
-
-    # Create a new Medicine.
-    createMedicine(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicine
-
-    # Delete an Medicine.
-    deleteMedicine(id: String!): Boolean
-
-
-    # Create a new MedicalFolder.!
-    createMedicalFolder(name: String!, firstname: String!, birthdate: Int!, sex: String!, height: Int!, weight: Int!, primary_doctor_id: String!, antecedent_disease_ids: [String!], onboarding_status: String!, family_members_med_info_id: [String!]!): MedicalInfo
-    # Update a new MedicalFolder.
-    updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus, family_members_med_info_id: [String!]): MedicalInfo
-    # Delete an MedicalFolder.
-    deleteMedicalFolder(id: String!): Boolean
-
-
-    # Create TreatmentsFollowUp
-    createTreatmentsFollowUp(treatment_id: String!, date: Int!, period: [Period!]!): TreatmentsFollowUp
-    #Update TreatmentsFollowUp
-    updateTreatmentsFollowUp(id: String!, treatment_id: String, date: Int, period: [Period!]): TreatmentsFollowUp
-    # Delete TreatmentsFollowUp
-    deleteTreatmentsFollowUp(id: String!): Boolean
-
-    # Create a new NlpReport
-    createNlpReport(version: Int!, input_symptoms: [String!]!, input_sentence: String!, output: [NlpReportOutputInput!]!, computation_time: Int!): NlpReport
-
-    # Create a new Chat
-    createChat(participants: [ChatParticipantsInput!]!, messages: [ChatMessagesInput!]!): Chat
-
-    #Update a Chat
-    updateChat(id: String!, participants: [ChatParticipantsInput!], messages: [ChatMessagesInput!]): Chat
-
-    #Delete a Chat
-    deleteChat(id: String!): Boolean
-
-
-    # Create new DeviceConnect
-    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Float!, longitude: Float!, date: Int!, trust_device: Boolean!): DeviceConnect
-
-    #update a DeviceConnect
-    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Float, longitude: Float, date: Int, trust_device: Boolean): DeviceConnect
-
-    #Delete a DeviceConnect
-    deleteDeviceConnect(id: String!): Boolean
-
-
-    # Create new DoubleAuth
-    createDoubleAuth(methods: [String!]!, secret: String!, url: String!, trust_device_id: String!): DoubleAuth
-
-    #update a DeviceConnect
-    updateDoubleAuth(id: String!, methods: [String!], secret: String, url: String, trust_device_id: String): DoubleAuth
-
-    #Delete a DeviceConnect
-    deleteDoubleAuth(id: String!): Boolean
-
-
-    # Create new DoubleAuth
-    createBlackList(token: [String!]!): BlackList
-
-    #update a DeviceConnect
-    updateBlackList(id: String!, token: [String!]): BlackList
-
-    #Delete a DeviceConnect
-    deleteBlackList(id: String!): Boolean
-
-
-    # Create new DoubleAuth
-    createSaveCode(code: [String!]!): SaveCode
-
-    #update a DeviceConnect
-    updateSaveCode(id: String!, code: [String!]): SaveCode
-
-    #Delete a DeviceConnect
-    deleteSaveCode(id: String!): Boolean
+input LogsInput {
+    question: String!
+    answer: String!
 }
 
+input NlpReportOutputInput {
+    symptom: String!
+    present: Boolean
+    days: Int
+}
 
-##  Enums  -------------------------------------------------------------------------------------------------------------
+input ChatParticipantsInput {
+    participant_id: String!
+    last_seen: Int!
+}
+
+input ChatMessagesInput {
+    owner_id: String!
+    message: String!
+    sended_time: Int!
+}
+
+##  Enums  ------------------------------------------------------------------------------------------------------------
 
 enum Sex {
     MALE,
@@ -861,4 +853,398 @@ enum AppointmentStatus {
     CANCELED_DUE_TO_REVIEW,
     CANCELED,
     OPENED
+}
+
+## Utils  -------------------------------------------------------------------------------------------------------------
+
+enum SortOrder {
+    ASC
+    DESC
+}
+
+input SortingOptions {
+    order: SortOrder!
+    key: String!
+}
+
+input Options {
+    sort: SortingOptions!
+    limit: Int!
+    offset: Int!
+}
+
+## Query  -------------------------------------------------------------------------------------------------------------
+
+type Query {
+    # Get the entire list of patients.
+    getPatients(option: Options): [Patient]
+
+    # Find a patient using its id.
+    getPatientById(id: String!): Patient
+
+    # Find a patient using its email.
+    getPatientByEmail(email: String!): Patient
+
+    # Get the entire list of doctors.
+    getDoctors(option: Options): [Doctor]
+
+    # Find a doctor using its id.
+    getDoctorById(id: String!): Doctor
+
+    # Find a doctor using its email.
+    getDoctorByEmail(email: String!): Doctor
+
+    # Get the entire list of admins.
+    getAdmins(option: Options): [Admin]
+
+    # Find a admin using its id.
+    getAdminById(id: String!): Admin
+
+    # Find an admin using its email.
+    getAdminByEmail(email: String!): Admin
+
+    # Get the entire list of sessions.
+    getSessions(option: Options): [Session]
+
+    # Find a session using its id.
+    getSessionById(id: String!): Session
+
+    # Find a symptom using its id.
+    getSymptomById(id: String!): Symptom
+
+    # Get a disease's symptoms by its name
+    getSymptomsByDiseaseName(name: String!): Disease
+
+    # Find a disease using its id.
+    getDiseaseById(id: String!): Disease
+
+    # Get the entire list of symptoms
+    getSymptoms(option: Options): [Symptom]
+
+    # Get the entire list of diseases
+    getDiseases(option: Options): [Disease]
+
+    # Get the entire list of notification.
+    getNotifications(option: Options): [Notification]
+
+    # Find a Notification using its id.
+    getNotificationById(id: String!): Notification
+
+    # Get the entire list of rdv patients.
+    getPatientRdv(id_patient: String!, option: Options): [Rdv]
+
+    #Get the entire list of rdv doctors.
+    getDoctorRdv(doctor_id: String!, option: Options): [Rdv]
+
+    # Find a rdv using its id.
+    getRdvById(id: String!): Rdv
+
+    #Find a slot and rdv using its id.
+    getSlotById(id: String!): Rdv
+
+    #Find all rdv and slot.
+    getSlots(id: String!, option: Options): [Rdv]
+
+    # Get the entire list of waiting review
+    getWaitingRdv(doctor_id: String!, option: Options): [Rdv]
+
+    # Get the entire list of document patient
+    getDocuments(option: Options): [Document]
+
+    # Find a doucment using its id.
+    getDocumentById(id: String!): Document
+
+    getPatientDocument(id: String!, option: Options): [Document]
+
+    # Get the entire list of antechirs.
+    getAnteChirs(option: Options): [AnteChir]
+
+    # Get an antechir by its id.
+    getAnteChirByID(id: String!): AnteChir
+
+    # Get the entire list of antediseases.
+    getAnteDiseases(option: Options): [AnteDisease]
+
+    # Get an antedisease by its id.
+    getAnteDiseaseByID(id: String!): AnteDisease
+
+    # Get the entire list of .
+    getAnteFamilies(option: Options): [AnteFamily]
+
+    # Get an antefamily by its id.
+    getAnteFamilyByID(id: String!): AnteFamily
+
+    # Get the entire list of treatments.
+    getTreatments(option: Options): [Treatment]
+
+    # Get a treament by its id.
+    getTreatmentByID(id: String!): Treatment
+
+    # Get the entire list of alerts.
+    getAlerts(option: Options): [Alert]
+
+    # Get an alert by its id.
+    getAlertById(id: String!): Alert
+
+    # Get the entire list of Medicament.
+    getMedicalFolder(option: Options): [MedicalInfo]
+
+    # Get a Medicine by its id.
+    getMedicalFolderById(id: String!): MedicalInfo
+
+    # Get the entire list of Medicine.
+    getMedicines(option: Options): [Medicine]
+
+    # Get an Medicine by its id.
+    getMedicineByID(id: String!): Medicine
+
+    # Get all patient from doctor with id.
+    getPatientsFromDoctorById(id: String!, option: Options): [Patient]
+
+    # Get TreatmentsFollowUp by its id
+    getTreatmentsFollowUpById(id: String!): TreatmentsFollowUp
+
+    # Get all TreatmentsFollowUp
+    getTreatmentsFollowUps(id: String!, option: Options): [TreatmentsFollowUp]
+
+    # Get NlpReports
+    getNlpReports(option: Options): [NlpReport]
+
+    # Get NlpReports by version
+    getNlpReportsByVersion(version: Int!, option: Options): [NlpReport]
+
+    # Get Chats
+    getChats(id: String!, option: Options): [Chat]
+
+    # Get chat by its id
+    getChatById(id: String!): Chat
+
+    # Get device by its id
+    getDeviceConnectById(id: String!): DeviceConnect
+
+    # Get DeviceConnects
+    getDevicesConnect(option: Options): [DeviceConnect]
+
+    # Get double auth by its id
+    getDoubleAuthById(id: String!): DoubleAuth
+
+    #Get DoubleAuth
+    getDoubleAuths(option: Options): [DoubleAuth]
+
+    # Get Black list
+    getBlackListById(id: String!): BlackList
+
+    # Get Black lists
+    getBlackList(option: Options): [BlackList]
+
+    # Get Black list
+    getSaveCodeById(id: String!): SaveCode
+
+    # Get Save Code
+    getSaveCode(option: Options): [SaveCode]
+}
+
+type Mutation {
+    # Create a new patient.
+    createPatient(input: CreatePatientInput!): Patient
+    
+    # Update a patient.
+    updatePatient(id: String!, input: UpdatePatientInput!): Patient
+
+    # Delete a patient.
+    deletePatient(id: String!): Boolean
+
+    # Create a new doctor.
+    createDoctor(input: CreateDoctorInput!): Doctor
+
+    # Update a doctor.
+    updateDoctor(id: String!, input: UpdateDoctorInput!): Doctor
+
+    updateDoctorsPatientIDs(id: String!, input: UpdateDoctorsPatientIDsInput!): Doctor
+
+    # Delete a doctor.
+    deleteDoctor(id: String!): Boolean
+
+    # Create a new Admin.
+    createAdmin(input: CreateAdminInput!): Admin
+
+    # Update a Admin.
+    updateAdmin(id: String!, input: UpdateAdminInput!): Admin
+
+    # Delete a Admin.
+    deleteAdmin(id: String!): Boolean
+
+    # Create a new session.
+    createSession(input: CreateSessionInput!): Session
+
+    # Update a new session.
+    updateSession(id: String!, input: UpdateSessionInput!): Session
+
+    # Delete a session.
+    deleteSession(id: String!): Boolean
+
+    # Create a new symptom.
+    createSymptom(input: CreateSymptomInput!): Symptom
+
+    # Update a new symptom.
+    updateSymptom(id: String!, input: UpdateSymptomInput!): Symptom
+
+    # Delete a symptom.
+    deleteSymptom(id: String!): Boolean
+
+    # Create a new disease.
+    createDisease(input: CreateDiseaseInput!): Disease
+
+    # Update a new disease.
+    updateDisease(id: String!, input: UpdateDiseaseInput!): Disease
+
+    # Delete a disease.
+    deleteDisease(id: String!): Boolean
+
+    # Create a new notification.
+    createNotification(input: CreateNotificationInput!): Notification
+
+    # Update a new notification.
+    updateNotification(id: String!, input: UpdateNotificationInput!): Notification
+
+    # Delete a notification.
+    deleteNotification(id: String!): Boolean
+
+    # Create a new Rdv.
+    createRdv(input: CreateRdvInput!): Rdv
+
+    # Update a new Rdv.
+    updateRdv(id: String!, input: UpdateRdvInput!): Rdv
+
+    # Delete a Rdv.
+    deleteRdv(id: String!): Boolean
+
+    # Delete a Slot.
+    deleteSlot(id: String!): Boolean
+
+    #Create a new document.
+    createDocument(input: CreateDocumentInput!): Document
+
+    # Update a new Slot.
+    updateDocument(id: String!, input: UpdateDocumentInput!): Document
+
+    # Delete a Slot.
+    deleteDocument(id: String!): Boolean
+
+    # Create a new antechir.
+    createAnteChir(input: CreateAnteChirInput!): AnteChir
+
+    # Update a new antechir.
+    updateAnteChir(id: String!, input: UpdateAnteChirInput!): AnteChir
+
+    # Delete a antechir.
+    deleteAnteChir(id: String!): Boolean
+
+    # Create a new antedisease.
+    createAnteDisease(input: CreateAnteDiseaseInput!): AnteDisease
+    
+    # Update a new antedisease.
+    updateAnteDisease(id: String!, input: UpdateAnteDiseaseInput!): AnteDisease
+    
+    # Delete a antedisease.
+    deleteAnteDisease(id: String!): Boolean
+
+    # Create a new antefamily.
+    createAnteFamily(input: CreateAnteFamilyInput!): AnteFamily
+
+    # Update a new antefamily.
+    updateAnteFamily(id: String!, input: UpdateAnteFamilyInput!): AnteFamily
+
+    # Delete a antefamily.
+    deleteAnteFamily(id: String!): Boolean
+
+    # Create a new treatment.
+    createTreatment(input: CreateTreatmentInput!): Treatment
+
+    # Update a new treatment.
+    updateTreatment(id: String!, input: UpdateTreatmentInput!): Treatment
+
+    # Delete a treatment.
+    deleteTreatment(id: String!): Boolean
+
+    # Create a new alert.
+    createAlert(input: CreateAlertInput!): Alert
+
+    # Update a new alert.
+    updateAlert(id: String!, input: UpdateAlertInput!): Alert
+
+    # Delete an alert.
+    deleteAlert(id: String!): Boolean
+
+    # Create a new Medicine.
+    createMedicine(input: CreateMedicineInput!): Medicine
+
+    # Delete an Medicine.
+    deleteMedicine(id: String!): Boolean
+
+    # Create a new MedicalFolder.!
+    createMedicalFolder(input: CreateMedicalFolderInput!): MedicalInfo
+    
+    # Update a new MedicalFolder.
+    updateMedicalFolder(id: String!, input: UpdateMedicalFolderInput!): MedicalInfo
+    
+    # Delete an MedicalFolder.
+    deleteMedicalFolder(id: String!): Boolean
+
+    # Create TreatmentsFollowUp
+    createTreatmentsFollowUp(input: CreateTreatmentsFollowUpInput!): TreatmentsFollowUp
+    
+    #Update TreatmentsFollowUp
+    updateTreatmentsFollowUp(id: String!, input: UpdateTreatmentsFollowUpInput!): TreatmentsFollowUp
+    
+    # Delete TreatmentsFollowUp
+    deleteTreatmentsFollowUp(id: String!): Boolean
+
+    # Create a new NlpReport
+    createNlpReport(input: CreateNlpReportInput!): NlpReport
+
+    # Create a new Chat
+    createChat(input: CreateChatInput!): Chat
+
+    #Update a Chat
+    updateChat(id: String!, input: UpdateChatInput!): Chat
+
+    #Delete a Chat
+    deleteChat(id: String!): Boolean
+
+    # Create new DeviceConnect
+    createDeviceConnect(input: CreateDeviceConnectInput!): DeviceConnect
+
+    #update a DeviceConnect
+    updateDeviceConnect(id: String!, input: UpdateDeviceConnectInput!): DeviceConnect
+
+    #Delete a DeviceConnect
+    deleteDeviceConnect(id: String!): Boolean
+
+    # Create new DoubleAuth
+    createDoubleAuth(input: CreateDoubleAuthInput!): DoubleAuth
+
+    #update a DoubleAuth
+    updateDoubleAuth(id: String!, input: UpdateDoubleAuthInput!): DoubleAuth
+
+    #Delete a DoubleAuth
+    deleteDoubleAuth(id: String!): Boolean
+
+    # Create new BlackList
+    createBlackList(input: CreateBlackListInput!): BlackList
+
+    #update a BlackList
+    updateBlackList(id: String!, input: UpdateBlackListInput!): BlackList
+
+    #Delete a DeviceConnect
+    deleteBlackList(id: String!): Boolean
+
+    # Create new SaveCode
+    createSaveCode(input: CreateSaveCodeInput!): SaveCode
+
+    #update a SaveCode
+    updateSaveCode(id: String!, input: UpdateSaveCodeInput!): SaveCode
+
+    #Delete a SaveCode
+    deleteSaveCode(id: String!): Boolean
 }

@@ -1,11 +1,10 @@
 package double_auth
 
 import (
-	"context"
 	"errors"
 
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type CreateDeviceConnectInput struct {
@@ -14,7 +13,6 @@ type CreateDeviceConnectInput struct {
 	Latitude   float64 `json:"latitude"`
 	Longitude  float64 `json:"longitude"`
 	Date       int     `json:"date"`
-	//TrustDevice bool   `json:"trust_device"`
 }
 
 type CreateDeviceConnectResponse struct {
@@ -25,34 +23,31 @@ type CreateDeviceConnectResponse struct {
 }
 
 func CreateDeviceConnect(input CreateDeviceConnectInput, patientId string) CreateDeviceConnectResponse {
-	gqlClient := graphql.CreateClient()
-
-	device, err := graphql.CreateDeviceConnect(context.Background(), gqlClient, input.DeviceName, input.Ip, input.Latitude, input.Longitude, input.Date, false)
+	device, err := graphql.CreateDeviceConnect(model.CreateDeviceConnectInput{
+		DeviceName:  input.DeviceName,
+		IPAddress:   input.Ip,
+		Latitude:    input.Latitude,
+		Longitude:   input.Longitude,
+		Date:        input.Date,
+		TrustDevice: false,
+	})
 	if err != nil {
 		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
 
-	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientId)
+	patient, err := graphql.GetPatientById(patientId)
 	if err != nil {
 		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, append(patient.GetPatientById.Device_connect, device.CreateDeviceConnect.Id), patient.GetPatientById.Double_auth_methods_id, patient.GetPatientById.Trust_devices, patient.GetPatientById.Status)
+	_, err = graphql.UpdatePatient(patientId, model.UpdatePatientInput{DeviceConnect: append(patient.DeviceConnect, &device.ID)})
 	if err != nil {
 		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("update failed" + err.Error())}
 	}
 
 	return CreateDeviceConnectResponse{
-		DeviceConnect: model.DeviceConnect{
-			ID:          device.CreateDeviceConnect.Id,
-			DeviceName:  device.CreateDeviceConnect.Device_name,
-			IPAddress:   device.CreateDeviceConnect.Ip_address,
-			Latitude:    device.CreateDeviceConnect.Latitude,
-			Longitude:   device.CreateDeviceConnect.Longitude,
-			Date:        device.CreateDeviceConnect.Date,
-			TrustDevice: device.CreateDeviceConnect.Trust_device,
-		},
-		Code: 201,
-		Err:  nil,
+		DeviceConnect: device,
+		Code:          201,
+		Err:           nil,
 	}
 }

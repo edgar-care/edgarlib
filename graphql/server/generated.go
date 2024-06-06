@@ -13,7 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -54,54 +54,68 @@ type ComplexityRoot struct {
 	}
 
 	Admin struct {
-		Email    func(childComplexity int) int
-		ID       func(childComplexity int) int
-		LastName func(childComplexity int) int
-		Name     func(childComplexity int) int
-		Password func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		Email     func(childComplexity int) int
+		ID        func(childComplexity int) int
+		LastName  func(childComplexity int) int
+		Name      func(childComplexity int) int
+		Password  func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
 	}
 
 	Alert struct {
-		Comment  func(childComplexity int) int
-		Height   func(childComplexity int) int
-		ID       func(childComplexity int) int
-		Name     func(childComplexity int) int
-		Sex      func(childComplexity int) int
-		Symptoms func(childComplexity int) int
-		Weight   func(childComplexity int) int
+		Comment   func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		Height    func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		Sex       func(childComplexity int) int
+		Symptoms  func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+		Weight    func(childComplexity int) int
 	}
 
 	AnteChir struct {
+		CreatedAt       func(childComplexity int) int
 		ID              func(childComplexity int) int
 		InducedSymptoms func(childComplexity int) int
 		Name            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
 	}
 
 	AnteDisease struct {
 		Chronicity    func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Name          func(childComplexity int) int
 		StillRelevant func(childComplexity int) int
 		SurgeryIds    func(childComplexity int) int
 		Symptoms      func(childComplexity int) int
 		TreatmentIds  func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
 	}
 
 	AnteFamily struct {
-		Disease func(childComplexity int) int
-		ID      func(childComplexity int) int
-		Name    func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		Disease   func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
 	}
 
 	BlackList struct {
-		ID    func(childComplexity int) int
-		Token func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Token     func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
 	}
 
 	Chat struct {
+		CreatedAt    func(childComplexity int) int
 		ID           func(childComplexity int) int
 		Messages     func(childComplexity int) int
 		Participants func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
 	}
 
 	ChatMessages struct {
@@ -120,13 +134,8 @@ type ComplexityRoot struct {
 		Symptom func(childComplexity int) int
 	}
 
-	DemoAccount struct {
-		Email    func(childComplexity int) int
-		ID       func(childComplexity int) int
-		Password func(childComplexity int) int
-	}
-
 	DeviceConnect struct {
+		CreatedAt   func(childComplexity int) int
 		Date        func(childComplexity int) int
 		DeviceName  func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -134,22 +143,26 @@ type ComplexityRoot struct {
 		Latitude    func(childComplexity int) int
 		Longitude   func(childComplexity int) int
 		TrustDevice func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
 	}
 
 	Disease struct {
 		Advice           func(childComplexity int) int
 		Code             func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
 		HeredityFactor   func(childComplexity int) int
 		ID               func(childComplexity int) int
 		Name             func(childComplexity int) int
 		OverweightFactor func(childComplexity int) int
 		Symptoms         func(childComplexity int) int
 		SymptomsWeight   func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
 	}
 
 	Doctor struct {
 		Address             func(childComplexity int) int
 		ChatIds             func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
 		DeviceConnect       func(childComplexity int) int
 		DoubleAuthMethodsID func(childComplexity int) int
 		Email               func(childComplexity int) int
@@ -161,24 +174,29 @@ type ComplexityRoot struct {
 		RendezVousIds       func(childComplexity int) int
 		Status              func(childComplexity int) int
 		TrustDevices        func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
 	}
 
 	Document struct {
 		Category     func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
 		DocumentType func(childComplexity int) int
 		DownloadURL  func(childComplexity int) int
 		ID           func(childComplexity int) int
 		IsFavorite   func(childComplexity int) int
 		Name         func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
 	}
 
 	DoubleAuth struct {
+		CreatedAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Methods       func(childComplexity int) int
 		Secret        func(childComplexity int) int
 		TrustDeviceID func(childComplexity int) int
 		URL           func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
 	}
 
 	Logs struct {
@@ -187,15 +205,18 @@ type ComplexityRoot struct {
 	}
 
 	MedicalAntecedents struct {
+		CreatedAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Medicines     func(childComplexity int) int
 		Name          func(childComplexity int) int
 		StillRelevant func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
 	}
 
 	MedicalInfo struct {
 		AntecedentDiseaseIds   func(childComplexity int) int
 		Birthdate              func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
 		FamilyMembersMedInfoID func(childComplexity int) int
 		Firstname              func(childComplexity int) int
 		Height                 func(childComplexity int) int
@@ -204,44 +225,45 @@ type ComplexityRoot struct {
 		OnboardingStatus       func(childComplexity int) int
 		PrimaryDoctorID        func(childComplexity int) int
 		Sex                    func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
 		Weight                 func(childComplexity int) int
 	}
 
 	Medicine struct {
+		CreatedAt       func(childComplexity int) int
 		ID              func(childComplexity int) int
 		Name            func(childComplexity int) int
 		SideEffects     func(childComplexity int) int
 		TargetDiseases  func(childComplexity int) int
 		TreatedSymptoms func(childComplexity int) int
 		Unit            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
 	}
 
 	Mutation struct {
-		CreateAdmin              func(childComplexity int, email string, password string, name string, lastName string) int
-		CreateAlert              func(childComplexity int, name string, sex *string, height *int, weight *int, symptoms []string, comment string) int
-		CreateAnteChir           func(childComplexity int, name string, inducedSymptoms []*model.ChirInducedSymptomInput) int
-		CreateAnteDisease        func(childComplexity int, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) int
-		CreateAnteFamily         func(childComplexity int, name string, disease []string) int
-		CreateBlackList          func(childComplexity int, token []string) int
-		CreateChat               func(childComplexity int, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
-		CreateDemoAccount        func(childComplexity int, email string, password string) int
-		CreateDeviceConnect      func(childComplexity int, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) int
-		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, heredityFactor float64, advice *string) int
-		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput, status bool) int
-		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
-		CreateDoubleAuth         func(childComplexity int, methods []string, secret string, url string, trustDeviceID string) int
-		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string, familyMembersMedInfoID []string, familyMembersMedInfoID []string) int
-		CreateMedicine           func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
-		CreateNlpReport          func(childComplexity int, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) int
-		CreateNotification       func(childComplexity int, token string, message string, title string) int
-		CreatePatient            func(childComplexity int, email string, password string, status bool) int
-		CreateRdv                func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
-		CreateSaveCode           func(childComplexity int, code []string) int
-		CreateSession            func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, hereditaryDisease []string, hereditaryDisease []string, alerts []string) int
-		CreateSymptom            func(childComplexity int, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) int
-		CreateTestAccount        func(childComplexity int, email string, password string) int
-		CreateTreatment          func(childComplexity int, period []model.Period, day []model.Day, quantity int, medicineID string) int
-		CreateTreatmentsFollowUp func(childComplexity int, treatmentID string, date int, period []model.Period) int
+		CreateAdmin              func(childComplexity int, input model.CreateAdminInput) int
+		CreateAlert              func(childComplexity int, input model.CreateAlertInput) int
+		CreateAnteChir           func(childComplexity int, input model.CreateAnteChirInput) int
+		CreateAnteDisease        func(childComplexity int, input model.CreateAnteDiseaseInput) int
+		CreateAnteFamily         func(childComplexity int, input model.CreateAnteFamilyInput) int
+		CreateBlackList          func(childComplexity int, input model.CreateBlackListInput) int
+		CreateChat               func(childComplexity int, input model.CreateChatInput) int
+		CreateDeviceConnect      func(childComplexity int, input model.CreateDeviceConnectInput) int
+		CreateDisease            func(childComplexity int, input model.CreateDiseaseInput) int
+		CreateDoctor             func(childComplexity int, input model.CreateDoctorInput) int
+		CreateDocument           func(childComplexity int, input model.CreateDocumentInput) int
+		CreateDoubleAuth         func(childComplexity int, input model.CreateDoubleAuthInput) int
+		CreateMedicalFolder      func(childComplexity int, input model.CreateMedicalFolderInput) int
+		CreateMedicine           func(childComplexity int, input model.CreateMedicineInput) int
+		CreateNlpReport          func(childComplexity int, input model.CreateNlpReportInput) int
+		CreateNotification       func(childComplexity int, input model.CreateNotificationInput) int
+		CreatePatient            func(childComplexity int, input model.CreatePatientInput) int
+		CreateRdv                func(childComplexity int, input model.CreateRdvInput) int
+		CreateSaveCode           func(childComplexity int, input model.CreateSaveCodeInput) int
+		CreateSession            func(childComplexity int, input model.CreateSessionInput) int
+		CreateSymptom            func(childComplexity int, input model.CreateSymptomInput) int
+		CreateTreatment          func(childComplexity int, input model.CreateTreatmentInput) int
+		CreateTreatmentsFollowUp func(childComplexity int, input model.CreateTreatmentsFollowUpInput) int
 		DeleteAdmin              func(childComplexity int, id string) int
 		DeleteAlert              func(childComplexity int, id string) int
 		DeleteAnteChir           func(childComplexity int, id string) int
@@ -249,7 +271,6 @@ type ComplexityRoot struct {
 		DeleteAnteFamily         func(childComplexity int, id string) int
 		DeleteBlackList          func(childComplexity int, id string) int
 		DeleteChat               func(childComplexity int, id string) int
-		DeleteDemoAccount        func(childComplexity int, id string) int
 		DeleteDeviceConnect      func(childComplexity int, id string) int
 		DeleteDisease            func(childComplexity int, id string) int
 		DeleteDoctor             func(childComplexity int, id string) int
@@ -264,40 +285,40 @@ type ComplexityRoot struct {
 		DeleteSession            func(childComplexity int, id string) int
 		DeleteSlot               func(childComplexity int, id string) int
 		DeleteSymptom            func(childComplexity int, id string) int
-		DeleteTestAccount        func(childComplexity int, id string) int
 		DeleteTreatment          func(childComplexity int, id string) int
 		DeleteTreatmentsFollowUp func(childComplexity int, id string) int
-		UpdateAdmin              func(childComplexity int, id string, email *string, password *string, name *string, lastName *string) int
-		UpdateAlert              func(childComplexity int, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) int
-		UpdateAnteChir           func(childComplexity int, id string, name *string, inducedSymptoms []*model.ChirInducedSymptomInput) int
-		UpdateAnteDisease        func(childComplexity int, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) int
-		UpdateAnteFamily         func(childComplexity int, id string, name *string, disease []string) int
-		UpdateBlackList          func(childComplexity int, id string, token []string) int
-		UpdateChat               func(childComplexity int, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
-		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
-		UpdateDeviceConnect      func(childComplexity int, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) int
-		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, heredityFactor *float64, heredityFactor *float64, advice *string) int
-		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) int
-		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
-		UpdateDoubleAuth         func(childComplexity int, id string, methods []string, secret *string, url *string, trustDeviceID *string) int
-		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus, familyMembersMedInfoID []string) int
-		UpdateNotification       func(childComplexity int, id string, token string, message string, title string) int
-		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) int
-		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) int
-		UpdateSaveCode           func(childComplexity int, id string, code []string) int
-		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, hereditaryDisease []string, hereditaryDisease []string, alerts []string) int
-		UpdateSymptom            func(childComplexity int, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) int
-		UpdateTestAccount        func(childComplexity int, id string, email *string, password *string) int
-		UpdateTreatment          func(childComplexity int, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) int
-		UpdateTreatmentsFollowUp func(childComplexity int, id string, treatmentID *string, date *int, period []model.Period) int
+		UpdateAdmin              func(childComplexity int, id string, input model.UpdateAdminInput) int
+		UpdateAlert              func(childComplexity int, id string, input model.UpdateAlertInput) int
+		UpdateAnteChir           func(childComplexity int, id string, input model.UpdateAnteChirInput) int
+		UpdateAnteDisease        func(childComplexity int, id string, input model.UpdateAnteDiseaseInput) int
+		UpdateAnteFamily         func(childComplexity int, id string, input model.UpdateAnteFamilyInput) int
+		UpdateBlackList          func(childComplexity int, id string, input model.UpdateBlackListInput) int
+		UpdateChat               func(childComplexity int, id string, input model.UpdateChatInput) int
+		UpdateDeviceConnect      func(childComplexity int, id string, input model.UpdateDeviceConnectInput) int
+		UpdateDisease            func(childComplexity int, id string, input model.UpdateDiseaseInput) int
+		UpdateDoctor             func(childComplexity int, id string, input model.UpdateDoctorInput) int
+		UpdateDoctorsPatientIDs  func(childComplexity int, id string, input model.UpdateDoctorsPatientIDsInput) int
+		UpdateDocument           func(childComplexity int, id string, input model.UpdateDocumentInput) int
+		UpdateDoubleAuth         func(childComplexity int, id string, input model.UpdateDoubleAuthInput) int
+		UpdateMedicalFolder      func(childComplexity int, id string, input model.UpdateMedicalFolderInput) int
+		UpdateNotification       func(childComplexity int, id string, input model.UpdateNotificationInput) int
+		UpdatePatient            func(childComplexity int, id string, input model.UpdatePatientInput) int
+		UpdateRdv                func(childComplexity int, id string, input model.UpdateRdvInput) int
+		UpdateSaveCode           func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
+		UpdateSession            func(childComplexity int, id string, input model.UpdateSessionInput) int
+		UpdateSymptom            func(childComplexity int, id string, input model.UpdateSymptomInput) int
+		UpdateTreatment          func(childComplexity int, id string, input model.UpdateTreatmentInput) int
+		UpdateTreatmentsFollowUp func(childComplexity int, id string, input model.UpdateTreatmentsFollowUpInput) int
 	}
 
 	NlpReport struct {
 		ComputationTime func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
 		ID              func(childComplexity int) int
 		InputSentence   func(childComplexity int) int
 		InputSymptoms   func(childComplexity int) int
 		Output          func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
 		Version         func(childComplexity int) int
 	}
 
@@ -308,14 +329,17 @@ type ComplexityRoot struct {
 	}
 
 	Notification struct {
-		ID      func(childComplexity int) int
-		Message func(childComplexity int) int
-		Title   func(childComplexity int) int
-		Token   func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Message   func(childComplexity int) int
+		Title     func(childComplexity int) int
+		Token     func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
 	}
 
 	Patient struct {
 		ChatIds              func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
 		DeviceConnect        func(childComplexity int) int
 		DocumentIds          func(childComplexity int) int
 		DoubleAuthMethodsID  func(childComplexity int) int
@@ -327,76 +351,72 @@ type ComplexityRoot struct {
 		Status               func(childComplexity int) int
 		TreatmentFollowUpIds func(childComplexity int) int
 		TrustDevices         func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
 	}
 
 	Query struct {
 		GetAdminByEmail           func(childComplexity int, email string) int
 		GetAdminByID              func(childComplexity int, id string) int
-		GetAdmins                 func(childComplexity int) int
+		GetAdmins                 func(childComplexity int, option *model.Options) int
 		GetAlertByID              func(childComplexity int, id string) int
-		GetAlerts                 func(childComplexity int) int
+		GetAlerts                 func(childComplexity int, option *model.Options) int
 		GetAnteChirByID           func(childComplexity int, id string) int
-		GetAnteChirs              func(childComplexity int) int
+		GetAnteChirs              func(childComplexity int, option *model.Options) int
 		GetAnteDiseaseByID        func(childComplexity int, id string) int
-		GetAnteDiseases           func(childComplexity int) int
-		GetAnteFamilies           func(childComplexity int) int
+		GetAnteDiseases           func(childComplexity int, option *model.Options) int
+		GetAnteFamilies           func(childComplexity int, option *model.Options) int
 		GetAnteFamilyByID         func(childComplexity int, id string) int
-		GetBlackList              func(childComplexity int) int
+		GetBlackList              func(childComplexity int, option *model.Options) int
 		GetBlackListByID          func(childComplexity int, id string) int
 		GetChatByID               func(childComplexity int, id string) int
-		GetChats                  func(childComplexity int, id string) int
-		GetDemoAccountByEmail     func(childComplexity int, email string) int
-		GetDemoAccountByID        func(childComplexity int, id string) int
-		GetDemoAccounts           func(childComplexity int) int
+		GetChats                  func(childComplexity int, id string, option *model.Options) int
 		GetDeviceConnectByID      func(childComplexity int, id string) int
-		GetDevicesConnect         func(childComplexity int) int
+		GetDevicesConnect         func(childComplexity int, option *model.Options) int
 		GetDiseaseByID            func(childComplexity int, id string) int
-		GetDiseases               func(childComplexity int) int
+		GetDiseases               func(childComplexity int, option *model.Options) int
 		GetDoctorByEmail          func(childComplexity int, email string) int
 		GetDoctorByID             func(childComplexity int, id string) int
-		GetDoctorRdv              func(childComplexity int, doctorID string) int
-		GetDoctors                func(childComplexity int) int
+		GetDoctorRdv              func(childComplexity int, doctorID string, option *model.Options) int
+		GetDoctors                func(childComplexity int, option *model.Options) int
 		GetDocumentByID           func(childComplexity int, id string) int
-		GetDocuments              func(childComplexity int) int
+		GetDocuments              func(childComplexity int, option *model.Options) int
 		GetDoubleAuthByID         func(childComplexity int, id string) int
-		GetDoubleAuths            func(childComplexity int) int
-		GetMedicalFolder          func(childComplexity int) int
+		GetDoubleAuths            func(childComplexity int, option *model.Options) int
+		GetMedicalFolder          func(childComplexity int, option *model.Options) int
 		GetMedicalFolderByID      func(childComplexity int, id string) int
 		GetMedicineByID           func(childComplexity int, id string) int
-		GetMedicines              func(childComplexity int) int
-		GetNlpReports             func(childComplexity int) int
-		GetNlpReportsByVersion    func(childComplexity int, version int) int
+		GetMedicines              func(childComplexity int, option *model.Options) int
+		GetNlpReports             func(childComplexity int, option *model.Options) int
+		GetNlpReportsByVersion    func(childComplexity int, version int, option *model.Options) int
 		GetNotificationByID       func(childComplexity int, id string) int
-		GetNotifications          func(childComplexity int) int
+		GetNotifications          func(childComplexity int, option *model.Options) int
 		GetPatientByEmail         func(childComplexity int, email string) int
 		GetPatientByID            func(childComplexity int, id string) int
-		GetPatientDocument        func(childComplexity int, id string) int
-		GetPatientRdv             func(childComplexity int, idPatient string) int
-		GetPatients               func(childComplexity int) int
-		GetPatientsFromDoctorByID func(childComplexity int, id string) int
+		GetPatientDocument        func(childComplexity int, id string, option *model.Options) int
+		GetPatientRdv             func(childComplexity int, idPatient string, option *model.Options) int
+		GetPatients               func(childComplexity int, option *model.Options) int
+		GetPatientsFromDoctorByID func(childComplexity int, id string, option *model.Options) int
 		GetRdvByID                func(childComplexity int, id string) int
-		GetSaveCode               func(childComplexity int) int
+		GetSaveCode               func(childComplexity int, option *model.Options) int
 		GetSaveCodeByID           func(childComplexity int, id string) int
 		GetSessionByID            func(childComplexity int, id string) int
-		GetSessions               func(childComplexity int) int
+		GetSessions               func(childComplexity int, option *model.Options) int
 		GetSlotByID               func(childComplexity int, id string) int
-		GetSlots                  func(childComplexity int, id string) int
+		GetSlots                  func(childComplexity int, id string, option *model.Options) int
 		GetSymptomByID            func(childComplexity int, id string) int
-		GetSymptoms               func(childComplexity int) int
+		GetSymptoms               func(childComplexity int, option *model.Options) int
 		GetSymptomsByDiseaseName  func(childComplexity int, name string) int
-		GetTestAccountByEmail     func(childComplexity int, email string) int
-		GetTestAccountByID        func(childComplexity int, id string) int
-		GetTestAccounts           func(childComplexity int) int
 		GetTreatmentByID          func(childComplexity int, id string) int
-		GetTreatments             func(childComplexity int) int
+		GetTreatments             func(childComplexity int, option *model.Options) int
 		GetTreatmentsFollowUpByID func(childComplexity int, id string) int
-		GetTreatmentsFollowUps    func(childComplexity int, id string) int
-		GetWaitingRdv             func(childComplexity int, doctorID string) int
+		GetTreatmentsFollowUps    func(childComplexity int, id string, option *model.Options) int
+		GetWaitingRdv             func(childComplexity int, doctorID string, option *model.Options) int
 	}
 
 	Rdv struct {
 		AppointmentStatus func(childComplexity int) int
 		CancelationReason func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
 		DoctorID          func(childComplexity int) int
 		EndDate           func(childComplexity int) int
 		HealthMethod      func(childComplexity int) int
@@ -404,11 +424,14 @@ type ComplexityRoot struct {
 		IDPatient         func(childComplexity int) int
 		SessionID         func(childComplexity int) int
 		StartDate         func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
 	}
 
 	SaveCode struct {
-		Code func(childComplexity int) int
-		ID   func(childComplexity int) int
+		Code      func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
 	}
 
 	Session struct {
@@ -416,6 +439,7 @@ type ComplexityRoot struct {
 		Alerts            func(childComplexity int) int
 		AnteChirs         func(childComplexity int) int
 		AnteDiseases      func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
 		Diseases          func(childComplexity int) int
 		Height            func(childComplexity int) int
 		HereditaryDisease func(childComplexity int) int
@@ -425,6 +449,7 @@ type ComplexityRoot struct {
 		Medicine          func(childComplexity int) int
 		Sex               func(childComplexity int) int
 		Symptoms          func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
 		Weight            func(childComplexity int) int
 	}
 
@@ -445,6 +470,7 @@ type ComplexityRoot struct {
 		Advice           func(childComplexity int) int
 		Chronic          func(childComplexity int) int
 		Code             func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
 		ID               func(childComplexity int) int
 		Name             func(childComplexity int) int
 		Question         func(childComplexity int) int
@@ -452,6 +478,7 @@ type ComplexityRoot struct {
 		QuestionBasic    func(childComplexity int) int
 		QuestionDuration func(childComplexity int) int
 		Symptom          func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
 	}
 
 	SymptomsWeight struct {
@@ -460,166 +487,153 @@ type ComplexityRoot struct {
 		Value   func(childComplexity int) int
 	}
 
-	TestAccount struct {
-		Email    func(childComplexity int) int
-		ID       func(childComplexity int) int
-		Password func(childComplexity int) int
-	}
-
 	Treatment struct {
+		CreatedAt  func(childComplexity int) int
 		Day        func(childComplexity int) int
 		ID         func(childComplexity int) int
 		MedicineID func(childComplexity int) int
 		Period     func(childComplexity int) int
 		Quantity   func(childComplexity int) int
+		UpdatedAt  func(childComplexity int) int
 	}
 
 	TreatmentsFollowUp struct {
+		CreatedAt   func(childComplexity int) int
 		Date        func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Period      func(childComplexity int) int
 		TreatmentID func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	CreatePatient(ctx context.Context, email string, password string, status bool) (*model.Patient, error)
-	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Patient, error)
+	CreatePatient(ctx context.Context, input model.CreatePatientInput) (*model.Patient, error)
+	UpdatePatient(ctx context.Context, id string, input model.UpdatePatientInput) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
-	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput, status bool) (*model.Doctor, error)
-	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Doctor, error)
+	CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error)
+	UpdateDoctor(ctx context.Context, id string, input model.UpdateDoctorInput) (*model.Doctor, error)
+	UpdateDoctorsPatientIDs(ctx context.Context, id string, input model.UpdateDoctorsPatientIDsInput) (*model.Doctor, error)
 	DeleteDoctor(ctx context.Context, id string) (*bool, error)
-	CreateAdmin(ctx context.Context, email string, password string, name string, lastName string) (*model.Admin, error)
-	UpdateAdmin(ctx context.Context, id string, email *string, password *string, name *string, lastName *string) (*model.Admin, error)
+	CreateAdmin(ctx context.Context, input model.CreateAdminInput) (*model.Admin, error)
+	UpdateAdmin(ctx context.Context, id string, input model.UpdateAdminInput) (*model.Admin, error)
 	DeleteAdmin(ctx context.Context, id string) (*bool, error)
-	CreateDemoAccount(ctx context.Context, email string, password string) (*model.DemoAccount, error)
-	UpdateDemoAccount(ctx context.Context, id string, email *string, password *string) (*model.DemoAccount, error)
-	DeleteDemoAccount(ctx context.Context, id string) (*bool, error)
-	CreateTestAccount(ctx context.Context, email string, password string) (*model.TestAccount, error)
-	UpdateTestAccount(ctx context.Context, id string, email *string, password *string) (*model.TestAccount, error)
-	DeleteTestAccount(ctx context.Context, id string) (*bool, error)
-	CreateSession(ctx context.Context, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) (*model.Session, error)
-	UpdateSession(ctx context.Context, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) (*model.Session, error)
+	CreateSession(ctx context.Context, input model.CreateSessionInput) (*model.Session, error)
+	UpdateSession(ctx context.Context, id string, input model.UpdateSessionInput) (*model.Session, error)
 	DeleteSession(ctx context.Context, id string) (*bool, error)
-	CreateSymptom(ctx context.Context, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) (*model.Symptom, error)
-	UpdateSymptom(ctx context.Context, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) (*model.Symptom, error)
+	CreateSymptom(ctx context.Context, input model.CreateSymptomInput) (*model.Symptom, error)
+	UpdateSymptom(ctx context.Context, id string, input model.UpdateSymptomInput) (*model.Symptom, error)
 	DeleteSymptom(ctx context.Context, id string) (*bool, error)
-	CreateDisease(ctx context.Context, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, heredityFactor float64, advice *string) (*model.Disease, error)
-	UpdateDisease(ctx context.Context, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, heredityFactor *float64, advice *string) (*model.Disease, error)
+	CreateDisease(ctx context.Context, input model.CreateDiseaseInput) (*model.Disease, error)
+	UpdateDisease(ctx context.Context, id string, input model.UpdateDiseaseInput) (*model.Disease, error)
 	DeleteDisease(ctx context.Context, id string) (*bool, error)
-	CreateNotification(ctx context.Context, token string, message string, title string) (*model.Notification, error)
-	UpdateNotification(ctx context.Context, id string, token string, message string, title string) (*model.Notification, error)
+	CreateNotification(ctx context.Context, input model.CreateNotificationInput) (*model.Notification, error)
+	UpdateNotification(ctx context.Context, id string, input model.UpdateNotificationInput) (*model.Notification, error)
 	DeleteNotification(ctx context.Context, id string) (*bool, error)
-	CreateRdv(ctx context.Context, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) (*model.Rdv, error)
-	UpdateRdv(ctx context.Context, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) (*model.Rdv, error)
+	CreateRdv(ctx context.Context, input model.CreateRdvInput) (*model.Rdv, error)
+	UpdateRdv(ctx context.Context, id string, input model.UpdateRdvInput) (*model.Rdv, error)
 	DeleteRdv(ctx context.Context, id string) (*bool, error)
 	DeleteSlot(ctx context.Context, id string) (*bool, error)
-	CreateDocument(ctx context.Context, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) (*model.Document, error)
-	UpdateDocument(ctx context.Context, id string, name *string, isFavorite *bool) (*model.Document, error)
+	CreateDocument(ctx context.Context, input model.CreateDocumentInput) (*model.Document, error)
+	UpdateDocument(ctx context.Context, id string, input model.UpdateDocumentInput) (*model.Document, error)
 	DeleteDocument(ctx context.Context, id string) (*bool, error)
-	CreateAnteChir(ctx context.Context, name string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error)
-	UpdateAnteChir(ctx context.Context, id string, name *string, inducedSymptoms []*model.ChirInducedSymptomInput) (*model.AnteChir, error)
+	CreateAnteChir(ctx context.Context, input model.CreateAnteChirInput) (*model.AnteChir, error)
+	UpdateAnteChir(ctx context.Context, id string, input model.UpdateAnteChirInput) (*model.AnteChir, error)
 	DeleteAnteChir(ctx context.Context, id string) (*bool, error)
-	CreateAnteDisease(ctx context.Context, name string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant bool) (*model.AnteDisease, error)
-	UpdateAnteDisease(ctx context.Context, id string, name *string, chronicity *float64, surgeryIds []string, symptoms []string, treatmentIds []string, stillRelevant *bool) (*model.AnteDisease, error)
+	CreateAnteDisease(ctx context.Context, input model.CreateAnteDiseaseInput) (*model.AnteDisease, error)
+	UpdateAnteDisease(ctx context.Context, id string, input model.UpdateAnteDiseaseInput) (*model.AnteDisease, error)
 	DeleteAnteDisease(ctx context.Context, id string) (*bool, error)
-	CreateAnteFamily(ctx context.Context, name string, disease []string) (*model.AnteFamily, error)
-	UpdateAnteFamily(ctx context.Context, id string, name *string, disease []string) (*model.AnteFamily, error)
+	CreateAnteFamily(ctx context.Context, input model.CreateAnteFamilyInput) (*model.AnteFamily, error)
+	UpdateAnteFamily(ctx context.Context, id string, input model.UpdateAnteFamilyInput) (*model.AnteFamily, error)
 	DeleteAnteFamily(ctx context.Context, id string) (*bool, error)
-	CreateTreatment(ctx context.Context, period []model.Period, day []model.Day, quantity int, medicineID string) (*model.Treatment, error)
-	UpdateTreatment(ctx context.Context, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) (*model.Treatment, error)
+	CreateTreatment(ctx context.Context, input model.CreateTreatmentInput) (*model.Treatment, error)
+	UpdateTreatment(ctx context.Context, id string, input model.UpdateTreatmentInput) (*model.Treatment, error)
 	DeleteTreatment(ctx context.Context, id string) (*bool, error)
-	CreateAlert(ctx context.Context, name string, sex *string, height *int, weight *int, symptoms []string, comment string) (*model.Alert, error)
-	UpdateAlert(ctx context.Context, id string, name *string, sex *string, height *int, weight *int, symptoms []string, comment *string) (*model.Alert, error)
+	CreateAlert(ctx context.Context, input model.CreateAlertInput) (*model.Alert, error)
+	UpdateAlert(ctx context.Context, id string, input model.UpdateAlertInput) (*model.Alert, error)
 	DeleteAlert(ctx context.Context, id string) (*bool, error)
-	CreateMedicine(ctx context.Context, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) (*model.Medicine, error)
+	CreateMedicine(ctx context.Context, input model.CreateMedicineInput) (*model.Medicine, error)
 	DeleteMedicine(ctx context.Context, id string) (*bool, error)
-	CreateMedicalFolder(ctx context.Context, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string, familyMembersMedInfoID []string) (*model.MedicalInfo, error)
-	UpdateMedicalFolder(ctx context.Context, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus, familyMembersMedInfoID []string) (*model.MedicalInfo, error)
+	CreateMedicalFolder(ctx context.Context, input model.CreateMedicalFolderInput) (*model.MedicalInfo, error)
+	UpdateMedicalFolder(ctx context.Context, id string, input model.UpdateMedicalFolderInput) (*model.MedicalInfo, error)
 	DeleteMedicalFolder(ctx context.Context, id string) (*bool, error)
-	CreateTreatmentsFollowUp(ctx context.Context, treatmentID string, date int, period []model.Period) (*model.TreatmentsFollowUp, error)
-	UpdateTreatmentsFollowUp(ctx context.Context, id string, treatmentID *string, date *int, period []model.Period) (*model.TreatmentsFollowUp, error)
+	CreateTreatmentsFollowUp(ctx context.Context, input model.CreateTreatmentsFollowUpInput) (*model.TreatmentsFollowUp, error)
+	UpdateTreatmentsFollowUp(ctx context.Context, id string, input model.UpdateTreatmentsFollowUpInput) (*model.TreatmentsFollowUp, error)
 	DeleteTreatmentsFollowUp(ctx context.Context, id string) (*bool, error)
-	CreateNlpReport(ctx context.Context, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) (*model.NlpReport, error)
-	CreateChat(ctx context.Context, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error)
-	UpdateChat(ctx context.Context, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error)
+	CreateNlpReport(ctx context.Context, input model.CreateNlpReportInput) (*model.NlpReport, error)
+	CreateChat(ctx context.Context, input model.CreateChatInput) (*model.Chat, error)
+	UpdateChat(ctx context.Context, id string, input model.UpdateChatInput) (*model.Chat, error)
 	DeleteChat(ctx context.Context, id string) (*bool, error)
-	CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) (*model.DeviceConnect, error)
-	UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) (*model.DeviceConnect, error)
+	CreateDeviceConnect(ctx context.Context, input model.CreateDeviceConnectInput) (*model.DeviceConnect, error)
+	UpdateDeviceConnect(ctx context.Context, id string, input model.UpdateDeviceConnectInput) (*model.DeviceConnect, error)
 	DeleteDeviceConnect(ctx context.Context, id string) (*bool, error)
-	CreateDoubleAuth(ctx context.Context, methods []string, secret string, url string, trustDeviceID string) (*model.DoubleAuth, error)
-	UpdateDoubleAuth(ctx context.Context, id string, methods []string, secret *string, url *string, trustDeviceID *string) (*model.DoubleAuth, error)
+	CreateDoubleAuth(ctx context.Context, input model.CreateDoubleAuthInput) (*model.DoubleAuth, error)
+	UpdateDoubleAuth(ctx context.Context, id string, input model.UpdateDoubleAuthInput) (*model.DoubleAuth, error)
 	DeleteDoubleAuth(ctx context.Context, id string) (*bool, error)
-	CreateBlackList(ctx context.Context, token []string) (*model.BlackList, error)
-	UpdateBlackList(ctx context.Context, id string, token []string) (*model.BlackList, error)
+	CreateBlackList(ctx context.Context, input model.CreateBlackListInput) (*model.BlackList, error)
+	UpdateBlackList(ctx context.Context, id string, input model.UpdateBlackListInput) (*model.BlackList, error)
 	DeleteBlackList(ctx context.Context, id string) (*bool, error)
-	CreateSaveCode(ctx context.Context, code []string) (*model.SaveCode, error)
-	UpdateSaveCode(ctx context.Context, id string, code []string) (*model.SaveCode, error)
+	CreateSaveCode(ctx context.Context, input model.CreateSaveCodeInput) (*model.SaveCode, error)
+	UpdateSaveCode(ctx context.Context, id string, input model.UpdateSaveCodeInput) (*model.SaveCode, error)
 	DeleteSaveCode(ctx context.Context, id string) (*bool, error)
 }
 type QueryResolver interface {
-	GetPatients(ctx context.Context) ([]*model.Patient, error)
+	GetPatients(ctx context.Context, option *model.Options) ([]*model.Patient, error)
 	GetPatientByID(ctx context.Context, id string) (*model.Patient, error)
 	GetPatientByEmail(ctx context.Context, email string) (*model.Patient, error)
-	GetDoctors(ctx context.Context) ([]*model.Doctor, error)
+	GetDoctors(ctx context.Context, option *model.Options) ([]*model.Doctor, error)
 	GetDoctorByID(ctx context.Context, id string) (*model.Doctor, error)
 	GetDoctorByEmail(ctx context.Context, email string) (*model.Doctor, error)
-	GetAdmins(ctx context.Context) ([]*model.Admin, error)
+	GetAdmins(ctx context.Context, option *model.Options) ([]*model.Admin, error)
 	GetAdminByID(ctx context.Context, id string) (*model.Admin, error)
 	GetAdminByEmail(ctx context.Context, email string) (*model.Admin, error)
-	GetDemoAccounts(ctx context.Context) ([]*model.DemoAccount, error)
-	GetDemoAccountByID(ctx context.Context, id string) (*model.DemoAccount, error)
-	GetDemoAccountByEmail(ctx context.Context, email string) (*model.DemoAccount, error)
-	GetTestAccounts(ctx context.Context) ([]*model.TestAccount, error)
-	GetTestAccountByID(ctx context.Context, id string) (*model.TestAccount, error)
-	GetTestAccountByEmail(ctx context.Context, email string) (*model.TestAccount, error)
-	GetSessions(ctx context.Context) ([]*model.Session, error)
+	GetSessions(ctx context.Context, option *model.Options) ([]*model.Session, error)
 	GetSessionByID(ctx context.Context, id string) (*model.Session, error)
 	GetSymptomByID(ctx context.Context, id string) (*model.Symptom, error)
-	GetDiseaseByID(ctx context.Context, id string) (*model.Disease, error)
-	GetSymptoms(ctx context.Context) ([]*model.Symptom, error)
-	GetDiseases(ctx context.Context) ([]*model.Disease, error)
 	GetSymptomsByDiseaseName(ctx context.Context, name string) (*model.Disease, error)
-	GetNotifications(ctx context.Context) ([]*model.Notification, error)
+	GetDiseaseByID(ctx context.Context, id string) (*model.Disease, error)
+	GetSymptoms(ctx context.Context, option *model.Options) ([]*model.Symptom, error)
+	GetDiseases(ctx context.Context, option *model.Options) ([]*model.Disease, error)
+	GetNotifications(ctx context.Context, option *model.Options) ([]*model.Notification, error)
 	GetNotificationByID(ctx context.Context, id string) (*model.Notification, error)
-	GetPatientRdv(ctx context.Context, idPatient string) ([]*model.Rdv, error)
-	GetDoctorRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error)
+	GetPatientRdv(ctx context.Context, idPatient string, option *model.Options) ([]*model.Rdv, error)
+	GetDoctorRdv(ctx context.Context, doctorID string, option *model.Options) ([]*model.Rdv, error)
 	GetRdvByID(ctx context.Context, id string) (*model.Rdv, error)
 	GetSlotByID(ctx context.Context, id string) (*model.Rdv, error)
-	GetSlots(ctx context.Context, id string) ([]*model.Rdv, error)
-	GetWaitingRdv(ctx context.Context, doctorID string) ([]*model.Rdv, error)
-	GetDocuments(ctx context.Context) ([]*model.Document, error)
+	GetSlots(ctx context.Context, id string, option *model.Options) ([]*model.Rdv, error)
+	GetWaitingRdv(ctx context.Context, doctorID string, option *model.Options) ([]*model.Rdv, error)
+	GetDocuments(ctx context.Context, option *model.Options) ([]*model.Document, error)
 	GetDocumentByID(ctx context.Context, id string) (*model.Document, error)
-	GetPatientDocument(ctx context.Context, id string) ([]*model.Document, error)
-	GetAnteChirs(ctx context.Context) ([]*model.AnteChir, error)
+	GetPatientDocument(ctx context.Context, id string, option *model.Options) ([]*model.Document, error)
+	GetAnteChirs(ctx context.Context, option *model.Options) ([]*model.AnteChir, error)
 	GetAnteChirByID(ctx context.Context, id string) (*model.AnteChir, error)
-	GetAnteDiseases(ctx context.Context) ([]*model.AnteDisease, error)
+	GetAnteDiseases(ctx context.Context, option *model.Options) ([]*model.AnteDisease, error)
 	GetAnteDiseaseByID(ctx context.Context, id string) (*model.AnteDisease, error)
-	GetAnteFamilies(ctx context.Context) ([]*model.AnteFamily, error)
+	GetAnteFamilies(ctx context.Context, option *model.Options) ([]*model.AnteFamily, error)
 	GetAnteFamilyByID(ctx context.Context, id string) (*model.AnteFamily, error)
-	GetTreatments(ctx context.Context) ([]*model.Treatment, error)
+	GetTreatments(ctx context.Context, option *model.Options) ([]*model.Treatment, error)
 	GetTreatmentByID(ctx context.Context, id string) (*model.Treatment, error)
-	GetAlerts(ctx context.Context) ([]*model.Alert, error)
+	GetAlerts(ctx context.Context, option *model.Options) ([]*model.Alert, error)
 	GetAlertByID(ctx context.Context, id string) (*model.Alert, error)
-	GetMedicalFolder(ctx context.Context) ([]*model.MedicalInfo, error)
+	GetMedicalFolder(ctx context.Context, option *model.Options) ([]*model.MedicalInfo, error)
 	GetMedicalFolderByID(ctx context.Context, id string) (*model.MedicalInfo, error)
-	GetMedicines(ctx context.Context) ([]*model.Medicine, error)
+	GetMedicines(ctx context.Context, option *model.Options) ([]*model.Medicine, error)
 	GetMedicineByID(ctx context.Context, id string) (*model.Medicine, error)
-	GetPatientsFromDoctorByID(ctx context.Context, id string) ([]*model.Patient, error)
+	GetPatientsFromDoctorByID(ctx context.Context, id string, option *model.Options) ([]*model.Patient, error)
 	GetTreatmentsFollowUpByID(ctx context.Context, id string) (*model.TreatmentsFollowUp, error)
-	GetTreatmentsFollowUps(ctx context.Context, id string) ([]*model.TreatmentsFollowUp, error)
-	GetNlpReports(ctx context.Context) ([]*model.NlpReport, error)
-	GetNlpReportsByVersion(ctx context.Context, version int) ([]*model.NlpReport, error)
-	GetChats(ctx context.Context, id string) ([]*model.Chat, error)
+	GetTreatmentsFollowUps(ctx context.Context, id string, option *model.Options) ([]*model.TreatmentsFollowUp, error)
+	GetNlpReports(ctx context.Context, option *model.Options) ([]*model.NlpReport, error)
+	GetNlpReportsByVersion(ctx context.Context, version int, option *model.Options) ([]*model.NlpReport, error)
+	GetChats(ctx context.Context, id string, option *model.Options) ([]*model.Chat, error)
 	GetChatByID(ctx context.Context, id string) (*model.Chat, error)
 	GetDeviceConnectByID(ctx context.Context, id string) (*model.DeviceConnect, error)
-	GetDevicesConnect(ctx context.Context) ([]*model.DeviceConnect, error)
+	GetDevicesConnect(ctx context.Context, option *model.Options) ([]*model.DeviceConnect, error)
 	GetDoubleAuthByID(ctx context.Context, id string) (*model.DoubleAuth, error)
-	GetDoubleAuths(ctx context.Context) ([]*model.DoubleAuth, error)
+	GetDoubleAuths(ctx context.Context, option *model.Options) ([]*model.DoubleAuth, error)
 	GetBlackListByID(ctx context.Context, id string) (*model.BlackList, error)
-	GetBlackList(ctx context.Context) ([]*model.BlackList, error)
+	GetBlackList(ctx context.Context, option *model.Options) ([]*model.BlackList, error)
 	GetSaveCodeByID(ctx context.Context, id string) (*model.SaveCode, error)
-	GetSaveCode(ctx context.Context) ([]*model.SaveCode, error)
+	GetSaveCode(ctx context.Context, option *model.Options) ([]*model.SaveCode, error)
 }
 
 type executableSchema struct {
@@ -669,6 +683,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Address.ZipCode(childComplexity), true
 
+	case "Admin.createdAt":
+		if e.complexity.Admin.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Admin.CreatedAt(childComplexity), true
+
 	case "Admin.email":
 		if e.complexity.Admin.Email == nil {
 			break
@@ -704,12 +725,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Admin.Password(childComplexity), true
 
+	case "Admin.updatedAt":
+		if e.complexity.Admin.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Admin.UpdatedAt(childComplexity), true
+
 	case "Alert.comment":
 		if e.complexity.Alert.Comment == nil {
 			break
 		}
 
 		return e.complexity.Alert.Comment(childComplexity), true
+
+	case "Alert.createdAt":
+		if e.complexity.Alert.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Alert.CreatedAt(childComplexity), true
 
 	case "Alert.height":
 		if e.complexity.Alert.Height == nil {
@@ -746,12 +781,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Alert.Symptoms(childComplexity), true
 
+	case "Alert.updatedAt":
+		if e.complexity.Alert.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Alert.UpdatedAt(childComplexity), true
+
 	case "Alert.weight":
 		if e.complexity.Alert.Weight == nil {
 			break
 		}
 
 		return e.complexity.Alert.Weight(childComplexity), true
+
+	case "AnteChir.createdAt":
+		if e.complexity.AnteChir.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.AnteChir.CreatedAt(childComplexity), true
 
 	case "AnteChir.id":
 		if e.complexity.AnteChir.ID == nil {
@@ -774,12 +823,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AnteChir.Name(childComplexity), true
 
+	case "AnteChir.updatedAt":
+		if e.complexity.AnteChir.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.AnteChir.UpdatedAt(childComplexity), true
+
 	case "AnteDisease.chronicity":
 		if e.complexity.AnteDisease.Chronicity == nil {
 			break
 		}
 
 		return e.complexity.AnteDisease.Chronicity(childComplexity), true
+
+	case "AnteDisease.createdAt":
+		if e.complexity.AnteDisease.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.AnteDisease.CreatedAt(childComplexity), true
 
 	case "AnteDisease.id":
 		if e.complexity.AnteDisease.ID == nil {
@@ -823,6 +886,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AnteDisease.TreatmentIds(childComplexity), true
 
+	case "AnteDisease.updatedAt":
+		if e.complexity.AnteDisease.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.AnteDisease.UpdatedAt(childComplexity), true
+
+	case "AnteFamily.createdAt":
+		if e.complexity.AnteFamily.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.AnteFamily.CreatedAt(childComplexity), true
+
 	case "AnteFamily.disease":
 		if e.complexity.AnteFamily.Disease == nil {
 			break
@@ -844,6 +921,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AnteFamily.Name(childComplexity), true
 
+	case "AnteFamily.updatedAt":
+		if e.complexity.AnteFamily.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.AnteFamily.UpdatedAt(childComplexity), true
+
+	case "BlackList.createdAt":
+		if e.complexity.BlackList.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.BlackList.CreatedAt(childComplexity), true
+
 	case "BlackList.id":
 		if e.complexity.BlackList.ID == nil {
 			break
@@ -857,6 +948,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BlackList.Token(childComplexity), true
+
+	case "BlackList.updatedAt":
+		if e.complexity.BlackList.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.BlackList.UpdatedAt(childComplexity), true
+
+	case "Chat.createdAt":
+		if e.complexity.Chat.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Chat.CreatedAt(childComplexity), true
 
 	case "Chat.id":
 		if e.complexity.Chat.ID == nil {
@@ -878,6 +983,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Chat.Participants(childComplexity), true
+
+	case "Chat.updatedAt":
+		if e.complexity.Chat.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Chat.UpdatedAt(childComplexity), true
 
 	case "ChatMessages.message":
 		if e.complexity.ChatMessages.Message == nil {
@@ -928,26 +1040,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ChirInducedSymptom.Symptom(childComplexity), true
 
-	case "DemoAccount.email":
-		if e.complexity.DemoAccount.Email == nil {
+	case "DeviceConnect.createdAt":
+		if e.complexity.DeviceConnect.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.DemoAccount.Email(childComplexity), true
-
-	case "DemoAccount.id":
-		if e.complexity.DemoAccount.ID == nil {
-			break
-		}
-
-		return e.complexity.DemoAccount.ID(childComplexity), true
-
-	case "DemoAccount.password":
-		if e.complexity.DemoAccount.Password == nil {
-			break
-		}
-
-		return e.complexity.DemoAccount.Password(childComplexity), true
+		return e.complexity.DeviceConnect.CreatedAt(childComplexity), true
 
 	case "DeviceConnect.date":
 		if e.complexity.DeviceConnect.Date == nil {
@@ -998,6 +1096,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.DeviceConnect.TrustDevice(childComplexity), true
 
+	case "DeviceConnect.updatedAt":
+		if e.complexity.DeviceConnect.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.UpdatedAt(childComplexity), true
+
 	case "Disease.advice":
 		if e.complexity.Disease.Advice == nil {
 			break
@@ -1011,6 +1116,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Disease.Code(childComplexity), true
+
+	case "Disease.createdAt":
+		if e.complexity.Disease.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Disease.CreatedAt(childComplexity), true
 
 	case "Disease.heredity_factor":
 		if e.complexity.Disease.HeredityFactor == nil {
@@ -1054,6 +1166,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Disease.SymptomsWeight(childComplexity), true
 
+	case "Disease.updatedAt":
+		if e.complexity.Disease.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Disease.UpdatedAt(childComplexity), true
+
 	case "Doctor.address":
 		if e.complexity.Doctor.Address == nil {
 			break
@@ -1067,6 +1186,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Doctor.ChatIds(childComplexity), true
+
+	case "Doctor.createdAt":
+		if e.complexity.Doctor.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Doctor.CreatedAt(childComplexity), true
 
 	case "Doctor.device_connect":
 		if e.complexity.Doctor.DeviceConnect == nil {
@@ -1145,12 +1271,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Doctor.TrustDevices(childComplexity), true
 
+	case "Doctor.updatedAt":
+		if e.complexity.Doctor.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Doctor.UpdatedAt(childComplexity), true
+
 	case "Document.category":
 		if e.complexity.Document.Category == nil {
 			break
 		}
 
 		return e.complexity.Document.Category(childComplexity), true
+
+	case "Document.createdAt":
+		if e.complexity.Document.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Document.CreatedAt(childComplexity), true
 
 	case "Document.document_type":
 		if e.complexity.Document.DocumentType == nil {
@@ -1194,6 +1334,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Document.OwnerID(childComplexity), true
 
+	case "Document.updatedAt":
+		if e.complexity.Document.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Document.UpdatedAt(childComplexity), true
+
+	case "DoubleAuth.createdAt":
+		if e.complexity.DoubleAuth.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DoubleAuth.CreatedAt(childComplexity), true
+
 	case "DoubleAuth.id":
 		if e.complexity.DoubleAuth.ID == nil {
 			break
@@ -1229,6 +1383,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.DoubleAuth.URL(childComplexity), true
 
+	case "DoubleAuth.updatedAt":
+		if e.complexity.DoubleAuth.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DoubleAuth.UpdatedAt(childComplexity), true
+
 	case "Logs.answer":
 		if e.complexity.Logs.Answer == nil {
 			break
@@ -1242,6 +1403,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Logs.Question(childComplexity), true
+
+	case "MedicalAntecedents.createdAt":
+		if e.complexity.MedicalAntecedents.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.MedicalAntecedents.CreatedAt(childComplexity), true
 
 	case "MedicalAntecedents.id":
 		if e.complexity.MedicalAntecedents.ID == nil {
@@ -1271,6 +1439,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MedicalAntecedents.StillRelevant(childComplexity), true
 
+	case "MedicalAntecedents.updatedAt":
+		if e.complexity.MedicalAntecedents.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.MedicalAntecedents.UpdatedAt(childComplexity), true
+
 	case "MedicalInfo.antecedent_disease_ids":
 		if e.complexity.MedicalInfo.AntecedentDiseaseIds == nil {
 			break
@@ -1284,6 +1459,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.MedicalInfo.Birthdate(childComplexity), true
+
+	case "MedicalInfo.createdAt":
+		if e.complexity.MedicalInfo.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.MedicalInfo.CreatedAt(childComplexity), true
 
 	case "MedicalInfo.family_members_med_info_id":
 		if e.complexity.MedicalInfo.FamilyMembersMedInfoID == nil {
@@ -1341,12 +1523,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MedicalInfo.Sex(childComplexity), true
 
+	case "MedicalInfo.updatedAt":
+		if e.complexity.MedicalInfo.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.MedicalInfo.UpdatedAt(childComplexity), true
+
 	case "MedicalInfo.weight":
 		if e.complexity.MedicalInfo.Weight == nil {
 			break
 		}
 
 		return e.complexity.MedicalInfo.Weight(childComplexity), true
+
+	case "Medicine.createdAt":
+		if e.complexity.Medicine.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Medicine.CreatedAt(childComplexity), true
 
 	case "Medicine.id":
 		if e.complexity.Medicine.ID == nil {
@@ -1390,6 +1586,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Medicine.Unit(childComplexity), true
 
+	case "Medicine.updatedAt":
+		if e.complexity.Medicine.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Medicine.UpdatedAt(childComplexity), true
+
 	case "Mutation.createAdmin":
 		if e.complexity.Mutation.CreateAdmin == nil {
 			break
@@ -1400,7 +1603,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAdmin(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["last_name"].(string)), true
+		return e.complexity.Mutation.CreateAdmin(childComplexity, args["input"].(model.CreateAdminInput)), true
 
 	case "Mutation.createAlert":
 		if e.complexity.Mutation.CreateAlert == nil {
@@ -1412,7 +1615,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAlert(childComplexity, args["name"].(string), args["sex"].(*string), args["height"].(*int), args["weight"].(*int), args["symptoms"].([]string), args["comment"].(string)), true
+		return e.complexity.Mutation.CreateAlert(childComplexity, args["input"].(model.CreateAlertInput)), true
 
 	case "Mutation.createAnteChir":
 		if e.complexity.Mutation.CreateAnteChir == nil {
@@ -1424,7 +1627,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAnteChir(childComplexity, args["name"].(string), args["induced_symptoms"].([]*model.ChirInducedSymptomInput)), true
+		return e.complexity.Mutation.CreateAnteChir(childComplexity, args["input"].(model.CreateAnteChirInput)), true
 
 	case "Mutation.createAnteDisease":
 		if e.complexity.Mutation.CreateAnteDisease == nil {
@@ -1436,7 +1639,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAnteDisease(childComplexity, args["name"].(string), args["chronicity"].(*float64), args["surgery_ids"].([]string), args["symptoms"].([]string), args["treatment_ids"].([]string), args["still_relevant"].(bool)), true
+		return e.complexity.Mutation.CreateAnteDisease(childComplexity, args["input"].(model.CreateAnteDiseaseInput)), true
 
 	case "Mutation.createAnteFamily":
 		if e.complexity.Mutation.CreateAnteFamily == nil {
@@ -1448,7 +1651,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAnteFamily(childComplexity, args["name"].(string), args["disease"].([]string)), true
+		return e.complexity.Mutation.CreateAnteFamily(childComplexity, args["input"].(model.CreateAnteFamilyInput)), true
 
 	case "Mutation.createBlackList":
 		if e.complexity.Mutation.CreateBlackList == nil {
@@ -1460,7 +1663,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBlackList(childComplexity, args["token"].([]string)), true
+		return e.complexity.Mutation.CreateBlackList(childComplexity, args["input"].(model.CreateBlackListInput)), true
 
 	case "Mutation.createChat":
 		if e.complexity.Mutation.CreateChat == nil {
@@ -1472,19 +1675,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateChat(childComplexity, args["participants"].([]*model.ChatParticipantsInput), args["messages"].([]*model.ChatMessagesInput)), true
-
-	case "Mutation.createDemoAccount":
-		if e.complexity.Mutation.CreateDemoAccount == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createDemoAccount_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateDemoAccount(childComplexity, args["email"].(string), args["password"].(string)), true
+		return e.complexity.Mutation.CreateChat(childComplexity, args["input"].(model.CreateChatInput)), true
 
 	case "Mutation.createDeviceConnect":
 		if e.complexity.Mutation.CreateDeviceConnect == nil {
@@ -1496,7 +1687,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDeviceConnect(childComplexity, args["device_name"].(string), args["ip_address"].(string), args["latitude"].(float64), args["longitude"].(float64), args["date"].(int), args["trust_device"].(bool)), true
+		return e.complexity.Mutation.CreateDeviceConnect(childComplexity, args["input"].(model.CreateDeviceConnectInput)), true
 
 	case "Mutation.createDisease":
 		if e.complexity.Mutation.CreateDisease == nil {
@@ -1508,7 +1699,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDisease(childComplexity, args["code"].(string), args["name"].(string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["overweight_factor"].(float64), args["heredity_factor"].(float64), args["advice"].(*string)), true
+		return e.complexity.Mutation.CreateDisease(childComplexity, args["input"].(model.CreateDiseaseInput)), true
 
 	case "Mutation.createDoctor":
 		if e.complexity.Mutation.CreateDoctor == nil {
@@ -1520,7 +1711,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDoctor(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["firstname"].(string), args["address"].(model.AddressInput), args["status"].(bool)), true
+		return e.complexity.Mutation.CreateDoctor(childComplexity, args["input"].(model.CreateDoctorInput)), true
 
 	case "Mutation.createDocument":
 		if e.complexity.Mutation.CreateDocument == nil {
@@ -1532,7 +1723,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDocument(childComplexity, args["owner_id"].(string), args["name"].(string), args["document_type"].(string), args["category"].(string), args["is_favorite"].(bool), args["download_url"].(string)), true
+		return e.complexity.Mutation.CreateDocument(childComplexity, args["input"].(model.CreateDocumentInput)), true
 
 	case "Mutation.createDoubleAuth":
 		if e.complexity.Mutation.CreateDoubleAuth == nil {
@@ -1544,7 +1735,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDoubleAuth(childComplexity, args["methods"].([]string), args["secret"].(string), args["url"].(string), args["trust_device_id"].(string)), true
+		return e.complexity.Mutation.CreateDoubleAuth(childComplexity, args["input"].(model.CreateDoubleAuthInput)), true
 
 	case "Mutation.createMedicalFolder":
 		if e.complexity.Mutation.CreateMedicalFolder == nil {
@@ -1556,7 +1747,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateMedicalFolder(childComplexity, args["name"].(string), args["firstname"].(string), args["birthdate"].(int), args["sex"].(string), args["height"].(int), args["weight"].(int), args["primary_doctor_id"].(string), args["antecedent_disease_ids"].([]string), args["onboarding_status"].(string), args["family_members_med_info_id"].([]string)), true
+		return e.complexity.Mutation.CreateMedicalFolder(childComplexity, args["input"].(model.CreateMedicalFolderInput)), true
 
 	case "Mutation.createMedicine":
 		if e.complexity.Mutation.CreateMedicine == nil {
@@ -1568,7 +1759,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateMedicine(childComplexity, args["name"].(string), args["unit"].(*string), args["target_diseases"].([]string), args["treated_symptoms"].([]string), args["side_effects"].([]string)), true
+		return e.complexity.Mutation.CreateMedicine(childComplexity, args["input"].(model.CreateMedicineInput)), true
 
 	case "Mutation.createNlpReport":
 		if e.complexity.Mutation.CreateNlpReport == nil {
@@ -1580,7 +1771,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateNlpReport(childComplexity, args["version"].(int), args["input_symptoms"].([]string), args["input_sentence"].(string), args["output"].([]*model.NlpReportOutputInput), args["computation_time"].(int)), true
+		return e.complexity.Mutation.CreateNlpReport(childComplexity, args["input"].(model.CreateNlpReportInput)), true
 
 	case "Mutation.createNotification":
 		if e.complexity.Mutation.CreateNotification == nil {
@@ -1592,7 +1783,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateNotification(childComplexity, args["token"].(string), args["message"].(string), args["title"].(string)), true
+		return e.complexity.Mutation.CreateNotification(childComplexity, args["input"].(model.CreateNotificationInput)), true
 
 	case "Mutation.createPatient":
 		if e.complexity.Mutation.CreatePatient == nil {
@@ -1604,7 +1795,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreatePatient(childComplexity, args["email"].(string), args["password"].(string), args["status"].(bool)), true
+		return e.complexity.Mutation.CreatePatient(childComplexity, args["input"].(model.CreatePatientInput)), true
 
 	case "Mutation.createRdv":
 		if e.complexity.Mutation.CreateRdv == nil {
@@ -1616,7 +1807,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["session_id"].(string)), true
+		return e.complexity.Mutation.CreateRdv(childComplexity, args["input"].(model.CreateRdvInput)), true
 
 	case "Mutation.createSaveCode":
 		if e.complexity.Mutation.CreateSaveCode == nil {
@@ -1628,7 +1819,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSaveCode(childComplexity, args["code"].([]string)), true
+		return e.complexity.Mutation.CreateSaveCode(childComplexity, args["input"].(model.CreateSaveCodeInput)), true
 
 	case "Mutation.createSession":
 		if e.complexity.Mutation.CreateSession == nil {
@@ -1640,7 +1831,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSession(childComplexity, args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(int), args["height"].(int), args["weight"].(int), args["sex"].(string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["medicine"].([]string), args["last_question"].(string), args["logs"].([]*model.LogsInput), args["hereditary_disease"].([]string), args["alerts"].([]string)), true
+		return e.complexity.Mutation.CreateSession(childComplexity, args["input"].(model.CreateSessionInput)), true
 
 	case "Mutation.createSymptom":
 		if e.complexity.Mutation.CreateSymptom == nil {
@@ -1652,19 +1843,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSymptom(childComplexity, args["code"].(string), args["name"].(string), args["chronic"].(*int), args["symptom"].([]string), args["advice"].(*string), args["question"].(string), args["question_basic"].(string), args["question_duration"].(string), args["question_ante"].(string)), true
-
-	case "Mutation.createTestAccount":
-		if e.complexity.Mutation.CreateTestAccount == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createTestAccount_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateTestAccount(childComplexity, args["email"].(string), args["password"].(string)), true
+		return e.complexity.Mutation.CreateSymptom(childComplexity, args["input"].(model.CreateSymptomInput)), true
 
 	case "Mutation.createTreatment":
 		if e.complexity.Mutation.CreateTreatment == nil {
@@ -1676,7 +1855,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTreatment(childComplexity, args["period"].([]model.Period), args["day"].([]model.Day), args["quantity"].(int), args["medicine_id"].(string)), true
+		return e.complexity.Mutation.CreateTreatment(childComplexity, args["input"].(model.CreateTreatmentInput)), true
 
 	case "Mutation.createTreatmentsFollowUp":
 		if e.complexity.Mutation.CreateTreatmentsFollowUp == nil {
@@ -1688,7 +1867,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTreatmentsFollowUp(childComplexity, args["treatment_id"].(string), args["date"].(int), args["period"].([]model.Period)), true
+		return e.complexity.Mutation.CreateTreatmentsFollowUp(childComplexity, args["input"].(model.CreateTreatmentsFollowUpInput)), true
 
 	case "Mutation.deleteAdmin":
 		if e.complexity.Mutation.DeleteAdmin == nil {
@@ -1773,18 +1952,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteChat(childComplexity, args["id"].(string)), true
-
-	case "Mutation.deleteDemoAccount":
-		if e.complexity.Mutation.DeleteDemoAccount == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteDemoAccount_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteDemoAccount(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteDeviceConnect":
 		if e.complexity.Mutation.DeleteDeviceConnect == nil {
@@ -1954,18 +2121,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteSymptom(childComplexity, args["id"].(string)), true
 
-	case "Mutation.deleteTestAccount":
-		if e.complexity.Mutation.DeleteTestAccount == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteTestAccount_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteTestAccount(childComplexity, args["id"].(string)), true
-
 	case "Mutation.deleteTreatment":
 		if e.complexity.Mutation.DeleteTreatment == nil {
 			break
@@ -2000,7 +2155,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAdmin(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["last_name"].(*string)), true
+		return e.complexity.Mutation.UpdateAdmin(childComplexity, args["id"].(string), args["input"].(model.UpdateAdminInput)), true
 
 	case "Mutation.updateAlert":
 		if e.complexity.Mutation.UpdateAlert == nil {
@@ -2012,7 +2167,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAlert(childComplexity, args["id"].(string), args["name"].(*string), args["sex"].(*string), args["height"].(*int), args["weight"].(*int), args["symptoms"].([]string), args["comment"].(*string)), true
+		return e.complexity.Mutation.UpdateAlert(childComplexity, args["id"].(string), args["input"].(model.UpdateAlertInput)), true
 
 	case "Mutation.updateAnteChir":
 		if e.complexity.Mutation.UpdateAnteChir == nil {
@@ -2024,7 +2179,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAnteChir(childComplexity, args["id"].(string), args["name"].(*string), args["induced_symptoms"].([]*model.ChirInducedSymptomInput)), true
+		return e.complexity.Mutation.UpdateAnteChir(childComplexity, args["id"].(string), args["input"].(model.UpdateAnteChirInput)), true
 
 	case "Mutation.updateAnteDisease":
 		if e.complexity.Mutation.UpdateAnteDisease == nil {
@@ -2036,7 +2191,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAnteDisease(childComplexity, args["id"].(string), args["name"].(*string), args["chronicity"].(*float64), args["surgery_ids"].([]string), args["symptoms"].([]string), args["treatment_ids"].([]string), args["still_relevant"].(*bool)), true
+		return e.complexity.Mutation.UpdateAnteDisease(childComplexity, args["id"].(string), args["input"].(model.UpdateAnteDiseaseInput)), true
 
 	case "Mutation.updateAnteFamily":
 		if e.complexity.Mutation.UpdateAnteFamily == nil {
@@ -2048,7 +2203,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAnteFamily(childComplexity, args["id"].(string), args["name"].(*string), args["disease"].([]string)), true
+		return e.complexity.Mutation.UpdateAnteFamily(childComplexity, args["id"].(string), args["input"].(model.UpdateAnteFamilyInput)), true
 
 	case "Mutation.updateBlackList":
 		if e.complexity.Mutation.UpdateBlackList == nil {
@@ -2060,7 +2215,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBlackList(childComplexity, args["id"].(string), args["token"].([]string)), true
+		return e.complexity.Mutation.UpdateBlackList(childComplexity, args["id"].(string), args["input"].(model.UpdateBlackListInput)), true
 
 	case "Mutation.updateChat":
 		if e.complexity.Mutation.UpdateChat == nil {
@@ -2072,19 +2227,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateChat(childComplexity, args["id"].(string), args["participants"].([]*model.ChatParticipantsInput), args["messages"].([]*model.ChatMessagesInput)), true
-
-	case "Mutation.updateDemoAccount":
-		if e.complexity.Mutation.UpdateDemoAccount == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateDemoAccount_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateDemoAccount(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string)), true
+		return e.complexity.Mutation.UpdateChat(childComplexity, args["id"].(string), args["input"].(model.UpdateChatInput)), true
 
 	case "Mutation.updateDeviceConnect":
 		if e.complexity.Mutation.UpdateDeviceConnect == nil {
@@ -2096,7 +2239,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDeviceConnect(childComplexity, args["id"].(string), args["device_name"].(*string), args["ip_address"].(*string), args["latitude"].(*float64), args["longitude"].(*float64), args["date"].(*int), args["trust_device"].(*bool)), true
+		return e.complexity.Mutation.UpdateDeviceConnect(childComplexity, args["id"].(string), args["input"].(model.UpdateDeviceConnectInput)), true
 
 	case "Mutation.updateDisease":
 		if e.complexity.Mutation.UpdateDisease == nil {
@@ -2108,7 +2251,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDisease(childComplexity, args["id"].(string), args["code"].(*string), args["name"].(*string), args["symptoms"].([]string), args["symptoms_weight"].([]*model.SymptomsWeightInput), args["overweight_factor"].(*float64), args["heredity_factor"].(*float64), args["advice"].(*string)), true
+		return e.complexity.Mutation.UpdateDisease(childComplexity, args["id"].(string), args["input"].(model.UpdateDiseaseInput)), true
 
 	case "Mutation.updateDoctor":
 		if e.complexity.Mutation.UpdateDoctor == nil {
@@ -2120,7 +2263,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["firstname"].(*string), args["rendez_vous_ids"].([]*string), args["patient_ids"].([]*string), args["address"].(*model.AddressInput), args["chat_ids"].([]*string), args["device_connect"].([]*string), args["double_auth_methods_id"].(*string), args["trust_devices"].([]*string), args["status"].(*bool)), true
+		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["input"].(model.UpdateDoctorInput)), true
+
+	case "Mutation.updateDoctorsPatientIDs":
+		if e.complexity.Mutation.UpdateDoctorsPatientIDs == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDoctorsPatientIDs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDoctorsPatientIDs(childComplexity, args["id"].(string), args["input"].(model.UpdateDoctorsPatientIDsInput)), true
 
 	case "Mutation.updateDocument":
 		if e.complexity.Mutation.UpdateDocument == nil {
@@ -2132,7 +2287,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDocument(childComplexity, args["id"].(string), args["name"].(*string), args["is_favorite"].(*bool)), true
+		return e.complexity.Mutation.UpdateDocument(childComplexity, args["id"].(string), args["input"].(model.UpdateDocumentInput)), true
 
 	case "Mutation.updateDoubleAuth":
 		if e.complexity.Mutation.UpdateDoubleAuth == nil {
@@ -2144,7 +2299,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDoubleAuth(childComplexity, args["id"].(string), args["methods"].([]string), args["secret"].(*string), args["url"].(*string), args["trust_device_id"].(*string)), true
+		return e.complexity.Mutation.UpdateDoubleAuth(childComplexity, args["id"].(string), args["input"].(model.UpdateDoubleAuthInput)), true
 
 	case "Mutation.updateMedicalFolder":
 		if e.complexity.Mutation.UpdateMedicalFolder == nil {
@@ -2156,7 +2311,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateMedicalFolder(childComplexity, args["id"].(string), args["name"].(*string), args["firstname"].(*string), args["birthdate"].(*int), args["sex"].(*string), args["height"].(*int), args["weight"].(*int), args["primary_doctor_id"].(*string), args["antecedent_disease_ids"].([]string), args["onboarding_status"].(*model.OnboardingStatus), args["family_members_med_info_id"].([]string)), true
+		return e.complexity.Mutation.UpdateMedicalFolder(childComplexity, args["id"].(string), args["input"].(model.UpdateMedicalFolderInput)), true
 
 	case "Mutation.updateNotification":
 		if e.complexity.Mutation.UpdateNotification == nil {
@@ -2168,7 +2323,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateNotification(childComplexity, args["id"].(string), args["token"].(string), args["message"].(string), args["title"].(string)), true
+		return e.complexity.Mutation.UpdateNotification(childComplexity, args["id"].(string), args["input"].(model.UpdateNotificationInput)), true
 
 	case "Mutation.updatePatient":
 		if e.complexity.Mutation.UpdatePatient == nil {
@@ -2180,7 +2335,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string), args["chat_ids"].([]*string), args["device_connect"].([]*string), args["double_auth_methods_id"].(*string), args["trust_devices"].([]*string), args["status"].(*bool)), true
+		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientInput)), true
 
 	case "Mutation.updateRdv":
 		if e.complexity.Mutation.UpdateRdv == nil {
@@ -2192,7 +2347,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["session_id"].(*string), args["health_method"].(*string)), true
+		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["input"].(model.UpdateRdvInput)), true
 
 	case "Mutation.updateSaveCode":
 		if e.complexity.Mutation.UpdateSaveCode == nil {
@@ -2204,7 +2359,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSaveCode(childComplexity, args["id"].(string), args["code"].([]string)), true
+		return e.complexity.Mutation.UpdateSaveCode(childComplexity, args["id"].(string), args["input"].(model.UpdateSaveCodeInput)), true
 
 	case "Mutation.updateSession":
 		if e.complexity.Mutation.UpdateSession == nil {
@@ -2216,7 +2371,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSession(childComplexity, args["id"].(string), args["diseases"].([]*model.SessionDiseasesInput), args["symptoms"].([]*model.SessionSymptomInput), args["age"].(*int), args["height"].(*int), args["weight"].(*int), args["sex"].(*string), args["ante_chirs"].([]string), args["ante_diseases"].([]string), args["medicine"].([]string), args["last_question"].(*string), args["logs"].([]*model.LogsInput), args["hereditary_disease"].([]string), args["alerts"].([]string)), true
+		return e.complexity.Mutation.UpdateSession(childComplexity, args["id"].(string), args["input"].(model.UpdateSessionInput)), true
 
 	case "Mutation.updateSymptom":
 		if e.complexity.Mutation.UpdateSymptom == nil {
@@ -2228,19 +2383,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSymptom(childComplexity, args["id"].(string), args["code"].(*string), args["name"].(*string), args["chronic"].(*int), args["symptom"].([]string), args["advice"].(*string), args["question"].(*string), args["question_basic"].(*string), args["question_duration"].(*string), args["question_ante"].(*string)), true
-
-	case "Mutation.updateTestAccount":
-		if e.complexity.Mutation.UpdateTestAccount == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateTestAccount_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateTestAccount(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string)), true
+		return e.complexity.Mutation.UpdateSymptom(childComplexity, args["id"].(string), args["input"].(model.UpdateSymptomInput)), true
 
 	case "Mutation.updateTreatment":
 		if e.complexity.Mutation.UpdateTreatment == nil {
@@ -2252,7 +2395,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTreatment(childComplexity, args["id"].(string), args["period"].([]model.Period), args["day"].([]model.Day), args["quantity"].(*int), args["medicine_id"].(*string)), true
+		return e.complexity.Mutation.UpdateTreatment(childComplexity, args["id"].(string), args["input"].(model.UpdateTreatmentInput)), true
 
 	case "Mutation.updateTreatmentsFollowUp":
 		if e.complexity.Mutation.UpdateTreatmentsFollowUp == nil {
@@ -2264,7 +2407,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTreatmentsFollowUp(childComplexity, args["id"].(string), args["treatment_id"].(*string), args["date"].(*int), args["period"].([]model.Period)), true
+		return e.complexity.Mutation.UpdateTreatmentsFollowUp(childComplexity, args["id"].(string), args["input"].(model.UpdateTreatmentsFollowUpInput)), true
 
 	case "NlpReport.computation_time":
 		if e.complexity.NlpReport.ComputationTime == nil {
@@ -2272,6 +2415,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NlpReport.ComputationTime(childComplexity), true
+
+	case "NlpReport.createdAt":
+		if e.complexity.NlpReport.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.CreatedAt(childComplexity), true
 
 	case "NlpReport.id":
 		if e.complexity.NlpReport.ID == nil {
@@ -2301,6 +2451,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NlpReport.Output(childComplexity), true
 
+	case "NlpReport.updatedAt":
+		if e.complexity.NlpReport.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.NlpReport.UpdatedAt(childComplexity), true
+
 	case "NlpReport.version":
 		if e.complexity.NlpReport.Version == nil {
 			break
@@ -2328,6 +2485,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.NlpReportOutput.Symptom(childComplexity), true
+
+	case "Notification.createdAt":
+		if e.complexity.Notification.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Notification.CreatedAt(childComplexity), true
 
 	case "Notification.id":
 		if e.complexity.Notification.ID == nil {
@@ -2357,12 +2521,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Notification.Token(childComplexity), true
 
+	case "Notification.updatedAt":
+		if e.complexity.Notification.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Notification.UpdatedAt(childComplexity), true
+
 	case "Patient.chat_ids":
 		if e.complexity.Patient.ChatIds == nil {
 			break
 		}
 
 		return e.complexity.Patient.ChatIds(childComplexity), true
+
+	case "Patient.createdAt":
+		if e.complexity.Patient.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Patient.CreatedAt(childComplexity), true
 
 	case "Patient.device_connect":
 		if e.complexity.Patient.DeviceConnect == nil {
@@ -2441,6 +2619,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Patient.TrustDevices(childComplexity), true
 
+	case "Patient.updatedAt":
+		if e.complexity.Patient.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Patient.UpdatedAt(childComplexity), true
+
 	case "Query.getAdminByEmail":
 		if e.complexity.Query.GetAdminByEmail == nil {
 			break
@@ -2470,7 +2655,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetAdmins(childComplexity), true
+		args, err := ec.field_Query_getAdmins_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAdmins(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getAlertById":
 		if e.complexity.Query.GetAlertByID == nil {
@@ -2489,7 +2679,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetAlerts(childComplexity), true
+		args, err := ec.field_Query_getAlerts_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAlerts(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getAnteChirByID":
 		if e.complexity.Query.GetAnteChirByID == nil {
@@ -2508,7 +2703,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetAnteChirs(childComplexity), true
+		args, err := ec.field_Query_getAnteChirs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAnteChirs(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getAnteDiseaseByID":
 		if e.complexity.Query.GetAnteDiseaseByID == nil {
@@ -2527,14 +2727,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetAnteDiseases(childComplexity), true
+		args, err := ec.field_Query_getAnteDiseases_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAnteDiseases(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getAnteFamilies":
 		if e.complexity.Query.GetAnteFamilies == nil {
 			break
 		}
 
-		return e.complexity.Query.GetAnteFamilies(childComplexity), true
+		args, err := ec.field_Query_getAnteFamilies_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAnteFamilies(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getAnteFamilyByID":
 		if e.complexity.Query.GetAnteFamilyByID == nil {
@@ -2553,7 +2763,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetBlackList(childComplexity), true
+		args, err := ec.field_Query_getBlackList_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetBlackList(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getBlackListById":
 		if e.complexity.Query.GetBlackListByID == nil {
@@ -2589,38 +2804,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetChats(childComplexity, args["id"].(string)), true
-
-	case "Query.getDemoAccountByEmail":
-		if e.complexity.Query.GetDemoAccountByEmail == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getDemoAccountByEmail_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetDemoAccountByEmail(childComplexity, args["email"].(string)), true
-
-	case "Query.getDemoAccountById":
-		if e.complexity.Query.GetDemoAccountByID == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getDemoAccountById_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetDemoAccountByID(childComplexity, args["id"].(string)), true
-
-	case "Query.getDemoAccounts":
-		if e.complexity.Query.GetDemoAccounts == nil {
-			break
-		}
-
-		return e.complexity.Query.GetDemoAccounts(childComplexity), true
+		return e.complexity.Query.GetChats(childComplexity, args["id"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getDeviceConnectById":
 		if e.complexity.Query.GetDeviceConnectByID == nil {
@@ -2639,7 +2823,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetDevicesConnect(childComplexity), true
+		args, err := ec.field_Query_getDevicesConnect_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDevicesConnect(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getDiseaseById":
 		if e.complexity.Query.GetDiseaseByID == nil {
@@ -2658,7 +2847,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetDiseases(childComplexity), true
+		args, err := ec.field_Query_getDiseases_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDiseases(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getDoctorByEmail":
 		if e.complexity.Query.GetDoctorByEmail == nil {
@@ -2694,14 +2888,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetDoctorRdv(childComplexity, args["doctor_id"].(string)), true
+		return e.complexity.Query.GetDoctorRdv(childComplexity, args["doctor_id"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getDoctors":
 		if e.complexity.Query.GetDoctors == nil {
 			break
 		}
 
-		return e.complexity.Query.GetDoctors(childComplexity), true
+		args, err := ec.field_Query_getDoctors_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDoctors(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getDocumentById":
 		if e.complexity.Query.GetDocumentByID == nil {
@@ -2720,7 +2919,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetDocuments(childComplexity), true
+		args, err := ec.field_Query_getDocuments_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDocuments(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getDoubleAuthById":
 		if e.complexity.Query.GetDoubleAuthByID == nil {
@@ -2739,14 +2943,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetDoubleAuths(childComplexity), true
+		args, err := ec.field_Query_getDoubleAuths_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDoubleAuths(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getMedicalFolder":
 		if e.complexity.Query.GetMedicalFolder == nil {
 			break
 		}
 
-		return e.complexity.Query.GetMedicalFolder(childComplexity), true
+		args, err := ec.field_Query_getMedicalFolder_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetMedicalFolder(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getMedicalFolderById":
 		if e.complexity.Query.GetMedicalFolderByID == nil {
@@ -2777,14 +2991,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetMedicines(childComplexity), true
+		args, err := ec.field_Query_getMedicines_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetMedicines(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getNlpReports":
 		if e.complexity.Query.GetNlpReports == nil {
 			break
 		}
 
-		return e.complexity.Query.GetNlpReports(childComplexity), true
+		args, err := ec.field_Query_getNlpReports_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetNlpReports(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getNlpReportsByVersion":
 		if e.complexity.Query.GetNlpReportsByVersion == nil {
@@ -2796,7 +3020,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetNlpReportsByVersion(childComplexity, args["version"].(int)), true
+		return e.complexity.Query.GetNlpReportsByVersion(childComplexity, args["version"].(int), args["option"].(*model.Options)), true
 
 	case "Query.getNotificationById":
 		if e.complexity.Query.GetNotificationByID == nil {
@@ -2815,7 +3039,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetNotifications(childComplexity), true
+		args, err := ec.field_Query_getNotifications_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetNotifications(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getPatientByEmail":
 		if e.complexity.Query.GetPatientByEmail == nil {
@@ -2851,7 +3080,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetPatientDocument(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GetPatientDocument(childComplexity, args["id"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getPatientRdv":
 		if e.complexity.Query.GetPatientRdv == nil {
@@ -2863,14 +3092,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetPatientRdv(childComplexity, args["id_patient"].(string)), true
+		return e.complexity.Query.GetPatientRdv(childComplexity, args["id_patient"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getPatients":
 		if e.complexity.Query.GetPatients == nil {
 			break
 		}
 
-		return e.complexity.Query.GetPatients(childComplexity), true
+		args, err := ec.field_Query_getPatients_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetPatients(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getPatientsFromDoctorById":
 		if e.complexity.Query.GetPatientsFromDoctorByID == nil {
@@ -2882,7 +3116,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetPatientsFromDoctorByID(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GetPatientsFromDoctorByID(childComplexity, args["id"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getRdvById":
 		if e.complexity.Query.GetRdvByID == nil {
@@ -2901,7 +3135,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetSaveCode(childComplexity), true
+		args, err := ec.field_Query_getSaveCode_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSaveCode(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getSaveCodeById":
 		if e.complexity.Query.GetSaveCodeByID == nil {
@@ -2932,7 +3171,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetSessions(childComplexity), true
+		args, err := ec.field_Query_getSessions_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSessions(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getSlotById":
 		if e.complexity.Query.GetSlotByID == nil {
@@ -2956,7 +3200,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetSlots(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GetSlots(childComplexity, args["id"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getSymptomById":
 		if e.complexity.Query.GetSymptomByID == nil {
@@ -2975,7 +3219,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetSymptoms(childComplexity), true
+		args, err := ec.field_Query_getSymptoms_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSymptoms(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getSymptomsByDiseaseName":
 		if e.complexity.Query.GetSymptomsByDiseaseName == nil {
@@ -2988,37 +3237,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetSymptomsByDiseaseName(childComplexity, args["name"].(string)), true
-
-	case "Query.getTestAccountByEmail":
-		if e.complexity.Query.GetTestAccountByEmail == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getTestAccountByEmail_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetTestAccountByEmail(childComplexity, args["email"].(string)), true
-
-	case "Query.getTestAccountById":
-		if e.complexity.Query.GetTestAccountByID == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getTestAccountById_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetTestAccountByID(childComplexity, args["id"].(string)), true
-
-	case "Query.getTestAccounts":
-		if e.complexity.Query.GetTestAccounts == nil {
-			break
-		}
-
-		return e.complexity.Query.GetTestAccounts(childComplexity), true
 
 	case "Query.getTreatmentByID":
 		if e.complexity.Query.GetTreatmentByID == nil {
@@ -3037,7 +3255,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.GetTreatments(childComplexity), true
+		args, err := ec.field_Query_getTreatments_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetTreatments(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getTreatmentsFollowUpById":
 		if e.complexity.Query.GetTreatmentsFollowUpByID == nil {
@@ -3061,7 +3284,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetTreatmentsFollowUps(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.GetTreatmentsFollowUps(childComplexity, args["id"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getWaitingRdv":
 		if e.complexity.Query.GetWaitingRdv == nil {
@@ -3073,7 +3296,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetWaitingRdv(childComplexity, args["doctor_id"].(string)), true
+		return e.complexity.Query.GetWaitingRdv(childComplexity, args["doctor_id"].(string), args["option"].(*model.Options)), true
 
 	case "Rdv.appointment_status":
 		if e.complexity.Rdv.AppointmentStatus == nil {
@@ -3088,6 +3311,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Rdv.CancelationReason(childComplexity), true
+
+	case "Rdv.createdAt":
+		if e.complexity.Rdv.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Rdv.CreatedAt(childComplexity), true
 
 	case "Rdv.doctor_id":
 		if e.complexity.Rdv.DoctorID == nil {
@@ -3138,6 +3368,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Rdv.StartDate(childComplexity), true
 
+	case "Rdv.updatedAt":
+		if e.complexity.Rdv.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Rdv.UpdatedAt(childComplexity), true
+
 	case "SaveCode.code":
 		if e.complexity.SaveCode.Code == nil {
 			break
@@ -3145,12 +3382,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SaveCode.Code(childComplexity), true
 
+	case "SaveCode.createdAt":
+		if e.complexity.SaveCode.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.SaveCode.CreatedAt(childComplexity), true
+
 	case "SaveCode.id":
 		if e.complexity.SaveCode.ID == nil {
 			break
 		}
 
 		return e.complexity.SaveCode.ID(childComplexity), true
+
+	case "SaveCode.updatedAt":
+		if e.complexity.SaveCode.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.SaveCode.UpdatedAt(childComplexity), true
 
 	case "Session.age":
 		if e.complexity.Session.Age == nil {
@@ -3179,6 +3430,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Session.AnteDiseases(childComplexity), true
+
+	case "Session.createdAt":
+		if e.complexity.Session.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Session.CreatedAt(childComplexity), true
 
 	case "Session.diseases":
 		if e.complexity.Session.Diseases == nil {
@@ -3242,6 +3500,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Session.Symptoms(childComplexity), true
+
+	case "Session.updatedAt":
+		if e.complexity.Session.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Session.UpdatedAt(childComplexity), true
 
 	case "Session.weight":
 		if e.complexity.Session.Weight == nil {
@@ -3320,6 +3585,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Symptom.Code(childComplexity), true
 
+	case "Symptom.createdAt":
+		if e.complexity.Symptom.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Symptom.CreatedAt(childComplexity), true
+
 	case "Symptom.id":
 		if e.complexity.Symptom.ID == nil {
 			break
@@ -3369,6 +3641,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Symptom.Symptom(childComplexity), true
 
+	case "Symptom.updatedAt":
+		if e.complexity.Symptom.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Symptom.UpdatedAt(childComplexity), true
+
 	case "SymptomsWeight.chronic":
 		if e.complexity.SymptomsWeight.Chronic == nil {
 			break
@@ -3390,26 +3669,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SymptomsWeight.Value(childComplexity), true
 
-	case "TestAccount.email":
-		if e.complexity.TestAccount.Email == nil {
+	case "Treatment.createdAt":
+		if e.complexity.Treatment.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TestAccount.Email(childComplexity), true
-
-	case "TestAccount.id":
-		if e.complexity.TestAccount.ID == nil {
-			break
-		}
-
-		return e.complexity.TestAccount.ID(childComplexity), true
-
-	case "TestAccount.password":
-		if e.complexity.TestAccount.Password == nil {
-			break
-		}
-
-		return e.complexity.TestAccount.Password(childComplexity), true
+		return e.complexity.Treatment.CreatedAt(childComplexity), true
 
 	case "Treatment.day":
 		if e.complexity.Treatment.Day == nil {
@@ -3446,6 +3711,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Treatment.Quantity(childComplexity), true
 
+	case "Treatment.updatedAt":
+		if e.complexity.Treatment.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Treatment.UpdatedAt(childComplexity), true
+
+	case "TreatmentsFollowUp.createdAt":
+		if e.complexity.TreatmentsFollowUp.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TreatmentsFollowUp.CreatedAt(childComplexity), true
+
 	case "TreatmentsFollowUp.date":
 		if e.complexity.TreatmentsFollowUp.Date == nil {
 			break
@@ -3474,6 +3753,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TreatmentsFollowUp.TreatmentID(childComplexity), true
 
+	case "TreatmentsFollowUp.updatedAt":
+		if e.complexity.TreatmentsFollowUp.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TreatmentsFollowUp.UpdatedAt(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -3486,14 +3772,61 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputChatMessagesInput,
 		ec.unmarshalInputChatParticipantsInput,
 		ec.unmarshalInputChirInducedSymptomInput,
+		ec.unmarshalInputCreateAdminInput,
+		ec.unmarshalInputCreateAlertInput,
+		ec.unmarshalInputCreateAnteChirInput,
+		ec.unmarshalInputCreateAnteDiseaseInput,
+		ec.unmarshalInputCreateAnteFamilyInput,
+		ec.unmarshalInputCreateBlackListInput,
+		ec.unmarshalInputCreateChatInput,
+		ec.unmarshalInputCreateDeviceConnectInput,
+		ec.unmarshalInputCreateDiseaseInput,
+		ec.unmarshalInputCreateDoctorInput,
+		ec.unmarshalInputCreateDocumentInput,
+		ec.unmarshalInputCreateDoubleAuthInput,
+		ec.unmarshalInputCreateMedicalFolderInput,
+		ec.unmarshalInputCreateMedicineInput,
+		ec.unmarshalInputCreateNlpReportInput,
+		ec.unmarshalInputCreateNotificationInput,
+		ec.unmarshalInputCreatePatientInput,
+		ec.unmarshalInputCreateRdvInput,
+		ec.unmarshalInputCreateSaveCodeInput,
+		ec.unmarshalInputCreateSessionInput,
+		ec.unmarshalInputCreateSymptomInput,
+		ec.unmarshalInputCreateTreatmentInput,
+		ec.unmarshalInputCreateTreatmentsFollowUpInput,
 		ec.unmarshalInputLogsInput,
 		ec.unmarshalInputMedicalAntecedentsInput,
 		ec.unmarshalInputMedicineInput,
 		ec.unmarshalInputNlpReportOutputInput,
+		ec.unmarshalInputOptions,
 		ec.unmarshalInputSessionDiseasesInput,
 		ec.unmarshalInputSessionSymptomInput,
+		ec.unmarshalInputSortingOptions,
 		ec.unmarshalInputSymptomsWeightInput,
 		ec.unmarshalInputTreatmentInput,
+		ec.unmarshalInputUpdateAdminInput,
+		ec.unmarshalInputUpdateAlertInput,
+		ec.unmarshalInputUpdateAnteChirInput,
+		ec.unmarshalInputUpdateAnteDiseaseInput,
+		ec.unmarshalInputUpdateAnteFamilyInput,
+		ec.unmarshalInputUpdateBlackListInput,
+		ec.unmarshalInputUpdateChatInput,
+		ec.unmarshalInputUpdateDeviceConnectInput,
+		ec.unmarshalInputUpdateDiseaseInput,
+		ec.unmarshalInputUpdateDoctorInput,
+		ec.unmarshalInputUpdateDoctorsPatientIDsInput,
+		ec.unmarshalInputUpdateDocumentInput,
+		ec.unmarshalInputUpdateDoubleAuthInput,
+		ec.unmarshalInputUpdateMedicalFolderInput,
+		ec.unmarshalInputUpdateNotificationInput,
+		ec.unmarshalInputUpdatePatientInput,
+		ec.unmarshalInputUpdateRdvInput,
+		ec.unmarshalInputUpdateSaveCodeInput,
+		ec.unmarshalInputUpdateSessionInput,
+		ec.unmarshalInputUpdateSymptomInput,
+		ec.unmarshalInputUpdateTreatmentInput,
+		ec.unmarshalInputUpdateTreatmentsFollowUpInput,
 	)
 	first := true
 
@@ -3591,108 +3924,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../schema.graphql", Input: `##  Substructures  -----------------------------------------------------------------------------------------------------
-
-#  AnteChir
-
-type ChirInducedSymptom {
-    symptom: String!
-    factor: Float!
-}
-
-input ChirInducedSymptomInput {
-    symptom: String!
-    factor: Float!
-}
-
-#  Disease
-type SymptomsWeight {
-    symptom: String!
-    value: Float!
-    chronic: Boolean!
-}
-
-input SymptomsWeightInput {
-    symptom: String!
-    value: Float!
-    chronic: Boolean!
-}
-
-#  Session
-type SessionSymptom {
-    name: String!
-    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
-    duration: Int
-    treated: [String!]
-}
-
-input SessionSymptomInput {
-    name: String!
-    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
-    duration: Int
-    treated: [String!]
-}
-
-type Logs {
-    question: String!
-    answer: String!
-}
-
-input LogsInput {
-    question: String!
-    answer: String!
-}
-
-type SessionDiseases {
-    name: String!
-    presence: Float!
-    unknown_presence: Float!
-}
-
-input SessionDiseasesInput {
-    name: String!
-    presence: Float!
-    unknown_presence: Float!
-}
-
-type NlpReportOutput {
-    symptom: String!
-    present: Boolean
-    days: Int
-}
-
-input NlpReportOutputInput {
-    symptom: String!
-    present: Boolean
-    days: Int
-}
-
-type ChatParticipants {
-    participant_id: String!
-    last_seen: Int!
-}
-
-type ChatMessages {
-    owner_id: String!
-    message: String!
-    sended_time: Int!
-}
-
-input ChatParticipantsInput {
-    participant_id: String!
-    last_seen: Int!
-}
-
-input ChatMessagesInput {
-    owner_id: String!
-    message: String!
-    sended_time: Int!
-}
-
-
-##  Entities  ----------------------------------------------------------------------------------------------------------
-
-# Patient entity
+	{Name: "../schema.graphql", Input: `# Patient entity
 type Patient {
     id: ID!
     email: String!
@@ -3706,6 +3938,8 @@ type Patient {
     device_connect: [String]
     trust_devices: [String]
     status: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Doctor entity
@@ -3723,20 +3957,8 @@ type Doctor {
     device_connect: [String]
     trust_devices: [String]
     status: Boolean!
-}
-
-type Address {
-    street: String!
-    zip_code: String!
-    country: String!
-    city: String!
-}
-
-input AddressInput {
-    street: String!
-    zip_code: String!
-    country: String!
-    city: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Admin entity
@@ -3746,6 +3968,8 @@ type Admin {
     password: String!
     name: String!
     last_name: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Session entity
@@ -3764,6 +3988,8 @@ type Session {
     logs: [Logs!]!
     hereditary_disease: [String!]!
     alerts: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Symptom entity
@@ -3778,6 +4004,8 @@ type Symptom {
     question_basic: String!
     question_duration: String!
     question_ante: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
 # Disease entity
@@ -3790,8 +4018,11 @@ type Disease {
     overweight_factor: Float!
     heredity_factor: Float!
     advice: String
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# MedicalInfo entity
 type MedicalInfo {
     id: ID!
     name: String!
@@ -3804,15 +4035,21 @@ type MedicalInfo {
     onboarding_status: OnboardingStatus!
     antecedent_disease_ids: [String!]!
     family_members_med_info_id: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Notification entity
 type Notification {
 	id:	ID!
 	token: String!
 	title: String!
     message: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Rdv entity
 type Rdv {
     id: ID!
     doctor_id: String!
@@ -3823,36 +4060,33 @@ type Rdv {
     appointment_status: AppointmentStatus!
     session_id: String!
     health_method: String
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Document entity
 type Document {
-   id: ID!
-   owner_id: String!
-   name: String!
-   document_type: DocumentType!
-   category: Category!
-   is_favorite: Boolean!
-   download_url: String!
-}
-
-type TestAccount {
     id: ID!
-    email: String!
-    password: String!
+    owner_id: String!
+    name: String!
+    document_type: DocumentType!
+    category: Category!
+    is_favorite: Boolean!
+    download_url: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
-type DemoAccount {
-    id: ID!
-    email: String!
-    password: String!
-}
-
+# AnteChir entity
 type AnteChir {
     id: ID!
     name: String!
     induced_symptoms: [ChirInducedSymptom!]
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# AnteDisease entity
 type AnteDisease {
     id: ID!
     name: String!
@@ -3861,22 +4095,31 @@ type AnteDisease {
     symptoms: [String!]
     treatment_ids: [String!]
     still_relevant: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# AnteFamily entity
 type AnteFamily {
     id: ID!
     name: String!
     disease: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Treatment entity
 type Treatment {
     id: ID!
     period: [Period!]!
     day: [Day!]!
     quantity: Int!
     medicine_id: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# Alert entity
 type Alert {
     id: ID!
     name: String!
@@ -3885,20 +4128,491 @@ type Alert {
     weight: Int
     symptoms: [String!]!
     comment: String!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
+# MedicalAntecedents entity
 type MedicalAntecedents {
     id: ID!
     name: String!
     medicines: [Treatment!]!
     still_relevant: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
 }
 
-#type Medicines {
-#    period: [Period]!
-#    day: [Day]!
-#    quantity: Int!
-#}
+# Medicine entity
+type Medicine {
+    id: ID!
+    name: String!
+    unit: MedicineUnit!
+    target_diseases: [String!]!
+    treated_symptoms: [String!]!
+    side_effects: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+# TreatmentsFollowUp entity
+type TreatmentsFollowUp {
+    id: ID!
+    treatment_id: String!
+    date: Int!
+    period: [Period!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+# NlpReport entity
+type NlpReport {
+    id: ID!
+    version: Int!
+    input_symptoms: [String!]!
+    input_sentence: String!
+    output: [NlpReportOutput!]!
+    computation_time: Int!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+# Chat entity
+type Chat {
+    id: ID!
+    participants: [ChatParticipants!]!
+    messages: [ChatMessages!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type DoubleAuth {
+    id: ID!
+    methods: [String!]!
+    secret: String!
+    url: String!
+    trust_device_id: String!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type DeviceConnect {
+    id: ID!
+    device_name: String!
+    ip_address: String!
+    latitude: Float!
+    longitude: Float!
+    date: Int!
+    trust_device: Boolean!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type BlackList {
+    id: ID!
+    token: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+type SaveCode {
+    id: ID!
+    code: [String!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+##  Substructure  ----------------------------------------------------------------------------------------------------
+
+type Address {
+    street: String!
+    zip_code: String!
+    country: String!
+    city: String!
+}
+
+type ChirInducedSymptom {
+    symptom: String!
+    factor: Float!
+}
+
+type SymptomsWeight {
+    symptom: String!
+    value: Float!
+    chronic: Boolean!
+}
+
+type SessionSymptom {
+    name: String!
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
+    duration: Int
+    treated: [String!]
+}
+
+type Logs {
+    question: String!
+    answer: String!
+}
+
+type SessionDiseases {
+    name: String!
+    presence: Float!
+    unknown_presence: Float!
+}
+
+type NlpReportOutput {
+    symptom: String!
+    present: Boolean
+    days: Int
+}
+
+type ChatParticipants {
+    participant_id: String!
+    last_seen: Int!
+}
+
+type ChatMessages {
+    owner_id: String!
+    message: String!
+    sended_time: Int!
+}
+
+## Inputs -------------------------------------------------------------------------------------------------------------
+
+input CreatePatientInput {
+    email: String!
+    password: String!
+    status: Boolean!
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
+}
+
+input UpdatePatientInput {
+    email: String
+    password: String
+    medical_info_id: String
+    rendez_vous_ids: [String]
+    document_ids: [String]
+    treatment_follow_up_ids: [String]
+    chat_ids: [String]
+    status: Boolean
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
+}
+
+input CreateDoctorInput {
+    email: String!
+    password: String!
+    name: String!
+    firstname: String!
+    address: AddressInput!
+    status: Boolean!
+}
+
+input UpdateDoctorInput {
+    email: String
+    password: String
+    name: String
+    firstname: String
+    rendez_vous_ids: [String]
+    patient_ids: [String]
+    address: AddressInput
+    chat_ids: [String]
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
+    status: Boolean
+}
+
+input UpdateDoctorsPatientIDsInput {
+    patient_ids: [String]
+}
+
+input AddressInput {
+    street: String!
+    zip_code: String!
+    country: String!
+    city: String!
+}
+
+input CreateAdminInput {
+    email: String!
+    password: String!
+    name: String!
+    last_name: String!
+}
+
+input UpdateAdminInput {
+    email: String
+    password: String
+    name: String
+    last_name: String
+}
+
+input CreateSessionInput {
+    diseases: [SessionDiseasesInput!]!
+    symptoms: [SessionSymptomInput!]!
+    age: Int!
+    height: Int!
+    weight: Int!
+    sex: String!
+    ante_chirs: [String!]!
+    ante_diseases: [String!]!
+    medicine: [String!]!
+    last_question: String!
+    logs: [LogsInput!]!
+    hereditary_disease: [String!]!
+    alerts: [String!]!
+}
+
+input UpdateSessionInput {
+    diseases: [SessionDiseasesInput!]
+    symptoms: [SessionSymptomInput!]
+    age: Int
+    height: Int
+    weight: Int
+    sex: String
+    ante_chirs: [String!]
+    ante_diseases: [String!]
+    medicine: [String!]
+    last_question: String
+    logs: [LogsInput!]
+    hereditary_disease: [String!]
+    alerts: [String!]
+}
+
+input SessionDiseasesInput {
+    name: String!
+    presence: Float!
+    unknown_presence: Float!
+}
+
+input CreateSymptomInput {
+    code: String!
+    name: String!
+    chronic: Int
+    symptom: [String!]!
+    advice: String
+    question: String!
+    question_basic: String!
+    question_duration: String!
+    question_ante: String!
+}
+
+input UpdateSymptomInput {
+    code: String
+    name: String
+    chronic: Int
+    symptom: [String!]
+    advice: String
+    question: String
+    question_basic: String
+    question_duration: String
+    question_ante: String
+}
+
+input CreateDiseaseInput {
+    code: String!
+    name: String!
+    symptoms: [String!]!
+    symptoms_weight: [SymptomsWeightInput!]
+    overweight_factor: Float!
+    heredity_factor: Float!
+    advice: String
+}
+
+input UpdateDiseaseInput {
+    code: String
+    name: String
+    symptoms: [String!]
+    symptoms_weight: [SymptomsWeightInput!]
+    overweight_factor: Float
+    heredity_factor: Float
+    advice: String
+}
+
+input CreateNotificationInput {
+    token: String!
+    message: String!
+    title: String!
+}
+
+input UpdateNotificationInput {
+    token: String!
+    message: String!
+    title: String!
+}
+
+input CreateRdvInput {
+    id_patient: String!
+    doctor_id: String!
+    start_date: Int!
+    end_date: Int!
+    appointment_status: AppointmentStatus!
+    session_id: String!
+}
+
+input UpdateRdvInput {
+    id_patient: String
+    doctor_id: String
+    start_date: Int
+    end_date: Int
+    cancelation_reason: String
+    appointment_status: AppointmentStatus
+    session_id: String
+    health_method: String
+}
+
+
+input CreateDocumentInput {
+    owner_id: String!
+    name: String!
+    document_type: String!
+    category: String!
+    is_favorite: Boolean!
+    download_url: String!
+}
+
+input UpdateDocumentInput {
+    name: String
+    is_favorite: Boolean
+}
+
+input CreateAnteChirInput {
+    name: String!
+    induced_symptoms: [ChirInducedSymptomInput!]
+}
+
+input UpdateAnteChirInput {
+    name: String
+    induced_symptoms: [ChirInducedSymptomInput!]
+}
+
+input CreateAnteDiseaseInput {
+    name: String!
+    chronicity: Float
+    surgery_ids: [String!]
+    symptoms: [String!]
+    treatment_ids: [String!]
+    still_relevant: Boolean!
+}
+
+input UpdateAnteDiseaseInput {
+    name: String
+    chronicity: Float
+    surgery_ids: [String!]
+    symptoms: [String!]
+    treatment_ids: [String!]
+    still_relevant: Boolean
+}
+
+input CreateAnteFamilyInput {
+    name: String!
+    disease: [String!]!
+}
+
+input UpdateAnteFamilyInput {
+    name: String
+    disease: [String!]
+}
+
+input CreateTreatmentInput {
+    period: [Period!]!
+    day: [Day!]!
+    quantity: Int!
+    medicine_id: String!
+}
+
+input UpdateTreatmentInput {
+    period: [Period!]
+    day: [Day!]
+    quantity: Int
+    medicine_id: String
+}
+
+input CreateAlertInput {
+    name: String!
+    sex: String
+    height: Int
+    weight: Int
+    symptoms: [String!]!
+    comment: String!
+}
+
+input UpdateAlertInput {
+    name: String
+    sex: String
+    height: Int
+    weight: Int
+    symptoms: [String!]
+    comment: String
+}
+
+input CreateMedicineInput {
+    name: String!
+    unit: String
+    target_diseases: [String!]!
+    treated_symptoms: [String!]!
+    side_effects: [String!]!
+}
+
+
+input CreateMedicalFolderInput {
+    name: String!
+    firstname: String!
+    birthdate: Int!
+    sex: String!
+    height: Int!
+    weight: Int!
+    primary_doctor_id: String!
+    antecedent_disease_ids: [String!]
+    onboarding_status: String!
+    family_members_med_info_id: [String!]!
+}
+
+input UpdateMedicalFolderInput {
+    name: String
+    firstname: String
+    birthdate: Int
+    sex: String
+    height: Int
+    weight: Int
+    primary_doctor_id: String
+    antecedent_disease_ids: [String!]
+    onboarding_status: OnboardingStatus
+    family_members_med_info_id: [String!]
+}
+
+input CreateTreatmentsFollowUpInput {
+    treatment_id: String!
+    date: Int!
+    period: [Period!]!
+}
+
+input UpdateTreatmentsFollowUpInput {
+    treatment_id: String
+    date: Int
+    period: [Period!]
+}
+
+input CreateNlpReportInput {
+    version: Int!
+    input_symptoms: [String!]!
+    input_sentence: String!
+    output: [NlpReportOutputInput!]!
+    computation_time: Int!
+}
+
+input CreateChatInput {
+    participants: [ChatParticipantsInput!]!
+    messages: [ChatMessagesInput!]!
+}
+
+input UpdateChatInput {
+    participants: [ChatParticipantsInput!]
+    messages: [ChatMessagesInput!]
+}
 
 input MedicalAntecedentsInput {
     name: String!
@@ -3913,15 +4627,6 @@ input TreatmentInput {
     medicine_id: String!
 }
 
-type Medicine {
-    id: ID!
-    name: String!
-    unit: MedicineUnit!
-    target_diseases: [String!]!
-    treated_symptoms: [String!]!
-    side_effects: [String!]!
-}
-
 input MedicineInput {
     name: String!
     unit: MedicineUnit!
@@ -3930,38 +4635,25 @@ input MedicineInput {
     side_effects: [String!]!
 }
 
-type TreatmentsFollowUp {
-    id: ID!
-    treatment_id: String!
-    date: Int!
-    period: [Period!]!
+input ChirInducedSymptomInput {
+    symptom: String!
+    factor: Float!
 }
 
-type NlpReport {
-    id: ID!
-    version: Int!
-    input_symptoms: [String!]!
-    input_sentence: String!
-    output: [NlpReportOutput!]!
-    computation_time: Int!
+input SymptomsWeightInput {
+    symptom: String!
+    value: Float!
+    chronic: Boolean!
 }
 
-type Chat {
-    id: ID!
-    participants: [ChatParticipants!]!
-    messages: [ChatMessages!]!
+input SessionSymptomInput {
+    name: String!
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
+    duration: Int
+    treated: [String!]
 }
 
-type DoubleAuth {
-    id: ID!
-    methods: [String!]!
-    secret: String!
-    url: String!
-    trust_device_id: String!
-}
-
-type DeviceConnect {
-    id: ID!
+input CreateDeviceConnectInput {
     device_name: String!
     ip_address: String!
     latitude: Float!
@@ -3970,435 +4662,68 @@ type DeviceConnect {
     trust_device: Boolean!
 }
 
-type BlackList {
-    id: ID!
+input UpdateDeviceConnectInput {
+    device_name: String
+    ip_address: String
+    latitude: Float
+    longitude: Float
+    date: Int
+    trust_device: Boolean
+}
+
+input CreateDoubleAuthInput {
+    methods: [String!]!
+    secret: String!
+    url: String!
+    trust_device_id: String!
+}
+
+input UpdateDoubleAuthInput {
+    methods: [String!]
+    secret: String
+    url: String
+    trust_device_id: String
+}
+
+input CreateBlackListInput {
     token: [String!]!
 }
 
-type SaveCode {
-    id: ID!
+input UpdateBlackListInput {
+    token: [String!]
+}
+
+input CreateSaveCodeInput {
     code: [String!]!
 }
 
-
-## Query  --------------------------------------------------------------------------------------------------------------
-
-type Query {
-    # Get the entire list of patients.
-    getPatients: [Patient]
-
-    # Find a patient using its id.
-    getPatientById(id: String!): Patient
-
-    # Find a patient using its email.
-    getPatientByEmail(email: String!): Patient
-
-    # Get the entire list of doctors.
-    getDoctors: [Doctor]
-
-    # Find a doctor using its id.
-    getDoctorById(id: String!): Doctor
-
-    # Find a doctor using its email.
-    getDoctorByEmail(email: String!): Doctor
-
-    # Get the entire list of admins.
-    getAdmins: [Admin]
-
-    # Find a admin using its id.
-    getAdminById(id: String!): Admin
-
-    # Find an admin using its email.
-    getAdminByEmail(email: String!): Admin
-
-    # Get the entire list of demo accounts.
-    getDemoAccounts: [DemoAccount]
-
-    # Find a demo account using its id.
-    getDemoAccountById(id: String!): DemoAccount
-
-    # Find an demo account using its email.
-    getDemoAccountByEmail(email: String!): DemoAccount
-
-    # Get the entire list of test accounts.
-    getTestAccounts: [TestAccount]
-
-    # Find a test account using its id.
-    getTestAccountById(id: String!): TestAccount
-
-    # Find an test account using its email.
-    getTestAccountByEmail(email: String!): TestAccount
-
-    # Get the entire list of sessions.
-    getSessions: [Session]
-
-    # Find a session using its id.
-    getSessionById(id: String!): Session
-
-    # Find a symptom using its id.
-    getSymptomById(id: String!): Symptom
-
-    # Find a disease using its id.
-    getDiseaseById(id: String!): Disease
-
-    # Get the entire list of symptoms
-    getSymptoms: [Symptom]
-
-    # Get the entire list of diseases
-    getDiseases: [Disease]
-
-    # Get a disease's symptoms its name
-    getSymptomsByDiseaseName(name: String!): Disease
-
-    # Get the entire list of notification.
-    getNotifications: [Notification]
-
-    # Find a Notification using its id.
-    getNotificationById(id: String!): Notification
-
-    # Get the entire list of rdv patients.
-    getPatientRdv(id_patient: String!): [Rdv]
-
-    #Get the entire list of rdv doctors.
-    getDoctorRdv(doctor_id: String!): [Rdv]
-
-    # Find a rdv using its id.
-    getRdvById(id: String!): Rdv
-
-    #Find a slot and rdv using its id.
-    getSlotById(id: String!): Rdv
-
-    #Find all rdv and slot.
-    getSlots(id: String!): [Rdv]
-
-    # Get the entire list of waiting review
-    getWaitingRdv(doctor_id: String!): [Rdv]
-
-    # Get the entire list of document patient
-    getDocuments: [Document]
-
-    # Find a doucment using its id.
-    getDocumentById(id: String!): Document
-
-    getPatientDocument(id: String!): [Document]
-
-    # Get the entire list of antechirs.
-    getAnteChirs: [AnteChir]
-
-    # Get an antechir by its id.
-    getAnteChirByID(id: String!): AnteChir
-
-    # Get the entire list of antediseases.
-    getAnteDiseases: [AnteDisease]
-
-    # Get an antedisease by its id.
-    getAnteDiseaseByID(id: String!): AnteDisease
-
-    # Get the entire list of .
-    getAnteFamilies: [AnteFamily]
-
-    # Get an antefamily by its id.
-    getAnteFamilyByID(id: String!): AnteFamily
-
-    # Get the entire list of treatments.
-    getTreatments: [Treatment]
-
-    # Get a treament by its id.
-    getTreatmentByID(id: String!): Treatment
-
-    # Get the entire list of alerts.
-    getAlerts: [Alert]
-
-    # Get an alert by its id.
-    getAlertById(id: String!): Alert
-
-# ========================================== #
-
-    # Get the entire list of Medicament.
-    getMedicalFolder: [MedicalInfo]
-
-    # Get a Medicine by its id.
-    getMedicalFolderById(id: String!): MedicalInfo
-
-    # Get the entire list of Medicine.
-    getMedicines: [Medicine]
-
-    # Get an Medicine by its id.
-    getMedicineByID(id: String!): Medicine
-
-    # Get all patient from doctor with id.
-    getPatientsFromDoctorById(id: String!): [Patient]
-
-
-    # Get TreatmentsFollowUp by its id
-    getTreatmentsFollowUpById(id: String!): TreatmentsFollowUp
-
-    # Get all TreatmentsFollowUp
-    getTreatmentsFollowUps(id: String!): [TreatmentsFollowUp]
-
-    # Get NlpReports
-    getNlpReports: [NlpReport]
-
-    # Get NlpReports by version
-    getNlpReportsByVersion(version: Int!): [NlpReport]
-
-    # Get Chats
-    getChats(id: String!): [Chat]
-
-    # Get chat by its id
-    getChatById(id: String!): Chat
-
-    #================================================
-    # Get device by its id
-    getDeviceConnectById(id: String!): DeviceConnect
-
-    # Get DeviceConnects
-    getDevicesConnect: [DeviceConnect]
-    #================================================
-    # Get double auth by its id
-    getDoubleAuthById(id: String!): DoubleAuth
-
-    #Get DoubleAuth
-    getDoubleAuths: [DoubleAuth]
-
-    # Get Black list
-    getBlackListById(id: String!): BlackList
-
-    getBlackList: [BlackList]
-
-    # Get Black list
-    getSaveCodeById(id: String!): SaveCode
-
-    getSaveCode: [SaveCode]
-
+input UpdateSaveCodeInput {
+    code: [String!]
 }
 
-##  Mutation  ----------------------------------------------------------------------------------------------------------
-
-type Mutation {
-    # Create a new patient.
-    createPatient(email: String!, password: String!, status: Boolean!): Patient
-
-    # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Patient
-
-    # Delete a patient.
-    deletePatient(id: String!): Boolean
-
-    # Create a new doctor.
-    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!, status: Boolean!): Doctor
-
-    # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Doctor #rendez_vous_id: String , slot_ids: [String] status: Boolean
-
-    # Delete a doctor.
-    deleteDoctor(id: String!): Boolean
-
-    # Create a new Admin.
-    createAdmin(email: String!, password: String!, name: String!, last_name: String!): Admin
-
-    # Update a Admin.
-    updateAdmin(id: String!, email: String, password: String, name: String, last_name: String): Admin
-
-    # Delete a Admin.
-    deleteAdmin(id: String!): Boolean
-
-    # Create a new DemoAccount.
-    createDemoAccount(email: String!, password: String!): DemoAccount
-
-    # Update a DemoAccount.
-    updateDemoAccount(id: String!, email: String, password: String): DemoAccount
-
-    # Delete a DemoAccount.
-    deleteDemoAccount(id: String!): Boolean
-
-    # Create a new TestAccount.
-    createTestAccount(email: String!, password: String!): TestAccount
-
-    # Update a TestAccount.
-    updateTestAccount(id: String!, email: String, password: String): TestAccount
-
-    # Delete a TestAccount.
-    deleteTestAccount(id: String!): Boolean
-
-    # Create a new session.
-    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, medicine: [String!]!, last_question: String!, logs: [LogsInput!]!, hereditary_disease: [String!]!, alerts: [String!]!): Session
-
-    # Update a new session.
-    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], medicine: [String!], last_question: String, logs: [LogsInput!], hereditary_disease: [String!], alerts: [String!]): Session
-
-    # Delete a session.
-    deleteSession(id: String!): Boolean
-
-    # Create a new symptom.
-
-    createSymptom(code: String!, name: String!, chronic: Int, symptom: [String!]! ,advice: String, question: String!, question_basic: String!, question_duration: String!, question_ante: String!): Symptom
-
-    # Update a new symptom.
-    updateSymptom(id: String!, code: String, name: String, chronic: Int, symptom: [String!], advice: String, question: String, question_basic: String, question_duration: String, question_ante: String): Symptom
-
-    # Delete a symptom.
-    deleteSymptom(id: String!): Boolean
-
-    # Create a new disease.
-    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float!, heredity_factor: Float!, advice: String): Disease
-
-    # Update a new disease.
-    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float, heredity_factor: Float, advice: String): Disease
-
-    # Delete a disease.
-    deleteDisease(id: String!): Boolean
-
-    # Create a new notification.
-    createNotification(token: String!, message: String!, title: String!): Notification
-
-    # Update a new notification.
-    updateNotification(id: String!, token: String!, message: String!, title: String!): Notification
-
-    # Delete a notification.
-    deleteNotification(id: String!): Boolean
-
-    # Create a new Rdv.
-    createRdv(id_patient: String!, doctor_id: String!, start_date: Int!, end_date: Int!, appointment_status: AppointmentStatus!, session_id: String!): Rdv
-
-    # Update a new Rdv.
-    updateRdv(id: String!, id_patient: String, doctor_id: String, start_date: Int, end_date: Int, cancelation_reason: String, appointment_status: AppointmentStatus, session_id: String, health_method: String): Rdv
-
-    # Delete a Rdv.
-    deleteRdv(id: String!): Boolean
-
-    # Delete a Slot.
-    deleteSlot(id: String!): Boolean
-
-    #Create a new document.
-    createDocument(owner_id: String!, name: String!, document_type: String!, category: String!, is_favorite: Boolean!, download_url: String!): Document
-
-    # Update a new Slot.
-    updateDocument(id: String!, name: String, is_favorite: Boolean): Document
-
-    # Delete a Slot.
-    deleteDocument(id: String!): Boolean
-
-    # Create a new antechir.
-    createAnteChir(name: String!, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
-
-    # Update a new antechir.
-    updateAnteChir(id: String!, name: String, induced_symptoms: [ChirInducedSymptomInput!]): AnteChir
-
-    # Delete a antechir.
-    deleteAnteChir(id: String!): Boolean
-
-    # Create a new antedisease.
-    createAnteDisease(name: String!, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean!): AnteDisease
-    # Update a new antedisease.
-    updateAnteDisease(id: String!, name: String, chronicity: Float, surgery_ids: [String!], symptoms: [String!], treatment_ids: [String!], still_relevant: Boolean): AnteDisease
-    # Delete a antedisease.
-    deleteAnteDisease(id: String!): Boolean
-
-    # Create a new antefamily.
-    createAnteFamily(name: String!, disease: [String!]!): AnteFamily
-
-    # Update a new antefamily.
-    updateAnteFamily(id: String!, name: String, disease: [String!]): AnteFamily
-
-    # Delete a antefamily.
-    deleteAnteFamily(id: String!): Boolean
-
-    # Create a new treatment.
-    createTreatment(period: [Period!]!, day: [Day!]!, quantity: Int!, medicine_id: String!): Treatment
-    # Update a new treatment.
-    updateTreatment(id: String!, period: [Period!], day: [Day!], quantity: Int, medicine_id: String): Treatment
-    # Delete a treatment.
-    deleteTreatment(id: String!): Boolean
-
-    # Create a new alert.
-    createAlert(name: String!, sex: String, height: Int, weight: Int, symptoms: [String!]!, comment: String!): Alert
-
-    # Update a new alert.
-    updateAlert(id: String!, name: String, sex: String, height: Int, weight: Int, symptoms: [String!], comment: String): Alert
-
-    # Delete an alert.
-    deleteAlert(id: String!): Boolean
-
-# ================================================ #
-
-    # Create a new Medicine.
-    createMedicine(name: String!, unit: String, target_diseases: [String!]!, treated_symptoms: [String!]!, side_effects: [String!]!): Medicine
-
-    # Delete an Medicine.
-    deleteMedicine(id: String!): Boolean
-
-
-    # Create a new MedicalFolder.!
-    createMedicalFolder(name: String!, firstname: String!, birthdate: Int!, sex: String!, height: Int!, weight: Int!, primary_doctor_id: String!, antecedent_disease_ids: [String!], onboarding_status: String!, family_members_med_info_id: [String!]!): MedicalInfo
-    # Update a new MedicalFolder.
-    updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus, family_members_med_info_id: [String!]): MedicalInfo
-    # Delete an MedicalFolder.
-    deleteMedicalFolder(id: String!): Boolean
-
-
-    # Create TreatmentsFollowUp
-    createTreatmentsFollowUp(treatment_id: String!, date: Int!, period: [Period!]!): TreatmentsFollowUp
-    #Update TreatmentsFollowUp
-    updateTreatmentsFollowUp(id: String!, treatment_id: String, date: Int, period: [Period!]): TreatmentsFollowUp
-    # Delete TreatmentsFollowUp
-    deleteTreatmentsFollowUp(id: String!): Boolean
-
-    # Create a new NlpReport
-    createNlpReport(version: Int!, input_symptoms: [String!]!, input_sentence: String!, output: [NlpReportOutputInput!]!, computation_time: Int!): NlpReport
-
-    # Create a new Chat
-    createChat(participants: [ChatParticipantsInput!]!, messages: [ChatMessagesInput!]!): Chat
-
-    #Update a Chat
-    updateChat(id: String!, participants: [ChatParticipantsInput!], messages: [ChatMessagesInput!]): Chat
-
-    #Delete a Chat
-    deleteChat(id: String!): Boolean
-
-
-    # Create new DeviceConnect
-    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Float!, longitude: Float!, date: Int!, trust_device: Boolean!): DeviceConnect
-
-    #update a DeviceConnect
-    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Float, longitude: Float, date: Int, trust_device: Boolean): DeviceConnect
-
-    #Delete a DeviceConnect
-    deleteDeviceConnect(id: String!): Boolean
-
-
-    # Create new DoubleAuth
-    createDoubleAuth(methods: [String!]!, secret: String!, url: String!, trust_device_id: String!): DoubleAuth
-
-    #update a DeviceConnect
-    updateDoubleAuth(id: String!, methods: [String!], secret: String, url: String, trust_device_id: String): DoubleAuth
-
-    #Delete a DeviceConnect
-    deleteDoubleAuth(id: String!): Boolean
-
-
-    # Create new DoubleAuth
-    createBlackList(token: [String!]!): BlackList
-
-    #update a DeviceConnect
-    updateBlackList(id: String!, token: [String!]): BlackList
-
-    #Delete a DeviceConnect
-    deleteBlackList(id: String!): Boolean
-
-
-    # Create new DoubleAuth
-    createSaveCode(code: [String!]!): SaveCode
-
-    #update a DeviceConnect
-    updateSaveCode(id: String!, code: [String!]): SaveCode
-
-    #Delete a DeviceConnect
-    deleteSaveCode(id: String!): Boolean
+input LogsInput {
+    question: String!
+    answer: String!
 }
 
+input NlpReportOutputInput {
+    symptom: String!
+    present: Boolean
+    days: Int
+}
 
-##  Enums  -------------------------------------------------------------------------------------------------------------
+input ChatParticipantsInput {
+    participant_id: String!
+    last_seen: Int!
+}
+
+input ChatMessagesInput {
+    owner_id: String!
+    message: String!
+    sended_time: Int!
+}
+
+##  Enums  ------------------------------------------------------------------------------------------------------------
 
 enum Sex {
     MALE,
@@ -4454,6 +4779,400 @@ enum AppointmentStatus {
     CANCELED_DUE_TO_REVIEW,
     CANCELED,
     OPENED
+}
+
+## Utils  -------------------------------------------------------------------------------------------------------------
+
+enum SortOrder {
+    ASC
+    DESC
+}
+
+input SortingOptions {
+    order: SortOrder!
+    key: String!
+}
+
+input Options {
+    sort: SortingOptions!
+    limit: Int!
+    offset: Int!
+}
+
+## Query  -------------------------------------------------------------------------------------------------------------
+
+type Query {
+    # Get the entire list of patients.
+    getPatients(option: Options): [Patient]
+
+    # Find a patient using its id.
+    getPatientById(id: String!): Patient
+
+    # Find a patient using its email.
+    getPatientByEmail(email: String!): Patient
+
+    # Get the entire list of doctors.
+    getDoctors(option: Options): [Doctor]
+
+    # Find a doctor using its id.
+    getDoctorById(id: String!): Doctor
+
+    # Find a doctor using its email.
+    getDoctorByEmail(email: String!): Doctor
+
+    # Get the entire list of admins.
+    getAdmins(option: Options): [Admin]
+
+    # Find a admin using its id.
+    getAdminById(id: String!): Admin
+
+    # Find an admin using its email.
+    getAdminByEmail(email: String!): Admin
+
+    # Get the entire list of sessions.
+    getSessions(option: Options): [Session]
+
+    # Find a session using its id.
+    getSessionById(id: String!): Session
+
+    # Find a symptom using its id.
+    getSymptomById(id: String!): Symptom
+
+    # Get a disease's symptoms by its name
+    getSymptomsByDiseaseName(name: String!): Disease
+
+    # Find a disease using its id.
+    getDiseaseById(id: String!): Disease
+
+    # Get the entire list of symptoms
+    getSymptoms(option: Options): [Symptom]
+
+    # Get the entire list of diseases
+    getDiseases(option: Options): [Disease]
+
+    # Get the entire list of notification.
+    getNotifications(option: Options): [Notification]
+
+    # Find a Notification using its id.
+    getNotificationById(id: String!): Notification
+
+    # Get the entire list of rdv patients.
+    getPatientRdv(id_patient: String!, option: Options): [Rdv]
+
+    #Get the entire list of rdv doctors.
+    getDoctorRdv(doctor_id: String!, option: Options): [Rdv]
+
+    # Find a rdv using its id.
+    getRdvById(id: String!): Rdv
+
+    #Find a slot and rdv using its id.
+    getSlotById(id: String!): Rdv
+
+    #Find all rdv and slot.
+    getSlots(id: String!, option: Options): [Rdv]
+
+    # Get the entire list of waiting review
+    getWaitingRdv(doctor_id: String!, option: Options): [Rdv]
+
+    # Get the entire list of document patient
+    getDocuments(option: Options): [Document]
+
+    # Find a doucment using its id.
+    getDocumentById(id: String!): Document
+
+    getPatientDocument(id: String!, option: Options): [Document]
+
+    # Get the entire list of antechirs.
+    getAnteChirs(option: Options): [AnteChir]
+
+    # Get an antechir by its id.
+    getAnteChirByID(id: String!): AnteChir
+
+    # Get the entire list of antediseases.
+    getAnteDiseases(option: Options): [AnteDisease]
+
+    # Get an antedisease by its id.
+    getAnteDiseaseByID(id: String!): AnteDisease
+
+    # Get the entire list of .
+    getAnteFamilies(option: Options): [AnteFamily]
+
+    # Get an antefamily by its id.
+    getAnteFamilyByID(id: String!): AnteFamily
+
+    # Get the entire list of treatments.
+    getTreatments(option: Options): [Treatment]
+
+    # Get a treament by its id.
+    getTreatmentByID(id: String!): Treatment
+
+    # Get the entire list of alerts.
+    getAlerts(option: Options): [Alert]
+
+    # Get an alert by its id.
+    getAlertById(id: String!): Alert
+
+    # Get the entire list of Medicament.
+    getMedicalFolder(option: Options): [MedicalInfo]
+
+    # Get a Medicine by its id.
+    getMedicalFolderById(id: String!): MedicalInfo
+
+    # Get the entire list of Medicine.
+    getMedicines(option: Options): [Medicine]
+
+    # Get an Medicine by its id.
+    getMedicineByID(id: String!): Medicine
+
+    # Get all patient from doctor with id.
+    getPatientsFromDoctorById(id: String!, option: Options): [Patient]
+
+    # Get TreatmentsFollowUp by its id
+    getTreatmentsFollowUpById(id: String!): TreatmentsFollowUp
+
+    # Get all TreatmentsFollowUp
+    getTreatmentsFollowUps(id: String!, option: Options): [TreatmentsFollowUp]
+
+    # Get NlpReports
+    getNlpReports(option: Options): [NlpReport]
+
+    # Get NlpReports by version
+    getNlpReportsByVersion(version: Int!, option: Options): [NlpReport]
+
+    # Get Chats
+    getChats(id: String!, option: Options): [Chat]
+
+    # Get chat by its id
+    getChatById(id: String!): Chat
+
+    # Get device by its id
+    getDeviceConnectById(id: String!): DeviceConnect
+
+    # Get DeviceConnects
+    getDevicesConnect(option: Options): [DeviceConnect]
+
+    # Get double auth by its id
+    getDoubleAuthById(id: String!): DoubleAuth
+
+    #Get DoubleAuth
+    getDoubleAuths(option: Options): [DoubleAuth]
+
+    # Get Black list
+    getBlackListById(id: String!): BlackList
+
+    # Get Black lists
+    getBlackList(option: Options): [BlackList]
+
+    # Get Black list
+    getSaveCodeById(id: String!): SaveCode
+
+    # Get Save Code
+    getSaveCode(option: Options): [SaveCode]
+}
+
+type Mutation {
+    # Create a new patient.
+    createPatient(input: CreatePatientInput!): Patient
+    
+    # Update a patient.
+    updatePatient(id: String!, input: UpdatePatientInput!): Patient
+
+    # Delete a patient.
+    deletePatient(id: String!): Boolean
+
+    # Create a new doctor.
+    createDoctor(input: CreateDoctorInput!): Doctor
+
+    # Update a doctor.
+    updateDoctor(id: String!, input: UpdateDoctorInput!): Doctor
+
+    updateDoctorsPatientIDs(id: String!, input: UpdateDoctorsPatientIDsInput!): Doctor
+
+    # Delete a doctor.
+    deleteDoctor(id: String!): Boolean
+
+    # Create a new Admin.
+    createAdmin(input: CreateAdminInput!): Admin
+
+    # Update a Admin.
+    updateAdmin(id: String!, input: UpdateAdminInput!): Admin
+
+    # Delete a Admin.
+    deleteAdmin(id: String!): Boolean
+
+    # Create a new session.
+    createSession(input: CreateSessionInput!): Session
+
+    # Update a new session.
+    updateSession(id: String!, input: UpdateSessionInput!): Session
+
+    # Delete a session.
+    deleteSession(id: String!): Boolean
+
+    # Create a new symptom.
+    createSymptom(input: CreateSymptomInput!): Symptom
+
+    # Update a new symptom.
+    updateSymptom(id: String!, input: UpdateSymptomInput!): Symptom
+
+    # Delete a symptom.
+    deleteSymptom(id: String!): Boolean
+
+    # Create a new disease.
+    createDisease(input: CreateDiseaseInput!): Disease
+
+    # Update a new disease.
+    updateDisease(id: String!, input: UpdateDiseaseInput!): Disease
+
+    # Delete a disease.
+    deleteDisease(id: String!): Boolean
+
+    # Create a new notification.
+    createNotification(input: CreateNotificationInput!): Notification
+
+    # Update a new notification.
+    updateNotification(id: String!, input: UpdateNotificationInput!): Notification
+
+    # Delete a notification.
+    deleteNotification(id: String!): Boolean
+
+    # Create a new Rdv.
+    createRdv(input: CreateRdvInput!): Rdv
+
+    # Update a new Rdv.
+    updateRdv(id: String!, input: UpdateRdvInput!): Rdv
+
+    # Delete a Rdv.
+    deleteRdv(id: String!): Boolean
+
+    # Delete a Slot.
+    deleteSlot(id: String!): Boolean
+
+    #Create a new document.
+    createDocument(input: CreateDocumentInput!): Document
+
+    # Update a new Slot.
+    updateDocument(id: String!, input: UpdateDocumentInput!): Document
+
+    # Delete a Slot.
+    deleteDocument(id: String!): Boolean
+
+    # Create a new antechir.
+    createAnteChir(input: CreateAnteChirInput!): AnteChir
+
+    # Update a new antechir.
+    updateAnteChir(id: String!, input: UpdateAnteChirInput!): AnteChir
+
+    # Delete a antechir.
+    deleteAnteChir(id: String!): Boolean
+
+    # Create a new antedisease.
+    createAnteDisease(input: CreateAnteDiseaseInput!): AnteDisease
+    
+    # Update a new antedisease.
+    updateAnteDisease(id: String!, input: UpdateAnteDiseaseInput!): AnteDisease
+    
+    # Delete a antedisease.
+    deleteAnteDisease(id: String!): Boolean
+
+    # Create a new antefamily.
+    createAnteFamily(input: CreateAnteFamilyInput!): AnteFamily
+
+    # Update a new antefamily.
+    updateAnteFamily(id: String!, input: UpdateAnteFamilyInput!): AnteFamily
+
+    # Delete a antefamily.
+    deleteAnteFamily(id: String!): Boolean
+
+    # Create a new treatment.
+    createTreatment(input: CreateTreatmentInput!): Treatment
+
+    # Update a new treatment.
+    updateTreatment(id: String!, input: UpdateTreatmentInput!): Treatment
+
+    # Delete a treatment.
+    deleteTreatment(id: String!): Boolean
+
+    # Create a new alert.
+    createAlert(input: CreateAlertInput!): Alert
+
+    # Update a new alert.
+    updateAlert(id: String!, input: UpdateAlertInput!): Alert
+
+    # Delete an alert.
+    deleteAlert(id: String!): Boolean
+
+    # Create a new Medicine.
+    createMedicine(input: CreateMedicineInput!): Medicine
+
+    # Delete an Medicine.
+    deleteMedicine(id: String!): Boolean
+
+    # Create a new MedicalFolder.!
+    createMedicalFolder(input: CreateMedicalFolderInput!): MedicalInfo
+    
+    # Update a new MedicalFolder.
+    updateMedicalFolder(id: String!, input: UpdateMedicalFolderInput!): MedicalInfo
+    
+    # Delete an MedicalFolder.
+    deleteMedicalFolder(id: String!): Boolean
+
+    # Create TreatmentsFollowUp
+    createTreatmentsFollowUp(input: CreateTreatmentsFollowUpInput!): TreatmentsFollowUp
+    
+    #Update TreatmentsFollowUp
+    updateTreatmentsFollowUp(id: String!, input: UpdateTreatmentsFollowUpInput!): TreatmentsFollowUp
+    
+    # Delete TreatmentsFollowUp
+    deleteTreatmentsFollowUp(id: String!): Boolean
+
+    # Create a new NlpReport
+    createNlpReport(input: CreateNlpReportInput!): NlpReport
+
+    # Create a new Chat
+    createChat(input: CreateChatInput!): Chat
+
+    #Update a Chat
+    updateChat(id: String!, input: UpdateChatInput!): Chat
+
+    #Delete a Chat
+    deleteChat(id: String!): Boolean
+
+    # Create new DeviceConnect
+    createDeviceConnect(input: CreateDeviceConnectInput!): DeviceConnect
+
+    #update a DeviceConnect
+    updateDeviceConnect(id: String!, input: UpdateDeviceConnectInput!): DeviceConnect
+
+    #Delete a DeviceConnect
+    deleteDeviceConnect(id: String!): Boolean
+
+    # Create new DoubleAuth
+    createDoubleAuth(input: CreateDoubleAuthInput!): DoubleAuth
+
+    #update a DoubleAuth
+    updateDoubleAuth(id: String!, input: UpdateDoubleAuthInput!): DoubleAuth
+
+    #Delete a DoubleAuth
+    deleteDoubleAuth(id: String!): Boolean
+
+    # Create new BlackList
+    createBlackList(input: CreateBlackListInput!): BlackList
+
+    #update a BlackList
+    updateBlackList(id: String!, input: UpdateBlackListInput!): BlackList
+
+    #Delete a DeviceConnect
+    deleteBlackList(id: String!): Boolean
+
+    # Create new SaveCode
+    createSaveCode(input: CreateSaveCodeInput!): SaveCode
+
+    #update a SaveCode
+    updateSaveCode(id: String!, input: UpdateSaveCodeInput!): SaveCode
+
+    #Delete a SaveCode
+    deleteSaveCode(id: String!): Boolean
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -4465,1212 +5184,345 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Mutation_createAdmin_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateAdminInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAdminInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg2
-	var arg3 string
-	if tmp, ok := rawArgs["last_name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_name"))
-		arg3, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last_name"] = arg3
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createAlert_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateAlertInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAlertInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["sex"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["sex"] = arg1
-	var arg2 *int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
-		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["height"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["weight"] = arg3
-	var arg4 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg4, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg4
-	var arg5 string
-	if tmp, ok := rawArgs["comment"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comment"))
-		arg5, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["comment"] = arg5
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createAnteChir_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateAnteChirInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteChirInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg0
-	var arg1 []*model.ChirInducedSymptomInput
-	if tmp, ok := rawArgs["induced_symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
-		arg1, err = ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["induced_symptoms"] = arg1
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createAnteDisease_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateAnteDiseaseInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg0
-	var arg1 *float64
-	if tmp, ok := rawArgs["chronicity"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronicity"))
-		arg1, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["chronicity"] = arg1
-	var arg2 []string
-	if tmp, ok := rawArgs["surgery_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("surgery_ids"))
-		arg2, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["surgery_ids"] = arg2
-	var arg3 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg3, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg3
-	var arg4 []string
-	if tmp, ok := rawArgs["treatment_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_ids"))
-		arg4, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["treatment_ids"] = arg4
-	var arg5 bool
-	if tmp, ok := rawArgs["still_relevant"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("still_relevant"))
-		arg5, err = ec.unmarshalNBoolean2bool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["still_relevant"] = arg5
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createAnteFamily_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateAnteFamilyInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg0
-	var arg1 []string
-	if tmp, ok := rawArgs["disease"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("disease"))
-		arg1, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["disease"] = arg1
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createBlackList_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []string
-	if tmp, ok := rawArgs["token"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
-		arg0, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+	var arg0 model.CreateBlackListInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateBlackListInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["token"] = arg0
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createChat_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []*model.ChatParticipantsInput
-	if tmp, ok := rawArgs["participants"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("participants"))
-		arg0, err = ec.unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInputᚄ(ctx, tmp)
+	var arg0 model.CreateChatInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateChatInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["participants"] = arg0
-	var arg1 []*model.ChatMessagesInput
-	if tmp, ok := rawArgs["messages"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("messages"))
-		arg1, err = ec.unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["messages"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_createDemoAccount_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["email"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg1
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["device_name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateDeviceConnectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDeviceConnectInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["device_name"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["ip_address"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ip_address"] = arg1
-	var arg2 float64
-	if tmp, ok := rawArgs["latitude"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
-		arg2, err = ec.unmarshalNFloat2float64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["latitude"] = arg2
-	var arg3 float64
-	if tmp, ok := rawArgs["longitude"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
-		arg3, err = ec.unmarshalNFloat2float64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["longitude"] = arg3
-	var arg4 int
-	if tmp, ok := rawArgs["date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
-		arg4, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["date"] = arg4
-	var arg5 bool
-	if tmp, ok := rawArgs["trust_device"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device"))
-		arg5, err = ec.unmarshalNBoolean2bool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["trust_device"] = arg5
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createDisease_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["code"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateDiseaseInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["code"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg1
-	var arg2 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg2, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg2
-	var arg3 []*model.SymptomsWeightInput
-	if tmp, ok := rawArgs["symptoms_weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
-		arg3, err = ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms_weight"] = arg3
-	var arg4 float64
-	if tmp, ok := rawArgs["overweight_factor"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overweight_factor"))
-		arg4, err = ec.unmarshalNFloat2float64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["overweight_factor"] = arg4
-	var arg5 float64
-	if tmp, ok := rawArgs["heredity_factor"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("heredity_factor"))
-		arg5, err = ec.unmarshalNFloat2float64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["heredity_factor"] = arg5
-	var arg6 *string
-	if tmp, ok := rawArgs["advice"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["advice"] = arg6
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createDoctor_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateDoctorInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoctorInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg2
-	var arg3 string
-	if tmp, ok := rawArgs["firstname"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
-		arg3, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["firstname"] = arg3
-	var arg4 model.AddressInput
-	if tmp, ok := rawArgs["address"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-		arg4, err = ec.unmarshalNAddressInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["address"] = arg4
-	var arg5 bool
-	if tmp, ok := rawArgs["status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-		arg5, err = ec.unmarshalNBoolean2bool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["status"] = arg5
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createDocument_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["owner_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("owner_id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateDocumentInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDocumentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["owner_id"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["document_type"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("document_type"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["document_type"] = arg2
-	var arg3 string
-	if tmp, ok := rawArgs["category"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
-		arg3, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["category"] = arg3
-	var arg4 bool
-	if tmp, ok := rawArgs["is_favorite"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("is_favorite"))
-		arg4, err = ec.unmarshalNBoolean2bool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["is_favorite"] = arg4
-	var arg5 string
-	if tmp, ok := rawArgs["download_url"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("download_url"))
-		arg5, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["download_url"] = arg5
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createDoubleAuth_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []string
-	if tmp, ok := rawArgs["methods"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("methods"))
-		arg0, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+	var arg0 model.CreateDoubleAuthInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoubleAuthInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["methods"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["secret"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secret"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["secret"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["url"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["url"] = arg2
-	var arg3 string
-	if tmp, ok := rawArgs["trust_device_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device_id"))
-		arg3, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["trust_device_id"] = arg3
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createMedicalFolder_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateMedicalFolderInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicalFolderInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["firstname"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["firstname"] = arg1
-	var arg2 int
-	if tmp, ok := rawArgs["birthdate"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
-		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["birthdate"] = arg2
-	var arg3 string
-	if tmp, ok := rawArgs["sex"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg3, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["sex"] = arg3
-	var arg4 int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
-		arg4, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["height"] = arg4
-	var arg5 int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
-		arg5, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["weight"] = arg5
-	var arg6 string
-	if tmp, ok := rawArgs["primary_doctor_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primary_doctor_id"))
-		arg6, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["primary_doctor_id"] = arg6
-	var arg7 []string
-	if tmp, ok := rawArgs["antecedent_disease_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("antecedent_disease_ids"))
-		arg7, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["antecedent_disease_ids"] = arg7
-	var arg8 string
-	if tmp, ok := rawArgs["onboarding_status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("onboarding_status"))
-		arg8, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["onboarding_status"] = arg8
-	var arg9 []string
-	if tmp, ok := rawArgs["family_members_med_info_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("family_members_med_info_id"))
-		arg9, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["family_members_med_info_id"] = arg9
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createMedicine_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateMedicineInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateMedicineInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicineInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["unit"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unit"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["unit"] = arg1
-	var arg2 []string
-	if tmp, ok := rawArgs["target_diseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("target_diseases"))
-		arg2, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["target_diseases"] = arg2
-	var arg3 []string
-	if tmp, ok := rawArgs["treated_symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treated_symptoms"))
-		arg3, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["treated_symptoms"] = arg3
-	var arg4 []string
-	if tmp, ok := rawArgs["side_effects"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("side_effects"))
-		arg4, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["side_effects"] = arg4
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createNlpReport_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 int
-	if tmp, ok := rawArgs["version"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("version"))
-		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
+	var arg0 model.CreateNlpReportInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateNlpReportInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNlpReportInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["version"] = arg0
-	var arg1 []string
-	if tmp, ok := rawArgs["input_symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input_symptoms"))
-		arg1, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input_symptoms"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["input_sentence"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input_sentence"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input_sentence"] = arg2
-	var arg3 []*model.NlpReportOutputInput
-	if tmp, ok := rawArgs["output"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("output"))
-		arg3, err = ec.unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["output"] = arg3
-	var arg4 int
-	if tmp, ok := rawArgs["computation_time"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("computation_time"))
-		arg4, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["computation_time"] = arg4
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["token"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateNotificationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNotificationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["token"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["message"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("message"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["message"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["title"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["title"] = arg2
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createPatient_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreatePatientInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreatePatientInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg1
-	var arg2 bool
-	if tmp, ok := rawArgs["status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-		arg2, err = ec.unmarshalNBoolean2bool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["status"] = arg2
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id_patient"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id_patient"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateRdvInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateRdvInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id_patient"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["doctor_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("doctor_id"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["doctor_id"] = arg1
-	var arg2 int
-	if tmp, ok := rawArgs["start_date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
-		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["start_date"] = arg2
-	var arg3 int
-	if tmp, ok := rawArgs["end_date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("end_date"))
-		arg3, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["end_date"] = arg3
-	var arg4 model.AppointmentStatus
-	if tmp, ok := rawArgs["appointment_status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
-		arg4, err = ec.unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["appointment_status"] = arg4
-	var arg5 string
-	if tmp, ok := rawArgs["session_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("session_id"))
-		arg5, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["session_id"] = arg5
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []string
-	if tmp, ok := rawArgs["code"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-		arg0, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+	var arg0 model.CreateSaveCodeInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSaveCodeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["code"] = arg0
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createSession_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []*model.SessionDiseasesInput
-	if tmp, ok := rawArgs["diseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
-		arg0, err = ec.unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx, tmp)
+	var arg0 model.CreateSessionInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSessionInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["diseases"] = arg0
-	var arg1 []*model.SessionSymptomInput
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg1, err = ec.unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg1
-	var arg2 int
-	if tmp, ok := rawArgs["age"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("age"))
-		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["age"] = arg2
-	var arg3 int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
-		arg3, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["height"] = arg3
-	var arg4 int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
-		arg4, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["weight"] = arg4
-	var arg5 string
-	if tmp, ok := rawArgs["sex"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg5, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["sex"] = arg5
-	var arg6 []string
-	if tmp, ok := rawArgs["ante_chirs"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_chirs"))
-		arg6, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ante_chirs"] = arg6
-	var arg7 []string
-	if tmp, ok := rawArgs["ante_diseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
-		arg7, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ante_diseases"] = arg7
-	var arg8 []string
-	if tmp, ok := rawArgs["medicine"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine"))
-		arg8, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["medicine"] = arg8
-	var arg9 string
-	if tmp, ok := rawArgs["last_question"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
-		arg9, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last_question"] = arg9
-	var arg10 []*model.LogsInput
-	if tmp, ok := rawArgs["logs"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
-		arg10, err = ec.unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["logs"] = arg10
-	var arg11 []string
-	if tmp, ok := rawArgs["hereditary_disease"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hereditary_disease"))
-		arg11, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["hereditary_disease"] = arg11
-	var arg12 []string
-	if tmp, ok := rawArgs["alerts"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alerts"))
-		arg12, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["alerts"] = arg12
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createSymptom_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["code"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateSymptomInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSymptomInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["code"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg1
-	var arg2 *int
-	if tmp, ok := rawArgs["chronic"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronic"))
-		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["chronic"] = arg2
-	var arg3 []string
-	if tmp, ok := rawArgs["symptom"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptom"))
-		arg3, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptom"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["advice"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["advice"] = arg4
-	var arg5 string
-	if tmp, ok := rawArgs["question"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question"))
-		arg5, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question"] = arg5
-	var arg6 string
-	if tmp, ok := rawArgs["question_basic"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_basic"))
-		arg6, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question_basic"] = arg6
-	var arg7 string
-	if tmp, ok := rawArgs["question_duration"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_duration"))
-		arg7, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question_duration"] = arg7
-	var arg8 string
-	if tmp, ok := rawArgs["question_ante"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_ante"))
-		arg8, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question_ante"] = arg8
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_createTestAccount_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["email"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg1
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createTreatment_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 []model.Period
-	if tmp, ok := rawArgs["period"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-		arg0, err = ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, tmp)
+	var arg0 model.CreateTreatmentInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["period"] = arg0
-	var arg1 []model.Day
-	if tmp, ok := rawArgs["day"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
-		arg1, err = ec.unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDayᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["day"] = arg1
-	var arg2 int
-	if tmp, ok := rawArgs["quantity"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
-		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["quantity"] = arg2
-	var arg3 string
-	if tmp, ok := rawArgs["medicine_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine_id"))
-		arg3, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["medicine_id"] = arg3
+	args["input"] = arg0
 	return args, nil
 }
 
 func (ec *executionContext) field_Mutation_createTreatmentsFollowUp_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["treatment_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 model.CreateTreatmentsFollowUpInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentsFollowUpInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatment_id"] = arg0
-	var arg1 int
-	if tmp, ok := rawArgs["date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
-		arg1, err = ec.unmarshalNInt2int(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["date"] = arg1
-	var arg2 []model.Period
-	if tmp, ok := rawArgs["period"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-		arg2, err = ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["period"] = arg2
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -5765,21 +5617,6 @@ func (ec *executionContext) field_Mutation_deleteBlackList_args(ctx context.Cont
 }
 
 func (ec *executionContext) field_Mutation_deleteChat_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteDemoAccount_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -6004,21 +5841,6 @@ func (ec *executionContext) field_Mutation_deleteSymptom_args(ctx context.Contex
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteTestAccount_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_deleteTreatment_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6061,42 +5883,15 @@ func (ec *executionContext) field_Mutation_updateAdmin_args(ctx context.Context,
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateAdminInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAdminInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg2
-	var arg3 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg3, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["last_name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_name"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last_name"] = arg4
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6112,60 +5907,15 @@ func (ec *executionContext) field_Mutation_updateAlert_args(ctx context.Context,
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateAlertInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAlertInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["sex"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["sex"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["height"] = arg3
-	var arg4 *int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
-		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["weight"] = arg4
-	var arg5 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg5, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg5
-	var arg6 *string
-	if tmp, ok := rawArgs["comment"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comment"))
-		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["comment"] = arg6
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6181,24 +5931,15 @@ func (ec *executionContext) field_Mutation_updateAnteChir_args(ctx context.Conte
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateAnteChirInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteChirInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg1
-	var arg2 []*model.ChirInducedSymptomInput
-	if tmp, ok := rawArgs["induced_symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
-		arg2, err = ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["induced_symptoms"] = arg2
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6214,60 +5955,15 @@ func (ec *executionContext) field_Mutation_updateAnteDisease_args(ctx context.Co
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateAnteDiseaseInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg1
-	var arg2 *float64
-	if tmp, ok := rawArgs["chronicity"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronicity"))
-		arg2, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["chronicity"] = arg2
-	var arg3 []string
-	if tmp, ok := rawArgs["surgery_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("surgery_ids"))
-		arg3, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["surgery_ids"] = arg3
-	var arg4 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg4, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg4
-	var arg5 []string
-	if tmp, ok := rawArgs["treatment_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_ids"))
-		arg5, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["treatment_ids"] = arg5
-	var arg6 *bool
-	if tmp, ok := rawArgs["still_relevant"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("still_relevant"))
-		arg6, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["still_relevant"] = arg6
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6283,24 +5979,15 @@ func (ec *executionContext) field_Mutation_updateAnteFamily_args(ctx context.Con
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateAnteFamilyInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteFamilyInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg1
-	var arg2 []string
-	if tmp, ok := rawArgs["disease"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("disease"))
-		arg2, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["disease"] = arg2
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6316,15 +6003,15 @@ func (ec *executionContext) field_Mutation_updateBlackList_args(ctx context.Cont
 		}
 	}
 	args["id"] = arg0
-	var arg1 []string
-	if tmp, ok := rawArgs["token"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
-		arg1, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+	var arg1 model.UpdateBlackListInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateBlackListInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["token"] = arg1
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6340,57 +6027,15 @@ func (ec *executionContext) field_Mutation_updateChat_args(ctx context.Context, 
 		}
 	}
 	args["id"] = arg0
-	var arg1 []*model.ChatParticipantsInput
-	if tmp, ok := rawArgs["participants"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("participants"))
-		arg1, err = ec.unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInputᚄ(ctx, tmp)
+	var arg1 model.UpdateChatInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateChatInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["participants"] = arg1
-	var arg2 []*model.ChatMessagesInput
-	if tmp, ok := rawArgs["messages"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("messages"))
-		arg2, err = ec.unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["messages"] = arg2
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateDemoAccount_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["email"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg2
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6406,60 +6051,15 @@ func (ec *executionContext) field_Mutation_updateDeviceConnect_args(ctx context.
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["device_name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateDeviceConnectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDeviceConnectInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["device_name"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["ip_address"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ip_address"] = arg2
-	var arg3 *float64
-	if tmp, ok := rawArgs["latitude"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
-		arg3, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["latitude"] = arg3
-	var arg4 *float64
-	if tmp, ok := rawArgs["longitude"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
-		arg4, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["longitude"] = arg4
-	var arg5 *int
-	if tmp, ok := rawArgs["date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
-		arg5, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["date"] = arg5
-	var arg6 *bool
-	if tmp, ok := rawArgs["trust_device"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device"))
-		arg6, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["trust_device"] = arg6
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6475,69 +6075,15 @@ func (ec *executionContext) field_Mutation_updateDisease_args(ctx context.Contex
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["code"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateDiseaseInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["code"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg2
-	var arg3 []string
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg3, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg3
-	var arg4 []*model.SymptomsWeightInput
-	if tmp, ok := rawArgs["symptoms_weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
-		arg4, err = ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms_weight"] = arg4
-	var arg5 *float64
-	if tmp, ok := rawArgs["overweight_factor"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overweight_factor"))
-		arg5, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["overweight_factor"] = arg5
-	var arg6 *float64
-	if tmp, ok := rawArgs["heredity_factor"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("heredity_factor"))
-		arg6, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["heredity_factor"] = arg6
-	var arg7 *string
-	if tmp, ok := rawArgs["advice"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["advice"] = arg7
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6553,114 +6099,39 @@ func (ec *executionContext) field_Mutation_updateDoctor_args(ctx context.Context
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateDoctorInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateDoctorsPatientIDs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["password"] = arg2
-	var arg3 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg3, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	args["id"] = arg0
+	var arg1 model.UpdateDoctorsPatientIDsInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDoctorsPatientIDsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorsPatientIDsInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["firstname"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["firstname"] = arg4
-	var arg5 []*string
-	if tmp, ok := rawArgs["rendez_vous_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rendez_vous_ids"))
-		arg5, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["rendez_vous_ids"] = arg5
-	var arg6 []*string
-	if tmp, ok := rawArgs["patient_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("patient_ids"))
-		arg6, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["patient_ids"] = arg6
-	var arg7 *model.AddressInput
-	if tmp, ok := rawArgs["address"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-		arg7, err = ec.unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["address"] = arg7
-	var arg8 []*string
-	if tmp, ok := rawArgs["chat_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chat_ids"))
-		arg8, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["chat_ids"] = arg8
-	var arg9 []*string
-	if tmp, ok := rawArgs["device_connect"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
-		arg9, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["device_connect"] = arg9
-	var arg10 *string
-	if tmp, ok := rawArgs["double_auth_methods_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
-		arg10, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["double_auth_methods_id"] = arg10
-	var arg11 []*string
-	if tmp, ok := rawArgs["trust_devices"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
-		arg11, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["trust_devices"] = arg11
-	var arg12 *bool
-	if tmp, ok := rawArgs["status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-		arg12, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["status"] = arg12
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6676,24 +6147,15 @@ func (ec *executionContext) field_Mutation_updateDocument_args(ctx context.Conte
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateDocumentInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDocumentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg1
-	var arg2 *bool
-	if tmp, ok := rawArgs["is_favorite"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("is_favorite"))
-		arg2, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["is_favorite"] = arg2
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6709,42 +6171,15 @@ func (ec *executionContext) field_Mutation_updateDoubleAuth_args(ctx context.Con
 		}
 	}
 	args["id"] = arg0
-	var arg1 []string
-	if tmp, ok := rawArgs["methods"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("methods"))
-		arg1, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+	var arg1 model.UpdateDoubleAuthInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoubleAuthInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["methods"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["secret"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secret"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["secret"] = arg2
-	var arg3 *string
-	if tmp, ok := rawArgs["url"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
-		arg3, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["url"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["trust_device_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device_id"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["trust_device_id"] = arg4
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6760,96 +6195,15 @@ func (ec *executionContext) field_Mutation_updateMedicalFolder_args(ctx context.
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateMedicalFolderInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateMedicalFolderInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["firstname"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["firstname"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["birthdate"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["birthdate"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["sex"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["sex"] = arg4
-	var arg5 *int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
-		arg5, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["height"] = arg5
-	var arg6 *int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
-		arg6, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["weight"] = arg6
-	var arg7 *string
-	if tmp, ok := rawArgs["primary_doctor_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primary_doctor_id"))
-		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["primary_doctor_id"] = arg7
-	var arg8 []string
-	if tmp, ok := rawArgs["antecedent_disease_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("antecedent_disease_ids"))
-		arg8, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["antecedent_disease_ids"] = arg8
-	var arg9 *model.OnboardingStatus
-	if tmp, ok := rawArgs["onboarding_status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("onboarding_status"))
-		arg9, err = ec.unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐOnboardingStatus(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["onboarding_status"] = arg9
-	var arg10 []string
-	if tmp, ok := rawArgs["family_members_med_info_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("family_members_med_info_id"))
-		arg10, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["family_members_med_info_id"] = arg10
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6865,33 +6219,15 @@ func (ec *executionContext) field_Mutation_updateNotification_args(ctx context.C
 		}
 	}
 	args["id"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["token"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg1 model.UpdateNotificationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateNotificationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["token"] = arg1
-	var arg2 string
-	if tmp, ok := rawArgs["message"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("message"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["message"] = arg2
-	var arg3 string
-	if tmp, ok := rawArgs["title"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
-		arg3, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["title"] = arg3
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -6907,105 +6243,15 @@ func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Contex
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdatePatientInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg2
-	var arg3 *string
-	if tmp, ok := rawArgs["medical_info_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medical_info_id"))
-		arg3, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["medical_info_id"] = arg3
-	var arg4 []*string
-	if tmp, ok := rawArgs["rendez_vous_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rendez_vous_ids"))
-		arg4, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["rendez_vous_ids"] = arg4
-	var arg5 []*string
-	if tmp, ok := rawArgs["document_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("document_ids"))
-		arg5, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["document_ids"] = arg5
-	var arg6 []*string
-	if tmp, ok := rawArgs["treatment_follow_up_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_follow_up_ids"))
-		arg6, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["treatment_follow_up_ids"] = arg6
-	var arg7 []*string
-	if tmp, ok := rawArgs["chat_ids"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chat_ids"))
-		arg7, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["chat_ids"] = arg7
-	var arg8 []*string
-	if tmp, ok := rawArgs["device_connect"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
-		arg8, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["device_connect"] = arg8
-	var arg9 *string
-	if tmp, ok := rawArgs["double_auth_methods_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
-		arg9, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["double_auth_methods_id"] = arg9
-	var arg10 []*string
-	if tmp, ok := rawArgs["trust_devices"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
-		arg10, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["trust_devices"] = arg10
-	var arg11 *bool
-	if tmp, ok := rawArgs["status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-		arg11, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["status"] = arg11
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -7021,78 +6267,15 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["id_patient"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id_patient"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateRdvInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateRdvInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["id_patient"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["doctor_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("doctor_id"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["doctor_id"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["start_date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["start_date"] = arg3
-	var arg4 *int
-	if tmp, ok := rawArgs["end_date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("end_date"))
-		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["end_date"] = arg4
-	var arg5 *string
-	if tmp, ok := rawArgs["cancelation_reason"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cancelation_reason"))
-		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["cancelation_reason"] = arg5
-	var arg6 *model.AppointmentStatus
-	if tmp, ok := rawArgs["appointment_status"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
-		arg6, err = ec.unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["appointment_status"] = arg6
-	var arg7 *string
-	if tmp, ok := rawArgs["session_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("session_id"))
-		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["session_id"] = arg7
-	var arg8 *string
-	if tmp, ok := rawArgs["health_method"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("health_method"))
-		arg8, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["health_method"] = arg8
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -7108,15 +6291,15 @@ func (ec *executionContext) field_Mutation_updateSaveCode_args(ctx context.Conte
 		}
 	}
 	args["id"] = arg0
-	var arg1 []string
-	if tmp, ok := rawArgs["code"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-		arg1, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+	var arg1 model.UpdateSaveCodeInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSaveCodeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["code"] = arg1
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -7132,123 +6315,15 @@ func (ec *executionContext) field_Mutation_updateSession_args(ctx context.Contex
 		}
 	}
 	args["id"] = arg0
-	var arg1 []*model.SessionDiseasesInput
-	if tmp, ok := rawArgs["diseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
-		arg1, err = ec.unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx, tmp)
+	var arg1 model.UpdateSessionInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSessionInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["diseases"] = arg1
-	var arg2 []*model.SessionSymptomInput
-	if tmp, ok := rawArgs["symptoms"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-		arg2, err = ec.unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptoms"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["age"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("age"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["age"] = arg3
-	var arg4 *int
-	if tmp, ok := rawArgs["height"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
-		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["height"] = arg4
-	var arg5 *int
-	if tmp, ok := rawArgs["weight"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
-		arg5, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["weight"] = arg5
-	var arg6 *string
-	if tmp, ok := rawArgs["sex"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
-		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["sex"] = arg6
-	var arg7 []string
-	if tmp, ok := rawArgs["ante_chirs"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_chirs"))
-		arg7, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ante_chirs"] = arg7
-	var arg8 []string
-	if tmp, ok := rawArgs["ante_diseases"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
-		arg8, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ante_diseases"] = arg8
-	var arg9 []string
-	if tmp, ok := rawArgs["medicine"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine"))
-		arg9, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["medicine"] = arg9
-	var arg10 *string
-	if tmp, ok := rawArgs["last_question"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
-		arg10, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last_question"] = arg10
-	var arg11 []*model.LogsInput
-	if tmp, ok := rawArgs["logs"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
-		arg11, err = ec.unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["logs"] = arg11
-	var arg12 []string
-	if tmp, ok := rawArgs["hereditary_disease"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hereditary_disease"))
-		arg12, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["hereditary_disease"] = arg12
-	var arg13 []string
-	if tmp, ok := rawArgs["alerts"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alerts"))
-		arg13, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["alerts"] = arg13
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -7264,120 +6339,15 @@ func (ec *executionContext) field_Mutation_updateSymptom_args(ctx context.Contex
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["code"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateSymptomInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSymptomInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["code"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["name"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["chronic"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronic"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["chronic"] = arg3
-	var arg4 []string
-	if tmp, ok := rawArgs["symptom"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptom"))
-		arg4, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["symptom"] = arg4
-	var arg5 *string
-	if tmp, ok := rawArgs["advice"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
-		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["advice"] = arg5
-	var arg6 *string
-	if tmp, ok := rawArgs["question"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question"))
-		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question"] = arg6
-	var arg7 *string
-	if tmp, ok := rawArgs["question_basic"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_basic"))
-		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question_basic"] = arg7
-	var arg8 *string
-	if tmp, ok := rawArgs["question_duration"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_duration"))
-		arg8, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question_duration"] = arg8
-	var arg9 *string
-	if tmp, ok := rawArgs["question_ante"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_ante"))
-		arg9, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["question_ante"] = arg9
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTestAccount_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["email"] = arg1
-	var arg2 *string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg2
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -7393,42 +6363,15 @@ func (ec *executionContext) field_Mutation_updateTreatment_args(ctx context.Cont
 		}
 	}
 	args["id"] = arg0
-	var arg1 []model.Period
-	if tmp, ok := rawArgs["period"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-		arg1, err = ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, tmp)
+	var arg1 model.UpdateTreatmentInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["period"] = arg1
-	var arg2 []model.Day
-	if tmp, ok := rawArgs["day"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
-		arg2, err = ec.unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDayᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["day"] = arg2
-	var arg3 *int
-	if tmp, ok := rawArgs["quantity"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["quantity"] = arg3
-	var arg4 *string
-	if tmp, ok := rawArgs["medicine_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine_id"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["medicine_id"] = arg4
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -7444,33 +6387,15 @@ func (ec *executionContext) field_Mutation_updateTreatmentsFollowUp_args(ctx con
 		}
 	}
 	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["treatment_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_id"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+	var arg1 model.UpdateTreatmentsFollowUpInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentsFollowUpInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["treatment_id"] = arg1
-	var arg2 *int
-	if tmp, ok := rawArgs["date"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
-		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["date"] = arg2
-	var arg3 []model.Period
-	if tmp, ok := rawArgs["period"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-		arg3, err = ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["period"] = arg3
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -7519,6 +6444,21 @@ func (ec *executionContext) field_Query_getAdminById_args(ctx context.Context, r
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getAdmins_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getAlertById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7531,6 +6471,21 @@ func (ec *executionContext) field_Query_getAlertById_args(ctx context.Context, r
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAlerts_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7549,6 +6504,21 @@ func (ec *executionContext) field_Query_getAnteChirByID_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getAnteChirs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getAnteDiseaseByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7561,6 +6531,36 @@ func (ec *executionContext) field_Query_getAnteDiseaseByID_args(ctx context.Cont
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAnteDiseases_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAnteFamilies_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7594,6 +6594,21 @@ func (ec *executionContext) field_Query_getBlackListById_args(ctx context.Contex
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getBlackList_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getChatById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7621,36 +6636,15 @@ func (ec *executionContext) field_Query_getChats_args(ctx context.Context, rawAr
 		}
 	}
 	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getDemoAccountByEmail_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getDemoAccountById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
+	args["option"] = arg1
 	return args, nil
 }
 
@@ -7669,6 +6663,21 @@ func (ec *executionContext) field_Query_getDeviceConnectById_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getDevicesConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getDiseaseById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7681,6 +6690,21 @@ func (ec *executionContext) field_Query_getDiseaseById_args(ctx context.Context,
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getDiseases_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7726,6 +6750,30 @@ func (ec *executionContext) field_Query_getDoctorRdv_args(ctx context.Context, r
 		}
 	}
 	args["doctor_id"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getDoctors_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7744,6 +6792,21 @@ func (ec *executionContext) field_Query_getDocumentById_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getDocuments_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getDoubleAuthById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7756,6 +6819,21 @@ func (ec *executionContext) field_Query_getDoubleAuthById_args(ctx context.Conte
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getDoubleAuths_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7774,6 +6852,21 @@ func (ec *executionContext) field_Query_getMedicalFolderById_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getMedicalFolder_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getMedicineByID_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7789,6 +6882,21 @@ func (ec *executionContext) field_Query_getMedicineByID_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getMedicines_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getNlpReportsByVersion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7801,6 +6909,30 @@ func (ec *executionContext) field_Query_getNlpReportsByVersion_args(ctx context.
 		}
 	}
 	args["version"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getNlpReports_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7816,6 +6948,21 @@ func (ec *executionContext) field_Query_getNotificationById_args(ctx context.Con
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getNotifications_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7861,6 +7008,15 @@ func (ec *executionContext) field_Query_getPatientDocument_args(ctx context.Cont
 		}
 	}
 	args["id"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
 	return args, nil
 }
 
@@ -7876,6 +7032,15 @@ func (ec *executionContext) field_Query_getPatientRdv_args(ctx context.Context, 
 		}
 	}
 	args["id_patient"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
 	return args, nil
 }
 
@@ -7891,6 +7056,30 @@ func (ec *executionContext) field_Query_getPatientsFromDoctorById_args(ctx conte
 		}
 	}
 	args["id"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getPatients_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7924,6 +7113,21 @@ func (ec *executionContext) field_Query_getSaveCodeById_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getSessionById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7936,6 +7140,21 @@ func (ec *executionContext) field_Query_getSessionById_args(ctx context.Context,
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getSessions_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -7966,6 +7185,15 @@ func (ec *executionContext) field_Query_getSlots_args(ctx context.Context, rawAr
 		}
 	}
 	args["id"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
 	return args, nil
 }
 
@@ -7999,33 +7227,18 @@ func (ec *executionContext) field_Query_getSymptomsByDiseaseName_args(ctx contex
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getTestAccountByEmail_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_getSymptoms_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_getTestAccountById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -8071,6 +7284,30 @@ func (ec *executionContext) field_Query_getTreatmentsFollowUps_args(ctx context.
 		}
 	}
 	args["id"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getTreatments_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -8086,6 +7323,15 @@ func (ec *executionContext) field_Query_getWaitingRdv_args(ctx context.Context, 
 		}
 	}
 	args["doctor_id"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
 	return args, nil
 }
 
@@ -8523,6 +7769,94 @@ func (ec *executionContext) fieldContext_Admin_last_name(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Admin_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Admin) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Admin_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Admin_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Admin",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Admin_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Admin) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Admin_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Admin_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Admin",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Alert_id(ctx context.Context, field graphql.CollectedField, obj *model.Alert) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Alert_id(ctx, field)
 	if err != nil {
@@ -8822,6 +8156,94 @@ func (ec *executionContext) fieldContext_Alert_comment(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Alert_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Alert) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Alert_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Alert_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Alert",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Alert_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Alert) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Alert_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Alert_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Alert",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _AnteChir_id(ctx context.Context, field graphql.CollectedField, obj *model.AnteChir) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AnteChir_id(ctx, field)
 	if err != nil {
@@ -8935,7 +8357,7 @@ func (ec *executionContext) _AnteChir_induced_symptoms(ctx context.Context, fiel
 	}
 	res := resTmp.([]*model.ChirInducedSymptom)
 	fc.Result = res
-	return ec.marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomᚄ(ctx, field.Selections, res)
+	return ec.marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AnteChir_induced_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8952,6 +8374,94 @@ func (ec *executionContext) fieldContext_AnteChir_induced_symptoms(ctx context.C
 				return ec.fieldContext_ChirInducedSymptom_factor(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ChirInducedSymptom", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnteChir_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.AnteChir) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteChir_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteChir_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteChir",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnteChir_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.AnteChir) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteChir_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteChir_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteChir",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -9256,6 +8766,94 @@ func (ec *executionContext) fieldContext_AnteDisease_still_relevant(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _AnteDisease_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.AnteDisease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteDisease_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteDisease_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteDisease",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnteDisease_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.AnteDisease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteDisease_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteDisease_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteDisease",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _AnteFamily_id(ctx context.Context, field graphql.CollectedField, obj *model.AnteFamily) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AnteFamily_id(ctx, field)
 	if err != nil {
@@ -9388,6 +8986,94 @@ func (ec *executionContext) fieldContext_AnteFamily_disease(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _AnteFamily_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.AnteFamily) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteFamily_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteFamily_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteFamily",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AnteFamily_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.AnteFamily) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnteFamily_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnteFamily_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnteFamily",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _BlackList_id(ctx context.Context, field graphql.CollectedField, obj *model.BlackList) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_BlackList_id(ctx, field)
 	if err != nil {
@@ -9476,6 +9162,94 @@ func (ec *executionContext) fieldContext_BlackList_token(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _BlackList_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.BlackList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_BlackList_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_BlackList_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlackList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _BlackList_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.BlackList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_BlackList_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_BlackList_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "BlackList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Chat_id(ctx context.Context, field graphql.CollectedField, obj *model.Chat) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Chat_id(ctx, field)
 	if err != nil {
@@ -9548,7 +9322,7 @@ func (ec *executionContext) _Chat_participants(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.ChatParticipants)
 	fc.Result = res
-	return ec.marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsᚄ(ctx, field.Selections, res)
+	return ec.marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Chat_participants(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9598,7 +9372,7 @@ func (ec *executionContext) _Chat_messages(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.ChatMessages)
 	fc.Result = res
-	return ec.marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesᚄ(ctx, field.Selections, res)
+	return ec.marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Chat_messages(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9617,6 +9391,94 @@ func (ec *executionContext) fieldContext_Chat_messages(ctx context.Context, fiel
 				return ec.fieldContext_ChatMessages_sended_time(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ChatMessages", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Chat_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Chat) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Chat_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Chat_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Chat",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Chat_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Chat) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Chat_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Chat_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Chat",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -9930,138 +9792,6 @@ func (ec *executionContext) fieldContext_ChirInducedSymptom_factor(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _DemoAccount_id(ctx context.Context, field graphql.CollectedField, obj *model.DemoAccount) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DemoAccount_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DemoAccount_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DemoAccount",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DemoAccount_email(ctx context.Context, field graphql.CollectedField, obj *model.DemoAccount) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DemoAccount_email(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Email, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DemoAccount_email(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DemoAccount",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DemoAccount_password(ctx context.Context, field graphql.CollectedField, obj *model.DemoAccount) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DemoAccount_password(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Password, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DemoAccount_password(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DemoAccount",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _DeviceConnect_id(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_DeviceConnect_id(ctx, field)
 	if err != nil {
@@ -10370,6 +10100,94 @@ func (ec *executionContext) fieldContext_DeviceConnect_trust_device(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _DeviceConnect_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Disease_id(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Disease_id(ctx, field)
 	if err != nil {
@@ -10571,7 +10389,7 @@ func (ec *executionContext) _Disease_symptoms_weight(ctx context.Context, field 
 	}
 	res := resTmp.([]*model.SymptomsWeight)
 	fc.Result = res
-	return ec.marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightᚄ(ctx, field.Selections, res)
+	return ec.marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Disease_symptoms_weight(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -10719,6 +10537,94 @@ func (ec *executionContext) fieldContext_Disease_advice(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Disease_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Disease_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Disease_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Disease",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Disease_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Disease_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Disease_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Disease",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -10972,7 +10878,7 @@ func (ec *executionContext) _Doctor_address(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Address)
 	fc.Result = res
-	return ec.marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddress(ctx, field.Selections, res)
+	return ec.marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddress(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Doctor_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -11288,6 +11194,94 @@ func (ec *executionContext) fieldContext_Doctor_status(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Doctor_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Doctor_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Document_id(ctx context.Context, field graphql.CollectedField, obj *model.Document) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Document_id(ctx, field)
 	if err != nil {
@@ -11448,7 +11442,7 @@ func (ec *executionContext) _Document_document_type(ctx context.Context, field g
 	}
 	res := resTmp.(model.DocumentType)
 	fc.Result = res
-	return ec.marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocumentType(ctx, field.Selections, res)
+	return ec.marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocumentType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Document_document_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -11492,7 +11486,7 @@ func (ec *executionContext) _Document_category(ctx context.Context, field graphq
 	}
 	res := resTmp.(model.Category)
 	fc.Result = res
-	return ec.marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐCategory(ctx, field.Selections, res)
+	return ec.marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Document_category(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -11591,6 +11585,94 @@ func (ec *executionContext) fieldContext_Document_download_url(ctx context.Conte
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Document_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Document) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Document_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Document_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Document",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Document_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Document) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Document_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Document_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Document",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -11816,6 +11898,94 @@ func (ec *executionContext) fieldContext_DoubleAuth_trust_device_id(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _DoubleAuth_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.DoubleAuth) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DoubleAuth_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DoubleAuth_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DoubleAuth",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DoubleAuth_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.DoubleAuth) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DoubleAuth_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DoubleAuth_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DoubleAuth",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Logs_question(ctx context.Context, field graphql.CollectedField, obj *model.Logs) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Logs_question(ctx, field)
 	if err != nil {
@@ -12020,7 +12190,7 @@ func (ec *executionContext) _MedicalAntecedents_medicines(ctx context.Context, f
 	}
 	res := resTmp.([]*model.Treatment)
 	fc.Result = res
-	return ec.marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentᚄ(ctx, field.Selections, res)
+	return ec.marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MedicalAntecedents_medicines(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12041,6 +12211,10 @@ func (ec *executionContext) fieldContext_MedicalAntecedents_medicines(ctx contex
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Treatment_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Treatment_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Treatment", field.Name)
 		},
@@ -12087,6 +12261,94 @@ func (ec *executionContext) fieldContext_MedicalAntecedents_still_relevant(ctx c
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MedicalAntecedents_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.MedicalAntecedents) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MedicalAntecedents_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MedicalAntecedents_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MedicalAntecedents",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MedicalAntecedents_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.MedicalAntecedents) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MedicalAntecedents_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MedicalAntecedents_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MedicalAntecedents",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -12296,7 +12558,7 @@ func (ec *executionContext) _MedicalInfo_sex(ctx context.Context, field graphql.
 	}
 	res := resTmp.(model.Sex)
 	fc.Result = res
-	return ec.marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSex(ctx, field.Selections, res)
+	return ec.marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSex(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MedicalInfo_sex(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12472,7 +12734,7 @@ func (ec *executionContext) _MedicalInfo_onboarding_status(ctx context.Context, 
 	}
 	res := resTmp.(model.OnboardingStatus)
 	fc.Result = res
-	return ec.marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐOnboardingStatus(ctx, field.Selections, res)
+	return ec.marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MedicalInfo_onboarding_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12571,6 +12833,94 @@ func (ec *executionContext) fieldContext_MedicalInfo_family_members_med_info_id(
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MedicalInfo_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.MedicalInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MedicalInfo_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MedicalInfo_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MedicalInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MedicalInfo_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.MedicalInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MedicalInfo_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MedicalInfo_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MedicalInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -12692,7 +13042,7 @@ func (ec *executionContext) _Medicine_unit(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(model.MedicineUnit)
 	fc.Result = res
-	return ec.marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx, field.Selections, res)
+	return ec.marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Medicine_unit(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12840,6 +13190,94 @@ func (ec *executionContext) fieldContext_Medicine_side_effects(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Medicine_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Medicine_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Medicine",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Medicine_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Medicine_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Medicine",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createPatient(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createPatient(ctx, field)
 	if err != nil {
@@ -12854,7 +13292,7 @@ func (ec *executionContext) _Mutation_createPatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreatePatient(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["status"].(bool))
+		return ec.resolvers.Mutation().CreatePatient(rctx, fc.Args["input"].(model.CreatePatientInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12865,7 +13303,7 @@ func (ec *executionContext) _Mutation_createPatient(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createPatient(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12900,6 +13338,10 @@ func (ec *executionContext) fieldContext_Mutation_createPatient(ctx context.Cont
 				return ec.fieldContext_Patient_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -12932,7 +13374,7 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string), fc.Args["double_auth_methods_id"].(*string), fc.Args["trust_devices"].([]*string), fc.Args["status"].(*bool))
+		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdatePatientInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12943,7 +13385,7 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12978,6 +13420,10 @@ func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Cont
 				return ec.fieldContext_Patient_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -13062,7 +13508,7 @@ func (ec *executionContext) _Mutation_createDoctor(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDoctor(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["firstname"].(string), fc.Args["address"].(model.AddressInput), fc.Args["status"].(bool))
+		return ec.resolvers.Mutation().CreateDoctor(rctx, fc.Args["input"].(model.CreateDoctorInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13073,7 +13519,7 @@ func (ec *executionContext) _Mutation_createDoctor(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDoctor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13110,6 +13556,10 @@ func (ec *executionContext) fieldContext_Mutation_createDoctor(ctx context.Conte
 				return ec.fieldContext_Doctor_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -13142,7 +13592,7 @@ func (ec *executionContext) _Mutation_updateDoctor(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["patient_ids"].([]*string), fc.Args["address"].(*model.AddressInput), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string), fc.Args["double_auth_methods_id"].(*string), fc.Args["trust_devices"].([]*string), fc.Args["status"].(*bool))
+		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDoctorInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13153,7 +13603,7 @@ func (ec *executionContext) _Mutation_updateDoctor(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDoctor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13190,6 +13640,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDoctor(ctx context.Conte
 				return ec.fieldContext_Doctor_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -13202,6 +13656,90 @@ func (ec *executionContext) fieldContext_Mutation_updateDoctor(ctx context.Conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateDoctor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateDoctorsPatientIDs(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateDoctorsPatientIDs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateDoctorsPatientIDs(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDoctorsPatientIDsInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Doctor)
+	fc.Result = res
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateDoctorsPatientIDs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Doctor_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Doctor_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Doctor_password(ctx, field)
+			case "name":
+				return ec.fieldContext_Doctor_name(ctx, field)
+			case "firstname":
+				return ec.fieldContext_Doctor_firstname(ctx, field)
+			case "address":
+				return ec.fieldContext_Doctor_address(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Doctor_rendez_vous_ids(ctx, field)
+			case "patient_ids":
+				return ec.fieldContext_Doctor_patient_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateDoctorsPatientIDs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13274,7 +13812,7 @@ func (ec *executionContext) _Mutation_createAdmin(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAdmin(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["last_name"].(string))
+		return ec.resolvers.Mutation().CreateAdmin(rctx, fc.Args["input"].(model.CreateAdminInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13285,7 +13823,7 @@ func (ec *executionContext) _Mutation_createAdmin(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAdmin(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13306,6 +13844,10 @@ func (ec *executionContext) fieldContext_Mutation_createAdmin(ctx context.Contex
 				return ec.fieldContext_Admin_name(ctx, field)
 			case "last_name":
 				return ec.fieldContext_Admin_last_name(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Admin_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Admin_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -13338,7 +13880,7 @@ func (ec *executionContext) _Mutation_updateAdmin(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAdmin(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["last_name"].(*string))
+		return ec.resolvers.Mutation().UpdateAdmin(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateAdminInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13349,7 +13891,7 @@ func (ec *executionContext) _Mutation_updateAdmin(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAdmin(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13370,6 +13912,10 @@ func (ec *executionContext) fieldContext_Mutation_updateAdmin(ctx context.Contex
 				return ec.fieldContext_Admin_name(ctx, field)
 			case "last_name":
 				return ec.fieldContext_Admin_last_name(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Admin_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Admin_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -13440,350 +13986,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteAdmin(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createDemoAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createDemoAccount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDemoAccount(rctx, fc.Args["email"].(string), fc.Args["password"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.DemoAccount)
-	fc.Result = res
-	return ec.marshalODemoAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createDemoAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DemoAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_DemoAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_DemoAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DemoAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createDemoAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateDemoAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updateDemoAccount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDemoAccount(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.DemoAccount)
-	fc.Result = res
-	return ec.marshalODemoAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updateDemoAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DemoAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_DemoAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_DemoAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DemoAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateDemoAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_deleteDemoAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_deleteDemoAccount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteDemoAccount(rctx, fc.Args["id"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*bool)
-	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_deleteDemoAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteDemoAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createTestAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createTestAccount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateTestAccount(rctx, fc.Args["email"].(string), fc.Args["password"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.TestAccount)
-	fc.Result = res
-	return ec.marshalOTestAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createTestAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TestAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_TestAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_TestAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TestAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createTestAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateTestAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updateTestAccount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateTestAccount(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.TestAccount)
-	fc.Result = res
-	return ec.marshalOTestAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updateTestAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TestAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_TestAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_TestAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TestAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateTestAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_deleteTestAccount(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_deleteTestAccount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteTestAccount(rctx, fc.Args["id"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*bool)
-	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_deleteTestAccount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteTestAccount_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_createSession(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createSession(ctx, field)
 	if err != nil {
@@ -13798,7 +14000,7 @@ func (ec *executionContext) _Mutation_createSession(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSession(rctx, fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(int), fc.Args["height"].(int), fc.Args["weight"].(int), fc.Args["sex"].(string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["medicine"].([]string), fc.Args["last_question"].(string), fc.Args["logs"].([]*model.LogsInput), fc.Args["hereditary_disease"].([]string), fc.Args["alerts"].([]string))
+		return ec.resolvers.Mutation().CreateSession(rctx, fc.Args["input"].(model.CreateSessionInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13809,7 +14011,7 @@ func (ec *executionContext) _Mutation_createSession(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createSession(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13848,6 +14050,10 @@ func (ec *executionContext) fieldContext_Mutation_createSession(ctx context.Cont
 				return ec.fieldContext_Session_hereditary_disease(ctx, field)
 			case "alerts":
 				return ec.fieldContext_Session_alerts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Session_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Session_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Session", field.Name)
 		},
@@ -13880,7 +14086,7 @@ func (ec *executionContext) _Mutation_updateSession(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateSession(rctx, fc.Args["id"].(string), fc.Args["diseases"].([]*model.SessionDiseasesInput), fc.Args["symptoms"].([]*model.SessionSymptomInput), fc.Args["age"].(*int), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["sex"].(*string), fc.Args["ante_chirs"].([]string), fc.Args["ante_diseases"].([]string), fc.Args["medicine"].([]string), fc.Args["last_question"].(*string), fc.Args["logs"].([]*model.LogsInput), fc.Args["hereditary_disease"].([]string), fc.Args["alerts"].([]string))
+		return ec.resolvers.Mutation().UpdateSession(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateSessionInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -13891,7 +14097,7 @@ func (ec *executionContext) _Mutation_updateSession(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateSession(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13930,6 +14136,10 @@ func (ec *executionContext) fieldContext_Mutation_updateSession(ctx context.Cont
 				return ec.fieldContext_Session_hereditary_disease(ctx, field)
 			case "alerts":
 				return ec.fieldContext_Session_alerts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Session_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Session_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Session", field.Name)
 		},
@@ -14014,7 +14224,7 @@ func (ec *executionContext) _Mutation_createSymptom(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSymptom(rctx, fc.Args["code"].(string), fc.Args["name"].(string), fc.Args["chronic"].(*int), fc.Args["symptom"].([]string), fc.Args["advice"].(*string), fc.Args["question"].(string), fc.Args["question_basic"].(string), fc.Args["question_duration"].(string), fc.Args["question_ante"].(string))
+		return ec.resolvers.Mutation().CreateSymptom(rctx, fc.Args["input"].(model.CreateSymptomInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14025,7 +14235,7 @@ func (ec *executionContext) _Mutation_createSymptom(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createSymptom(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14056,6 +14266,10 @@ func (ec *executionContext) fieldContext_Mutation_createSymptom(ctx context.Cont
 				return ec.fieldContext_Symptom_question_duration(ctx, field)
 			case "question_ante":
 				return ec.fieldContext_Symptom_question_ante(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Symptom_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Symptom_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Symptom", field.Name)
 		},
@@ -14088,7 +14302,7 @@ func (ec *executionContext) _Mutation_updateSymptom(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateSymptom(rctx, fc.Args["id"].(string), fc.Args["code"].(*string), fc.Args["name"].(*string), fc.Args["chronic"].(*int), fc.Args["symptom"].([]string), fc.Args["advice"].(*string), fc.Args["question"].(*string), fc.Args["question_basic"].(*string), fc.Args["question_duration"].(*string), fc.Args["question_ante"].(*string))
+		return ec.resolvers.Mutation().UpdateSymptom(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateSymptomInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14099,7 +14313,7 @@ func (ec *executionContext) _Mutation_updateSymptom(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateSymptom(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14130,6 +14344,10 @@ func (ec *executionContext) fieldContext_Mutation_updateSymptom(ctx context.Cont
 				return ec.fieldContext_Symptom_question_duration(ctx, field)
 			case "question_ante":
 				return ec.fieldContext_Symptom_question_ante(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Symptom_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Symptom_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Symptom", field.Name)
 		},
@@ -14214,7 +14432,7 @@ func (ec *executionContext) _Mutation_createDisease(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDisease(rctx, fc.Args["code"].(string), fc.Args["name"].(string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["overweight_factor"].(float64), fc.Args["heredity_factor"].(float64), fc.Args["advice"].(*string))
+		return ec.resolvers.Mutation().CreateDisease(rctx, fc.Args["input"].(model.CreateDiseaseInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14225,7 +14443,7 @@ func (ec *executionContext) _Mutation_createDisease(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14252,6 +14470,10 @@ func (ec *executionContext) fieldContext_Mutation_createDisease(ctx context.Cont
 				return ec.fieldContext_Disease_heredity_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Disease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Disease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Disease", field.Name)
 		},
@@ -14284,7 +14506,7 @@ func (ec *executionContext) _Mutation_updateDisease(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDisease(rctx, fc.Args["id"].(string), fc.Args["code"].(*string), fc.Args["name"].(*string), fc.Args["symptoms"].([]string), fc.Args["symptoms_weight"].([]*model.SymptomsWeightInput), fc.Args["overweight_factor"].(*float64), fc.Args["heredity_factor"].(*float64), fc.Args["advice"].(*string))
+		return ec.resolvers.Mutation().UpdateDisease(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDiseaseInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14295,7 +14517,7 @@ func (ec *executionContext) _Mutation_updateDisease(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14322,6 +14544,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDisease(ctx context.Cont
 				return ec.fieldContext_Disease_heredity_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Disease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Disease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Disease", field.Name)
 		},
@@ -14406,7 +14632,7 @@ func (ec *executionContext) _Mutation_createNotification(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateNotification(rctx, fc.Args["token"].(string), fc.Args["message"].(string), fc.Args["title"].(string))
+		return ec.resolvers.Mutation().CreateNotification(rctx, fc.Args["input"].(model.CreateNotificationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14417,7 +14643,7 @@ func (ec *executionContext) _Mutation_createNotification(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createNotification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14436,6 +14662,10 @@ func (ec *executionContext) fieldContext_Mutation_createNotification(ctx context
 				return ec.fieldContext_Notification_title(ctx, field)
 			case "message":
 				return ec.fieldContext_Notification_message(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Notification_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Notification_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},
@@ -14468,7 +14698,7 @@ func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateNotification(rctx, fc.Args["id"].(string), fc.Args["token"].(string), fc.Args["message"].(string), fc.Args["title"].(string))
+		return ec.resolvers.Mutation().UpdateNotification(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateNotificationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14479,7 +14709,7 @@ func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateNotification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14498,6 +14728,10 @@ func (ec *executionContext) fieldContext_Mutation_updateNotification(ctx context
 				return ec.fieldContext_Notification_title(ctx, field)
 			case "message":
 				return ec.fieldContext_Notification_message(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Notification_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Notification_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},
@@ -14582,7 +14816,7 @@ func (ec *executionContext) _Mutation_createRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["id_patient"].(string), fc.Args["doctor_id"].(string), fc.Args["start_date"].(int), fc.Args["end_date"].(int), fc.Args["appointment_status"].(model.AppointmentStatus), fc.Args["session_id"].(string))
+		return ec.resolvers.Mutation().CreateRdv(rctx, fc.Args["input"].(model.CreateRdvInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14593,7 +14827,7 @@ func (ec *executionContext) _Mutation_createRdv(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14622,6 +14856,10 @@ func (ec *executionContext) fieldContext_Mutation_createRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -14654,7 +14892,7 @@ func (ec *executionContext) _Mutation_updateRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["id_patient"].(*string), fc.Args["doctor_id"].(*string), fc.Args["start_date"].(*int), fc.Args["end_date"].(*int), fc.Args["cancelation_reason"].(*string), fc.Args["appointment_status"].(*model.AppointmentStatus), fc.Args["session_id"].(*string), fc.Args["health_method"].(*string))
+		return ec.resolvers.Mutation().UpdateRdv(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateRdvInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14665,7 +14903,7 @@ func (ec *executionContext) _Mutation_updateRdv(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14694,6 +14932,10 @@ func (ec *executionContext) fieldContext_Mutation_updateRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -14830,7 +15072,7 @@ func (ec *executionContext) _Mutation_createDocument(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDocument(rctx, fc.Args["owner_id"].(string), fc.Args["name"].(string), fc.Args["document_type"].(string), fc.Args["category"].(string), fc.Args["is_favorite"].(bool), fc.Args["download_url"].(string))
+		return ec.resolvers.Mutation().CreateDocument(rctx, fc.Args["input"].(model.CreateDocumentInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14841,7 +15083,7 @@ func (ec *executionContext) _Mutation_createDocument(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDocument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14866,6 +15108,10 @@ func (ec *executionContext) fieldContext_Mutation_createDocument(ctx context.Con
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Document_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Document_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Document", field.Name)
 		},
@@ -14898,7 +15144,7 @@ func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDocument(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["is_favorite"].(*bool))
+		return ec.resolvers.Mutation().UpdateDocument(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDocumentInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -14909,7 +15155,7 @@ func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDocument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14934,6 +15180,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDocument(ctx context.Con
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Document_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Document_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Document", field.Name)
 		},
@@ -15018,7 +15268,7 @@ func (ec *executionContext) _Mutation_createAnteChir(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAnteChir(rctx, fc.Args["name"].(string), fc.Args["induced_symptoms"].([]*model.ChirInducedSymptomInput))
+		return ec.resolvers.Mutation().CreateAnteChir(rctx, fc.Args["input"].(model.CreateAnteChirInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15029,7 +15279,7 @@ func (ec *executionContext) _Mutation_createAnteChir(ctx context.Context, field 
 	}
 	res := resTmp.(*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAnteChir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15046,6 +15296,10 @@ func (ec *executionContext) fieldContext_Mutation_createAnteChir(ctx context.Con
 				return ec.fieldContext_AnteChir_name(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteChir_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteChir_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteChir", field.Name)
 		},
@@ -15078,7 +15332,7 @@ func (ec *executionContext) _Mutation_updateAnteChir(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAnteChir(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["induced_symptoms"].([]*model.ChirInducedSymptomInput))
+		return ec.resolvers.Mutation().UpdateAnteChir(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateAnteChirInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15089,7 +15343,7 @@ func (ec *executionContext) _Mutation_updateAnteChir(ctx context.Context, field 
 	}
 	res := resTmp.(*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAnteChir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15106,6 +15360,10 @@ func (ec *executionContext) fieldContext_Mutation_updateAnteChir(ctx context.Con
 				return ec.fieldContext_AnteChir_name(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteChir_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteChir_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteChir", field.Name)
 		},
@@ -15190,7 +15448,7 @@ func (ec *executionContext) _Mutation_createAnteDisease(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAnteDisease(rctx, fc.Args["name"].(string), fc.Args["chronicity"].(*float64), fc.Args["surgery_ids"].([]string), fc.Args["symptoms"].([]string), fc.Args["treatment_ids"].([]string), fc.Args["still_relevant"].(bool))
+		return ec.resolvers.Mutation().CreateAnteDisease(rctx, fc.Args["input"].(model.CreateAnteDiseaseInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15201,7 +15459,7 @@ func (ec *executionContext) _Mutation_createAnteDisease(ctx context.Context, fie
 	}
 	res := resTmp.(*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAnteDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15226,6 +15484,10 @@ func (ec *executionContext) fieldContext_Mutation_createAnteDisease(ctx context.
 				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
 			case "still_relevant":
 				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteDisease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteDisease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
@@ -15258,7 +15520,7 @@ func (ec *executionContext) _Mutation_updateAnteDisease(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAnteDisease(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["chronicity"].(*float64), fc.Args["surgery_ids"].([]string), fc.Args["symptoms"].([]string), fc.Args["treatment_ids"].([]string), fc.Args["still_relevant"].(*bool))
+		return ec.resolvers.Mutation().UpdateAnteDisease(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateAnteDiseaseInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15269,7 +15531,7 @@ func (ec *executionContext) _Mutation_updateAnteDisease(ctx context.Context, fie
 	}
 	res := resTmp.(*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAnteDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15294,6 +15556,10 @@ func (ec *executionContext) fieldContext_Mutation_updateAnteDisease(ctx context.
 				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
 			case "still_relevant":
 				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteDisease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteDisease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
@@ -15378,7 +15644,7 @@ func (ec *executionContext) _Mutation_createAnteFamily(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAnteFamily(rctx, fc.Args["name"].(string), fc.Args["disease"].([]string))
+		return ec.resolvers.Mutation().CreateAnteFamily(rctx, fc.Args["input"].(model.CreateAnteFamilyInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15389,7 +15655,7 @@ func (ec *executionContext) _Mutation_createAnteFamily(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAnteFamily(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15406,6 +15672,10 @@ func (ec *executionContext) fieldContext_Mutation_createAnteFamily(ctx context.C
 				return ec.fieldContext_AnteFamily_name(ctx, field)
 			case "disease":
 				return ec.fieldContext_AnteFamily_disease(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteFamily_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteFamily_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteFamily", field.Name)
 		},
@@ -15438,7 +15708,7 @@ func (ec *executionContext) _Mutation_updateAnteFamily(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAnteFamily(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["disease"].([]string))
+		return ec.resolvers.Mutation().UpdateAnteFamily(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateAnteFamilyInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15449,7 +15719,7 @@ func (ec *executionContext) _Mutation_updateAnteFamily(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAnteFamily(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15466,6 +15736,10 @@ func (ec *executionContext) fieldContext_Mutation_updateAnteFamily(ctx context.C
 				return ec.fieldContext_AnteFamily_name(ctx, field)
 			case "disease":
 				return ec.fieldContext_AnteFamily_disease(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteFamily_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteFamily_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteFamily", field.Name)
 		},
@@ -15550,7 +15824,7 @@ func (ec *executionContext) _Mutation_createTreatment(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateTreatment(rctx, fc.Args["period"].([]model.Period), fc.Args["day"].([]model.Day), fc.Args["quantity"].(int), fc.Args["medicine_id"].(string))
+		return ec.resolvers.Mutation().CreateTreatment(rctx, fc.Args["input"].(model.CreateTreatmentInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15561,7 +15835,7 @@ func (ec *executionContext) _Mutation_createTreatment(ctx context.Context, field
 	}
 	res := resTmp.(*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTreatment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15582,6 +15856,10 @@ func (ec *executionContext) fieldContext_Mutation_createTreatment(ctx context.Co
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Treatment_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Treatment_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Treatment", field.Name)
 		},
@@ -15614,7 +15892,7 @@ func (ec *executionContext) _Mutation_updateTreatment(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateTreatment(rctx, fc.Args["id"].(string), fc.Args["period"].([]model.Period), fc.Args["day"].([]model.Day), fc.Args["quantity"].(*int), fc.Args["medicine_id"].(*string))
+		return ec.resolvers.Mutation().UpdateTreatment(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateTreatmentInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15625,7 +15903,7 @@ func (ec *executionContext) _Mutation_updateTreatment(ctx context.Context, field
 	}
 	res := resTmp.(*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateTreatment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15646,6 +15924,10 @@ func (ec *executionContext) fieldContext_Mutation_updateTreatment(ctx context.Co
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Treatment_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Treatment_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Treatment", field.Name)
 		},
@@ -15730,7 +16012,7 @@ func (ec *executionContext) _Mutation_createAlert(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAlert(rctx, fc.Args["name"].(string), fc.Args["sex"].(*string), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["symptoms"].([]string), fc.Args["comment"].(string))
+		return ec.resolvers.Mutation().CreateAlert(rctx, fc.Args["input"].(model.CreateAlertInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15741,7 +16023,7 @@ func (ec *executionContext) _Mutation_createAlert(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAlert(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15766,6 +16048,10 @@ func (ec *executionContext) fieldContext_Mutation_createAlert(ctx context.Contex
 				return ec.fieldContext_Alert_symptoms(ctx, field)
 			case "comment":
 				return ec.fieldContext_Alert_comment(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Alert_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Alert_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Alert", field.Name)
 		},
@@ -15798,7 +16084,7 @@ func (ec *executionContext) _Mutation_updateAlert(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAlert(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["sex"].(*string), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["symptoms"].([]string), fc.Args["comment"].(*string))
+		return ec.resolvers.Mutation().UpdateAlert(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateAlertInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15809,7 +16095,7 @@ func (ec *executionContext) _Mutation_updateAlert(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAlert(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15834,6 +16120,10 @@ func (ec *executionContext) fieldContext_Mutation_updateAlert(ctx context.Contex
 				return ec.fieldContext_Alert_symptoms(ctx, field)
 			case "comment":
 				return ec.fieldContext_Alert_comment(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Alert_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Alert_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Alert", field.Name)
 		},
@@ -15918,7 +16208,7 @@ func (ec *executionContext) _Mutation_createMedicine(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateMedicine(rctx, fc.Args["name"].(string), fc.Args["unit"].(*string), fc.Args["target_diseases"].([]string), fc.Args["treated_symptoms"].([]string), fc.Args["side_effects"].([]string))
+		return ec.resolvers.Mutation().CreateMedicine(rctx, fc.Args["input"].(model.CreateMedicineInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15929,7 +16219,7 @@ func (ec *executionContext) _Mutation_createMedicine(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createMedicine(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15952,6 +16242,10 @@ func (ec *executionContext) fieldContext_Mutation_createMedicine(ctx context.Con
 				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
 				return ec.fieldContext_Medicine_side_effects(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Medicine_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Medicine_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
@@ -16036,7 +16330,7 @@ func (ec *executionContext) _Mutation_createMedicalFolder(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateMedicalFolder(rctx, fc.Args["name"].(string), fc.Args["firstname"].(string), fc.Args["birthdate"].(int), fc.Args["sex"].(string), fc.Args["height"].(int), fc.Args["weight"].(int), fc.Args["primary_doctor_id"].(string), fc.Args["antecedent_disease_ids"].([]string), fc.Args["onboarding_status"].(string), fc.Args["family_members_med_info_id"].([]string))
+		return ec.resolvers.Mutation().CreateMedicalFolder(rctx, fc.Args["input"].(model.CreateMedicalFolderInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16047,7 +16341,7 @@ func (ec *executionContext) _Mutation_createMedicalFolder(ctx context.Context, f
 	}
 	res := resTmp.(*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createMedicalFolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16080,6 +16374,10 @@ func (ec *executionContext) fieldContext_Mutation_createMedicalFolder(ctx contex
 				return ec.fieldContext_MedicalInfo_antecedent_disease_ids(ctx, field)
 			case "family_members_med_info_id":
 				return ec.fieldContext_MedicalInfo_family_members_med_info_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_MedicalInfo_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_MedicalInfo_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MedicalInfo", field.Name)
 		},
@@ -16112,7 +16410,7 @@ func (ec *executionContext) _Mutation_updateMedicalFolder(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateMedicalFolder(rctx, fc.Args["id"].(string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["birthdate"].(*int), fc.Args["sex"].(*string), fc.Args["height"].(*int), fc.Args["weight"].(*int), fc.Args["primary_doctor_id"].(*string), fc.Args["antecedent_disease_ids"].([]string), fc.Args["onboarding_status"].(*model.OnboardingStatus), fc.Args["family_members_med_info_id"].([]string))
+		return ec.resolvers.Mutation().UpdateMedicalFolder(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateMedicalFolderInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16123,7 +16421,7 @@ func (ec *executionContext) _Mutation_updateMedicalFolder(ctx context.Context, f
 	}
 	res := resTmp.(*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateMedicalFolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16156,6 +16454,10 @@ func (ec *executionContext) fieldContext_Mutation_updateMedicalFolder(ctx contex
 				return ec.fieldContext_MedicalInfo_antecedent_disease_ids(ctx, field)
 			case "family_members_med_info_id":
 				return ec.fieldContext_MedicalInfo_family_members_med_info_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_MedicalInfo_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_MedicalInfo_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MedicalInfo", field.Name)
 		},
@@ -16240,7 +16542,7 @@ func (ec *executionContext) _Mutation_createTreatmentsFollowUp(ctx context.Conte
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateTreatmentsFollowUp(rctx, fc.Args["treatment_id"].(string), fc.Args["date"].(int), fc.Args["period"].([]model.Period))
+		return ec.resolvers.Mutation().CreateTreatmentsFollowUp(rctx, fc.Args["input"].(model.CreateTreatmentsFollowUpInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16251,7 +16553,7 @@ func (ec *executionContext) _Mutation_createTreatmentsFollowUp(ctx context.Conte
 	}
 	res := resTmp.(*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16270,6 +16572,10 @@ func (ec *executionContext) fieldContext_Mutation_createTreatmentsFollowUp(ctx c
 				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
 			case "period":
 				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_TreatmentsFollowUp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_TreatmentsFollowUp_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
 		},
@@ -16302,7 +16608,7 @@ func (ec *executionContext) _Mutation_updateTreatmentsFollowUp(ctx context.Conte
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateTreatmentsFollowUp(rctx, fc.Args["id"].(string), fc.Args["treatment_id"].(*string), fc.Args["date"].(*int), fc.Args["period"].([]model.Period))
+		return ec.resolvers.Mutation().UpdateTreatmentsFollowUp(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateTreatmentsFollowUpInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16313,7 +16619,7 @@ func (ec *executionContext) _Mutation_updateTreatmentsFollowUp(ctx context.Conte
 	}
 	res := resTmp.(*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16332,6 +16638,10 @@ func (ec *executionContext) fieldContext_Mutation_updateTreatmentsFollowUp(ctx c
 				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
 			case "period":
 				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_TreatmentsFollowUp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_TreatmentsFollowUp_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
 		},
@@ -16416,7 +16726,7 @@ func (ec *executionContext) _Mutation_createNlpReport(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateNlpReport(rctx, fc.Args["version"].(int), fc.Args["input_symptoms"].([]string), fc.Args["input_sentence"].(string), fc.Args["output"].([]*model.NlpReportOutputInput), fc.Args["computation_time"].(int))
+		return ec.resolvers.Mutation().CreateNlpReport(rctx, fc.Args["input"].(model.CreateNlpReportInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16427,7 +16737,7 @@ func (ec *executionContext) _Mutation_createNlpReport(ctx context.Context, field
 	}
 	res := resTmp.(*model.NlpReport)
 	fc.Result = res
-	return ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, field.Selections, res)
+	return ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createNlpReport(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16450,6 +16760,10 @@ func (ec *executionContext) fieldContext_Mutation_createNlpReport(ctx context.Co
 				return ec.fieldContext_NlpReport_output(ctx, field)
 			case "computation_time":
 				return ec.fieldContext_NlpReport_computation_time(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_NlpReport_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_NlpReport_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NlpReport", field.Name)
 		},
@@ -16482,7 +16796,7 @@ func (ec *executionContext) _Mutation_createChat(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateChat(rctx, fc.Args["participants"].([]*model.ChatParticipantsInput), fc.Args["messages"].([]*model.ChatMessagesInput))
+		return ec.resolvers.Mutation().CreateChat(rctx, fc.Args["input"].(model.CreateChatInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16493,7 +16807,7 @@ func (ec *executionContext) _Mutation_createChat(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createChat(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16510,6 +16824,10 @@ func (ec *executionContext) fieldContext_Mutation_createChat(ctx context.Context
 				return ec.fieldContext_Chat_participants(ctx, field)
 			case "messages":
 				return ec.fieldContext_Chat_messages(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Chat_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Chat_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Chat", field.Name)
 		},
@@ -16542,7 +16860,7 @@ func (ec *executionContext) _Mutation_updateChat(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateChat(rctx, fc.Args["id"].(string), fc.Args["participants"].([]*model.ChatParticipantsInput), fc.Args["messages"].([]*model.ChatMessagesInput))
+		return ec.resolvers.Mutation().UpdateChat(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateChatInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16553,7 +16871,7 @@ func (ec *executionContext) _Mutation_updateChat(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateChat(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16570,6 +16888,10 @@ func (ec *executionContext) fieldContext_Mutation_updateChat(ctx context.Context
 				return ec.fieldContext_Chat_participants(ctx, field)
 			case "messages":
 				return ec.fieldContext_Chat_messages(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Chat_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Chat_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Chat", field.Name)
 		},
@@ -16654,7 +16976,7 @@ func (ec *executionContext) _Mutation_createDeviceConnect(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDeviceConnect(rctx, fc.Args["device_name"].(string), fc.Args["ip_address"].(string), fc.Args["latitude"].(float64), fc.Args["longitude"].(float64), fc.Args["date"].(int), fc.Args["trust_device"].(bool))
+		return ec.resolvers.Mutation().CreateDeviceConnect(rctx, fc.Args["input"].(model.CreateDeviceConnectInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16665,7 +16987,7 @@ func (ec *executionContext) _Mutation_createDeviceConnect(ctx context.Context, f
 	}
 	res := resTmp.(*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16690,6 +17012,10 @@ func (ec *executionContext) fieldContext_Mutation_createDeviceConnect(ctx contex
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
 				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DeviceConnect_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DeviceConnect_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
 		},
@@ -16722,7 +17048,7 @@ func (ec *executionContext) _Mutation_updateDeviceConnect(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDeviceConnect(rctx, fc.Args["id"].(string), fc.Args["device_name"].(*string), fc.Args["ip_address"].(*string), fc.Args["latitude"].(*float64), fc.Args["longitude"].(*float64), fc.Args["date"].(*int), fc.Args["trust_device"].(*bool))
+		return ec.resolvers.Mutation().UpdateDeviceConnect(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDeviceConnectInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16733,7 +17059,7 @@ func (ec *executionContext) _Mutation_updateDeviceConnect(ctx context.Context, f
 	}
 	res := resTmp.(*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16758,6 +17084,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDeviceConnect(ctx contex
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
 				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DeviceConnect_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DeviceConnect_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
 		},
@@ -16842,7 +17172,7 @@ func (ec *executionContext) _Mutation_createDoubleAuth(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDoubleAuth(rctx, fc.Args["methods"].([]string), fc.Args["secret"].(string), fc.Args["url"].(string), fc.Args["trust_device_id"].(string))
+		return ec.resolvers.Mutation().CreateDoubleAuth(rctx, fc.Args["input"].(model.CreateDoubleAuthInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16853,7 +17183,7 @@ func (ec *executionContext) _Mutation_createDoubleAuth(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDoubleAuth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16874,6 +17204,10 @@ func (ec *executionContext) fieldContext_Mutation_createDoubleAuth(ctx context.C
 				return ec.fieldContext_DoubleAuth_url(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DoubleAuth_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DoubleAuth_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DoubleAuth", field.Name)
 		},
@@ -16906,7 +17240,7 @@ func (ec *executionContext) _Mutation_updateDoubleAuth(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDoubleAuth(rctx, fc.Args["id"].(string), fc.Args["methods"].([]string), fc.Args["secret"].(*string), fc.Args["url"].(*string), fc.Args["trust_device_id"].(*string))
+		return ec.resolvers.Mutation().UpdateDoubleAuth(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDoubleAuthInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -16917,7 +17251,7 @@ func (ec *executionContext) _Mutation_updateDoubleAuth(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDoubleAuth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16938,6 +17272,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDoubleAuth(ctx context.C
 				return ec.fieldContext_DoubleAuth_url(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DoubleAuth_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DoubleAuth_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DoubleAuth", field.Name)
 		},
@@ -17022,7 +17360,7 @@ func (ec *executionContext) _Mutation_createBlackList(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateBlackList(rctx, fc.Args["token"].([]string))
+		return ec.resolvers.Mutation().CreateBlackList(rctx, fc.Args["input"].(model.CreateBlackListInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -17033,7 +17371,7 @@ func (ec *executionContext) _Mutation_createBlackList(ctx context.Context, field
 	}
 	res := resTmp.(*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createBlackList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17048,6 +17386,10 @@ func (ec *executionContext) fieldContext_Mutation_createBlackList(ctx context.Co
 				return ec.fieldContext_BlackList_id(ctx, field)
 			case "token":
 				return ec.fieldContext_BlackList_token(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BlackList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BlackList_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type BlackList", field.Name)
 		},
@@ -17080,7 +17422,7 @@ func (ec *executionContext) _Mutation_updateBlackList(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBlackList(rctx, fc.Args["id"].(string), fc.Args["token"].([]string))
+		return ec.resolvers.Mutation().UpdateBlackList(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateBlackListInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -17091,7 +17433,7 @@ func (ec *executionContext) _Mutation_updateBlackList(ctx context.Context, field
 	}
 	res := resTmp.(*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateBlackList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17106,6 +17448,10 @@ func (ec *executionContext) fieldContext_Mutation_updateBlackList(ctx context.Co
 				return ec.fieldContext_BlackList_id(ctx, field)
 			case "token":
 				return ec.fieldContext_BlackList_token(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BlackList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BlackList_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type BlackList", field.Name)
 		},
@@ -17190,7 +17536,7 @@ func (ec *executionContext) _Mutation_createSaveCode(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSaveCode(rctx, fc.Args["code"].([]string))
+		return ec.resolvers.Mutation().CreateSaveCode(rctx, fc.Args["input"].(model.CreateSaveCodeInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -17201,7 +17547,7 @@ func (ec *executionContext) _Mutation_createSaveCode(ctx context.Context, field 
 	}
 	res := resTmp.(*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17216,6 +17562,10 @@ func (ec *executionContext) fieldContext_Mutation_createSaveCode(ctx context.Con
 				return ec.fieldContext_SaveCode_id(ctx, field)
 			case "code":
 				return ec.fieldContext_SaveCode_code(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_SaveCode_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_SaveCode_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
 		},
@@ -17248,7 +17598,7 @@ func (ec *executionContext) _Mutation_updateSaveCode(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateSaveCode(rctx, fc.Args["id"].(string), fc.Args["code"].([]string))
+		return ec.resolvers.Mutation().UpdateSaveCode(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateSaveCodeInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -17259,7 +17609,7 @@ func (ec *executionContext) _Mutation_updateSaveCode(ctx context.Context, field 
 	}
 	res := resTmp.(*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17274,6 +17624,10 @@ func (ec *executionContext) fieldContext_Mutation_updateSaveCode(ctx context.Con
 				return ec.fieldContext_SaveCode_id(ctx, field)
 			case "code":
 				return ec.fieldContext_SaveCode_code(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_SaveCode_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_SaveCode_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
 		},
@@ -17548,7 +17902,7 @@ func (ec *executionContext) _NlpReport_output(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.NlpReportOutput)
 	fc.Result = res
-	return ec.marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputᚄ(ctx, field.Selections, res)
+	return ec.marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_NlpReport_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17604,6 +17958,94 @@ func (ec *executionContext) _NlpReport_computation_time(ctx context.Context, fie
 }
 
 func (ec *executionContext) fieldContext_NlpReport_computation_time(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "NlpReport",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _NlpReport_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_NlpReport_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_NlpReport_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NlpReport",
 		Field:      field,
@@ -17913,6 +18355,94 @@ func (ec *executionContext) fieldContext_Notification_message(ctx context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Notification_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Notification) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Notification_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Notification_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Notification",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Notification_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Notification) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Notification_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Notification_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Notification",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -18422,6 +18952,94 @@ func (ec *executionContext) fieldContext_Patient_status(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Patient_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Patient) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Patient_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Patient_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Patient",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Patient_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Patient) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Patient_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Patient_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Patient",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_getPatients(ctx, field)
 	if err != nil {
@@ -18436,7 +19054,7 @@ func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetPatients(rctx)
+		return ec.resolvers.Query().GetPatients(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -18447,7 +19065,7 @@ func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatients(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18482,9 +19100,24 @@ func (ec *executionContext) fieldContext_Query_getPatients(ctx context.Context, 
 				return ec.fieldContext_Patient_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getPatients_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -18514,7 +19147,7 @@ func (ec *executionContext) _Query_getPatientById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18549,6 +19182,10 @@ func (ec *executionContext) fieldContext_Query_getPatientById(ctx context.Contex
 				return ec.fieldContext_Patient_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -18592,7 +19229,7 @@ func (ec *executionContext) _Query_getPatientByEmail(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18627,6 +19264,10 @@ func (ec *executionContext) fieldContext_Query_getPatientByEmail(ctx context.Con
 				return ec.fieldContext_Patient_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -18659,7 +19300,7 @@ func (ec *executionContext) _Query_getDoctors(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDoctors(rctx)
+		return ec.resolvers.Query().GetDoctors(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -18670,7 +19311,7 @@ func (ec *executionContext) _Query_getDoctors(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18707,9 +19348,24 @@ func (ec *executionContext) fieldContext_Query_getDoctors(ctx context.Context, f
 				return ec.fieldContext_Doctor_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDoctors_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -18739,7 +19395,7 @@ func (ec *executionContext) _Query_getDoctorById(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctorById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18776,6 +19432,10 @@ func (ec *executionContext) fieldContext_Query_getDoctorById(ctx context.Context
 				return ec.fieldContext_Doctor_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -18819,7 +19479,7 @@ func (ec *executionContext) _Query_getDoctorByEmail(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctorByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18856,6 +19516,10 @@ func (ec *executionContext) fieldContext_Query_getDoctorByEmail(ctx context.Cont
 				return ec.fieldContext_Doctor_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -18888,7 +19552,7 @@ func (ec *executionContext) _Query_getAdmins(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAdmins(rctx)
+		return ec.resolvers.Query().GetAdmins(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -18899,7 +19563,7 @@ func (ec *executionContext) _Query_getAdmins(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAdmins(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18920,9 +19584,24 @@ func (ec *executionContext) fieldContext_Query_getAdmins(ctx context.Context, fi
 				return ec.fieldContext_Admin_name(ctx, field)
 			case "last_name":
 				return ec.fieldContext_Admin_last_name(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Admin_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Admin_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAdmins_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -18952,7 +19631,7 @@ func (ec *executionContext) _Query_getAdminById(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAdminById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -18973,6 +19652,10 @@ func (ec *executionContext) fieldContext_Query_getAdminById(ctx context.Context,
 				return ec.fieldContext_Admin_name(ctx, field)
 			case "last_name":
 				return ec.fieldContext_Admin_last_name(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Admin_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Admin_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -19016,7 +19699,7 @@ func (ec *executionContext) _Query_getAdminByEmail(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAdminByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19037,6 +19720,10 @@ func (ec *executionContext) fieldContext_Query_getAdminByEmail(ctx context.Conte
 				return ec.fieldContext_Admin_name(ctx, field)
 			case "last_name":
 				return ec.fieldContext_Admin_last_name(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Admin_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Admin_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Admin", field.Name)
 		},
@@ -19049,344 +19736,6 @@ func (ec *executionContext) fieldContext_Query_getAdminByEmail(ctx context.Conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getAdminByEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getDemoAccounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getDemoAccounts(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDemoAccounts(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.DemoAccount)
-	fc.Result = res
-	return ec.marshalODemoAccount2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getDemoAccounts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DemoAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_DemoAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_DemoAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DemoAccount", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getDemoAccountById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getDemoAccountById(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDemoAccountByID(rctx, fc.Args["id"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.DemoAccount)
-	fc.Result = res
-	return ec.marshalODemoAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getDemoAccountById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DemoAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_DemoAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_DemoAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DemoAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getDemoAccountById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getDemoAccountByEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getDemoAccountByEmail(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDemoAccountByEmail(rctx, fc.Args["email"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.DemoAccount)
-	fc.Result = res
-	return ec.marshalODemoAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getDemoAccountByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DemoAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_DemoAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_DemoAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DemoAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getDemoAccountByEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getTestAccounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getTestAccounts(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTestAccounts(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.TestAccount)
-	fc.Result = res
-	return ec.marshalOTestAccount2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getTestAccounts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TestAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_TestAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_TestAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TestAccount", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getTestAccountById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getTestAccountById(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTestAccountByID(rctx, fc.Args["id"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.TestAccount)
-	fc.Result = res
-	return ec.marshalOTestAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getTestAccountById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TestAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_TestAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_TestAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TestAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getTestAccountById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getTestAccountByEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getTestAccountByEmail(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTestAccountByEmail(rctx, fc.Args["email"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.TestAccount)
-	fc.Result = res
-	return ec.marshalOTestAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getTestAccountByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TestAccount_id(ctx, field)
-			case "email":
-				return ec.fieldContext_TestAccount_email(ctx, field)
-			case "password":
-				return ec.fieldContext_TestAccount_password(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TestAccount", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getTestAccountByEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -19407,7 +19756,7 @@ func (ec *executionContext) _Query_getSessions(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetSessions(rctx)
+		return ec.resolvers.Query().GetSessions(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -19418,7 +19767,7 @@ func (ec *executionContext) _Query_getSessions(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSessions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19457,9 +19806,24 @@ func (ec *executionContext) fieldContext_Query_getSessions(ctx context.Context, 
 				return ec.fieldContext_Session_hereditary_disease(ctx, field)
 			case "alerts":
 				return ec.fieldContext_Session_alerts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Session_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Session_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Session", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSessions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -19489,7 +19853,7 @@ func (ec *executionContext) _Query_getSessionById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSessionById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19528,6 +19892,10 @@ func (ec *executionContext) fieldContext_Query_getSessionById(ctx context.Contex
 				return ec.fieldContext_Session_hereditary_disease(ctx, field)
 			case "alerts":
 				return ec.fieldContext_Session_alerts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Session_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Session_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Session", field.Name)
 		},
@@ -19571,7 +19939,7 @@ func (ec *executionContext) _Query_getSymptomById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSymptomById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19602,6 +19970,10 @@ func (ec *executionContext) fieldContext_Query_getSymptomById(ctx context.Contex
 				return ec.fieldContext_Symptom_question_duration(ctx, field)
 			case "question_ante":
 				return ec.fieldContext_Symptom_question_ante(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Symptom_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Symptom_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Symptom", field.Name)
 		},
@@ -19614,6 +19986,80 @@ func (ec *executionContext) fieldContext_Query_getSymptomById(ctx context.Contex
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getSymptomById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getSymptomsByDiseaseName(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSymptomsByDiseaseName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetSymptomsByDiseaseName(rctx, fc.Args["name"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Disease)
+	fc.Result = res
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getSymptomsByDiseaseName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Disease_id(ctx, field)
+			case "code":
+				return ec.fieldContext_Disease_code(ctx, field)
+			case "name":
+				return ec.fieldContext_Disease_name(ctx, field)
+			case "symptoms":
+				return ec.fieldContext_Disease_symptoms(ctx, field)
+			case "symptoms_weight":
+				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
+			case "overweight_factor":
+				return ec.fieldContext_Disease_overweight_factor(ctx, field)
+			case "heredity_factor":
+				return ec.fieldContext_Disease_heredity_factor(ctx, field)
+			case "advice":
+				return ec.fieldContext_Disease_advice(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Disease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Disease_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Disease", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSymptomsByDiseaseName_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -19645,7 +20091,7 @@ func (ec *executionContext) _Query_getDiseaseById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDiseaseById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19672,6 +20118,10 @@ func (ec *executionContext) fieldContext_Query_getDiseaseById(ctx context.Contex
 				return ec.fieldContext_Disease_heredity_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Disease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Disease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Disease", field.Name)
 		},
@@ -19704,7 +20154,7 @@ func (ec *executionContext) _Query_getSymptoms(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetSymptoms(rctx)
+		return ec.resolvers.Query().GetSymptoms(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -19715,7 +20165,7 @@ func (ec *executionContext) _Query_getSymptoms(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSymptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19746,9 +20196,24 @@ func (ec *executionContext) fieldContext_Query_getSymptoms(ctx context.Context, 
 				return ec.fieldContext_Symptom_question_duration(ctx, field)
 			case "question_ante":
 				return ec.fieldContext_Symptom_question_ante(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Symptom_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Symptom_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Symptom", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSymptoms_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -19767,7 +20232,7 @@ func (ec *executionContext) _Query_getDiseases(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDiseases(rctx)
+		return ec.resolvers.Query().GetDiseases(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -19778,7 +20243,7 @@ func (ec *executionContext) _Query_getDiseases(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDiseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19805,65 +20270,10 @@ func (ec *executionContext) fieldContext_Query_getDiseases(ctx context.Context, 
 				return ec.fieldContext_Disease_heredity_factor(ctx, field)
 			case "advice":
 				return ec.fieldContext_Disease_advice(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Disease", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_getSymptomsByDiseaseName(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getSymptomsByDiseaseName(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetSymptomsByDiseaseName(rctx, fc.Args["name"].(string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Disease)
-	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_getSymptomsByDiseaseName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Disease_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Disease_code(ctx, field)
-			case "name":
-				return ec.fieldContext_Disease_name(ctx, field)
-			case "symptoms":
-				return ec.fieldContext_Disease_symptoms(ctx, field)
-			case "symptoms_weight":
-				return ec.fieldContext_Disease_symptoms_weight(ctx, field)
-			case "overweight_factor":
-				return ec.fieldContext_Disease_overweight_factor(ctx, field)
-			case "heredity_factor":
-				return ec.fieldContext_Disease_heredity_factor(ctx, field)
-			case "advice":
-				return ec.fieldContext_Disease_advice(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Disease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Disease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Disease", field.Name)
 		},
@@ -19875,7 +20285,7 @@ func (ec *executionContext) fieldContext_Query_getSymptomsByDiseaseName(ctx cont
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getSymptomsByDiseaseName_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_getDiseases_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -19896,7 +20306,7 @@ func (ec *executionContext) _Query_getNotifications(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetNotifications(rctx)
+		return ec.resolvers.Query().GetNotifications(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -19907,7 +20317,7 @@ func (ec *executionContext) _Query_getNotifications(ctx context.Context, field g
 	}
 	res := resTmp.([]*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNotifications(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19926,9 +20336,24 @@ func (ec *executionContext) fieldContext_Query_getNotifications(ctx context.Cont
 				return ec.fieldContext_Notification_title(ctx, field)
 			case "message":
 				return ec.fieldContext_Notification_message(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Notification_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Notification_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getNotifications_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -19958,7 +20383,7 @@ func (ec *executionContext) _Query_getNotificationById(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNotificationById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19977,6 +20402,10 @@ func (ec *executionContext) fieldContext_Query_getNotificationById(ctx context.C
 				return ec.fieldContext_Notification_title(ctx, field)
 			case "message":
 				return ec.fieldContext_Notification_message(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Notification_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Notification_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},
@@ -20009,7 +20438,7 @@ func (ec *executionContext) _Query_getPatientRdv(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetPatientRdv(rctx, fc.Args["id_patient"].(string))
+		return ec.resolvers.Query().GetPatientRdv(rctx, fc.Args["id_patient"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20020,7 +20449,7 @@ func (ec *executionContext) _Query_getPatientRdv(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20049,6 +20478,10 @@ func (ec *executionContext) fieldContext_Query_getPatientRdv(ctx context.Context
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -20081,7 +20514,7 @@ func (ec *executionContext) _Query_getDoctorRdv(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDoctorRdv(rctx, fc.Args["doctor_id"].(string))
+		return ec.resolvers.Query().GetDoctorRdv(rctx, fc.Args["doctor_id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20092,7 +20525,7 @@ func (ec *executionContext) _Query_getDoctorRdv(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctorRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20121,6 +20554,10 @@ func (ec *executionContext) fieldContext_Query_getDoctorRdv(ctx context.Context,
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -20164,7 +20601,7 @@ func (ec *executionContext) _Query_getRdvById(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getRdvById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20193,6 +20630,10 @@ func (ec *executionContext) fieldContext_Query_getRdvById(ctx context.Context, f
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -20236,7 +20677,7 @@ func (ec *executionContext) _Query_getSlotById(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSlotById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20265,6 +20706,10 @@ func (ec *executionContext) fieldContext_Query_getSlotById(ctx context.Context, 
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -20297,7 +20742,7 @@ func (ec *executionContext) _Query_getSlots(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetSlots(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetSlots(rctx, fc.Args["id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20308,7 +20753,7 @@ func (ec *executionContext) _Query_getSlots(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSlots(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20337,6 +20782,10 @@ func (ec *executionContext) fieldContext_Query_getSlots(ctx context.Context, fie
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -20369,7 +20818,7 @@ func (ec *executionContext) _Query_getWaitingRdv(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetWaitingRdv(rctx, fc.Args["doctor_id"].(string))
+		return ec.resolvers.Query().GetWaitingRdv(rctx, fc.Args["doctor_id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20380,7 +20829,7 @@ func (ec *executionContext) _Query_getWaitingRdv(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getWaitingRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20409,6 +20858,10 @@ func (ec *executionContext) fieldContext_Query_getWaitingRdv(ctx context.Context
 				return ec.fieldContext_Rdv_session_id(ctx, field)
 			case "health_method":
 				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
 		},
@@ -20441,7 +20894,7 @@ func (ec *executionContext) _Query_getDocuments(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDocuments(rctx)
+		return ec.resolvers.Query().GetDocuments(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20452,7 +20905,7 @@ func (ec *executionContext) _Query_getDocuments(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDocuments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20477,9 +20930,24 @@ func (ec *executionContext) fieldContext_Query_getDocuments(ctx context.Context,
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Document_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Document_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Document", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDocuments_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -20509,7 +20977,7 @@ func (ec *executionContext) _Query_getDocumentById(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDocumentById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20534,6 +21002,10 @@ func (ec *executionContext) fieldContext_Query_getDocumentById(ctx context.Conte
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Document_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Document_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Document", field.Name)
 		},
@@ -20566,7 +21038,7 @@ func (ec *executionContext) _Query_getPatientDocument(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetPatientDocument(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetPatientDocument(rctx, fc.Args["id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20577,7 +21049,7 @@ func (ec *executionContext) _Query_getPatientDocument(ctx context.Context, field
 	}
 	res := resTmp.([]*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientDocument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20602,6 +21074,10 @@ func (ec *executionContext) fieldContext_Query_getPatientDocument(ctx context.Co
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Document_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Document_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Document", field.Name)
 		},
@@ -20634,7 +21110,7 @@ func (ec *executionContext) _Query_getAnteChirs(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAnteChirs(rctx)
+		return ec.resolvers.Query().GetAnteChirs(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20645,7 +21121,7 @@ func (ec *executionContext) _Query_getAnteChirs(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteChirs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20662,9 +21138,24 @@ func (ec *executionContext) fieldContext_Query_getAnteChirs(ctx context.Context,
 				return ec.fieldContext_AnteChir_name(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteChir_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteChir_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteChir", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAnteChirs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -20694,7 +21185,7 @@ func (ec *executionContext) _Query_getAnteChirByID(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteChirByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20711,6 +21202,10 @@ func (ec *executionContext) fieldContext_Query_getAnteChirByID(ctx context.Conte
 				return ec.fieldContext_AnteChir_name(ctx, field)
 			case "induced_symptoms":
 				return ec.fieldContext_AnteChir_induced_symptoms(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteChir_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteChir_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteChir", field.Name)
 		},
@@ -20743,7 +21238,7 @@ func (ec *executionContext) _Query_getAnteDiseases(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAnteDiseases(rctx)
+		return ec.resolvers.Query().GetAnteDiseases(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20754,7 +21249,7 @@ func (ec *executionContext) _Query_getAnteDiseases(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteDiseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20779,9 +21274,24 @@ func (ec *executionContext) fieldContext_Query_getAnteDiseases(ctx context.Conte
 				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
 			case "still_relevant":
 				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteDisease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteDisease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAnteDiseases_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -20811,7 +21321,7 @@ func (ec *executionContext) _Query_getAnteDiseaseByID(ctx context.Context, field
 	}
 	res := resTmp.(*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteDiseaseByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20836,6 +21346,10 @@ func (ec *executionContext) fieldContext_Query_getAnteDiseaseByID(ctx context.Co
 				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
 			case "still_relevant":
 				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteDisease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteDisease_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
 		},
@@ -20868,7 +21382,7 @@ func (ec *executionContext) _Query_getAnteFamilies(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAnteFamilies(rctx)
+		return ec.resolvers.Query().GetAnteFamilies(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20879,7 +21393,7 @@ func (ec *executionContext) _Query_getAnteFamilies(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteFamilies(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20896,9 +21410,24 @@ func (ec *executionContext) fieldContext_Query_getAnteFamilies(ctx context.Conte
 				return ec.fieldContext_AnteFamily_name(ctx, field)
 			case "disease":
 				return ec.fieldContext_AnteFamily_disease(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteFamily_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteFamily_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteFamily", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAnteFamilies_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -20928,7 +21457,7 @@ func (ec *executionContext) _Query_getAnteFamilyByID(ctx context.Context, field 
 	}
 	res := resTmp.(*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteFamilyByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20945,6 +21474,10 @@ func (ec *executionContext) fieldContext_Query_getAnteFamilyByID(ctx context.Con
 				return ec.fieldContext_AnteFamily_name(ctx, field)
 			case "disease":
 				return ec.fieldContext_AnteFamily_disease(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteFamily_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteFamily_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AnteFamily", field.Name)
 		},
@@ -20977,7 +21510,7 @@ func (ec *executionContext) _Query_getTreatments(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTreatments(rctx)
+		return ec.resolvers.Query().GetTreatments(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20988,7 +21521,7 @@ func (ec *executionContext) _Query_getTreatments(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21009,9 +21542,24 @@ func (ec *executionContext) fieldContext_Query_getTreatments(ctx context.Context
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Treatment_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Treatment_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Treatment", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getTreatments_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -21041,7 +21589,7 @@ func (ec *executionContext) _Query_getTreatmentByID(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatmentByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21062,6 +21610,10 @@ func (ec *executionContext) fieldContext_Query_getTreatmentByID(ctx context.Cont
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Treatment_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Treatment_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Treatment", field.Name)
 		},
@@ -21094,7 +21646,7 @@ func (ec *executionContext) _Query_getAlerts(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAlerts(rctx)
+		return ec.resolvers.Query().GetAlerts(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21105,7 +21657,7 @@ func (ec *executionContext) _Query_getAlerts(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAlerts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21130,9 +21682,24 @@ func (ec *executionContext) fieldContext_Query_getAlerts(ctx context.Context, fi
 				return ec.fieldContext_Alert_symptoms(ctx, field)
 			case "comment":
 				return ec.fieldContext_Alert_comment(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Alert_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Alert_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Alert", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAlerts_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -21162,7 +21729,7 @@ func (ec *executionContext) _Query_getAlertById(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAlertById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21187,6 +21754,10 @@ func (ec *executionContext) fieldContext_Query_getAlertById(ctx context.Context,
 				return ec.fieldContext_Alert_symptoms(ctx, field)
 			case "comment":
 				return ec.fieldContext_Alert_comment(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Alert_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Alert_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Alert", field.Name)
 		},
@@ -21219,7 +21790,7 @@ func (ec *executionContext) _Query_getMedicalFolder(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetMedicalFolder(rctx)
+		return ec.resolvers.Query().GetMedicalFolder(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21230,7 +21801,7 @@ func (ec *executionContext) _Query_getMedicalFolder(ctx context.Context, field g
 	}
 	res := resTmp.([]*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicalFolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21263,9 +21834,24 @@ func (ec *executionContext) fieldContext_Query_getMedicalFolder(ctx context.Cont
 				return ec.fieldContext_MedicalInfo_antecedent_disease_ids(ctx, field)
 			case "family_members_med_info_id":
 				return ec.fieldContext_MedicalInfo_family_members_med_info_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_MedicalInfo_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_MedicalInfo_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MedicalInfo", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getMedicalFolder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -21295,7 +21881,7 @@ func (ec *executionContext) _Query_getMedicalFolderById(ctx context.Context, fie
 	}
 	res := resTmp.(*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicalFolderById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21328,6 +21914,10 @@ func (ec *executionContext) fieldContext_Query_getMedicalFolderById(ctx context.
 				return ec.fieldContext_MedicalInfo_antecedent_disease_ids(ctx, field)
 			case "family_members_med_info_id":
 				return ec.fieldContext_MedicalInfo_family_members_med_info_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_MedicalInfo_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_MedicalInfo_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MedicalInfo", field.Name)
 		},
@@ -21360,7 +21950,7 @@ func (ec *executionContext) _Query_getMedicines(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetMedicines(rctx)
+		return ec.resolvers.Query().GetMedicines(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21371,7 +21961,7 @@ func (ec *executionContext) _Query_getMedicines(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicines(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21394,9 +21984,24 @@ func (ec *executionContext) fieldContext_Query_getMedicines(ctx context.Context,
 				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
 				return ec.fieldContext_Medicine_side_effects(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Medicine_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Medicine_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getMedicines_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -21426,7 +22031,7 @@ func (ec *executionContext) _Query_getMedicineByID(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicineByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21449,6 +22054,10 @@ func (ec *executionContext) fieldContext_Query_getMedicineByID(ctx context.Conte
 				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
 				return ec.fieldContext_Medicine_side_effects(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Medicine_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Medicine_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Medicine", field.Name)
 		},
@@ -21481,7 +22090,7 @@ func (ec *executionContext) _Query_getPatientsFromDoctorById(ctx context.Context
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetPatientsFromDoctorByID(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetPatientsFromDoctorByID(rctx, fc.Args["id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21492,7 +22101,7 @@ func (ec *executionContext) _Query_getPatientsFromDoctorById(ctx context.Context
 	}
 	res := resTmp.([]*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21527,6 +22136,10 @@ func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx con
 				return ec.fieldContext_Patient_trust_devices(ctx, field)
 			case "status":
 				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -21570,7 +22183,7 @@ func (ec *executionContext) _Query_getTreatmentsFollowUpById(ctx context.Context
 	}
 	res := resTmp.(*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUpById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21589,6 +22202,10 @@ func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUpById(ctx con
 				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
 			case "period":
 				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_TreatmentsFollowUp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_TreatmentsFollowUp_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
 		},
@@ -21621,7 +22238,7 @@ func (ec *executionContext) _Query_getTreatmentsFollowUps(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetTreatmentsFollowUps(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetTreatmentsFollowUps(rctx, fc.Args["id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21632,7 +22249,7 @@ func (ec *executionContext) _Query_getTreatmentsFollowUps(ctx context.Context, f
 	}
 	res := resTmp.([]*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUps(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21651,6 +22268,10 @@ func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUps(ctx contex
 				return ec.fieldContext_TreatmentsFollowUp_date(ctx, field)
 			case "period":
 				return ec.fieldContext_TreatmentsFollowUp_period(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_TreatmentsFollowUp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_TreatmentsFollowUp_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TreatmentsFollowUp", field.Name)
 		},
@@ -21683,7 +22304,7 @@ func (ec *executionContext) _Query_getNlpReports(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetNlpReports(rctx)
+		return ec.resolvers.Query().GetNlpReports(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21694,7 +22315,7 @@ func (ec *executionContext) _Query_getNlpReports(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.NlpReport)
 	fc.Result = res
-	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, field.Selections, res)
+	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNlpReports(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21717,9 +22338,24 @@ func (ec *executionContext) fieldContext_Query_getNlpReports(ctx context.Context
 				return ec.fieldContext_NlpReport_output(ctx, field)
 			case "computation_time":
 				return ec.fieldContext_NlpReport_computation_time(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_NlpReport_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_NlpReport_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NlpReport", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getNlpReports_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -21738,7 +22374,7 @@ func (ec *executionContext) _Query_getNlpReportsByVersion(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetNlpReportsByVersion(rctx, fc.Args["version"].(int))
+		return ec.resolvers.Query().GetNlpReportsByVersion(rctx, fc.Args["version"].(int), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21749,7 +22385,7 @@ func (ec *executionContext) _Query_getNlpReportsByVersion(ctx context.Context, f
 	}
 	res := resTmp.([]*model.NlpReport)
 	fc.Result = res
-	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, field.Selections, res)
+	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNlpReportsByVersion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21772,6 +22408,10 @@ func (ec *executionContext) fieldContext_Query_getNlpReportsByVersion(ctx contex
 				return ec.fieldContext_NlpReport_output(ctx, field)
 			case "computation_time":
 				return ec.fieldContext_NlpReport_computation_time(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_NlpReport_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_NlpReport_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NlpReport", field.Name)
 		},
@@ -21804,7 +22444,7 @@ func (ec *executionContext) _Query_getChats(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetChats(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetChats(rctx, fc.Args["id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -21815,7 +22455,7 @@ func (ec *executionContext) _Query_getChats(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getChats(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21832,6 +22472,10 @@ func (ec *executionContext) fieldContext_Query_getChats(ctx context.Context, fie
 				return ec.fieldContext_Chat_participants(ctx, field)
 			case "messages":
 				return ec.fieldContext_Chat_messages(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Chat_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Chat_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Chat", field.Name)
 		},
@@ -21875,7 +22519,7 @@ func (ec *executionContext) _Query_getChatById(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getChatById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21892,6 +22536,10 @@ func (ec *executionContext) fieldContext_Query_getChatById(ctx context.Context, 
 				return ec.fieldContext_Chat_participants(ctx, field)
 			case "messages":
 				return ec.fieldContext_Chat_messages(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Chat_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Chat_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Chat", field.Name)
 		},
@@ -21935,7 +22583,7 @@ func (ec *executionContext) _Query_getDeviceConnectById(ctx context.Context, fie
 	}
 	res := resTmp.(*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDeviceConnectById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21960,6 +22608,10 @@ func (ec *executionContext) fieldContext_Query_getDeviceConnectById(ctx context.
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
 				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DeviceConnect_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DeviceConnect_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
 		},
@@ -21992,7 +22644,7 @@ func (ec *executionContext) _Query_getDevicesConnect(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDevicesConnect(rctx)
+		return ec.resolvers.Query().GetDevicesConnect(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -22003,7 +22655,7 @@ func (ec *executionContext) _Query_getDevicesConnect(ctx context.Context, field 
 	}
 	res := resTmp.([]*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDevicesConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22028,9 +22680,24 @@ func (ec *executionContext) fieldContext_Query_getDevicesConnect(ctx context.Con
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
 				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DeviceConnect_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DeviceConnect_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDevicesConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -22060,7 +22727,7 @@ func (ec *executionContext) _Query_getDoubleAuthById(ctx context.Context, field 
 	}
 	res := resTmp.(*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoubleAuthById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22081,6 +22748,10 @@ func (ec *executionContext) fieldContext_Query_getDoubleAuthById(ctx context.Con
 				return ec.fieldContext_DoubleAuth_url(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DoubleAuth_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DoubleAuth_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DoubleAuth", field.Name)
 		},
@@ -22113,7 +22784,7 @@ func (ec *executionContext) _Query_getDoubleAuths(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDoubleAuths(rctx)
+		return ec.resolvers.Query().GetDoubleAuths(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -22124,7 +22795,7 @@ func (ec *executionContext) _Query_getDoubleAuths(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoubleAuths(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22145,9 +22816,24 @@ func (ec *executionContext) fieldContext_Query_getDoubleAuths(ctx context.Contex
 				return ec.fieldContext_DoubleAuth_url(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DoubleAuth_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DoubleAuth_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DoubleAuth", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDoubleAuths_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -22177,7 +22863,7 @@ func (ec *executionContext) _Query_getBlackListById(ctx context.Context, field g
 	}
 	res := resTmp.(*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getBlackListById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22192,6 +22878,10 @@ func (ec *executionContext) fieldContext_Query_getBlackListById(ctx context.Cont
 				return ec.fieldContext_BlackList_id(ctx, field)
 			case "token":
 				return ec.fieldContext_BlackList_token(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BlackList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BlackList_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type BlackList", field.Name)
 		},
@@ -22224,7 +22914,7 @@ func (ec *executionContext) _Query_getBlackList(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetBlackList(rctx)
+		return ec.resolvers.Query().GetBlackList(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -22235,7 +22925,7 @@ func (ec *executionContext) _Query_getBlackList(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getBlackList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22250,9 +22940,24 @@ func (ec *executionContext) fieldContext_Query_getBlackList(ctx context.Context,
 				return ec.fieldContext_BlackList_id(ctx, field)
 			case "token":
 				return ec.fieldContext_BlackList_token(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_BlackList_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_BlackList_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type BlackList", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getBlackList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -22282,7 +22987,7 @@ func (ec *executionContext) _Query_getSaveCodeById(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSaveCodeById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22297,6 +23002,10 @@ func (ec *executionContext) fieldContext_Query_getSaveCodeById(ctx context.Conte
 				return ec.fieldContext_SaveCode_id(ctx, field)
 			case "code":
 				return ec.fieldContext_SaveCode_code(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_SaveCode_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_SaveCode_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
 		},
@@ -22329,7 +23038,7 @@ func (ec *executionContext) _Query_getSaveCode(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetSaveCode(rctx)
+		return ec.resolvers.Query().GetSaveCode(rctx, fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -22340,7 +23049,7 @@ func (ec *executionContext) _Query_getSaveCode(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22355,9 +23064,24 @@ func (ec *executionContext) fieldContext_Query_getSaveCode(ctx context.Context, 
 				return ec.fieldContext_SaveCode_id(ctx, field)
 			case "code":
 				return ec.fieldContext_SaveCode_code(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_SaveCode_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_SaveCode_updatedAt(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSaveCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -22780,7 +23504,7 @@ func (ec *executionContext) _Rdv_appointment_status(ctx context.Context, field g
 	}
 	res := resTmp.(model.AppointmentStatus)
 	fc.Result = res
-	return ec.marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx, field.Selections, res)
+	return ec.marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Rdv_appointment_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22881,6 +23605,94 @@ func (ec *executionContext) fieldContext_Rdv_health_method(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Rdv_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Rdv) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Rdv_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Rdv_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Rdv",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Rdv_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Rdv) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Rdv_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Rdv_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Rdv",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SaveCode_id(ctx context.Context, field graphql.CollectedField, obj *model.SaveCode) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SaveCode_id(ctx, field)
 	if err != nil {
@@ -22969,6 +23781,94 @@ func (ec *executionContext) fieldContext_SaveCode_code(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _SaveCode_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.SaveCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SaveCode_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SaveCode_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SaveCode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SaveCode_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.SaveCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SaveCode_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SaveCode_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SaveCode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Session_id(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Session_id(ctx, field)
 	if err != nil {
@@ -23041,7 +23941,7 @@ func (ec *executionContext) _Session_diseases(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.SessionDiseases)
 	fc.Result = res
-	return ec.marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesᚄ(ctx, field.Selections, res)
+	return ec.marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Session_diseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -23093,7 +23993,7 @@ func (ec *executionContext) _Session_symptoms(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.SessionSymptom)
 	fc.Result = res
-	return ec.marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomᚄ(ctx, field.Selections, res)
+	return ec.marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Session_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -23499,7 +24399,7 @@ func (ec *executionContext) _Session_logs(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Logs)
 	fc.Result = res
-	return ec.marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsᚄ(ctx, field.Selections, res)
+	return ec.marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Session_logs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -23604,6 +24504,94 @@ func (ec *executionContext) fieldContext_Session_alerts(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Session_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Session_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Session_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Session",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Session_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Session_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Session_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Session",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -24345,6 +25333,94 @@ func (ec *executionContext) fieldContext_Symptom_question_ante(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Symptom_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Symptom) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Symptom_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Symptom_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Symptom",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Symptom_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Symptom) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Symptom_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Symptom_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Symptom",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SymptomsWeight_symptom(ctx context.Context, field graphql.CollectedField, obj *model.SymptomsWeight) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SymptomsWeight_symptom(ctx, field)
 	if err != nil {
@@ -24477,138 +25553,6 @@ func (ec *executionContext) fieldContext_SymptomsWeight_chronic(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _TestAccount_id(ctx context.Context, field graphql.CollectedField, obj *model.TestAccount) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TestAccount_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TestAccount_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TestAccount",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TestAccount_email(ctx context.Context, field graphql.CollectedField, obj *model.TestAccount) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TestAccount_email(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Email, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TestAccount_email(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TestAccount",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TestAccount_password(ctx context.Context, field graphql.CollectedField, obj *model.TestAccount) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TestAccount_password(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Password, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TestAccount_password(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TestAccount",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Treatment_id(ctx context.Context, field graphql.CollectedField, obj *model.Treatment) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Treatment_id(ctx, field)
 	if err != nil {
@@ -24681,7 +25625,7 @@ func (ec *executionContext) _Treatment_period(ctx context.Context, field graphql
 	}
 	res := resTmp.([]model.Period)
 	fc.Result = res
-	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
+	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Treatment_period(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -24725,7 +25669,7 @@ func (ec *executionContext) _Treatment_day(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]model.Day)
 	fc.Result = res
-	return ec.marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDayᚄ(ctx, field.Selections, res)
+	return ec.marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Treatment_day(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -24824,6 +25768,94 @@ func (ec *executionContext) fieldContext_Treatment_medicine_id(ctx context.Conte
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Treatment_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Treatment) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Treatment_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Treatment_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Treatment",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Treatment_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.Treatment) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Treatment_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Treatment_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Treatment",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -24989,7 +26021,7 @@ func (ec *executionContext) _TreatmentsFollowUp_period(ctx context.Context, fiel
 	}
 	res := resTmp.([]model.Period)
 	fc.Result = res
-	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
+	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_TreatmentsFollowUp_period(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -25000,6 +26032,94 @@ func (ec *executionContext) fieldContext_TreatmentsFollowUp_period(ctx context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Period does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TreatmentsFollowUp_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.TreatmentsFollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TreatmentsFollowUp_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TreatmentsFollowUp_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TreatmentsFollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TreatmentsFollowUp_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.TreatmentsFollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TreatmentsFollowUp_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TreatmentsFollowUp_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TreatmentsFollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -26935,6 +28055,1285 @@ func (ec *executionContext) unmarshalInputChirInducedSymptomInput(ctx context.Co
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCreateAdminInput(ctx context.Context, obj interface{}) (model.CreateAdminInput, error) {
+	var it model.CreateAdminInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"email", "password", "name", "last_name"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "password":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Password = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "last_name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LastName = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateAlertInput(ctx context.Context, obj interface{}) (model.CreateAlertInput, error) {
+	var it model.CreateAlertInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "sex", "height", "weight", "symptoms", "comment"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "sex":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sex = data
+		case "height":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Height = data
+		case "weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "comment":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comment"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Comment = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateAnteChirInput(ctx context.Context, obj interface{}) (model.CreateAnteChirInput, error) {
+	var it model.CreateAnteChirInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "induced_symptoms"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "induced_symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
+			data, err := ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InducedSymptoms = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateAnteDiseaseInput(ctx context.Context, obj interface{}) (model.CreateAnteDiseaseInput, error) {
+	var it model.CreateAnteDiseaseInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "chronicity", "surgery_ids", "symptoms", "treatment_ids", "still_relevant"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "chronicity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronicity"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Chronicity = data
+		case "surgery_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("surgery_ids"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SurgeryIds = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "treatment_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_ids"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatmentIds = data
+		case "still_relevant":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("still_relevant"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StillRelevant = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateAnteFamilyInput(ctx context.Context, obj interface{}) (model.CreateAnteFamilyInput, error) {
+	var it model.CreateAnteFamilyInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "disease"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "disease":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("disease"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Disease = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateBlackListInput(ctx context.Context, obj interface{}) (model.CreateBlackListInput, error) {
+	var it model.CreateBlackListInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"token"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "token":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Token = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateChatInput(ctx context.Context, obj interface{}) (model.CreateChatInput, error) {
+	var it model.CreateChatInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"participants", "messages"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "participants":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("participants"))
+			data, err := ec.unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Participants = data
+		case "messages":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("messages"))
+			data, err := ec.unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Messages = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateDeviceConnectInput(ctx context.Context, obj interface{}) (model.CreateDeviceConnectInput, error) {
+	var it model.CreateDeviceConnectInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"device_name", "ip_address", "latitude", "longitude", "date", "trust_device"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "device_name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceName = data
+		case "ip_address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddress = data
+		case "latitude":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Latitude = data
+		case "longitude":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Longitude = data
+		case "date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Date = data
+		case "trust_device":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevice = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateDiseaseInput(ctx context.Context, obj interface{}) (model.CreateDiseaseInput, error) {
+	var it model.CreateDiseaseInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"code", "name", "symptoms", "symptoms_weight", "overweight_factor", "heredity_factor", "advice"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Code = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "symptoms_weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
+			data, err := ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SymptomsWeight = data
+		case "overweight_factor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overweight_factor"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OverweightFactor = data
+		case "heredity_factor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("heredity_factor"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HeredityFactor = data
+		case "advice":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Advice = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateDoctorInput(ctx context.Context, obj interface{}) (model.CreateDoctorInput, error) {
+	var it model.CreateDoctorInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"email", "password", "name", "firstname", "address", "status"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "password":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Password = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "firstname":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Firstname = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalNAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Address = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateDocumentInput(ctx context.Context, obj interface{}) (model.CreateDocumentInput, error) {
+	var it model.CreateDocumentInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"owner_id", "name", "document_type", "category", "is_favorite", "download_url"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "owner_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("owner_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "document_type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("document_type"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentType = data
+		case "category":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Category = data
+		case "is_favorite":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("is_favorite"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsFavorite = data
+		case "download_url":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("download_url"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DownloadURL = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateDoubleAuthInput(ctx context.Context, obj interface{}) (model.CreateDoubleAuthInput, error) {
+	var it model.CreateDoubleAuthInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"methods", "secret", "url", "trust_device_id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "methods":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("methods"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Methods = data
+		case "secret":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secret"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Secret = data
+		case "url":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.URL = data
+		case "trust_device_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDeviceID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateMedicalFolderInput(ctx context.Context, obj interface{}) (model.CreateMedicalFolderInput, error) {
+	var it model.CreateMedicalFolderInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "firstname", "birthdate", "sex", "height", "weight", "primary_doctor_id", "antecedent_disease_ids", "onboarding_status", "family_members_med_info_id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "firstname":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Firstname = data
+		case "birthdate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
+		case "sex":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sex = data
+		case "height":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Height = data
+		case "weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "primary_doctor_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primary_doctor_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryDoctorID = data
+		case "antecedent_disease_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("antecedent_disease_ids"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AntecedentDiseaseIds = data
+		case "onboarding_status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("onboarding_status"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OnboardingStatus = data
+		case "family_members_med_info_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("family_members_med_info_id"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FamilyMembersMedInfoID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateMedicineInput(ctx context.Context, obj interface{}) (model.CreateMedicineInput, error) {
+	var it model.CreateMedicineInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "unit", "target_diseases", "treated_symptoms", "side_effects"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "unit":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unit"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Unit = data
+		case "target_diseases":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("target_diseases"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TargetDiseases = data
+		case "treated_symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treated_symptoms"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatedSymptoms = data
+		case "side_effects":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("side_effects"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SideEffects = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateNlpReportInput(ctx context.Context, obj interface{}) (model.CreateNlpReportInput, error) {
+	var it model.CreateNlpReportInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"version", "input_symptoms", "input_sentence", "output", "computation_time"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "version":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("version"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Version = data
+		case "input_symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input_symptoms"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InputSymptoms = data
+		case "input_sentence":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input_sentence"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InputSentence = data
+		case "output":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("output"))
+			data, err := ec.unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Output = data
+		case "computation_time":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("computation_time"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ComputationTime = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateNotificationInput(ctx context.Context, obj interface{}) (model.CreateNotificationInput, error) {
+	var it model.CreateNotificationInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"token", "message", "title"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "token":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Token = data
+		case "message":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("message"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Message = data
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreatePatientInput(ctx context.Context, obj interface{}) (model.CreatePatientInput, error) {
+	var it model.CreatePatientInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"email", "password", "status", "device_connect", "double_auth_methods_id", "trust_devices"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "password":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Password = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
+		case "device_connect":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceConnect = data
+		case "double_auth_methods_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DoubleAuthMethodsID = data
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateRdvInput(ctx context.Context, obj interface{}) (model.CreateRdvInput, error) {
+	var it model.CreateRdvInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id_patient", "doctor_id", "start_date", "end_date", "appointment_status", "session_id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id_patient":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id_patient"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDPatient = data
+		case "doctor_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("doctor_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DoctorID = data
+		case "start_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "end_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("end_date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
+		case "appointment_status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
+			data, err := ec.unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AppointmentStatus = data
+		case "session_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("session_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SessionID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateSaveCodeInput(ctx context.Context, obj interface{}) (model.CreateSaveCodeInput, error) {
+	var it model.CreateSaveCodeInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"code"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Code = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateSessionInput(ctx context.Context, obj interface{}) (model.CreateSessionInput, error) {
+	var it model.CreateSessionInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"diseases", "symptoms", "age", "height", "weight", "sex", "ante_chirs", "ante_diseases", "medicine", "last_question", "logs", "hereditary_disease", "alerts"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "diseases":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
+			data, err := ec.unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Diseases = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "age":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("age"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Age = data
+		case "height":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Height = data
+		case "weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "sex":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sex = data
+		case "ante_chirs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_chirs"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AnteChirs = data
+		case "ante_diseases":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AnteDiseases = data
+		case "medicine":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Medicine = data
+		case "last_question":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LastQuestion = data
+		case "logs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
+			data, err := ec.unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Logs = data
+		case "hereditary_disease":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hereditary_disease"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HereditaryDisease = data
+		case "alerts":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alerts"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Alerts = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateSymptomInput(ctx context.Context, obj interface{}) (model.CreateSymptomInput, error) {
+	var it model.CreateSymptomInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"code", "name", "chronic", "symptom", "advice", "question", "question_basic", "question_duration", "question_ante"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Code = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "chronic":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronic"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Chronic = data
+		case "symptom":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptom"))
+			data, err := ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptom = data
+		case "advice":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Advice = data
+		case "question":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Question = data
+		case "question_basic":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_basic"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QuestionBasic = data
+		case "question_duration":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_duration"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QuestionDuration = data
+		case "question_ante":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_ante"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QuestionAnte = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateTreatmentInput(ctx context.Context, obj interface{}) (model.CreateTreatmentInput, error) {
+	var it model.CreateTreatmentInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "period":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
+			data, err := ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Period = data
+		case "day":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
+			data, err := ec.unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Day = data
+		case "quantity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Quantity = data
+		case "medicine_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MedicineID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateTreatmentsFollowUpInput(ctx context.Context, obj interface{}) (model.CreateTreatmentsFollowUpInput, error) {
+	var it model.CreateTreatmentsFollowUpInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"treatment_id", "date", "period"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "treatment_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatmentID = data
+		case "date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Date = data
+		case "period":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
+			data, err := ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Period = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputLogsInput(ctx context.Context, obj interface{}) (model.LogsInput, error) {
 	var it model.LogsInput
 	asMap := map[string]interface{}{}
@@ -26992,7 +29391,7 @@ func (ec *executionContext) unmarshalInputMedicalAntecedentsInput(ctx context.Co
 			it.Name = data
 		case "medicines":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicines"))
-			data, err := ec.unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentInputᚄ(ctx, v)
+			data, err := ec.unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -27033,7 +29432,7 @@ func (ec *executionContext) unmarshalInputMedicineInput(ctx context.Context, obj
 			it.Name = data
 		case "unit":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unit"))
-			data, err := ec.unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx, v)
+			data, err := ec.unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -27100,6 +29499,47 @@ func (ec *executionContext) unmarshalInputNlpReportOutputInput(ctx context.Conte
 				return it, err
 			}
 			it.Days = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputOptions(ctx context.Context, obj interface{}) (model.Options, error) {
+	var it model.Options
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"sort", "limit", "offset"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "sort":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sort"))
+			data, err := ec.unmarshalNSortingOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortingOptions(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sort = data
+		case "limit":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Limit = data
+		case "offset":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Offset = data
 		}
 	}
 
@@ -27195,6 +29635,40 @@ func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Contex
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSortingOptions(ctx context.Context, obj interface{}) (model.SortingOptions, error) {
+	var it model.SortingOptions
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"order", "key"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "order":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("order"))
+			data, err := ec.unmarshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortOrder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Order = data
+		case "key":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Key = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputSymptomsWeightInput(ctx context.Context, obj interface{}) (model.SymptomsWeightInput, error) {
 	var it model.SymptomsWeightInput
 	asMap := map[string]interface{}{}
@@ -27252,14 +29726,14 @@ func (ec *executionContext) unmarshalInputTreatmentInput(ctx context.Context, ob
 		switch k {
 		case "period":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx, v)
+			data, err := ec.unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Period = data
 		case "day":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
-			data, err := ec.unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx, v)
+			data, err := ec.unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -27278,6 +29752,1265 @@ func (ec *executionContext) unmarshalInputTreatmentInput(ctx context.Context, ob
 				return it, err
 			}
 			it.MedicineID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateAdminInput(ctx context.Context, obj interface{}) (model.UpdateAdminInput, error) {
+	var it model.UpdateAdminInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"email", "password", "name", "last_name"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "password":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Password = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "last_name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LastName = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateAlertInput(ctx context.Context, obj interface{}) (model.UpdateAlertInput, error) {
+	var it model.UpdateAlertInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "sex", "height", "weight", "symptoms", "comment"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "sex":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sex = data
+		case "height":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Height = data
+		case "weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "comment":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("comment"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Comment = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateAnteChirInput(ctx context.Context, obj interface{}) (model.UpdateAnteChirInput, error) {
+	var it model.UpdateAnteChirInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "induced_symptoms"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "induced_symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
+			data, err := ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InducedSymptoms = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateAnteDiseaseInput(ctx context.Context, obj interface{}) (model.UpdateAnteDiseaseInput, error) {
+	var it model.UpdateAnteDiseaseInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "chronicity", "surgery_ids", "symptoms", "treatment_ids", "still_relevant"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "chronicity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronicity"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Chronicity = data
+		case "surgery_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("surgery_ids"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SurgeryIds = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "treatment_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_ids"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatmentIds = data
+		case "still_relevant":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("still_relevant"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StillRelevant = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateAnteFamilyInput(ctx context.Context, obj interface{}) (model.UpdateAnteFamilyInput, error) {
+	var it model.UpdateAnteFamilyInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "disease"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "disease":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("disease"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Disease = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateBlackListInput(ctx context.Context, obj interface{}) (model.UpdateBlackListInput, error) {
+	var it model.UpdateBlackListInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"token"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "token":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Token = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateChatInput(ctx context.Context, obj interface{}) (model.UpdateChatInput, error) {
+	var it model.UpdateChatInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"participants", "messages"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "participants":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("participants"))
+			data, err := ec.unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Participants = data
+		case "messages":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("messages"))
+			data, err := ec.unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Messages = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDeviceConnectInput(ctx context.Context, obj interface{}) (model.UpdateDeviceConnectInput, error) {
+	var it model.UpdateDeviceConnectInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"device_name", "ip_address", "latitude", "longitude", "date", "trust_device"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "device_name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceName = data
+		case "ip_address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IPAddress = data
+		case "latitude":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Latitude = data
+		case "longitude":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Longitude = data
+		case "date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Date = data
+		case "trust_device":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevice = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDiseaseInput(ctx context.Context, obj interface{}) (model.UpdateDiseaseInput, error) {
+	var it model.UpdateDiseaseInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"code", "name", "symptoms", "symptoms_weight", "overweight_factor", "heredity_factor", "advice"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Code = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "symptoms_weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
+			data, err := ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SymptomsWeight = data
+		case "overweight_factor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("overweight_factor"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OverweightFactor = data
+		case "heredity_factor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("heredity_factor"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HeredityFactor = data
+		case "advice":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Advice = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDoctorInput(ctx context.Context, obj interface{}) (model.UpdateDoctorInput, error) {
+	var it model.UpdateDoctorInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"email", "password", "name", "firstname", "rendez_vous_ids", "patient_ids", "address", "chat_ids", "device_connect", "double_auth_methods_id", "trust_devices", "status"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "password":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Password = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "firstname":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Firstname = data
+		case "rendez_vous_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rendez_vous_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RendezVousIds = data
+		case "patient_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("patient_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PatientIds = data
+		case "address":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
+			data, err := ec.unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Address = data
+		case "chat_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chat_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChatIds = data
+		case "device_connect":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceConnect = data
+		case "double_auth_methods_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DoubleAuthMethodsID = data
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDoctorsPatientIDsInput(ctx context.Context, obj interface{}) (model.UpdateDoctorsPatientIDsInput, error) {
+	var it model.UpdateDoctorsPatientIDsInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"patient_ids"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "patient_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("patient_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PatientIds = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDocumentInput(ctx context.Context, obj interface{}) (model.UpdateDocumentInput, error) {
+	var it model.UpdateDocumentInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "is_favorite"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "is_favorite":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("is_favorite"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsFavorite = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDoubleAuthInput(ctx context.Context, obj interface{}) (model.UpdateDoubleAuthInput, error) {
+	var it model.UpdateDoubleAuthInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"methods", "secret", "url", "trust_device_id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "methods":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("methods"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Methods = data
+		case "secret":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secret"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Secret = data
+		case "url":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.URL = data
+		case "trust_device_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDeviceID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateMedicalFolderInput(ctx context.Context, obj interface{}) (model.UpdateMedicalFolderInput, error) {
+	var it model.UpdateMedicalFolderInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "firstname", "birthdate", "sex", "height", "weight", "primary_doctor_id", "antecedent_disease_ids", "onboarding_status", "family_members_med_info_id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "firstname":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstname"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Firstname = data
+		case "birthdate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("birthdate"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Birthdate = data
+		case "sex":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sex = data
+		case "height":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Height = data
+		case "weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "primary_doctor_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primary_doctor_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryDoctorID = data
+		case "antecedent_disease_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("antecedent_disease_ids"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AntecedentDiseaseIds = data
+		case "onboarding_status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("onboarding_status"))
+			data, err := ec.unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OnboardingStatus = data
+		case "family_members_med_info_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("family_members_med_info_id"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FamilyMembersMedInfoID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateNotificationInput(ctx context.Context, obj interface{}) (model.UpdateNotificationInput, error) {
+	var it model.UpdateNotificationInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"token", "message", "title"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "token":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("token"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Token = data
+		case "message":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("message"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Message = data
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdatePatientInput(ctx context.Context, obj interface{}) (model.UpdatePatientInput, error) {
+	var it model.UpdatePatientInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"email", "password", "medical_info_id", "rendez_vous_ids", "document_ids", "treatment_follow_up_ids", "chat_ids", "status", "device_connect", "double_auth_methods_id", "trust_devices"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		case "password":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Password = data
+		case "medical_info_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medical_info_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MedicalInfoID = data
+		case "rendez_vous_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rendez_vous_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RendezVousIds = data
+		case "document_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("document_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DocumentIds = data
+		case "treatment_follow_up_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_follow_up_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatmentFollowUpIds = data
+		case "chat_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chat_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ChatIds = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
+		case "device_connect":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceConnect = data
+		case "double_auth_methods_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DoubleAuthMethodsID = data
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateRdvInput(ctx context.Context, obj interface{}) (model.UpdateRdvInput, error) {
+	var it model.UpdateRdvInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id_patient", "doctor_id", "start_date", "end_date", "cancelation_reason", "appointment_status", "session_id", "health_method"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id_patient":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id_patient"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDPatient = data
+		case "doctor_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("doctor_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DoctorID = data
+		case "start_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "end_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("end_date"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
+		case "cancelation_reason":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cancelation_reason"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CancelationReason = data
+		case "appointment_status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
+			data, err := ec.unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AppointmentStatus = data
+		case "session_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("session_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SessionID = data
+		case "health_method":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("health_method"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HealthMethod = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateSaveCodeInput(ctx context.Context, obj interface{}) (model.UpdateSaveCodeInput, error) {
+	var it model.UpdateSaveCodeInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"code"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Code = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateSessionInput(ctx context.Context, obj interface{}) (model.UpdateSessionInput, error) {
+	var it model.UpdateSessionInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"diseases", "symptoms", "age", "height", "weight", "sex", "ante_chirs", "ante_diseases", "medicine", "last_question", "logs", "hereditary_disease", "alerts"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "diseases":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
+			data, err := ec.unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Diseases = data
+		case "symptoms":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
+			data, err := ec.unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptoms = data
+		case "age":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("age"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Age = data
+		case "height":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Height = data
+		case "weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "sex":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sex"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sex = data
+		case "ante_chirs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_chirs"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AnteChirs = data
+		case "ante_diseases":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ante_diseases"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AnteDiseases = data
+		case "medicine":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Medicine = data
+		case "last_question":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last_question"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LastQuestion = data
+		case "logs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
+			data, err := ec.unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Logs = data
+		case "hereditary_disease":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hereditary_disease"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HereditaryDisease = data
+		case "alerts":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alerts"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Alerts = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateSymptomInput(ctx context.Context, obj interface{}) (model.UpdateSymptomInput, error) {
+	var it model.UpdateSymptomInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"code", "name", "chronic", "symptom", "advice", "question", "question_basic", "question_duration", "question_ante"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Code = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "chronic":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("chronic"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Chronic = data
+		case "symptom":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptom"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symptom = data
+		case "advice":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("advice"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Advice = data
+		case "question":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Question = data
+		case "question_basic":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_basic"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QuestionBasic = data
+		case "question_duration":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_duration"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QuestionDuration = data
+		case "question_ante":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_ante"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QuestionAnte = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateTreatmentInput(ctx context.Context, obj interface{}) (model.UpdateTreatmentInput, error) {
+	var it model.UpdateTreatmentInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "period":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
+			data, err := ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Period = data
+		case "day":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
+			data, err := ec.unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Day = data
+		case "quantity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Quantity = data
+		case "medicine_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicine_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MedicineID = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateTreatmentsFollowUpInput(ctx context.Context, obj interface{}) (model.UpdateTreatmentsFollowUpInput, error) {
+	var it model.UpdateTreatmentsFollowUpInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"treatment_id", "date", "period"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "treatment_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatmentID = data
+		case "date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Date = data
+		case "period":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
+			data, err := ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Period = data
 		}
 	}
 
@@ -27382,6 +31115,16 @@ func (ec *executionContext) _Admin(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Admin_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Admin_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -27442,6 +31185,16 @@ func (ec *executionContext) _Alert(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Alert_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Alert_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -27488,6 +31241,16 @@ func (ec *executionContext) _AnteChir(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "induced_symptoms":
 			out.Values[i] = ec._AnteChir_induced_symptoms(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._AnteChir_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._AnteChir_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -27548,6 +31311,16 @@ func (ec *executionContext) _AnteDisease(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._AnteDisease_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._AnteDisease_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -27597,6 +31370,16 @@ func (ec *executionContext) _AnteFamily(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._AnteFamily_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._AnteFamily_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -27638,6 +31421,16 @@ func (ec *executionContext) _BlackList(ctx context.Context, sel ast.SelectionSet
 			}
 		case "token":
 			out.Values[i] = ec._BlackList_token(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._BlackList_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._BlackList_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -27687,6 +31480,16 @@ func (ec *executionContext) _Chat(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "messages":
 			out.Values[i] = ec._Chat_messages(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Chat_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Chat_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -27850,55 +31653,6 @@ func (ec *executionContext) _ChirInducedSymptom(ctx context.Context, sel ast.Sel
 	return out
 }
 
-var demoAccountImplementors = []string{"DemoAccount"}
-
-func (ec *executionContext) _DemoAccount(ctx context.Context, sel ast.SelectionSet, obj *model.DemoAccount) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, demoAccountImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DemoAccount")
-		case "id":
-			out.Values[i] = ec._DemoAccount_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "email":
-			out.Values[i] = ec._DemoAccount_email(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "password":
-			out.Values[i] = ec._DemoAccount_password(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 var deviceConnectImplementors = []string{"DeviceConnect"}
 
 func (ec *executionContext) _DeviceConnect(ctx context.Context, sel ast.SelectionSet, obj *model.DeviceConnect) graphql.Marshaler {
@@ -27942,6 +31696,16 @@ func (ec *executionContext) _DeviceConnect(ctx context.Context, sel ast.Selectio
 			}
 		case "trust_device":
 			out.Values[i] = ec._DeviceConnect_trust_device(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._DeviceConnect_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._DeviceConnect_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -28013,6 +31777,16 @@ func (ec *executionContext) _Disease(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "advice":
 			out.Values[i] = ec._Disease_advice(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Disease_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Disease_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28094,6 +31868,16 @@ func (ec *executionContext) _Doctor(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Doctor_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Doctor_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28163,6 +31947,16 @@ func (ec *executionContext) _Document(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Document_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Document_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28219,6 +32013,16 @@ func (ec *executionContext) _DoubleAuth(ctx context.Context, sel ast.SelectionSe
 			}
 		case "trust_device_id":
 			out.Values[i] = ec._DoubleAuth_trust_device_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._DoubleAuth_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._DoubleAuth_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -28320,6 +32124,16 @@ func (ec *executionContext) _MedicalAntecedents(ctx context.Context, sel ast.Sel
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._MedicalAntecedents_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._MedicalAntecedents_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28409,6 +32223,16 @@ func (ec *executionContext) _MedicalInfo(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._MedicalInfo_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._MedicalInfo_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28470,6 +32294,16 @@ func (ec *executionContext) _Medicine(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "side_effects":
 			out.Values[i] = ec._Medicine_side_effects(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Medicine_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Medicine_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -28535,6 +32369,10 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateDoctor(ctx, field)
 			})
+		case "updateDoctorsPatientIDs":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateDoctorsPatientIDs(ctx, field)
+			})
 		case "deleteDoctor":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteDoctor(ctx, field)
@@ -28550,30 +32388,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteAdmin":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteAdmin(ctx, field)
-			})
-		case "createDemoAccount":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createDemoAccount(ctx, field)
-			})
-		case "updateDemoAccount":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateDemoAccount(ctx, field)
-			})
-		case "deleteDemoAccount":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteDemoAccount(ctx, field)
-			})
-		case "createTestAccount":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createTestAccount(ctx, field)
-			})
-		case "updateTestAccount":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateTestAccount(ctx, field)
-			})
-		case "deleteTestAccount":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteTestAccount(ctx, field)
 			})
 		case "createSession":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -28871,6 +32685,16 @@ func (ec *executionContext) _NlpReport(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._NlpReport_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._NlpReport_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28968,6 +32792,16 @@ func (ec *executionContext) _Notification(ctx context.Context, sel ast.Selection
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Notification_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Notification_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -29035,6 +32869,16 @@ func (ec *executionContext) _Patient(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Patient_trust_devices(ctx, field, obj)
 		case "status":
 			out.Values[i] = ec._Patient_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Patient_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Patient_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -29251,120 +33095,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getDemoAccounts":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getDemoAccounts(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getDemoAccountById":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getDemoAccountById(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getDemoAccountByEmail":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getDemoAccountByEmail(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getTestAccounts":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getTestAccounts(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getTestAccountById":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getTestAccountById(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getTestAccountByEmail":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getTestAccountByEmail(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "getSessions":
 			field := field
 
@@ -29422,6 +33152,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getSymptomsByDiseaseName":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getSymptomsByDiseaseName(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "getDiseaseById":
 			field := field
 
@@ -29470,25 +33219,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getDiseases(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getSymptomsByDiseaseName":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_getSymptomsByDiseaseName(ctx, field)
 				return res
 			}
 
@@ -30339,6 +34069,16 @@ func (ec *executionContext) _Rdv(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 		case "health_method":
 			out.Values[i] = ec._Rdv_health_method(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Rdv_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Rdv_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -30380,6 +34120,16 @@ func (ec *executionContext) _SaveCode(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "code":
 			out.Values[i] = ec._SaveCode_code(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._SaveCode_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._SaveCode_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -30484,6 +34234,16 @@ func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "alerts":
 			out.Values[i] = ec._Session_alerts(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Session_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Session_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -30662,6 +34422,16 @@ func (ec *executionContext) _Symptom(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createdAt":
+			out.Values[i] = ec._Symptom_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Symptom_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -30734,55 +34504,6 @@ func (ec *executionContext) _SymptomsWeight(ctx context.Context, sel ast.Selecti
 	return out
 }
 
-var testAccountImplementors = []string{"TestAccount"}
-
-func (ec *executionContext) _TestAccount(ctx context.Context, sel ast.SelectionSet, obj *model.TestAccount) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, testAccountImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("TestAccount")
-		case "id":
-			out.Values[i] = ec._TestAccount_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "email":
-			out.Values[i] = ec._TestAccount_email(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "password":
-			out.Values[i] = ec._TestAccount_password(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 var treatmentImplementors = []string{"Treatment"}
 
 func (ec *executionContext) _Treatment(ctx context.Context, sel ast.SelectionSet, obj *model.Treatment) graphql.Marshaler {
@@ -30816,6 +34537,16 @@ func (ec *executionContext) _Treatment(ctx context.Context, sel ast.SelectionSet
 			}
 		case "medicine_id":
 			out.Values[i] = ec._Treatment_medicine_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._Treatment_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._Treatment_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -30870,6 +34601,16 @@ func (ec *executionContext) _TreatmentsFollowUp(ctx context.Context, sel ast.Sel
 			}
 		case "period":
 			out.Values[i] = ec._TreatmentsFollowUp_period(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._TreatmentsFollowUp_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._TreatmentsFollowUp_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -31222,7 +34963,7 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v *model.Address) graphql.Marshaler {
+func (ec *executionContext) marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v *model.Address) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -31232,18 +34973,18 @@ func (ec *executionContext) marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedg
 	return ec._Address(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNAddressInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (model.AddressInput, error) {
+func (ec *executionContext) unmarshalNAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
 	res, err := ec.unmarshalInputAddressInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (model.AppointmentStatus, error) {
+func (ec *executionContext) unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (model.AppointmentStatus, error) {
 	var res model.AppointmentStatus
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v model.AppointmentStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v model.AppointmentStatus) graphql.Marshaler {
 	return v
 }
 
@@ -31262,17 +35003,17 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐCategory(ctx context.Context, v interface{}) (model.Category, error) {
+func (ec *executionContext) unmarshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCategory(ctx context.Context, v interface{}) (model.Category, error) {
 	var res model.Category
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v model.Category) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatMessages) graphql.Marshaler {
+func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatMessages) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31296,7 +35037,7 @@ func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑca
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessages(ctx, sel, v[i])
+			ret[i] = ec.marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessages(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31316,7 +35057,7 @@ func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑca
 	return ret
 }
 
-func (ec *executionContext) marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessages(ctx context.Context, sel ast.SelectionSet, v *model.ChatMessages) graphql.Marshaler {
+func (ec *executionContext) marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessages(ctx context.Context, sel ast.SelectionSet, v *model.ChatMessages) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -31326,7 +35067,7 @@ func (ec *executionContext) marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcare�
 	return ec._ChatMessages(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
+func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31335,7 +35076,7 @@ func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	res := make([]*model.ChatMessagesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31343,12 +35084,12 @@ func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesInput(ctx context.Context, v interface{}) (*model.ChatMessagesInput, error) {
+func (ec *executionContext) unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInput(ctx context.Context, v interface{}) (*model.ChatMessagesInput, error) {
 	res, err := ec.unmarshalInputChatMessagesInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatParticipants) graphql.Marshaler {
+func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatParticipants) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31372,7 +35113,7 @@ func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgar�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipants(ctx, sel, v[i])
+			ret[i] = ec.marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipants(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31392,7 +35133,7 @@ func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgar�
 	return ret
 }
 
-func (ec *executionContext) marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipants(ctx context.Context, sel ast.SelectionSet, v *model.ChatParticipants) graphql.Marshaler {
+func (ec *executionContext) marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipants(ctx context.Context, sel ast.SelectionSet, v *model.ChatParticipants) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -31402,7 +35143,7 @@ func (ec *executionContext) marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑc
 	return ec._ChatParticipants(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
+func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31411,7 +35152,7 @@ func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcom�
 	res := make([]*model.ChatParticipantsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31419,12 +35160,12 @@ func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcom�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInput(ctx context.Context, v interface{}) (*model.ChatParticipantsInput, error) {
+func (ec *executionContext) unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx context.Context, v interface{}) (*model.ChatParticipantsInput, error) {
 	res, err := ec.unmarshalInputChatParticipantsInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptom(ctx context.Context, sel ast.SelectionSet, v *model.ChirInducedSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptom(ctx context.Context, sel ast.SelectionSet, v *model.ChirInducedSymptom) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -31434,22 +35175,137 @@ func (ec *executionContext) marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgar�
 	return ec._ChirInducedSymptom(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInput(ctx context.Context, v interface{}) (*model.ChirInducedSymptomInput, error) {
+func (ec *executionContext) unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInput(ctx context.Context, v interface{}) (*model.ChirInducedSymptomInput, error) {
 	res, err := ec.unmarshalInputChirInducedSymptomInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx context.Context, v interface{}) (model.Day, error) {
+func (ec *executionContext) unmarshalNCreateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAdminInput(ctx context.Context, v interface{}) (model.CreateAdminInput, error) {
+	res, err := ec.unmarshalInputCreateAdminInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAlertInput(ctx context.Context, v interface{}) (model.CreateAlertInput, error) {
+	res, err := ec.unmarshalInputCreateAlertInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteChirInput(ctx context.Context, v interface{}) (model.CreateAnteChirInput, error) {
+	res, err := ec.unmarshalInputCreateAnteChirInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteDiseaseInput(ctx context.Context, v interface{}) (model.CreateAnteDiseaseInput, error) {
+	res, err := ec.unmarshalInputCreateAnteDiseaseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx context.Context, v interface{}) (model.CreateAnteFamilyInput, error) {
+	res, err := ec.unmarshalInputCreateAnteFamilyInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateBlackListInput(ctx context.Context, v interface{}) (model.CreateBlackListInput, error) {
+	res, err := ec.unmarshalInputCreateBlackListInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateChatInput(ctx context.Context, v interface{}) (model.CreateChatInput, error) {
+	res, err := ec.unmarshalInputCreateChatInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDeviceConnectInput(ctx context.Context, v interface{}) (model.CreateDeviceConnectInput, error) {
+	res, err := ec.unmarshalInputCreateDeviceConnectInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDiseaseInput(ctx context.Context, v interface{}) (model.CreateDiseaseInput, error) {
+	res, err := ec.unmarshalInputCreateDiseaseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoctorInput(ctx context.Context, v interface{}) (model.CreateDoctorInput, error) {
+	res, err := ec.unmarshalInputCreateDoctorInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDocumentInput(ctx context.Context, v interface{}) (model.CreateDocumentInput, error) {
+	res, err := ec.unmarshalInputCreateDocumentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoubleAuthInput(ctx context.Context, v interface{}) (model.CreateDoubleAuthInput, error) {
+	res, err := ec.unmarshalInputCreateDoubleAuthInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicalFolderInput(ctx context.Context, v interface{}) (model.CreateMedicalFolderInput, error) {
+	res, err := ec.unmarshalInputCreateMedicalFolderInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateMedicineInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicineInput(ctx context.Context, v interface{}) (model.CreateMedicineInput, error) {
+	res, err := ec.unmarshalInputCreateMedicineInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateNlpReportInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNlpReportInput(ctx context.Context, v interface{}) (model.CreateNlpReportInput, error) {
+	res, err := ec.unmarshalInputCreateNlpReportInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNotificationInput(ctx context.Context, v interface{}) (model.CreateNotificationInput, error) {
+	res, err := ec.unmarshalInputCreateNotificationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreatePatientInput(ctx context.Context, v interface{}) (model.CreatePatientInput, error) {
+	res, err := ec.unmarshalInputCreatePatientInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateRdvInput(ctx context.Context, v interface{}) (model.CreateRdvInput, error) {
+	res, err := ec.unmarshalInputCreateRdvInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSaveCodeInput(ctx context.Context, v interface{}) (model.CreateSaveCodeInput, error) {
+	res, err := ec.unmarshalInputCreateSaveCodeInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSessionInput(ctx context.Context, v interface{}) (model.CreateSessionInput, error) {
+	res, err := ec.unmarshalInputCreateSessionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSymptomInput(ctx context.Context, v interface{}) (model.CreateSymptomInput, error) {
+	res, err := ec.unmarshalInputCreateSymptomInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentInput(ctx context.Context, v interface{}) (model.CreateTreatmentInput, error) {
+	res, err := ec.unmarshalInputCreateTreatmentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentsFollowUpInput(ctx context.Context, v interface{}) (model.CreateTreatmentsFollowUpInput, error) {
+	res, err := ec.unmarshalInputCreateTreatmentsFollowUpInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) (model.Day, error) {
 	var res model.Day
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v model.Day) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
+func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31458,7 +35314,7 @@ func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	res := make([]model.Day, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31466,7 +35322,7 @@ func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	return res, nil
 }
 
-func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31490,7 +35346,7 @@ func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx, sel, v[i])
+			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31510,7 +35366,7 @@ func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 	return ret
 }
 
-func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx context.Context, v interface{}) ([]*model.Day, error) {
+func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) ([]*model.Day, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31519,7 +35375,7 @@ func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	res := make([]*model.Day, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx, vSlice[i])
+		res[i], err = ec.unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31527,7 +35383,7 @@ func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return res, nil
 }
 
-func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v []*model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v []*model.Day) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31551,7 +35407,7 @@ func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx, sel, v[i])
+			ret[i] = ec.marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31565,13 +35421,13 @@ func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocumentType(ctx context.Context, v interface{}) (model.DocumentType, error) {
+func (ec *executionContext) unmarshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocumentType(ctx context.Context, v interface{}) (model.DocumentType, error) {
 	var res model.DocumentType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v model.DocumentType) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v model.DocumentType) graphql.Marshaler {
 	return v
 }
 
@@ -31620,7 +35476,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Logs) graphql.Marshaler {
+func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Logs) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31644,7 +35500,7 @@ func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogs(ctx, sel, v[i])
+			ret[i] = ec.marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogs(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31664,7 +35520,7 @@ func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 	return ret
 }
 
-func (ec *executionContext) marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogs(ctx context.Context, sel ast.SelectionSet, v *model.Logs) graphql.Marshaler {
+func (ec *executionContext) marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogs(ctx context.Context, sel ast.SelectionSet, v *model.Logs) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -31674,7 +35530,7 @@ func (ec *executionContext) marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarl
 	return ec._Logs(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
+func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31683,7 +35539,7 @@ func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	res := make([]*model.LogsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31691,22 +35547,22 @@ func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInput(ctx context.Context, v interface{}) (*model.LogsInput, error) {
+func (ec *executionContext) unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInput(ctx context.Context, v interface{}) (*model.LogsInput, error) {
 	res, err := ec.unmarshalInputLogsInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx context.Context, v interface{}) (model.MedicineUnit, error) {
+func (ec *executionContext) unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx context.Context, v interface{}) (model.MedicineUnit, error) {
 	var res model.MedicineUnit
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicineUnit(ctx context.Context, sel ast.SelectionSet, v model.MedicineUnit) graphql.Marshaler {
+func (ec *executionContext) marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx context.Context, sel ast.SelectionSet, v model.MedicineUnit) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReportOutput) graphql.Marshaler {
+func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReportOutput) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31730,7 +35586,7 @@ func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgar�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutput(ctx, sel, v[i])
+			ret[i] = ec.marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutput(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31750,7 +35606,7 @@ func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgar�
 	return ret
 }
 
-func (ec *executionContext) marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutput(ctx context.Context, sel ast.SelectionSet, v *model.NlpReportOutput) graphql.Marshaler {
+func (ec *executionContext) marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutput(ctx context.Context, sel ast.SelectionSet, v *model.NlpReportOutput) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -31760,7 +35616,7 @@ func (ec *executionContext) marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑca
 	return ec._NlpReportOutput(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInputᚄ(ctx context.Context, v interface{}) ([]*model.NlpReportOutputInput, error) {
+func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInputᚄ(ctx context.Context, v interface{}) ([]*model.NlpReportOutputInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31769,7 +35625,7 @@ func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.NlpReportOutputInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31777,32 +35633,32 @@ func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReportOutputInput(ctx context.Context, v interface{}) (*model.NlpReportOutputInput, error) {
+func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInput(ctx context.Context, v interface{}) (*model.NlpReportOutputInput, error) {
 	res, err := ec.unmarshalInputNlpReportOutputInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (model.OnboardingStatus, error) {
+func (ec *executionContext) unmarshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (model.OnboardingStatus, error) {
 	var res model.OnboardingStatus
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v model.OnboardingStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v model.OnboardingStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx context.Context, v interface{}) (model.Period, error) {
+func (ec *executionContext) unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) (model.Period, error) {
 	var res model.Period
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v model.Period) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
+func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31811,7 +35667,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	res := make([]model.Period, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31819,7 +35675,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	return res, nil
 }
 
-func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31843,7 +35699,7 @@ func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx, sel, v[i])
+			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31863,7 +35719,7 @@ func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx context.Context, v interface{}) ([]*model.Period, error) {
+func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) ([]*model.Period, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31872,7 +35728,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	res := make([]*model.Period, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31880,7 +35736,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return res, nil
 }
 
-func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v []*model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v []*model.Period) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31904,7 +35760,7 @@ func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx, sel, v[i])
+			ret[i] = ec.marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31918,7 +35774,7 @@ func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 	return ret
 }
 
-func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionDiseases) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionDiseases) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -31942,7 +35798,7 @@ func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgar�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseases(ctx, sel, v[i])
+			ret[i] = ec.marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseases(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -31962,7 +35818,7 @@ func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgar�
 	return ret
 }
 
-func (ec *executionContext) marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseases(ctx context.Context, sel ast.SelectionSet, v *model.SessionDiseases) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseases(ctx context.Context, sel ast.SelectionSet, v *model.SessionDiseases) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -31972,7 +35828,7 @@ func (ec *executionContext) marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑca
 	return ec._SessionDiseases(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
+func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -31981,7 +35837,7 @@ func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.SessionDiseasesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -31989,12 +35845,12 @@ func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInput(ctx context.Context, v interface{}) (*model.SessionDiseasesInput, error) {
+func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx context.Context, v interface{}) (*model.SessionDiseasesInput, error) {
 	res, err := ec.unmarshalInputSessionDiseasesInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionSymptom) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -32018,7 +35874,7 @@ func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptom(ctx, sel, v[i])
+			ret[i] = ec.marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptom(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32038,7 +35894,7 @@ func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑ
 	return ret
 }
 
-func (ec *executionContext) marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptom(ctx context.Context, sel ast.SelectionSet, v *model.SessionSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptom(ctx context.Context, sel ast.SelectionSet, v *model.SessionSymptom) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -32048,7 +35904,7 @@ func (ec *executionContext) marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcar
 	return ec._SessionSymptom(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
+func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -32057,7 +35913,7 @@ func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋe
 	res := make([]*model.SessionSymptomInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -32065,19 +35921,34 @@ func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋe
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInput(ctx context.Context, v interface{}) (*model.SessionSymptomInput, error) {
+func (ec *executionContext) unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx context.Context, v interface{}) (*model.SessionSymptomInput, error) {
 	res, err := ec.unmarshalInputSessionSymptomInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSex(ctx context.Context, v interface{}) (model.Sex, error) {
+func (ec *executionContext) unmarshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSex(ctx context.Context, v interface{}) (model.Sex, error) {
 	var res model.Sex
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSex(ctx context.Context, sel ast.SelectionSet, v model.Sex) graphql.Marshaler {
+func (ec *executionContext) marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSex(ctx context.Context, sel ast.SelectionSet, v model.Sex) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) unmarshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortOrder(ctx context.Context, v interface{}) (model.SortOrder, error) {
+	var res model.SortOrder
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortOrder(ctx context.Context, sel ast.SelectionSet, v model.SortOrder) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNSortingOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortingOptions(ctx context.Context, v interface{}) (*model.SortingOptions, error) {
+	res, err := ec.unmarshalInputSortingOptions(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -32127,7 +35998,7 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeight(ctx context.Context, sel ast.SelectionSet, v *model.SymptomsWeight) graphql.Marshaler {
+func (ec *executionContext) marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeight(ctx context.Context, sel ast.SelectionSet, v *model.SymptomsWeight) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -32137,12 +36008,12 @@ func (ec *executionContext) marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcar
 	return ec._SymptomsWeight(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInput(ctx context.Context, v interface{}) (*model.SymptomsWeightInput, error) {
+func (ec *executionContext) unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInput(ctx context.Context, v interface{}) (*model.SymptomsWeightInput, error) {
 	res, err := ec.unmarshalInputSymptomsWeightInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
+func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -32166,7 +36037,7 @@ func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx, sel, v[i])
+			ret[i] = ec.marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32186,7 +36057,7 @@ func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
+func (ec *executionContext) marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -32196,7 +36067,7 @@ func (ec *executionContext) marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋe
 	return ec._Treatment(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentInputᚄ(ctx context.Context, v interface{}) ([]*model.TreatmentInput, error) {
+func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInputᚄ(ctx context.Context, v interface{}) ([]*model.TreatmentInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -32205,7 +36076,7 @@ func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgar�
 	res := make([]*model.TreatmentInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -32213,9 +36084,119 @@ func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgar�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentInput(ctx context.Context, v interface{}) (*model.TreatmentInput, error) {
+func (ec *executionContext) unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInput(ctx context.Context, v interface{}) (*model.TreatmentInput, error) {
 	res, err := ec.unmarshalInputTreatmentInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAdminInput(ctx context.Context, v interface{}) (model.UpdateAdminInput, error) {
+	res, err := ec.unmarshalInputUpdateAdminInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAlertInput(ctx context.Context, v interface{}) (model.UpdateAlertInput, error) {
+	res, err := ec.unmarshalInputUpdateAlertInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteChirInput(ctx context.Context, v interface{}) (model.UpdateAnteChirInput, error) {
+	res, err := ec.unmarshalInputUpdateAnteChirInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteDiseaseInput(ctx context.Context, v interface{}) (model.UpdateAnteDiseaseInput, error) {
+	res, err := ec.unmarshalInputUpdateAnteDiseaseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteFamilyInput(ctx context.Context, v interface{}) (model.UpdateAnteFamilyInput, error) {
+	res, err := ec.unmarshalInputUpdateAnteFamilyInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateBlackListInput(ctx context.Context, v interface{}) (model.UpdateBlackListInput, error) {
+	res, err := ec.unmarshalInputUpdateBlackListInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateChatInput(ctx context.Context, v interface{}) (model.UpdateChatInput, error) {
+	res, err := ec.unmarshalInputUpdateChatInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDeviceConnectInput(ctx context.Context, v interface{}) (model.UpdateDeviceConnectInput, error) {
+	res, err := ec.unmarshalInputUpdateDeviceConnectInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDiseaseInput(ctx context.Context, v interface{}) (model.UpdateDiseaseInput, error) {
+	res, err := ec.unmarshalInputUpdateDiseaseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorInput(ctx context.Context, v interface{}) (model.UpdateDoctorInput, error) {
+	res, err := ec.unmarshalInputUpdateDoctorInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDoctorsPatientIDsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorsPatientIDsInput(ctx context.Context, v interface{}) (model.UpdateDoctorsPatientIDsInput, error) {
+	res, err := ec.unmarshalInputUpdateDoctorsPatientIDsInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDocumentInput(ctx context.Context, v interface{}) (model.UpdateDocumentInput, error) {
+	res, err := ec.unmarshalInputUpdateDocumentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoubleAuthInput(ctx context.Context, v interface{}) (model.UpdateDoubleAuthInput, error) {
+	res, err := ec.unmarshalInputUpdateDoubleAuthInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateMedicalFolderInput(ctx context.Context, v interface{}) (model.UpdateMedicalFolderInput, error) {
+	res, err := ec.unmarshalInputUpdateMedicalFolderInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateNotificationInput(ctx context.Context, v interface{}) (model.UpdateNotificationInput, error) {
+	res, err := ec.unmarshalInputUpdateNotificationInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx context.Context, v interface{}) (model.UpdatePatientInput, error) {
+	res, err := ec.unmarshalInputUpdatePatientInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateRdvInput(ctx context.Context, v interface{}) (model.UpdateRdvInput, error) {
+	res, err := ec.unmarshalInputUpdateRdvInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSaveCodeInput(ctx context.Context, v interface{}) (model.UpdateSaveCodeInput, error) {
+	res, err := ec.unmarshalInputUpdateSaveCodeInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSessionInput(ctx context.Context, v interface{}) (model.UpdateSessionInput, error) {
+	res, err := ec.unmarshalInputUpdateSessionInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSymptomInput(ctx context.Context, v interface{}) (model.UpdateSymptomInput, error) {
+	res, err := ec.unmarshalInputUpdateSymptomInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentInput(ctx context.Context, v interface{}) (model.UpdateTreatmentInput, error) {
+	res, err := ec.unmarshalInputUpdateTreatmentInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentsFollowUpInput(ctx context.Context, v interface{}) (model.UpdateTreatmentsFollowUpInput, error) {
+	res, err := ec.unmarshalInputUpdateTreatmentsFollowUpInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -32471,7 +36452,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
+func (ec *executionContext) unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -32479,7 +36460,7 @@ func (ec *executionContext) unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcar
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v []*model.Admin) graphql.Marshaler {
+func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v []*model.Admin) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32506,7 +36487,7 @@ func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx, sel, v[i])
+			ret[i] = ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32520,14 +36501,14 @@ func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return ret
 }
 
-func (ec *executionContext) marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v *model.Admin) graphql.Marshaler {
+func (ec *executionContext) marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v *model.Admin) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Admin(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v []*model.Alert) graphql.Marshaler {
+func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v []*model.Alert) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32554,7 +36535,7 @@ func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAlert(ctx, sel, v[i])
+			ret[i] = ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32568,14 +36549,14 @@ func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return ret
 }
 
-func (ec *executionContext) marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v *model.Alert) graphql.Marshaler {
+func (ec *executionContext) marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v *model.Alert) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Alert(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v []*model.AnteChir) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v []*model.AnteChir) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32602,7 +36583,7 @@ func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteChir(ctx, sel, v[i])
+			ret[i] = ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32616,14 +36597,14 @@ func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v *model.AnteChir) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v *model.AnteChir) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AnteChir(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v []*model.AnteDisease) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v []*model.AnteDisease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32650,7 +36631,7 @@ func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteDisease(ctx, sel, v[i])
+			ret[i] = ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32664,14 +36645,14 @@ func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return ret
 }
 
-func (ec *executionContext) marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v *model.AnteDisease) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v *model.AnteDisease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AnteDisease(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v []*model.AnteFamily) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v []*model.AnteFamily) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32698,7 +36679,7 @@ func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcare
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteFamily(ctx, sel, v[i])
+			ret[i] = ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32712,14 +36693,14 @@ func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcare
 	return ret
 }
 
-func (ec *executionContext) marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v *model.AnteFamily) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v *model.AnteFamily) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AnteFamily(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (*model.AppointmentStatus, error) {
+func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (*model.AppointmentStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -32728,14 +36709,14 @@ func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgar�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v *model.AppointmentStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v *model.AppointmentStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v []*model.BlackList) graphql.Marshaler {
+func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v []*model.BlackList) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32762,7 +36743,7 @@ func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐBlackList(ctx, sel, v[i])
+			ret[i] = ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32776,7 +36757,7 @@ func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v *model.BlackList) graphql.Marshaler {
+func (ec *executionContext) marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v *model.BlackList) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32809,7 +36790,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v []*model.Chat) graphql.Marshaler {
+func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v []*model.Chat) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32836,7 +36817,7 @@ func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChat(ctx, sel, v[i])
+			ret[i] = ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32850,14 +36831,14 @@ func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 	return ret
 }
 
-func (ec *executionContext) marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v *model.Chat) graphql.Marshaler {
+func (ec *executionContext) marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v *model.Chat) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Chat(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
+func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -32869,7 +36850,7 @@ func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	res := make([]*model.ChatMessagesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -32877,7 +36858,7 @@ func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
+func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -32889,7 +36870,7 @@ func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcom�
 	res := make([]*model.ChatParticipantsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -32897,7 +36878,7 @@ func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcom�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChirInducedSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChirInducedSymptom) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -32924,7 +36905,7 @@ func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptom(ctx, sel, v[i])
+			ret[i] = ec.marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptom(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -32944,7 +36925,7 @@ func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.ChirInducedSymptomInput, error) {
+func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.ChirInducedSymptomInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -32956,7 +36937,7 @@ func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcom
 	res := make([]*model.ChirInducedSymptomInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐChirInducedSymptomInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -32964,7 +36945,7 @@ func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcom
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
+func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -32976,7 +36957,7 @@ func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	res := make([]model.Day, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -32984,7 +36965,7 @@ func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	return res, nil
 }
 
-func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33011,7 +36992,7 @@ func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx, sel, v[i])
+			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33031,7 +37012,7 @@ func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 	return ret
 }
 
-func (ec *executionContext) unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx context.Context, v interface{}) (*model.Day, error) {
+func (ec *executionContext) unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) (*model.Day, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -33040,14 +37021,14 @@ func (ec *executionContext) unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgar
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v *model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v *model.Day) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalODemoAccount2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx context.Context, sel ast.SelectionSet, v []*model.DemoAccount) graphql.Marshaler {
+func (ec *executionContext) marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v []*model.DeviceConnect) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33074,7 +37055,7 @@ func (ec *executionContext) marshalODemoAccount2ᚕᚖgithubᚗcomᚋedgarᚑcar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODemoAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx, sel, v[i])
+			ret[i] = ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33088,62 +37069,14 @@ func (ec *executionContext) marshalODemoAccount2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return ret
 }
 
-func (ec *executionContext) marshalODemoAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDemoAccount(ctx context.Context, sel ast.SelectionSet, v *model.DemoAccount) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._DemoAccount(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v []*model.DeviceConnect) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v *model.DeviceConnect) graphql.Marshaler {
+func (ec *executionContext) marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v *model.DeviceConnect) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._DeviceConnect(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v []*model.Disease) graphql.Marshaler {
+func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v []*model.Disease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33170,7 +37103,7 @@ func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx, sel, v[i])
+			ret[i] = ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33184,14 +37117,14 @@ func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v *model.Disease) graphql.Marshaler {
+func (ec *executionContext) marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v *model.Disease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Disease(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v []*model.Doctor) graphql.Marshaler {
+func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v []*model.Doctor) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33218,7 +37151,7 @@ func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx, sel, v[i])
+			ret[i] = ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33232,14 +37165,14 @@ func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 	return ret
 }
 
-func (ec *executionContext) marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v *model.Doctor) graphql.Marshaler {
+func (ec *executionContext) marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v *model.Doctor) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Doctor(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v []*model.Document) graphql.Marshaler {
+func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v []*model.Document) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33266,7 +37199,7 @@ func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx, sel, v[i])
+			ret[i] = ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33280,14 +37213,14 @@ func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v *model.Document) graphql.Marshaler {
+func (ec *executionContext) marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v *model.Document) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Document(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v []*model.DoubleAuth) graphql.Marshaler {
+func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v []*model.DoubleAuth) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33314,7 +37247,7 @@ func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcare
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoubleAuth(ctx, sel, v[i])
+			ret[i] = ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33328,7 +37261,7 @@ func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcare
 	return ret
 }
 
-func (ec *executionContext) marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v *model.DoubleAuth) graphql.Marshaler {
+func (ec *executionContext) marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v *model.DoubleAuth) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33367,7 +37300,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
+func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -33379,7 +37312,7 @@ func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	res := make([]*model.LogsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐLogsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -33387,7 +37320,7 @@ func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return res, nil
 }
 
-func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v []*model.MedicalInfo) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v []*model.MedicalInfo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33414,7 +37347,7 @@ func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicalInfo(ctx, sel, v[i])
+			ret[i] = ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33428,14 +37361,14 @@ func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return ret
 }
 
-func (ec *executionContext) marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v *model.MedicalInfo) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v *model.MedicalInfo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._MedicalInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v []*model.Medicine) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v []*model.Medicine) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33462,7 +37395,7 @@ func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx, sel, v[i])
+			ret[i] = ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33476,14 +37409,14 @@ func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v *model.Medicine) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v *model.Medicine) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Medicine(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReport) graphql.Marshaler {
+func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReport) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33510,7 +37443,7 @@ func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx, sel, v[i])
+			ret[i] = ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33524,14 +37457,14 @@ func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v *model.NlpReport) graphql.Marshaler {
+func (ec *executionContext) marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v *model.NlpReport) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._NlpReport(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33558,7 +37491,7 @@ func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑca
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx, sel, v[i])
+			ret[i] = ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33572,14 +37505,14 @@ func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑca
 	return ret
 }
 
-func (ec *executionContext) marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v *model.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v *model.Notification) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Notification(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (*model.OnboardingStatus, error) {
+func (ec *executionContext) unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (*model.OnboardingStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -33588,14 +37521,22 @@ func (ec *executionContext) unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgar�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v *model.OnboardingStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v *model.OnboardingStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v []*model.Patient) graphql.Marshaler {
+func (ec *executionContext) unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx context.Context, v interface{}) (*model.Options, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputOptions(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v []*model.Patient) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33622,7 +37563,7 @@ func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx, sel, v[i])
+			ret[i] = ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33636,14 +37577,14 @@ func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v *model.Patient) graphql.Marshaler {
+func (ec *executionContext) marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v *model.Patient) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Patient(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
+func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -33655,7 +37596,7 @@ func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	res := make([]model.Period, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -33663,7 +37604,7 @@ func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	return res, nil
 }
 
-func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33690,7 +37631,7 @@ func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx, sel, v[i])
+			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33710,7 +37651,7 @@ func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx context.Context, v interface{}) (*model.Period, error) {
+func (ec *executionContext) unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) (*model.Period, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -33719,14 +37660,14 @@ func (ec *executionContext) unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v *model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v *model.Period) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v []*model.Rdv) graphql.Marshaler {
+func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v []*model.Rdv) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33753,7 +37694,7 @@ func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx, sel, v[i])
+			ret[i] = ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33767,14 +37708,14 @@ func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v *model.Rdv) graphql.Marshaler {
+func (ec *executionContext) marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v *model.Rdv) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Rdv(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v []*model.SaveCode) graphql.Marshaler {
+func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v []*model.SaveCode) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33801,7 +37742,7 @@ func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, sel, v[i])
+			ret[i] = ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33815,14 +37756,14 @@ func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v *model.SaveCode) graphql.Marshaler {
+func (ec *executionContext) marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v *model.SaveCode) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._SaveCode(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
+func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -33849,7 +37790,7 @@ func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx, sel, v[i])
+			ret[i] = ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -33863,14 +37804,14 @@ func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
+func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Session(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
+func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -33882,7 +37823,7 @@ func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.SessionDiseasesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -33890,7 +37831,7 @@ func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
+func (ec *executionContext) unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -33902,7 +37843,7 @@ func (ec *executionContext) unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋe
 	res := make([]*model.SessionSymptomInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -33996,7 +37937,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v []*model.Symptom) graphql.Marshaler {
+func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v []*model.Symptom) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -34023,7 +37964,7 @@ func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptom(ctx, sel, v[i])
+			ret[i] = ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -34037,14 +37978,14 @@ func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v *model.Symptom) graphql.Marshaler {
+func (ec *executionContext) marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v *model.Symptom) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Symptom(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SymptomsWeight) graphql.Marshaler {
+func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SymptomsWeight) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -34071,7 +38012,7 @@ func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeight(ctx, sel, v[i])
+			ret[i] = ec.marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeight(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -34091,7 +38032,7 @@ func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑ
 	return ret
 }
 
-func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInputᚄ(ctx context.Context, v interface{}) ([]*model.SymptomsWeightInput, error) {
+func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx context.Context, v interface{}) ([]*model.SymptomsWeightInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -34103,7 +38044,7 @@ func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋe
 	res := make([]*model.SymptomsWeightInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSymptomsWeightInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -34111,7 +38052,7 @@ func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋe
 	return res, nil
 }
 
-func (ec *executionContext) marshalOTestAccount2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx context.Context, sel ast.SelectionSet, v []*model.TestAccount) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -34138,7 +38079,7 @@ func (ec *executionContext) marshalOTestAccount2ᚕᚖgithubᚗcomᚋedgarᚑcar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTestAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx, sel, v[i])
+			ret[i] = ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -34152,62 +38093,14 @@ func (ec *executionContext) marshalOTestAccount2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return ret
 }
 
-func (ec *executionContext) marshalOTestAccount2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTestAccount(ctx context.Context, sel ast.SelectionSet, v *model.TestAccount) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._TestAccount(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Treatment(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v []*model.TreatmentsFollowUp) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v []*model.TreatmentsFollowUp) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -34234,7 +38127,7 @@ func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx, sel, v[i])
+			ret[i] = ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -34248,7 +38141,7 @@ func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedga
 	return ret
 }
 
-func (ec *executionContext) marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v *model.TreatmentsFollowUp) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v *model.TreatmentsFollowUp) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

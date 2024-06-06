@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"context"
 	"errors"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"strings"
 
 	"github.com/edgar-care/edgarlib/auth/utils"
@@ -16,23 +16,26 @@ type ResetPasswordResponse struct {
 }
 
 func ResetPassword(email string, password string, uuid string) ResetPasswordResponse {
-	gqlClient := graphql.CreateClient()
-
 	if uuid == "" {
 		return ResetPasswordResponse{403, errors.New("uuid has to be provided")}
 	}
 	value, err := redis.GetKey(uuid)
+	if err != nil {
+		return ResetPasswordResponse{500, err}
+	}
+
 	value = strings.Replace(value, "\n", "", -1)
 	if value == "" || err != nil {
 		return ResetPasswordResponse{403, errors.New("uuid is expired")}
 	}
 
-	patient, err := graphql.GetPatientByEmail(context.Background(), gqlClient, email)
+	patient, err := graphql.GetPatientByEmail(email)
 	if err != nil {
 		return ResetPasswordResponse{403, errors.New("no patient correspond to this email")}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patient.GetPatientByEmail.Id, patient.GetPatientByEmail.Email, utils.HashPassword(password), patient.GetPatientByEmail.Medical_info_id, patient.GetPatientByEmail.Rendez_vous_ids, patient.GetPatientByEmail.Document_ids, patient.GetPatientByEmail.Treatment_follow_up_ids, patient.GetPatientByEmail.Chat_ids, patient.GetPatientByEmail.Device_connect, patient.GetPatientByEmail.Double_auth_methods_id, patient.GetPatientByEmail.Trust_devices, patient.GetPatientByEmail.Status)
+	password = utils.HashPassword(password)
+	_, err = graphql.UpdatePatient(patient.ID, model.UpdatePatientInput{Password: &password})
 	if err != nil {
 		return ResetPasswordResponse{400, err}
 	}

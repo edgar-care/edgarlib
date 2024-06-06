@@ -1,11 +1,10 @@
 package slot
 
 import (
-	"context"
 	"errors"
 
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type GetSlotByIdResponse struct {
@@ -21,54 +20,26 @@ type GetSlotsResponse struct {
 }
 
 func GetSlotById(id string, doctorId string) GetSlotByIdResponse {
-	gqlClient := graphql.CreateClient()
-	var res model.Rdv
-
-	slot, err := graphql.GetSlotById(context.Background(), gqlClient, id)
+	slot, err := graphql.GetSlotById(id)
 	if err != nil {
 		return GetSlotByIdResponse{model.Rdv{}, 400, errors.New("id does not correspond to a slot")}
 	}
-	if slot.GetSlotById.Doctor_id != doctorId {
+	if slot.DoctorID != doctorId {
 		return GetSlotByIdResponse{model.Rdv{}, 403, errors.New("you cannot access to this appointment")}
 	}
-	res = model.Rdv{
-		ID:                slot.GetSlotById.Id,
-		DoctorID:          slot.GetSlotById.Doctor_id,
-		IDPatient:         slot.GetSlotById.Id_patient,
-		StartDate:         slot.GetSlotById.Start_date,
-		EndDate:           slot.GetSlotById.End_date,
-		AppointmentStatus: model.AppointmentStatus(slot.GetSlotById.Appointment_status),
-		SessionID:         slot.GetSlotById.Session_id,
-	}
-	return GetSlotByIdResponse{res, 200, nil}
+	return GetSlotByIdResponse{slot, 200, nil}
 }
 
 func GetSlots(doctorId string) GetSlotsResponse {
-	gqlClient := graphql.CreateClient()
-	var res []model.Rdv
-
-	_, err := graphql.GetDoctorById(context.Background(), gqlClient, doctorId)
+	_, err := graphql.GetDoctorById(doctorId)
 	if err != nil {
 		return GetSlotsResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a doctor")}
 	}
 
-	slots, err := graphql.GetSlots(context.Background(), gqlClient, doctorId)
+	slots, err := graphql.GetSlots(doctorId, nil)
 	if err != nil {
 		return GetSlotsResponse{[]model.Rdv{}, 400, errors.New("invalid input: " + err.Error())}
 	}
 
-	for _, slot := range slots.GetSlots {
-		temp := slot.Cancelation_reason
-		res = append(res, model.Rdv{
-			ID:                slot.Id,
-			DoctorID:          slot.Doctor_id,
-			IDPatient:         slot.Id_patient,
-			StartDate:         slot.Start_date,
-			EndDate:           slot.End_date,
-			CancelationReason: &temp,
-			AppointmentStatus: model.AppointmentStatus(slot.Appointment_status),
-			SessionID:         slot.Session_id,
-		})
-	}
-	return GetSlotsResponse{res, 200, nil}
+	return GetSlotsResponse{slots, 200, nil}
 }

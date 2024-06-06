@@ -1,12 +1,11 @@
 package black_list
 
 import (
-	"context"
 	"errors"
 	"net/http"
 
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type UpdateBlackListResponse struct {
@@ -16,33 +15,25 @@ type UpdateBlackListResponse struct {
 }
 
 func UpdateBlackList(token string) UpdateBlackListResponse {
-	gqlClient := graphql.CreateClient()
-
-	list, err := graphql.GetBlackList(context.Background(), gqlClient)
+	list, err := graphql.GetBlackList(nil)
 	if err != nil {
 		return UpdateBlackListResponse{BlackList: model.BlackList{}, Code: http.StatusBadRequest, Err: errors.New("unable to fetch blacklist")}
 	}
 
 	var updatedBlackList model.BlackList
-	if list == nil || len(list.GetBlackList) == 0 {
-		createdBlackList, err := graphql.CreateBlackList(context.Background(), gqlClient, []string{token})
+	if list == nil || len(list) == 0 {
+		createdBlackList, err := graphql.CreateBlackList(model.CreateBlackListInput{Token: []string{token}})
 		if err != nil {
 			return UpdateBlackListResponse{BlackList: model.BlackList{}, Code: http.StatusInternalServerError, Err: errors.New("unable to create blacklist")}
 		}
-		updatedBlackList = model.BlackList{
-			ID:    createdBlackList.CreateBlackList.Id,
-			Token: createdBlackList.CreateBlackList.Token,
-		}
+		updatedBlackList = createdBlackList
 	} else {
-		updatedTokens := append(list.GetBlackList[0].Token, token)
-		auth, err := graphql.UpdateBlackList(context.Background(), gqlClient, list.GetBlackList[0].Id, updatedTokens)
+		updatedTokens := append(list[0].Token, token)
+		auth, err := graphql.UpdateBlackList(list[0].ID, model.UpdateBlackListInput{Token: updatedTokens})
 		if err != nil {
 			return UpdateBlackListResponse{BlackList: model.BlackList{}, Code: http.StatusInternalServerError, Err: errors.New("unable to update blacklist")}
 		}
-		updatedBlackList = model.BlackList{
-			ID:    auth.UpdateBlackList.Id,
-			Token: auth.UpdateBlackList.Token,
-		}
+		updatedBlackList = auth
 	}
 
 	return UpdateBlackListResponse{
