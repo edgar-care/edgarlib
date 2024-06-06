@@ -1,9 +1,10 @@
 package auth
 
 import (
-	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type LoginInput struct {
@@ -17,21 +18,20 @@ type LoginResponse struct {
 	Err   error
 }
 
-func Login(input LoginInput, t string, ip string) LoginResponse {
+func Login(input LoginInput, t string, nameDevice string) LoginResponse {
 	var resp LoginResponse
-	var doctor *graphql.GetDoctorByEmailResponse
-	var admin *graphql.GetAdminByEmailResponse
-	var patient *graphql.GetPatientByEmailResponse
+	var doctor model.Doctor
+	var admin model.Admin
+	var patient model.Patient
 	var token string
 	var err error
-	gqlClient := graphql.CreateClient()
 
 	if t == "d" {
-		doctor, err = graphql.GetDoctorByEmail(context.Background(), gqlClient, input.Email)
+		doctor, err = graphql.GetDoctorByEmail(input.Email)
 	} else if t == "a" {
-		admin, err = graphql.GetAdminByEmail(context.Background(), gqlClient, input.Email)
+		admin, err = graphql.GetAdminByEmail(input.Email)
 	} else {
-		patient, err = graphql.GetPatientByEmail(context.Background(), gqlClient, input.Email)
+		patient, err = graphql.GetPatientByEmail(input.Email)
 	}
 	if err != nil {
 		resp.Code = 400
@@ -39,9 +39,9 @@ func Login(input LoginInput, t string, ip string) LoginResponse {
 		return resp
 	}
 
-	if !(t == "d" && CheckPassword(input.Password, doctor.GetDoctorByEmail.Password)) &&
-		!(t == "a" && CheckPassword(input.Password, admin.GetAdminByEmail.Password)) &&
-		!(t == "p" && CheckPassword(input.Password, patient.GetPatientByEmail.Password)) {
+	if !(t == "d" && CheckPassword(input.Password, doctor.Password)) &&
+		!(t == "a" && CheckPassword(input.Password, admin.Password)) &&
+		!(t == "p" && CheckPassword(input.Password, patient.Password)) {
 		resp.Code = 401
 		resp.Err = errors.New("username and password mismatch")
 		return resp
@@ -49,17 +49,19 @@ func Login(input LoginInput, t string, ip string) LoginResponse {
 
 	if t == "d" {
 		token, err = CreateToken(map[string]interface{}{
-			"doctor": doctor.GetDoctorByEmail,
+			"doctor":      doctor.Email,
+			"id":          doctor.ID,
+			"name_device": nameDevice,
 		})
 	} else if t == "a" {
 		token, err = CreateToken(map[string]interface{}{
-			"admin": admin.GetAdminByEmail,
+			"admin": admin,
 		})
 	} else {
 		token, err = CreateToken(map[string]interface{}{
-			"patient":   patient.GetPatientByEmail.Email,
-			"id":        patient.GetPatientByEmail.Id,
-			"ip_device": ip,
+			"patient":     patient.Email,
+			"id":          patient.ID,
+			"name_device": nameDevice,
 		})
 	}
 	resp.Token = token

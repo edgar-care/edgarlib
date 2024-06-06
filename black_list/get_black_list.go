@@ -1,10 +1,9 @@
 package black_list
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type GetBlackListByIdResponse struct {
@@ -20,34 +19,18 @@ type GetBlackListResponse struct {
 }
 
 func GetBlackListById(id string) GetBlackListByIdResponse {
-	gqlClient := graphql.CreateClient()
-	var res model.BlackList
-
-	device, err := graphql.GetBlackListById(context.Background(), gqlClient, id)
+	device, err := graphql.GetBlackListById(id)
 	if err != nil {
 		return GetBlackListByIdResponse{model.BlackList{}, 400, errors.New("id does not correspond to a slot")}
 	}
-	res = model.BlackList{
-		ID:    device.GetBlackListById.Id,
-		Token: device.GetBlackListById.Token,
-	}
-	return GetBlackListByIdResponse{res, 200, nil}
+	return GetBlackListByIdResponse{device, 200, nil}
 }
 
 func GetBlackList() GetBlackListResponse {
-	gqlClient := graphql.CreateClient()
-	var res []model.BlackList
-
-	devices, err := graphql.GetBlackList(context.Background(), gqlClient)
+	devices, err := graphql.GetBlackList(nil)
 	if err != nil {
 		return GetBlackListResponse{[]model.BlackList{}, 400, errors.New("invalid input: " + err.Error())}
 	}
 
-	for _, device := range devices.GetBlackList {
-		res = append(res, model.BlackList{
-			ID:    device.Id,
-			Token: device.Token,
-		})
-	}
-	return GetBlackListResponse{res, 200, nil}
+	return GetBlackListResponse{devices, 200, nil}
 }

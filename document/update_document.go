@@ -1,11 +1,10 @@
 package document
 
 import (
-	"context"
 	"errors"
 
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type CreateDocumentInput struct {
@@ -25,24 +24,17 @@ type UpdateDocumentResponse struct {
 }
 
 func UpdateDocument(newDocumentInfo CreateDocumentInput, id string) UpdateDocumentResponse {
-	gqlClient := graphql.CreateClient()
-
-	updatedDocument, err := graphql.UpdateDocument(context.Background(), gqlClient, id, newDocumentInfo.Name, newDocumentInfo.IsFavorite)
+	updatedDocument, err := graphql.UpdateDocument(id, model.UpdateDocumentInput{
+		Name:       &newDocumentInfo.Name,
+		IsFavorite: &newDocumentInfo.IsFavorite,
+	})
 	if err != nil {
 		return UpdateDocumentResponse{Document: model.Document{}, Code: 500, Err: errors.New("unable to update document")}
 	}
 
 	return UpdateDocumentResponse{
-		Document: model.Document{
-			ID:           updatedDocument.UpdateDocument.Id,
-			OwnerID:      updatedDocument.UpdateDocument.Owner_id,
-			Name:         updatedDocument.UpdateDocument.Name,
-			DocumentType: model.DocumentType(updatedDocument.UpdateDocument.Document_type),
-			Category:     model.Category(updatedDocument.UpdateDocument.Category),
-			IsFavorite:   updatedDocument.UpdateDocument.Is_favorite,
-			DownloadURL:  updatedDocument.UpdateDocument.Download_url,
-		},
-		Code: 201,
-		Err:  nil,
+		Document: updatedDocument,
+		Code:     201,
+		Err:      nil,
 	}
 }

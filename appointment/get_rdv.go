@@ -1,10 +1,9 @@
 package appointment
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type GetRdvResponse struct {
@@ -14,25 +13,14 @@ type GetRdvResponse struct {
 }
 
 func GetRdv(patientId string) GetRdvResponse {
-	gqlClient := graphql.CreateClient()
 	var res []model.Rdv
-	rdv, err := graphql.GetPatientRdv(context.Background(), gqlClient, patientId)
+	rdv, err := graphql.GetPatientRdv(patientId, nil)
 
 	if err != nil {
 		return GetRdvResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a patient")}
 	}
-	for _, appointment := range rdv.GetPatientRdv {
-		temp := appointment.Cancelation_reason
-		res = append(res, model.Rdv{
-			ID:                appointment.Id,
-			DoctorID:          appointment.Doctor_id,
-			IDPatient:         appointment.Id_patient,
-			StartDate:         appointment.Start_date,
-			EndDate:           appointment.End_date,
-			CancelationReason: &temp,
-			AppointmentStatus: model.AppointmentStatus(appointment.Appointment_status),
-			SessionID:         appointment.Session_id,
-		})
+	for _, appointment := range rdv {
+		res = append(res, appointment)
 	}
 	return GetRdvResponse{res, 200, nil}
 }

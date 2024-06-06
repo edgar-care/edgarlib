@@ -1,12 +1,11 @@
 package dashboard
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/medical_folder"
 
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type GetPatientByIdResponse struct {
@@ -20,9 +19,9 @@ type PatientWithMedicalInfo struct {
 	Email             string                                     `json:"email"`
 	MedicalInfo       model.MedicalInfo                          `json:"medical_info"`
 	Antedisease       []medical_folder.AnteDiseaseWithTreatments `json:"antedisease"`
-	RendezVousIds     []string                                   `json:"rendez_vous_ids"`
-	DocumentsIds      []string                                   `json:"documents_ids"`
-	TreatmentFollowUp []string                                   `json:"treatment_follow_up"`
+	RendezVousIds     []*string                                  `json:"rendez_vous_ids"`
+	DocumentsIds      []*string                                  `json:"documents_ids"`
+	TreatmentFollowUp []*string                                  `json:"treatment_follow_up"`
 }
 
 type GetPatientsResponse struct {
@@ -32,15 +31,13 @@ type GetPatientsResponse struct {
 }
 
 func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
-	gqlClient := graphql.CreateClient()
-
-	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, doctorid)
+	doctor, err := graphql.GetDoctorById(doctorid)
 	if err != nil {
 		return GetPatientByIdResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 	idFound := false
-	for _, item := range doctor.GetDoctorById.Patient_ids {
-		if item == id {
+	for _, item := range doctor.PatientIds {
+		if *item == id {
 			idFound = true
 			break
 		}
@@ -49,7 +46,7 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		return GetPatientByIdResponse{Code: 401, Err: errors.New("unauthorized to access to this account")}
 	}
 
-	patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
+	patient, err := graphql.GetPatientById(id)
 	if err != nil {
 		return GetPatientByIdResponse{Code: 404, Err: errors.New("id does not correspond to a patient")}
 	}
@@ -61,12 +58,12 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 	}
 
 	patients = PatientWithMedicalInfo{
-		ID:                patient.GetPatientById.Id,
-		Email:             patient.GetPatientById.Email,
-		RendezVousIds:     patient.GetPatientById.Rendez_vous_ids,
-		DocumentsIds:      patient.GetPatientById.Document_ids,
+		ID:                patient.ID,
+		Email:             patient.Email,
+		RendezVousIds:     patient.RendezVousIds,
+		DocumentsIds:      patient.DocumentIds,
 		MedicalInfo:       medicalInfo.MedicalInfo,
-		TreatmentFollowUp: patient.GetPatientById.Treatment_follow_up_ids,
+		TreatmentFollowUp: patient.TreatmentFollowUpIds,
 		Antedisease:       medicalInfo.AnteDiseasesWithTreatments,
 	}
 
@@ -78,26 +75,24 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 }
 
 func GetPatients(doctorId string) GetPatientsResponse {
-	gqlClient := graphql.CreateClient()
-
-	patientDoctor, err := graphql.GetPatientsFromDoctorById(context.Background(), gqlClient, doctorId)
+	patientDoctor, err := graphql.GetPatientsFromDoctorById(doctorId, nil)
 	if err != nil {
 		return GetPatientsResponse{Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
 	var patients []PatientWithMedicalInfo
-	for _, patient := range patientDoctor.GetPatientsFromDoctorById {
-		medicalInfo := medical_folder.GetMedicalInfo(patient.Id)
+	for _, patient := range patientDoctor {
+		medicalInfo := medical_folder.GetMedicalInfo(patient.ID)
 		if medicalInfo.Err != nil {
 			return GetPatientsResponse{Code: 401, Err: errors.New("error while retrieving medical info by id")}
 		}
 		patients = append(patients, PatientWithMedicalInfo{
-			ID:                patient.Id,
+			ID:                patient.ID,
 			Email:             patient.Email,
-			RendezVousIds:     patient.Rendez_vous_ids,
-			DocumentsIds:      patient.Document_ids,
+			RendezVousIds:     patient.RendezVousIds,
+			DocumentsIds:      patient.DocumentIds,
 			MedicalInfo:       medicalInfo.MedicalInfo,
-			TreatmentFollowUp: patient.Treatment_follow_up_ids,
+			TreatmentFollowUp: patient.TreatmentFollowUpIds,
 			Antedisease:       medicalInfo.AnteDiseasesWithTreatments,
 		})
 	}

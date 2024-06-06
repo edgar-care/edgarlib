@@ -1,0 +1,1600 @@
+mutation DeleteTreatment($id: String!){
+    deleteTreatment(id: $id)
+}
+
+mutation CreateAnteChir($input: CreateAnteChirInput!){
+    createAnteChir(input: $input){
+        id
+        name
+        induced_symptoms{
+            symptom
+            factor
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateAnteDisease($input: CreateAnteDiseaseInput!){
+    createAnteDisease(input: $input){
+        id
+        name
+        chronicity
+        surgery_ids
+        symptoms
+        treatment_ids
+        still_relevant
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateSymptom($input: CreateSymptomInput!){
+    createSymptom(input: $input){
+        id
+        code
+        name
+        chronic
+        symptom
+        advice
+        question
+        question_basic
+        question_duration
+        question_ante
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteDisease($id: String!){
+    deleteDisease(id: $id)
+}
+
+mutation DeleteSymptom($id: String!){
+    deleteSymptom(id: $id)
+}
+
+mutation DeleteAdmin($id: String!){
+    deleteAdmin(id: $id)
+}
+
+mutation DeleteDoctor($id: String!){
+    deleteDoctor(id: $id)
+}
+
+mutation CreateDocument($input: CreateDocumentInput!){
+    createDocument(input: $input){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateChat($input: CreateChatInput!){
+    createChat(input: $input){
+        id
+        participants{
+            participant_id
+            last_seen
+        }
+        messages{
+            owner_id
+            message
+            sended_time
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateAdmin($input: CreateAdminInput!){
+    createAdmin(input: $input){
+        id
+        email
+        password
+        name
+        last_name
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeletePatient($id: String!){
+    deletePatient(id: $id)
+}
+
+mutation CreateNlpReport($input: CreateNlpReportInput!){
+    createNlpReport(input: $input){
+        id
+        version
+        input_symptoms
+        input_sentence
+        output{
+            symptom
+            present
+            days
+        }
+        computation_time
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateAnteChir($id: String!, $input: UpdateAnteChirInput!){
+    updateAnteChir(id: $id, input: $input){
+        id
+        name
+        induced_symptoms{
+            symptom
+            factor
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateMedicalFolder($id: String!, $input: UpdateMedicalFolderInput!){
+    updateMedicalFolder(id: $id, input: $input){
+        id
+        name
+        firstname
+        birthdate
+        sex
+        height
+        weight
+        primary_doctor_id
+        onboarding_status
+        antecedent_disease_ids
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateMedicine($input: CreateMedicineInput!){
+    createMedicine(input: $input){
+        id
+        name
+        unit
+        target_diseases
+        treated_symptoms
+        side_effects
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteAlert($id: String!){
+    deleteAlert(id: $id)
+}
+
+mutation UpdateTreatment($id: String!, $input: UpdateTreatmentInput!){
+    updateTreatment(id: $id, input: $input){
+        id
+        period
+        day
+        quantity
+        medicine_id
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateDoctor($input: CreateDoctorInput!){
+    createDoctor(input: $input){
+        id
+        email
+        password
+        name
+        firstname
+        address {
+            street
+            zip_code
+            country
+        }
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteChat($id: String!){
+    deleteChat(id: $id)
+}
+
+mutation UpdateChat($id: String!, $input: UpdateChatInput!){
+    updateChat(id: $id, input: $input){
+        id
+        participants{
+            participant_id
+            last_seen
+        }
+        messages{
+            owner_id
+            message
+            sended_time
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateAnteFamily($input: CreateAnteFamilyInput!){
+    createAnteFamily(input: $input){
+        id
+        name
+        disease
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateTreatmentsFollowUp($id: String!, $input: UpdateTreatmentsFollowUpInput!){
+    updateTreatmentsFollowUp(id: $id, input: $input){
+        id
+        treatment_id
+        date
+        period
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateDocument($id: String!, $input: UpdateDocumentInput!){
+    updateDocument(id: $id, input: $input){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteSlot($id: String!){
+    deleteSlot(id: $id)
+}
+
+mutation UpdateRdv($id: String!, $input: UpdateRdvInput!){
+    updateRdv(id: $id, input: $input){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        health_method
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteAnteFamily($id: String!){
+    deleteAnteFamily(id: $id)
+}
+
+mutation CreateAlert($input: CreateAlertInput!){
+    createAlert(input: $input){
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteMedicalFolder($id: String!){
+    deleteMedicalFolder(id: $id)
+}
+
+mutation CreatePatient($input: CreatePatientInput!){
+    createPatient(input: $input){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteAnteChir($id: String!){
+    deleteAnteChir(id: $id)
+}
+
+mutation UpdatePatient($id: String!, $input: UpdatePatientInput!){
+    updatePatient(id: $id, input: $input){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateSession($input: CreateSessionInput!){
+    createSession(input: $input){
+        id
+        diseases{
+            name
+            presence
+        }
+        symptoms{
+            name
+            presence
+            duration
+            treated
+        }
+        age
+        height
+        weight
+        sex
+        ante_chirs
+        ante_diseases
+        medicine
+        last_question
+        logs{
+            question
+            answer
+        }
+        hereditary_disease
+        alerts
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteAnteDisease($id: String!){
+    deleteAnteDisease(id: $id)
+}
+
+mutation UpdateDoctor($id: String!, $input: UpdateDoctorInput!){
+    updateDoctor(id: $id, input: $input){
+        id
+        email
+        password
+        name
+        firstname
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        address {
+            street
+            zip_code
+            country
+        }
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateDoctorsPatientIDs($id: String!, $input: UpdateDoctorsPatientIDsInput!){
+    updateDoctorsPatientIDs(id: $id, input: $input){
+        id
+        email
+        password
+        name
+        firstname
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        address {
+            street
+            zip_code
+            country
+        }
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateMedicalFolder($input: CreateMedicalFolderInput!){
+    createMedicalFolder(input: $input){
+        id
+        name
+        firstname
+        birthdate
+        sex
+        height
+        weight
+        primary_doctor_id
+        onboarding_status
+        antecedent_disease_ids
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteDocument($id: String!){
+    deleteDocument(id: $id)
+}
+
+mutation UpdateAlert($id: String!, $input: UpdateAlertInput!){
+    updateAlert(id: $id, input: $input){
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteMedicine($id: String!){
+    deleteMedicine(id: $id)
+}
+
+mutation CreateTreatment($input: CreateTreatmentInput!){
+    createTreatment(input: $input){
+        id
+        period
+        day
+        quantity
+        medicine_id
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteRdv($id: String!){
+    deleteRdv(id: $id)
+}
+
+mutation UpdateDisease($id: String!, $input: UpdateDiseaseInput!){
+    updateDisease(id: $id, input: $input){
+        id
+        code
+        name
+        symptoms
+        symptoms_weight{
+            symptom
+            value
+            chronic
+        }
+        overweight_factor
+        heredity_factor
+        advice
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteNotification($id: String!){
+    deleteNotification(id: $id)
+}
+
+mutation DeleteSession($id: String!){
+    deleteSession(id: $id)
+}
+
+mutation UpdateAdmin($id: String!, $input: UpdateAdminInput!){
+    updateAdmin(id: $id, input: $input){
+        id
+        email
+        password
+        name
+        last_name
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateSymptom($id: String!, $input: UpdateSymptomInput!){
+    updateSymptom(id: $id, input: $input){
+        id
+        code
+        name
+        chronic
+        symptom
+        advice
+        question
+        question_basic
+        question_duration
+        question_ante
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateTreatmentsFollowUp($input: CreateTreatmentsFollowUpInput!){
+    createTreatmentsFollowUp(input: $input){
+        id
+        treatment_id
+        date
+        period
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateDisease($input: CreateDiseaseInput!){
+    createDisease(input: $input){
+        id
+        code
+        name
+        symptoms
+        symptoms_weight{
+            symptom
+            value
+            chronic
+        }
+        overweight_factor
+        heredity_factor
+        advice
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateNotification($id: String!, $input: UpdateNotificationInput!){
+    updateNotification(id: $id, input: $input){
+        id
+        token
+        title
+        message
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateNotification($input: CreateNotificationInput!){
+    createNotification(input: $input){
+        id
+        token
+        title
+        message
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateAnteFamily($id: String!, $input: UpdateAnteFamilyInput!){
+    updateAnteFamily(id: $id, input: $input){
+        id
+        name
+        disease
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteTreatmentsFollowUp($id: String!){
+    deleteTreatmentsFollowUp(id: $id)
+}
+
+mutation UpdateAnteDisease($id: String!, $input: UpdateAnteDiseaseInput!){
+    updateAnteDisease(id: $id, input: $input){
+        id
+        name
+        chronicity
+        surgery_ids
+        symptoms
+        treatment_ids
+        still_relevant
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateRdv($input: CreateRdvInput!){
+    createRdv(input: $input){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        health_method
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateSession($id: String!, $input: UpdateSessionInput!){
+    updateSession(id: $id, input: $input){
+        id
+        diseases{
+            name
+            presence
+        }
+        symptoms{
+            name
+            presence
+            duration
+            treated
+        }
+        age
+        height
+        weight
+        sex
+        ante_chirs
+        ante_diseases
+        medicine
+        last_question
+        logs{
+            question
+            answer
+        }
+        hereditary_disease
+        alerts
+        createdAt
+        updatedAt
+    }
+}
+
+query GetWaitingRdv($doctor_id: String!, $option: Options){
+    getWaitingRdv(doctor_id: $doctor_id, option: $option){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        health_method
+        createdAt
+        updatedAt
+    }
+}
+
+query GetTreatmentByID($id: String!){
+    getTreatmentByID(id: $id){
+        id
+        period
+        day
+        quantity
+        medicine_id
+        createdAt
+        updatedAt
+    }
+}
+
+query GetDiseases($option: Options){
+    getDiseases(option: $option){
+        id
+        code
+        name
+        symptoms
+        symptoms_weight{
+            symptom
+            value
+            chronic
+        }
+        overweight_factor
+        heredity_factor
+        advice
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAlerts($option: Options){
+    getAlerts(option: $option){
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+        createdAt
+        updatedAt
+    }
+}
+
+query GetMedicineByID($id: String!){
+    getMedicineByID(id: $id){
+        id
+        name
+        unit
+        target_diseases
+        treated_symptoms
+        side_effects
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAnteChirs($option: Options){
+    getAnteChirs(option: $option){
+        id
+        name
+        induced_symptoms{
+            symptom
+            factor
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+query GetRdvById($id: String!){
+    getRdvById(id: $id){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        health_method
+        createdAt
+        updatedAt
+    }
+}
+
+query GetPatientDocument($id: String!, $option: Options){
+    getPatientDocument(id: $id, option: $option){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+        createdAt
+        updatedAt
+    }
+}
+
+query GetNotifications($option: Options){
+    getNotifications(option: $option){
+        id
+        token
+        title
+        message
+        createdAt
+        updatedAt
+    }
+}
+
+query GetDoctorRdv($doctor_id: String!, $option: Options){
+    getDoctorRdv(doctor_id: $doctor_id, option: $option){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        health_method
+        createdAt
+        updatedAt
+    }
+}
+
+query GetTreatments($option: Options){
+    getTreatments(option: $option){
+        id
+        period
+        day
+        quantity
+        medicine_id
+        createdAt
+        updatedAt
+    }
+}
+
+query GetNotificationById($id: String!){
+    getNotificationById(id: $id){
+        id
+        token
+        title
+        message
+        createdAt
+        updatedAt
+    }
+}
+
+query GetDiseaseById($id: String!){
+    getDiseaseById(id: $id){
+        id
+        code
+        name
+        symptoms
+        symptoms_weight{
+            symptom
+            value
+            chronic
+        }
+        overweight_factor
+        heredity_factor
+        advice
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSymptomsByDiseaseName($name: String!){
+    getSymptomsByDiseaseName(name: $name) {
+        symptoms
+    }
+}
+
+query GetDocumentById($id: String!){
+    getDocumentById(id: $id){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAdminById($id: String!){
+    getAdminById(id: $id){
+        id
+        email
+        password
+        name
+        last_name
+        createdAt
+        updatedAt
+    }
+}
+
+query GetPatientByEmail($email: String!){
+    getPatientByEmail(email: $email){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query GetChatById($id: String!){
+    getChatById(id: $id){
+        id
+        participants{
+            participant_id
+            last_seen
+        }
+        messages{
+            owner_id
+            message
+            sended_time
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+query GetDoctorByEmail($email: String!){
+    getDoctorByEmail(email: $email){
+        id
+        email
+        password
+        name
+        firstname
+        address{
+            street
+            zip_code
+            country
+            city
+        }
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAnteDiseaseByID($id: String!){
+    getAnteDiseaseByID(id: $id){
+        id
+        name
+        chronicity
+        surgery_ids
+        symptoms
+        treatment_ids
+        still_relevant
+        createdAt
+        updatedAt
+    }
+}
+
+query GetNlpReports($option: Options){
+    getNlpReports(option: $option){
+        id
+        version
+        input_symptoms
+        input_sentence
+        output{
+            symptom
+            present
+            days
+        }
+        computation_time
+        createdAt
+        updatedAt
+    }
+}
+
+query GetNlpReportsByVersion($version: Int!, $option: Options){
+    getNlpReportsByVersion(version: $version, option: $option){
+        id
+        version
+        input_symptoms
+        input_sentence
+        output{
+            symptom
+            present
+            days
+        }
+        computation_time
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAlertById($id: String!){
+    getAlertById(id: $id){
+        id
+        name
+        sex
+        height
+        weight
+        symptoms
+        comment
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAnteChirByID($id: String!){
+    getAnteChirByID(id: $id){
+        id
+        name
+        induced_symptoms{
+            symptom
+            factor
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSymptoms($option: Options){
+    getSymptoms(option: $option){
+        id
+        code
+        name
+        chronic
+        symptom
+        advice
+        question
+        question_basic
+        question_duration
+        question_ante
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSessionById($id: String!){
+    getSessionById(id: $id){
+        id
+        diseases{
+            name
+            presence
+        }
+        symptoms{
+            name
+            presence
+            duration
+            treated
+        }
+        age
+        height
+        weight
+        sex
+        ante_chirs
+        ante_diseases
+        medicine
+        last_question
+        logs{
+            question
+            answer
+        }
+        hereditary_disease
+        alerts
+        createdAt
+        updatedAt
+    }
+}
+
+query GetPatientsFromDoctorById($id: String!, $option: Options){
+    getPatientsFromDoctorById(id: $id, option: $option){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query GetMedicalFolderByID($id: String!){
+    getMedicalFolderById(id: $id){
+        id
+        name
+        firstname
+        birthdate
+        sex
+        height
+        weight
+        primary_doctor_id
+        antecedent_disease_ids
+        onboarding_status
+        family_members_med_info_id
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSymptomById($id: String!){
+    getSymptomById(id: $id){
+        id
+        code
+        name
+        chronic
+        symptom
+        advice
+        question
+        question_basic
+        question_duration
+        question_ante
+        createdAt
+        updatedAt
+    }
+}
+
+query GetPatientById($id: String!){
+    getPatientById(id: $id){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query GetMedicalFolder($option: Options){
+    getMedicalFolder(option: $option){
+        id
+        name
+        firstname
+        birthdate
+        sex
+        height
+        weight
+        primary_doctor_id
+        onboarding_status
+        antecedent_disease_ids
+        family_members_med_info_id
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSlots($id: String!, $option: Options){
+    getSlots(id: $id, option: $option){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        createdAt
+        updatedAt
+    }
+}
+
+query GetPatientRdv($id_patient: String!, $option: Options){
+    getPatientRdv(id_patient: $id_patient, option: $option){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        health_method
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAdminByEmail($email: String!){
+    getAdminByEmail(email: $email){
+        id
+        email
+        password
+        name
+        last_name
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSlotById($id: String!){
+    getSlotById(id: $id){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        health_method
+        createdAt
+        updatedAt
+    }
+}
+
+query GetDoctors($option: Options){
+    getDoctors(option: $option){
+        id
+        email
+        password
+        name
+        firstname
+        address{
+            street
+            zip_code
+            country
+            city
+        }
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAdmins($option: Options){
+    getAdmins(option: $option){
+        id
+        email
+        password
+        name
+        last_name
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAnteFamilyByID($id: String!){
+    getAnteFamilyByID(id: $id){
+        id
+        name
+        disease
+        createdAt
+        updatedAt
+    }
+}
+
+query GetChats($id: String!, $option: Options){
+    getChats(id: $id, option: $option){
+        id
+        participants{
+            participant_id
+            last_seen
+        }
+        messages{
+            owner_id
+            message
+            sended_time
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAnteDiseases($option: Options){
+    getAnteDiseases(option: $option){
+        id
+        name
+        chronicity
+        surgery_ids
+        symptoms
+        treatment_ids
+        still_relevant
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSessions($option: Options){
+    getSessions(option: $option){
+        id
+        diseases{
+            name
+            presence
+        }
+        symptoms{
+            name
+            presence
+            duration
+            treated
+        }
+        age
+        height
+        weight
+        sex
+        ante_chirs
+        ante_diseases
+        medicine
+        last_question
+        logs{
+            question
+            answer
+        }
+        hereditary_disease
+        alerts
+        createdAt
+        updatedAt
+    }
+}
+
+query GetMedicines($option: Options){
+    getMedicines(option: $option){
+        id
+        name
+        unit
+        target_diseases
+        treated_symptoms
+        side_effects
+        createdAt
+        updatedAt
+    }
+}
+
+query GetDoctorById($id: String!){
+    getDoctorById(id: $id){
+        id
+        email
+        password
+        name
+        firstname
+        address{
+            street
+            zip_code
+            country
+            city
+        }
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query GetPatients($option: Options){
+    getPatients(option: $option){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+query GetTreatmentsFollowUpById($id: String!){
+    getTreatmentsFollowUpById(id: $id){
+        id
+        treatment_id
+        date
+        period
+        createdAt
+        updatedAt
+    }
+}
+
+query GetDocuments($option: Options){
+    getDocuments(option: $option){
+        id
+        owner_id
+        name
+        document_type
+        category
+        is_favorite
+        download_url
+        createdAt
+        updatedAt
+    }
+}
+
+query GetTreatmentsFollowUps($id: String!, $option: Options){
+    getTreatmentsFollowUps(id: $id, option: $option){
+        id
+        treatment_id
+        date
+        period
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAnteFamilies($option: Options){
+    getAnteFamilies(option: $option){
+        id
+        name
+        disease
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateDeviceConnect($input: CreateDeviceConnectInput!) {
+    createDeviceConnect(input: $input) {
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation UpdateDeviceConnect($id: String!, $input: UpdateDeviceConnectInput!) {
+    updateDeviceConnect(id: $id, input: $input) {
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation DeleteDeviceConnect($id: String!){
+    deleteDeviceConnect(id: $id)
+}
+
+
+query GetDevicesConnect($option: Options){
+    getDevicesConnect(option: $option){
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+query GetDeviceConnectById($id: String!){
+    getDeviceConnectById(id:$id){
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation CreateDoubleAuth($input: CreateDoubleAuthInput!) {
+    createDoubleAuth(input: $input) {
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+mutation UpdateDoubleAuth($id: String!, $input: UpdateDoubleAuthInput!) {
+    updateDoubleAuth(id: $id, input: $input) {
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+mutation DeleteDoubleAuth($id: String!){
+    deleteDoubleAuth(id: $id)
+}
+
+
+query GetDoubleAuths($option: Options){
+    getDoubleAuths(option: $option){
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+query GetDoubleAuthById($id: String!){
+    getDoubleAuthById(id: $id){
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+mutation CreateBlackList($input: CreateBlackListInput!) {
+    createBlackList(input: $input){
+        id
+        token
+    }
+}
+
+mutation UpdateBlackList($id: String!, $input: UpdateBlackListInput!) {
+    updateBlackList(id: $id, input: $input){
+        id
+        token
+    }
+}
+
+mutation DeleteBlackList($id: String!){
+    deleteDoubleAuth(id: $id)
+}
+
+query GetBlackListById($id: String!){
+    getBlackListById(id: $id){
+        id
+        token
+    }
+}
+
+query GetBlackList($option: Options){
+    getBlackList(option: $option){
+        id
+        token
+    }
+}
+
+mutation CreateSaveCode($input: CreateSaveCodeInput!){
+    createSaveCode(input: $input){
+        id
+        code
+    }
+}
+
+mutation UpdateSaveCode($id: String!, $input: UpdateSaveCodeInput!){
+    updateSaveCode(id: $id, input: $input){
+        id
+        code
+    }
+}
+
+mutation DeleteSaveCode($id: String!){
+    deleteSaveCode(id: $id)
+}
+
+query GetSaveCodeById($id: String!){
+    getSaveCodeById(id: $id){
+        id
+        code
+    }
+}
+
+query GetSaveCode($option: Options){
+    getSaveCode(option: $option){
+        id
+        code
+    }
+}

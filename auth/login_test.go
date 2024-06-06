@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/edgar-care/edgarlib/auth/utils"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/joho/godotenv"
 	"log"
 	"net/http"
@@ -29,7 +29,7 @@ func TestLoginDoctor_Success(t *testing.T) {
 	response := Login(LoginInput{
 		Email:    doctor.Email,
 		Password: password,
-	}, "d")
+	}, "d", "")
 
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
@@ -52,7 +52,7 @@ func TestLoginDoctor_MismatchError(t *testing.T) {
 	response := Login(LoginInput{
 		Email:    "test_login@example.com",
 		Password: "invalid",
-	}, "d")
+	}, "d", "")
 
 	if response.Token != "" {
 		t.Error("Expected token to be empty, but got an non-empty token")
@@ -75,7 +75,7 @@ func TestLoginDoctor_Error(t *testing.T) {
 	response := Login(LoginInput{
 		Email:    "inexistant@email.com",
 		Password: "invalid",
-	}, "d")
+	}, "d", "")
 
 	if response.Token != "" {
 		t.Error("Expected token to be empty, but got an non-empty token")
@@ -107,7 +107,7 @@ func TestLoginPatient_Success(t *testing.T) {
 	response := Login(LoginInput{
 		Email:    patient.Email,
 		Password: password,
-	}, "p")
+	}, "p", "")
 
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
@@ -130,7 +130,7 @@ func TestLoginPatient_Error(t *testing.T) {
 	response := Login(LoginInput{
 		Email:    "inexistant@email.com",
 		Password: "invalid",
-	}, "p")
+	}, "p", "")
 
 	if response.Token != "" {
 		t.Error("Expected token to be empty, but got an non-empty token")
@@ -175,7 +175,7 @@ func TestLoginAdmin_Success(t *testing.T) {
 	response := Login(LoginInput{
 		Email:    admin.Email,
 		Password: password,
-	}, "a")
+	}, "a", "")
 
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
@@ -198,7 +198,7 @@ func TestLoginAdmin_Error(t *testing.T) {
 	response := Login(LoginInput{
 		Email:    "inexistant@email.com",
 		Password: "invalid",
-	}, "a")
+	}, "a", "")
 
 	if response.Token != "" {
 		t.Errorf("Expected token to be empty, but got %s:", response.Token)

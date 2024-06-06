@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/edgar-care/edgarlib/auth/utils"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/joho/godotenv"
 	"github.com/lestrrat-go/jwx/v2/jwt"

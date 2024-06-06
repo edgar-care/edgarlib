@@ -1,12 +1,11 @@
 package diagnostic
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib"
 	"github.com/edgar-care/edgarlib/diagnostic/utils"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"strings"
 )
 
@@ -27,8 +26,7 @@ func nameInList(s utils.Symptom, symptoms []model.SessionSymptom) (bool, int) {
 }
 
 func Diagnose(id string, sentence string) DiagnoseResponse {
-	gqlClient := graphql.CreateClient()
-	session, err := graphql.GetSessionById(context.Background(), gqlClient, id)
+	session, err := graphql.GetSessionById(id)
 	if err != nil {
 		return DiagnoseResponse{
 			Code: 400,
@@ -37,30 +35,29 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	}
 
 	var symptoms []model.SessionSymptom
-	for _, s := range session.GetSessionById.Symptoms {
+	for _, s := range session.Symptoms {
 		var ns model.SessionSymptom
 		ns.Name = s.Name
 		ns.Presence = s.Presence
-		dura := s.Duration
-		ns.Duration = &dura
+		ns.Duration = s.Duration
 		ns.Treated = s.Treated
 		symptoms = append(symptoms, ns)
 	}
 
-	if len(session.GetSessionById.Logs) > 0 {
-		session.GetSessionById.Logs[len(session.GetSessionById.Logs)-1].Answer = sentence
+	if len(session.Logs) > 0 {
+		session.Logs[len(session.Logs)-1].Answer = sentence
 	}
 
-	questionSymptom := []string{session.GetSessionById.Last_question}
+	questionSymptom := []string{session.LastQuestion}
 
 	var newSymptoms utils.NlpResponseBody
-	if session.GetSessionById.Last_question == "" || session.GetSessionById.Last_question == "describe symptoms" || session.GetSessionById.Last_question == "describe medicines" {
+	if session.LastQuestion == "" || session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
 		questionSymptom = []string{}
 	}
 
 	var durSymptom *string
-	if session.GetSessionById.Last_question != "" && strings.Split(session.GetSessionById.Last_question, " ")[0] == "duration" {
-		durSymptom = &strings.Split(session.GetSessionById.Last_question, " ")[1]
+	if session.LastQuestion != "" && strings.Split(session.LastQuestion, " ")[0] == "duration" {
+		durSymptom = &strings.Split(session.LastQuestion, " ")[1]
 	}
 	var errCode int
 	newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom)
@@ -90,24 +87,25 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		symptoms = append(symptoms, newSessionSymptom)
 	}
 
-	var symptomsinput []graphql.SessionSymptomInput
+	var symptomsinput []*model.SessionSymptomInput
 	for _, s := range symptoms {
-		var ns graphql.SessionSymptomInput
+		var ns model.SessionSymptomInput
 		ns.Name = s.Name
 		ns.Presence = s.Presence
 		if s.Duration == nil {
-			ns.Duration = 0
+			duration := 0
+			ns.Duration = &duration
 		} else {
-			ns.Duration = *s.Duration
+			ns.Duration = s.Duration
 		}
-		symptomsinput = append(symptomsinput, ns)
+		symptomsinput = append(symptomsinput, &ns)
 	}
 
 	var anteSymptom string
 
 	var exam utils.ExamResponseBody
 	if len(symptomsinput) > 0 {
-		symptomsinput, exam.Question, session.GetSessionById.Last_question = utils.CheckSymptomDuration(symptomsinput, session.GetSessionById.Last_question)
+		symptomsinput, exam.Question, session.LastQuestion = utils.CheckSymptomDuration(symptomsinput, session.LastQuestion)
 	}
 	if len(symptoms) == 0 {
 		exam.Question = "Pourriez-vous décrire vos symptomes ?"
@@ -115,18 +113,18 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		exam.Context = symptoms
 		exam.Symptoms = []string{}
 		exam.Alert = []string{}
-		session.GetSessionById.Last_question = "describe symptoms"
-	} else if len(session.GetSessionById.Medicine) != 0 && session.GetSessionById.Medicine[0] == "CanonFlesh" { //todo: uncomment CannonFlesh when this is enabled
+		session.LastQuestion = "describe symptoms"
+	} else if len(session.Medicine) != 0 && session.Medicine[0] == "CanonFlesh" { //todo: uncomment CannonFlesh when this is enabled
 		exam.Question = "Avez-vous pris des médicaments récemment ?"
-		session.GetSessionById.Last_question = "describe medicines"
-		if len(session.GetSessionById.Medicine) > 1 {
-			session.GetSessionById.Medicine = session.GetSessionById.Medicine[1:]
+		session.LastQuestion = "describe medicines"
+		if len(session.Medicine) > 1 {
+			session.Medicine = session.Medicine[1:]
 		} else {
-			session.GetSessionById.Medicine = []string{}
+			session.Medicine = []string{}
 		}
 
-	} else if exam.Question == "" && session.GetSessionById.Last_question == "" {
-		exam = utils.CallExam(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs, session.GetSessionById.Hereditary_disease)
+	} else if exam.Question == "" && session.LastQuestion == "" {
+		exam = utils.CallExam(symptoms, float64(session.Weight)/(float64(session.Height)/100.0*(float64(session.Height)/100.0)), session.AnteChirs, session.HereditaryDisease)
 		if exam.Err != nil {
 			if exam.Err != nil {
 				return DiagnoseResponse{
@@ -138,12 +136,12 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 		if len(exam.Alert) > 0 {
 			for _, alert := range exam.Alert {
-				session.GetSessionById.Alerts = append(session.GetSessionById.Alerts, alert)
+				session.Alerts = append(session.Alerts, alert)
 			}
 		}
 
-		if len(session.GetSessionById.Medicine) > 0 {
-			symptomsinput, err = utils.CheckTreatments(symptomsinput, session.GetSessionById.Medicine)
+		if len(session.Medicine) > 0 {
+			symptomsinput, err = utils.CheckTreatments(symptomsinput, session.Medicine)
 			if err != nil {
 				return DiagnoseResponse{
 					Code: 500,
@@ -152,9 +150,9 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 			}
 		}
 
-		if len(session.GetSessionById.Ante_diseases) > 0 {
+		if len(session.AnteDiseases) > 0 {
 			var anteSymptomQuestion string
-			anteSymptomQuestion, anteSymptom, err = utils.CheckAnteDiseaseInSymptoms(session.GetSessionById)
+			anteSymptomQuestion, anteSymptom, err = utils.CheckAnteDiseaseInSymptoms(session)
 			if err != nil {
 				return DiagnoseResponse{
 					Code: 400, //metter un code correct
@@ -163,42 +161,42 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 			}
 			if anteSymptom != "" {
 				exam.Question = anteSymptomQuestion
-				session.GetSessionById.Last_question = anteSymptom
+				session.LastQuestion = anteSymptom
 			}
 		}
 
 		if len(exam.Symptoms) > 0 && anteSymptom == "" {
-			session.GetSessionById.Last_question = exam.Symptoms[0]
+			session.LastQuestion = exam.Symptoms[0]
 		}
 
 		if len(exam.Symptoms) == 0 {
-			session.GetSessionById.Last_question = ""
+			session.LastQuestion = ""
 		}
 	}
 
-	var logs []graphql.LogsInput //
-	for _, log := range session.GetSessionById.Logs {
-		logs = append(logs, graphql.LogsInput{
+	var logs []*model.LogsInput //
+	for _, log := range session.Logs {
+		logs = append(logs, &model.LogsInput{
 			Question: log.Question,
 			Answer:   log.Answer,
 		})
 	}
 	if len(logs) == 0 && sentence != "" {
-		logs = append(logs, graphql.LogsInput{
+		logs = append(logs, &model.LogsInput{
 			Question: "Pourriez-vous décrire vos symptomes ?",
 			Answer:   sentence,
 		})
 	}
 	if !exam.Done {
-		logs = append(logs, graphql.LogsInput{
+		logs = append(logs, &model.LogsInput{
 			Question: exam.Question,
 			Answer:   "",
 		})
 	}
 
-	var diseasesinput []graphql.SessionDiseasesInput
+	var diseasesinput []*model.SessionDiseasesInput
 	if exam.Done == true {
-		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs, session.GetSessionById.Hereditary_disease)
+		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.Weight)/(float64(session.Height)/100.0*(float64(session.Height)/100.0)), session.AnteChirs, session.HereditaryDisease)
 		if err != nil {
 			return DiagnoseResponse{
 				Code: 500,
@@ -206,7 +204,12 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 			}
 		}
 	}
-	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, diseasesinput, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Medicine, session.GetSessionById.Last_question, logs, session.GetSessionById.Hereditary_disease, session.GetSessionById.Alerts)
+
+	_, err = graphql.UpdateSession(session.ID, model.UpdateSessionInput{
+		Diseases: diseasesinput,
+		Symptoms: symptomsinput,
+		Logs:     logs,
+	})
 	edgarlib.CheckError(err)
 	return DiagnoseResponse{
 		Done:     exam.Done,

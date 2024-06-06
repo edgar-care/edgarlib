@@ -1,10 +1,9 @@
 package medical_folder
 
 import (
-	"context"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type AnteDiseaseWithTreatments struct {
@@ -20,107 +19,57 @@ type MedicalInfoResponse struct {
 }
 
 func GetMedicalInfo(patientID string) MedicalInfoResponse {
-	gqlClient := graphql.CreateClient()
-
-	control, err := graphql.GetPatientById(context.Background(), gqlClient, patientID)
+	control, err := graphql.GetPatientById(patientID)
 	if err != nil {
 		return MedicalInfoResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
 	}
 
-	if control.GetPatientById.Medical_info_id == "" {
+	if control.MedicalInfoID == nil || *control.MedicalInfoID == "" {
 		return MedicalInfoResponse{Code: 404, Err: errors.New("medical folder not found for the patient")}
 	}
 
-	medical, err := graphql.GetMedicalFolderByID(context.Background(), gqlClient, control.GetPatientById.Medical_info_id)
+	medical, err := graphql.GetMedicalFolderByID(*control.MedicalInfoID)
 	if err != nil {
 		return MedicalInfoResponse{Code: 400, Err: errors.New("unable to fetch medical folder: " + err.Error())}
 	}
 
-	if len(medical.GetMedicalFolderById.Antecedent_disease_ids) == 1 && medical.GetMedicalFolderById.Antecedent_disease_ids[0] == "" {
+	if len(medical.AntecedentDiseaseIds) == 1 && medical.AntecedentDiseaseIds[0] == "" {
 		return MedicalInfoResponse{
-			MedicalInfo: model.MedicalInfo{
-				ID:                   medical.GetMedicalFolderById.Id,
-				Name:                 medical.GetMedicalFolderById.Name,
-				Firstname:            medical.GetMedicalFolderById.Firstname,
-				Birthdate:            medical.GetMedicalFolderById.Birthdate,
-				Sex:                  model.Sex(medical.GetMedicalFolderById.Sex),
-				Weight:               medical.GetMedicalFolderById.Weight,
-				Height:               medical.GetMedicalFolderById.Height,
-				PrimaryDoctorID:      medical.GetMedicalFolderById.Primary_doctor_id,
-				OnboardingStatus:     model.OnboardingStatus(medical.GetMedicalFolderById.Onboarding_status),
-				AntecedentDiseaseIds: medical.GetMedicalFolderById.Antecedent_disease_ids,
-			},
-			Code: 200,
-			Err:  nil,
+			MedicalInfo: medical,
+			Code:        200,
+			Err:         nil,
 		}
 	}
 
 	var treatments []model.Treatment
 	var antediseasesWithTreatments []AnteDiseaseWithTreatments
-	for _, antediseaseID := range medical.GetMedicalFolderById.Antecedent_disease_ids {
-		antedisease, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, antediseaseID)
+	for _, antediseaseID := range medical.AntecedentDiseaseIds {
+		antedisease, err := graphql.GetAnteDiseaseByID(antediseaseID)
 		if err != nil {
 			return MedicalInfoResponse{Code: 400, Err: errors.New("unable to fetch antedisease: " + err.Error())}
 		}
 
 		var antediseaseTreatments []model.Treatment
-		for _, treatmentID := range antedisease.GetAnteDiseaseByID.Treatment_ids {
-			treatment, err := graphql.GetTreatmentByID(context.Background(), gqlClient, treatmentID)
+		for _, treatmentID := range antedisease.TreatmentIds {
+			treatment, err := graphql.GetTreatmentByID(treatmentID)
 			if err != nil {
 				return MedicalInfoResponse{Code: 400, Err: errors.New("unable to fetch treatment: " + err.Error())}
 			}
 
-			var periods []model.Period
-			for _, period := range treatment.GetTreatmentByID.Period {
-				periods = append(periods, model.Period(period))
-			}
-
-			var days []model.Day
-			for _, day := range treatment.GetTreatmentByID.Day {
-				days = append(days, model.Day(day))
-			}
-
-			treatmentToAdd := model.Treatment{
-				ID:         treatment.GetTreatmentByID.Id,
-				Period:     periods,
-				Day:        days,
-				Quantity:   treatment.GetTreatmentByID.Quantity,
-				MedicineID: treatment.GetTreatmentByID.Medicine_id,
-			}
-
-			antediseaseTreatments = append(antediseaseTreatments, treatmentToAdd)
-			treatments = append(treatments, treatmentToAdd)
+			antediseaseTreatments = append(antediseaseTreatments, treatment)
+			treatments = append(treatments, treatment)
 		}
 
 		antediseaseWithTreatments := AnteDiseaseWithTreatments{
-			AnteDisease: model.AnteDisease{
-				ID:            antedisease.GetAnteDiseaseByID.Id,
-				Name:          antedisease.GetAnteDiseaseByID.Name,
-				Chronicity:    antedisease.GetAnteDiseaseByID.Chronicity,
-				SurgeryIds:    antedisease.GetAnteDiseaseByID.Surgery_ids,
-				Symptoms:      antedisease.GetAnteDiseaseByID.Symptoms,
-				TreatmentIds:  antedisease.GetAnteDiseaseByID.Treatment_ids,
-				StillRelevant: antedisease.GetAnteDiseaseByID.Still_relevant,
-			},
-			Treatments: antediseaseTreatments,
+			AnteDisease: antedisease,
+			Treatments:  antediseaseTreatments,
 		}
 
 		antediseasesWithTreatments = append(antediseasesWithTreatments, antediseaseWithTreatments)
 	}
 
 	return MedicalInfoResponse{
-		MedicalInfo: model.MedicalInfo{
-			ID:                   medical.GetMedicalFolderById.Id,
-			Name:                 medical.GetMedicalFolderById.Name,
-			Firstname:            medical.GetMedicalFolderById.Firstname,
-			Birthdate:            medical.GetMedicalFolderById.Birthdate,
-			Sex:                  model.Sex(medical.GetMedicalFolderById.Sex),
-			Weight:               medical.GetMedicalFolderById.Weight,
-			Height:               medical.GetMedicalFolderById.Height,
-			PrimaryDoctorID:      medical.GetMedicalFolderById.Primary_doctor_id,
-			OnboardingStatus:     model.OnboardingStatus(medical.GetMedicalFolderById.Onboarding_status),
-			AntecedentDiseaseIds: medical.GetMedicalFolderById.Antecedent_disease_ids,
-		},
+		MedicalInfo:                medical,
 		AnteDiseasesWithTreatments: antediseasesWithTreatments,
 		Code:                       200,
 		Err:                        nil,

@@ -1,13 +1,12 @@
 package auth
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"math/big"
 	"net/http"
 )
@@ -53,7 +52,7 @@ func hashCode(code string) string {
 }
 
 func CreateBackupCodes(id string, r *http.Request) CreateSaveCodeResponse {
-	gqlClient := graphql.CreateClient()
+	var doubleAuthId *string
 
 	codes, err := generateBackupCodes()
 	if err != nil {
@@ -65,52 +64,53 @@ func CreateBackupCodes(id string, r *http.Request) CreateSaveCodeResponse {
 		hashedCodes[i] = hashCode(code)
 	}
 
-	saveCode, err := graphql.CreateSaveCode(context.Background(), gqlClient, hashedCodes)
+	saveCode, err := graphql.CreateSaveCode(model.CreateSaveCodeInput{Code: hashedCodes})
 	if err != nil {
 		return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 400, Err: errors.New("unable to create save code")}
 	}
 
-	accountType := GetAccountType(r)
+	token := GetBearerToken(r)
+	accountType, err := GetAccountType(token)
 	if accountType == "" {
 		return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 400, Err: errors.New("no account type found")}
 	}
 
 	if accountType == "patient" {
-		patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
+		patient, err := graphql.GetPatientById(id)
 		if err != nil {
 			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: http.StatusBadRequest, Err: errors.New("id does not correspond to a patient")}
 		}
-		doubleAuth, err := graphql.GetDoubleAuthById(context.Background(), gqlClient, patient.GetPatientById.Double_auth_methods_id)
-		if err != nil {
-			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: http.StatusBadRequest, Err: errors.New("id does not correspond to a double-auth")}
-		}
-
-		_, err = graphql.UpdateDoubleAuth(context.Background(), gqlClient, doubleAuth.GetDoubleAuthById.Id, doubleAuth.GetDoubleAuthById.Methods, saveCode.CreateSaveCode.Id, doubleAuth.GetDoubleAuthById.Url, doubleAuth.GetDoubleAuthById.Trust_device_id)
-		if err != nil {
-			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
-		}
-
+		doubleAuthId = patient.DoubleAuthMethodsID
 	} else {
-		doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, id)
+		doctor, err := graphql.GetDoctorById(id)
 		if err != nil {
 			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: http.StatusBadRequest, Err: errors.New("id does not correspond to a doctor")}
 		}
-		doubleAuth, err := graphql.GetDoubleAuthById(context.Background(), gqlClient, doctor.GetDoctorById.Double_auth_methods_id)
-		if err != nil {
-			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: http.StatusBadRequest, Err: errors.New("id does not correspond to a double-auth")}
-		}
+		doubleAuthId = doctor.DoubleAuthMethodsID
+	}
 
-		_, err = graphql.UpdateDoubleAuth(context.Background(), gqlClient, doubleAuth.GetDoubleAuthById.Id, doubleAuth.GetDoubleAuthById.Methods, saveCode.CreateSaveCode.Id, doubleAuth.GetDoubleAuthById.Url, doubleAuth.GetDoubleAuthById.Trust_device_id)
+	if doubleAuthId != nil {
+		_, err = graphql.UpdateDoubleAuth(*doubleAuthId, model.UpdateDoubleAuthInput{
+			Secret: &saveCode.ID,
+		})
+		if err != nil {
+			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
+		}
+	} else {
+		_, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
+			Methods:       []string{"BACKUPCODE"},
+			Secret:        saveCode.ID,
+			URL:           "",
+			TrustDeviceID: "",
+		})
 		if err != nil {
 			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
 		}
 	}
 
 	return CreateSaveCodeResponse{
-		SaveCode: model.SaveCode{
-			Code: codes,
-		},
-		Code: 201,
-		Err:  nil,
+		SaveCode: saveCode,
+		Code:     201,
+		Err:      nil,
 	}
 }
