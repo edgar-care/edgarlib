@@ -347,13 +347,13 @@ func (v *CreateDemoAccountResponse) GetCreateDemoAccount() CreateDemoAccountCrea
 
 // CreateDeviceConnectCreateDeviceConnect includes the requested fields of the GraphQL type DeviceConnect.
 type CreateDeviceConnectCreateDeviceConnect struct {
-	Id           string `json:"id"`
-	Device_name  string `json:"device_name"`
-	Ip_address   string `json:"ip_address"`
-	Latitude     int    `json:"latitude"`
-	Longitude    int    `json:"longitude"`
-	Date         int    `json:"date"`
-	Trust_device bool   `json:"trust_device"`
+	Id           string  `json:"id"`
+	Device_name  string  `json:"device_name"`
+	Ip_address   string  `json:"ip_address"`
+	Latitude     float64 `json:"latitude"`
+	Longitude    float64 `json:"longitude"`
+	Date         int     `json:"date"`
+	Trust_device bool    `json:"trust_device"`
 }
 
 // GetId returns CreateDeviceConnectCreateDeviceConnect.Id, and is useful for accessing the field via an interface.
@@ -366,10 +366,10 @@ func (v *CreateDeviceConnectCreateDeviceConnect) GetDevice_name() string { retur
 func (v *CreateDeviceConnectCreateDeviceConnect) GetIp_address() string { return v.Ip_address }
 
 // GetLatitude returns CreateDeviceConnectCreateDeviceConnect.Latitude, and is useful for accessing the field via an interface.
-func (v *CreateDeviceConnectCreateDeviceConnect) GetLatitude() int { return v.Latitude }
+func (v *CreateDeviceConnectCreateDeviceConnect) GetLatitude() float64 { return v.Latitude }
 
 // GetLongitude returns CreateDeviceConnectCreateDeviceConnect.Longitude, and is useful for accessing the field via an interface.
-func (v *CreateDeviceConnectCreateDeviceConnect) GetLongitude() int { return v.Longitude }
+func (v *CreateDeviceConnectCreateDeviceConnect) GetLongitude() float64 { return v.Longitude }
 
 // GetDate returns CreateDeviceConnectCreateDeviceConnect.Date, and is useful for accessing the field via an interface.
 func (v *CreateDeviceConnectCreateDeviceConnect) GetDate() int { return v.Date }
@@ -1834,13 +1834,13 @@ func (v *GetDemoAccountsResponse) GetGetDemoAccounts() []GetDemoAccountsGetDemoA
 
 // GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect includes the requested fields of the GraphQL type DeviceConnect.
 type GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect struct {
-	Id           string `json:"id"`
-	Device_name  string `json:"device_name"`
-	Ip_address   string `json:"ip_address"`
-	Latitude     int    `json:"latitude"`
-	Longitude    int    `json:"longitude"`
-	Date         int    `json:"date"`
-	Trust_device bool   `json:"trust_device"`
+	Id           string  `json:"id"`
+	Device_name  string  `json:"device_name"`
+	Ip_address   string  `json:"ip_address"`
+	Latitude     float64 `json:"latitude"`
+	Longitude    float64 `json:"longitude"`
+	Date         int     `json:"date"`
+	Trust_device bool    `json:"trust_device"`
 }
 
 // GetId returns GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect.Id, and is useful for accessing the field via an interface.
@@ -1857,10 +1857,12 @@ func (v *GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect) GetIp_address() 
 }
 
 // GetLatitude returns GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect.Latitude, and is useful for accessing the field via an interface.
-func (v *GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect) GetLatitude() int { return v.Latitude }
+func (v *GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect) GetLatitude() float64 {
+	return v.Latitude
+}
 
 // GetLongitude returns GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect.Longitude, and is useful for accessing the field via an interface.
-func (v *GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect) GetLongitude() int {
+func (v *GetDeviceConnectByIdGetDeviceConnectByIdDeviceConnect) GetLongitude() float64 {
 	return v.Longitude
 }
 
@@ -1884,13 +1886,13 @@ func (v *GetDeviceConnectByIdResponse) GetGetDeviceConnectById() GetDeviceConnec
 
 // GetDevicesConnectGetDevicesConnectDeviceConnect includes the requested fields of the GraphQL type DeviceConnect.
 type GetDevicesConnectGetDevicesConnectDeviceConnect struct {
-	Id           string `json:"id"`
-	Device_name  string `json:"device_name"`
-	Ip_address   string `json:"ip_address"`
-	Latitude     int    `json:"latitude"`
-	Longitude    int    `json:"longitude"`
-	Date         int    `json:"date"`
-	Trust_device bool   `json:"trust_device"`
+	Id           string  `json:"id"`
+	Device_name  string  `json:"device_name"`
+	Ip_address   string  `json:"ip_address"`
+	Latitude     float64 `json:"latitude"`
+	Longitude    float64 `json:"longitude"`
+	Date         int     `json:"date"`
+	Trust_device bool    `json:"trust_device"`
 }
 
 // GetId returns GetDevicesConnectGetDevicesConnectDeviceConnect.Id, and is useful for accessing the field via an interface.
@@ -1905,10 +1907,10 @@ func (v *GetDevicesConnectGetDevicesConnectDeviceConnect) GetDevice_name() strin
 func (v *GetDevicesConnectGetDevicesConnectDeviceConnect) GetIp_address() string { return v.Ip_address }
 
 // GetLatitude returns GetDevicesConnectGetDevicesConnectDeviceConnect.Latitude, and is useful for accessing the field via an interface.
-func (v *GetDevicesConnectGetDevicesConnectDeviceConnect) GetLatitude() int { return v.Latitude }
+func (v *GetDevicesConnectGetDevicesConnectDeviceConnect) GetLatitude() float64 { return v.Latitude }
 
 // GetLongitude returns GetDevicesConnectGetDevicesConnectDeviceConnect.Longitude, and is useful for accessing the field via an interface.
-func (v *GetDevicesConnectGetDevicesConnectDeviceConnect) GetLongitude() int { return v.Longitude }
+func (v *GetDevicesConnectGetDevicesConnectDeviceConnect) GetLongitude() float64 { return v.Longitude }
 
 // GetDate returns GetDevicesConnectGetDevicesConnectDeviceConnect.Date, and is useful for accessing the field via an interface.
 func (v *GetDevicesConnectGetDevicesConnectDeviceConnect) GetDate() int { return v.Date }
@@ -4241,13 +4243,13 @@ func (v *UpdateDeviceConnectResponse) GetUpdateDeviceConnect() UpdateDeviceConne
 
 // UpdateDeviceConnectUpdateDeviceConnect includes the requested fields of the GraphQL type DeviceConnect.
 type UpdateDeviceConnectUpdateDeviceConnect struct {
-	Id           string `json:"id"`
-	Device_name  string `json:"device_name"`
-	Ip_address   string `json:"ip_address"`
-	Latitude     int    `json:"latitude"`
-	Longitude    int    `json:"longitude"`
-	Date         int    `json:"date"`
-	Trust_device bool   `json:"trust_device"`
+	Id           string  `json:"id"`
+	Device_name  string  `json:"device_name"`
+	Ip_address   string  `json:"ip_address"`
+	Latitude     float64 `json:"latitude"`
+	Longitude    float64 `json:"longitude"`
+	Date         int     `json:"date"`
+	Trust_device bool    `json:"trust_device"`
 }
 
 // GetId returns UpdateDeviceConnectUpdateDeviceConnect.Id, and is useful for accessing the field via an interface.
@@ -4260,10 +4262,10 @@ func (v *UpdateDeviceConnectUpdateDeviceConnect) GetDevice_name() string { retur
 func (v *UpdateDeviceConnectUpdateDeviceConnect) GetIp_address() string { return v.Ip_address }
 
 // GetLatitude returns UpdateDeviceConnectUpdateDeviceConnect.Latitude, and is useful for accessing the field via an interface.
-func (v *UpdateDeviceConnectUpdateDeviceConnect) GetLatitude() int { return v.Latitude }
+func (v *UpdateDeviceConnectUpdateDeviceConnect) GetLatitude() float64 { return v.Latitude }
 
 // GetLongitude returns UpdateDeviceConnectUpdateDeviceConnect.Longitude, and is useful for accessing the field via an interface.
-func (v *UpdateDeviceConnectUpdateDeviceConnect) GetLongitude() int { return v.Longitude }
+func (v *UpdateDeviceConnectUpdateDeviceConnect) GetLongitude() float64 { return v.Longitude }
 
 // GetDate returns UpdateDeviceConnectUpdateDeviceConnect.Date, and is useful for accessing the field via an interface.
 func (v *UpdateDeviceConnectUpdateDeviceConnect) GetDate() int { return v.Date }
@@ -5009,12 +5011,12 @@ func (v *__CreateDemoAccountInput) GetPassword() string { return v.Password }
 
 // __CreateDeviceConnectInput is used internally by genqlient
 type __CreateDeviceConnectInput struct {
-	Device_name  string `json:"device_name"`
-	Ip_address   string `json:"ip_address"`
-	Latitude     int    `json:"latitude"`
-	Longitude    int    `json:"longitude"`
-	Date         int    `json:"date"`
-	Trust_device bool   `json:"trust_device"`
+	Device_name  string  `json:"device_name"`
+	Ip_address   string  `json:"ip_address"`
+	Latitude     float64 `json:"latitude"`
+	Longitude    float64 `json:"longitude"`
+	Date         int     `json:"date"`
+	Trust_device bool    `json:"trust_device"`
 }
 
 // GetDevice_name returns __CreateDeviceConnectInput.Device_name, and is useful for accessing the field via an interface.
@@ -5024,10 +5026,10 @@ func (v *__CreateDeviceConnectInput) GetDevice_name() string { return v.Device_n
 func (v *__CreateDeviceConnectInput) GetIp_address() string { return v.Ip_address }
 
 // GetLatitude returns __CreateDeviceConnectInput.Latitude, and is useful for accessing the field via an interface.
-func (v *__CreateDeviceConnectInput) GetLatitude() int { return v.Latitude }
+func (v *__CreateDeviceConnectInput) GetLatitude() float64 { return v.Latitude }
 
 // GetLongitude returns __CreateDeviceConnectInput.Longitude, and is useful for accessing the field via an interface.
-func (v *__CreateDeviceConnectInput) GetLongitude() int { return v.Longitude }
+func (v *__CreateDeviceConnectInput) GetLongitude() float64 { return v.Longitude }
 
 // GetDate returns __CreateDeviceConnectInput.Date, and is useful for accessing the field via an interface.
 func (v *__CreateDeviceConnectInput) GetDate() int { return v.Date }
@@ -5997,13 +5999,13 @@ func (v *__UpdateDemoAccountInput) GetPassword() string { return v.Password }
 
 // __UpdateDeviceConnectInput is used internally by genqlient
 type __UpdateDeviceConnectInput struct {
-	Id           string `json:"id"`
-	Device_name  string `json:"device_name"`
-	Ip_address   string `json:"ip_address"`
-	Latitude     int    `json:"latitude"`
-	Longitude    int    `json:"longitude"`
-	Date         int    `json:"date"`
-	Trust_device bool   `json:"trust_device"`
+	Id           string  `json:"id"`
+	Device_name  string  `json:"device_name"`
+	Ip_address   string  `json:"ip_address"`
+	Latitude     float64 `json:"latitude"`
+	Longitude    float64 `json:"longitude"`
+	Date         int     `json:"date"`
+	Trust_device bool    `json:"trust_device"`
 }
 
 // GetId returns __UpdateDeviceConnectInput.Id, and is useful for accessing the field via an interface.
@@ -6016,10 +6018,10 @@ func (v *__UpdateDeviceConnectInput) GetDevice_name() string { return v.Device_n
 func (v *__UpdateDeviceConnectInput) GetIp_address() string { return v.Ip_address }
 
 // GetLatitude returns __UpdateDeviceConnectInput.Latitude, and is useful for accessing the field via an interface.
-func (v *__UpdateDeviceConnectInput) GetLatitude() int { return v.Latitude }
+func (v *__UpdateDeviceConnectInput) GetLatitude() float64 { return v.Latitude }
 
 // GetLongitude returns __UpdateDeviceConnectInput.Longitude, and is useful for accessing the field via an interface.
-func (v *__UpdateDeviceConnectInput) GetLongitude() int { return v.Longitude }
+func (v *__UpdateDeviceConnectInput) GetLongitude() float64 { return v.Longitude }
 
 // GetDate returns __UpdateDeviceConnectInput.Date, and is useful for accessing the field via an interface.
 func (v *__UpdateDeviceConnectInput) GetDate() int { return v.Date }
@@ -6816,7 +6818,7 @@ func CreateDemoAccount(
 
 // The query or mutation executed by CreateDeviceConnect.
 const CreateDeviceConnect_Operation = `
-mutation CreateDeviceConnect ($device_name: String!, $ip_address: String!, $latitude: Int!, $longitude: Int!, $date: Int!, $trust_device: Boolean!) {
+mutation CreateDeviceConnect ($device_name: String!, $ip_address: String!, $latitude: Float!, $longitude: Float!, $date: Int!, $trust_device: Boolean!) {
 	createDeviceConnect(device_name: $device_name, ip_address: $ip_address, latitude: $latitude, longitude: $longitude, date: $date, trust_device: $trust_device) {
 		id
 		device_name
@@ -6834,8 +6836,8 @@ func CreateDeviceConnect(
 	client graphql.Client,
 	device_name string,
 	ip_address string,
-	latitude int,
-	longitude int,
+	latitude float64,
+	longitude float64,
 	date int,
 	trust_device bool,
 ) (*CreateDeviceConnectResponse, error) {
@@ -10818,7 +10820,7 @@ func UpdateDemoAccount(
 
 // The query or mutation executed by UpdateDeviceConnect.
 const UpdateDeviceConnect_Operation = `
-mutation UpdateDeviceConnect ($id: String!, $device_name: String, $ip_address: String, $latitude: Int, $longitude: Int, $date: Int, $trust_device: Boolean) {
+mutation UpdateDeviceConnect ($id: String!, $device_name: String, $ip_address: String, $latitude: Float, $longitude: Float, $date: Int, $trust_device: Boolean) {
 	updateDeviceConnect(id: $id, device_name: $device_name, ip_address: $ip_address, latitude: $latitude, longitude: $longitude, date: $date, trust_device: $trust_device) {
 		id
 		device_name
@@ -10837,8 +10839,8 @@ func UpdateDeviceConnect(
 	id string,
 	device_name string,
 	ip_address string,
-	latitude int,
-	longitude int,
+	latitude float64,
+	longitude float64,
 	date int,
 	trust_device bool,
 ) (*UpdateDeviceConnectResponse, error) {

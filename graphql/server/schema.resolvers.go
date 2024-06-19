@@ -1588,7 +1588,7 @@ func (r *mutationResolver) DeleteChat(ctx context.Context, id string) (*bool, er
 }
 
 // CreateDeviceConnect is the resolver for the createDeviceConnect field.
-func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude int, longitude int, date int, trustDevice bool) (*model.DeviceConnect, error) {
+func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) (*model.DeviceConnect, error) {
 	newDevice := bson.M{
 		"device_name":  deviceName,
 		"ip_address":   ipAddress,
@@ -1615,7 +1615,7 @@ func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, deviceName s
 }
 
 // UpdateDeviceConnect is the resolver for the updateDeviceConnect field.
-func (r *mutationResolver) UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *int, longitude *int, date *int, trustDevice *bool) (*model.DeviceConnect, error) {
+func (r *mutationResolver) UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) (*model.DeviceConnect, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err

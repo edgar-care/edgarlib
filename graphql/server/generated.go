@@ -205,7 +205,7 @@ type ComplexityRoot struct {
 		CreateAnteFamily         func(childComplexity int, name string, disease []string) int
 		CreateChat               func(childComplexity int, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
 		CreateDemoAccount        func(childComplexity int, email string, password string) int
-		CreateDeviceConnect      func(childComplexity int, deviceName string, ipAddress string, latitude int, longitude int, date int, trustDevice bool) int
+		CreateDeviceConnect      func(childComplexity int, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) int
 		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, advice *string) int
 		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
 		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
@@ -249,7 +249,7 @@ type ComplexityRoot struct {
 		UpdateAnteFamily         func(childComplexity int, id string, name *string, disease []string) int
 		UpdateChat               func(childComplexity int, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
 		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
-		UpdateDeviceConnect      func(childComplexity int, id string, deviceName *string, ipAddress *string, latitude *int, longitude *int, date *int, trustDevice *bool) int
+		UpdateDeviceConnect      func(childComplexity int, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) int
 		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, advice *string) int
 		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) int
 		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
@@ -499,8 +499,8 @@ type MutationResolver interface {
 	CreateChat(ctx context.Context, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error)
 	UpdateChat(ctx context.Context, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error)
 	DeleteChat(ctx context.Context, id string) (*bool, error)
-	CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude int, longitude int, date int, trustDevice bool) (*model.DeviceConnect, error)
-	UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *int, longitude *int, date *int, trustDevice *bool) (*model.DeviceConnect, error)
+	CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) (*model.DeviceConnect, error)
+	UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) (*model.DeviceConnect, error)
 	DeleteDeviceConnect(ctx context.Context, id string) (*bool, error)
 }
 type QueryResolver interface {
@@ -1332,7 +1332,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDeviceConnect(childComplexity, args["device_name"].(string), args["ip_address"].(string), args["latitude"].(int), args["longitude"].(int), args["date"].(int), args["trust_device"].(bool)), true
+		return e.complexity.Mutation.CreateDeviceConnect(childComplexity, args["device_name"].(string), args["ip_address"].(string), args["latitude"].(float64), args["longitude"].(float64), args["date"].(int), args["trust_device"].(bool)), true
 
 	case "Mutation.createDisease":
 		if e.complexity.Mutation.CreateDisease == nil {
@@ -1860,7 +1860,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDeviceConnect(childComplexity, args["id"].(string), args["device_name"].(*string), args["ip_address"].(*string), args["latitude"].(*int), args["longitude"].(*int), args["date"].(*int), args["trust_device"].(*bool)), true
+		return e.complexity.Mutation.UpdateDeviceConnect(childComplexity, args["id"].(string), args["device_name"].(*string), args["ip_address"].(*string), args["latitude"].(*float64), args["longitude"].(*float64), args["date"].(*int), args["trust_device"].(*bool)), true
 
 	case "Mutation.updateDisease":
 		if e.complexity.Mutation.UpdateDisease == nil {
@@ -3575,8 +3575,8 @@ type DeviceConnect {
     id: ID!
     device_name: String!
     ip_address: String!
-    latitude: Int!
-    longitude: Int!
+    latitude: Float!
+    longitude: Float!
     date: Int!
     trust_device: Boolean!
 }
@@ -3940,10 +3940,10 @@ type Mutation {
 
 
     # Create new DeviceConnect
-    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Int!, longitude: Int!, date: Int!, trust_device: Boolean!): DeviceConnect
+    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Float!, longitude: Float!, date: Int!, trust_device: Boolean!): DeviceConnect
 
     #update a DeviceConnect
-    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Int, longitude: Int, date: Int, trust_device: Boolean): DeviceConnect
+    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Float, longitude: Float, date: Int, trust_device: Boolean): DeviceConnect
 
     #Delete a DeviceConnect
     deleteDeviceConnect(id: String!): Boolean
@@ -4293,19 +4293,19 @@ func (ec *executionContext) field_Mutation_createDeviceConnect_args(ctx context.
 		}
 	}
 	args["ip_address"] = arg1
-	var arg2 int
+	var arg2 float64
 	if tmp, ok := rawArgs["latitude"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
-		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
+		arg2, err = ec.unmarshalNFloat2float64(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
 	args["latitude"] = arg2
-	var arg3 int
+	var arg3 float64
 	if tmp, ok := rawArgs["longitude"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
-		arg3, err = ec.unmarshalNInt2int(ctx, tmp)
+		arg3, err = ec.unmarshalNFloat2float64(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5790,19 +5790,19 @@ func (ec *executionContext) field_Mutation_updateDeviceConnect_args(ctx context.
 		}
 	}
 	args["ip_address"] = arg2
-	var arg3 *int
+	var arg3 *float64
 	if tmp, ok := rawArgs["latitude"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
-		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		arg3, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
 	args["latitude"] = arg3
-	var arg4 *int
+	var arg4 *float64
 	if tmp, ok := rawArgs["longitude"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
-		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		arg4, err = ec.unmarshalOFloat2ᚖfloat64(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -9273,9 +9273,9 @@ func (ec *executionContext) _DeviceConnect_latitude(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_DeviceConnect_latitude(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9285,7 +9285,7 @@ func (ec *executionContext) fieldContext_DeviceConnect_latitude(ctx context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -9317,9 +9317,9 @@ func (ec *executionContext) _DeviceConnect_longitude(ctx context.Context, field 
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_DeviceConnect_longitude(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9329,7 +9329,7 @@ func (ec *executionContext) fieldContext_DeviceConnect_longitude(ctx context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -15192,7 +15192,7 @@ func (ec *executionContext) _Mutation_createDeviceConnect(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDeviceConnect(rctx, fc.Args["device_name"].(string), fc.Args["ip_address"].(string), fc.Args["latitude"].(int), fc.Args["longitude"].(int), fc.Args["date"].(int), fc.Args["trust_device"].(bool))
+		return ec.resolvers.Mutation().CreateDeviceConnect(rctx, fc.Args["device_name"].(string), fc.Args["ip_address"].(string), fc.Args["latitude"].(float64), fc.Args["longitude"].(float64), fc.Args["date"].(int), fc.Args["trust_device"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -15260,7 +15260,7 @@ func (ec *executionContext) _Mutation_updateDeviceConnect(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDeviceConnect(rctx, fc.Args["id"].(string), fc.Args["device_name"].(*string), fc.Args["ip_address"].(*string), fc.Args["latitude"].(*int), fc.Args["longitude"].(*int), fc.Args["date"].(*int), fc.Args["trust_device"].(*bool))
+		return ec.resolvers.Mutation().UpdateDeviceConnect(rctx, fc.Args["id"].(string), fc.Args["device_name"].(*string), fc.Args["ip_address"].(*string), fc.Args["latitude"].(*float64), fc.Args["longitude"].(*float64), fc.Args["date"].(*int), fc.Args["trust_device"].(*bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

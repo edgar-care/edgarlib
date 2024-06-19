@@ -360,8 +360,8 @@ type DeviceConnect {
     id: ID!
     device_name: String!
     ip_address: String!
-    latitude: Int!
-    longitude: Int!
+    latitude: Float!
+    longitude: Float!
     date: Int!
     trust_device: Boolean!
 }
@@ -725,10 +725,10 @@ type Mutation {
 
 
     # Create new DeviceConnect
-    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Int!, longitude: Int!, date: Int!, trust_device: Boolean!): DeviceConnect
+    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Float!, longitude: Float!, date: Int!, trust_device: Boolean!): DeviceConnect
 
     #update a DeviceConnect
-    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Int, longitude: Int, date: Int, trust_device: Boolean): DeviceConnect
+    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Float, longitude: Float, date: Int, trust_device: Boolean): DeviceConnect
 
     #Delete a DeviceConnect
     deleteDeviceConnect(id: String!): Boolean

@@ -9,11 +9,11 @@ import (
 )
 
 type CreateDeviceConnectInput struct {
-	DeviceName string `json:"device_name"`
-	Ip         string `json:"ip"`
-	Latitude   int    `json:"latitude"`
-	Longitude  int    `json:"longitude"`
-	Date       int    `json:"date"`
+	DeviceName string  `json:"device_name"`
+	Ip         string  `json:"ip"`
+	Latitude   float64 `json:"latitude"`
+	Longitude  float64 `json:"longitude"`
+	Date       int     `json:"date"`
 	//TrustDevice bool   `json:"trust_device"`
 }
 

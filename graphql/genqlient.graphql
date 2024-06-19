@@ -1291,7 +1291,7 @@ mutation DeleteChat($id: String!){
 
 
 
-mutation CreateDeviceConnect($device_name: String!, $ip_address: String!, $latitude: Int!, $longitude: Int!, $date: Int!, $trust_device: Boolean!) {
+mutation CreateDeviceConnect($device_name: String!, $ip_address: String!, $latitude: Float!, $longitude: Float!, $date: Int!, $trust_device: Boolean!) {
     createDeviceConnect(device_name: $device_name, ip_address: $ip_address, latitude: $latitude, longitude: $longitude, date: $date, trust_device: $trust_device) {
         id
         device_name
@@ -1303,7 +1303,7 @@ mutation CreateDeviceConnect($device_name: String!, $ip_address: String!, $latit
     }
 }
 
-mutation UpdateDeviceConnect($id: String!, $device_name: String, $ip_address: String, $latitude: Int, $longitude: Int, $date: Int, $trust_device: Boolean) {
+mutation UpdateDeviceConnect($id: String!, $device_name: String, $ip_address: String, $latitude: Float, $longitude: Float, $date: Int, $trust_device: Boolean) {
     updateDeviceConnect(id: $id, device_name: $device_name, ip_address: $ip_address, latitude: $latitude, longitude: $longitude, date: $date, trust_device: $trust_device) {
         id
         device_name

@@ -107,13 +107,13 @@ type DemoAccount struct {
 }
 
 type DeviceConnect struct {
-	ID          string `json:"id" bson:"_id"`
-	DeviceName  string `json:"device_name" bson:"device_name"`
-	IPAddress   string `json:"ip_address" bson:"ip_address"`
-	Latitude    int    `json:"latitude" bson:"latitude"`
-	Longitude   int    `json:"longitude" bson:"longitude"`
-	Date        int    `json:"date" bson:"date"`
-	TrustDevice bool   `json:"trust_device" bson:"trust_device"`
+	ID          string  `json:"id" bson:"_id"`
+	DeviceName  string  `json:"device_name" bson:"device_name"`
+	IPAddress   string  `json:"ip_address" bson:"ip_address"`
+	Latitude    float64 `json:"latitude" bson:"latitude"`
+	Longitude   float64 `json:"longitude" bson:"longitude"`
+	Date        int     `json:"date" bson:"date"`
+	TrustDevice bool    `json:"trust_device" bson:"trust_device"`
 }
 
 type Disease struct {
