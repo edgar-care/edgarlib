@@ -43,7 +43,7 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string) (*model.Patient, error) {
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -59,6 +59,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		"document_ids":            documentIds,
 		"treatment_follow_up_ids": treatmentFollowUpIds,
 		"chat_ids":                chatIds,
+		"device_connect":          deviceConnect,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
 	return &model.Patient{
@@ -70,6 +71,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		DocumentIds:          documentIds,
 		TreatmentFollowUpIds: treatmentFollowUpIds,
 		ChatIds:              chatIds,
+		DeviceConnect:        deviceConnect,
 	}, err
 }
 
@@ -1585,6 +1587,80 @@ func (r *mutationResolver) DeleteChat(ctx context.Context, id string) (*bool, er
 	return &resp, err
 }
 
+// CreateDeviceConnect is the resolver for the createDeviceConnect field.
+func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude int, longitude int, date int, trustDevice bool) (*model.DeviceConnect, error) {
+	newDevice := bson.M{
+		"device_name":  deviceName,
+		"ip_address":   ipAddress,
+		"latitude":     latitude,
+		"longitude":    longitude,
+		"date":         date,
+		"trust_device": trustDevice,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").InsertOne(ctx, newDevice)
+	if err != nil {
+		return nil, err
+	}
+	entity := model.DeviceConnect{
+		ID:          res.InsertedID.(primitive.ObjectID).Hex(),
+		DeviceName:  deviceName,
+		IPAddress:   ipAddress,
+		Latitude:    latitude,
+		Longitude:   longitude,
+		Date:        date,
+		TrustDevice: trustDevice,
+	}
+	return &entity, err
+}
+
+// UpdateDeviceConnect is the resolver for the updateDeviceConnect field.
+func (r *mutationResolver) UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *int, longitude *int, date *int, trustDevice *bool) (*model.DeviceConnect, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":          objId,
+		"device_name":  deviceName,
+		"ip_address":   ipAddress,
+		"latitude":     latitude,
+		"longitude":    longitude,
+		"date":         date,
+		"trust_device": trustDevice,
+	}
+
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").ReplaceOne(ctx, filter, updated)
+
+	return &model.DeviceConnect{
+		ID:          id,
+		DeviceName:  *deviceName,
+		IPAddress:   *ipAddress,
+		Latitude:    *latitude,
+		Longitude:   *longitude,
+		Date:        *date,
+		TrustDevice: *trustDevice,
+	}, err
+}
+
+// DeleteDeviceConnect is the resolver for the deleteDeviceConnect field.
+func (r *mutationResolver) DeleteDeviceConnect(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -2577,6 +2653,41 @@ func (r *queryResolver) GetChatByID(ctx context.Context, id string) (*model.Chat
 		return nil, err
 	}
 	return &result, nil
+}
+
+// GetDeviceConnectByID is the resolver for the getDeviceConnectById field.
+func (r *queryResolver) GetDeviceConnectByID(ctx context.Context, id string) (*model.DeviceConnect, error) {
+	var result model.DeviceConnect
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetDevicesConnect is the resolver for the getDevicesConnect field.
+func (r *queryResolver) GetDevicesConnect(ctx context.Context) ([]*model.DeviceConnect, error) {
+	var report []*model.DeviceConnect
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
 }
 
 // Mutation returns MutationResolver implementation.

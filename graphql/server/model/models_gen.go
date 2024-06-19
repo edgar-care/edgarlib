@@ -106,6 +106,16 @@ type DemoAccount struct {
 	Password string `json:"password" bson:"password"`
 }
 
+type DeviceConnect struct {
+	ID          string `json:"id" bson:"_id"`
+	DeviceName  string `json:"device_name" bson:"device_name"`
+	IPAddress   string `json:"ip_address" bson:"ip_address"`
+	Latitude    int    `json:"latitude" bson:"latitude"`
+	Longitude   int    `json:"longitude" bson:"longitude"`
+	Date        int    `json:"date" bson:"date"`
+	TrustDevice bool   `json:"trust_device" bson:"trust_device"`
+}
+
 type Disease struct {
 	ID               string            `json:"id" bson:"_id"`
 	Code             string            `json:"code" bson:"code"`
@@ -231,6 +241,7 @@ type Patient struct {
 	DocumentIds          []*string `json:"document_ids,omitempty" bson:"document_ids"`
 	TreatmentFollowUpIds []*string `json:"treatment_follow_up_ids,omitempty" bson:"treatment_follow_up_ids"`
 	ChatIds              []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
+	DeviceConnect        []*string `json:"device_connect,omitempty" bson:"device_connect"`
 }
 
 type Query struct {

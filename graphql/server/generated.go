@@ -121,6 +121,16 @@ type ComplexityRoot struct {
 		Password func(childComplexity int) int
 	}
 
+	DeviceConnect struct {
+		Date        func(childComplexity int) int
+		DeviceName  func(childComplexity int) int
+		ID          func(childComplexity int) int
+		IPAddress   func(childComplexity int) int
+		Latitude    func(childComplexity int) int
+		Longitude   func(childComplexity int) int
+		TrustDevice func(childComplexity int) int
+	}
+
 	Disease struct {
 		Advice           func(childComplexity int) int
 		Code             func(childComplexity int) int
@@ -195,6 +205,7 @@ type ComplexityRoot struct {
 		CreateAnteFamily         func(childComplexity int, name string, disease []string) int
 		CreateChat               func(childComplexity int, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
 		CreateDemoAccount        func(childComplexity int, email string, password string) int
+		CreateDeviceConnect      func(childComplexity int, deviceName string, ipAddress string, latitude int, longitude int, date int, trustDevice bool) int
 		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, advice *string) int
 		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
 		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
@@ -216,6 +227,7 @@ type ComplexityRoot struct {
 		DeleteAnteFamily         func(childComplexity int, id string) int
 		DeleteChat               func(childComplexity int, id string) int
 		DeleteDemoAccount        func(childComplexity int, id string) int
+		DeleteDeviceConnect      func(childComplexity int, id string) int
 		DeleteDisease            func(childComplexity int, id string) int
 		DeleteDoctor             func(childComplexity int, id string) int
 		DeleteDocument           func(childComplexity int, id string) int
@@ -237,12 +249,13 @@ type ComplexityRoot struct {
 		UpdateAnteFamily         func(childComplexity int, id string, name *string, disease []string) int
 		UpdateChat               func(childComplexity int, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
 		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
+		UpdateDeviceConnect      func(childComplexity int, id string, deviceName *string, ipAddress *string, latitude *int, longitude *int, date *int, trustDevice *bool) int
 		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, advice *string) int
 		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) int
 		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
 		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus) int
 		UpdateNotification       func(childComplexity int, id string, token string, message string, title string) int
-		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string) int
+		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string) int
 		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) int
 		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, alerts []string) int
 		UpdateSymptom            func(childComplexity int, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) int
@@ -275,6 +288,7 @@ type ComplexityRoot struct {
 
 	Patient struct {
 		ChatIds              func(childComplexity int) int
+		DeviceConnect        func(childComplexity int) int
 		DocumentIds          func(childComplexity int) int
 		Email                func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -301,6 +315,8 @@ type ComplexityRoot struct {
 		GetDemoAccountByEmail     func(childComplexity int, email string) int
 		GetDemoAccountByID        func(childComplexity int, id string) int
 		GetDemoAccounts           func(childComplexity int) int
+		GetDeviceConnectByID      func(childComplexity int, id string) int
+		GetDevicesConnect         func(childComplexity int) int
 		GetDiseaseByID            func(childComplexity int, id string) int
 		GetDiseases               func(childComplexity int) int
 		GetDoctorByEmail          func(childComplexity int, email string) int
@@ -423,7 +439,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreatePatient(ctx context.Context, email string, password string) (*model.Patient, error)
-	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string) (*model.Patient, error)
+	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error)
 	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) (*model.Doctor, error)
@@ -483,6 +499,9 @@ type MutationResolver interface {
 	CreateChat(ctx context.Context, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error)
 	UpdateChat(ctx context.Context, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) (*model.Chat, error)
 	DeleteChat(ctx context.Context, id string) (*bool, error)
+	CreateDeviceConnect(ctx context.Context, deviceName string, ipAddress string, latitude int, longitude int, date int, trustDevice bool) (*model.DeviceConnect, error)
+	UpdateDeviceConnect(ctx context.Context, id string, deviceName *string, ipAddress *string, latitude *int, longitude *int, date *int, trustDevice *bool) (*model.DeviceConnect, error)
+	DeleteDeviceConnect(ctx context.Context, id string) (*bool, error)
 }
 type QueryResolver interface {
 	GetPatients(ctx context.Context) ([]*model.Patient, error)
@@ -538,6 +557,8 @@ type QueryResolver interface {
 	GetNlpReportsByVersion(ctx context.Context, version int) ([]*model.NlpReport, error)
 	GetChats(ctx context.Context, id string) ([]*model.Chat, error)
 	GetChatByID(ctx context.Context, id string) (*model.Chat, error)
+	GetDeviceConnectByID(ctx context.Context, id string) (*model.DeviceConnect, error)
+	GetDevicesConnect(ctx context.Context) ([]*model.DeviceConnect, error)
 }
 
 type executableSchema struct {
@@ -852,6 +873,55 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.DemoAccount.Password(childComplexity), true
+
+	case "DeviceConnect.date":
+		if e.complexity.DeviceConnect.Date == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.Date(childComplexity), true
+
+	case "DeviceConnect.device_name":
+		if e.complexity.DeviceConnect.DeviceName == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.DeviceName(childComplexity), true
+
+	case "DeviceConnect.id":
+		if e.complexity.DeviceConnect.ID == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.ID(childComplexity), true
+
+	case "DeviceConnect.ip_address":
+		if e.complexity.DeviceConnect.IPAddress == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.IPAddress(childComplexity), true
+
+	case "DeviceConnect.latitude":
+		if e.complexity.DeviceConnect.Latitude == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.Latitude(childComplexity), true
+
+	case "DeviceConnect.longitude":
+		if e.complexity.DeviceConnect.Longitude == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.Longitude(childComplexity), true
+
+	case "DeviceConnect.trust_device":
+		if e.complexity.DeviceConnect.TrustDevice == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.TrustDevice(childComplexity), true
 
 	case "Disease.advice":
 		if e.complexity.Disease.Advice == nil {
@@ -1252,6 +1322,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateDemoAccount(childComplexity, args["email"].(string), args["password"].(string)), true
 
+	case "Mutation.createDeviceConnect":
+		if e.complexity.Mutation.CreateDeviceConnect == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDeviceConnect_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDeviceConnect(childComplexity, args["device_name"].(string), args["ip_address"].(string), args["latitude"].(int), args["longitude"].(int), args["date"].(int), args["trust_device"].(bool)), true
+
 	case "Mutation.createDisease":
 		if e.complexity.Mutation.CreateDisease == nil {
 			break
@@ -1503,6 +1585,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteDemoAccount(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteDeviceConnect":
+		if e.complexity.Mutation.DeleteDeviceConnect == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDeviceConnect_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDeviceConnect(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteDisease":
 		if e.complexity.Mutation.DeleteDisease == nil {
@@ -1756,6 +1850,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateDemoAccount(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string)), true
 
+	case "Mutation.updateDeviceConnect":
+		if e.complexity.Mutation.UpdateDeviceConnect == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDeviceConnect_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDeviceConnect(childComplexity, args["id"].(string), args["device_name"].(*string), args["ip_address"].(*string), args["latitude"].(*int), args["longitude"].(*int), args["date"].(*int), args["trust_device"].(*bool)), true
+
 	case "Mutation.updateDisease":
 		if e.complexity.Mutation.UpdateDisease == nil {
 			break
@@ -1826,7 +1932,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string), args["chat_ids"].([]*string)), true
+		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string), args["chat_ids"].([]*string), args["device_connect"].([]*string)), true
 
 	case "Mutation.updateRdv":
 		if e.complexity.Mutation.UpdateRdv == nil {
@@ -1997,6 +2103,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Patient.ChatIds(childComplexity), true
+
+	case "Patient.device_connect":
+		if e.complexity.Patient.DeviceConnect == nil {
+			break
+		}
+
+		return e.complexity.Patient.DeviceConnect(childComplexity), true
 
 	case "Patient.document_ids":
 		if e.complexity.Patient.DocumentIds == nil {
@@ -2208,6 +2321,25 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetDemoAccounts(childComplexity), true
+
+	case "Query.getDeviceConnectById":
+		if e.complexity.Query.GetDeviceConnectByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getDeviceConnectById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDeviceConnectByID(childComplexity, args["id"].(string)), true
+
+	case "Query.getDevicesConnect":
+		if e.complexity.Query.GetDevicesConnect == nil {
+			break
+		}
+
+		return e.complexity.Query.GetDevicesConnect(childComplexity), true
 
 	case "Query.getDiseaseById":
 		if e.complexity.Query.GetDiseaseByID == nil {
@@ -3190,6 +3322,8 @@ type Patient {
     document_ids: [String]
     treatment_follow_up_ids: [String]
     chat_ids: [String]
+    #double_auth_method: [String]
+    device_connect: [String]
 }
 
 # Doctor entity
@@ -3429,6 +3563,24 @@ type Chat {
     messages: [ChatMessages!]!
 }
 
+#type DoubleAuth {
+#    id: ID!
+#    methods: [String!]!
+#    secret: String!
+#    url: String!
+#    trust_device_id: String!
+#}
+
+type DeviceConnect {
+    id: ID!
+    device_name: String!
+    ip_address: String!
+    latitude: Int!
+    longitude: Int!
+    date: Int!
+    trust_device: Boolean!
+}
+
 
 ## Query  --------------------------------------------------------------------------------------------------------------
 
@@ -3594,6 +3746,13 @@ type Query {
     # Get chat by its id
     getChatById(id: String!): Chat
 
+    #================================================
+    # Get device by its id
+    getDeviceConnectById(id: String!): DeviceConnect
+
+    # Get DeviceConnects
+    getDevicesConnect: [DeviceConnect]
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
@@ -3603,7 +3762,7 @@ type Mutation {
     createPatient(email: String!, password: String!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String]): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String]): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -3778,6 +3937,16 @@ type Mutation {
 
     #Delete a Chat
     deleteChat(id: String!): Boolean
+
+
+    # Create new DeviceConnect
+    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Int!, longitude: Int!, date: Int!, trust_device: Boolean!): DeviceConnect
+
+    #update a DeviceConnect
+    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Int, longitude: Int, date: Int, trust_device: Boolean): DeviceConnect
+
+    #Delete a DeviceConnect
+    deleteDeviceConnect(id: String!): Boolean
 }
 
 
@@ -4100,6 +4269,66 @@ func (ec *executionContext) field_Mutation_createDemoAccount_args(ctx context.Co
 		}
 	}
 	args["password"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["device_name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["device_name"] = arg0
+	var arg1 string
+	if tmp, ok := rawArgs["ip_address"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
+		arg1, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ip_address"] = arg1
+	var arg2 int
+	if tmp, ok := rawArgs["latitude"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
+		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["latitude"] = arg2
+	var arg3 int
+	if tmp, ok := rawArgs["longitude"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
+		arg3, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["longitude"] = arg3
+	var arg4 int
+	if tmp, ok := rawArgs["date"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+		arg4, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["date"] = arg4
+	var arg5 bool
+	if tmp, ok := rawArgs["trust_device"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device"))
+		arg5, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["trust_device"] = arg5
 	return args, nil
 }
 
@@ -4985,6 +5214,21 @@ func (ec *executionContext) field_Mutation_deleteDemoAccount_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteDisease_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -5516,6 +5760,75 @@ func (ec *executionContext) field_Mutation_updateDemoAccount_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["device_name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
+		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["device_name"] = arg1
+	var arg2 *string
+	if tmp, ok := rawArgs["ip_address"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
+		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ip_address"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["latitude"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["latitude"] = arg3
+	var arg4 *int
+	if tmp, ok := rawArgs["longitude"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["longitude"] = arg4
+	var arg5 *int
+	if tmp, ok := rawArgs["date"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
+		arg5, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["date"] = arg5
+	var arg6 *bool
+	if tmp, ok := rawArgs["trust_device"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device"))
+		arg6, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["trust_device"] = arg6
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateDisease_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -5918,6 +6231,15 @@ func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Contex
 		}
 	}
 	args["chat_ids"] = arg7
+	var arg8 []*string
+	if tmp, ok := rawArgs["device_connect"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+		arg8, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["device_connect"] = arg8
 	return args, nil
 }
 
@@ -6504,6 +6826,21 @@ func (ec *executionContext) field_Query_getDemoAccountByEmail_args(ctx context.C
 }
 
 func (ec *executionContext) field_Query_getDemoAccountById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getDeviceConnectById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -8778,6 +9115,314 @@ func (ec *executionContext) fieldContext_DemoAccount_password(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _DeviceConnect_id(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_device_name(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_device_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DeviceName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_device_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_ip_address(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_ip_address(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IPAddress, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_ip_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_latitude(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_latitude(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Latitude, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_latitude(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_longitude(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_longitude(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Longitude, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_longitude(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_date(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_date(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Date, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_date(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_trust_device(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TrustDevice, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_trust_device(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Disease_id(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Disease_id(ctx, field)
 	if err != nil {
@@ -10825,6 +11470,8 @@ func (ec *executionContext) fieldContext_Mutation_createPatient(ctx context.Cont
 				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -10857,7 +11504,7 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string), fc.Args["chat_ids"].([]*string))
+		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10895,6 +11542,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Cont
 				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -14529,6 +15178,194 @@ func (ec *executionContext) fieldContext_Mutation_deleteChat(ctx context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createDeviceConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createDeviceConnect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateDeviceConnect(rctx, fc.Args["device_name"].(string), fc.Args["ip_address"].(string), fc.Args["latitude"].(int), fc.Args["longitude"].(int), fc.Args["date"].(int), fc.Args["trust_device"].(bool))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.DeviceConnect)
+	fc.Result = res
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DeviceConnect_id(ctx, field)
+			case "device_name":
+				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "ip_address":
+				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
+			case "latitude":
+				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
+			case "longitude":
+				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "date":
+				return ec.fieldContext_DeviceConnect_date(ctx, field)
+			case "trust_device":
+				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createDeviceConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateDeviceConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateDeviceConnect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateDeviceConnect(rctx, fc.Args["id"].(string), fc.Args["device_name"].(*string), fc.Args["ip_address"].(*string), fc.Args["latitude"].(*int), fc.Args["longitude"].(*int), fc.Args["date"].(*int), fc.Args["trust_device"].(*bool))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.DeviceConnect)
+	fc.Result = res
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DeviceConnect_id(ctx, field)
+			case "device_name":
+				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "ip_address":
+				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
+			case "latitude":
+				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
+			case "longitude":
+				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "date":
+				return ec.fieldContext_DeviceConnect_date(ctx, field)
+			case "trust_device":
+				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateDeviceConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteDeviceConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteDeviceConnect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteDeviceConnect(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteDeviceConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _NlpReport_id(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_NlpReport_id(ctx, field)
 	if err != nil {
@@ -15440,6 +16277,47 @@ func (ec *executionContext) fieldContext_Patient_chat_ids(ctx context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _Patient_device_connect(ctx context.Context, field graphql.CollectedField, obj *model.Patient) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Patient_device_connect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DeviceConnect, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Patient_device_connect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Patient",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_getPatients(ctx, field)
 	if err != nil {
@@ -15492,6 +16370,8 @@ func (ec *executionContext) fieldContext_Query_getPatients(ctx context.Context, 
 				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -15551,6 +16431,8 @@ func (ec *executionContext) fieldContext_Query_getPatientById(ctx context.Contex
 				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -15621,6 +16503,8 @@ func (ec *executionContext) fieldContext_Query_getPatientByEmail(ctx context.Con
 				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -18407,6 +19291,8 @@ func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx con
 				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -18786,6 +19672,131 @@ func (ec *executionContext) fieldContext_Query_getChatById(ctx context.Context, 
 	if fc.Args, err = ec.field_Query_getChatById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getDeviceConnectById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getDeviceConnectById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetDeviceConnectByID(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.DeviceConnect)
+	fc.Result = res
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getDeviceConnectById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DeviceConnect_id(ctx, field)
+			case "device_name":
+				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "ip_address":
+				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
+			case "latitude":
+				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
+			case "longitude":
+				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "date":
+				return ec.fieldContext_DeviceConnect_date(ctx, field)
+			case "trust_device":
+				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDeviceConnectById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getDevicesConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getDevicesConnect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetDevicesConnect(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.DeviceConnect)
+	fc.Result = res
+	return ec.marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getDevicesConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DeviceConnect_id(ctx, field)
+			case "device_name":
+				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "ip_address":
+				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
+			case "latitude":
+				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
+			case "longitude":
+				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "date":
+				return ec.fieldContext_DeviceConnect_date(ctx, field)
+			case "trust_device":
+				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -24095,6 +25106,75 @@ func (ec *executionContext) _DemoAccount(ctx context.Context, sel ast.SelectionS
 	return out
 }
 
+var deviceConnectImplementors = []string{"DeviceConnect"}
+
+func (ec *executionContext) _DeviceConnect(ctx context.Context, sel ast.SelectionSet, obj *model.DeviceConnect) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, deviceConnectImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DeviceConnect")
+		case "id":
+			out.Values[i] = ec._DeviceConnect_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "device_name":
+			out.Values[i] = ec._DeviceConnect_device_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ip_address":
+			out.Values[i] = ec._DeviceConnect_ip_address(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "latitude":
+			out.Values[i] = ec._DeviceConnect_latitude(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "longitude":
+			out.Values[i] = ec._DeviceConnect_longitude(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "date":
+			out.Values[i] = ec._DeviceConnect_date(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "trust_device":
+			out.Values[i] = ec._DeviceConnect_trust_device(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var diseaseImplementors = []string{"Disease"}
 
 func (ec *executionContext) _Disease(ctx context.Context, sel ast.SelectionSet, obj *model.Disease) graphql.Marshaler {
@@ -24806,6 +25886,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteChat(ctx, field)
 			})
+		case "createDeviceConnect":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createDeviceConnect(ctx, field)
+			})
+		case "updateDeviceConnect":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateDeviceConnect(ctx, field)
+			})
+		case "deleteDeviceConnect":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteDeviceConnect(ctx, field)
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -25026,6 +26118,8 @@ func (ec *executionContext) _Patient(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Patient_treatment_follow_up_ids(ctx, field, obj)
 		case "chat_ids":
 			out.Values[i] = ec._Patient_chat_ids(ctx, field, obj)
+		case "device_connect":
+			out.Values[i] = ec._Patient_device_connect(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -26066,6 +27160,44 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getChatById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getDeviceConnectById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getDeviceConnectById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getDevicesConnect":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getDevicesConnect(ctx, field)
 				return res
 			}
 
@@ -28805,6 +29937,54 @@ func (ec *executionContext) marshalODemoAccount2ᚖgithubᚗcomᚋedgarᚑcare�
 		return graphql.Null
 	}
 	return ec._DemoAccount(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v []*model.DeviceConnect) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v *model.DeviceConnect) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._DeviceConnect(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v []*model.Disease) graphql.Marshaler {

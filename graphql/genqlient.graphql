@@ -412,8 +412,8 @@ mutation UpdateNotification($id: String!, $token: String!, $message: String!, $t
     }
 }
 
-mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String]){
-    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids, chat_ids:$chat_ids){
+mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String], $device_connect: [String]){
+    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids, chat_ids:$chat_ids, device_connect:$device_connect){
         id
         email
         password
@@ -422,6 +422,7 @@ mutation UpdatePatient($id: String!, $email: String, $password: String, $medical
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
     }
 }
 
@@ -812,6 +813,7 @@ query GetPatientByEmail($email: String!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
     }
 }
 
@@ -825,6 +827,7 @@ query GetPatientById($id: String!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
     }
 }
 
@@ -864,6 +867,7 @@ query GetPatients{
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
     }
 }
 
@@ -1086,6 +1090,7 @@ query GetPatientsFromDoctorById($id: String!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
     }
 }
 
@@ -1282,4 +1287,59 @@ mutation UpdateChat($id: String!, $participants: [ChatParticipantsInput!], $mess
 
 mutation DeleteChat($id: String!){
     deleteChat(id: $id)
+}
+
+
+
+mutation CreateDeviceConnect($device_name: String!, $ip_address: String!, $latitude: Int!, $longitude: Int!, $date: Int!, $trust_device: Boolean!) {
+    createDeviceConnect(device_name: $device_name, ip_address: $ip_address, latitude: $latitude, longitude: $longitude, date: $date, trust_device: $trust_device) {
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation UpdateDeviceConnect($id: String!, $device_name: String, $ip_address: String, $latitude: Int, $longitude: Int, $date: Int, $trust_device: Boolean) {
+    updateDeviceConnect(id: $id, device_name: $device_name, ip_address: $ip_address, latitude: $latitude, longitude: $longitude, date: $date, trust_device: $trust_device) {
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation DeleteDeviceConnect($id: String!){
+    deleteDeviceConnect(id: $id)
+}
+
+
+query GetDevicesConnect{
+    getDevicesConnect {
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+query GetDeviceConnectById($id: String!){
+    getDeviceConnectById(id:$id){
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
 }
