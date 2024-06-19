@@ -69,7 +69,7 @@ func TestRegisterAndLoginPatient_Success(t *testing.T) {
 	email := "test@example.com"
 	password := "password"
 
-	response := RegisterAndLoginPatient(email, password)
+	response := RegisterAndLoginPatient(email, password, "123")
 
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
@@ -92,7 +92,7 @@ func TestRegisterAndLoginPatient_Error(t *testing.T) {
 	email := "test@example.com"
 	password := "password"
 
-	response := RegisterAndLoginPatient(email, password)
+	response := RegisterAndLoginPatient(email, password, "1345")
 
 	if response.Token != "" {
 		t.Error("Expected token to be empty, but got an non-empty token")

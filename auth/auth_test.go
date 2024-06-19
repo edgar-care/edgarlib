@@ -126,7 +126,7 @@ func TestAuthMiddlewareWithValidToken(t *testing.T) {
 	email := "test_bearer@example.com"
 	password := "password"
 
-	response := RegisterAndLoginPatient(email, password)
+	response := RegisterAndLoginPatient(email, password, "1256")
 	if response.Err != nil {
 		t.Error("Error trying to create account")
 	}
