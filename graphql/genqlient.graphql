@@ -147,6 +147,7 @@ mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionS
         diseases {
             name
             presence
+            unknown_presence
         }
         symptoms{
             name
@@ -445,6 +446,7 @@ mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $sympto
         diseases {
             name
             presence
+            unknown_presence
         }
         symptoms{
             name
@@ -887,6 +889,7 @@ query GetSessionById($id: String!){
         diseases {
             name
             presence
+            unknown_presence
         }
         symptoms{
             name
@@ -916,6 +919,7 @@ query GetSessions{
         diseases {
             name
             presence
+            unknown_presence
         }
         symptoms{
             name

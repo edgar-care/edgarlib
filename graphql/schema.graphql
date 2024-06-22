@@ -28,14 +28,14 @@ input SymptomsWeightInput {
 #  Session
 type SessionSymptom {
     name: String!
-    presence: Boolean
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
     duration: Int
     treated: [String!]
 }
 
 input SessionSymptomInput {
     name: String!
-    presence: Boolean
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
     duration: Int
     treated: [String!]
 }
@@ -53,11 +53,13 @@ input LogsInput {
 type SessionDiseases {
     name: String!
     presence: Float!
+    unknown_presence: Float!
 }
 
 input SessionDiseasesInput {
     name: String!
     presence: Float!
+    unknown_presence: Float!
 }
 
 type NlpReportOutput {
