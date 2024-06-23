@@ -18,7 +18,7 @@ func TestAuthenticateRequest(t *testing.T) {
 
 	email := "test_checker_login@example.com"
 	password := "password"
-	response := RegisterAndLoginPatient(email, password)
+	response := RegisterAndLoginPatient(email, password, "12345")
 	if response.Err != nil {
 		t.Error("Error trying to create account")
 	}

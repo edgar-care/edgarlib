@@ -58,6 +58,7 @@ func Login(input LoginInput, t string, ip string) LoginResponse {
 	} else {
 		token, err = CreateToken(map[string]interface{}{
 			"patient":   patient.GetPatientByEmail.Email,
+			"id":        patient.GetPatientByEmail.Id,
 			"ip_device": ip,
 		})
 	}

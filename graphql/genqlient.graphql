@@ -818,6 +818,7 @@ query GetPatientByEmail($email: String!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
         double_auth_methods_id
     }
 }

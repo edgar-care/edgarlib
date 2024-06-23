@@ -105,6 +105,7 @@ func RegisterAndLoginPatient(email string, password string, ip string) RegisterA
 	}
 	token, err := utils.CreateToken(map[string]interface{}{
 		"patient":   patient.Email,
+		"id":        patient.ID,
 		"ip_device": ip,
 	})
 	return RegisterAndLoginResponse{token, 200, err}
