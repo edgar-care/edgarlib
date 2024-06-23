@@ -98,13 +98,14 @@ func RegisterPatient(email string, password string) (model.Patient, error) {
 	}, nil
 }
 
-func RegisterAndLoginPatient(email string, password string) RegisterAndLoginResponse {
+func RegisterAndLoginPatient(email string, password string, ip string) RegisterAndLoginResponse {
 	patient, err := RegisterPatient(email, password)
 	if err != nil {
 		return RegisterAndLoginResponse{"", http.StatusBadRequest, err}
 	}
 	token, err := utils.CreateToken(map[string]interface{}{
-		"patient": patient,
+		"patient":   patient.Email,
+		"ip_device": ip,
 	})
 	return RegisterAndLoginResponse{token, 200, err}
 }

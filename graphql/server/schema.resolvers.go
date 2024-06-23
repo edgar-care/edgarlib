@@ -43,7 +43,7 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string) (*model.Patient, error) {
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -60,6 +60,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		"treatment_follow_up_ids": treatmentFollowUpIds,
 		"chat_ids":                chatIds,
 		"device_connect":          deviceConnect,
+		"double_auth_methods_id":  doubleAuthMethodsID,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
 	return &model.Patient{
@@ -72,6 +73,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		TreatmentFollowUpIds: treatmentFollowUpIds,
 		ChatIds:              chatIds,
 		DeviceConnect:        deviceConnect,
+		DoubleAuthMethodsID:  doubleAuthMethodsID,
 	}, err
 }
 
@@ -1661,6 +1663,126 @@ func (r *mutationResolver) DeleteDeviceConnect(ctx context.Context, id string) (
 	return &resp, err
 }
 
+// CreateDoubleAuth is the resolver for the createDoubleAuth field.
+func (r *mutationResolver) CreateDoubleAuth(ctx context.Context, methods []string, secret string, url string, trustDeviceID string) (*model.DoubleAuth, error) {
+	newDevice := bson.M{
+		"methods":         methods,
+		"secret":          secret,
+		"url":             url,
+		"trust_device_id": trustDeviceID,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").InsertOne(ctx, newDevice)
+	if err != nil {
+		return nil, err
+	}
+	entity := model.DoubleAuth{
+		ID:            res.InsertedID.(primitive.ObjectID).Hex(),
+		Methods:       methods,
+		Secret:        secret,
+		URL:           url,
+		TrustDeviceID: trustDeviceID,
+	}
+	return &entity, err
+}
+
+// UpdateDoubleAuth is the resolver for the updateDoubleAuth field.
+func (r *mutationResolver) UpdateDoubleAuth(ctx context.Context, id string, methods []string, secret *string, url *string, trustDeviceID *string) (*model.DoubleAuth, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":             objId,
+		"methods":         methods,
+		"secret":          secret,
+		"url":             url,
+		"trust_device_id": trustDeviceID,
+	}
+
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").ReplaceOne(ctx, filter, updated)
+
+	return &model.DoubleAuth{
+		ID:            id,
+		Methods:       methods,
+		Secret:        *secret,
+		URL:           *url,
+		TrustDeviceID: *trustDeviceID,
+	}, err
+}
+
+// DeleteDoubleAuth is the resolver for the deleteDoubleAuth field.
+func (r *mutationResolver) DeleteDoubleAuth(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
+// CreateBlackList is the resolver for the createBlackList field.
+func (r *mutationResolver) CreateBlackList(ctx context.Context, token []string) (*model.BlackList, error) {
+	newDevice := bson.M{
+		"token": token,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").InsertOne(ctx, newDevice)
+	if err != nil {
+		return nil, err
+	}
+	entity := model.BlackList{
+		ID:    res.InsertedID.(primitive.ObjectID).Hex(),
+		Token: token,
+	}
+	return &entity, err
+}
+
+// UpdateBlackList is the resolver for the updateBlackList field.
+func (r *mutationResolver) UpdateBlackList(ctx context.Context, id string, token []string) (*model.BlackList, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":   objId,
+		"token": token,
+	}
+
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").ReplaceOne(ctx, filter, updated)
+
+	return &model.BlackList{
+		ID:    id,
+		Token: token,
+	}, err
+}
+
+// DeleteBlackList is the resolver for the deleteBlackList field.
+func (r *mutationResolver) DeleteBlackList(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -2678,6 +2800,76 @@ func (r *queryResolver) GetDevicesConnect(ctx context.Context) ([]*model.DeviceC
 	filter := bson.D{}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+// GetDoubleAuthByID is the resolver for the getDoubleAuthById field.
+func (r *queryResolver) GetDoubleAuthByID(ctx context.Context, id string) (*model.DoubleAuth, error) {
+	var result model.DoubleAuth
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetDoubleAuths is the resolver for the getDoubleAuths field.
+func (r *queryResolver) GetDoubleAuths(ctx context.Context) ([]*model.DoubleAuth, error) {
+	var report []*model.DoubleAuth
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DoubleAuth").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+// GetBlackListByID is the resolver for the getBlackListById field.
+func (r *queryResolver) GetBlackListByID(ctx context.Context, id string) (*model.BlackList, error) {
+	var result model.BlackList
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetBlackList is the resolver for the getBlackList field.
+func (r *queryResolver) GetBlackList(ctx context.Context) ([]*model.BlackList, error) {
+	var report []*model.BlackList
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}

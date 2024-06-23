@@ -17,7 +17,7 @@ type LoginResponse struct {
 	Err   error
 }
 
-func Login(input LoginInput, t string) LoginResponse {
+func Login(input LoginInput, t string, ip string) LoginResponse {
 	var resp LoginResponse
 	var doctor *graphql.GetDoctorByEmailResponse
 	var admin *graphql.GetAdminByEmailResponse
@@ -57,7 +57,8 @@ func Login(input LoginInput, t string) LoginResponse {
 		})
 	} else {
 		token, err = CreateToken(map[string]interface{}{
-			"patient": patient.GetPatientByEmail,
+			"patient":   patient.GetPatientByEmail.Email,
+			"ip_device": ip,
 		})
 	}
 	resp.Token = token

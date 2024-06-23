@@ -36,7 +36,7 @@ func TestDelete_follow_up(t *testing.T) {
 	follow_upID := follow_up.CreateTreatmentsFollowUp.Id
 	patientID := patient.CreatePatient.Id
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.CreatePatient.Email, patient.CreatePatient.Password, patient.CreatePatient.Medical_info_id, patient.CreatePatient.Rendez_vous_ids, patient.CreatePatient.Document_ids, append(patient.CreatePatient.Treatment_follow_up_ids, follow_upID))
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.CreatePatient.Email, patient.CreatePatient.Password, patient.CreatePatient.Medical_info_id, patient.CreatePatient.Rendez_vous_ids, patient.CreatePatient.Document_ids, append(patient.CreatePatient.Treatment_follow_up_ids, follow_upID), patient.CreatePatient.Chat_ids, patient.CreatePatient.Device_connect, patient.CreatePatient.Double_auth_methods_id)
 	if err != nil {
 		t.Errorf("Error while updating patient: %v", err)
 	}

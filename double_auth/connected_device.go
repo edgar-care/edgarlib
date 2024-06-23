@@ -37,7 +37,7 @@ func CreateDeviceConnect(input CreateDeviceConnectInput, patientId string) Creat
 		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, append(patient.GetPatientById.Device_connect, device.CreateDeviceConnect.Id))
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, append(patient.GetPatientById.Device_connect, device.CreateDeviceConnect.Id), patient.GetPatientById.Double_auth_methods_id)
 	if err != nil {
 		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("update failed" + err.Error())}
 	}
@@ -52,7 +52,7 @@ func CreateDeviceConnect(input CreateDeviceConnectInput, patientId string) Creat
 			Date:        device.CreateDeviceConnect.Date,
 			TrustDevice: device.CreateDeviceConnect.Trust_device,
 		},
-		Code: 200,
+		Code: 201,
 		Err:  nil,
 	}
 }

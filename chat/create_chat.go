@@ -60,7 +60,7 @@ func CreateChat(patientID string, content ContentInput) CreateChatResponse {
 		return CreateChatResponse{Chat: model.Chat{}, Code: 400, Err: errors.New("Id does not correspond to a patient")}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, append(patient.GetPatientById.Chat_ids, newChat.CreateChat.Id))
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, append(patient.GetPatientById.Chat_ids, newChat.CreateChat.Id), patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id)
 	if err != nil {
 		return CreateChatResponse{Chat: model.Chat{}, Code: 500, Err: errors.New("Unable to update patient")}
 	}
