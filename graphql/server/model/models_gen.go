@@ -62,6 +62,11 @@ type AnteFamily struct {
 	Disease []string `json:"disease" bson:"disease"`
 }
 
+type BlackList struct {
+	ID    string   `json:"id" bson:"_id"`
+	Token []string `json:"token" bson:"token"`
+}
+
 type Chat struct {
 	ID           string              `json:"id" bson:"_id"`
 	Participants []*ChatParticipants `json:"participants" bson:"participants"`
@@ -106,6 +111,16 @@ type DemoAccount struct {
 	Password string `json:"password" bson:"password"`
 }
 
+type DeviceConnect struct {
+	ID          string  `json:"id" bson:"_id"`
+	DeviceName  string  `json:"device_name" bson:"device_name"`
+	IPAddress   string  `json:"ip_address" bson:"ip_address"`
+	Latitude    float64 `json:"latitude" bson:"latitude"`
+	Longitude   float64 `json:"longitude" bson:"longitude"`
+	Date        int     `json:"date" bson:"date"`
+	TrustDevice bool    `json:"trust_device" bson:"trust_device"`
+}
+
 type Disease struct {
 	ID               string            `json:"id" bson:"_id"`
 	Code             string            `json:"code" bson:"code"`
@@ -136,6 +151,14 @@ type Document struct {
 	Category     Category     `json:"category" bson:"category"`
 	IsFavorite   bool         `json:"is_favorite" bson:"is_favorite"`
 	DownloadURL  string       `json:"download_url" bson:"download_url"`
+}
+
+type DoubleAuth struct {
+	ID            string   `json:"id" bson:"_id"`
+	Methods       []string `json:"methods" bson:"methods"`
+	Secret        string   `json:"secret" bson:"secret"`
+	URL           string   `json:"url" bson:"url"`
+	TrustDeviceID string   `json:"trust_device_id" bson:"trust_device_id"`
 }
 
 type Logs struct {
@@ -231,6 +254,8 @@ type Patient struct {
 	DocumentIds          []*string `json:"document_ids,omitempty" bson:"document_ids"`
 	TreatmentFollowUpIds []*string `json:"treatment_follow_up_ids,omitempty" bson:"treatment_follow_up_ids"`
 	ChatIds              []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
+	DoubleAuthMethodsID  *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
+	DeviceConnect        []*string `json:"device_connect,omitempty" bson:"device_connect"`
 }
 
 type Query struct {

@@ -109,6 +109,8 @@ type Patient {
     document_ids: [String]
     treatment_follow_up_ids: [String]
     chat_ids: [String]
+    double_auth_methods_id: String
+    device_connect: [String]
 }
 
 # Doctor entity
@@ -348,6 +350,29 @@ type Chat {
     messages: [ChatMessages!]!
 }
 
+type DoubleAuth {
+    id: ID!
+    methods: [String!]!
+    secret: String!
+    url: String!
+    trust_device_id: String!
+}
+
+type DeviceConnect {
+    id: ID!
+    device_name: String!
+    ip_address: String!
+    latitude: Float!
+    longitude: Float!
+    date: Int!
+    trust_device: Boolean!
+}
+
+type BlackList {
+    id: ID!
+    token: [String!]!
+}
+
 
 ## Query  --------------------------------------------------------------------------------------------------------------
 
@@ -513,6 +538,24 @@ type Query {
     # Get chat by its id
     getChatById(id: String!): Chat
 
+    #================================================
+    # Get device by its id
+    getDeviceConnectById(id: String!): DeviceConnect
+
+    # Get DeviceConnects
+    getDevicesConnect: [DeviceConnect]
+    #================================================
+    # Get double auth by its id
+    getDoubleAuthById(id: String!): DoubleAuth
+
+    #Get DoubleAuth
+    getDoubleAuths: [DoubleAuth]
+
+    # Get Black list
+    getBlackListById(id: String!): BlackList
+
+    getBlackList: [BlackList]
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
@@ -522,7 +565,7 @@ type Mutation {
     createPatient(email: String!, password: String!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String]): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -697,6 +740,36 @@ type Mutation {
 
     #Delete a Chat
     deleteChat(id: String!): Boolean
+
+
+    # Create new DeviceConnect
+    createDeviceConnect(device_name: String!, ip_address: String!, latitude: Float!, longitude: Float!, date: Int!, trust_device: Boolean!): DeviceConnect
+
+    #update a DeviceConnect
+    updateDeviceConnect(id: String!, device_name: String, ip_address: String, latitude: Float, longitude: Float, date: Int, trust_device: Boolean): DeviceConnect
+
+    #Delete a DeviceConnect
+    deleteDeviceConnect(id: String!): Boolean
+
+
+    # Create new DoubleAuth
+    createDoubleAuth(methods: [String!]!, secret: String!, url: String!, trust_device_id: String!): DoubleAuth
+
+    #update a DeviceConnect
+    updateDoubleAuth(id: String!, methods: [String!], secret: String, url: String, trust_device_id: String): DoubleAuth
+
+    #Delete a DeviceConnect
+    deleteDoubleAuth(id: String!): Boolean
+
+
+    # Create new DoubleAuth
+    createBlackList(token: [String!]!): BlackList
+
+    #update a DeviceConnect
+    updateBlackList(id: String!, token: [String!]): BlackList
+
+    #Delete a DeviceConnect
+    deleteBlackList(id: String!): Boolean
 }
 
 
