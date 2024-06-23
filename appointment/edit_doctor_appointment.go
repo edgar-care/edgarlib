@@ -52,7 +52,7 @@ func UpdateDoctorAppointment(newAppointmentId string, appointmentId string) Upda
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
 
-	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, oldAppointment.GetRdvById.Id_patient, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, append(removeElement(patient.GetPatientById.Rendez_vous_ids, appointmentId), newAppointmentId), patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids)
+	updatedPatient, err := graphql.UpdatePatient(context.Background(), gqlClient, oldAppointment.GetRdvById.Id_patient, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, append(removeElement(patient.GetPatientById.Rendez_vous_ids, appointmentId), newAppointmentId), patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id)
 	if err != nil {
 		return UpdateDoctorAppointmentStruct{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update patient")}
 	}

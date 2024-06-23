@@ -42,6 +42,7 @@ func GetSummary(id string) GetSummaryResponse {
 			}
 		}
 		nSD.Presence = sessionDisease.Presence
+		nSD.UnknownPresence = sessionDisease.Unknown_presence
 		sessionDiseases = append(sessionDiseases, nSD)
 	}
 
@@ -59,13 +60,7 @@ func GetSummary(id string) GetSummaryResponse {
 				nSS.Name = sessionSymptom.Name
 			}
 		}
-		var b bool
-		if sessionSymptom.Presence == true {
-			b = true
-		} else {
-			b = false
-		}
-		nSS.Presence = &b
+		nSS.Presence = sessionSymptom.Presence
 		dura := sessionSymptom.Duration
 		nSS.Duration = &dura
 		sessionSymptoms = append(sessionSymptoms, nSS)

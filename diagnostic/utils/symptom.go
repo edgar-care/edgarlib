@@ -57,7 +57,7 @@ func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion s
 		symptomName = list[1]
 	}
 	for _, symptom := range symptoms {
-		if symptom.Duration == 0 && symptom.Presence == true && symptomName != symptom.Name {
+		if symptom.Duration == 0 && symptom.Presence == 1 && symptomName != symptom.Name {
 			if len(allSymptoms.GetSymptoms) > 0 {
 				for _, s := range allSymptoms.GetSymptoms {
 					if s.Code == symptom.Name && s.Question_duration != "" {

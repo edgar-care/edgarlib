@@ -40,13 +40,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	for _, s := range session.GetSessionById.Symptoms {
 		var ns model.SessionSymptom
 		ns.Name = s.Name
-		var b bool
-		if s.Presence == true {
-			b = true
-		} else {
-			b = false
-		}
-		ns.Presence = &b
+		ns.Presence = s.Presence
 		dura := s.Duration
 		ns.Duration = &dura
 		ns.Treated = s.Treated
@@ -86,10 +80,11 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		var newSessionSymptom model.SessionSymptom
 		newSessionSymptom.Name = s.Name
 		if s.Present == nil { // todo: temporaire le temps de changer les fonction graphql
-			f := false
-			newSessionSymptom.Presence = &f
+			newSessionSymptom.Presence = 0
+		} else if *s.Present {
+			newSessionSymptom.Presence = 1
 		} else {
-			newSessionSymptom.Presence = s.Present
+			newSessionSymptom.Presence = 2
 		}
 		newSessionSymptom.Duration = s.Days
 		symptoms = append(symptoms, newSessionSymptom)
@@ -99,11 +94,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	for _, s := range symptoms {
 		var ns graphql.SessionSymptomInput
 		ns.Name = s.Name
-		if s.Presence != nil && *s.Presence == true {
-			ns.Presence = true
-		} else {
-			ns.Presence = false
-		}
+		ns.Presence = s.Presence
 		if s.Duration == nil {
 			ns.Duration = 0
 		} else {

@@ -8,8 +8,8 @@ import (
 
 func isAlertPresent(context []model.SessionSymptom, symptom string) bool {
 	for _, e := range context {
-		if e.Presence != nil {
-			if e.Name == symptom && *e.Presence == true {
+		if e.Presence != 0 {
+			if e.Name == symptom && e.Presence == 1 {
 				return true
 			}
 		}

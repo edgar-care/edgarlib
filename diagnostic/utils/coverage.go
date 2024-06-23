@@ -29,7 +29,7 @@ func GetSessionDiseases(sessionContext []model.SessionSymptom, imc float64, ante
 
 	for _, disease := range mapped {
 		if disease.Percentage >= 0.30 {
-			newsorted := graphql.SessionDiseasesInput{Name: disease.Disease, Presence: disease.Percentage}
+			newsorted := graphql.SessionDiseasesInput{Name: disease.Disease, Presence: disease.Percentage, Unknown_presence: disease.Unknown}
 			sortedDiseases = append(sortedDiseases, newsorted)
 		}
 	}

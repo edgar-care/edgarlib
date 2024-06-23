@@ -10,6 +10,7 @@ import (
 type DiseaseCoverage struct {
 	Disease           string
 	Percentage        float64
+	Unknown           float64
 	PotentialQuestion string
 }
 
@@ -49,6 +50,7 @@ func CalculPercentage(context_ []model.SessionSymptom, disease graphql.GetDiseas
 	var potentialQuestionSymptom string
 	var buf string
 	percentage := 0.0
+	unknown := 0.0
 
 	if anteChirIds != nil && len(anteChirIds) > 0 {
 		for _, chirId := range anteChirIds {
@@ -69,26 +71,28 @@ func CalculPercentage(context_ []model.SessionSymptom, disease graphql.GetDiseas
 	for _, symptomWeight := range disease.Symptoms_weight {
 		lock := 1
 		for _, contextSymptom := range context_ {
-			if contextSymptom.Presence != nil {
-				if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == true {
-					if symptomWeight.Chronic && !isChronic(contextSymptom) {
-						percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
-					} else if !symptomWeight.Chronic && isChronic(contextSymptom) {
-						percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
-					} else {
-						percentage += symptomWeight.Value * isAnteChir(contextSymptom.Name, anteChirs)
-					}
-					lock = 0
-					break
-				} else if symptomWeight.Symptom == contextSymptom.Name && *contextSymptom.Presence == false {
-					if contextSymptom.Treated != nil && len(contextSymptom.Treated) != 0 {
-						percentage += symptomWeight.Value * 0.5
-					}
-					lock = 0
-					break
+			if symptomWeight.Symptom == contextSymptom.Name && contextSymptom.Presence == 0 {
+				unknown += symptomWeight.Value
+				lock = 0
+				break
+			} else if symptomWeight.Symptom == contextSymptom.Name && contextSymptom.Presence == 1 {
+				if symptomWeight.Chronic && !isChronic(contextSymptom) {
+					percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
+				} else if !symptomWeight.Chronic && isChronic(contextSymptom) {
+					percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
 				} else {
-					buf = symptomWeight.Symptom
+					percentage += symptomWeight.Value * isAnteChir(contextSymptom.Name, anteChirs)
 				}
+				lock = 0
+				break
+			} else if symptomWeight.Symptom == contextSymptom.Name && contextSymptom.Presence == 2 {
+				if contextSymptom.Treated != nil && len(contextSymptom.Treated) != 0 {
+					percentage += symptomWeight.Value * 0.5
+				}
+				lock = 0
+				break
+			} else {
+				buf = symptomWeight.Symptom
 			}
 		}
 		if lock == 1 {
@@ -99,7 +103,7 @@ func CalculPercentage(context_ []model.SessionSymptom, disease graphql.GetDiseas
 		percentage *= disease.Overweight_factor
 	}
 
-	return DiseaseCoverage{Disease: disease.Code, Percentage: percentage, PotentialQuestion: potentialQuestionSymptom}
+	return DiseaseCoverage{Disease: disease.Code, Percentage: percentage, Unknown: unknown, PotentialQuestion: potentialQuestionSymptom}
 }
 
 func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptomsSymptom) string {
