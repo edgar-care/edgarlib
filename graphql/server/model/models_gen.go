@@ -265,25 +265,27 @@ type Session struct {
 }
 
 type SessionDiseases struct {
-	Name     string  `json:"name" bson:"name"`
-	Presence float64 `json:"presence" bson:"presence"`
+	Name            string  `json:"name" bson:"name"`
+	Presence        float64 `json:"presence" bson:"presence"`
+	UnknownPresence float64 `json:"unknown_presence" bson:"unknown_presence"`
 }
 
 type SessionDiseasesInput struct {
-	Name     string  `json:"name" bson:"name"`
-	Presence float64 `json:"presence" bson:"presence"`
+	Name            string  `json:"name" bson:"name"`
+	Presence        float64 `json:"presence" bson:"presence"`
+	UnknownPresence float64 `json:"unknown_presence" bson:"unknown_presence"`
 }
 
 type SessionSymptom struct {
 	Name     string   `json:"name" bson:"name"`
-	Presence *bool    `json:"presence,omitempty" bson:"presence"`
+	Presence int      `json:"presence" bson:"presence"`
 	Duration *int     `json:"duration,omitempty" bson:"duration"`
 	Treated  []string `json:"treated,omitempty" bson:"treated"`
 }
 
 type SessionSymptomInput struct {
 	Name     string   `json:"name" bson:"name"`
-	Presence *bool    `json:"presence,omitempty" bson:"presence"`
+	Presence int      `json:"presence" bson:"presence"`
 	Duration *int     `json:"duration,omitempty" bson:"duration"`
 	Treated  []string `json:"treated,omitempty" bson:"treated"`
 }

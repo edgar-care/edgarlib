@@ -369,8 +369,9 @@ type ComplexityRoot struct {
 	}
 
 	SessionDiseases struct {
-		Name     func(childComplexity int) int
-		Presence func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Presence        func(childComplexity int) int
+		UnknownPresence func(childComplexity int) int
 	}
 
 	SessionSymptom struct {
@@ -2761,6 +2762,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SessionDiseases.Presence(childComplexity), true
 
+	case "SessionDiseases.unknown_presence":
+		if e.complexity.SessionDiseases.UnknownPresence == nil {
+			break
+		}
+
+		return e.complexity.SessionDiseases.UnknownPresence(childComplexity), true
+
 	case "SessionSymptom.duration":
 		if e.complexity.SessionSymptom.Duration == nil {
 			break
@@ -3111,14 +3119,14 @@ input SymptomsWeightInput {
 #  Session
 type SessionSymptom {
     name: String!
-    presence: Boolean
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
     duration: Int
     treated: [String!]
 }
 
 input SessionSymptomInput {
     name: String!
-    presence: Boolean
+    presence: Int! # 0(Ne sais pas) | 1(Présent) | 2(Absent)
     duration: Int
     treated: [String!]
 }
@@ -3136,11 +3144,13 @@ input LogsInput {
 type SessionDiseases {
     name: String!
     presence: Float!
+    unknown_presence: Float!
 }
 
 input SessionDiseasesInput {
     name: String!
     presence: Float!
+    unknown_presence: Float!
 }
 
 type NlpReportOutput {
@@ -19396,6 +19406,8 @@ func (ec *executionContext) fieldContext_Session_diseases(ctx context.Context, f
 				return ec.fieldContext_SessionDiseases_name(ctx, field)
 			case "presence":
 				return ec.fieldContext_SessionDiseases_presence(ctx, field)
+			case "unknown_presence":
+				return ec.fieldContext_SessionDiseases_unknown_presence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SessionDiseases", field.Name)
 		},
@@ -19991,6 +20003,50 @@ func (ec *executionContext) fieldContext_SessionDiseases_presence(ctx context.Co
 	return fc, nil
 }
 
+func (ec *executionContext) _SessionDiseases_unknown_presence(ctx context.Context, field graphql.CollectedField, obj *model.SessionDiseases) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SessionDiseases_unknown_presence(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UnknownPresence, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SessionDiseases_unknown_presence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SessionDiseases",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SessionSymptom_name(ctx context.Context, field graphql.CollectedField, obj *model.SessionSymptom) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SessionSymptom_name(ctx, field)
 	if err != nil {
@@ -20056,11 +20112,14 @@ func (ec *executionContext) _SessionSymptom_presence(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SessionSymptom_presence(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20070,7 +20129,7 @@ func (ec *executionContext) fieldContext_SessionSymptom_presence(ctx context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -23360,7 +23419,7 @@ func (ec *executionContext) unmarshalInputSessionDiseasesInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "presence"}
+	fieldsInOrder := [...]string{"name", "presence", "unknown_presence"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -23381,6 +23440,13 @@ func (ec *executionContext) unmarshalInputSessionDiseasesInput(ctx context.Conte
 				return it, err
 			}
 			it.Presence = data
+		case "unknown_presence":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unknown_presence"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UnknownPresence = data
 		}
 	}
 
@@ -23410,7 +23476,7 @@ func (ec *executionContext) unmarshalInputSessionSymptomInput(ctx context.Contex
 			it.Name = data
 		case "presence":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("presence"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			data, err := ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -26299,6 +26365,11 @@ func (ec *executionContext) _SessionDiseases(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "unknown_presence":
+			out.Values[i] = ec._SessionDiseases_unknown_presence(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -26340,6 +26411,9 @@ func (ec *executionContext) _SessionSymptom(ctx context.Context, sel ast.Selecti
 			}
 		case "presence":
 			out.Values[i] = ec._SessionSymptom_presence(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "duration":
 			out.Values[i] = ec._SessionSymptom_duration(ctx, field, obj)
 		case "treated":

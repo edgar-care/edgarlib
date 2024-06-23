@@ -795,8 +795,9 @@ func (v *CreateSessionCreateSession) GetAlerts() []string { return v.Alerts }
 
 // CreateSessionCreateSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
 type CreateSessionCreateSessionDiseases struct {
-	Name     string  `json:"name"`
-	Presence float64 `json:"presence"`
+	Name             string  `json:"name"`
+	Presence         float64 `json:"presence"`
+	Unknown_presence float64 `json:"unknown_presence"`
 }
 
 // GetName returns CreateSessionCreateSessionDiseases.Name, and is useful for accessing the field via an interface.
@@ -804,6 +805,9 @@ func (v *CreateSessionCreateSessionDiseases) GetName() string { return v.Name }
 
 // GetPresence returns CreateSessionCreateSessionDiseases.Presence, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSessionDiseases) GetPresence() float64 { return v.Presence }
+
+// GetUnknown_presence returns CreateSessionCreateSessionDiseases.Unknown_presence, and is useful for accessing the field via an interface.
+func (v *CreateSessionCreateSessionDiseases) GetUnknown_presence() float64 { return v.Unknown_presence }
 
 // CreateSessionCreateSessionLogs includes the requested fields of the GraphQL type Logs.
 type CreateSessionCreateSessionLogs struct {
@@ -820,7 +824,7 @@ func (v *CreateSessionCreateSessionLogs) GetAnswer() string { return v.Answer }
 // CreateSessionCreateSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type CreateSessionCreateSessionSymptomsSessionSymptom struct {
 	Name     string   `json:"name"`
-	Presence bool     `json:"presence"`
+	Presence int      `json:"presence"`
 	Duration int      `json:"duration"`
 	Treated  []string `json:"treated"`
 }
@@ -829,7 +833,7 @@ type CreateSessionCreateSessionSymptomsSessionSymptom struct {
 func (v *CreateSessionCreateSessionSymptomsSessionSymptom) GetName() string { return v.Name }
 
 // GetPresence returns CreateSessionCreateSessionSymptomsSessionSymptom.Presence, and is useful for accessing the field via an interface.
-func (v *CreateSessionCreateSessionSymptomsSessionSymptom) GetPresence() bool { return v.Presence }
+func (v *CreateSessionCreateSessionSymptomsSessionSymptom) GetPresence() int { return v.Presence }
 
 // GetDuration returns CreateSessionCreateSessionSymptomsSessionSymptom.Duration, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSessionSymptomsSessionSymptom) GetDuration() int { return v.Duration }
@@ -3054,8 +3058,9 @@ func (v *GetSessionByIdGetSessionByIdSession) GetAlerts() []string { return v.Al
 
 // GetSessionByIdGetSessionByIdSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
 type GetSessionByIdGetSessionByIdSessionDiseases struct {
-	Name     string  `json:"name"`
-	Presence float64 `json:"presence"`
+	Name             string  `json:"name"`
+	Presence         float64 `json:"presence"`
+	Unknown_presence float64 `json:"unknown_presence"`
 }
 
 // GetName returns GetSessionByIdGetSessionByIdSessionDiseases.Name, and is useful for accessing the field via an interface.
@@ -3063,6 +3068,11 @@ func (v *GetSessionByIdGetSessionByIdSessionDiseases) GetName() string { return 
 
 // GetPresence returns GetSessionByIdGetSessionByIdSessionDiseases.Presence, and is useful for accessing the field via an interface.
 func (v *GetSessionByIdGetSessionByIdSessionDiseases) GetPresence() float64 { return v.Presence }
+
+// GetUnknown_presence returns GetSessionByIdGetSessionByIdSessionDiseases.Unknown_presence, and is useful for accessing the field via an interface.
+func (v *GetSessionByIdGetSessionByIdSessionDiseases) GetUnknown_presence() float64 {
+	return v.Unknown_presence
+}
 
 // GetSessionByIdGetSessionByIdSessionLogs includes the requested fields of the GraphQL type Logs.
 type GetSessionByIdGetSessionByIdSessionLogs struct {
@@ -3079,7 +3089,7 @@ func (v *GetSessionByIdGetSessionByIdSessionLogs) GetAnswer() string { return v.
 // GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom struct {
 	Name     string   `json:"name"`
-	Presence bool     `json:"presence"`
+	Presence int      `json:"presence"`
 	Duration int      `json:"duration"`
 	Treated  []string `json:"treated"`
 }
@@ -3088,7 +3098,7 @@ type GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom struct {
 func (v *GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom) GetName() string { return v.Name }
 
 // GetPresence returns GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom.Presence, and is useful for accessing the field via an interface.
-func (v *GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom) GetPresence() bool {
+func (v *GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom) GetPresence() int {
 	return v.Presence
 }
 
@@ -3174,8 +3184,9 @@ func (v *GetSessionsGetSessionsSession) GetAlerts() []string { return v.Alerts }
 
 // GetSessionsGetSessionsSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
 type GetSessionsGetSessionsSessionDiseases struct {
-	Name     string  `json:"name"`
-	Presence float64 `json:"presence"`
+	Name             string  `json:"name"`
+	Presence         float64 `json:"presence"`
+	Unknown_presence float64 `json:"unknown_presence"`
 }
 
 // GetName returns GetSessionsGetSessionsSessionDiseases.Name, and is useful for accessing the field via an interface.
@@ -3183,6 +3194,11 @@ func (v *GetSessionsGetSessionsSessionDiseases) GetName() string { return v.Name
 
 // GetPresence returns GetSessionsGetSessionsSessionDiseases.Presence, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSessionDiseases) GetPresence() float64 { return v.Presence }
+
+// GetUnknown_presence returns GetSessionsGetSessionsSessionDiseases.Unknown_presence, and is useful for accessing the field via an interface.
+func (v *GetSessionsGetSessionsSessionDiseases) GetUnknown_presence() float64 {
+	return v.Unknown_presence
+}
 
 // GetSessionsGetSessionsSessionLogs includes the requested fields of the GraphQL type Logs.
 type GetSessionsGetSessionsSessionLogs struct {
@@ -3199,7 +3215,7 @@ func (v *GetSessionsGetSessionsSessionLogs) GetAnswer() string { return v.Answer
 // GetSessionsGetSessionsSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type GetSessionsGetSessionsSessionSymptomsSessionSymptom struct {
 	Name     string   `json:"name"`
-	Presence bool     `json:"presence"`
+	Presence int      `json:"presence"`
 	Duration int      `json:"duration"`
 	Treated  []string `json:"treated"`
 }
@@ -3208,7 +3224,7 @@ type GetSessionsGetSessionsSessionSymptomsSessionSymptom struct {
 func (v *GetSessionsGetSessionsSessionSymptomsSessionSymptom) GetName() string { return v.Name }
 
 // GetPresence returns GetSessionsGetSessionsSessionSymptomsSessionSymptom.Presence, and is useful for accessing the field via an interface.
-func (v *GetSessionsGetSessionsSessionSymptomsSessionSymptom) GetPresence() bool { return v.Presence }
+func (v *GetSessionsGetSessionsSessionSymptomsSessionSymptom) GetPresence() int { return v.Presence }
 
 // GetDuration returns GetSessionsGetSessionsSessionSymptomsSessionSymptom.Duration, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSessionSymptomsSessionSymptom) GetDuration() int { return v.Duration }
@@ -3747,8 +3763,9 @@ const (
 )
 
 type SessionDiseasesInput struct {
-	Name     string  `json:"name"`
-	Presence float64 `json:"presence"`
+	Name             string  `json:"name"`
+	Presence         float64 `json:"presence"`
+	Unknown_presence float64 `json:"unknown_presence"`
 }
 
 // GetName returns SessionDiseasesInput.Name, and is useful for accessing the field via an interface.
@@ -3757,9 +3774,12 @@ func (v *SessionDiseasesInput) GetName() string { return v.Name }
 // GetPresence returns SessionDiseasesInput.Presence, and is useful for accessing the field via an interface.
 func (v *SessionDiseasesInput) GetPresence() float64 { return v.Presence }
 
+// GetUnknown_presence returns SessionDiseasesInput.Unknown_presence, and is useful for accessing the field via an interface.
+func (v *SessionDiseasesInput) GetUnknown_presence() float64 { return v.Unknown_presence }
+
 type SessionSymptomInput struct {
 	Name     string   `json:"name"`
-	Presence bool     `json:"presence"`
+	Presence int      `json:"presence"`
 	Duration int      `json:"duration"`
 	Treated  []string `json:"treated"`
 }
@@ -3768,7 +3788,7 @@ type SessionSymptomInput struct {
 func (v *SessionSymptomInput) GetName() string { return v.Name }
 
 // GetPresence returns SessionSymptomInput.Presence, and is useful for accessing the field via an interface.
-func (v *SessionSymptomInput) GetPresence() bool { return v.Presence }
+func (v *SessionSymptomInput) GetPresence() int { return v.Presence }
 
 // GetDuration returns SessionSymptomInput.Duration, and is useful for accessing the field via an interface.
 func (v *SessionSymptomInput) GetDuration() int { return v.Duration }
@@ -4483,8 +4503,9 @@ func (v *UpdateSessionUpdateSession) GetAlerts() []string { return v.Alerts }
 
 // UpdateSessionUpdateSessionDiseases includes the requested fields of the GraphQL type SessionDiseases.
 type UpdateSessionUpdateSessionDiseases struct {
-	Name     string  `json:"name"`
-	Presence float64 `json:"presence"`
+	Name             string  `json:"name"`
+	Presence         float64 `json:"presence"`
+	Unknown_presence float64 `json:"unknown_presence"`
 }
 
 // GetName returns UpdateSessionUpdateSessionDiseases.Name, and is useful for accessing the field via an interface.
@@ -4492,6 +4513,9 @@ func (v *UpdateSessionUpdateSessionDiseases) GetName() string { return v.Name }
 
 // GetPresence returns UpdateSessionUpdateSessionDiseases.Presence, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSessionDiseases) GetPresence() float64 { return v.Presence }
+
+// GetUnknown_presence returns UpdateSessionUpdateSessionDiseases.Unknown_presence, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSessionDiseases) GetUnknown_presence() float64 { return v.Unknown_presence }
 
 // UpdateSessionUpdateSessionLogs includes the requested fields of the GraphQL type Logs.
 type UpdateSessionUpdateSessionLogs struct {
@@ -4508,7 +4532,7 @@ func (v *UpdateSessionUpdateSessionLogs) GetAnswer() string { return v.Answer }
 // UpdateSessionUpdateSessionSymptomsSessionSymptom includes the requested fields of the GraphQL type SessionSymptom.
 type UpdateSessionUpdateSessionSymptomsSessionSymptom struct {
 	Name     string   `json:"name"`
-	Presence bool     `json:"presence"`
+	Presence int      `json:"presence"`
 	Duration int      `json:"duration"`
 	Treated  []string `json:"treated"`
 }
@@ -4517,7 +4541,7 @@ type UpdateSessionUpdateSessionSymptomsSessionSymptom struct {
 func (v *UpdateSessionUpdateSessionSymptomsSessionSymptom) GetName() string { return v.Name }
 
 // GetPresence returns UpdateSessionUpdateSessionSymptomsSessionSymptom.Presence, and is useful for accessing the field via an interface.
-func (v *UpdateSessionUpdateSessionSymptomsSessionSymptom) GetPresence() bool { return v.Presence }
+func (v *UpdateSessionUpdateSessionSymptomsSessionSymptom) GetPresence() int { return v.Presence }
 
 // GetDuration returns UpdateSessionUpdateSessionSymptomsSessionSymptom.Duration, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSessionSymptomsSessionSymptom) GetDuration() int { return v.Duration }
@@ -6938,6 +6962,7 @@ mutation CreateSession ($diseases: [SessionDiseasesInput!]!, $symptoms: [Session
 		diseases {
 			name
 			presence
+			unknown_presence
 		}
 		symptoms {
 			name
@@ -9459,6 +9484,7 @@ query GetSessionById ($id: String!) {
 		diseases {
 			name
 			presence
+			unknown_presence
 		}
 		symptoms {
 			name
@@ -9517,6 +9543,7 @@ query GetSessions {
 		diseases {
 			name
 			presence
+			unknown_presence
 		}
 		symptoms {
 			name
@@ -10752,6 +10779,7 @@ mutation UpdateSession ($id: String!, $diseases: [SessionDiseasesInput!], $sympt
 		diseases {
 			name
 			presence
+			unknown_presence
 		}
 		symptoms {
 			name
