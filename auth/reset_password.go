@@ -32,7 +32,7 @@ func ResetPassword(email string, password string, uuid string) ResetPasswordResp
 		return ResetPasswordResponse{403, errors.New("no patient correspond to this email")}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patient.GetPatientByEmail.Id, patient.GetPatientByEmail.Email, utils.HashPassword(password), patient.GetPatientByEmail.Medical_info_id, patient.GetPatientByEmail.Rendez_vous_ids, patient.GetPatientByEmail.Document_ids, patient.GetPatientByEmail.Treatment_follow_up_ids, patient.GetPatientByEmail.Chat_ids)
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patient.GetPatientByEmail.Id, patient.GetPatientByEmail.Email, utils.HashPassword(password), patient.GetPatientByEmail.Medical_info_id, patient.GetPatientByEmail.Rendez_vous_ids, patient.GetPatientByEmail.Document_ids, patient.GetPatientByEmail.Treatment_follow_up_ids, patient.GetPatientByEmail.Chat_ids, patient.GetPatientByEmail.Device_connect, patient.GetPatientByEmail.Double_auth_methods_id)
 	if err != nil {
 		return ResetPasswordResponse{400, err}
 	}
