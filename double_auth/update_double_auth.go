@@ -9,7 +9,7 @@ import (
 )
 
 type UpdateDoubleAuthInput struct {
-	Methods         string `json:"2fa_method"`
+	Methods         string `json:"method_2fa"`
 	Secret          string `json:"secret"`
 	URL             string `json:"url"`
 	TrustedDeviceId string `json:"trusted_device_id"`

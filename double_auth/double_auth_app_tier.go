@@ -10,7 +10,7 @@ import (
 )
 
 type CreateDoubleAuthTierInput struct {
-	Methods string `json:"2fa_method"`
+	Methods string `json:"method_2fa"`
 	Code    string `json:"code"`
 }
 

@@ -9,7 +9,7 @@ import (
 )
 
 type CreateDoubleAuthInput struct {
-	Methods string `json:"2fa_method"`
+	Methods string `json:"method_2fa"`
 }
 
 type CreateDoubleAuthResponse struct {
