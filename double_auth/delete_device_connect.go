@@ -3,6 +3,7 @@ package double_auth
 import (
 	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/black_list"
 	"github.com/edgar-care/edgarlib/graphql"
 )

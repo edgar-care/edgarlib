@@ -2998,6 +2998,7 @@ type GetPatientByEmailGetPatientByEmailPatient struct {
 	Document_ids            []string `json:"document_ids"`
 	Treatment_follow_up_ids []string `json:"treatment_follow_up_ids"`
 	Chat_ids                []string `json:"chat_ids"`
+	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
 }
 
@@ -3030,6 +3031,11 @@ func (v *GetPatientByEmailGetPatientByEmailPatient) GetTreatment_follow_up_ids()
 
 // GetChat_ids returns GetPatientByEmailGetPatientByEmailPatient.Chat_ids, and is useful for accessing the field via an interface.
 func (v *GetPatientByEmailGetPatientByEmailPatient) GetChat_ids() []string { return v.Chat_ids }
+
+// GetDevice_connect returns GetPatientByEmailGetPatientByEmailPatient.Device_connect, and is useful for accessing the field via an interface.
+func (v *GetPatientByEmailGetPatientByEmailPatient) GetDevice_connect() []string {
+	return v.Device_connect
+}
 
 // GetDouble_auth_methods_id returns GetPatientByEmailGetPatientByEmailPatient.Double_auth_methods_id, and is useful for accessing the field via an interface.
 func (v *GetPatientByEmailGetPatientByEmailPatient) GetDouble_auth_methods_id() string {
@@ -10320,6 +10326,7 @@ query GetPatientByEmail ($email: String!) {
 		document_ids
 		treatment_follow_up_ids
 		chat_ids
+		device_connect
 		double_auth_methods_id
 	}
 }

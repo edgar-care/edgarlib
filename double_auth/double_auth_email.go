@@ -3,9 +3,10 @@ package double_auth
 import (
 	"context"
 	"errors"
+	"net/http"
+
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
-	"net/http"
 )
 
 type CreateDoubleAuthInput struct {
