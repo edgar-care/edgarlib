@@ -26,6 +26,8 @@ func Initiate(id string) InitiateResponse {
 		return InitiateResponse{"", 400, errors.New("unable to get patient medical infos")}
 	}
 
+	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
+
 	var input model.Session
 	input.Age = patientInfos.GetMedicalFolderById.Birthdate
 	input.Height = patientInfos.GetMedicalFolderById.Height
@@ -39,6 +41,7 @@ func Initiate(id string) InitiateResponse {
 	}
 	input.AnteDiseases = patientInfos.GetMedicalFolderById.Antecedent_disease_ids
 
+	input.AnteChirs = []string{}
 	if input.AnteDiseases != nil && len(input.AnteDiseases) > 0 {
 		for _, anteDiseaseID := range input.AnteDiseases {
 			if anteDiseaseID != "" {
@@ -50,11 +53,7 @@ func Initiate(id string) InitiateResponse {
 					for _, anteChirId := range ante.GetAnteDiseaseByID.Surgery_ids {
 						input.AnteChirs = append(input.AnteChirs, anteChirId)
 					}
-				} else {
-					input.AnteChirs = []string{}
 				}
-			} else {
-				input.AnteChirs = []string{}
 			}
 		}
 	}
@@ -84,9 +83,26 @@ func Initiate(id string) InitiateResponse {
 		}
 	}
 
+	input.HereditaryDisease = []string{}
+	for _, familyMemberInfoId := range patientInfos.GetMedicalFolderById.Family_members_med_info_id {
+		if familyMemberInfoId != "" {
+			familyMemberInfo, _ := graphql.GetMedicalFolderByID(context.Background(), gqlClient, familyMemberInfoId)
+			for _, familyMemberAnteId := range familyMemberInfo.GetMedicalFolderById.Antecedent_disease_ids {
+				familyMemberAnte, _ := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, familyMemberAnteId)
+				if familyMemberAnte.GetAnteDiseaseByID.Still_relevant == true {
+					for _, disease := range diseases.GetDiseases {
+						if familyMemberAnte.GetAnteDiseaseByID.Name == disease.Name && disease.Heredity_factor != 0 {
+							input.HereditaryDisease = append(input.HereditaryDisease, disease.Name)
+						}
+					}
+				}
+			}
+		}
+	}
+
 	utils.WakeNlpUp()
 
-	session, err := graphql.CreateSession(context.Background(), gqlClient, []graphql.SessionDiseasesInput{}, []graphql.SessionSymptomInput{}, input.Age, input.Height, input.Weight, input.Sex, input.AnteChirs, input.AnteDiseases, input.Medicine, "", []graphql.LogsInput{}, []string{})
+	session, err := graphql.CreateSession(context.Background(), gqlClient, []graphql.SessionDiseasesInput{}, []graphql.SessionSymptomInput{}, input.Age, input.Height, input.Weight, input.Sex, input.AnteChirs, input.AnteDiseases, input.Medicine, "", []graphql.LogsInput{}, input.HereditaryDisease, []string{})
 
 	if err != nil {
 		return InitiateResponse{"", 500, errors.New("unable to create session")}

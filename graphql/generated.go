@@ -417,6 +417,7 @@ type CreateDiseaseCreateDisease struct {
 	Symptoms          []string                                                  `json:"symptoms"`
 	Symptoms_weight   []CreateDiseaseCreateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
 	Overweight_factor float64                                                   `json:"overweight_factor"`
+	Heredity_factor   float64                                                   `json:"heredity_factor"`
 	Advice            string                                                    `json:"advice"`
 }
 
@@ -439,6 +440,9 @@ func (v *CreateDiseaseCreateDisease) GetSymptoms_weight() []CreateDiseaseCreateD
 
 // GetOverweight_factor returns CreateDiseaseCreateDisease.Overweight_factor, and is useful for accessing the field via an interface.
 func (v *CreateDiseaseCreateDisease) GetOverweight_factor() float64 { return v.Overweight_factor }
+
+// GetHeredity_factor returns CreateDiseaseCreateDisease.Heredity_factor, and is useful for accessing the field via an interface.
+func (v *CreateDiseaseCreateDisease) GetHeredity_factor() float64 { return v.Heredity_factor }
 
 // GetAdvice returns CreateDiseaseCreateDisease.Advice, and is useful for accessing the field via an interface.
 func (v *CreateDiseaseCreateDisease) GetAdvice() string { return v.Advice }
@@ -611,16 +615,17 @@ func (v *CreateDoubleAuthResponse) GetCreateDoubleAuth() CreateDoubleAuthCreateD
 
 // CreateMedicalFolderCreateMedicalFolderMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
 type CreateMedicalFolderCreateMedicalFolderMedicalInfo struct {
-	Id                     string           `json:"id"`
-	Name                   string           `json:"name"`
-	Firstname              string           `json:"firstname"`
-	Birthdate              int              `json:"birthdate"`
-	Sex                    Sex              `json:"sex"`
-	Height                 int              `json:"height"`
-	Weight                 int              `json:"weight"`
-	Primary_doctor_id      string           `json:"primary_doctor_id"`
-	Antecedent_disease_ids []string         `json:"antecedent_disease_ids"`
-	Onboarding_status      OnboardingStatus `json:"onboarding_status"`
+	Id                         string           `json:"id"`
+	Name                       string           `json:"name"`
+	Firstname                  string           `json:"firstname"`
+	Birthdate                  int              `json:"birthdate"`
+	Sex                        Sex              `json:"sex"`
+	Height                     int              `json:"height"`
+	Weight                     int              `json:"weight"`
+	Primary_doctor_id          string           `json:"primary_doctor_id"`
+	Antecedent_disease_ids     []string         `json:"antecedent_disease_ids"`
+	Onboarding_status          OnboardingStatus `json:"onboarding_status"`
+	Family_members_med_info_id []string         `json:"family_members_med_info_id"`
 }
 
 // GetId returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Id, and is useful for accessing the field via an interface.
@@ -657,6 +662,11 @@ func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetAntecedent_diseas
 // GetOnboarding_status returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Onboarding_status, and is useful for accessing the field via an interface.
 func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetOnboarding_status() OnboardingStatus {
 	return v.Onboarding_status
+}
+
+// GetFamily_members_med_info_id returns CreateMedicalFolderCreateMedicalFolderMedicalInfo.Family_members_med_info_id, and is useful for accessing the field via an interface.
+func (v *CreateMedicalFolderCreateMedicalFolderMedicalInfo) GetFamily_members_med_info_id() []string {
+	return v.Family_members_med_info_id
 }
 
 // CreateMedicalFolderResponse is returned by CreateMedicalFolder on success.
@@ -843,19 +853,20 @@ func (v *CreateRdvResponse) GetCreateRdv() CreateRdvCreateRdv { return v.CreateR
 
 // CreateSessionCreateSession includes the requested fields of the GraphQL type Session.
 type CreateSessionCreateSession struct {
-	Id            string                                             `json:"id"`
-	Diseases      []CreateSessionCreateSessionDiseases               `json:"diseases"`
-	Symptoms      []CreateSessionCreateSessionSymptomsSessionSymptom `json:"symptoms"`
-	Age           int                                                `json:"age"`
-	Height        int                                                `json:"height"`
-	Weight        int                                                `json:"weight"`
-	Sex           string                                             `json:"sex"`
-	Ante_chirs    []string                                           `json:"ante_chirs"`
-	Ante_diseases []string                                           `json:"ante_diseases"`
-	Medicine      []string                                           `json:"medicine"`
-	Last_question string                                             `json:"last_question"`
-	Logs          []CreateSessionCreateSessionLogs                   `json:"logs"`
-	Alerts        []string                                           `json:"alerts"`
+	Id                 string                                             `json:"id"`
+	Diseases           []CreateSessionCreateSessionDiseases               `json:"diseases"`
+	Symptoms           []CreateSessionCreateSessionSymptomsSessionSymptom `json:"symptoms"`
+	Age                int                                                `json:"age"`
+	Height             int                                                `json:"height"`
+	Weight             int                                                `json:"weight"`
+	Sex                string                                             `json:"sex"`
+	Ante_chirs         []string                                           `json:"ante_chirs"`
+	Ante_diseases      []string                                           `json:"ante_diseases"`
+	Medicine           []string                                           `json:"medicine"`
+	Last_question      string                                             `json:"last_question"`
+	Logs               []CreateSessionCreateSessionLogs                   `json:"logs"`
+	Hereditary_disease []string                                           `json:"hereditary_disease"`
+	Alerts             []string                                           `json:"alerts"`
 }
 
 // GetId returns CreateSessionCreateSession.Id, and is useful for accessing the field via an interface.
@@ -897,6 +908,9 @@ func (v *CreateSessionCreateSession) GetLast_question() string { return v.Last_q
 
 // GetLogs returns CreateSessionCreateSession.Logs, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSession) GetLogs() []CreateSessionCreateSessionLogs { return v.Logs }
+
+// GetHereditary_disease returns CreateSessionCreateSession.Hereditary_disease, and is useful for accessing the field via an interface.
+func (v *CreateSessionCreateSession) GetHereditary_disease() []string { return v.Hereditary_disease }
 
 // GetAlerts returns CreateSessionCreateSession.Alerts, and is useful for accessing the field via an interface.
 func (v *CreateSessionCreateSession) GetAlerts() []string { return v.Alerts }
@@ -2066,6 +2080,7 @@ type GetDiseaseByIdGetDiseaseByIdDisease struct {
 	Symptoms          []string                                                           `json:"symptoms"`
 	Symptoms_weight   []GetDiseaseByIdGetDiseaseByIdDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
 	Overweight_factor float64                                                            `json:"overweight_factor"`
+	Heredity_factor   float64                                                            `json:"heredity_factor"`
 	Advice            string                                                             `json:"advice"`
 }
 
@@ -2090,6 +2105,9 @@ func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetSymptoms_weight() []GetDiseaseB
 func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetOverweight_factor() float64 {
 	return v.Overweight_factor
 }
+
+// GetHeredity_factor returns GetDiseaseByIdGetDiseaseByIdDisease.Heredity_factor, and is useful for accessing the field via an interface.
+func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetHeredity_factor() float64 { return v.Heredity_factor }
 
 // GetAdvice returns GetDiseaseByIdGetDiseaseByIdDisease.Advice, and is useful for accessing the field via an interface.
 func (v *GetDiseaseByIdGetDiseaseByIdDisease) GetAdvice() string { return v.Advice }
@@ -2134,6 +2152,7 @@ type GetDiseasesGetDiseasesDisease struct {
 	Symptoms          []string                                                     `json:"symptoms"`
 	Symptoms_weight   []GetDiseasesGetDiseasesDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
 	Overweight_factor float64                                                      `json:"overweight_factor"`
+	Heredity_factor   float64                                                      `json:"heredity_factor"`
 	Advice            string                                                       `json:"advice"`
 }
 
@@ -2156,6 +2175,9 @@ func (v *GetDiseasesGetDiseasesDisease) GetSymptoms_weight() []GetDiseasesGetDis
 
 // GetOverweight_factor returns GetDiseasesGetDiseasesDisease.Overweight_factor, and is useful for accessing the field via an interface.
 func (v *GetDiseasesGetDiseasesDisease) GetOverweight_factor() float64 { return v.Overweight_factor }
+
+// GetHeredity_factor returns GetDiseasesGetDiseasesDisease.Heredity_factor, and is useful for accessing the field via an interface.
+func (v *GetDiseasesGetDiseasesDisease) GetHeredity_factor() float64 { return v.Heredity_factor }
 
 // GetAdvice returns GetDiseasesGetDiseasesDisease.Advice, and is useful for accessing the field via an interface.
 func (v *GetDiseasesGetDiseasesDisease) GetAdvice() string { return v.Advice }
@@ -2614,16 +2636,17 @@ func (v *GetDoubleAuthsResponse) GetGetDoubleAuths() []GetDoubleAuthsGetDoubleAu
 
 // GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
 type GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo struct {
-	Id                     string           `json:"id"`
-	Name                   string           `json:"name"`
-	Firstname              string           `json:"firstname"`
-	Birthdate              int              `json:"birthdate"`
-	Sex                    Sex              `json:"sex"`
-	Height                 int              `json:"height"`
-	Weight                 int              `json:"weight"`
-	Primary_doctor_id      string           `json:"primary_doctor_id"`
-	Antecedent_disease_ids []string         `json:"antecedent_disease_ids"`
-	Onboarding_status      OnboardingStatus `json:"onboarding_status"`
+	Id                         string           `json:"id"`
+	Name                       string           `json:"name"`
+	Firstname                  string           `json:"firstname"`
+	Birthdate                  int              `json:"birthdate"`
+	Sex                        Sex              `json:"sex"`
+	Height                     int              `json:"height"`
+	Weight                     int              `json:"weight"`
+	Primary_doctor_id          string           `json:"primary_doctor_id"`
+	Antecedent_disease_ids     []string         `json:"antecedent_disease_ids"`
+	Onboarding_status          OnboardingStatus `json:"onboarding_status"`
+	Family_members_med_info_id []string         `json:"family_members_med_info_id"`
 }
 
 // GetId returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Id, and is useful for accessing the field via an interface.
@@ -2664,6 +2687,11 @@ func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetOnboarding_stat
 	return v.Onboarding_status
 }
 
+// GetFamily_members_med_info_id returns GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo.Family_members_med_info_id, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo) GetFamily_members_med_info_id() []string {
+	return v.Family_members_med_info_id
+}
+
 // GetMedicalFolderByIDResponse is returned by GetMedicalFolderByID on success.
 type GetMedicalFolderByIDResponse struct {
 	GetMedicalFolderById GetMedicalFolderByIDGetMedicalFolderByIdMedicalInfo `json:"getMedicalFolderById"`
@@ -2676,16 +2704,17 @@ func (v *GetMedicalFolderByIDResponse) GetGetMedicalFolderById() GetMedicalFolde
 
 // GetMedicalFolderGetMedicalFolderMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
 type GetMedicalFolderGetMedicalFolderMedicalInfo struct {
-	Id                     string           `json:"id"`
-	Name                   string           `json:"name"`
-	Firstname              string           `json:"firstname"`
-	Birthdate              int              `json:"birthdate"`
-	Sex                    Sex              `json:"sex"`
-	Height                 int              `json:"height"`
-	Weight                 int              `json:"weight"`
-	Primary_doctor_id      string           `json:"primary_doctor_id"`
-	Antecedent_disease_ids []string         `json:"antecedent_disease_ids"`
-	Onboarding_status      OnboardingStatus `json:"onboarding_status"`
+	Id                         string           `json:"id"`
+	Name                       string           `json:"name"`
+	Firstname                  string           `json:"firstname"`
+	Birthdate                  int              `json:"birthdate"`
+	Sex                        Sex              `json:"sex"`
+	Height                     int              `json:"height"`
+	Weight                     int              `json:"weight"`
+	Primary_doctor_id          string           `json:"primary_doctor_id"`
+	Antecedent_disease_ids     []string         `json:"antecedent_disease_ids"`
+	Onboarding_status          OnboardingStatus `json:"onboarding_status"`
+	Family_members_med_info_id []string         `json:"family_members_med_info_id"`
 }
 
 // GetId returns GetMedicalFolderGetMedicalFolderMedicalInfo.Id, and is useful for accessing the field via an interface.
@@ -2722,6 +2751,11 @@ func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetAntecedent_disease_ids(
 // GetOnboarding_status returns GetMedicalFolderGetMedicalFolderMedicalInfo.Onboarding_status, and is useful for accessing the field via an interface.
 func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetOnboarding_status() OnboardingStatus {
 	return v.Onboarding_status
+}
+
+// GetFamily_members_med_info_id returns GetMedicalFolderGetMedicalFolderMedicalInfo.Family_members_med_info_id, and is useful for accessing the field via an interface.
+func (v *GetMedicalFolderGetMedicalFolderMedicalInfo) GetFamily_members_med_info_id() []string {
+	return v.Family_members_med_info_id
 }
 
 // GetMedicalFolderResponse is returned by GetMedicalFolder on success.
@@ -3384,19 +3418,20 @@ func (v *GetRdvByIdResponse) GetGetRdvById() GetRdvByIdGetRdvByIdRdv { return v.
 
 // GetSessionByIdGetSessionByIdSession includes the requested fields of the GraphQL type Session.
 type GetSessionByIdGetSessionByIdSession struct {
-	Id            string                                                      `json:"id"`
-	Diseases      []GetSessionByIdGetSessionByIdSessionDiseases               `json:"diseases"`
-	Symptoms      []GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom `json:"symptoms"`
-	Age           int                                                         `json:"age"`
-	Height        int                                                         `json:"height"`
-	Weight        int                                                         `json:"weight"`
-	Sex           string                                                      `json:"sex"`
-	Ante_chirs    []string                                                    `json:"ante_chirs"`
-	Ante_diseases []string                                                    `json:"ante_diseases"`
-	Medicine      []string                                                    `json:"medicine"`
-	Last_question string                                                      `json:"last_question"`
-	Logs          []GetSessionByIdGetSessionByIdSessionLogs                   `json:"logs"`
-	Alerts        []string                                                    `json:"alerts"`
+	Id                 string                                                      `json:"id"`
+	Diseases           []GetSessionByIdGetSessionByIdSessionDiseases               `json:"diseases"`
+	Symptoms           []GetSessionByIdGetSessionByIdSessionSymptomsSessionSymptom `json:"symptoms"`
+	Age                int                                                         `json:"age"`
+	Height             int                                                         `json:"height"`
+	Weight             int                                                         `json:"weight"`
+	Sex                string                                                      `json:"sex"`
+	Ante_chirs         []string                                                    `json:"ante_chirs"`
+	Ante_diseases      []string                                                    `json:"ante_diseases"`
+	Medicine           []string                                                    `json:"medicine"`
+	Last_question      string                                                      `json:"last_question"`
+	Logs               []GetSessionByIdGetSessionByIdSessionLogs                   `json:"logs"`
+	Hereditary_disease []string                                                    `json:"hereditary_disease"`
+	Alerts             []string                                                    `json:"alerts"`
 }
 
 // GetId returns GetSessionByIdGetSessionByIdSession.Id, and is useful for accessing the field via an interface.
@@ -3439,6 +3474,11 @@ func (v *GetSessionByIdGetSessionByIdSession) GetLast_question() string { return
 // GetLogs returns GetSessionByIdGetSessionByIdSession.Logs, and is useful for accessing the field via an interface.
 func (v *GetSessionByIdGetSessionByIdSession) GetLogs() []GetSessionByIdGetSessionByIdSessionLogs {
 	return v.Logs
+}
+
+// GetHereditary_disease returns GetSessionByIdGetSessionByIdSession.Hereditary_disease, and is useful for accessing the field via an interface.
+func (v *GetSessionByIdGetSessionByIdSession) GetHereditary_disease() []string {
+	return v.Hereditary_disease
 }
 
 // GetAlerts returns GetSessionByIdGetSessionByIdSession.Alerts, and is useful for accessing the field via an interface.
@@ -3512,19 +3552,20 @@ func (v *GetSessionByIdResponse) GetGetSessionById() GetSessionByIdGetSessionByI
 
 // GetSessionsGetSessionsSession includes the requested fields of the GraphQL type Session.
 type GetSessionsGetSessionsSession struct {
-	Id            string                                                `json:"id"`
-	Diseases      []GetSessionsGetSessionsSessionDiseases               `json:"diseases"`
-	Symptoms      []GetSessionsGetSessionsSessionSymptomsSessionSymptom `json:"symptoms"`
-	Age           int                                                   `json:"age"`
-	Height        int                                                   `json:"height"`
-	Weight        int                                                   `json:"weight"`
-	Sex           string                                                `json:"sex"`
-	Ante_chirs    []string                                              `json:"ante_chirs"`
-	Ante_diseases []string                                              `json:"ante_diseases"`
-	Medicine      []string                                              `json:"medicine"`
-	Last_question string                                                `json:"last_question"`
-	Logs          []GetSessionsGetSessionsSessionLogs                   `json:"logs"`
-	Alerts        []string                                              `json:"alerts"`
+	Id                 string                                                `json:"id"`
+	Diseases           []GetSessionsGetSessionsSessionDiseases               `json:"diseases"`
+	Symptoms           []GetSessionsGetSessionsSessionSymptomsSessionSymptom `json:"symptoms"`
+	Age                int                                                   `json:"age"`
+	Height             int                                                   `json:"height"`
+	Weight             int                                                   `json:"weight"`
+	Sex                string                                                `json:"sex"`
+	Ante_chirs         []string                                              `json:"ante_chirs"`
+	Ante_diseases      []string                                              `json:"ante_diseases"`
+	Medicine           []string                                              `json:"medicine"`
+	Last_question      string                                                `json:"last_question"`
+	Logs               []GetSessionsGetSessionsSessionLogs                   `json:"logs"`
+	Hereditary_disease []string                                              `json:"hereditary_disease"`
+	Alerts             []string                                              `json:"alerts"`
 }
 
 // GetId returns GetSessionsGetSessionsSession.Id, and is useful for accessing the field via an interface.
@@ -3566,6 +3607,9 @@ func (v *GetSessionsGetSessionsSession) GetLast_question() string { return v.Las
 
 // GetLogs returns GetSessionsGetSessionsSession.Logs, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSession) GetLogs() []GetSessionsGetSessionsSessionLogs { return v.Logs }
+
+// GetHereditary_disease returns GetSessionsGetSessionsSession.Hereditary_disease, and is useful for accessing the field via an interface.
+func (v *GetSessionsGetSessionsSession) GetHereditary_disease() []string { return v.Hereditary_disease }
 
 // GetAlerts returns GetSessionsGetSessionsSession.Alerts, and is useful for accessing the field via an interface.
 func (v *GetSessionsGetSessionsSession) GetAlerts() []string { return v.Alerts }
@@ -4551,6 +4595,7 @@ type UpdateDiseaseUpdateDisease struct {
 	Symptoms          []string                                                  `json:"symptoms"`
 	Symptoms_weight   []UpdateDiseaseUpdateDiseaseSymptoms_weightSymptomsWeight `json:"symptoms_weight"`
 	Overweight_factor float64                                                   `json:"overweight_factor"`
+	Heredity_factor   float64                                                   `json:"heredity_factor"`
 	Advice            string                                                    `json:"advice"`
 }
 
@@ -4573,6 +4618,9 @@ func (v *UpdateDiseaseUpdateDisease) GetSymptoms_weight() []UpdateDiseaseUpdateD
 
 // GetOverweight_factor returns UpdateDiseaseUpdateDisease.Overweight_factor, and is useful for accessing the field via an interface.
 func (v *UpdateDiseaseUpdateDisease) GetOverweight_factor() float64 { return v.Overweight_factor }
+
+// GetHeredity_factor returns UpdateDiseaseUpdateDisease.Heredity_factor, and is useful for accessing the field via an interface.
+func (v *UpdateDiseaseUpdateDisease) GetHeredity_factor() float64 { return v.Heredity_factor }
 
 // GetAdvice returns UpdateDiseaseUpdateDisease.Advice, and is useful for accessing the field via an interface.
 func (v *UpdateDiseaseUpdateDisease) GetAdvice() string { return v.Advice }
@@ -4747,16 +4795,17 @@ func (v *UpdateMedicalFolderResponse) GetUpdateMedicalFolder() UpdateMedicalFold
 
 // UpdateMedicalFolderUpdateMedicalFolderMedicalInfo includes the requested fields of the GraphQL type MedicalInfo.
 type UpdateMedicalFolderUpdateMedicalFolderMedicalInfo struct {
-	Id                     string           `json:"id"`
-	Name                   string           `json:"name"`
-	Firstname              string           `json:"firstname"`
-	Birthdate              int              `json:"birthdate"`
-	Sex                    Sex              `json:"sex"`
-	Height                 int              `json:"height"`
-	Weight                 int              `json:"weight"`
-	Primary_doctor_id      string           `json:"primary_doctor_id"`
-	Antecedent_disease_ids []string         `json:"antecedent_disease_ids"`
-	Onboarding_status      OnboardingStatus `json:"onboarding_status"`
+	Id                         string           `json:"id"`
+	Name                       string           `json:"name"`
+	Firstname                  string           `json:"firstname"`
+	Birthdate                  int              `json:"birthdate"`
+	Sex                        Sex              `json:"sex"`
+	Height                     int              `json:"height"`
+	Weight                     int              `json:"weight"`
+	Primary_doctor_id          string           `json:"primary_doctor_id"`
+	Antecedent_disease_ids     []string         `json:"antecedent_disease_ids"`
+	Onboarding_status          OnboardingStatus `json:"onboarding_status"`
+	Family_members_med_info_id []string         `json:"family_members_med_info_id"`
 }
 
 // GetId returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Id, and is useful for accessing the field via an interface.
@@ -4793,6 +4842,11 @@ func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetAntecedent_diseas
 // GetOnboarding_status returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Onboarding_status, and is useful for accessing the field via an interface.
 func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetOnboarding_status() OnboardingStatus {
 	return v.Onboarding_status
+}
+
+// GetFamily_members_med_info_id returns UpdateMedicalFolderUpdateMedicalFolderMedicalInfo.Family_members_med_info_id, and is useful for accessing the field via an interface.
+func (v *UpdateMedicalFolderUpdateMedicalFolderMedicalInfo) GetFamily_members_med_info_id() []string {
+	return v.Family_members_med_info_id
 }
 
 // UpdateNotificationResponse is returned by UpdateNotification on success.
@@ -4939,19 +4993,20 @@ func (v *UpdateSessionResponse) GetUpdateSession() UpdateSessionUpdateSession { 
 
 // UpdateSessionUpdateSession includes the requested fields of the GraphQL type Session.
 type UpdateSessionUpdateSession struct {
-	Id            string                                             `json:"id"`
-	Diseases      []UpdateSessionUpdateSessionDiseases               `json:"diseases"`
-	Symptoms      []UpdateSessionUpdateSessionSymptomsSessionSymptom `json:"symptoms"`
-	Age           int                                                `json:"age"`
-	Height        int                                                `json:"height"`
-	Weight        int                                                `json:"weight"`
-	Sex           string                                             `json:"sex"`
-	Ante_chirs    []string                                           `json:"ante_chirs"`
-	Ante_diseases []string                                           `json:"ante_diseases"`
-	Medicine      []string                                           `json:"medicine"`
-	Last_question string                                             `json:"last_question"`
-	Logs          []UpdateSessionUpdateSessionLogs                   `json:"logs"`
-	Alerts        []string                                           `json:"alerts"`
+	Id                 string                                             `json:"id"`
+	Diseases           []UpdateSessionUpdateSessionDiseases               `json:"diseases"`
+	Symptoms           []UpdateSessionUpdateSessionSymptomsSessionSymptom `json:"symptoms"`
+	Age                int                                                `json:"age"`
+	Height             int                                                `json:"height"`
+	Weight             int                                                `json:"weight"`
+	Sex                string                                             `json:"sex"`
+	Ante_chirs         []string                                           `json:"ante_chirs"`
+	Ante_diseases      []string                                           `json:"ante_diseases"`
+	Medicine           []string                                           `json:"medicine"`
+	Last_question      string                                             `json:"last_question"`
+	Logs               []UpdateSessionUpdateSessionLogs                   `json:"logs"`
+	Hereditary_disease []string                                           `json:"hereditary_disease"`
+	Alerts             []string                                           `json:"alerts"`
 }
 
 // GetId returns UpdateSessionUpdateSession.Id, and is useful for accessing the field via an interface.
@@ -4993,6 +5048,9 @@ func (v *UpdateSessionUpdateSession) GetLast_question() string { return v.Last_q
 
 // GetLogs returns UpdateSessionUpdateSession.Logs, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSession) GetLogs() []UpdateSessionUpdateSessionLogs { return v.Logs }
+
+// GetHereditary_disease returns UpdateSessionUpdateSession.Hereditary_disease, and is useful for accessing the field via an interface.
+func (v *UpdateSessionUpdateSession) GetHereditary_disease() []string { return v.Hereditary_disease }
 
 // GetAlerts returns UpdateSessionUpdateSession.Alerts, and is useful for accessing the field via an interface.
 func (v *UpdateSessionUpdateSession) GetAlerts() []string { return v.Alerts }
@@ -5358,6 +5416,7 @@ type __CreateDiseaseInput struct {
 	Symptoms          []string              `json:"symptoms"`
 	Symptoms_weight   []SymptomsWeightInput `json:"symptoms_weight"`
 	Overweight_factor float64               `json:"overweight_factor"`
+	Heredity_factor   float64               `json:"heredity_factor"`
 	Advice            string                `json:"advice"`
 }
 
@@ -5375,6 +5434,9 @@ func (v *__CreateDiseaseInput) GetSymptoms_weight() []SymptomsWeightInput { retu
 
 // GetOverweight_factor returns __CreateDiseaseInput.Overweight_factor, and is useful for accessing the field via an interface.
 func (v *__CreateDiseaseInput) GetOverweight_factor() float64 { return v.Overweight_factor }
+
+// GetHeredity_factor returns __CreateDiseaseInput.Heredity_factor, and is useful for accessing the field via an interface.
+func (v *__CreateDiseaseInput) GetHeredity_factor() float64 { return v.Heredity_factor }
 
 // GetAdvice returns __CreateDiseaseInput.Advice, and is useful for accessing the field via an interface.
 func (v *__CreateDiseaseInput) GetAdvice() string { return v.Advice }
@@ -5453,15 +5515,16 @@ func (v *__CreateDoubleAuthInput) GetTrust_device_id() string { return v.Trust_d
 
 // __CreateMedicalFolderInput is used internally by genqlient
 type __CreateMedicalFolderInput struct {
-	Name                   string   `json:"name"`
-	Firstname              string   `json:"firstname"`
-	Birthdate              int      `json:"birthdate"`
-	Sex                    string   `json:"sex"`
-	Height                 int      `json:"height"`
-	Weight                 int      `json:"weight"`
-	Primary_doctor_id      string   `json:"primary_doctor_id"`
-	Antecedent_disease_ids []string `json:"antecedent_disease_ids"`
-	Onboarding_status      string   `json:"onboarding_status"`
+	Name                       string   `json:"name"`
+	Firstname                  string   `json:"firstname"`
+	Birthdate                  int      `json:"birthdate"`
+	Sex                        string   `json:"sex"`
+	Height                     int      `json:"height"`
+	Weight                     int      `json:"weight"`
+	Primary_doctor_id          string   `json:"primary_doctor_id"`
+	Antecedent_disease_ids     []string `json:"antecedent_disease_ids"`
+	Onboarding_status          string   `json:"onboarding_status"`
+	Family_members_med_info_id []string `json:"family_members_med_info_id"`
 }
 
 // GetName returns __CreateMedicalFolderInput.Name, and is useful for accessing the field via an interface.
@@ -5492,6 +5555,11 @@ func (v *__CreateMedicalFolderInput) GetAntecedent_disease_ids() []string {
 
 // GetOnboarding_status returns __CreateMedicalFolderInput.Onboarding_status, and is useful for accessing the field via an interface.
 func (v *__CreateMedicalFolderInput) GetOnboarding_status() string { return v.Onboarding_status }
+
+// GetFamily_members_med_info_id returns __CreateMedicalFolderInput.Family_members_med_info_id, and is useful for accessing the field via an interface.
+func (v *__CreateMedicalFolderInput) GetFamily_members_med_info_id() []string {
+	return v.Family_members_med_info_id
+}
 
 // __CreateMedicineInput is used internally by genqlient
 type __CreateMedicineInput struct {
@@ -5575,18 +5643,19 @@ func (v *__CreateRdvInput) GetSession_id() string { return v.Session_id }
 
 // __CreateSessionInput is used internally by genqlient
 type __CreateSessionInput struct {
-	Diseases      []SessionDiseasesInput `json:"diseases"`
-	Symptoms      []SessionSymptomInput  `json:"symptoms"`
-	Age           int                    `json:"age"`
-	Height        int                    `json:"height"`
-	Weight        int                    `json:"weight"`
-	Sex           string                 `json:"sex"`
-	Ante_chirs    []string               `json:"ante_chirs"`
-	Ante_diseases []string               `json:"ante_diseases"`
-	Medicine      []string               `json:"medicine"`
-	Last_question string                 `json:"last_question"`
-	Logs          []LogsInput            `json:"logs"`
-	Alerts        []string               `json:"alerts"`
+	Diseases           []SessionDiseasesInput `json:"diseases"`
+	Symptoms           []SessionSymptomInput  `json:"symptoms"`
+	Age                int                    `json:"age"`
+	Height             int                    `json:"height"`
+	Weight             int                    `json:"weight"`
+	Sex                string                 `json:"sex"`
+	Ante_chirs         []string               `json:"ante_chirs"`
+	Ante_diseases      []string               `json:"ante_diseases"`
+	Medicine           []string               `json:"medicine"`
+	Last_question      string                 `json:"last_question"`
+	Logs               []LogsInput            `json:"logs"`
+	Hereditary_disease []string               `json:"hereditary_disease"`
+	Alerts             []string               `json:"alerts"`
 }
 
 // GetDiseases returns __CreateSessionInput.Diseases, and is useful for accessing the field via an interface.
@@ -5621,6 +5690,9 @@ func (v *__CreateSessionInput) GetLast_question() string { return v.Last_questio
 
 // GetLogs returns __CreateSessionInput.Logs, and is useful for accessing the field via an interface.
 func (v *__CreateSessionInput) GetLogs() []LogsInput { return v.Logs }
+
+// GetHereditary_disease returns __CreateSessionInput.Hereditary_disease, and is useful for accessing the field via an interface.
+func (v *__CreateSessionInput) GetHereditary_disease() []string { return v.Hereditary_disease }
 
 // GetAlerts returns __CreateSessionInput.Alerts, and is useful for accessing the field via an interface.
 func (v *__CreateSessionInput) GetAlerts() []string { return v.Alerts }
@@ -6415,6 +6487,7 @@ type __UpdateDiseaseInput struct {
 	Symptoms          []string              `json:"symptoms"`
 	Symptoms_weight   []SymptomsWeightInput `json:"symptoms_weight"`
 	Overweight_factor float64               `json:"overweight_factor"`
+	Heredity_factor   float64               `json:"heredity_factor"`
 	Advice            string                `json:"advice"`
 }
 
@@ -6435,6 +6508,9 @@ func (v *__UpdateDiseaseInput) GetSymptoms_weight() []SymptomsWeightInput { retu
 
 // GetOverweight_factor returns __UpdateDiseaseInput.Overweight_factor, and is useful for accessing the field via an interface.
 func (v *__UpdateDiseaseInput) GetOverweight_factor() float64 { return v.Overweight_factor }
+
+// GetHeredity_factor returns __UpdateDiseaseInput.Heredity_factor, and is useful for accessing the field via an interface.
+func (v *__UpdateDiseaseInput) GetHeredity_factor() float64 { return v.Heredity_factor }
 
 // GetAdvice returns __UpdateDiseaseInput.Advice, and is useful for accessing the field via an interface.
 func (v *__UpdateDiseaseInput) GetAdvice() string { return v.Advice }
@@ -6521,16 +6597,17 @@ func (v *__UpdateDoubleAuthInput) GetTrust_device_id() string { return v.Trust_d
 
 // __UpdateMedicalFolderInput is used internally by genqlient
 type __UpdateMedicalFolderInput struct {
-	Id                     string           `json:"id"`
-	Name                   string           `json:"name"`
-	Firstname              string           `json:"firstname"`
-	Birthdate              int              `json:"birthdate"`
-	Sex                    string           `json:"sex"`
-	Height                 int              `json:"height"`
-	Weight                 int              `json:"weight"`
-	Primary_doctor_id      string           `json:"primary_doctor_id"`
-	Antecedent_disease_ids []string         `json:"antecedent_disease_ids"`
-	Onboarding_status      OnboardingStatus `json:"onboarding_status"`
+	Id                         string           `json:"id"`
+	Name                       string           `json:"name"`
+	Firstname                  string           `json:"firstname"`
+	Birthdate                  int              `json:"birthdate"`
+	Sex                        string           `json:"sex"`
+	Height                     int              `json:"height"`
+	Weight                     int              `json:"weight"`
+	Primary_doctor_id          string           `json:"primary_doctor_id"`
+	Antecedent_disease_ids     []string         `json:"antecedent_disease_ids"`
+	Onboarding_status          OnboardingStatus `json:"onboarding_status"`
+	Family_members_med_info_id []string         `json:"family_members_med_info_id"`
 }
 
 // GetId returns __UpdateMedicalFolderInput.Id, and is useful for accessing the field via an interface.
@@ -6565,6 +6642,11 @@ func (v *__UpdateMedicalFolderInput) GetAntecedent_disease_ids() []string {
 // GetOnboarding_status returns __UpdateMedicalFolderInput.Onboarding_status, and is useful for accessing the field via an interface.
 func (v *__UpdateMedicalFolderInput) GetOnboarding_status() OnboardingStatus {
 	return v.Onboarding_status
+}
+
+// GetFamily_members_med_info_id returns __UpdateMedicalFolderInput.Family_members_med_info_id, and is useful for accessing the field via an interface.
+func (v *__UpdateMedicalFolderInput) GetFamily_members_med_info_id() []string {
+	return v.Family_members_med_info_id
 }
 
 // __UpdateNotificationInput is used internally by genqlient
@@ -6675,19 +6757,20 @@ func (v *__UpdateRdvInput) GetHealth_method() string { return v.Health_method }
 
 // __UpdateSessionInput is used internally by genqlient
 type __UpdateSessionInput struct {
-	Id            string                 `json:"id"`
-	Diseases      []SessionDiseasesInput `json:"diseases"`
-	Symptoms      []SessionSymptomInput  `json:"symptoms"`
-	Age           int                    `json:"age"`
-	Height        int                    `json:"height"`
-	Weight        int                    `json:"weight"`
-	Sex           string                 `json:"sex"`
-	Ante_chirs    []string               `json:"ante_chirs"`
-	Ante_diseases []string               `json:"ante_diseases"`
-	Medicine      []string               `json:"medicine"`
-	Last_question string                 `json:"last_question"`
-	Logs          []LogsInput            `json:"logs"`
-	Alerts        []string               `json:"alerts"`
+	Id                 string                 `json:"id"`
+	Diseases           []SessionDiseasesInput `json:"diseases"`
+	Symptoms           []SessionSymptomInput  `json:"symptoms"`
+	Age                int                    `json:"age"`
+	Height             int                    `json:"height"`
+	Weight             int                    `json:"weight"`
+	Sex                string                 `json:"sex"`
+	Ante_chirs         []string               `json:"ante_chirs"`
+	Ante_diseases      []string               `json:"ante_diseases"`
+	Medicine           []string               `json:"medicine"`
+	Last_question      string                 `json:"last_question"`
+	Logs               []LogsInput            `json:"logs"`
+	Hereditary_disease []string               `json:"hereditary_disease"`
+	Alerts             []string               `json:"alerts"`
 }
 
 // GetId returns __UpdateSessionInput.Id, and is useful for accessing the field via an interface.
@@ -6725,6 +6808,9 @@ func (v *__UpdateSessionInput) GetLast_question() string { return v.Last_questio
 
 // GetLogs returns __UpdateSessionInput.Logs, and is useful for accessing the field via an interface.
 func (v *__UpdateSessionInput) GetLogs() []LogsInput { return v.Logs }
+
+// GetHereditary_disease returns __UpdateSessionInput.Hereditary_disease, and is useful for accessing the field via an interface.
+func (v *__UpdateSessionInput) GetHereditary_disease() []string { return v.Hereditary_disease }
 
 // GetAlerts returns __UpdateSessionInput.Alerts, and is useful for accessing the field via an interface.
 func (v *__UpdateSessionInput) GetAlerts() []string { return v.Alerts }
@@ -7311,8 +7397,8 @@ func CreateDeviceConnect(
 
 // The query or mutation executed by CreateDisease.
 const CreateDisease_Operation = `
-mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float!, $advice: String) {
-	createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice) {
+mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float!, $heredity_factor: Float!, $advice: String) {
+	createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, heredity_factor: $heredity_factor, advice: $advice) {
 		id
 		code
 		name
@@ -7323,6 +7409,7 @@ mutation CreateDisease ($code: String!, $name: String!, $symptoms: [String!]!, $
 			chronic
 		}
 		overweight_factor
+		heredity_factor
 		advice
 	}
 }
@@ -7336,6 +7423,7 @@ func CreateDisease(
 	symptoms []string,
 	symptoms_weight []SymptomsWeightInput,
 	overweight_factor float64,
+	heredity_factor float64,
 	advice string,
 ) (*CreateDiseaseResponse, error) {
 	req := &graphql.Request{
@@ -7347,6 +7435,7 @@ func CreateDisease(
 			Symptoms:          symptoms,
 			Symptoms_weight:   symptoms_weight,
 			Overweight_factor: overweight_factor,
+			Heredity_factor:   heredity_factor,
 			Advice:            advice,
 		},
 	}
@@ -7517,8 +7606,8 @@ func CreateDoubleAuth(
 
 // The query or mutation executed by CreateMedicalFolder.
 const CreateMedicalFolder_Operation = `
-mutation CreateMedicalFolder ($name: String!, $firstname: String!, $birthdate: Int!, $sex: String!, $height: Int!, $weight: Int!, $primary_doctor_id: String!, $antecedent_disease_ids: [String!]!, $onboarding_status: String!) {
-	createMedicalFolder(name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status) {
+mutation CreateMedicalFolder ($name: String!, $firstname: String!, $birthdate: Int!, $sex: String!, $height: Int!, $weight: Int!, $primary_doctor_id: String!, $antecedent_disease_ids: [String!]!, $onboarding_status: String!, $family_members_med_info_id: [String!]!) {
+	createMedicalFolder(name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status, family_members_med_info_id: $family_members_med_info_id) {
 		id
 		name
 		firstname
@@ -7529,6 +7618,7 @@ mutation CreateMedicalFolder ($name: String!, $firstname: String!, $birthdate: I
 		primary_doctor_id
 		antecedent_disease_ids
 		onboarding_status
+		family_members_med_info_id
 	}
 }
 `
@@ -7545,20 +7635,22 @@ func CreateMedicalFolder(
 	primary_doctor_id string,
 	antecedent_disease_ids []string,
 	onboarding_status string,
+	family_members_med_info_id []string,
 ) (*CreateMedicalFolderResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateMedicalFolder",
 		Query:  CreateMedicalFolder_Operation,
 		Variables: &__CreateMedicalFolderInput{
-			Name:                   name,
-			Firstname:              firstname,
-			Birthdate:              birthdate,
-			Sex:                    sex,
-			Height:                 height,
-			Weight:                 weight,
-			Primary_doctor_id:      primary_doctor_id,
-			Antecedent_disease_ids: antecedent_disease_ids,
-			Onboarding_status:      onboarding_status,
+			Name:                       name,
+			Firstname:                  firstname,
+			Birthdate:                  birthdate,
+			Sex:                        sex,
+			Height:                     height,
+			Weight:                     weight,
+			Primary_doctor_id:          primary_doctor_id,
+			Antecedent_disease_ids:     antecedent_disease_ids,
+			Onboarding_status:          onboarding_status,
+			Family_members_med_info_id: family_members_med_info_id,
 		},
 	}
 	var err error
@@ -7766,8 +7858,8 @@ func CreateRdv(
 
 // The query or mutation executed by CreateSession.
 const CreateSession_Operation = `
-mutation CreateSession ($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $medicine: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!) {
-	createSession(diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, alerts: $alerts) {
+mutation CreateSession ($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $medicine: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $hereditary_disease: [String!]!, $alerts: [String!]!) {
+	createSession(diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, hereditary_disease: $hereditary_disease, alerts: $alerts) {
 		id
 		diseases {
 			name
@@ -7792,6 +7884,7 @@ mutation CreateSession ($diseases: [SessionDiseasesInput!]!, $symptoms: [Session
 			question
 			answer
 		}
+		hereditary_disease
 		alerts
 	}
 }
@@ -7811,24 +7904,26 @@ func CreateSession(
 	medicine []string,
 	last_question string,
 	logs []LogsInput,
+	hereditary_disease []string,
 	alerts []string,
 ) (*CreateSessionResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateSession",
 		Query:  CreateSession_Operation,
 		Variables: &__CreateSessionInput{
-			Diseases:      diseases,
-			Symptoms:      symptoms,
-			Age:           age,
-			Height:        height,
-			Weight:        weight,
-			Sex:           sex,
-			Ante_chirs:    ante_chirs,
-			Ante_diseases: ante_diseases,
-			Medicine:      medicine,
-			Last_question: last_question,
-			Logs:          logs,
-			Alerts:        alerts,
+			Diseases:           diseases,
+			Symptoms:           symptoms,
+			Age:                age,
+			Height:             height,
+			Weight:             weight,
+			Sex:                sex,
+			Ante_chirs:         ante_chirs,
+			Ante_diseases:      ante_diseases,
+			Medicine:           medicine,
+			Last_question:      last_question,
+			Logs:               logs,
+			Hereditary_disease: hereditary_disease,
+			Alerts:             alerts,
 		},
 	}
 	var err error
@@ -9593,6 +9688,7 @@ query GetDiseaseById ($id: String!) {
 			chronic
 		}
 		overweight_factor
+		heredity_factor
 		advice
 	}
 }
@@ -9638,6 +9734,7 @@ query GetDiseases {
 			chronic
 		}
 		overweight_factor
+		heredity_factor
 		advice
 	}
 }
@@ -10014,6 +10111,7 @@ query GetMedicalFolder {
 		primary_doctor_id
 		antecedent_disease_ids
 		onboarding_status
+		family_members_med_info_id
 	}
 }
 `
@@ -10054,6 +10152,7 @@ query GetMedicalFolderByID ($id: String!) {
 		primary_doctor_id
 		antecedent_disease_ids
 		onboarding_status
+		family_members_med_info_id
 	}
 }
 `
@@ -10641,6 +10740,7 @@ query GetSessionById ($id: String!) {
 			question
 			answer
 		}
+		hereditary_disease
 		alerts
 	}
 }
@@ -10700,6 +10800,7 @@ query GetSessions {
 			question
 			answer
 		}
+		hereditary_disease
 		alerts
 	}
 }
@@ -11615,8 +11716,8 @@ func UpdateDeviceConnect(
 
 // The query or mutation executed by UpdateDisease.
 const UpdateDisease_Operation = `
-mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float, $advice: String) {
-	updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice) {
+mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float, $heredity_factor: Float, $advice: String) {
+	updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, heredity_factor: $heredity_factor, advice: $advice) {
 		id
 		code
 		name
@@ -11627,6 +11728,7 @@ mutation UpdateDisease ($id: String!, $code: String, $name: String, $symptoms: [
 			chronic
 		}
 		overweight_factor
+		heredity_factor
 		advice
 	}
 }
@@ -11641,6 +11743,7 @@ func UpdateDisease(
 	symptoms []string,
 	symptoms_weight []SymptomsWeightInput,
 	overweight_factor float64,
+	heredity_factor float64,
 	advice string,
 ) (*UpdateDiseaseResponse, error) {
 	req := &graphql.Request{
@@ -11653,6 +11756,7 @@ func UpdateDisease(
 			Symptoms:          symptoms,
 			Symptoms_weight:   symptoms_weight,
 			Overweight_factor: overweight_factor,
+			Heredity_factor:   heredity_factor,
 			Advice:            advice,
 		},
 	}
@@ -11827,8 +11931,8 @@ func UpdateDoubleAuth(
 
 // The query or mutation executed by UpdateMedicalFolder.
 const UpdateMedicalFolder_Operation = `
-mutation UpdateMedicalFolder ($id: String!, $name: String, $firstname: String, $birthdate: Int, $sex: String, $height: Int, $weight: Int, $primary_doctor_id: String, $antecedent_disease_ids: [String!], $onboarding_status: OnboardingStatus) {
-	updateMedicalFolder(id: $id, name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status) {
+mutation UpdateMedicalFolder ($id: String!, $name: String, $firstname: String, $birthdate: Int, $sex: String, $height: Int, $weight: Int, $primary_doctor_id: String, $antecedent_disease_ids: [String!], $onboarding_status: OnboardingStatus, $family_members_med_info_id: [String!]!) {
+	updateMedicalFolder(id: $id, name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status, family_members_med_info_id: $family_members_med_info_id) {
 		id
 		name
 		firstname
@@ -11839,6 +11943,7 @@ mutation UpdateMedicalFolder ($id: String!, $name: String, $firstname: String, $
 		primary_doctor_id
 		antecedent_disease_ids
 		onboarding_status
+		family_members_med_info_id
 	}
 }
 `
@@ -11856,21 +11961,23 @@ func UpdateMedicalFolder(
 	primary_doctor_id string,
 	antecedent_disease_ids []string,
 	onboarding_status OnboardingStatus,
+	family_members_med_info_id []string,
 ) (*UpdateMedicalFolderResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateMedicalFolder",
 		Query:  UpdateMedicalFolder_Operation,
 		Variables: &__UpdateMedicalFolderInput{
-			Id:                     id,
-			Name:                   name,
-			Firstname:              firstname,
-			Birthdate:              birthdate,
-			Sex:                    sex,
-			Height:                 height,
-			Weight:                 weight,
-			Primary_doctor_id:      primary_doctor_id,
-			Antecedent_disease_ids: antecedent_disease_ids,
-			Onboarding_status:      onboarding_status,
+			Id:                         id,
+			Name:                       name,
+			Firstname:                  firstname,
+			Birthdate:                  birthdate,
+			Sex:                        sex,
+			Height:                     height,
+			Weight:                     weight,
+			Primary_doctor_id:          primary_doctor_id,
+			Antecedent_disease_ids:     antecedent_disease_ids,
+			Onboarding_status:          onboarding_status,
+			Family_members_med_info_id: family_members_med_info_id,
 		},
 	}
 	var err error
@@ -12054,8 +12161,8 @@ func UpdateRdv(
 
 // The query or mutation executed by UpdateSession.
 const UpdateSession_Operation = `
-mutation UpdateSession ($id: String!, $diseases: [SessionDiseasesInput!], $symptoms: [SessionSymptomInput!], $age: Int, $height: Int, $weight: Int, $sex: String, $ante_chirs: [String!], $ante_diseases: [String!], $medicine: [String!], $last_question: String, $logs: [LogsInput!], $alerts: [String!]) {
-	updateSession(id: $id, diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, alerts: $alerts) {
+mutation UpdateSession ($id: String!, $diseases: [SessionDiseasesInput!], $symptoms: [SessionSymptomInput!], $age: Int, $height: Int, $weight: Int, $sex: String, $ante_chirs: [String!], $ante_diseases: [String!], $medicine: [String!], $last_question: String, $logs: [LogsInput!], $hereditary_disease: [String!], $alerts: [String!]) {
+	updateSession(id: $id, diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, hereditary_disease: $hereditary_disease, alerts: $alerts) {
 		id
 		diseases {
 			name
@@ -12080,6 +12187,7 @@ mutation UpdateSession ($id: String!, $diseases: [SessionDiseasesInput!], $sympt
 			question
 			answer
 		}
+		hereditary_disease
 		alerts
 	}
 }
@@ -12100,25 +12208,27 @@ func UpdateSession(
 	medicine []string,
 	last_question string,
 	logs []LogsInput,
+	hereditary_disease []string,
 	alerts []string,
 ) (*UpdateSessionResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateSession",
 		Query:  UpdateSession_Operation,
 		Variables: &__UpdateSessionInput{
-			Id:            id,
-			Diseases:      diseases,
-			Symptoms:      symptoms,
-			Age:           age,
-			Height:        height,
-			Weight:        weight,
-			Sex:           sex,
-			Ante_chirs:    ante_chirs,
-			Ante_diseases: ante_diseases,
-			Medicine:      medicine,
-			Last_question: last_question,
-			Logs:          logs,
-			Alerts:        alerts,
+			Id:                 id,
+			Diseases:           diseases,
+			Symptoms:           symptoms,
+			Age:                age,
+			Height:             height,
+			Weight:             weight,
+			Sex:                sex,
+			Ante_chirs:         ante_chirs,
+			Ante_diseases:      ante_diseases,
+			Medicine:           medicine,
+			Last_question:      last_question,
+			Logs:               logs,
+			Hereditary_disease: hereditary_disease,
+			Alerts:             alerts,
 		},
 	}
 	var err error
