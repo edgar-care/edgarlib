@@ -18,7 +18,7 @@ type ExamResponseBody struct {
 	Err      error                  `json:"err"`
 }
 
-func CallExam(context []model.SessionSymptom, imc float64, anteChirIds []string) ExamResponseBody {
+func CallExam(context []model.SessionSymptom, imc float64, anteChirIds []string, hereditary_disease []string) ExamResponseBody {
 	//var rBody = examRequestBody{
 	//	Context: context,
 	//}
@@ -34,7 +34,7 @@ func CallExam(context []model.SessionSymptom, imc float64, anteChirIds []string)
 	//err = json.NewDecoder(resp.Body).Decode(&respBody)
 	//edgarlib.CheckError(err)
 
-	examr := exam.Exam(context, imc, anteChirIds)
+	examr := exam.Exam(context, imc, anteChirIds, hereditary_disease)
 	if examr.Err != nil {
 		return ExamResponseBody{Err: examr.Err}
 	}

@@ -59,8 +59,8 @@ mutation CreateDemoAccount($email: String!, $password: String!){
     }
 }
 
-mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float!, $advice: String){
-    createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice){
+mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float!, $heredity_factor: Float!, $advice: String){
+    createDisease(code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, heredity_factor: $heredity_factor, advice: $advice){
         id
         code
         name
@@ -71,6 +71,7 @@ mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $s
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
     }
 }
@@ -143,8 +144,8 @@ mutation CreateRdv($id_patient: String!, $doctor_id: String!, $start_date: Int!,
     }
 }
 
-mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $medicine: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $alerts: [String!]!){
-    createSession(diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, alerts: $alerts){
+mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $medicine: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $hereditary_disease: [String!]!, $alerts: [String!]!){
+    createSession(diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, hereditary_disease: $hereditary_disease, alerts: $alerts){
         id
         diseases {
             name
@@ -169,6 +170,7 @@ mutation CreateSession($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionS
             question
             answer
         }
+        hereditary_disease
         alerts
     }
 }
@@ -207,8 +209,8 @@ mutation CreateTreatment($periods: [Period!]!, $day: [Day!]!, $quantity: Int!, $
     }
 }
 
-mutation CreateMedicalFolder($name: String!, $firstname: String!, $birthdate: Int!, $sex: String!, $height: Int!, $weight: Int!, $primary_doctor_id: String!, $antecedent_disease_ids: [String!]!, $onboarding_status: String!){
-    createMedicalFolder(name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status){
+mutation CreateMedicalFolder($name: String!, $firstname: String!, $birthdate: Int!, $sex: String!, $height: Int!, $weight: Int!, $primary_doctor_id: String!, $antecedent_disease_ids: [String!]!, $onboarding_status: String!, $family_members_med_info_id: [String!]!){
+    createMedicalFolder(name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status, family_members_med_info_id: $family_members_med_info_id){
         id
         name
         firstname
@@ -219,6 +221,7 @@ mutation CreateMedicalFolder($name: String!, $firstname: String!, $birthdate: In
         primary_doctor_id
         antecedent_disease_ids
         onboarding_status
+        family_members_med_info_id
     }
 }
 
@@ -360,8 +363,8 @@ mutation UpdateDemoAccount($id: String!, $email: String, $password: String){
     }
 }
 
-mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float, $advice: String){
-    updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, advice: $advice){
+mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [String!], $symptoms_weight: [SymptomsWeightInput!], $overweight_factor: Float, $heredity_factor: Float, $advice: String){
+    updateDisease(id: $id, code: $code, name: $name, symptoms: $symptoms, symptoms_weight: $symptoms_weight, overweight_factor: $overweight_factor, heredity_factor: $heredity_factor, advice: $advice){
         id
         code
         name
@@ -372,6 +375,7 @@ mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [S
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
     }
 }
@@ -444,8 +448,8 @@ mutation UpdateRdv($id: String!, $id_patient: String, $doctor_id: String, $start
     }
 }
 
-mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $symptoms: [SessionSymptomInput!], $age: Int, $height: Int, $weight: Int, $sex: String, $ante_chirs: [String!], $ante_diseases: [String!], $medicine: [String!], $last_question: String, $logs: [LogsInput!], $alerts: [String!]){
-    updateSession(id: $id, diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, alerts: $alerts){
+mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $symptoms: [SessionSymptomInput!], $age: Int, $height: Int, $weight: Int, $sex: String, $ante_chirs: [String!], $ante_diseases: [String!], $medicine: [String!], $last_question: String, $logs: [LogsInput!], $hereditary_disease: [String!], $alerts: [String!]){
+    updateSession(id: $id, diseases: $diseases, symptoms: $symptoms, age: $age, height: $height, weight: $weight, sex: $sex, ante_chirs: $ante_chirs, ante_diseases: $ante_diseases, medicine: $medicine, last_question: $last_question, logs: $logs, hereditary_disease: $hereditary_disease, alerts: $alerts){
         id
         diseases {
             name
@@ -470,6 +474,7 @@ mutation UpdateSession($id: String!, $diseases: [SessionDiseasesInput!], $sympto
             question
             answer
         }
+        hereditary_disease
         alerts
     }
 }
@@ -508,8 +513,8 @@ mutation UpdateTreatment($id: String!, $period: [Period!], $day: [Day!], $quanti
     }
 }
 
-mutation UpdateMedicalFolder($id: String!, $name: String, $firstname: String, $birthdate: Int, $sex: String, $height: Int, $weight: Int, $primary_doctor_id: String, $antecedent_disease_ids: [String!], $onboarding_status: OnboardingStatus){
-    updateMedicalFolder(id:$id, name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status){
+mutation UpdateMedicalFolder($id: String!, $name: String, $firstname: String, $birthdate: Int, $sex: String, $height: Int, $weight: Int, $primary_doctor_id: String, $antecedent_disease_ids: [String!], $onboarding_status: OnboardingStatus, $family_members_med_info_id: [String!]!){
+    updateMedicalFolder(id:$id, name: $name, firstname: $firstname, birthdate: $birthdate, sex: $sex, height: $height, weight: $weight, primary_doctor_id: $primary_doctor_id, antecedent_disease_ids: $antecedent_disease_ids, onboarding_status: $onboarding_status, family_members_med_info_id: $family_members_med_info_id){
         id
         name
         firstname
@@ -520,6 +525,7 @@ mutation UpdateMedicalFolder($id: String!, $name: String, $firstname: String, $b
         primary_doctor_id
         antecedent_disease_ids
         onboarding_status
+        family_members_med_info_id
     }
 }
 
@@ -675,6 +681,7 @@ query GetDiseaseById($id: String!){
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
     }
 }
@@ -691,6 +698,7 @@ query GetDiseases{
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
     }
 }
@@ -919,6 +927,7 @@ query GetSessionById($id: String!){
             question
             answer
         }
+        hereditary_disease
         alerts
     }
 }
@@ -949,6 +958,7 @@ query GetSessions{
             question
             answer
         }
+        hereditary_disease
         alerts
     }
 }
@@ -1072,6 +1082,7 @@ query GetMedicalFolderByID($id: String!){
         primary_doctor_id
         antecedent_disease_ids
         onboarding_status
+        family_members_med_info_id
     }
 }
 
@@ -1087,6 +1098,7 @@ query GetMedicalFolder{
         primary_doctor_id
         antecedent_disease_ids
         onboarding_status
+        family_members_med_info_id
     }
 }
 
