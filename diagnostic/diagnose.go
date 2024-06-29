@@ -126,7 +126,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		}
 
 	} else if exam.Question == "" && session.GetSessionById.Last_question == "" {
-		exam = utils.CallExam(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs)
+		exam = utils.CallExam(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs, session.GetSessionById.Hereditary_disease)
 		if exam.Err != nil {
 			if exam.Err != nil {
 				return DiagnoseResponse{
@@ -198,7 +198,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 
 	var diseasesinput []graphql.SessionDiseasesInput
 	if exam.Done == true {
-		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs)
+		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.GetSessionById.Weight)/(float64(session.GetSessionById.Height)/100.0*(float64(session.GetSessionById.Height)/100.0)), session.GetSessionById.Ante_chirs, session.GetSessionById.Hereditary_disease)
 		if err != nil {
 			return DiagnoseResponse{
 				Code: 500,
@@ -206,7 +206,7 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 			}
 		}
 	}
-	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, diseasesinput, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Medicine, session.GetSessionById.Last_question, logs, session.GetSessionById.Alerts)
+	_, err = graphql.UpdateSession(context.Background(), gqlClient, session.GetSessionById.Id, diseasesinput, symptomsinput, session.GetSessionById.Age, session.GetSessionById.Height, session.GetSessionById.Weight, session.GetSessionById.Sex, session.GetSessionById.Ante_chirs, session.GetSessionById.Ante_diseases, session.GetSessionById.Medicine, session.GetSessionById.Last_question, logs, session.GetSessionById.Hereditary_disease, session.GetSessionById.Alerts)
 	edgarlib.CheckError(err)
 	return DiagnoseResponse{
 		Done:     exam.Done,

@@ -128,6 +128,7 @@ type Disease struct {
 	Symptoms         []string          `json:"symptoms" bson:"symptoms"`
 	SymptomsWeight   []*SymptomsWeight `json:"symptoms_weight,omitempty" bson:"symptoms_weight"`
 	OverweightFactor float64           `json:"overweight_factor" bson:"overweight_factor"`
+	HeredityFactor   float64           `json:"heredity_factor" bson:"heredity_factor"`
 	Advice           *string           `json:"advice,omitempty" bson:"advice"`
 }
 
@@ -185,16 +186,17 @@ type MedicalAntecedentsInput struct {
 }
 
 type MedicalInfo struct {
-	ID                   string           `json:"id" bson:"_id"`
-	Name                 string           `json:"name" bson:"name"`
-	Firstname            string           `json:"firstname" bson:"firstname"`
-	Birthdate            int              `json:"birthdate" bson:"birthdate"`
-	Sex                  Sex              `json:"sex" bson:"sex"`
-	Height               int              `json:"height" bson:"height"`
-	Weight               int              `json:"weight" bson:"weight"`
-	PrimaryDoctorID      string           `json:"primary_doctor_id" bson:"primary_doctor_id"`
-	OnboardingStatus     OnboardingStatus `json:"onboarding_status" bson:"onboarding_status"`
-	AntecedentDiseaseIds []string         `json:"antecedent_disease_ids" bson:"antecedent_disease_ids"`
+	ID                     string           `json:"id" bson:"_id"`
+	Name                   string           `json:"name" bson:"name"`
+	Firstname              string           `json:"firstname" bson:"firstname"`
+	Birthdate              int              `json:"birthdate" bson:"birthdate"`
+	Sex                    Sex              `json:"sex" bson:"sex"`
+	Height                 int              `json:"height" bson:"height"`
+	Weight                 int              `json:"weight" bson:"weight"`
+	PrimaryDoctorID        string           `json:"primary_doctor_id" bson:"primary_doctor_id"`
+	OnboardingStatus       OnboardingStatus `json:"onboarding_status" bson:"onboarding_status"`
+	AntecedentDiseaseIds   []string         `json:"antecedent_disease_ids" bson:"antecedent_disease_ids"`
+	FamilyMembersMedInfoID []string         `json:"family_members_med_info_id" bson:"family_members_med_info_id"`
 }
 
 type Medicine struct {
@@ -274,19 +276,20 @@ type Rdv struct {
 }
 
 type Session struct {
-	ID           string             `json:"id" bson:"_id"`
-	Diseases     []*SessionDiseases `json:"diseases" bson:"diseases"`
-	Symptoms     []*SessionSymptom  `json:"symptoms" bson:"symptoms"`
-	Age          int                `json:"age" bson:"age"`
-	Height       int                `json:"height" bson:"height"`
-	Weight       int                `json:"weight" bson:"weight"`
-	Sex          string             `json:"sex" bson:"sex"`
-	AnteChirs    []string           `json:"ante_chirs" bson:"ante_chirs"`
-	AnteDiseases []string           `json:"ante_diseases" bson:"ante_diseases"`
-	Medicine     []string           `json:"medicine" bson:"medicine"`
-	LastQuestion string             `json:"last_question" bson:"last_question"`
-	Logs         []*Logs            `json:"logs" bson:"logs"`
-	Alerts       []string           `json:"alerts" bson:"alerts"`
+	ID                string             `json:"id" bson:"_id"`
+	Diseases          []*SessionDiseases `json:"diseases" bson:"diseases"`
+	Symptoms          []*SessionSymptom  `json:"symptoms" bson:"symptoms"`
+	Age               int                `json:"age" bson:"age"`
+	Height            int                `json:"height" bson:"height"`
+	Weight            int                `json:"weight" bson:"weight"`
+	Sex               string             `json:"sex" bson:"sex"`
+	AnteChirs         []string           `json:"ante_chirs" bson:"ante_chirs"`
+	AnteDiseases      []string           `json:"ante_diseases" bson:"ante_diseases"`
+	Medicine          []string           `json:"medicine" bson:"medicine"`
+	LastQuestion      string             `json:"last_question" bson:"last_question"`
+	Logs              []*Logs            `json:"logs" bson:"logs"`
+	HereditaryDisease []string           `json:"hereditary_disease" bson:"hereditary_disease"`
+	Alerts            []string           `json:"alerts" bson:"alerts"`
 }
 
 type SessionDiseases struct {

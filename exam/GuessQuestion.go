@@ -4,7 +4,10 @@ import (
 	"context"
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"math/rand"
 	"sort"
+	"strings"
+	"time"
 )
 
 type DiseaseCoverage struct {
@@ -33,6 +36,15 @@ func isChronic(sessionSymptom model.SessionSymptom) bool {
 	return false
 }
 
+func isInStringArray(array []string, str string) bool {
+	for _, s := range array {
+		if s != "" && str != "" && s == str {
+			return true
+		}
+	}
+	return false
+}
+
 func isAnteChir(symptomName string, anteChirs []model.AnteChir) float64 {
 	for _, anteChir := range anteChirs {
 		for _, iS := range anteChir.InducedSymptoms {
@@ -44,7 +56,7 @@ func isAnteChir(symptomName string, anteChirs []model.AnteChir) float64 {
 	return 1.0
 }
 
-func CalculPercentage(context_ []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease, imc float64, anteChirIds []string) DiseaseCoverage {
+func CalculPercentage(context_ []model.SessionSymptom, disease graphql.GetDiseasesGetDiseasesDisease, imc float64, anteChirIds []string, hereditary_disease []string) DiseaseCoverage {
 	gqlClient := graphql.CreateClient()
 	var anteChirs []model.AnteChir
 	var potentialQuestionSymptom string
@@ -102,21 +114,32 @@ func CalculPercentage(context_ []model.SessionSymptom, disease graphql.GetDiseas
 	if disease.Overweight_factor != 0 && imc > 25.0 {
 		percentage *= disease.Overweight_factor
 	}
+	if disease.Heredity_factor != 0 && isInStringArray(hereditary_disease, disease.Name) {
+		percentage *= disease.Heredity_factor
+	}
 
 	return DiseaseCoverage{Disease: disease.Code, Percentage: percentage, Unknown: unknown, PotentialQuestion: potentialQuestionSymptom}
+}
+
+func AddDiscursiveConnector(question string) string {
+	rand.Seed(time.Now().UnixNano())
+	connectorList := []string{"Je comprends", "Très bien", "Je note", "Je vois", "C'est noté", "Je vous suis", "D'accord", "Ensuite", "D'accord, je vois", "C'est entendu", "Ça marche", "Compris", "Oui, je comprends", "Entendu"}
+	it := rand.Intn(len(connectorList) - 1)
+	question = strings.Replace(question, "{{connecteur}}", connectorList[it], 1)
+	return question
 }
 
 func getTheQuestion(symptomName string, symptoms []graphql.GetSymptomsGetSymptomsSymptom) string {
 	for _, symptom := range symptoms {
 		if symptomName == symptom.Code {
 			if symptom.Question != "" {
-				return symptom.Question_basic
+				return AddDiscursiveConnector(symptom.Question_basic)
 			} else {
-				return "Est-ce que vous avez ce symptôme: " + symptom.Code + " ?"
+				return AddDiscursiveConnector("{{connecteur}}. Est-ce que vous avez ce symptôme: " + symptom.Name + " ?")
 			}
 		}
 	}
-	return "Est-ce que vous avez ce symptôme: " + symptomName + " ?"
+	return AddDiscursiveConnector("{{connecteur}}. Est-ce que vous avez ce symptôme: " + symptomName + " ?")
 }
 
 func GuessQuestion(mapped []DiseaseCoverage) (string, []string, error) {
@@ -134,12 +157,12 @@ func GuessQuestion(mapped []DiseaseCoverage) (string, []string, error) {
 	return getTheQuestion(mapped[i].PotentialQuestion, symptoms.GetSymptoms), []string{mapped[i].PotentialQuestion}, nil
 }
 
-func Calculi(sessionContext []model.SessionSymptom, imc float64, anteChirIds []string) ([]DiseaseCoverage, bool) {
+func Calculi(sessionContext []model.SessionSymptom, imc float64, anteChirIds []string, hereditary_disease []string) ([]DiseaseCoverage, bool) {
 	gqlClient := graphql.CreateClient()
 	diseases, _ := graphql.GetDiseases(context.Background(), gqlClient)
 	mapped := make([]DiseaseCoverage, len(diseases.GetDiseases))
 	for i, e := range diseases.GetDiseases {
-		mapped[i] = CalculPercentage(sessionContext, e, imc, anteChirIds)
+		mapped[i] = CalculPercentage(sessionContext, e, imc, anteChirIds, hereditary_disease)
 	}
 	sort.Sort(ByCoverage(mapped))
 

@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"fmt"
+	"github.com/edgar-care/edgarlib/exam"
 	"github.com/edgar-care/edgarlib/graphql"
 	"strings"
 )
@@ -61,14 +62,14 @@ func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion s
 			if len(allSymptoms.GetSymptoms) > 0 {
 				for _, s := range allSymptoms.GetSymptoms {
 					if s.Code == symptom.Name && s.Question_duration != "" {
-						question = s.Question_duration
+						question = exam.AddDiscursiveConnector(s.Question_duration)
 						break
 					} else {
-						question = "Depuis combien de jours souffrez-vous de " + symptom.Name
+						question = exam.AddDiscursiveConnector("{{connecteur}}. Depuis combien de jours souffrez-vous de " + symptom.Name)
 					}
 				}
 			} else {
-				question = "Depuis combien de jours souffrez-vous de " + symptom.Name
+				question = exam.AddDiscursiveConnector("{{connecteur}}. Depuis combien de jours souffrez-vous de " + symptom.Name)
 			}
 			nextLastQuestion = "duration " + symptom.Name
 		}

@@ -163,6 +163,7 @@ type Session {
     medicine: [String!]!
     last_question: String!
     logs: [Logs!]!
+    hereditary_disease: [String!]!
     alerts: [String!]!
 }
 
@@ -188,6 +189,7 @@ type Disease {
     symptoms: [String!]!
     symptoms_weight: [SymptomsWeight!]
     overweight_factor: Float!
+    heredity_factor: Float!
     advice: String
 }
 
@@ -202,6 +204,7 @@ type MedicalInfo {
     primary_doctor_id: String!
     onboarding_status: OnboardingStatus!
     antecedent_disease_ids: [String!]!
+    family_members_med_info_id: [String!]!
 }
 
 type Notification {
@@ -607,10 +610,10 @@ type Mutation {
     deleteTestAccount(id: String!): Boolean
 
     # Create a new session.
-    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, medicine: [String!]!, last_question: String!, logs: [LogsInput!]!, alerts: [String!]!): Session
+    createSession(diseases: [SessionDiseasesInput!]!, symptoms: [SessionSymptomInput!]!, age: Int!, height: Int!, weight: Int!, sex: String!, ante_chirs: [String!]!, ante_diseases: [String!]!, medicine: [String!]!, last_question: String!, logs: [LogsInput!]!, hereditary_disease: [String!]!, alerts: [String!]!): Session
 
     # Update a new session.
-    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], medicine: [String!], last_question: String, logs: [LogsInput!], alerts: [String!]): Session
+    updateSession(id: String!, diseases: [SessionDiseasesInput!], symptoms: [SessionSymptomInput!], age: Int, height: Int, weight: Int, sex: String, ante_chirs: [String!], ante_diseases: [String!], medicine: [String!], last_question: String, logs: [LogsInput!], hereditary_disease: [String!], alerts: [String!]): Session
 
     # Delete a session.
     deleteSession(id: String!): Boolean
@@ -626,10 +629,10 @@ type Mutation {
     deleteSymptom(id: String!): Boolean
 
     # Create a new disease.
-    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float!, advice: String): Disease
+    createDisease(code: String!, name: String!, symptoms: [String!]!, symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float!, heredity_factor: Float!, advice: String): Disease
 
     # Update a new disease.
-    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float, advice: String): Disease
+    updateDisease(id: String!, code: String, name: String, symptoms: [String!], symptoms_weight: [SymptomsWeightInput!], overweight_factor: Float, heredity_factor: Float, advice: String): Disease
 
     # Delete a disease.
     deleteDisease(id: String!): Boolean
@@ -715,9 +718,9 @@ type Mutation {
 
 
     # Create a new MedicalFolder.!
-    createMedicalFolder(name: String!, firstname: String!, birthdate: Int!, sex: String!, height: Int!, weight: Int!, primary_doctor_id: String!, antecedent_disease_ids: [String!], onboarding_status: String!): MedicalInfo
+    createMedicalFolder(name: String!, firstname: String!, birthdate: Int!, sex: String!, height: Int!, weight: Int!, primary_doctor_id: String!, antecedent_disease_ids: [String!], onboarding_status: String!, family_members_med_info_id: [String!]!): MedicalInfo
     # Update a new MedicalFolder.
-    updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus): MedicalInfo
+    updateMedicalFolder(id: String!, name: String, firstname: String, birthdate: Int, sex: String, height: Int, weight: Int, primary_doctor_id: String, antecedent_disease_ids: [String!], onboarding_status: OnboardingStatus, family_members_med_info_id: [String!]): MedicalInfo
     # Delete an MedicalFolder.
     deleteMedicalFolder(id: String!): Boolean
 
