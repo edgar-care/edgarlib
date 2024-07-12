@@ -48,7 +48,7 @@ func ModifyStatusAccount(id string, status bool) ModifyAccountStatusResponse {
 
 	patient, err := graphql.GetPatientById(context.Background(), gqlClient, id)
 	if err == nil {
-		_, updateErr := graphql.UpdatePatient(context.Background(), gqlClient, id, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id, status)
+		_, updateErr := graphql.UpdatePatient(context.Background(), gqlClient, id, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id, patient.GetPatientById.Trust_devices, status)
 		if updateErr != nil {
 			return ModifyAccountStatusResponse{Patient: model.Patient{}, Code: http.StatusInternalServerError, Err: updateErr}
 		}
@@ -58,7 +58,7 @@ func ModifyStatusAccount(id string, status bool) ModifyAccountStatusResponse {
 
 	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, id)
 	if err == nil {
-		_, updateErr := graphql.UpdateDoctor(context.Background(), gqlClient, id, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country}, doctor.GetDoctorById.Chat_ids, status)
+		_, updateErr := graphql.UpdateDoctor(context.Background(), gqlClient, id, doctor.GetDoctorById.Email, doctor.GetDoctorById.Password, doctor.GetDoctorById.Name, doctor.GetDoctorById.Firstname, doctor.GetDoctorById.Rendez_vous_ids, doctor.GetDoctorById.Patient_ids, graphql.AddressInput{Street: doctor.GetDoctorById.Address.Street, Zip_code: doctor.GetDoctorById.Address.Zip_code, Country: doctor.GetDoctorById.Address.Country}, doctor.GetDoctorById.Chat_ids, doctor.GetDoctorById.Device_connect, doctor.GetDoctorById.Double_auth_methods_id, doctor.GetDoctorById.Trust_devices, status)
 		if updateErr != nil {
 			return ModifyAccountStatusResponse{Doctor: model.Doctor{}, Code: http.StatusInternalServerError, Err: updateErr}
 		}

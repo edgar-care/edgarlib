@@ -475,16 +475,19 @@ func (v *CreateDiseaseResponse) GetCreateDisease() CreateDiseaseCreateDisease { 
 
 // CreateDoctorCreateDoctor includes the requested fields of the GraphQL type Doctor.
 type CreateDoctorCreateDoctor struct {
-	Id              string                          `json:"id"`
-	Email           string                          `json:"email"`
-	Password        string                          `json:"password"`
-	Name            string                          `json:"name"`
-	Firstname       string                          `json:"firstname"`
-	Address         CreateDoctorCreateDoctorAddress `json:"address"`
-	Rendez_vous_ids []string                        `json:"rendez_vous_ids"`
-	Patient_ids     []string                        `json:"patient_ids"`
-	Chat_ids        []string                        `json:"chat_ids"`
-	Status          bool                            `json:"status"`
+	Id                     string                          `json:"id"`
+	Email                  string                          `json:"email"`
+	Password               string                          `json:"password"`
+	Name                   string                          `json:"name"`
+	Firstname              string                          `json:"firstname"`
+	Address                CreateDoctorCreateDoctorAddress `json:"address"`
+	Rendez_vous_ids        []string                        `json:"rendez_vous_ids"`
+	Patient_ids            []string                        `json:"patient_ids"`
+	Chat_ids               []string                        `json:"chat_ids"`
+	Device_connect         []string                        `json:"device_connect"`
+	Double_auth_methods_id string                          `json:"double_auth_methods_id"`
+	Trust_devices          []string                        `json:"trust_devices"`
+	Status                 bool                            `json:"status"`
 }
 
 // GetId returns CreateDoctorCreateDoctor.Id, and is useful for accessing the field via an interface.
@@ -513,6 +516,17 @@ func (v *CreateDoctorCreateDoctor) GetPatient_ids() []string { return v.Patient_
 
 // GetChat_ids returns CreateDoctorCreateDoctor.Chat_ids, and is useful for accessing the field via an interface.
 func (v *CreateDoctorCreateDoctor) GetChat_ids() []string { return v.Chat_ids }
+
+// GetDevice_connect returns CreateDoctorCreateDoctor.Device_connect, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctor) GetDevice_connect() []string { return v.Device_connect }
+
+// GetDouble_auth_methods_id returns CreateDoctorCreateDoctor.Double_auth_methods_id, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctor) GetDouble_auth_methods_id() string {
+	return v.Double_auth_methods_id
+}
+
+// GetTrust_devices returns CreateDoctorCreateDoctor.Trust_devices, and is useful for accessing the field via an interface.
+func (v *CreateDoctorCreateDoctor) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns CreateDoctorCreateDoctor.Status, and is useful for accessing the field via an interface.
 func (v *CreateDoctorCreateDoctor) GetStatus() bool { return v.Status }
@@ -763,6 +777,7 @@ type CreatePatientCreatePatient struct {
 	Chat_ids                []string `json:"chat_ids"`
 	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
+	Trust_devices           []string `json:"trust_devices"`
 	Status                  bool     `json:"status"`
 }
 
@@ -799,6 +814,9 @@ func (v *CreatePatientCreatePatient) GetDevice_connect() []string { return v.Dev
 func (v *CreatePatientCreatePatient) GetDouble_auth_methods_id() string {
 	return v.Double_auth_methods_id
 }
+
+// GetTrust_devices returns CreatePatientCreatePatient.Trust_devices, and is useful for accessing the field via an interface.
+func (v *CreatePatientCreatePatient) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns CreatePatientCreatePatient.Status, and is useful for accessing the field via an interface.
 func (v *CreatePatientCreatePatient) GetStatus() bool { return v.Status }
@@ -2252,16 +2270,19 @@ func (v *GetDiseasesResponse) GetGetDiseases() []GetDiseasesGetDiseasesDisease {
 
 // GetDoctorByEmailGetDoctorByEmailDoctor includes the requested fields of the GraphQL type Doctor.
 type GetDoctorByEmailGetDoctorByEmailDoctor struct {
-	Id              string                                        `json:"id"`
-	Email           string                                        `json:"email"`
-	Password        string                                        `json:"password"`
-	Name            string                                        `json:"name"`
-	Firstname       string                                        `json:"firstname"`
-	Address         GetDoctorByEmailGetDoctorByEmailDoctorAddress `json:"address"`
-	Rendez_vous_ids []string                                      `json:"rendez_vous_ids"`
-	Patient_ids     []string                                      `json:"patient_ids"`
-	Chat_ids        []string                                      `json:"chat_ids"`
-	Status          bool                                          `json:"status"`
+	Id                     string                                        `json:"id"`
+	Email                  string                                        `json:"email"`
+	Password               string                                        `json:"password"`
+	Name                   string                                        `json:"name"`
+	Firstname              string                                        `json:"firstname"`
+	Address                GetDoctorByEmailGetDoctorByEmailDoctorAddress `json:"address"`
+	Rendez_vous_ids        []string                                      `json:"rendez_vous_ids"`
+	Patient_ids            []string                                      `json:"patient_ids"`
+	Chat_ids               []string                                      `json:"chat_ids"`
+	Device_connect         []string                                      `json:"device_connect"`
+	Double_auth_methods_id string                                        `json:"double_auth_methods_id"`
+	Trust_devices          []string                                      `json:"trust_devices"`
+	Status                 bool                                          `json:"status"`
 }
 
 // GetId returns GetDoctorByEmailGetDoctorByEmailDoctor.Id, and is useful for accessing the field via an interface.
@@ -2294,6 +2315,19 @@ func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetPatient_ids() []string { ret
 
 // GetChat_ids returns GetDoctorByEmailGetDoctorByEmailDoctor.Chat_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetChat_ids() []string { return v.Chat_ids }
+
+// GetDevice_connect returns GetDoctorByEmailGetDoctorByEmailDoctor.Device_connect, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetDevice_connect() []string {
+	return v.Device_connect
+}
+
+// GetDouble_auth_methods_id returns GetDoctorByEmailGetDoctorByEmailDoctor.Double_auth_methods_id, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetDouble_auth_methods_id() string {
+	return v.Double_auth_methods_id
+}
+
+// GetTrust_devices returns GetDoctorByEmailGetDoctorByEmailDoctor.Trust_devices, and is useful for accessing the field via an interface.
+func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns GetDoctorByEmailGetDoctorByEmailDoctor.Status, and is useful for accessing the field via an interface.
 func (v *GetDoctorByEmailGetDoctorByEmailDoctor) GetStatus() bool { return v.Status }
@@ -2330,16 +2364,19 @@ func (v *GetDoctorByEmailResponse) GetGetDoctorByEmail() GetDoctorByEmailGetDoct
 
 // GetDoctorByIdGetDoctorByIdDoctor includes the requested fields of the GraphQL type Doctor.
 type GetDoctorByIdGetDoctorByIdDoctor struct {
-	Id              string                                  `json:"id"`
-	Email           string                                  `json:"email"`
-	Password        string                                  `json:"password"`
-	Name            string                                  `json:"name"`
-	Firstname       string                                  `json:"firstname"`
-	Address         GetDoctorByIdGetDoctorByIdDoctorAddress `json:"address"`
-	Rendez_vous_ids []string                                `json:"rendez_vous_ids"`
-	Patient_ids     []string                                `json:"patient_ids"`
-	Chat_ids        []string                                `json:"chat_ids"`
-	Status          bool                                    `json:"status"`
+	Id                     string                                  `json:"id"`
+	Email                  string                                  `json:"email"`
+	Password               string                                  `json:"password"`
+	Name                   string                                  `json:"name"`
+	Firstname              string                                  `json:"firstname"`
+	Address                GetDoctorByIdGetDoctorByIdDoctorAddress `json:"address"`
+	Rendez_vous_ids        []string                                `json:"rendez_vous_ids"`
+	Patient_ids            []string                                `json:"patient_ids"`
+	Chat_ids               []string                                `json:"chat_ids"`
+	Device_connect         []string                                `json:"device_connect"`
+	Double_auth_methods_id string                                  `json:"double_auth_methods_id"`
+	Trust_devices          []string                                `json:"trust_devices"`
+	Status                 bool                                    `json:"status"`
 }
 
 // GetId returns GetDoctorByIdGetDoctorByIdDoctor.Id, and is useful for accessing the field via an interface.
@@ -2370,6 +2407,17 @@ func (v *GetDoctorByIdGetDoctorByIdDoctor) GetPatient_ids() []string { return v.
 
 // GetChat_ids returns GetDoctorByIdGetDoctorByIdDoctor.Chat_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorByIdGetDoctorByIdDoctor) GetChat_ids() []string { return v.Chat_ids }
+
+// GetDevice_connect returns GetDoctorByIdGetDoctorByIdDoctor.Device_connect, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctor) GetDevice_connect() []string { return v.Device_connect }
+
+// GetDouble_auth_methods_id returns GetDoctorByIdGetDoctorByIdDoctor.Double_auth_methods_id, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctor) GetDouble_auth_methods_id() string {
+	return v.Double_auth_methods_id
+}
+
+// GetTrust_devices returns GetDoctorByIdGetDoctorByIdDoctor.Trust_devices, and is useful for accessing the field via an interface.
+func (v *GetDoctorByIdGetDoctorByIdDoctor) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns GetDoctorByIdGetDoctorByIdDoctor.Status, and is useful for accessing the field via an interface.
 func (v *GetDoctorByIdGetDoctorByIdDoctor) GetStatus() bool { return v.Status }
@@ -2456,16 +2504,19 @@ func (v *GetDoctorRdvResponse) GetGetDoctorRdv() []GetDoctorRdvGetDoctorRdv { re
 
 // GetDoctorsGetDoctorsDoctor includes the requested fields of the GraphQL type Doctor.
 type GetDoctorsGetDoctorsDoctor struct {
-	Id              string                            `json:"id"`
-	Email           string                            `json:"email"`
-	Password        string                            `json:"password"`
-	Name            string                            `json:"name"`
-	Firstname       string                            `json:"firstname"`
-	Address         GetDoctorsGetDoctorsDoctorAddress `json:"address"`
-	Rendez_vous_ids []string                          `json:"rendez_vous_ids"`
-	Patient_ids     []string                          `json:"patient_ids"`
-	Chat_ids        []string                          `json:"chat_ids"`
-	Status          bool                              `json:"status"`
+	Id                     string                            `json:"id"`
+	Email                  string                            `json:"email"`
+	Password               string                            `json:"password"`
+	Name                   string                            `json:"name"`
+	Firstname              string                            `json:"firstname"`
+	Address                GetDoctorsGetDoctorsDoctorAddress `json:"address"`
+	Rendez_vous_ids        []string                          `json:"rendez_vous_ids"`
+	Patient_ids            []string                          `json:"patient_ids"`
+	Chat_ids               []string                          `json:"chat_ids"`
+	Device_connect         []string                          `json:"device_connect"`
+	Double_auth_methods_id string                            `json:"double_auth_methods_id"`
+	Trust_devices          []string                          `json:"trust_devices"`
+	Status                 bool                              `json:"status"`
 }
 
 // GetId returns GetDoctorsGetDoctorsDoctor.Id, and is useful for accessing the field via an interface.
@@ -2494,6 +2545,17 @@ func (v *GetDoctorsGetDoctorsDoctor) GetPatient_ids() []string { return v.Patien
 
 // GetChat_ids returns GetDoctorsGetDoctorsDoctor.Chat_ids, and is useful for accessing the field via an interface.
 func (v *GetDoctorsGetDoctorsDoctor) GetChat_ids() []string { return v.Chat_ids }
+
+// GetDevice_connect returns GetDoctorsGetDoctorsDoctor.Device_connect, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctor) GetDevice_connect() []string { return v.Device_connect }
+
+// GetDouble_auth_methods_id returns GetDoctorsGetDoctorsDoctor.Double_auth_methods_id, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctor) GetDouble_auth_methods_id() string {
+	return v.Double_auth_methods_id
+}
+
+// GetTrust_devices returns GetDoctorsGetDoctorsDoctor.Trust_devices, and is useful for accessing the field via an interface.
+func (v *GetDoctorsGetDoctorsDoctor) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns GetDoctorsGetDoctorsDoctor.Status, and is useful for accessing the field via an interface.
 func (v *GetDoctorsGetDoctorsDoctor) GetStatus() bool { return v.Status }
@@ -3084,6 +3146,7 @@ type GetPatientByEmailGetPatientByEmailPatient struct {
 	Chat_ids                []string `json:"chat_ids"`
 	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
+	Trust_devices           []string `json:"trust_devices"`
 	Status                  bool     `json:"status"`
 }
 
@@ -3127,6 +3190,11 @@ func (v *GetPatientByEmailGetPatientByEmailPatient) GetDouble_auth_methods_id() 
 	return v.Double_auth_methods_id
 }
 
+// GetTrust_devices returns GetPatientByEmailGetPatientByEmailPatient.Trust_devices, and is useful for accessing the field via an interface.
+func (v *GetPatientByEmailGetPatientByEmailPatient) GetTrust_devices() []string {
+	return v.Trust_devices
+}
+
 // GetStatus returns GetPatientByEmailGetPatientByEmailPatient.Status, and is useful for accessing the field via an interface.
 func (v *GetPatientByEmailGetPatientByEmailPatient) GetStatus() bool { return v.Status }
 
@@ -3152,6 +3220,7 @@ type GetPatientByIdGetPatientByIdPatient struct {
 	Chat_ids                []string `json:"chat_ids"`
 	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
+	Trust_devices           []string `json:"trust_devices"`
 	Status                  bool     `json:"status"`
 }
 
@@ -3188,6 +3257,9 @@ func (v *GetPatientByIdGetPatientByIdPatient) GetDevice_connect() []string { ret
 func (v *GetPatientByIdGetPatientByIdPatient) GetDouble_auth_methods_id() string {
 	return v.Double_auth_methods_id
 }
+
+// GetTrust_devices returns GetPatientByIdGetPatientByIdPatient.Trust_devices, and is useful for accessing the field via an interface.
+func (v *GetPatientByIdGetPatientByIdPatient) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns GetPatientByIdGetPatientByIdPatient.Status, and is useful for accessing the field via an interface.
 func (v *GetPatientByIdGetPatientByIdPatient) GetStatus() bool { return v.Status }
@@ -3310,6 +3382,7 @@ type GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient struct {
 	Chat_ids                []string `json:"chat_ids"`
 	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
+	Trust_devices           []string `json:"trust_devices"`
 	Status                  bool     `json:"status"`
 }
 
@@ -3359,6 +3432,11 @@ func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetDouble_au
 	return v.Double_auth_methods_id
 }
 
+// GetTrust_devices returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Trust_devices, and is useful for accessing the field via an interface.
+func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetTrust_devices() []string {
+	return v.Trust_devices
+}
+
 // GetStatus returns GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient.Status, and is useful for accessing the field via an interface.
 func (v *GetPatientsFromDoctorByIdGetPatientsFromDoctorByIdPatient) GetStatus() bool { return v.Status }
 
@@ -3384,6 +3462,7 @@ type GetPatientsGetPatientsPatient struct {
 	Chat_ids                []string `json:"chat_ids"`
 	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
+	Trust_devices           []string `json:"trust_devices"`
 	Status                  bool     `json:"status"`
 }
 
@@ -3420,6 +3499,9 @@ func (v *GetPatientsGetPatientsPatient) GetDevice_connect() []string { return v.
 func (v *GetPatientsGetPatientsPatient) GetDouble_auth_methods_id() string {
 	return v.Double_auth_methods_id
 }
+
+// GetTrust_devices returns GetPatientsGetPatientsPatient.Trust_devices, and is useful for accessing the field via an interface.
+func (v *GetPatientsGetPatientsPatient) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns GetPatientsGetPatientsPatient.Status, and is useful for accessing the field via an interface.
 func (v *GetPatientsGetPatientsPatient) GetStatus() bool { return v.Status }
@@ -4781,16 +4863,19 @@ func (v *UpdateDoctorResponse) GetUpdateDoctor() UpdateDoctorUpdateDoctor { retu
 
 // UpdateDoctorUpdateDoctor includes the requested fields of the GraphQL type Doctor.
 type UpdateDoctorUpdateDoctor struct {
-	Id              string                          `json:"id"`
-	Email           string                          `json:"email"`
-	Password        string                          `json:"password"`
-	Name            string                          `json:"name"`
-	Firstname       string                          `json:"firstname"`
-	Rendez_vous_ids []string                        `json:"rendez_vous_ids"`
-	Patient_ids     []string                        `json:"patient_ids"`
-	Chat_ids        []string                        `json:"chat_ids"`
-	Address         UpdateDoctorUpdateDoctorAddress `json:"address"`
-	Status          bool                            `json:"status"`
+	Id                     string                          `json:"id"`
+	Email                  string                          `json:"email"`
+	Password               string                          `json:"password"`
+	Name                   string                          `json:"name"`
+	Firstname              string                          `json:"firstname"`
+	Rendez_vous_ids        []string                        `json:"rendez_vous_ids"`
+	Patient_ids            []string                        `json:"patient_ids"`
+	Chat_ids               []string                        `json:"chat_ids"`
+	Address                UpdateDoctorUpdateDoctorAddress `json:"address"`
+	Device_connect         []string                        `json:"device_connect"`
+	Double_auth_methods_id string                          `json:"double_auth_methods_id"`
+	Trust_devices          []string                        `json:"trust_devices"`
+	Status                 bool                            `json:"status"`
 }
 
 // GetId returns UpdateDoctorUpdateDoctor.Id, and is useful for accessing the field via an interface.
@@ -4819,6 +4904,17 @@ func (v *UpdateDoctorUpdateDoctor) GetChat_ids() []string { return v.Chat_ids }
 
 // GetAddress returns UpdateDoctorUpdateDoctor.Address, and is useful for accessing the field via an interface.
 func (v *UpdateDoctorUpdateDoctor) GetAddress() UpdateDoctorUpdateDoctorAddress { return v.Address }
+
+// GetDevice_connect returns UpdateDoctorUpdateDoctor.Device_connect, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctor) GetDevice_connect() []string { return v.Device_connect }
+
+// GetDouble_auth_methods_id returns UpdateDoctorUpdateDoctor.Double_auth_methods_id, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctor) GetDouble_auth_methods_id() string {
+	return v.Double_auth_methods_id
+}
+
+// GetTrust_devices returns UpdateDoctorUpdateDoctor.Trust_devices, and is useful for accessing the field via an interface.
+func (v *UpdateDoctorUpdateDoctor) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns UpdateDoctorUpdateDoctor.Status, and is useful for accessing the field via an interface.
 func (v *UpdateDoctorUpdateDoctor) GetStatus() bool { return v.Status }
@@ -5031,6 +5127,7 @@ type UpdatePatientUpdatePatient struct {
 	Chat_ids                []string `json:"chat_ids"`
 	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
+	Trust_devices           []string `json:"trust_devices"`
 	Status                  bool     `json:"status"`
 }
 
@@ -5067,6 +5164,9 @@ func (v *UpdatePatientUpdatePatient) GetDevice_connect() []string { return v.Dev
 func (v *UpdatePatientUpdatePatient) GetDouble_auth_methods_id() string {
 	return v.Double_auth_methods_id
 }
+
+// GetTrust_devices returns UpdatePatientUpdatePatient.Trust_devices, and is useful for accessing the field via an interface.
+func (v *UpdatePatientUpdatePatient) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns UpdatePatientUpdatePatient.Status, and is useful for accessing the field via an interface.
 func (v *UpdatePatientUpdatePatient) GetStatus() bool { return v.Status }
@@ -6715,16 +6815,19 @@ func (v *__UpdateDiseaseInput) GetAdvice() string { return v.Advice }
 
 // __UpdateDoctorInput is used internally by genqlient
 type __UpdateDoctorInput struct {
-	Id              string       `json:"id"`
-	Email           string       `json:"email"`
-	Password        string       `json:"password"`
-	Name            string       `json:"name"`
-	Firstname       string       `json:"firstname"`
-	Rendez_vous_ids []string     `json:"rendez_vous_ids"`
-	Patient_ids     []string     `json:"patient_ids"`
-	Address         AddressInput `json:"address"`
-	Chat_ids        []string     `json:"chat_ids"`
-	Status          bool         `json:"status"`
+	Id                     string       `json:"id"`
+	Email                  string       `json:"email"`
+	Password               string       `json:"password"`
+	Name                   string       `json:"name"`
+	Firstname              string       `json:"firstname"`
+	Rendez_vous_ids        []string     `json:"rendez_vous_ids"`
+	Patient_ids            []string     `json:"patient_ids"`
+	Address                AddressInput `json:"address"`
+	Chat_ids               []string     `json:"chat_ids"`
+	Device_connect         []string     `json:"device_connect"`
+	Double_auth_methods_id string       `json:"double_auth_methods_id"`
+	Trust_devices          []string     `json:"trust_devices"`
+	Status                 bool         `json:"status"`
 }
 
 // GetId returns __UpdateDoctorInput.Id, and is useful for accessing the field via an interface.
@@ -6753,6 +6856,15 @@ func (v *__UpdateDoctorInput) GetAddress() AddressInput { return v.Address }
 
 // GetChat_ids returns __UpdateDoctorInput.Chat_ids, and is useful for accessing the field via an interface.
 func (v *__UpdateDoctorInput) GetChat_ids() []string { return v.Chat_ids }
+
+// GetDevice_connect returns __UpdateDoctorInput.Device_connect, and is useful for accessing the field via an interface.
+func (v *__UpdateDoctorInput) GetDevice_connect() []string { return v.Device_connect }
+
+// GetDouble_auth_methods_id returns __UpdateDoctorInput.Double_auth_methods_id, and is useful for accessing the field via an interface.
+func (v *__UpdateDoctorInput) GetDouble_auth_methods_id() string { return v.Double_auth_methods_id }
+
+// GetTrust_devices returns __UpdateDoctorInput.Trust_devices, and is useful for accessing the field via an interface.
+func (v *__UpdateDoctorInput) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns __UpdateDoctorInput.Status, and is useful for accessing the field via an interface.
 func (v *__UpdateDoctorInput) GetStatus() bool { return v.Status }
@@ -6883,6 +6995,7 @@ type __UpdatePatientInput struct {
 	Chat_ids                []string `json:"chat_ids"`
 	Device_connect          []string `json:"device_connect"`
 	Double_auth_methods_id  string   `json:"double_auth_methods_id"`
+	Trust_devices           []string `json:"trust_devices"`
 	Status                  bool     `json:"status"`
 }
 
@@ -6917,6 +7030,9 @@ func (v *__UpdatePatientInput) GetDevice_connect() []string { return v.Device_co
 
 // GetDouble_auth_methods_id returns __UpdatePatientInput.Double_auth_methods_id, and is useful for accessing the field via an interface.
 func (v *__UpdatePatientInput) GetDouble_auth_methods_id() string { return v.Double_auth_methods_id }
+
+// GetTrust_devices returns __UpdatePatientInput.Trust_devices, and is useful for accessing the field via an interface.
+func (v *__UpdatePatientInput) GetTrust_devices() []string { return v.Trust_devices }
 
 // GetStatus returns __UpdatePatientInput.Status, and is useful for accessing the field via an interface.
 func (v *__UpdatePatientInput) GetStatus() bool { return v.Status }
@@ -7688,6 +7804,9 @@ mutation CreateDoctor ($email: String!, $password: String!, $name: String!, $fir
 		rendez_vous_ids
 		patient_ids
 		chat_ids
+		device_connect
+		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -7992,6 +8111,7 @@ mutation CreatePatient ($email: String!, $password: String!, $status: Boolean!) 
 		chat_ids
 		device_connect
 		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -10073,6 +10193,9 @@ query GetDoctorByEmail ($email: String!) {
 		rendez_vous_ids
 		patient_ids
 		chat_ids
+		device_connect
+		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -10122,6 +10245,9 @@ query GetDoctorById ($id: String!) {
 		rendez_vous_ids
 		patient_ids
 		chat_ids
+		device_connect
+		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -10214,6 +10340,9 @@ query GetDoctors {
 		rendez_vous_ids
 		patient_ids
 		chat_ids
+		device_connect
+		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -10723,6 +10852,7 @@ query GetPatientByEmail ($email: String!) {
 		chat_ids
 		device_connect
 		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -10768,6 +10898,7 @@ query GetPatientById ($id: String!) {
 		chat_ids
 		device_connect
 		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -10897,6 +11028,7 @@ query GetPatients {
 		chat_ids
 		device_connect
 		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -10938,6 +11070,7 @@ query GetPatientsFromDoctorById ($id: String!) {
 		chat_ids
 		device_connect
 		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -12179,8 +12312,8 @@ func UpdateDisease(
 
 // The query or mutation executed by UpdateDoctor.
 const UpdateDoctor_Operation = `
-mutation UpdateDoctor ($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!, $chat_ids: [String], $status: Boolean) {
-	updateDoctor(id: $id, email: $email, password: $password, name: $name, firstname: $firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address, chat_ids: $chat_ids, status: $status) {
+mutation UpdateDoctor ($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!, $chat_ids: [String], $device_connect: [String], $double_auth_methods_id: String, $trust_devices: [String], $status: Boolean) {
+	updateDoctor(id: $id, email: $email, password: $password, name: $name, firstname: $firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address, chat_ids: $chat_ids, status: $status, device_connect: $device_connect, double_auth_methods_id: $double_auth_methods_id, trust_devices: $trust_devices) {
 		id
 		email
 		password
@@ -12194,6 +12327,9 @@ mutation UpdateDoctor ($id: String!, $email: String, $password: String, $name: S
 			zip_code
 			country
 		}
+		device_connect
+		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -12211,22 +12347,28 @@ func UpdateDoctor(
 	patient_ids []string,
 	address AddressInput,
 	chat_ids []string,
+	device_connect []string,
+	double_auth_methods_id string,
+	trust_devices []string,
 	status bool,
 ) (*UpdateDoctorResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateDoctor",
 		Query:  UpdateDoctor_Operation,
 		Variables: &__UpdateDoctorInput{
-			Id:              id,
-			Email:           email,
-			Password:        password,
-			Name:            name,
-			Firstname:       firstname,
-			Rendez_vous_ids: rendez_vous_ids,
-			Patient_ids:     patient_ids,
-			Address:         address,
-			Chat_ids:        chat_ids,
-			Status:          status,
+			Id:                     id,
+			Email:                  email,
+			Password:               password,
+			Name:                   name,
+			Firstname:              firstname,
+			Rendez_vous_ids:        rendez_vous_ids,
+			Patient_ids:            patient_ids,
+			Address:                address,
+			Chat_ids:               chat_ids,
+			Device_connect:         device_connect,
+			Double_auth_methods_id: double_auth_methods_id,
+			Trust_devices:          trust_devices,
+			Status:                 status,
 		},
 	}
 	var err error
@@ -12446,8 +12588,8 @@ func UpdateNotification(
 
 // The query or mutation executed by UpdatePatient.
 const UpdatePatient_Operation = `
-mutation UpdatePatient ($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String], $device_connect: [String], $double_auth_methods_id: String, $status: Boolean) {
-	updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids: $treatment_follow_up_ids, chat_ids: $chat_ids, device_connect: $device_connect, double_auth_methods_id: $double_auth_methods_id, status: $status) {
+mutation UpdatePatient ($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String], $device_connect: [String], $double_auth_methods_id: String, $trust_devices: [String], $status: Boolean) {
+	updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids: $treatment_follow_up_ids, chat_ids: $chat_ids, device_connect: $device_connect, double_auth_methods_id: $double_auth_methods_id, trust_devices: $trust_devices, status: $status) {
 		id
 		email
 		password
@@ -12458,6 +12600,7 @@ mutation UpdatePatient ($id: String!, $email: String, $password: String, $medica
 		chat_ids
 		device_connect
 		double_auth_methods_id
+		trust_devices
 		status
 	}
 }
@@ -12476,6 +12619,7 @@ func UpdatePatient(
 	chat_ids []string,
 	device_connect []string,
 	double_auth_methods_id string,
+	trust_devices []string,
 	status bool,
 ) (*UpdatePatientResponse, error) {
 	req := &graphql.Request{
@@ -12492,6 +12636,7 @@ func UpdatePatient(
 			Chat_ids:                chat_ids,
 			Device_connect:          device_connect,
 			Double_auth_methods_id:  double_auth_methods_id,
+			Trust_devices:           trust_devices,
 			Status:                  status,
 		},
 	}

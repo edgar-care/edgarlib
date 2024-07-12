@@ -45,7 +45,7 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, status *bool) (*model.Patient, error) {
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -63,6 +63,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		"chat_ids":                chatIds,
 		"device_connect":          deviceConnect,
 		"double_auth_methods_id":  doubleAuthMethodsID,
+		"trust_devices":           trustDevices,
 		"status":                  status,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
@@ -77,6 +78,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		ChatIds:              chatIds,
 		DeviceConnect:        deviceConnect,
 		DoubleAuthMethodsID:  doubleAuthMethodsID,
+		TrustDevices:         trustDevices,
 		Status:               *status,
 	}, err
 }
@@ -142,7 +144,7 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 }
 
 // UpdateDoctor is the resolver for the updateDoctor field.
-func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, status *bool) (*model.Doctor, error) {
+func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Doctor, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -150,16 +152,19 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":             objId,
-		"email":           email,
-		"password":        password,
-		"name":            name,
-		"firstname":       firstname,
-		"rendez_vous_ids": rendezVousIds,
-		"patient_ids":     patientIds,
-		"address":         address,
-		"chat_ids":        chatIds,
-		"status":          status,
+		"_id":                    objId,
+		"email":                  email,
+		"password":               password,
+		"name":                   name,
+		"firstname":              firstname,
+		"rendez_vous_ids":        rendezVousIds,
+		"patient_ids":            patientIds,
+		"address":                address,
+		"chat_ids":               chatIds,
+		"device_connect":         deviceConnect,
+		"double_auth_methods_id": doubleAuthMethodsID,
+		"trust_devices":          trustDevices,
+		"status":                 status,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").ReplaceOne(ctx, filter, updated)
 	return &model.Doctor{
@@ -174,10 +179,13 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 			Country: address.Country,
 			City:    address.City,
 		},
-		RendezVousIds: rendezVousIds,
-		PatientIds:    patientIds,
-		ChatIds:       chatIds,
-		Status:        *status,
+		RendezVousIds:       rendezVousIds,
+		PatientIds:          patientIds,
+		ChatIds:             chatIds,
+		DeviceConnect:       deviceConnect,
+		DoubleAuthMethodsID: doubleAuthMethodsID,
+		TrustDevices:        trustDevices,
+		Status:              *status,
 	}, err
 }
 

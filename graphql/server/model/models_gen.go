@@ -133,16 +133,19 @@ type Disease struct {
 }
 
 type Doctor struct {
-	ID            string    `json:"id" bson:"_id"`
-	Email         string    `json:"email" bson:"email"`
-	Password      string    `json:"password" bson:"password"`
-	Name          string    `json:"name" bson:"name"`
-	Firstname     string    `json:"firstname" bson:"firstname"`
-	Address       *Address  `json:"address" bson:"address"`
-	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
-	PatientIds    []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
-	ChatIds       []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
-	Status        bool      `json:"status" bson:"status"`
+	ID                  string    `json:"id" bson:"_id"`
+	Email               string    `json:"email" bson:"email"`
+	Password            string    `json:"password" bson:"password"`
+	Name                string    `json:"name" bson:"name"`
+	Firstname           string    `json:"firstname" bson:"firstname"`
+	Address             *Address  `json:"address" bson:"address"`
+	RendezVousIds       []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+	PatientIds          []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
+	ChatIds             []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
+	DoubleAuthMethodsID *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
+	DeviceConnect       []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	TrustDevices        []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
+	Status              bool      `json:"status" bson:"status"`
 }
 
 type Document struct {
@@ -259,6 +262,7 @@ type Patient struct {
 	ChatIds              []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
 	DoubleAuthMethodsID  *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
 	DeviceConnect        []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	TrustDevices         []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
 	Status               bool      `json:"status" bson:"status"`
 }
 

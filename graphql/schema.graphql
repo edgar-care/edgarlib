@@ -111,6 +111,7 @@ type Patient {
     chat_ids: [String]
     double_auth_methods_id: String
     device_connect: [String]
+    trust_devices: [String]
     status: Boolean!
 }
 
@@ -125,6 +126,9 @@ type Doctor {
     rendez_vous_ids: [String]
     patient_ids: [String]
     chat_ids: [String]
+    double_auth_methods_id: String
+    device_connect: [String]
+    trust_devices: [String]
     status: Boolean!
 }
 
@@ -583,7 +587,7 @@ type Mutation {
     createPatient(email: String!, password: String!, status: Boolean!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String, status: Boolean): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -592,7 +596,7 @@ type Mutation {
     createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!, status: Boolean!): Doctor
 
     # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String], status: Boolean): Doctor #rendez_vous_id: String , slot_ids: [String] status: Boolean
+    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Doctor #rendez_vous_id: String , slot_ids: [String] status: Boolean
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean

@@ -35,7 +35,7 @@ func DeleteDocument(docId string, patientId string) DeleteDocumentResponse {
 		return DeleteDocumentResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	updatedPatient, _ := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, removeElement(patient.GetPatientById.Document_ids, docId), patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id)
+	updatedPatient, _ := graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, removeElement(patient.GetPatientById.Document_ids, docId), patient.GetPatientById.Treatment_follow_up_ids, patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id, patient.GetPatientById.Trust_devices)
 	return DeleteDocumentResponse{
 		UpdatedPatient: model.Patient{
 			ID:            updatedPatient.UpdatePatient.Id,

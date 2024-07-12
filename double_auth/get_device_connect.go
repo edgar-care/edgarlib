@@ -19,7 +19,7 @@ type GetDevicesConnectResponse struct {
 	Err            error
 }
 
-func GetDeviceConnectById(id string, doctorId string) GetDeviceConnectByIdResponse {
+func GetDeviceConnectById(id string) GetDeviceConnectByIdResponse {
 	gqlClient := graphql.CreateClient()
 	var res model.DeviceConnect
 
