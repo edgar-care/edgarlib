@@ -76,8 +76,8 @@ mutation CreateDisease($code: String!, $name: String!, $symptoms: [String!]!, $s
     }
 }
 
-mutation CreateDoctor($email: String!, $password: String!, $name: String!, $firstname: String!, $address: AddressInput!){
-    createDoctor(email: $email, password: $password, name: $name, firstname: $firstname, address:$address){
+mutation CreateDoctor($email: String!, $password: String!, $name: String!, $firstname: String!, $address: AddressInput!, $status: Boolean!){
+    createDoctor(email: $email, password: $password, name: $name, firstname: $firstname, address:$address, status:$status){
         id
         email
         password
@@ -91,6 +91,7 @@ mutation CreateDoctor($email: String!, $password: String!, $name: String!, $firs
         rendez_vous_ids
         patient_ids
         chat_ids
+        status
     }
 }
 
@@ -115,8 +116,8 @@ mutation CreateNotification($token: String!, $message: String!, $title: String!)
     }
 }
 
-mutation CreatePatient($email: String!, $password: String!){
-    createPatient(email: $email, password: $password){
+mutation CreatePatient($email: String!, $password: String!, $status: Boolean!){
+    createPatient(email: $email, password: $password, status:$status){
         id
         email
         password
@@ -127,6 +128,7 @@ mutation CreatePatient($email: String!, $password: String!){
         chat_ids
         device_connect
         double_auth_methods_id
+        status
     }
 }
 
@@ -380,8 +382,8 @@ mutation UpdateDisease($id: String!, $code: String, $name: String, $symptoms: [S
     }
 }
 
-mutation UpdateDoctor($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!, $chat_ids: [String]){
-    updateDoctor(id: $id, email: $email, password: $password, name:$name, firstname:$firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address, chat_ids:$chat_ids){
+mutation UpdateDoctor($id: String!, $email: String, $password: String, $name: String, $firstname: String, $rendez_vous_ids: [String], $patient_ids: [String], $address: AddressInput!, $chat_ids: [String], $status: Boolean){
+    updateDoctor(id: $id, email: $email, password: $password, name:$name, firstname:$firstname, rendez_vous_ids: $rendez_vous_ids, patient_ids: $patient_ids, address: $address, chat_ids:$chat_ids, status:$status){
         id
         email
         password
@@ -395,6 +397,7 @@ mutation UpdateDoctor($id: String!, $email: String, $password: String, $name: St
             zip_code
             country
         }
+        status
     }
 }
 
@@ -419,8 +422,8 @@ mutation UpdateNotification($id: String!, $token: String!, $message: String!, $t
     }
 }
 
-mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String], $device_connect: [String], $double_auth_methods_id: String){
-    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids, chat_ids:$chat_ids, device_connect:$device_connect, double_auth_methods_id:$double_auth_methods_id){
+mutation UpdatePatient($id: String!, $email: String, $password: String, $medical_info_id: String, $rendez_vous_ids: [String], $document_ids: [String], $treatment_follow_up_ids: [String], $chat_ids: [String], $device_connect: [String], $double_auth_methods_id: String, $status: Boolean){
+    updatePatient(id: $id, email: $email, password: $password, medical_info_id: $medical_info_id, rendez_vous_ids: $rendez_vous_ids, document_ids: $document_ids, treatment_follow_up_ids:$treatment_follow_up_ids, chat_ids:$chat_ids, device_connect:$device_connect, double_auth_methods_id:$double_auth_methods_id, status:$status){
         id
         email
         password
@@ -431,6 +434,7 @@ mutation UpdatePatient($id: String!, $email: String, $password: String, $medical
         chat_ids
         device_connect
         double_auth_methods_id
+        status
     }
 }
 
@@ -725,6 +729,7 @@ query GetDoctorByEmail($email: String!){
         rendez_vous_ids
         patient_ids
         chat_ids
+        status
     }
 }
 
@@ -744,6 +749,7 @@ query GetDoctorById($id: String!){
         rendez_vous_ids
         patient_ids
         chat_ids
+        status
     }
 }
 
@@ -777,6 +783,7 @@ query GetDoctors{
         rendez_vous_ids
         patient_ids
         chat_ids
+        status
     }
 }
 
@@ -834,6 +841,7 @@ query GetPatientByEmail($email: String!){
         chat_ids
         device_connect
         double_auth_methods_id
+        status
     }
 }
 
@@ -849,6 +857,7 @@ query GetPatientById($id: String!){
         chat_ids
         device_connect
         double_auth_methods_id
+        status
     }
 }
 
@@ -890,6 +899,7 @@ query GetPatients{
         chat_ids
         device_connect
         double_auth_methods_id
+        status
     }
 }
 
@@ -1120,6 +1130,7 @@ query GetPatientsFromDoctorById($id: String!){
         chat_ids
         device_connect
         double_auth_methods_id
+        status
     }
 }
 
