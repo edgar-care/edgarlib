@@ -68,3 +68,17 @@ func AuthMiddleware(w http.ResponseWriter, r *http.Request) string {
 	}
 	return GetAuthenticatedUser(w, r)
 }
+
+func GetAccountType(r *http.Request) string {
+	_, claims, _ := jwtauth.FromContext(r.Context())
+
+	_, valid := claims["patient"].(map[string]interface{})
+	if valid {
+		return "patient"
+	}
+	_, valid = claims["doctor"].(map[string]interface{})
+	if valid {
+		return "doctor"
+	}
+	return ""
+}

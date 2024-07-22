@@ -275,6 +275,11 @@ type Rdv struct {
 	HealthMethod      *string           `json:"health_method,omitempty" bson:"health_method"`
 }
 
+type SaveCode struct {
+	ID   string   `json:"id" bson:"_id"`
+	Code []string `json:"code" bson:"code"`
+}
+
 type Session struct {
 	ID                string             `json:"id" bson:"_id"`
 	Diseases          []*SessionDiseases `json:"diseases" bson:"diseases"`

@@ -232,6 +232,7 @@ type ComplexityRoot struct {
 		CreateNotification       func(childComplexity int, token string, message string, title string) int
 		CreatePatient            func(childComplexity int, email string, password string) int
 		CreateRdv                func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
+		CreateSaveCode           func(childComplexity int, code []string) int
 		CreateSession            func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) int
 		CreateSymptom            func(childComplexity int, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) int
 		CreateTestAccount        func(childComplexity int, email string, password string) int
@@ -255,6 +256,7 @@ type ComplexityRoot struct {
 		DeleteNotification       func(childComplexity int, id string) int
 		DeletePatient            func(childComplexity int, id string) int
 		DeleteRdv                func(childComplexity int, id string) int
+		DeleteSaveCode           func(childComplexity int, id string) int
 		DeleteSession            func(childComplexity int, id string) int
 		DeleteSlot               func(childComplexity int, id string) int
 		DeleteSymptom            func(childComplexity int, id string) int
@@ -278,6 +280,7 @@ type ComplexityRoot struct {
 		UpdateNotification       func(childComplexity int, id string, token string, message string, title string) int
 		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) int
 		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) int
+		UpdateSaveCode           func(childComplexity int, id string, code []string) int
 		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) int
 		UpdateSymptom            func(childComplexity int, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) int
 		UpdateTestAccount        func(childComplexity int, id string, email *string, password *string) int
@@ -366,6 +369,8 @@ type ComplexityRoot struct {
 		GetPatients               func(childComplexity int) int
 		GetPatientsFromDoctorByID func(childComplexity int, id string) int
 		GetRdvByID                func(childComplexity int, id string) int
+		GetSaveCode               func(childComplexity int) int
+		GetSaveCodeByID           func(childComplexity int, id string) int
 		GetSessionByID            func(childComplexity int, id string) int
 		GetSessions               func(childComplexity int) int
 		GetSlotByID               func(childComplexity int, id string) int
@@ -392,6 +397,11 @@ type ComplexityRoot struct {
 		IDPatient         func(childComplexity int) int
 		SessionID         func(childComplexity int) int
 		StartDate         func(childComplexity int) int
+	}
+
+	SaveCode struct {
+		Code func(childComplexity int) int
+		ID   func(childComplexity int) int
 	}
 
 	Session struct {
@@ -536,6 +546,9 @@ type MutationResolver interface {
 	CreateBlackList(ctx context.Context, token []string) (*model.BlackList, error)
 	UpdateBlackList(ctx context.Context, id string, token []string) (*model.BlackList, error)
 	DeleteBlackList(ctx context.Context, id string) (*bool, error)
+	CreateSaveCode(ctx context.Context, code []string) (*model.SaveCode, error)
+	UpdateSaveCode(ctx context.Context, id string, code []string) (*model.SaveCode, error)
+	DeleteSaveCode(ctx context.Context, id string) (*bool, error)
 }
 type QueryResolver interface {
 	GetPatients(ctx context.Context) ([]*model.Patient, error)
@@ -597,6 +610,8 @@ type QueryResolver interface {
 	GetDoubleAuths(ctx context.Context) ([]*model.DoubleAuth, error)
 	GetBlackListByID(ctx context.Context, id string) (*model.BlackList, error)
 	GetBlackList(ctx context.Context) ([]*model.BlackList, error)
+	GetSaveCodeByID(ctx context.Context, id string) (*model.SaveCode, error)
+	GetSaveCode(ctx context.Context) ([]*model.SaveCode, error)
 }
 
 type executableSchema struct {
@@ -1567,6 +1582,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["session_id"].(string)), true
 
+	case "Mutation.createSaveCode":
+		if e.complexity.Mutation.CreateSaveCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSaveCode_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateSaveCode(childComplexity, args["code"].([]string)), true
+
 	case "Mutation.createSession":
 		if e.complexity.Mutation.CreateSession == nil {
 			break
@@ -1843,6 +1870,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteRdv(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteSaveCode":
+		if e.complexity.Mutation.DeleteSaveCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteSaveCode_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteSaveCode(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteSession":
 		if e.complexity.Mutation.DeleteSession == nil {
 			break
@@ -2118,6 +2157,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["session_id"].(*string), args["health_method"].(*string)), true
+
+	case "Mutation.updateSaveCode":
+		if e.complexity.Mutation.UpdateSaveCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSaveCode_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSaveCode(childComplexity, args["id"].(string), args["code"].([]string)), true
 
 	case "Mutation.updateSession":
 		if e.complexity.Mutation.UpdateSession == nil {
@@ -2795,6 +2846,25 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetRdvByID(childComplexity, args["id"].(string)), true
 
+	case "Query.getSaveCode":
+		if e.complexity.Query.GetSaveCode == nil {
+			break
+		}
+
+		return e.complexity.Query.GetSaveCode(childComplexity), true
+
+	case "Query.getSaveCodeById":
+		if e.complexity.Query.GetSaveCodeByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getSaveCodeById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSaveCodeByID(childComplexity, args["id"].(string)), true
+
 	case "Query.getSessionById":
 		if e.complexity.Query.GetSessionByID == nil {
 			break
@@ -3005,6 +3075,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Rdv.StartDate(childComplexity), true
+
+	case "SaveCode.code":
+		if e.complexity.SaveCode.Code == nil {
+			break
+		}
+
+		return e.complexity.SaveCode.Code(childComplexity), true
+
+	case "SaveCode.id":
+		if e.complexity.SaveCode.ID == nil {
+			break
+		}
+
+		return e.complexity.SaveCode.ID(childComplexity), true
 
 	case "Session.age":
 		if e.complexity.Session.Age == nil {
@@ -3823,6 +3907,11 @@ type BlackList {
     token: [String!]!
 }
 
+type SaveCode {
+    id: ID!
+    code: [String!]!
+}
+
 
 ## Query  --------------------------------------------------------------------------------------------------------------
 
@@ -4005,6 +4094,11 @@ type Query {
     getBlackListById(id: String!): BlackList
 
     getBlackList: [BlackList]
+
+    # Get Black list
+    getSaveCodeById(id: String!): SaveCode
+
+    getSaveCode: [SaveCode]
 
 }
 
@@ -4220,6 +4314,16 @@ type Mutation {
 
     #Delete a DeviceConnect
     deleteBlackList(id: String!): Boolean
+
+
+    # Create new DoubleAuth
+    createSaveCode(code: [String!]!): SaveCode
+
+    #update a DeviceConnect
+    updateSaveCode(id: String!, code: [String!]): SaveCode
+
+    #Delete a DeviceConnect
+    deleteSaveCode(id: String!): Boolean
 }
 
 
@@ -5157,6 +5261,21 @@ func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, r
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []string
+	if tmp, ok := rawArgs["code"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+		arg0, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["code"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createSession_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -5722,6 +5841,21 @@ func (ec *executionContext) field_Mutation_deletePatient_args(ctx context.Contex
 }
 
 func (ec *executionContext) field_Mutation_deleteRdv_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -6819,6 +6953,30 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 []string
+	if tmp, ok := rawArgs["code"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+		arg1, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["code"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateSession_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7594,6 +7752,21 @@ func (ec *executionContext) field_Query_getPatientsFromDoctorById_args(ctx conte
 }
 
 func (ec *executionContext) field_Query_getRdvById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getSaveCodeById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -16654,6 +16827,174 @@ func (ec *executionContext) fieldContext_Mutation_deleteBlackList(ctx context.Co
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateSaveCode(rctx, fc.Args["code"].([]string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createSaveCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateSaveCode(rctx, fc.Args["id"].(string), fc.Args["code"].([]string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateSaveCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteSaveCode(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteSaveCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _NlpReport_id(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_NlpReport_id(ctx, field)
 	if err != nil {
@@ -21372,6 +21713,111 @@ func (ec *executionContext) fieldContext_Query_getBlackList(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getSaveCodeById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSaveCodeById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetSaveCodeByID(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getSaveCodeById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSaveCodeById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetSaveCode(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query___type(ctx, field)
 	if err != nil {
@@ -21881,6 +22327,94 @@ func (ec *executionContext) _Rdv_health_method(ctx context.Context, field graphq
 func (ec *executionContext) fieldContext_Rdv_health_method(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Rdv",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SaveCode_id(ctx context.Context, field graphql.CollectedField, obj *model.SaveCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SaveCode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SaveCode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SaveCode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SaveCode_code(ctx context.Context, field graphql.CollectedField, obj *model.SaveCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SaveCode_code(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Code, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SaveCode_code(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SaveCode",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -27706,6 +28240,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBlackList(ctx, field)
 			})
+		case "createSaveCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createSaveCode(ctx, field)
+			})
+		case "updateSaveCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateSaveCode(ctx, field)
+			})
+		case "deleteSaveCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteSaveCode(ctx, field)
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -29093,6 +29639,44 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getSaveCodeById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getSaveCodeById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getSaveCode":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getSaveCode(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -29174,6 +29758,50 @@ func (ec *executionContext) _Rdv(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 		case "health_method":
 			out.Values[i] = ec._Rdv_health_method(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var saveCodeImplementors = []string{"SaveCode"}
+
+func (ec *executionContext) _SaveCode(ctx context.Context, sel ast.SelectionSet, obj *model.SaveCode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, saveCodeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SaveCode")
+		case "id":
+			out.Values[i] = ec._SaveCode_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "code":
+			out.Values[i] = ec._SaveCode_code(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -32563,6 +33191,54 @@ func (ec *executionContext) marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarli
 		return graphql.Null
 	}
 	return ec._Rdv(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v []*model.SaveCode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v *model.SaveCode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SaveCode(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
