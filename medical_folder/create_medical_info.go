@@ -61,7 +61,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 			return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
 		}
 
-		_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, control.GetPatientById.Email, control.GetPatientById.Password, medical.CreateMedicalFolder.Id, control.GetPatientById.Rendez_vous_ids, control.GetPatientById.Document_ids, control.GetPatientById.Treatment_follow_up_ids, control.GetPatientById.Chat_ids, control.GetPatientById.Device_connect, control.GetPatientById.Double_auth_methods_id)
+		_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, control.GetPatientById.Email, control.GetPatientById.Password, medical.CreateMedicalFolder.Id, control.GetPatientById.Rendez_vous_ids, control.GetPatientById.Document_ids, control.GetPatientById.Treatment_follow_up_ids, control.GetPatientById.Chat_ids, control.GetPatientById.Device_connect, control.GetPatientById.Double_auth_methods_id, control.GetPatientById.Trust_devices)
 		if err != nil {
 			return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to update patient: " + err.Error())}
 		}
@@ -157,7 +157,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, control.GetPatientById.Email, control.GetPatientById.Password, medical.CreateMedicalFolder.Id, control.GetPatientById.Rendez_vous_ids, control.GetPatientById.Document_ids, control.GetPatientById.Treatment_follow_up_ids, control.GetPatientById.Chat_ids, control.GetPatientById.Device_connect, control.GetPatientById.Double_auth_methods_id)
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, control.GetPatientById.Email, control.GetPatientById.Password, medical.CreateMedicalFolder.Id, control.GetPatientById.Rendez_vous_ids, control.GetPatientById.Document_ids, control.GetPatientById.Treatment_follow_up_ids, control.GetPatientById.Chat_ids, control.GetPatientById.Device_connect, control.GetPatientById.Double_auth_methods_id, control.GetPatientById.Trust_devices)
 	if err != nil {
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to update patient: " + err.Error())}
 	}

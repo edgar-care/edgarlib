@@ -46,7 +46,7 @@ func Delete_follow_up(id string, patientId string) DeleteFollowUpResponse {
 		return DeleteFollowUpResponse{Deleted: false, UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, remElement(patient.GetPatientById.Treatment_follow_up_ids, id), patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id)
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientId, patient.GetPatientById.Email, patient.GetPatientById.Password, patient.GetPatientById.Medical_info_id, patient.GetPatientById.Rendez_vous_ids, patient.GetPatientById.Document_ids, remElement(patient.GetPatientById.Treatment_follow_up_ids, id), patient.GetPatientById.Chat_ids, patient.GetPatientById.Device_connect, patient.GetPatientById.Double_auth_methods_id, patient.GetPatientById.Trust_devices)
 	if err != nil {
 		return DeleteFollowUpResponse{Deleted: false, UpdatedPatient: model.Patient{}, Code: 500, Err: errors.New("unable to update patient")}
 	}

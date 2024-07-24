@@ -23,7 +23,7 @@ func TestDeletePatient(t *testing.T) {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
 
-	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.CreateDoctor.Id, doctor.CreateDoctor.Email, doctor.CreateDoctor.Password, doctor.CreateDoctor.Name, doctor.CreateDoctor.Firstname, []string{}, []string{patient.CreatePatient.Id}, graphql.AddressInput{"", "", "", ""})
+	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.CreateDoctor.Id, doctor.CreateDoctor.Email, doctor.CreateDoctor.Password, doctor.CreateDoctor.Name, doctor.CreateDoctor.Firstname, []string{}, []string{patient.CreatePatient.Id}, graphql.AddressInput{"", "", "", ""}, []string{}, []string{}, "", []string{})
 	if err != nil {
 		t.Errorf("Error while updating doctor: %v", err)
 	}

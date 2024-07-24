@@ -133,15 +133,19 @@ type Disease struct {
 }
 
 type Doctor struct {
-	ID            string    `json:"id" bson:"_id"`
-	Email         string    `json:"email" bson:"email"`
-	Password      string    `json:"password" bson:"password"`
-	Name          string    `json:"name" bson:"name"`
-	Firstname     string    `json:"firstname" bson:"firstname"`
-	Address       *Address  `json:"address" bson:"address"`
-	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
-	PatientIds    []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
-	ChatIds       []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
+	ID                  string    `json:"id" bson:"_id"`
+	Email               string    `json:"email" bson:"email"`
+	Password            string    `json:"password" bson:"password"`
+	Name                string    `json:"name" bson:"name"`
+	Firstname           string    `json:"firstname" bson:"firstname"`
+	Address             *Address  `json:"address" bson:"address"`
+	RendezVousIds       []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+	PatientIds          []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
+	ChatIds             []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
+	DoubleAuthMethodsID *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
+	DeviceConnect       []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	TrustDevices        []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
+	Status              bool      `json:"status" bson:"status"`
 }
 
 type Document struct {
@@ -258,6 +262,8 @@ type Patient struct {
 	ChatIds              []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
 	DoubleAuthMethodsID  *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
 	DeviceConnect        []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	TrustDevices         []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
+	Status               bool      `json:"status" bson:"status"`
 }
 
 type Query struct {
@@ -273,6 +279,11 @@ type Rdv struct {
 	AppointmentStatus AppointmentStatus `json:"appointment_status" bson:"appointment_status"`
 	SessionID         string            `json:"session_id" bson:"session_id"`
 	HealthMethod      *string           `json:"health_method,omitempty" bson:"health_method"`
+}
+
+type SaveCode struct {
+	ID   string   `json:"id" bson:"_id"`
+	Code []string `json:"code" bson:"code"`
 }
 
 type Session struct {

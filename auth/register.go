@@ -47,7 +47,7 @@ type RegisterAndLoginResponse struct {
 func RegisterDoctor(email string, password string, name string, firstname string, address AddressInput) (model.Doctor, error) {
 	gqlClient := graphql.CreateClient()
 	password = utils.HashPassword(password)
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, email, password, firstname, name, graphql.AddressInput{Street: address.Street, Zip_code: address.ZipCode, Country: address.Country, City: address.City})
+	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, email, password, firstname, name, graphql.AddressInput{Street: address.Street, Zip_code: address.ZipCode, Country: address.Country, City: address.City}, true)
 	if err != nil {
 		return model.Doctor{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
@@ -83,7 +83,7 @@ func RegisterAndLoginDoctor(email string, password string, name string, firstnam
 func RegisterPatient(email string, password string) (model.Patient, error) {
 	gqlClient := graphql.CreateClient()
 	password = utils.HashPassword(password)
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, email, password)
+	patient, err := graphql.CreatePatient(context.Background(), gqlClient, email, password, true)
 	if err != nil {
 		return model.Patient{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}

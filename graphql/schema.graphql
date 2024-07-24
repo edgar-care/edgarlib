@@ -111,6 +111,8 @@ type Patient {
     chat_ids: [String]
     double_auth_methods_id: String
     device_connect: [String]
+    trust_devices: [String]
+    status: Boolean!
 }
 
 # Doctor entity
@@ -124,6 +126,10 @@ type Doctor {
     rendez_vous_ids: [String]
     patient_ids: [String]
     chat_ids: [String]
+    double_auth_methods_id: String
+    device_connect: [String]
+    trust_devices: [String]
+    status: Boolean!
 }
 
 type Address {
@@ -376,6 +382,11 @@ type BlackList {
     token: [String!]!
 }
 
+type SaveCode {
+    id: ID!
+    code: [String!]!
+}
+
 
 ## Query  --------------------------------------------------------------------------------------------------------------
 
@@ -562,25 +573,30 @@ type Query {
 
     getBlackList: [BlackList]
 
+    # Get Black list
+    getSaveCodeById(id: String!): SaveCode
+
+    getSaveCode: [SaveCode]
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
 
 type Mutation {
     # Create a new patient.
-    createPatient(email: String!, password: String!): Patient
+    createPatient(email: String!, password: String!, status: Boolean!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
 
     # Create a new doctor.
-    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!): Doctor
+    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!, status: Boolean!): Doctor
 
     # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String]): Doctor #rendez_vous_id: String , slot_ids: [String]
+    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Doctor #rendez_vous_id: String , slot_ids: [String] status: Boolean
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
@@ -776,6 +792,16 @@ type Mutation {
 
     #Delete a DeviceConnect
     deleteBlackList(id: String!): Boolean
+
+
+    # Create new DoubleAuth
+    createSaveCode(code: [String!]!): SaveCode
+
+    #update a DeviceConnect
+    updateSaveCode(id: String!, code: [String!]): SaveCode
+
+    #Delete a DeviceConnect
+    deleteSaveCode(id: String!): Boolean
 }
 
 

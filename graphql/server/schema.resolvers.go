@@ -15,7 +15,7 @@ import (
 )
 
 // CreatePatient is the resolver for the createPatient field.
-func (r *mutationResolver) CreatePatient(ctx context.Context, email string, password string) (*model.Patient, error) {
+func (r *mutationResolver) CreatePatient(ctx context.Context, email string, password string, status bool) (*model.Patient, error) {
 	var result model.Patient
 
 	filter := bson.M{"email": email}
@@ -28,6 +28,7 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 	newPatient := bson.M{
 		"email":    email,
 		"password": password,
+		"status":   status,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").InsertOne(ctx, newPatient)
@@ -37,13 +38,14 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 	entity := model.Patient{
 		Email:    email,
 		Password: password,
+		Status:   status,
 		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
 	}
 	return &entity, err
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) (*model.Patient, error) {
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -61,6 +63,8 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		"chat_ids":                chatIds,
 		"device_connect":          deviceConnect,
 		"double_auth_methods_id":  doubleAuthMethodsID,
+		"trust_devices":           trustDevices,
+		"status":                  status,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
 	return &model.Patient{
@@ -74,6 +78,8 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		ChatIds:              chatIds,
 		DeviceConnect:        deviceConnect,
 		DoubleAuthMethodsID:  doubleAuthMethodsID,
+		TrustDevices:         trustDevices,
+		Status:               *status,
 	}, err
 }
 
@@ -94,7 +100,7 @@ func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool,
 }
 
 // CreateDoctor is the resolver for the createDoctor field.
-func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error) {
+func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput, status bool) (*model.Doctor, error) {
 	var result model.Doctor
 
 	filter := bson.M{"email": email}
@@ -110,6 +116,7 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 		"name":      name,
 		"firstname": firstname,
 		"address":   address,
+		"status":    status,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").InsertOne(ctx, newDoctor)
@@ -130,13 +137,14 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 		Name:      name,
 		Firstname: firstname,
 		Address:   listaddress,
+		Status:    status,
 		ID:        res.InsertedID.(primitive.ObjectID).Hex(),
 	}
 	return &entity, err
 }
 
 // UpdateDoctor is the resolver for the updateDoctor field.
-func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) (*model.Doctor, error) {
+func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Doctor, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -144,15 +152,19 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 	filter := bson.M{"_id": objId}
 
 	updated := bson.M{
-		"_id":             objId,
-		"email":           email,
-		"password":        password,
-		"name":            name,
-		"firstname":       firstname,
-		"rendez_vous_ids": rendezVousIds,
-		"patient_ids":     patientIds,
-		"address":         address,
-		"chat_ids":        chatIds,
+		"_id":                    objId,
+		"email":                  email,
+		"password":               password,
+		"name":                   name,
+		"firstname":              firstname,
+		"rendez_vous_ids":        rendezVousIds,
+		"patient_ids":            patientIds,
+		"address":                address,
+		"chat_ids":               chatIds,
+		"device_connect":         deviceConnect,
+		"double_auth_methods_id": doubleAuthMethodsID,
+		"trust_devices":          trustDevices,
+		"status":                 status,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").ReplaceOne(ctx, filter, updated)
 	return &model.Doctor{
@@ -167,9 +179,13 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 			Country: address.Country,
 			City:    address.City,
 		},
-		RendezVousIds: rendezVousIds,
-		PatientIds:    patientIds,
-		ChatIds:       chatIds,
+		RendezVousIds:       rendezVousIds,
+		PatientIds:          patientIds,
+		ChatIds:             chatIds,
+		DeviceConnect:       deviceConnect,
+		DoubleAuthMethodsID: doubleAuthMethodsID,
+		TrustDevices:        trustDevices,
+		Status:              *status,
 	}, err
 }
 
@@ -1799,6 +1815,60 @@ func (r *mutationResolver) DeleteBlackList(ctx context.Context, id string) (*boo
 	return &resp, err
 }
 
+// CreateSaveCode is the resolver for the createSaveCode field.
+func (r *mutationResolver) CreateSaveCode(ctx context.Context, code []string) (*model.SaveCode, error) {
+	newDevice := bson.M{
+		"code": code,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").InsertOne(ctx, newDevice)
+	if err != nil {
+		return nil, err
+	}
+	entity := model.SaveCode{
+		ID:   res.InsertedID.(primitive.ObjectID).Hex(),
+		Code: code,
+	}
+	return &entity, err
+}
+
+// UpdateSaveCode is the resolver for the updateSaveCode field.
+func (r *mutationResolver) UpdateSaveCode(ctx context.Context, id string, code []string) (*model.SaveCode, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":  objId,
+		"code": code,
+	}
+
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").ReplaceOne(ctx, filter, updated)
+
+	return &model.SaveCode{
+		ID:   id,
+		Code: code,
+	}, err
+}
+
+// DeleteSaveCode is the resolver for the deleteSaveCode field.
+func (r *mutationResolver) DeleteSaveCode(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -2899,6 +2969,41 @@ func (r *queryResolver) GetBlackList(ctx context.Context) ([]*model.BlackList, e
 	filter := bson.D{}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+// GetSaveCodeByID is the resolver for the getSaveCodeById field.
+func (r *queryResolver) GetSaveCodeByID(ctx context.Context, id string) (*model.SaveCode, error) {
+	var result model.SaveCode
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetSaveCode is the resolver for the getSaveCode field.
+func (r *queryResolver) GetSaveCode(ctx context.Context) ([]*model.SaveCode, error) {
+	var report []*model.SaveCode
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
