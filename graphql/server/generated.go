@@ -157,6 +157,7 @@ type ComplexityRoot struct {
 		Password      func(childComplexity int) int
 		PatientIds    func(childComplexity int) int
 		RendezVousIds func(childComplexity int) int
+		Status        func(childComplexity int) int
 	}
 
 	Document struct {
@@ -223,14 +224,14 @@ type ComplexityRoot struct {
 		CreateDemoAccount        func(childComplexity int, email string, password string) int
 		CreateDeviceConnect      func(childComplexity int, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) int
 		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, heredityFactor float64, advice *string) int
-		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
+		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput, status bool) int
 		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
 		CreateDoubleAuth         func(childComplexity int, methods []string, secret string, url string, trustDeviceID string) int
 		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string, familyMembersMedInfoID []string) int
 		CreateMedicine           func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
 		CreateNlpReport          func(childComplexity int, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) int
 		CreateNotification       func(childComplexity int, token string, message string, title string) int
-		CreatePatient            func(childComplexity int, email string, password string) int
+		CreatePatient            func(childComplexity int, email string, password string, status bool) int
 		CreateRdv                func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
 		CreateSession            func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) int
 		CreateSymptom            func(childComplexity int, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) int
@@ -271,12 +272,12 @@ type ComplexityRoot struct {
 		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
 		UpdateDeviceConnect      func(childComplexity int, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) int
 		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, heredityFactor *float64, advice *string) int
-		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) int
+		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, status *bool) int
 		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
 		UpdateDoubleAuth         func(childComplexity int, id string, methods []string, secret *string, url *string, trustDeviceID *string) int
 		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus, familyMembersMedInfoID []string) int
 		UpdateNotification       func(childComplexity int, id string, token string, message string, title string) int
-		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) int
+		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, status *bool) int
 		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) int
 		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) int
 		UpdateSymptom            func(childComplexity int, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) int
@@ -317,6 +318,7 @@ type ComplexityRoot struct {
 		MedicalInfoID        func(childComplexity int) int
 		Password             func(childComplexity int) int
 		RendezVousIds        func(childComplexity int) int
+		Status               func(childComplexity int) int
 		TreatmentFollowUpIds func(childComplexity int) int
 	}
 
@@ -467,11 +469,11 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreatePatient(ctx context.Context, email string, password string) (*model.Patient, error)
-	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) (*model.Patient, error)
+	CreatePatient(ctx context.Context, email string, password string, status bool) (*model.Patient, error)
+	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, status *bool) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
-	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error)
-	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) (*model.Doctor, error)
+	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput, status bool) (*model.Doctor, error)
+	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, status *bool) (*model.Doctor, error)
 	DeleteDoctor(ctx context.Context, id string) (*bool, error)
 	CreateAdmin(ctx context.Context, email string, password string, name string, lastName string) (*model.Admin, error)
 	UpdateAdmin(ctx context.Context, id string, email *string, password *string, name *string, lastName *string) (*model.Admin, error)
@@ -1096,6 +1098,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Doctor.RendezVousIds(childComplexity), true
 
+	case "Doctor.status":
+		if e.complexity.Doctor.Status == nil {
+			break
+		}
+
+		return e.complexity.Doctor.Status(childComplexity), true
+
 	case "Document.category":
 		if e.complexity.Document.Category == nil {
 			break
@@ -1471,7 +1480,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDoctor(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["firstname"].(string), args["address"].(model.AddressInput)), true
+		return e.complexity.Mutation.CreateDoctor(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["firstname"].(string), args["address"].(model.AddressInput), args["status"].(bool)), true
 
 	case "Mutation.createDocument":
 		if e.complexity.Mutation.CreateDocument == nil {
@@ -1555,7 +1564,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreatePatient(childComplexity, args["email"].(string), args["password"].(string)), true
+		return e.complexity.Mutation.CreatePatient(childComplexity, args["email"].(string), args["password"].(string), args["status"].(bool)), true
 
 	case "Mutation.createRdv":
 		if e.complexity.Mutation.CreateRdv == nil {
@@ -2047,7 +2056,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["firstname"].(*string), args["rendez_vous_ids"].([]*string), args["patient_ids"].([]*string), args["address"].(*model.AddressInput), args["chat_ids"].([]*string)), true
+		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["firstname"].(*string), args["rendez_vous_ids"].([]*string), args["patient_ids"].([]*string), args["address"].(*model.AddressInput), args["chat_ids"].([]*string), args["status"].(*bool)), true
 
 	case "Mutation.updateDocument":
 		if e.complexity.Mutation.UpdateDocument == nil {
@@ -2107,7 +2116,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string), args["chat_ids"].([]*string), args["device_connect"].([]*string), args["double_auth_methods_id"].(*string)), true
+		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string), args["chat_ids"].([]*string), args["device_connect"].([]*string), args["double_auth_methods_id"].(*string), args["status"].(*bool)), true
 
 	case "Mutation.updateRdv":
 		if e.complexity.Mutation.UpdateRdv == nil {
@@ -2334,6 +2343,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Patient.RendezVousIds(childComplexity), true
+
+	case "Patient.status":
+		if e.complexity.Patient.Status == nil {
+			break
+		}
+
+		return e.complexity.Patient.Status(childComplexity), true
 
 	case "Patient.treatment_follow_up_ids":
 		if e.complexity.Patient.TreatmentFollowUpIds == nil {
@@ -3572,6 +3588,7 @@ type Patient {
     chat_ids: [String]
     double_auth_methods_id: String
     device_connect: [String]
+    status: Boolean!
 }
 
 # Doctor entity
@@ -3585,6 +3602,7 @@ type Doctor {
     rendez_vous_ids: [String]
     patient_ids: [String]
     chat_ids: [String]
+    status: Boolean!
 }
 
 type Address {
@@ -4029,19 +4047,19 @@ type Query {
 
 type Mutation {
     # Create a new patient.
-    createPatient(email: String!, password: String!): Patient
+    createPatient(email: String!, password: String!, status: Boolean!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String, status: Boolean): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
 
     # Create a new doctor.
-    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!): Doctor
+    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!, status: Boolean!): Doctor
 
     # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String]): Doctor #rendez_vous_id: String , slot_ids: [String]
+    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String], status: Boolean): Doctor #rendez_vous_id: String , slot_ids: [String] status: Boolean
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
@@ -4754,6 +4772,15 @@ func (ec *executionContext) field_Mutation_createDoctor_args(ctx context.Context
 		}
 	}
 	args["address"] = arg4
+	var arg5 bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg5, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg5
 	return args, nil
 }
 
@@ -5111,6 +5138,15 @@ func (ec *executionContext) field_Mutation_createPatient_args(ctx context.Contex
 		}
 	}
 	args["password"] = arg1
+	var arg2 bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg2, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg2
 	return args, nil
 }
 
@@ -6419,6 +6455,15 @@ func (ec *executionContext) field_Mutation_updateDoctor_args(ctx context.Context
 		}
 	}
 	args["chat_ids"] = arg8
+	var arg9 *bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg9, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg9
 	return args, nil
 }
 
@@ -6746,6 +6791,15 @@ func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Contex
 		}
 	}
 	args["double_auth_methods_id"] = arg9
+	var arg10 *bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg10, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg10
 	return args, nil
 }
 
@@ -10822,6 +10876,50 @@ func (ec *executionContext) fieldContext_Doctor_chat_ids(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Doctor_status(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_status(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Document_id(ctx context.Context, field graphql.CollectedField, obj *model.Document) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Document_id(ctx, field)
 	if err != nil {
@@ -12388,7 +12486,7 @@ func (ec *executionContext) _Mutation_createPatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreatePatient(rctx, fc.Args["email"].(string), fc.Args["password"].(string))
+		return ec.resolvers.Mutation().CreatePatient(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["status"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12430,6 +12528,8 @@ func (ec *executionContext) fieldContext_Mutation_createPatient(ctx context.Cont
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -12462,7 +12562,7 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string), fc.Args["double_auth_methods_id"].(*string))
+		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string), fc.Args["double_auth_methods_id"].(*string), fc.Args["status"].(*bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12504,6 +12604,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Cont
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -12588,7 +12690,7 @@ func (ec *executionContext) _Mutation_createDoctor(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDoctor(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["firstname"].(string), fc.Args["address"].(model.AddressInput))
+		return ec.resolvers.Mutation().CreateDoctor(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["firstname"].(string), fc.Args["address"].(model.AddressInput), fc.Args["status"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12628,6 +12730,8 @@ func (ec *executionContext) fieldContext_Mutation_createDoctor(ctx context.Conte
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -12660,7 +12764,7 @@ func (ec *executionContext) _Mutation_updateDoctor(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["patient_ids"].([]*string), fc.Args["address"].(*model.AddressInput), fc.Args["chat_ids"].([]*string))
+		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["patient_ids"].([]*string), fc.Args["address"].(*model.AddressInput), fc.Args["chat_ids"].([]*string), fc.Args["status"].(*bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12700,6 +12804,8 @@ func (ec *executionContext) fieldContext_Mutation_updateDoctor(ctx context.Conte
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -17679,6 +17785,50 @@ func (ec *executionContext) fieldContext_Patient_device_connect(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Patient_status(ctx context.Context, field graphql.CollectedField, obj *model.Patient) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Patient_status(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Patient_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Patient",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_getPatients(ctx, field)
 	if err != nil {
@@ -17735,6 +17885,8 @@ func (ec *executionContext) fieldContext_Query_getPatients(ctx context.Context, 
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -17798,6 +17950,8 @@ func (ec *executionContext) fieldContext_Query_getPatientById(ctx context.Contex
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -17872,6 +18026,8 @@ func (ec *executionContext) fieldContext_Query_getPatientByEmail(ctx context.Con
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -17944,6 +18100,8 @@ func (ec *executionContext) fieldContext_Query_getDoctors(ctx context.Context, f
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -18005,6 +18163,8 @@ func (ec *executionContext) fieldContext_Query_getDoctorById(ctx context.Context
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -18077,6 +18237,8 @@ func (ec *executionContext) fieldContext_Query_getDoctorByEmail(ctx context.Cont
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -20744,6 +20906,8 @@ func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx con
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -27107,6 +27271,11 @@ func (ec *executionContext) _Doctor(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Doctor_patient_ids(ctx, field, obj)
 		case "chat_ids":
 			out.Values[i] = ec._Doctor_chat_ids(ctx, field, obj)
+		case "status":
+			out.Values[i] = ec._Doctor_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28032,6 +28201,11 @@ func (ec *executionContext) _Patient(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Patient_double_auth_methods_id(ctx, field, obj)
 		case "device_connect":
 			out.Values[i] = ec._Patient_device_connect(ctx, field, obj)
+		case "status":
+			out.Values[i] = ec._Patient_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

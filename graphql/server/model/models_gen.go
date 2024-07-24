@@ -142,6 +142,7 @@ type Doctor struct {
 	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
 	PatientIds    []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
 	ChatIds       []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
+	Status        bool      `json:"status" bson:"status"`
 }
 
 type Document struct {
@@ -258,6 +259,7 @@ type Patient struct {
 	ChatIds              []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
 	DoubleAuthMethodsID  *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
 	DeviceConnect        []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	Status               bool      `json:"status" bson:"status"`
 }
 
 type Query struct {

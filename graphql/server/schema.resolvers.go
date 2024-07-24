@@ -15,7 +15,7 @@ import (
 )
 
 // CreatePatient is the resolver for the createPatient field.
-func (r *mutationResolver) CreatePatient(ctx context.Context, email string, password string) (*model.Patient, error) {
+func (r *mutationResolver) CreatePatient(ctx context.Context, email string, password string, status bool) (*model.Patient, error) {
 	var result model.Patient
 
 	filter := bson.M{"email": email}
@@ -28,6 +28,7 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 	newPatient := bson.M{
 		"email":    email,
 		"password": password,
+		"status":   status,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").InsertOne(ctx, newPatient)
@@ -37,13 +38,14 @@ func (r *mutationResolver) CreatePatient(ctx context.Context, email string, pass
 	entity := model.Patient{
 		Email:    email,
 		Password: password,
+		Status:   status,
 		ID:       res.InsertedID.(primitive.ObjectID).Hex(),
 	}
 	return &entity, err
 }
 
 // UpdatePatient is the resolver for the updatePatient field.
-func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) (*model.Patient, error) {
+func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, status *bool) (*model.Patient, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -61,6 +63,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		"chat_ids":                chatIds,
 		"device_connect":          deviceConnect,
 		"double_auth_methods_id":  doubleAuthMethodsID,
+		"status":                  status,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").ReplaceOne(ctx, filter, updated)
 	return &model.Patient{
@@ -74,6 +77,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, email *
 		ChatIds:              chatIds,
 		DeviceConnect:        deviceConnect,
 		DoubleAuthMethodsID:  doubleAuthMethodsID,
+		Status:               *status,
 	}, err
 }
 
@@ -94,7 +98,7 @@ func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool,
 }
 
 // CreateDoctor is the resolver for the createDoctor field.
-func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error) {
+func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput, status bool) (*model.Doctor, error) {
 	var result model.Doctor
 
 	filter := bson.M{"email": email}
@@ -110,6 +114,7 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 		"name":      name,
 		"firstname": firstname,
 		"address":   address,
+		"status":    status,
 	}
 
 	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").InsertOne(ctx, newDoctor)
@@ -130,13 +135,14 @@ func (r *mutationResolver) CreateDoctor(ctx context.Context, email string, passw
 		Name:      name,
 		Firstname: firstname,
 		Address:   listaddress,
+		Status:    status,
 		ID:        res.InsertedID.(primitive.ObjectID).Hex(),
 	}
 	return &entity, err
 }
 
 // UpdateDoctor is the resolver for the updateDoctor field.
-func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) (*model.Doctor, error) {
+func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, status *bool) (*model.Doctor, error) {
 	objId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -153,6 +159,7 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 		"patient_ids":     patientIds,
 		"address":         address,
 		"chat_ids":        chatIds,
+		"status":          status,
 	}
 	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").ReplaceOne(ctx, filter, updated)
 	return &model.Doctor{
@@ -170,6 +177,7 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, email *s
 		RendezVousIds: rendezVousIds,
 		PatientIds:    patientIds,
 		ChatIds:       chatIds,
+		Status:        *status,
 	}, err
 }
 

@@ -69,3 +69,33 @@ func DeleteKey(key string) (string, error) {
 
 	return resp, nil
 }
+
+func AddTokenToList(token string) (string, error) {
+	client, err := CreateClient()
+	if err != nil {
+		return "", err
+	}
+
+	listKey := "user-tokens"
+	resp, err := ExecuteCommand(client, fmt.Sprintf("redis-cli RPUSH %s %s", listKey, token))
+	if err != nil {
+		return "", err
+	}
+
+	return resp, nil
+}
+
+func RemoveTokenFromList(token string) (string, error) {
+	client, err := CreateClient()
+	if err != nil {
+		return "", err
+	}
+
+	listKey := "user-tokens"
+	resp, err := ExecuteCommand(client, fmt.Sprintf("redis-cli LREM %s 0 %s", listKey, token))
+	if err != nil {
+		return "", err
+	}
+
+	return resp, nil
+}
