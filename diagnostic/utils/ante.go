@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"github.com/edgar-care/edgarlib/exam"
 	"github.com/edgar-care/edgarlib/graphql"
 )
 
@@ -27,9 +28,9 @@ func CheckAnteDiseaseInSymptoms(session graphql.GetSessionByIdGetSessionByIdSess
 					}
 					if anteSymptom.GetSymptomById.Code != session.Last_question {
 						if anteSymptom.GetSymptomById.Question_ante != "" {
-							question = anteSymptom.GetSymptomById.Question_ante
+							question = exam.AddDiscursiveConnector(anteSymptom.GetSymptomById.Question_ante)
 						} else {
-							question = "Ressentez-vous " + anteSymptom.GetSymptomById.Name + " plus intensément récemment ?"
+							question = exam.AddDiscursiveConnector("{{connecteur}}. Ressentez-vous " + anteSymptom.GetSymptomById.Name + " plus intensément récemment ?")
 						}
 						questionSymptomName = anteSymptom.GetSymptomById.Code
 					}
