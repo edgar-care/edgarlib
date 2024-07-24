@@ -27,7 +27,7 @@ func TestDeleteRdv(t *testing.T) {
 	appointmentID := appointment.CreateRdv.Id
 	patientID := patient.CreatePatient.Id
 
-	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.CreatePatient.Email, patient.CreatePatient.Password, patient.CreatePatient.Medical_info_id, append(patient.CreatePatient.Rendez_vous_ids, "test", appointmentID), patient.CreatePatient.Document_ids, patient.CreatePatient.Treatment_follow_up_ids, patient.CreatePatient.Chat_ids, patient.CreatePatient.Device_connect, patient.CreatePatient.Double_auth_methods_id)
+	_, err = graphql.UpdatePatient(context.Background(), gqlClient, patientID, patient.CreatePatient.Email, patient.CreatePatient.Password, patient.CreatePatient.Medical_info_id, append(patient.CreatePatient.Rendez_vous_ids, "test", appointmentID), patient.CreatePatient.Document_ids, patient.CreatePatient.Treatment_follow_up_ids, patient.CreatePatient.Chat_ids, patient.CreatePatient.Device_connect, patient.CreatePatient.Double_auth_methods_id, patient.CreatePatient.Trust_devices)
 	if err != nil {
 		t.Errorf("Error while updating patient: %v", err)
 	}

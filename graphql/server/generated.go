@@ -148,15 +148,19 @@ type ComplexityRoot struct {
 	}
 
 	Doctor struct {
-		Address       func(childComplexity int) int
-		ChatIds       func(childComplexity int) int
-		Email         func(childComplexity int) int
-		Firstname     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Password      func(childComplexity int) int
-		PatientIds    func(childComplexity int) int
-		RendezVousIds func(childComplexity int) int
+		Address             func(childComplexity int) int
+		ChatIds             func(childComplexity int) int
+		DeviceConnect       func(childComplexity int) int
+		DoubleAuthMethodsID func(childComplexity int) int
+		Email               func(childComplexity int) int
+		Firstname           func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		Name                func(childComplexity int) int
+		Password            func(childComplexity int) int
+		PatientIds          func(childComplexity int) int
+		RendezVousIds       func(childComplexity int) int
+		Status              func(childComplexity int) int
+		TrustDevices        func(childComplexity int) int
 	}
 
 	Document struct {
@@ -223,16 +227,17 @@ type ComplexityRoot struct {
 		CreateDemoAccount        func(childComplexity int, email string, password string) int
 		CreateDeviceConnect      func(childComplexity int, deviceName string, ipAddress string, latitude float64, longitude float64, date int, trustDevice bool) int
 		CreateDisease            func(childComplexity int, code string, name string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor float64, heredityFactor float64, advice *string) int
-		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput) int
+		CreateDoctor             func(childComplexity int, email string, password string, name string, firstname string, address model.AddressInput, status bool) int
 		CreateDocument           func(childComplexity int, ownerID string, name string, documentType string, category string, isFavorite bool, downloadURL string) int
 		CreateDoubleAuth         func(childComplexity int, methods []string, secret string, url string, trustDeviceID string) int
-		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string, familyMembersMedInfoID []string) int
+		CreateMedicalFolder      func(childComplexity int, name string, firstname string, birthdate int, sex string, height int, weight int, primaryDoctorID string, antecedentDiseaseIds []string, onboardingStatus string, familyMembersMedInfoID []string, familyMembersMedInfoID []string) int
 		CreateMedicine           func(childComplexity int, name string, unit *string, targetDiseases []string, treatedSymptoms []string, sideEffects []string) int
 		CreateNlpReport          func(childComplexity int, version int, inputSymptoms []string, inputSentence string, output []*model.NlpReportOutputInput, computationTime int) int
 		CreateNotification       func(childComplexity int, token string, message string, title string) int
-		CreatePatient            func(childComplexity int, email string, password string) int
+		CreatePatient            func(childComplexity int, email string, password string, status bool) int
 		CreateRdv                func(childComplexity int, idPatient string, doctorID string, startDate int, endDate int, appointmentStatus model.AppointmentStatus, sessionID string) int
-		CreateSession            func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) int
+		CreateSaveCode           func(childComplexity int, code []string) int
+		CreateSession            func(childComplexity int, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age int, height int, weight int, sex string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion string, logs []*model.LogsInput, hereditaryDisease []string, hereditaryDisease []string, alerts []string) int
 		CreateSymptom            func(childComplexity int, code string, name string, chronic *int, symptom []string, advice *string, question string, questionBasic string, questionDuration string, questionAnte string) int
 		CreateTestAccount        func(childComplexity int, email string, password string) int
 		CreateTreatment          func(childComplexity int, period []model.Period, day []model.Day, quantity int, medicineID string) int
@@ -255,6 +260,7 @@ type ComplexityRoot struct {
 		DeleteNotification       func(childComplexity int, id string) int
 		DeletePatient            func(childComplexity int, id string) int
 		DeleteRdv                func(childComplexity int, id string) int
+		DeleteSaveCode           func(childComplexity int, id string) int
 		DeleteSession            func(childComplexity int, id string) int
 		DeleteSlot               func(childComplexity int, id string) int
 		DeleteSymptom            func(childComplexity int, id string) int
@@ -270,15 +276,16 @@ type ComplexityRoot struct {
 		UpdateChat               func(childComplexity int, id string, participants []*model.ChatParticipantsInput, messages []*model.ChatMessagesInput) int
 		UpdateDemoAccount        func(childComplexity int, id string, email *string, password *string) int
 		UpdateDeviceConnect      func(childComplexity int, id string, deviceName *string, ipAddress *string, latitude *float64, longitude *float64, date *int, trustDevice *bool) int
-		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, heredityFactor *float64, advice *string) int
-		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) int
+		UpdateDisease            func(childComplexity int, id string, code *string, name *string, symptoms []string, symptomsWeight []*model.SymptomsWeightInput, overweightFactor *float64, heredityFactor *float64, heredityFactor *float64, advice *string) int
+		UpdateDoctor             func(childComplexity int, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) int
 		UpdateDocument           func(childComplexity int, id string, name *string, isFavorite *bool) int
 		UpdateDoubleAuth         func(childComplexity int, id string, methods []string, secret *string, url *string, trustDeviceID *string) int
 		UpdateMedicalFolder      func(childComplexity int, id string, name *string, firstname *string, birthdate *int, sex *string, height *int, weight *int, primaryDoctorID *string, antecedentDiseaseIds []string, onboardingStatus *model.OnboardingStatus, familyMembersMedInfoID []string) int
 		UpdateNotification       func(childComplexity int, id string, token string, message string, title string) int
-		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) int
+		UpdatePatient            func(childComplexity int, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) int
 		UpdateRdv                func(childComplexity int, id string, idPatient *string, doctorID *string, startDate *int, endDate *int, cancelationReason *string, appointmentStatus *model.AppointmentStatus, sessionID *string, healthMethod *string) int
-		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, hereditaryDisease []string, alerts []string) int
+		UpdateSaveCode           func(childComplexity int, id string, code []string) int
+		UpdateSession            func(childComplexity int, id string, diseases []*model.SessionDiseasesInput, symptoms []*model.SessionSymptomInput, age *int, height *int, weight *int, sex *string, anteChirs []string, anteDiseases []string, medicine []string, lastQuestion *string, logs []*model.LogsInput, hereditaryDisease []string, hereditaryDisease []string, alerts []string) int
 		UpdateSymptom            func(childComplexity int, id string, code *string, name *string, chronic *int, symptom []string, advice *string, question *string, questionBasic *string, questionDuration *string, questionAnte *string) int
 		UpdateTestAccount        func(childComplexity int, id string, email *string, password *string) int
 		UpdateTreatment          func(childComplexity int, id string, period []model.Period, day []model.Day, quantity *int, medicineID *string) int
@@ -317,7 +324,9 @@ type ComplexityRoot struct {
 		MedicalInfoID        func(childComplexity int) int
 		Password             func(childComplexity int) int
 		RendezVousIds        func(childComplexity int) int
+		Status               func(childComplexity int) int
 		TreatmentFollowUpIds func(childComplexity int) int
+		TrustDevices         func(childComplexity int) int
 	}
 
 	Query struct {
@@ -366,6 +375,8 @@ type ComplexityRoot struct {
 		GetPatients               func(childComplexity int) int
 		GetPatientsFromDoctorByID func(childComplexity int, id string) int
 		GetRdvByID                func(childComplexity int, id string) int
+		GetSaveCode               func(childComplexity int) int
+		GetSaveCodeByID           func(childComplexity int, id string) int
 		GetSessionByID            func(childComplexity int, id string) int
 		GetSessions               func(childComplexity int) int
 		GetSlotByID               func(childComplexity int, id string) int
@@ -393,6 +404,11 @@ type ComplexityRoot struct {
 		IDPatient         func(childComplexity int) int
 		SessionID         func(childComplexity int) int
 		StartDate         func(childComplexity int) int
+	}
+
+	SaveCode struct {
+		Code func(childComplexity int) int
+		ID   func(childComplexity int) int
 	}
 
 	Session struct {
@@ -467,11 +483,11 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreatePatient(ctx context.Context, email string, password string) (*model.Patient, error)
-	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string) (*model.Patient, error)
+	CreatePatient(ctx context.Context, email string, password string, status bool) (*model.Patient, error)
+	UpdatePatient(ctx context.Context, id string, email *string, password *string, medicalInfoID *string, rendezVousIds []*string, documentIds []*string, treatmentFollowUpIds []*string, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
-	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput) (*model.Doctor, error)
-	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string) (*model.Doctor, error)
+	CreateDoctor(ctx context.Context, email string, password string, name string, firstname string, address model.AddressInput, status bool) (*model.Doctor, error)
+	UpdateDoctor(ctx context.Context, id string, email *string, password *string, name *string, firstname *string, rendezVousIds []*string, patientIds []*string, address *model.AddressInput, chatIds []*string, deviceConnect []*string, doubleAuthMethodsID *string, trustDevices []*string, status *bool) (*model.Doctor, error)
 	DeleteDoctor(ctx context.Context, id string) (*bool, error)
 	CreateAdmin(ctx context.Context, email string, password string, name string, lastName string) (*model.Admin, error)
 	UpdateAdmin(ctx context.Context, id string, email *string, password *string, name *string, lastName *string) (*model.Admin, error)
@@ -537,6 +553,9 @@ type MutationResolver interface {
 	CreateBlackList(ctx context.Context, token []string) (*model.BlackList, error)
 	UpdateBlackList(ctx context.Context, id string, token []string) (*model.BlackList, error)
 	DeleteBlackList(ctx context.Context, id string) (*bool, error)
+	CreateSaveCode(ctx context.Context, code []string) (*model.SaveCode, error)
+	UpdateSaveCode(ctx context.Context, id string, code []string) (*model.SaveCode, error)
+	DeleteSaveCode(ctx context.Context, id string) (*bool, error)
 }
 type QueryResolver interface {
 	GetPatients(ctx context.Context) ([]*model.Patient, error)
@@ -599,6 +618,8 @@ type QueryResolver interface {
 	GetDoubleAuths(ctx context.Context) ([]*model.DoubleAuth, error)
 	GetBlackListByID(ctx context.Context, id string) (*model.BlackList, error)
 	GetBlackList(ctx context.Context) ([]*model.BlackList, error)
+	GetSaveCodeByID(ctx context.Context, id string) (*model.SaveCode, error)
+	GetSaveCode(ctx context.Context) ([]*model.SaveCode, error)
 }
 
 type executableSchema struct {
@@ -1047,6 +1068,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Doctor.ChatIds(childComplexity), true
 
+	case "Doctor.device_connect":
+		if e.complexity.Doctor.DeviceConnect == nil {
+			break
+		}
+
+		return e.complexity.Doctor.DeviceConnect(childComplexity), true
+
+	case "Doctor.double_auth_methods_id":
+		if e.complexity.Doctor.DoubleAuthMethodsID == nil {
+			break
+		}
+
+		return e.complexity.Doctor.DoubleAuthMethodsID(childComplexity), true
+
 	case "Doctor.email":
 		if e.complexity.Doctor.Email == nil {
 			break
@@ -1095,6 +1130,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Doctor.RendezVousIds(childComplexity), true
+
+	case "Doctor.status":
+		if e.complexity.Doctor.Status == nil {
+			break
+		}
+
+		return e.complexity.Doctor.Status(childComplexity), true
+
+	case "Doctor.trust_devices":
+		if e.complexity.Doctor.TrustDevices == nil {
+			break
+		}
+
+		return e.complexity.Doctor.TrustDevices(childComplexity), true
 
 	case "Document.category":
 		if e.complexity.Document.Category == nil {
@@ -1471,7 +1520,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateDoctor(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["firstname"].(string), args["address"].(model.AddressInput)), true
+		return e.complexity.Mutation.CreateDoctor(childComplexity, args["email"].(string), args["password"].(string), args["name"].(string), args["firstname"].(string), args["address"].(model.AddressInput), args["status"].(bool)), true
 
 	case "Mutation.createDocument":
 		if e.complexity.Mutation.CreateDocument == nil {
@@ -1555,7 +1604,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreatePatient(childComplexity, args["email"].(string), args["password"].(string)), true
+		return e.complexity.Mutation.CreatePatient(childComplexity, args["email"].(string), args["password"].(string), args["status"].(bool)), true
 
 	case "Mutation.createRdv":
 		if e.complexity.Mutation.CreateRdv == nil {
@@ -1568,6 +1617,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateRdv(childComplexity, args["id_patient"].(string), args["doctor_id"].(string), args["start_date"].(int), args["end_date"].(int), args["appointment_status"].(model.AppointmentStatus), args["session_id"].(string)), true
+
+	case "Mutation.createSaveCode":
+		if e.complexity.Mutation.CreateSaveCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSaveCode_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateSaveCode(childComplexity, args["code"].([]string)), true
 
 	case "Mutation.createSession":
 		if e.complexity.Mutation.CreateSession == nil {
@@ -1845,6 +1906,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteRdv(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteSaveCode":
+		if e.complexity.Mutation.DeleteSaveCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteSaveCode_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteSaveCode(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteSession":
 		if e.complexity.Mutation.DeleteSession == nil {
 			break
@@ -2047,7 +2120,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["firstname"].(*string), args["rendez_vous_ids"].([]*string), args["patient_ids"].([]*string), args["address"].(*model.AddressInput), args["chat_ids"].([]*string)), true
+		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["name"].(*string), args["firstname"].(*string), args["rendez_vous_ids"].([]*string), args["patient_ids"].([]*string), args["address"].(*model.AddressInput), args["chat_ids"].([]*string), args["device_connect"].([]*string), args["double_auth_methods_id"].(*string), args["trust_devices"].([]*string), args["status"].(*bool)), true
 
 	case "Mutation.updateDocument":
 		if e.complexity.Mutation.UpdateDocument == nil {
@@ -2107,7 +2180,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string), args["chat_ids"].([]*string), args["device_connect"].([]*string), args["double_auth_methods_id"].(*string)), true
+		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["email"].(*string), args["password"].(*string), args["medical_info_id"].(*string), args["rendez_vous_ids"].([]*string), args["document_ids"].([]*string), args["treatment_follow_up_ids"].([]*string), args["chat_ids"].([]*string), args["device_connect"].([]*string), args["double_auth_methods_id"].(*string), args["trust_devices"].([]*string), args["status"].(*bool)), true
 
 	case "Mutation.updateRdv":
 		if e.complexity.Mutation.UpdateRdv == nil {
@@ -2120,6 +2193,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateRdv(childComplexity, args["id"].(string), args["id_patient"].(*string), args["doctor_id"].(*string), args["start_date"].(*int), args["end_date"].(*int), args["cancelation_reason"].(*string), args["appointment_status"].(*model.AppointmentStatus), args["session_id"].(*string), args["health_method"].(*string)), true
+
+	case "Mutation.updateSaveCode":
+		if e.complexity.Mutation.UpdateSaveCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSaveCode_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSaveCode(childComplexity, args["id"].(string), args["code"].([]string)), true
 
 	case "Mutation.updateSession":
 		if e.complexity.Mutation.UpdateSession == nil {
@@ -2335,12 +2420,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Patient.RendezVousIds(childComplexity), true
 
+	case "Patient.status":
+		if e.complexity.Patient.Status == nil {
+			break
+		}
+
+		return e.complexity.Patient.Status(childComplexity), true
+
 	case "Patient.treatment_follow_up_ids":
 		if e.complexity.Patient.TreatmentFollowUpIds == nil {
 			break
 		}
 
 		return e.complexity.Patient.TreatmentFollowUpIds(childComplexity), true
+
+	case "Patient.trust_devices":
+		if e.complexity.Patient.TrustDevices == nil {
+			break
+		}
+
+		return e.complexity.Patient.TrustDevices(childComplexity), true
 
 	case "Query.getAdminByEmail":
 		if e.complexity.Query.GetAdminByEmail == nil {
@@ -2797,6 +2896,25 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetRdvByID(childComplexity, args["id"].(string)), true
 
+	case "Query.getSaveCode":
+		if e.complexity.Query.GetSaveCode == nil {
+			break
+		}
+
+		return e.complexity.Query.GetSaveCode(childComplexity), true
+
+	case "Query.getSaveCodeById":
+		if e.complexity.Query.GetSaveCodeByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getSaveCodeById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSaveCodeByID(childComplexity, args["id"].(string)), true
+
 	case "Query.getSessionById":
 		if e.complexity.Query.GetSessionByID == nil {
 			break
@@ -3019,6 +3137,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Rdv.StartDate(childComplexity), true
+
+	case "SaveCode.code":
+		if e.complexity.SaveCode.Code == nil {
+			break
+		}
+
+		return e.complexity.SaveCode.Code(childComplexity), true
+
+	case "SaveCode.id":
+		if e.complexity.SaveCode.ID == nil {
+			break
+		}
+
+		return e.complexity.SaveCode.ID(childComplexity), true
 
 	case "Session.age":
 		if e.complexity.Session.Age == nil {
@@ -3572,6 +3704,8 @@ type Patient {
     chat_ids: [String]
     double_auth_methods_id: String
     device_connect: [String]
+    trust_devices: [String]
+    status: Boolean!
 }
 
 # Doctor entity
@@ -3585,6 +3719,10 @@ type Doctor {
     rendez_vous_ids: [String]
     patient_ids: [String]
     chat_ids: [String]
+    double_auth_methods_id: String
+    device_connect: [String]
+    trust_devices: [String]
+    status: Boolean!
 }
 
 type Address {
@@ -3837,6 +3975,11 @@ type BlackList {
     token: [String!]!
 }
 
+type SaveCode {
+    id: ID!
+    code: [String!]!
+}
+
 
 ## Query  --------------------------------------------------------------------------------------------------------------
 
@@ -4023,25 +4166,30 @@ type Query {
 
     getBlackList: [BlackList]
 
+    # Get Black list
+    getSaveCodeById(id: String!): SaveCode
+
+    getSaveCode: [SaveCode]
+
 }
 
 ##  Mutation  ----------------------------------------------------------------------------------------------------------
 
 type Mutation {
     # Create a new patient.
-    createPatient(email: String!, password: String!): Patient
+    createPatient(email: String!, password: String!, status: Boolean!): Patient
 
     # Update a patient.
-    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String): Patient
+    updatePatient(id: String!, email: String, password: String, medical_info_id: String, rendez_vous_ids: [String], document_ids: [String], treatment_follow_up_ids: [String], chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
 
     # Create a new doctor.
-    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!): Doctor
+    createDoctor(email: String!, password: String!, name: String! firstname: String!, address: AddressInput!, status: Boolean!): Doctor
 
     # Update a doctor.rendez_vous_ids
-    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String]): Doctor #rendez_vous_id: String , slot_ids: [String]
+    updateDoctor(id: String!, email: String, password: String, name: String, firstname: String, rendez_vous_ids: [String], patient_ids: [String], address: AddressInput, chat_ids: [String], device_connect: [String], double_auth_methods_id: String, trust_devices: [String], status: Boolean): Doctor #rendez_vous_id: String , slot_ids: [String] status: Boolean
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
@@ -4237,6 +4385,16 @@ type Mutation {
 
     #Delete a DeviceConnect
     deleteBlackList(id: String!): Boolean
+
+
+    # Create new DoubleAuth
+    createSaveCode(code: [String!]!): SaveCode
+
+    #update a DeviceConnect
+    updateSaveCode(id: String!, code: [String!]): SaveCode
+
+    #Delete a DeviceConnect
+    deleteSaveCode(id: String!): Boolean
 }
 
 
@@ -4754,6 +4912,15 @@ func (ec *executionContext) field_Mutation_createDoctor_args(ctx context.Context
 		}
 	}
 	args["address"] = arg4
+	var arg5 bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg5, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg5
 	return args, nil
 }
 
@@ -5111,6 +5278,15 @@ func (ec *executionContext) field_Mutation_createPatient_args(ctx context.Contex
 		}
 	}
 	args["password"] = arg1
+	var arg2 bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg2, err = ec.unmarshalNBoolean2bool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg2
 	return args, nil
 }
 
@@ -5171,6 +5347,21 @@ func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, r
 		}
 	}
 	args["session_id"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []string
+	if tmp, ok := rawArgs["code"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+		arg0, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["code"] = arg0
 	return args, nil
 }
 
@@ -5739,6 +5930,21 @@ func (ec *executionContext) field_Mutation_deletePatient_args(ctx context.Contex
 }
 
 func (ec *executionContext) field_Mutation_deleteRdv_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -6419,6 +6625,42 @@ func (ec *executionContext) field_Mutation_updateDoctor_args(ctx context.Context
 		}
 	}
 	args["chat_ids"] = arg8
+	var arg9 []*string
+	if tmp, ok := rawArgs["device_connect"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+		arg9, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["device_connect"] = arg9
+	var arg10 *string
+	if tmp, ok := rawArgs["double_auth_methods_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
+		arg10, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["double_auth_methods_id"] = arg10
+	var arg11 []*string
+	if tmp, ok := rawArgs["trust_devices"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+		arg11, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["trust_devices"] = arg11
+	var arg12 *bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg12, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg12
 	return args, nil
 }
 
@@ -6746,6 +6988,24 @@ func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Contex
 		}
 	}
 	args["double_auth_methods_id"] = arg9
+	var arg10 []*string
+	if tmp, ok := rawArgs["trust_devices"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+		arg10, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["trust_devices"] = arg10
+	var arg11 *bool
+	if tmp, ok := rawArgs["status"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+		arg11, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["status"] = arg11
 	return args, nil
 }
 
@@ -6833,6 +7093,30 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 		}
 	}
 	args["health_method"] = arg8
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateSaveCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 []string
+	if tmp, ok := rawArgs["code"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+		arg1, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["code"] = arg1
 	return args, nil
 }
 
@@ -7611,6 +7895,21 @@ func (ec *executionContext) field_Query_getPatientsFromDoctorById_args(ctx conte
 }
 
 func (ec *executionContext) field_Query_getRdvById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getSaveCodeById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -10822,6 +11121,173 @@ func (ec *executionContext) fieldContext_Doctor_chat_ids(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Doctor_double_auth_methods_id(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DoubleAuthMethodsID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_double_auth_methods_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Doctor_device_connect(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_device_connect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DeviceConnect, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_device_connect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Doctor_trust_devices(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_trust_devices(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TrustDevices, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_trust_devices(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Doctor_status(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_status(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Document_id(ctx context.Context, field graphql.CollectedField, obj *model.Document) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Document_id(ctx, field)
 	if err != nil {
@@ -12388,7 +12854,7 @@ func (ec *executionContext) _Mutation_createPatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreatePatient(rctx, fc.Args["email"].(string), fc.Args["password"].(string))
+		return ec.resolvers.Mutation().CreatePatient(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["status"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12430,6 +12896,10 @@ func (ec *executionContext) fieldContext_Mutation_createPatient(ctx context.Cont
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -12462,7 +12932,7 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string), fc.Args["double_auth_methods_id"].(*string))
+		return ec.resolvers.Mutation().UpdatePatient(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["medical_info_id"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["document_ids"].([]*string), fc.Args["treatment_follow_up_ids"].([]*string), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string), fc.Args["double_auth_methods_id"].(*string), fc.Args["trust_devices"].([]*string), fc.Args["status"].(*bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12504,6 +12974,10 @@ func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Cont
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -12588,7 +13062,7 @@ func (ec *executionContext) _Mutation_createDoctor(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateDoctor(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["firstname"].(string), fc.Args["address"].(model.AddressInput))
+		return ec.resolvers.Mutation().CreateDoctor(rctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["name"].(string), fc.Args["firstname"].(string), fc.Args["address"].(model.AddressInput), fc.Args["status"].(bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12628,6 +13102,14 @@ func (ec *executionContext) fieldContext_Mutation_createDoctor(ctx context.Conte
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -12660,7 +13142,7 @@ func (ec *executionContext) _Mutation_updateDoctor(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["patient_ids"].([]*string), fc.Args["address"].(*model.AddressInput), fc.Args["chat_ids"].([]*string))
+		return ec.resolvers.Mutation().UpdateDoctor(rctx, fc.Args["id"].(string), fc.Args["email"].(*string), fc.Args["password"].(*string), fc.Args["name"].(*string), fc.Args["firstname"].(*string), fc.Args["rendez_vous_ids"].([]*string), fc.Args["patient_ids"].([]*string), fc.Args["address"].(*model.AddressInput), fc.Args["chat_ids"].([]*string), fc.Args["device_connect"].([]*string), fc.Args["double_auth_methods_id"].(*string), fc.Args["trust_devices"].([]*string), fc.Args["status"].(*bool))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12700,6 +13182,14 @@ func (ec *executionContext) fieldContext_Mutation_updateDoctor(ctx context.Conte
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -16686,6 +17176,174 @@ func (ec *executionContext) fieldContext_Mutation_deleteBlackList(ctx context.Co
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateSaveCode(rctx, fc.Args["code"].([]string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createSaveCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateSaveCode(rctx, fc.Args["id"].(string), fc.Args["code"].([]string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateSaveCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteSaveCode(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteSaveCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _NlpReport_id(ctx context.Context, field graphql.CollectedField, obj *model.NlpReport) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_NlpReport_id(ctx, field)
 	if err != nil {
@@ -17679,6 +18337,91 @@ func (ec *executionContext) fieldContext_Patient_device_connect(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Patient_trust_devices(ctx context.Context, field graphql.CollectedField, obj *model.Patient) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Patient_trust_devices(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TrustDevices, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Patient_trust_devices(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Patient",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Patient_status(ctx context.Context, field graphql.CollectedField, obj *model.Patient) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Patient_status(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Patient_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Patient",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_getPatients(ctx, field)
 	if err != nil {
@@ -17735,6 +18478,10 @@ func (ec *executionContext) fieldContext_Query_getPatients(ctx context.Context, 
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -17798,6 +18545,10 @@ func (ec *executionContext) fieldContext_Query_getPatientById(ctx context.Contex
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -17872,6 +18623,10 @@ func (ec *executionContext) fieldContext_Query_getPatientByEmail(ctx context.Con
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -17944,6 +18699,14 @@ func (ec *executionContext) fieldContext_Query_getDoctors(ctx context.Context, f
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -18005,6 +18768,14 @@ func (ec *executionContext) fieldContext_Query_getDoctorById(ctx context.Context
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -18077,6 +18848,14 @@ func (ec *executionContext) fieldContext_Query_getDoctorByEmail(ctx context.Cont
 				return ec.fieldContext_Doctor_patient_ids(ctx, field)
 			case "chat_ids":
 				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -20744,6 +21523,10 @@ func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx con
 				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
 			case "device_connect":
 				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
 		},
@@ -21474,6 +22257,111 @@ func (ec *executionContext) fieldContext_Query_getBlackList(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getSaveCodeById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSaveCodeById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetSaveCodeByID(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getSaveCodeById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getSaveCodeById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getSaveCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSaveCode(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetSaveCode(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.SaveCode)
+	fc.Result = res
+	return ec.marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_SaveCode_id(ctx, field)
+			case "code":
+				return ec.fieldContext_SaveCode_code(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SaveCode", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query___type(ctx, field)
 	if err != nil {
@@ -21983,6 +22871,94 @@ func (ec *executionContext) _Rdv_health_method(ctx context.Context, field graphq
 func (ec *executionContext) fieldContext_Rdv_health_method(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Rdv",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SaveCode_id(ctx context.Context, field graphql.CollectedField, obj *model.SaveCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SaveCode_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SaveCode_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SaveCode",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SaveCode_code(ctx context.Context, field graphql.CollectedField, obj *model.SaveCode) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SaveCode_code(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Code, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SaveCode_code(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SaveCode",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -27107,6 +28083,17 @@ func (ec *executionContext) _Doctor(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Doctor_patient_ids(ctx, field, obj)
 		case "chat_ids":
 			out.Values[i] = ec._Doctor_chat_ids(ctx, field, obj)
+		case "double_auth_methods_id":
+			out.Values[i] = ec._Doctor_double_auth_methods_id(ctx, field, obj)
+		case "device_connect":
+			out.Values[i] = ec._Doctor_device_connect(ctx, field, obj)
+		case "trust_devices":
+			out.Values[i] = ec._Doctor_trust_devices(ctx, field, obj)
+		case "status":
+			out.Values[i] = ec._Doctor_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -27808,6 +28795,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBlackList(ctx, field)
 			})
+		case "createSaveCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createSaveCode(ctx, field)
+			})
+		case "updateSaveCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateSaveCode(ctx, field)
+			})
+		case "deleteSaveCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteSaveCode(ctx, field)
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -28032,6 +29031,13 @@ func (ec *executionContext) _Patient(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Patient_double_auth_methods_id(ctx, field, obj)
 		case "device_connect":
 			out.Values[i] = ec._Patient_device_connect(ctx, field, obj)
+		case "trust_devices":
+			out.Values[i] = ec._Patient_trust_devices(ctx, field, obj)
+		case "status":
+			out.Values[i] = ec._Patient_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -29214,6 +30220,44 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getSaveCodeById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getSaveCodeById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getSaveCode":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getSaveCode(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -29295,6 +30339,50 @@ func (ec *executionContext) _Rdv(ctx context.Context, sel ast.SelectionSet, obj 
 			}
 		case "health_method":
 			out.Values[i] = ec._Rdv_health_method(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var saveCodeImplementors = []string{"SaveCode"}
+
+func (ec *executionContext) _SaveCode(ctx context.Context, sel ast.SelectionSet, obj *model.SaveCode) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, saveCodeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SaveCode")
+		case "id":
+			out.Values[i] = ec._SaveCode_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "code":
+			out.Values[i] = ec._SaveCode_code(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -32684,6 +33772,54 @@ func (ec *executionContext) marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarli
 		return graphql.Null
 	}
 	return ec._Rdv(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v []*model.SaveCode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v *model.SaveCode) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SaveCode(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋserverᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
