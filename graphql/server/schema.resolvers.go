@@ -1807,6 +1807,60 @@ func (r *mutationResolver) DeleteBlackList(ctx context.Context, id string) (*boo
 	return &resp, err
 }
 
+// CreateSaveCode is the resolver for the createSaveCode field.
+func (r *mutationResolver) CreateSaveCode(ctx context.Context, code []string) (*model.SaveCode, error) {
+	newDevice := bson.M{
+		"code": code,
+	}
+
+	res, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").InsertOne(ctx, newDevice)
+	if err != nil {
+		return nil, err
+	}
+	entity := model.SaveCode{
+		ID:   res.InsertedID.(primitive.ObjectID).Hex(),
+		Code: code,
+	}
+	return &entity, err
+}
+
+// UpdateSaveCode is the resolver for the updateSaveCode field.
+func (r *mutationResolver) UpdateSaveCode(ctx context.Context, id string, code []string) (*model.SaveCode, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	filter := bson.M{"_id": objId}
+
+	updated := bson.M{
+		"_id":  objId,
+		"code": code,
+	}
+
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").ReplaceOne(ctx, filter, updated)
+
+	return &model.SaveCode{
+		ID:   id,
+		Code: code,
+	}, err
+}
+
+// DeleteSaveCode is the resolver for the deleteSaveCode field.
+func (r *mutationResolver) DeleteSaveCode(ctx context.Context, id string) (*bool, error) {
+	objId, err := primitive.ObjectIDFromHex(id)
+	resp := false
+	if err != nil {
+		return &resp, err
+	}
+	filter := bson.M{"_id": objId}
+	_, err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -2907,6 +2961,41 @@ func (r *queryResolver) GetBlackList(ctx context.Context) ([]*model.BlackList, e
 	filter := bson.D{}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("BlackList").Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+// GetSaveCodeByID is the resolver for the getSaveCodeById field.
+func (r *queryResolver) GetSaveCodeByID(ctx context.Context, id string) (*model.SaveCode, error) {
+	var result model.SaveCode
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+
+	err = r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetSaveCode is the resolver for the getSaveCode field.
+func (r *queryResolver) GetSaveCode(ctx context.Context) ([]*model.SaveCode, error) {
+	var report []*model.SaveCode
+	filter := bson.D{}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}

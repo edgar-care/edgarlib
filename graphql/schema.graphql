@@ -378,6 +378,11 @@ type BlackList {
     token: [String!]!
 }
 
+type SaveCode {
+    id: ID!
+    code: [String!]!
+}
+
 
 ## Query  --------------------------------------------------------------------------------------------------------------
 
@@ -563,6 +568,11 @@ type Query {
     getBlackListById(id: String!): BlackList
 
     getBlackList: [BlackList]
+
+    # Get Black list
+    getSaveCodeById(id: String!): SaveCode
+
+    getSaveCode: [SaveCode]
 
 }
 
@@ -778,6 +788,16 @@ type Mutation {
 
     #Delete a DeviceConnect
     deleteBlackList(id: String!): Boolean
+
+
+    # Create new DoubleAuth
+    createSaveCode(code: [String!]!): SaveCode
+
+    #update a DeviceConnect
+    updateSaveCode(id: String!, code: [String!]): SaveCode
+
+    #Delete a DeviceConnect
+    deleteSaveCode(id: String!): Boolean
 }
 
 

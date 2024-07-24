@@ -859,6 +859,28 @@ type CreateRdvResponse struct {
 // GetCreateRdv returns CreateRdvResponse.CreateRdv, and is useful for accessing the field via an interface.
 func (v *CreateRdvResponse) GetCreateRdv() CreateRdvCreateRdv { return v.CreateRdv }
 
+// CreateSaveCodeCreateSaveCode includes the requested fields of the GraphQL type SaveCode.
+type CreateSaveCodeCreateSaveCode struct {
+	Id   string   `json:"id"`
+	Code []string `json:"code"`
+}
+
+// GetId returns CreateSaveCodeCreateSaveCode.Id, and is useful for accessing the field via an interface.
+func (v *CreateSaveCodeCreateSaveCode) GetId() string { return v.Id }
+
+// GetCode returns CreateSaveCodeCreateSaveCode.Code, and is useful for accessing the field via an interface.
+func (v *CreateSaveCodeCreateSaveCode) GetCode() []string { return v.Code }
+
+// CreateSaveCodeResponse is returned by CreateSaveCode on success.
+type CreateSaveCodeResponse struct {
+	CreateSaveCode CreateSaveCodeCreateSaveCode `json:"createSaveCode"`
+}
+
+// GetCreateSaveCode returns CreateSaveCodeResponse.CreateSaveCode, and is useful for accessing the field via an interface.
+func (v *CreateSaveCodeResponse) GetCreateSaveCode() CreateSaveCodeCreateSaveCode {
+	return v.CreateSaveCode
+}
+
 // CreateSessionCreateSession includes the requested fields of the GraphQL type Session.
 type CreateSessionCreateSession struct {
 	Id                 string                                             `json:"id"`
@@ -1278,6 +1300,14 @@ type DeleteRdvResponse struct {
 
 // GetDeleteRdv returns DeleteRdvResponse.DeleteRdv, and is useful for accessing the field via an interface.
 func (v *DeleteRdvResponse) GetDeleteRdv() bool { return v.DeleteRdv }
+
+// DeleteSaveCodeResponse is returned by DeleteSaveCode on success.
+type DeleteSaveCodeResponse struct {
+	DeleteSaveCode bool `json:"deleteSaveCode"`
+}
+
+// GetDeleteSaveCode returns DeleteSaveCodeResponse.DeleteSaveCode, and is useful for accessing the field via an interface.
+func (v *DeleteSaveCodeResponse) GetDeleteSaveCode() bool { return v.DeleteSaveCode }
 
 // DeleteSessionResponse is returned by DeleteSession on success.
 type DeleteSessionResponse struct {
@@ -3452,6 +3482,48 @@ type GetRdvByIdResponse struct {
 // GetGetRdvById returns GetRdvByIdResponse.GetRdvById, and is useful for accessing the field via an interface.
 func (v *GetRdvByIdResponse) GetGetRdvById() GetRdvByIdGetRdvByIdRdv { return v.GetRdvById }
 
+// GetSaveCodeByIdGetSaveCodeByIdSaveCode includes the requested fields of the GraphQL type SaveCode.
+type GetSaveCodeByIdGetSaveCodeByIdSaveCode struct {
+	Id   string   `json:"id"`
+	Code []string `json:"code"`
+}
+
+// GetId returns GetSaveCodeByIdGetSaveCodeByIdSaveCode.Id, and is useful for accessing the field via an interface.
+func (v *GetSaveCodeByIdGetSaveCodeByIdSaveCode) GetId() string { return v.Id }
+
+// GetCode returns GetSaveCodeByIdGetSaveCodeByIdSaveCode.Code, and is useful for accessing the field via an interface.
+func (v *GetSaveCodeByIdGetSaveCodeByIdSaveCode) GetCode() []string { return v.Code }
+
+// GetSaveCodeByIdResponse is returned by GetSaveCodeById on success.
+type GetSaveCodeByIdResponse struct {
+	GetSaveCodeById GetSaveCodeByIdGetSaveCodeByIdSaveCode `json:"getSaveCodeById"`
+}
+
+// GetGetSaveCodeById returns GetSaveCodeByIdResponse.GetSaveCodeById, and is useful for accessing the field via an interface.
+func (v *GetSaveCodeByIdResponse) GetGetSaveCodeById() GetSaveCodeByIdGetSaveCodeByIdSaveCode {
+	return v.GetSaveCodeById
+}
+
+// GetSaveCodeGetSaveCode includes the requested fields of the GraphQL type SaveCode.
+type GetSaveCodeGetSaveCode struct {
+	Id   string   `json:"id"`
+	Code []string `json:"code"`
+}
+
+// GetId returns GetSaveCodeGetSaveCode.Id, and is useful for accessing the field via an interface.
+func (v *GetSaveCodeGetSaveCode) GetId() string { return v.Id }
+
+// GetCode returns GetSaveCodeGetSaveCode.Code, and is useful for accessing the field via an interface.
+func (v *GetSaveCodeGetSaveCode) GetCode() []string { return v.Code }
+
+// GetSaveCodeResponse is returned by GetSaveCode on success.
+type GetSaveCodeResponse struct {
+	GetSaveCode []GetSaveCodeGetSaveCode `json:"getSaveCode"`
+}
+
+// GetGetSaveCode returns GetSaveCodeResponse.GetSaveCode, and is useful for accessing the field via an interface.
+func (v *GetSaveCodeResponse) GetGetSaveCode() []GetSaveCodeGetSaveCode { return v.GetSaveCode }
+
 // GetSessionByIdGetSessionByIdSession includes the requested fields of the GraphQL type Session.
 type GetSessionByIdGetSessionByIdSession struct {
 	Id                 string                                                      `json:"id"`
@@ -5047,6 +5119,28 @@ func (v *UpdateRdvUpdateRdv) GetSession_id() string { return v.Session_id }
 // GetHealth_method returns UpdateRdvUpdateRdv.Health_method, and is useful for accessing the field via an interface.
 func (v *UpdateRdvUpdateRdv) GetHealth_method() string { return v.Health_method }
 
+// UpdateSaveCodeResponse is returned by UpdateSaveCode on success.
+type UpdateSaveCodeResponse struct {
+	UpdateSaveCode UpdateSaveCodeUpdateSaveCode `json:"updateSaveCode"`
+}
+
+// GetUpdateSaveCode returns UpdateSaveCodeResponse.UpdateSaveCode, and is useful for accessing the field via an interface.
+func (v *UpdateSaveCodeResponse) GetUpdateSaveCode() UpdateSaveCodeUpdateSaveCode {
+	return v.UpdateSaveCode
+}
+
+// UpdateSaveCodeUpdateSaveCode includes the requested fields of the GraphQL type SaveCode.
+type UpdateSaveCodeUpdateSaveCode struct {
+	Id   string   `json:"id"`
+	Code []string `json:"code"`
+}
+
+// GetId returns UpdateSaveCodeUpdateSaveCode.Id, and is useful for accessing the field via an interface.
+func (v *UpdateSaveCodeUpdateSaveCode) GetId() string { return v.Id }
+
+// GetCode returns UpdateSaveCodeUpdateSaveCode.Code, and is useful for accessing the field via an interface.
+func (v *UpdateSaveCodeUpdateSaveCode) GetCode() []string { return v.Code }
+
 // UpdateSessionResponse is returned by UpdateSession on success.
 type UpdateSessionResponse struct {
 	UpdateSession UpdateSessionUpdateSession `json:"updateSession"`
@@ -5713,6 +5807,14 @@ func (v *__CreateRdvInput) GetAppointment_status() AppointmentStatus { return v.
 // GetSession_id returns __CreateRdvInput.Session_id, and is useful for accessing the field via an interface.
 func (v *__CreateRdvInput) GetSession_id() string { return v.Session_id }
 
+// __CreateSaveCodeInput is used internally by genqlient
+type __CreateSaveCodeInput struct {
+	Code []string `json:"code"`
+}
+
+// GetCode returns __CreateSaveCodeInput.Code, and is useful for accessing the field via an interface.
+func (v *__CreateSaveCodeInput) GetCode() []string { return v.Code }
+
 // __CreateSessionInput is used internally by genqlient
 type __CreateSessionInput struct {
 	Diseases           []SessionDiseasesInput `json:"diseases"`
@@ -6001,6 +6103,14 @@ type __DeleteRdvInput struct {
 // GetId returns __DeleteRdvInput.Id, and is useful for accessing the field via an interface.
 func (v *__DeleteRdvInput) GetId() string { return v.Id }
 
+// __DeleteSaveCodeInput is used internally by genqlient
+type __DeleteSaveCodeInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __DeleteSaveCodeInput.Id, and is useful for accessing the field via an interface.
+func (v *__DeleteSaveCodeInput) GetId() string { return v.Id }
+
 // __DeleteSessionInput is used internally by genqlient
 type __DeleteSessionInput struct {
 	Id string `json:"id"`
@@ -6272,6 +6382,14 @@ type __GetRdvByIdInput struct {
 
 // GetId returns __GetRdvByIdInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetRdvByIdInput) GetId() string { return v.Id }
+
+// __GetSaveCodeByIdInput is used internally by genqlient
+type __GetSaveCodeByIdInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __GetSaveCodeByIdInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetSaveCodeByIdInput) GetId() string { return v.Id }
 
 // __GetSessionByIdInput is used internally by genqlient
 type __GetSessionByIdInput struct {
@@ -6842,6 +6960,18 @@ func (v *__UpdateRdvInput) GetSession_id() string { return v.Session_id }
 
 // GetHealth_method returns __UpdateRdvInput.Health_method, and is useful for accessing the field via an interface.
 func (v *__UpdateRdvInput) GetHealth_method() string { return v.Health_method }
+
+// __UpdateSaveCodeInput is used internally by genqlient
+type __UpdateSaveCodeInput struct {
+	Id   string   `json:"id"`
+	Code []string `json:"code"`
+}
+
+// GetId returns __UpdateSaveCodeInput.Id, and is useful for accessing the field via an interface.
+func (v *__UpdateSaveCodeInput) GetId() string { return v.Id }
+
+// GetCode returns __UpdateSaveCodeInput.Code, and is useful for accessing the field via an interface.
+func (v *__UpdateSaveCodeInput) GetCode() []string { return v.Code }
 
 // __UpdateSessionInput is used internally by genqlient
 type __UpdateSessionInput struct {
@@ -7950,6 +8080,42 @@ func CreateRdv(
 	return &data, err
 }
 
+// The query or mutation executed by CreateSaveCode.
+const CreateSaveCode_Operation = `
+mutation CreateSaveCode ($code: [String!]!) {
+	createSaveCode(code: $code) {
+		id
+		code
+	}
+}
+`
+
+func CreateSaveCode(
+	ctx context.Context,
+	client graphql.Client,
+	code []string,
+) (*CreateSaveCodeResponse, error) {
+	req := &graphql.Request{
+		OpName: "CreateSaveCode",
+		Query:  CreateSaveCode_Operation,
+		Variables: &__CreateSaveCodeInput{
+			Code: code,
+		},
+	}
+	var err error
+
+	var data CreateSaveCodeResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 // The query or mutation executed by CreateSession.
 const CreateSession_Operation = `
 mutation CreateSession ($diseases: [SessionDiseasesInput!]!, $symptoms: [SessionSymptomInput!]!, $age: Int!, $height: Int!, $weight: Int!, $sex: String!, $ante_chirs: [String!]!, $ante_diseases: [String!]!, $medicine: [String!]!, $last_question: String!, $logs: [LogsInput!]!, $hereditary_disease: [String!]!, $alerts: [String!]!) {
@@ -8803,6 +8969,39 @@ func DeleteRdv(
 	var err error
 
 	var data DeleteRdvResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by DeleteSaveCode.
+const DeleteSaveCode_Operation = `
+mutation DeleteSaveCode ($id: String!) {
+	deleteSaveCode(id: $id)
+}
+`
+
+func DeleteSaveCode(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*DeleteSaveCodeResponse, error) {
+	req := &graphql.Request{
+		OpName: "DeleteSaveCode",
+		Query:  DeleteSaveCode_Operation,
+		Variables: &__DeleteSaveCodeInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data DeleteSaveCodeResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -10813,6 +11012,74 @@ func GetRdvById(
 	return &data, err
 }
 
+// The query or mutation executed by GetSaveCode.
+const GetSaveCode_Operation = `
+query GetSaveCode {
+	getSaveCode {
+		id
+		code
+	}
+}
+`
+
+func GetSaveCode(
+	ctx context.Context,
+	client graphql.Client,
+) (*GetSaveCodeResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetSaveCode",
+		Query:  GetSaveCode_Operation,
+	}
+	var err error
+
+	var data GetSaveCodeResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetSaveCodeById.
+const GetSaveCodeById_Operation = `
+query GetSaveCodeById ($id: String!) {
+	getSaveCodeById(id: $id) {
+		id
+		code
+	}
+}
+`
+
+func GetSaveCodeById(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*GetSaveCodeByIdResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetSaveCodeById",
+		Query:  GetSaveCodeById_Operation,
+		Variables: &__GetSaveCodeByIdInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetSaveCodeByIdResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 // The query or mutation executed by GetSessionById.
 const GetSessionById_Operation = `
 query GetSessionById ($id: String!) {
@@ -12290,6 +12557,44 @@ func UpdateRdv(
 	var err error
 
 	var data UpdateRdvResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by UpdateSaveCode.
+const UpdateSaveCode_Operation = `
+mutation UpdateSaveCode ($id: String!, $code: [String!]) {
+	updateSaveCode(id: $id, code: $code) {
+		id
+		code
+	}
+}
+`
+
+func UpdateSaveCode(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+	code []string,
+) (*UpdateSaveCodeResponse, error) {
+	req := &graphql.Request{
+		OpName: "UpdateSaveCode",
+		Query:  UpdateSaveCode_Operation,
+		Variables: &__UpdateSaveCodeInput{
+			Id:   id,
+			Code: code,
+		},
+	}
+	var err error
+
+	var data UpdateSaveCodeResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

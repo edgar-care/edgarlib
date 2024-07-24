@@ -1466,3 +1466,38 @@ query GetBlackList{
         token
     }
 }
+
+
+mutation CreateSaveCode($code: [String!]!) {
+    createSaveCode(code: $code) {
+        id
+        code
+    }
+}
+
+mutation UpdateSaveCode($id: String!, $code: [String!]) {
+    updateSaveCode(id: $id, code: $code) {
+        id
+        code
+    }
+}
+
+mutation DeleteSaveCode($id: String!){
+    deleteSaveCode(id: $id)
+}
+
+
+
+query GetSaveCodeById($id: String!){
+    getSaveCodeById(id:$id){
+        id
+        code
+    }
+}
+
+query GetSaveCode{
+    getSaveCode{
+        id
+        code
+    }
+}
