@@ -443,6 +443,9 @@ type Query {
     # Get the entire list of diseases
     getDiseases: [Disease]
 
+    # Get a disease's symptoms its name
+    getSymptomsByDiseaseName(name: String!): Disease
+
     # Get the entire list of notification.
     getNotifications: [Notification]
 

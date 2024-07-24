@@ -8,14 +8,15 @@ import (
 )
 
 type CreateMedicalInfoInput struct {
-	Name               string                         `json:"name"`
-	Firstname          string                         `json:"firstname"`
-	Birthdate          int                            `json:"birthdate"`
-	Sex                string                         `json:"sex"`
-	Weight             int                            `json:"weight"`
-	Height             int                            `json:"height"`
-	PrimaryDoctorID    string                         `json:"primary_doctor_id,omitempty"`
-	MedicalAntecedents []CreateMedicalAntecedentInput `json:"medical_antecedents"`
+	Name                   string                         `json:"name"`
+	Firstname              string                         `json:"firstname"`
+	Birthdate              int                            `json:"birthdate"`
+	Sex                    string                         `json:"sex"`
+	Weight                 int                            `json:"weight"`
+	Height                 int                            `json:"height"`
+	PrimaryDoctorID        string                         `json:"primary_doctor_id,omitempty"`
+	MedicalAntecedents     []CreateMedicalAntecedentInput `json:"medical_antecedents"`
+	FamilyMembersMedInfoId []string                       `json:"family_members_med_info_id"`
 }
 
 type CreateMedicalAntecedentInput struct {
@@ -55,7 +56,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 	}
 
 	if len(input.MedicalAntecedents) == 0 {
-		medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, []string{""}, "DONE")
+		medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, []string{""}, "DONE", input.FamilyMembersMedInfoId)
 		if err != nil {
 			return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
 		}
@@ -67,16 +68,17 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 
 		return CreateMedicalInfoResponse{
 			MedicalInfo: model.MedicalInfo{
-				ID:                   medical.CreateMedicalFolder.Id,
-				Name:                 medical.CreateMedicalFolder.Name,
-				Firstname:            medical.CreateMedicalFolder.Firstname,
-				Birthdate:            medical.CreateMedicalFolder.Birthdate,
-				Sex:                  model.Sex(medical.CreateMedicalFolder.Sex),
-				Weight:               medical.CreateMedicalFolder.Weight,
-				Height:               medical.CreateMedicalFolder.Height,
-				PrimaryDoctorID:      medical.CreateMedicalFolder.Primary_doctor_id,
-				OnboardingStatus:     model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
-				AntecedentDiseaseIds: medical.CreateMedicalFolder.Antecedent_disease_ids,
+				ID:                     medical.CreateMedicalFolder.Id,
+				Name:                   medical.CreateMedicalFolder.Name,
+				Firstname:              medical.CreateMedicalFolder.Firstname,
+				Birthdate:              medical.CreateMedicalFolder.Birthdate,
+				Sex:                    model.Sex(medical.CreateMedicalFolder.Sex),
+				Weight:                 medical.CreateMedicalFolder.Weight,
+				Height:                 medical.CreateMedicalFolder.Height,
+				PrimaryDoctorID:        medical.CreateMedicalFolder.Primary_doctor_id,
+				OnboardingStatus:       model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
+				AntecedentDiseaseIds:   medical.CreateMedicalFolder.Antecedent_disease_ids,
+				FamilyMembersMedInfoID: medical.CreateMedicalFolder.Family_members_med_info_id,
 			},
 			Code: 201,
 			Err:  nil,
@@ -150,7 +152,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 		antediseasesWithTreatments = append(antediseasesWithTreatments, antediseaseWithTreatments)
 	}
 
-	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, antdediseaseids, "DONE")
+	medical, err := graphql.CreateMedicalFolder(context.Background(), gqlClient, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, antdediseaseids, "DONE", input.FamilyMembersMedInfoId)
 	if err != nil {
 		return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
 	}
@@ -162,16 +164,17 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 
 	return CreateMedicalInfoResponse{
 		MedicalInfo: model.MedicalInfo{
-			ID:                   medical.CreateMedicalFolder.Id,
-			Name:                 medical.CreateMedicalFolder.Name,
-			Firstname:            medical.CreateMedicalFolder.Firstname,
-			Birthdate:            medical.CreateMedicalFolder.Birthdate,
-			Sex:                  model.Sex(medical.CreateMedicalFolder.Sex),
-			Weight:               medical.CreateMedicalFolder.Weight,
-			Height:               medical.CreateMedicalFolder.Height,
-			PrimaryDoctorID:      medical.CreateMedicalFolder.Primary_doctor_id,
-			OnboardingStatus:     model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
-			AntecedentDiseaseIds: antdediseaseids,
+			ID:                     medical.CreateMedicalFolder.Id,
+			Name:                   medical.CreateMedicalFolder.Name,
+			Firstname:              medical.CreateMedicalFolder.Firstname,
+			Birthdate:              medical.CreateMedicalFolder.Birthdate,
+			Sex:                    model.Sex(medical.CreateMedicalFolder.Sex),
+			Weight:                 medical.CreateMedicalFolder.Weight,
+			Height:                 medical.CreateMedicalFolder.Height,
+			PrimaryDoctorID:        medical.CreateMedicalFolder.Primary_doctor_id,
+			OnboardingStatus:       model.OnboardingStatus(medical.CreateMedicalFolder.Onboarding_status),
+			FamilyMembersMedInfoID: medical.CreateMedicalFolder.Family_members_med_info_id,
+			AntecedentDiseaseIds:   antdediseaseids,
 		},
 		AnteDiseasesWithTreatments: antediseasesWithTreatments,
 		Code:                       201,
