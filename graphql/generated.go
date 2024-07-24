@@ -3818,6 +3818,26 @@ func (v *GetSymptomByIdResponse) GetGetSymptomById() GetSymptomByIdGetSymptomByI
 	return v.GetSymptomById
 }
 
+// GetSymptomsByDiseaseNameGetSymptomsByDiseaseNameDisease includes the requested fields of the GraphQL type Disease.
+type GetSymptomsByDiseaseNameGetSymptomsByDiseaseNameDisease struct {
+	Symptoms []string `json:"symptoms"`
+}
+
+// GetSymptoms returns GetSymptomsByDiseaseNameGetSymptomsByDiseaseNameDisease.Symptoms, and is useful for accessing the field via an interface.
+func (v *GetSymptomsByDiseaseNameGetSymptomsByDiseaseNameDisease) GetSymptoms() []string {
+	return v.Symptoms
+}
+
+// GetSymptomsByDiseaseNameResponse is returned by GetSymptomsByDiseaseName on success.
+type GetSymptomsByDiseaseNameResponse struct {
+	GetSymptomsByDiseaseName GetSymptomsByDiseaseNameGetSymptomsByDiseaseNameDisease `json:"getSymptomsByDiseaseName"`
+}
+
+// GetGetSymptomsByDiseaseName returns GetSymptomsByDiseaseNameResponse.GetSymptomsByDiseaseName, and is useful for accessing the field via an interface.
+func (v *GetSymptomsByDiseaseNameResponse) GetGetSymptomsByDiseaseName() GetSymptomsByDiseaseNameGetSymptomsByDiseaseNameDisease {
+	return v.GetSymptomsByDiseaseName
+}
+
 // GetSymptomsGetSymptomsSymptom includes the requested fields of the GraphQL type Symptom.
 type GetSymptomsGetSymptomsSymptom struct {
 	Id                string   `json:"id"`
@@ -6232,6 +6252,14 @@ type __GetSymptomByIdInput struct {
 
 // GetId returns __GetSymptomByIdInput.Id, and is useful for accessing the field via an interface.
 func (v *__GetSymptomByIdInput) GetId() string { return v.Id }
+
+// __GetSymptomsByDiseaseNameInput is used internally by genqlient
+type __GetSymptomsByDiseaseNameInput struct {
+	Name string `json:"name"`
+}
+
+// GetName returns __GetSymptomsByDiseaseNameInput.Name, and is useful for accessing the field via an interface.
+func (v *__GetSymptomsByDiseaseNameInput) GetName() string { return v.Name }
 
 // __GetTestAccountByEmailInput is used internally by genqlient
 type __GetTestAccountByEmailInput struct {
@@ -10985,6 +11013,41 @@ func GetSymptoms(
 	var err error
 
 	var data GetSymptomsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by GetSymptomsByDiseaseName.
+const GetSymptomsByDiseaseName_Operation = `
+query GetSymptomsByDiseaseName ($name: String!) {
+	getSymptomsByDiseaseName(name: $name) {
+		symptoms
+	}
+}
+`
+
+func GetSymptomsByDiseaseName(
+	ctx context.Context,
+	client graphql.Client,
+	name string,
+) (*GetSymptomsByDiseaseNameResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetSymptomsByDiseaseName",
+		Query:  GetSymptomsByDiseaseName_Operation,
+		Variables: &__GetSymptomsByDiseaseNameInput{
+			Name: name,
+		},
+	}
+	var err error
+
+	var data GetSymptomsByDiseaseNameResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

@@ -2136,6 +2136,19 @@ func (r *queryResolver) GetDiseases(ctx context.Context) ([]*model.Disease, erro
 	return results, nil
 }
 
+// GetSymptomsByDiseaseName is the resolver for the getSymptomsByDiseaseName field.
+func (r *queryResolver) GetSymptomsByDiseaseName(ctx context.Context, name string) (*model.Disease, error) {
+	var result model.Disease
+
+	filter := bson.M{"name": name}
+
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Disease").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 // GetNotifications is the resolver for the getNotifications field.
 func (r *queryResolver) GetNotifications(ctx context.Context) ([]*model.Notification, error) {
 	filter := bson.D{}

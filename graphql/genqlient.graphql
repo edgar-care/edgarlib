@@ -703,6 +703,12 @@ query GetDiseases{
     }
 }
 
+query GetSymptomsByDiseaseName($name: String!){
+    getSymptomsByDiseaseName(name: $name) {
+        symptoms
+    }
+}
+
 query GetDoctorByEmail($email: String!){
     getDoctorByEmail(email: $email){
         id

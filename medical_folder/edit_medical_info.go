@@ -8,14 +8,15 @@ import (
 )
 
 type UpdateMedicalInfoInput struct {
-	Name               string                         `json:"name"`
-	Firstname          string                         `json:"firstname"`
-	Birthdate          int                            `json:"birthdate"`
-	Sex                string                         `json:"sex"`
-	Weight             int                            `json:"weight"`
-	Height             int                            `json:"height"`
-	PrimaryDoctorID    string                         `json:"primary_doctor_id,omitempty"`
-	MedicalAntecedents []UpdateMedicalAntecedentInput `json:"medical_antecedents"`
+	Name                   string                         `json:"name"`
+	Firstname              string                         `json:"firstname"`
+	Birthdate              int                            `json:"birthdate"`
+	Sex                    string                         `json:"sex"`
+	Weight                 int                            `json:"weight"`
+	Height                 int                            `json:"height"`
+	PrimaryDoctorID        string                         `json:"primary_doctor_id,omitempty"`
+	MedicalAntecedents     []UpdateMedicalAntecedentInput `json:"medical_antecedents"`
+	FamilyMembersMedInfoId []string                       `json:"family_members_med_info_id"`
 }
 
 type UpdateMedicalAntecedentInput struct {
@@ -129,7 +130,7 @@ func UpdateMedicalFolder(input UpdateMedicalInfoInput, medicalInfoID string) Upd
 				}
 			}
 
-			_, err = graphql.UpdateMedicalFolder(context.Background(), gqlClient, medicalInfoID, medicalFolder.Name, medicalFolder.Firstname, medicalFolder.Birthdate, string(medicalFolder.Sex), medicalFolder.Height, medicalFolder.Weight, medicalFolder.Primary_doctor_id, updatedAntecedentDiseaseIDs, "DONE")
+			_, err = graphql.UpdateMedicalFolder(context.Background(), gqlClient, medicalInfoID, medicalFolder.Name, medicalFolder.Firstname, medicalFolder.Birthdate, string(medicalFolder.Sex), medicalFolder.Height, medicalFolder.Weight, medicalFolder.Primary_doctor_id, updatedAntecedentDiseaseIDs, "DONE", medicalFolder.Family_members_med_info_id)
 			if err != nil {
 				return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to update medical folder: " + err.Error())}
 			}
@@ -232,23 +233,24 @@ func UpdateMedicalFolder(input UpdateMedicalInfoInput, medicalInfoID string) Upd
 
 	updatedAntecedentDiseaseIDs = append(updatedAntecedentDiseaseIDs, antdediseaseids...)
 
-	medical, err := graphql.UpdateMedicalFolder(context.Background(), gqlClient, medicalInfoID, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, updatedAntecedentDiseaseIDs, "DONE")
+	medical, err := graphql.UpdateMedicalFolder(context.Background(), gqlClient, medicalInfoID, input.Name, input.Firstname, input.Birthdate, input.Sex, input.Height, input.Weight, input.PrimaryDoctorID, updatedAntecedentDiseaseIDs, "DONE", input.FamilyMembersMedInfoId)
 	if err != nil {
 		return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to create medical folder: " + err.Error())}
 	}
 
 	return UpdateMedicalFolderResponse{
 		MedicalInfo: model.MedicalInfo{
-			ID:                   control.GetMedicalFolderById.Id,
-			Name:                 medical.UpdateMedicalFolder.Name,
-			Firstname:            medical.UpdateMedicalFolder.Firstname,
-			Birthdate:            medical.UpdateMedicalFolder.Birthdate,
-			Sex:                  model.Sex(medical.UpdateMedicalFolder.Sex),
-			Weight:               medical.UpdateMedicalFolder.Weight,
-			Height:               medical.UpdateMedicalFolder.Height,
-			PrimaryDoctorID:      medical.UpdateMedicalFolder.Primary_doctor_id,
-			OnboardingStatus:     model.OnboardingStatus(control.GetMedicalFolderById.Onboarding_status),
-			AntecedentDiseaseIds: updatedAntecedentDiseaseIDs,
+			ID:                     control.GetMedicalFolderById.Id,
+			Name:                   medical.UpdateMedicalFolder.Name,
+			Firstname:              medical.UpdateMedicalFolder.Firstname,
+			Birthdate:              medical.UpdateMedicalFolder.Birthdate,
+			Sex:                    model.Sex(medical.UpdateMedicalFolder.Sex),
+			Weight:                 medical.UpdateMedicalFolder.Weight,
+			Height:                 medical.UpdateMedicalFolder.Height,
+			PrimaryDoctorID:        medical.UpdateMedicalFolder.Primary_doctor_id,
+			OnboardingStatus:       model.OnboardingStatus(control.GetMedicalFolderById.Onboarding_status),
+			FamilyMembersMedInfoID: medical.UpdateMedicalFolder.Family_members_med_info_id,
+			AntecedentDiseaseIds:   updatedAntecedentDiseaseIDs,
 		},
 		AnteDiseasesWithTreatments: antediseasesWithTreatments,
 		Code:                       200,
