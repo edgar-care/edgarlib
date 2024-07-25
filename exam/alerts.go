@@ -3,7 +3,7 @@ package exam
 import (
 	"context"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 func isAlertPresent(context []model.SessionSymptom, symptom string) bool {

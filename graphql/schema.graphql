@@ -860,9 +860,9 @@ input SortingOptions {
 }
 
 input Options {
-    sort: SortingOptions
-    limit: Int
-    offset: Int
+    sort: SortingOptions!
+    limit: Int!
+    offset: Int!
 }
 
 ## Query  -------------------------------------------------------------------------------------------------------------

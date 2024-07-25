@@ -466,9 +466,9 @@ type Notification struct {
 }
 
 type Options struct {
-	Sort   *SortingOptions `json:"sort,omitempty" bson:"sort"`
-	Limit  *int            `json:"limit,omitempty" bson:"limit"`
-	Offset *int            `json:"offset,omitempty" bson:"offset"`
+	Sort   *SortingOptions `json:"sort" bson:"sort"`
+	Limit  int             `json:"limit" bson:"limit"`
+	Offset int             `json:"offset" bson:"offset"`
 }
 
 type Patient struct {

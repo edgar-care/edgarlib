@@ -6,7 +6,7 @@ import (
 	"github.com/edgar-care/edgarlib"
 	"github.com/edgar-care/edgarlib/diagnostic/utils"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"strings"
 )
 

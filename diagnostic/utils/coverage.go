@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/edgar-care/edgarlib/exam"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"sort"
 )
 

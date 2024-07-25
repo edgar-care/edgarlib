@@ -10,9 +10,8 @@ install:
 	@go mod tidy
 
 generate:
-	@go get github.com/Khan/genqlient/generate@v0.6.0
 	@go get github.com/99designs/gqlgen@v0.17.43
-	@cd graphql && go run github.com/99designs/gqlgen generate && go run hooks/bson.go
+	@cd graphql && go run github.com/99designs/gqlgen generate && go run hooks/bson.go && go run client/generate_client.go client/client_generator.go client/parser.go
 
 test:
 	@bold=$$(tput bold); \

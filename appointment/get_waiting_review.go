@@ -5,7 +5,7 @@ import (
 	"errors"
 	diagnos "github.com/edgar-care/edgarlib/diagnostic"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type SessionSummary struct {

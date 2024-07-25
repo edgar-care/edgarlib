@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 // CreatePatient is the resolver for the createPatient field.

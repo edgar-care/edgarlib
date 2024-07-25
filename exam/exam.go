@@ -1,7 +1,7 @@
 package exam
 
 import (
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type ExamResponse struct {

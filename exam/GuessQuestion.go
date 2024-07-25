@@ -2,12 +2,13 @@ package exam
 
 import (
 	"context"
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
 	"math/rand"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
 type DiseaseCoverage struct {

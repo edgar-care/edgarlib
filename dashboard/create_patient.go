@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/auth"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/edgar-care/edgarlib/medical_folder"
 )
 
