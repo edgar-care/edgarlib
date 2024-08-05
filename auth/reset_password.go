@@ -16,7 +16,6 @@ type ResetPasswordResponse struct {
 }
 
 func ResetPassword(email string, password string, uuid string) ResetPasswordResponse {
-	gqlClient := graphql.CreateClient()
 
 	if uuid == "" {
 		return ResetPasswordResponse{403, errors.New("uuid has to be provided")}
@@ -27,7 +26,7 @@ func ResetPassword(email string, password string, uuid string) ResetPasswordResp
 		return ResetPasswordResponse{403, errors.New("uuid is expired")}
 	}
 
-	patient, err := graphql.GetPatientByEmail(context.Background(), gqlClient, email)
+	patient, err := graphql.GetPatientByEmail(email)
 	if err != nil {
 		return ResetPasswordResponse{403, errors.New("no patient correspond to this email")}
 	}

@@ -3,6 +3,7 @@ package appointment
 import (
 	"context"
 	"errors"
+
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/model"
 )
@@ -18,28 +19,31 @@ func BookAppointment(appointmentId string, patientId string, session_id string) 
 	if appointmentId == "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment id is required")}
 	}
-	gqlClient := graphql.CreateClient()
 
 	if session_id == "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("session id is required")}
 	}
 
-	appointment, err := graphql.GetSlotById(context.Background(), gqlClient, appointmentId)
+	appointment, err := graphql.GetSlotById(appointmentId)
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
 
-	if appointment.GetSlotById.Id_patient != "" {
+	if appointment.IDPatient != "" {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("appointment is already booked")}
 	}
 
-	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientId)
+	patient, err := graphql.GetPatientById(patientId)
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
 	}
-	var appointment_status = graphql.AppointmentStatusWaitingForReview
+	var appointment_status = model.AppointmentStatusWaitingForReview
 
-	updatedRdv, err := graphql.UpdateRdv(context.Background(), gqlClient, appointmentId, patientId, appointment.GetSlotById.Doctor_id, appointment.GetSlotById.Start_date, appointment.GetSlotById.End_date, appointment.GetSlotById.Cancelation_reason, appointment_status, session_id, "")
+	updatedRdv, err := graphql.UpdateRdv(appointmentId, model.UpdateRdvInput{
+		IDPatient:         &patientId,
+		AppointmentStatus: &appointment_status,
+		SessionID:         &session_id,
+	})
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
@@ -49,14 +53,14 @@ func BookAppointment(appointmentId string, patientId string, session_id string) 
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update patient")}
 	}
 
-	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, appointment.GetSlotById.Doctor_id)
+	doctor, err := graphql.GetDoctorById(appointment.DoctorID)
 	if err != nil {
 		return BookAppointmentResponse{Rdv: model.Rdv{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
 	patientFound := false
-	for _, patientID := range doctor.GetDoctorById.Patient_ids {
-		if patientID == patientId {
+	for _, patientID := range doctor.PatientIds {
+		if patientID == &patientId {
 			patientFound = true
 			break
 		}
@@ -70,25 +74,9 @@ func BookAppointment(appointmentId string, patientId string, session_id string) 
 	}
 
 	return BookAppointmentResponse{
-		Rdv: model.Rdv{
-			ID:                updatedRdv.UpdateRdv.Id,
-			DoctorID:          updatedRdv.UpdateRdv.Doctor_id,
-			IDPatient:         updatedRdv.UpdateRdv.Id_patient,
-			StartDate:         updatedRdv.UpdateRdv.Start_date,
-			EndDate:           updatedRdv.UpdateRdv.End_date,
-			CancelationReason: &updatedRdv.UpdateRdv.Cancelation_reason,
-			AppointmentStatus: model.AppointmentStatus(updatedRdv.UpdateRdv.Appointment_status),
-			SessionID:         updatedRdv.UpdateRdv.Session_id,
-		},
-		Patient: model.Patient{
-			ID:            updatedPatient.UpdatePatient.Id,
-			Email:         updatedPatient.UpdatePatient.Email,
-			Password:      updatedPatient.UpdatePatient.Password,
-			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Rendez_vous_ids),
-			MedicalInfoID: &updatedPatient.UpdatePatient.Medical_info_id,
-			DocumentIds:   graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Document_ids),
-		},
-		Code: 200,
-		Err:  nil,
+		Rdv:     updatedRdv,
+		Patient: updatedPatient,
+		Code:    200,
+		Err:     nil,
 	}
 }

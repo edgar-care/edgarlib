@@ -18,30 +18,38 @@ func DeleteRdv(rdvId string, patientId string) DeleteRdvResponse {
 	if rdvId == "" {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("rdv id is required")}
 	}
-	gqlClient := graphql.CreateClient()
 
-	rdv, err := graphql.GetRdvById(context.Background(), gqlClient, rdvId)
+	rdv, err := graphql.GetRdvById(rdvId)
 	if err != nil {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to an appointment")}
 	}
-	var appointment_status = graphql.AppointmentStatusCanceled
-	_, err = graphql.UpdateRdv(context.Background(), gqlClient, rdv.GetRdvById.Id, rdv.GetRdvById.Id_patient, rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, rdv.GetRdvById.Cancelation_reason, appointment_status, rdv.GetRdvById.Session_id, rdv.GetRdvById.Health_method)
+	var appointment_status = model.AppointmentStatusCanceled
+	_, err = graphql.UpdateRdv(rdv.ID, model.UpdateRdvInput{
+		AppointmentStatus: &appointment_status,
+	})
 	if err != nil {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 500, Err: errors.New("could not update appointment")}
 	}
 
-	var new_appointment_status graphql.AppointmentStatus = "OPENED"
-	new_slot, err := graphql.CreateRdv(context.Background(), gqlClient, "", rdv.GetRdvById.Doctor_id, rdv.GetRdvById.Start_date, rdv.GetRdvById.End_date, new_appointment_status, "")
+	var new_appointment_status model.AppointmentStatus = "OPENED"
+	new_slot, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "",
+		DoctorID:          rdv.DoctorID,
+		StartDate:         rdv.StartDate,
+		EndDate:           rdv.EndDate,
+		AppointmentStatus: new_appointment_status,
+		SessionID:         "",
+	})
 	if err != nil {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
 
-	patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientId)
+	patient, err := graphql.GetPatientById(patientId)
 	if err != nil {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, rdv.GetRdvById.Doctor_id)
+	doctor, err := graphql.GetDoctorById(rdv.DoctorID)
 	if err != nil {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
@@ -52,16 +60,9 @@ func DeleteRdv(rdvId string, patientId string) DeleteRdvResponse {
 		return DeleteRdvResponse{UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("update failed" + err.Error())}
 	}
 	return DeleteRdvResponse{
-		UpdatedPatient: model.Patient{
-			ID:            updatedPatient.UpdatePatient.Id,
-			Email:         updatedPatient.UpdatePatient.Email,
-			Password:      updatedPatient.UpdatePatient.Password,
-			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Rendez_vous_ids),
-			MedicalInfoID: &updatedPatient.UpdatePatient.Medical_info_id,
-			DocumentIds:   graphql.ConvertStringSliceToPointerSlice(updatedPatient.UpdatePatient.Document_ids),
-		},
-		Code: 200,
-		Err:  nil,
+		UpdatedPatient: patient,
+		Code:           200,
+		Err:            nil,
 	}
 }
 

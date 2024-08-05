@@ -23,6 +23,21 @@ func normalizeType(graphQLType string) string {
 	}
 }
 
+func defaultOutputValue(outputType string) string {
+	switch outputType {
+	case "string":
+		return "\"\""
+	case "int":
+		return "0"
+	case "float64":
+		return "0.0"
+	case "bool":
+		return "false"
+	default:
+		return outputType + "{}"
+	}
+}
+
 func GenerateFunctionDefinitions(queryDefinitions []QueryDefinitionInfo, graphqlQueries []GraphQLQueryInfo) string {
 	var sb strings.Builder
 
@@ -42,7 +57,6 @@ func GenerateFunctionDefinitions(queryDefinitions []QueryDefinitionInfo, graphql
 	for _, queryDef := range queryDefinitions {
 		queryDefMap[queryDef.Name] = queryDef
 	}
-
 	for _, gqlQuery := range graphqlQueries {
 		queryDef, exists := queryDefMap[gqlQuery.QueryName]
 		if !exists {
@@ -99,7 +113,7 @@ func GenerateFunctionDefinitions(queryDefinitions []QueryDefinitionInfo, graphql
 		if queryDef.IsList {
 			funcBody += fmt.Sprintf("\t\treturn nil, err\n")
 		} else {
-			funcBody += fmt.Sprintf("\t\treturn %s{}, err\n", outputType)
+			funcBody += fmt.Sprintf("\t\treturn %s, err\n", defaultOutputValue(outputType))
 		}
 		funcBody += "\t}\n\n"
 
@@ -108,16 +122,16 @@ func GenerateFunctionDefinitions(queryDefinitions []QueryDefinitionInfo, graphql
 		if queryDef.IsList {
 			funcBody += fmt.Sprintf("\t\treturn nil, err\n")
 		} else {
-			funcBody += fmt.Sprintf("\t\treturn %s{}, err\n", outputType)
+			funcBody += fmt.Sprintf("\t\treturn %s, err\n", defaultOutputValue(outputType))
 		}
 		funcBody += "\t}\n"
 		funcBody += "\tdefer resp.Body.Close()\n\n"
 
 		funcBody += "\tif resp.StatusCode != http.StatusOK {\n"
 		if queryDef.IsList {
-			funcBody += fmt.Sprintf("\t\treturn nil, fmt.Errorf(\"failed to fetch data: %v\", resp.Status)\n")
+			funcBody += fmt.Sprintf("\t\treturn nil, fmt.Errorf(\"failed to fetch data: %v\", resp.Status)\n", "%v")
 		} else {
-			funcBody += fmt.Sprintf("\t\treturn %s{}, fmt.Errorf(\"failed to fetch data: %v\", resp.Status)\n", outputType)
+			funcBody += fmt.Sprintf("\t\treturn %s, fmt.Errorf(\"failed to fetch data: %v\", resp.Status)\n", defaultOutputValue(outputType), "%v")
 		}
 		funcBody += "\t}\n\n"
 
@@ -126,21 +140,29 @@ func GenerateFunctionDefinitions(queryDefinitions []QueryDefinitionInfo, graphql
 		if queryDef.IsList {
 			funcBody += fmt.Sprintf("\t\treturn nil, err\n")
 		} else {
-			funcBody += fmt.Sprintf("\t\treturn %s{}, err\n", outputType)
+			funcBody += fmt.Sprintf("\t\treturn %s, err\n", defaultOutputValue(outputType))
 		}
 		funcBody += "\t}\n\n"
 
 		if queryDef.IsList {
-			funcBody += fmt.Sprintf("\tvar result struct {\n\t\tData struct {\n\t\t\t%s []model.%s `json:\"%s\"`\n\t\t} `json:\"data\"`\n\t}\n", gqlQuery.GivenName, queryDef.OutputType, gqlQuery.QueryName)
+			funcBody += fmt.Sprintf("\tvar result struct {\n\t\tErrors []model.GraphQLError `json:\"errors\"`\n\t\tData struct {\n\t\t\t%s []%s `json:\"%s\"`\n\t\t} `json:\"data\"`\n\t}\n", gqlQuery.GivenName, normalizeType(queryDef.OutputType), gqlQuery.QueryName)
 		} else {
-			funcBody += fmt.Sprintf("\tvar result struct {\n\t\tData struct {\n\t\t\t%s model.%s `json:\"%s\"`\n\t\t} `json:\"data\"`\n\t}\n", gqlQuery.GivenName, queryDef.OutputType, gqlQuery.QueryName)
+			funcBody += fmt.Sprintf("\tvar result struct {\n\t\tErrors []model.GraphQLError `json:\"errors\"`\n\t\tData struct {\n\t\t\t%s %s `json:\"%s\"`\n\t\t} `json:\"data\"`\n\t}\n", gqlQuery.GivenName, normalizeType(queryDef.OutputType), gqlQuery.QueryName)
 		}
 		funcBody += "\terr = json.Unmarshal(responseBody, &result)\n"
 		funcBody += "\tif err != nil {\n"
 		if queryDef.IsList {
 			funcBody += fmt.Sprintf("\t\treturn nil, err\n")
 		} else {
-			funcBody += fmt.Sprintf("\t\treturn %s{}, err\n", outputType)
+			funcBody += fmt.Sprintf("\t\treturn %s, err\n", defaultOutputValue(outputType))
+		}
+		funcBody += "\t}\n\n"
+
+		funcBody += "\tif len(result.Errors) > 0 {\n"
+		if queryDef.IsList {
+			funcBody += fmt.Sprintf("\t\treturn nil, fmt.Errorf(\"GraphQL error: %s\", result.Errors[0].Message)\n", "%s")
+		} else {
+			funcBody += fmt.Sprintf("\t\treturn %s, fmt.Errorf(\"GraphQL error: %s\", result.Errors[0].Message)\n", defaultOutputValue(outputType), "%s")
 		}
 		funcBody += "\t}\n\n"
 

@@ -16,15 +16,21 @@ type CreateRdvResponse struct {
 }
 
 func CreateRdv(patientId string, doctorId string, startDate int, endDate int, session_id string) CreateRdvResponse {
-	gqlClient := graphql.CreateClient()
 
-	var appointment_status graphql.AppointmentStatus = "WAITING_FOR_REVIEW"
-	rdv, err := graphql.CreateRdv(context.Background(), gqlClient, patientId, doctorId, startDate, endDate, appointment_status, session_id)
+	var appointment_status model.AppointmentStatus = "WAITING_FOR_REVIEW"
+	rdv, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         patientId,
+		DoctorID:          doctorId,
+		StartDate:         startDate,
+		EndDate:           endDate,
+		AppointmentStatus: appointment_status,
+		SessionID:         session_id,
+	})
 	if err != nil {
 		return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
 
-	doctor, err := graphql.GetDoctorById(context.Background(), gqlClient, doctorId)
+	doctor, err := graphql.GetDoctorById(doctorId)
 	if err != nil {
 		return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
@@ -36,7 +42,7 @@ func CreateRdv(patientId string, doctorId string, startDate int, endDate int, se
 	}
 
 	if patientId != "" {
-		patient, err := graphql.GetPatientById(context.Background(), gqlClient, patientId)
+		patient, err := graphql.GetPatientById(patientId)
 		if err != nil {
 			return CreateRdvResponse{Rdv: model.Rdv{}, Doctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to an patient")}
 		}
@@ -47,24 +53,9 @@ func CreateRdv(patientId string, doctorId string, startDate int, endDate int, se
 	}
 
 	return CreateRdvResponse{
-		Rdv: model.Rdv{
-			ID:                rdv.CreateRdv.Id,
-			DoctorID:          rdv.CreateRdv.Doctor_id,
-			IDPatient:         rdv.CreateRdv.Id_patient,
-			StartDate:         rdv.CreateRdv.Start_date,
-			EndDate:           rdv.CreateRdv.End_date,
-			CancelationReason: &rdv.CreateRdv.Cancelation_reason,
-			AppointmentStatus: model.AppointmentStatus(rdv.CreateRdv.Appointment_status),
-			SessionID:         rdv.CreateRdv.Session_id,
-		},
-		Doctor: model.Doctor{
-			ID:            updatedDoctor.UpdateDoctor.Id,
-			Email:         updatedDoctor.UpdateDoctor.Email,
-			Password:      updatedDoctor.UpdateDoctor.Password,
-			RendezVousIds: graphql.ConvertStringSliceToPointerSlice(updatedDoctor.UpdateDoctor.Rendez_vous_ids),
-			PatientIds:    graphql.ConvertStringSliceToPointerSlice(updatedDoctor.UpdateDoctor.Patient_ids),
-		},
-		Code: 200,
-		Err:  nil,
+		Rdv:    rdv,
+		Doctor: updatedDoctor,
+		Code:   200,
+		Err:    nil,
 	}
 }

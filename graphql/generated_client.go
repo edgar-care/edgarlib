@@ -4,11 +4,118 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"github.com/edgar-care/edgarlib/graphql/model"
 )
+
+func DeleteTreatment(id string) (bool, error) {
+	query := `mutation DeleteTreatment($id: String!){
+	    deleteTreatment(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteTreatment bool `json:"deleteTreatment"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteTreatment, nil
+}
+
+func CreateAnteChir(input model.CreateAnteChirInput) (model.AnteChir, error) {
+	query := `mutation CreateAnteChir($input: CreateAnteChirInput!){
+	    createAnteChir(input: $input){
+	        id
+	        name
+	        induced_symptoms{
+	            symptom
+	            factor
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.AnteChir{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			CreateAnteChir model.AnteChir `json:"createAnteChir"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AnteChir{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateAnteChir, nil
+}
 
 func CreateAnteDisease(input model.CreateAnteDiseaseInput) (model.AnteDisease, error) {
 	query := `mutation CreateAnteDisease($input: CreateAnteDiseaseInput!){
@@ -28,7 +135,7 @@ func CreateAnteDisease(input model.CreateAnteDiseaseInput) (model.AnteDisease, e
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -43,7 +150,7 @@ func CreateAnteDisease(input model.CreateAnteDiseaseInput) (model.AnteDisease, e
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -52,13 +159,18 @@ func CreateAnteDisease(input model.CreateAnteDiseaseInput) (model.AnteDisease, e
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateAnteDisease model.AnteDisease `json:"createAnteDisease"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.AnteDisease{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.CreateAnteDisease, nil
@@ -85,7 +197,7 @@ func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -100,7 +212,7 @@ func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Symptom{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Symptom{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -109,7 +221,8 @@ func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateSymptom model.Symptom `json:"createSymptom"`
 		} `json:"data"`
 	}
@@ -118,7 +231,207 @@ func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 		return model.Symptom{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Symptom{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateSymptom, nil
+}
+
+func DeleteDisease(id string) (bool, error) {
+	query := `mutation DeleteDisease($id: String!){
+	    deleteDisease(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteDisease bool `json:"deleteDisease"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteDisease, nil
+}
+
+func DeleteSymptom(id string) (bool, error) {
+	query := `mutation DeleteSymptom($id: String!){
+	    deleteSymptom(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteSymptom bool `json:"deleteSymptom"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteSymptom, nil
+}
+
+func DeleteAdmin(id string) (bool, error) {
+	query := `mutation DeleteAdmin($id: String!){
+	    deleteAdmin(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteAdmin bool `json:"deleteAdmin"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteAdmin, nil
+}
+
+func DeleteDoctor(id string) (bool, error) {
+	query := `mutation DeleteDoctor($id: String!){
+	    deleteDoctor(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteDoctor bool `json:"deleteDoctor"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteDoctor, nil
 }
 
 func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
@@ -139,7 +452,7 @@ func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -154,7 +467,7 @@ func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Document{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Document{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -163,7 +476,8 @@ func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateDocument model.Document `json:"createDocument"`
 		} `json:"data"`
 	}
@@ -172,7 +486,73 @@ func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
 		return model.Document{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Document{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateDocument, nil
+}
+
+func CreateChat(input model.CreateChatInput) (model.Chat, error) {
+	query := `mutation CreateChat($input: CreateChatInput!){
+	    createChat(input: $input){
+	        id
+	        participants{
+	            participant_id
+	            last_seen
+	        }
+	        messages{
+	            owner_id
+	            message
+	            sended_time
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Chat{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Chat{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			CreateChat model.Chat `json:"createChat"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Chat{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateChat, nil
 }
 
 func CreateAdmin(input model.CreateAdminInput) (model.Admin, error) {
@@ -191,7 +571,7 @@ func CreateAdmin(input model.CreateAdminInput) (model.Admin, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -206,7 +586,7 @@ func CreateAdmin(input model.CreateAdminInput) (model.Admin, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Admin{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Admin{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -215,7 +595,8 @@ func CreateAdmin(input model.CreateAdminInput) (model.Admin, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateAdmin model.Admin `json:"createAdmin"`
 		} `json:"data"`
 	}
@@ -224,7 +605,181 @@ func CreateAdmin(input model.CreateAdminInput) (model.Admin, error) {
 		return model.Admin{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Admin{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateAdmin, nil
+}
+
+func DeletePatient(id string) (bool, error) {
+	query := `mutation DeletePatient($id: String!){
+	    deletePatient(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeletePatient bool `json:"deletePatient"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeletePatient, nil
+}
+
+func CreateNlpReport(input model.CreateNlpReportInput) (model.NlpReport, error) {
+	query := `mutation CreateNlpReport($input: CreateNlpReportInput!){
+	    createNlpReport(input: $input){
+	        id
+	        version
+	        input_symptoms
+	        input_sentence
+	        output{
+	            symptom
+	            present
+	            days
+	        }
+	        computation_time
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.NlpReport{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.NlpReport{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.NlpReport{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.NlpReport{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			CreateNlpReport model.NlpReport `json:"createNlpReport"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.NlpReport{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.NlpReport{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateNlpReport, nil
+}
+
+func UpdateAnteChir(id string, input model.UpdateAnteChirInput) (model.AnteChir, error) {
+	query := `mutation UpdateAnteChir($id: String!, $input: UpdateAnteChirInput!){
+	    updateAnteChir(id: $id, input: $input){
+	        id
+	        name
+	        induced_symptoms{
+	            symptom
+	            factor
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id":    id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.AnteChir{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			UpdateAnteChir model.AnteChir `json:"updateAnteChir"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AnteChir{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateAnteChir, nil
 }
 
 func UpdateMedicalFolder(id string, input model.UpdateMedicalFolderInput) (model.MedicalInfo, error) {
@@ -245,11 +800,11 @@ func UpdateMedicalFolder(id string, input model.UpdateMedicalFolderInput) (model
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -264,7 +819,7 @@ func UpdateMedicalFolder(id string, input model.UpdateMedicalFolderInput) (model
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.MedicalInfo{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.MedicalInfo{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -273,13 +828,18 @@ func UpdateMedicalFolder(id string, input model.UpdateMedicalFolderInput) (model
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateMedicalFolder model.MedicalInfo `json:"updateMedicalFolder"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.MedicalInfo{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.MedicalInfo{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.UpdateMedicalFolder, nil
@@ -302,7 +862,7 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -317,7 +877,7 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Medicine{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Medicine{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -326,7 +886,8 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateMedicine model.Medicine `json:"createMedicine"`
 		} `json:"data"`
 	}
@@ -335,7 +896,60 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 		return model.Medicine{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Medicine{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateMedicine, nil
+}
+
+func DeleteAlert(id string) (bool, error) {
+	query := `mutation DeleteAlert($id: String!){
+	    deleteAlert(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteAlert bool `json:"deleteAlert"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteAlert, nil
 }
 
 func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatment, error) {
@@ -351,11 +965,11 @@ func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatme
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -370,7 +984,7 @@ func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatme
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Treatment{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Treatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -379,7 +993,8 @@ func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatme
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateTreatment model.Treatment `json:"updateTreatment"`
 		} `json:"data"`
 	}
@@ -388,7 +1003,189 @@ func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatme
 		return model.Treatment{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Treatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.UpdateTreatment, nil
+}
+
+func CreateDoctor(input model.CreateDoctorInput) (model.Doctor, error) {
+	query := `mutation CreateDoctor($input: CreateDoctorInput!){
+	    createDoctor(input: $input){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        address{
+	            street
+	            zip_code
+	            country
+	            city
+	        }
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Doctor{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Doctor{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			CreateDoctor model.Doctor `json:"createDoctor"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Doctor{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateDoctor, nil
+}
+
+func DeleteChat(id string) (bool, error) {
+	query := `mutation DeleteChat($id: String!){
+	    deleteChat(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteChat bool `json:"deleteChat"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteChat, nil
+}
+
+func UpdateChat(id string, input model.UpdateChatInput) (model.Chat, error) {
+	query := `mutation UpdateChat($id: String!, $input: UpdateChatInput!){
+	    updateChat(id: $id, input: $input){
+	        id
+	        participants{
+	            participant_id
+	            last_seen
+	        }
+	        messages{
+	            owner_id
+	            message
+	            sended_time
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id":    id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Chat{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Chat{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			UpdateChat model.Chat `json:"updateChat"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Chat{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateChat, nil
 }
 
 func CreateAnteFamily(input model.CreateAnteFamilyInput) (model.AnteFamily, error) {
@@ -405,7 +1202,7 @@ func CreateAnteFamily(input model.CreateAnteFamilyInput) (model.AnteFamily, erro
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -420,7 +1217,7 @@ func CreateAnteFamily(input model.CreateAnteFamilyInput) (model.AnteFamily, erro
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.AnteFamily{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.AnteFamily{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -429,13 +1226,18 @@ func CreateAnteFamily(input model.CreateAnteFamilyInput) (model.AnteFamily, erro
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateAnteFamily model.AnteFamily `json:"createAnteFamily"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.AnteFamily{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AnteFamily{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.CreateAnteFamily, nil
@@ -453,11 +1255,11 @@ func UpdateTreatmentsFollowUp(id string, input model.UpdateTreatmentsFollowUpInp
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -472,7 +1274,7 @@ func UpdateTreatmentsFollowUp(id string, input model.UpdateTreatmentsFollowUpInp
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.TreatmentsFollowUp{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.TreatmentsFollowUp{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -481,13 +1283,18 @@ func UpdateTreatmentsFollowUp(id string, input model.UpdateTreatmentsFollowUpInp
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateTreatmentsFollowUp model.TreatmentsFollowUp `json:"updateTreatmentsFollowUp"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.TreatmentsFollowUp{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.TreatmentsFollowUp{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.UpdateTreatmentsFollowUp, nil
@@ -508,11 +1315,11 @@ func UpdateDocument(id string, input model.UpdateDocumentInput) (model.Document,
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -527,7 +1334,7 @@ func UpdateDocument(id string, input model.UpdateDocumentInput) (model.Document,
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Document{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Document{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -536,7 +1343,8 @@ func UpdateDocument(id string, input model.UpdateDocumentInput) (model.Document,
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateDocument model.Document `json:"updateDocument"`
 		} `json:"data"`
 	}
@@ -545,7 +1353,60 @@ func UpdateDocument(id string, input model.UpdateDocumentInput) (model.Document,
 		return model.Document{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Document{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.UpdateDocument, nil
+}
+
+func DeleteSlot(id string) (bool, error) {
+	query := `mutation DeleteSlot($id: String!){
+	    deleteSlot(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteSlot bool `json:"deleteSlot"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteSlot, nil
 }
 
 func UpdateRdv(id string, input model.UpdateRdvInput) (model.Rdv, error) {
@@ -565,11 +1426,11 @@ func UpdateRdv(id string, input model.UpdateRdvInput) (model.Rdv, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -584,7 +1445,7 @@ func UpdateRdv(id string, input model.UpdateRdvInput) (model.Rdv, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Rdv{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Rdv{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -593,7 +1454,8 @@ func UpdateRdv(id string, input model.UpdateRdvInput) (model.Rdv, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateRdv model.Rdv `json:"updateRdv"`
 		} `json:"data"`
 	}
@@ -602,7 +1464,60 @@ func UpdateRdv(id string, input model.UpdateRdvInput) (model.Rdv, error) {
 		return model.Rdv{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Rdv{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.UpdateRdv, nil
+}
+
+func DeleteAnteFamily(id string) (bool, error) {
+	query := `mutation DeleteAnteFamily($id: String!){
+	    deleteAnteFamily(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteAnteFamily bool `json:"deleteAnteFamily"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteAnteFamily, nil
 }
 
 func CreateAlert(input model.CreateAlertInput) (model.Alert, error) {
@@ -623,7 +1538,7 @@ func CreateAlert(input model.CreateAlertInput) (model.Alert, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -638,7 +1553,7 @@ func CreateAlert(input model.CreateAlertInput) (model.Alert, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Alert{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Alert{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -647,7 +1562,8 @@ func CreateAlert(input model.CreateAlertInput) (model.Alert, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateAlert model.Alert `json:"createAlert"`
 		} `json:"data"`
 	}
@@ -656,7 +1572,60 @@ func CreateAlert(input model.CreateAlertInput) (model.Alert, error) {
 		return model.Alert{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Alert{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateAlert, nil
+}
+
+func DeleteMedicalFolder(id string) (bool, error) {
+	query := `mutation DeleteMedicalFolder($id: String!){
+	    deleteMedicalFolder(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteMedicalFolder bool `json:"deleteMedicalFolder"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteMedicalFolder, nil
 }
 
 func CreatePatient(input model.CreatePatientInput) (model.Patient, error) {
@@ -678,7 +1647,7 @@ func CreatePatient(input model.CreatePatientInput) (model.Patient, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -693,7 +1662,7 @@ func CreatePatient(input model.CreatePatientInput) (model.Patient, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Patient{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Patient{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -702,7 +1671,8 @@ func CreatePatient(input model.CreatePatientInput) (model.Patient, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreatePatient model.Patient `json:"createPatient"`
 		} `json:"data"`
 	}
@@ -711,7 +1681,60 @@ func CreatePatient(input model.CreatePatientInput) (model.Patient, error) {
 		return model.Patient{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Patient{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreatePatient, nil
+}
+
+func DeleteAnteChir(id string) (bool, error) {
+	query := `mutation DeleteAnteChir($id: String!){
+	    deleteAnteChir(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteAnteChir bool `json:"deleteAnteChir"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteAnteChir, nil
 }
 
 func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, error) {
@@ -730,11 +1753,11 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -749,7 +1772,7 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Patient{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Patient{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -758,7 +1781,8 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdatePatient model.Patient `json:"updatePatient"`
 		} `json:"data"`
 	}
@@ -767,7 +1791,203 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 		return model.Patient{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Patient{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.UpdatePatient, nil
+}
+
+func CreateSession(input model.CreateSessionInput) (model.Session, error) {
+	query := `mutation CreateSession($input: CreateSessionInput!){
+	    createSession(input: $input){
+	        id
+	        diseases{
+	            name
+	            presence
+	        }
+	        symptoms{
+	            name
+	            presence
+	            duration
+	            treated
+	        }
+	        age
+	        height
+	        weight
+	        sex
+	        ante_chirs
+	        ante_diseases
+	        medicine
+	        last_question
+	        logs{
+	            question
+	            answer
+	        }
+	        alerts
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Session{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Session{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			CreateSession model.Session `json:"createSession"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Session{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateSession, nil
+}
+
+func DeleteAnteDisease(id string) (bool, error) {
+	query := `mutation DeleteAnteDisease($id: String!){
+	    deleteAnteDisease(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteAnteDisease bool `json:"deleteAnteDisease"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteAnteDisease, nil
+}
+
+func UpdateDoctor(id string, input model.UpdateDoctorInput) (model.Doctor, error) {
+	query := `mutation UpdateDoctor($id: String!, $input: UpdateDoctorInput!){
+	    updateDoctor(id: $id, input: $input){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        address{
+	            street
+	            zip_code
+	            country
+	            city
+	        }
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id":    id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Doctor{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Doctor{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			UpdateDoctor model.Doctor `json:"updateDoctor"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Doctor{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateDoctor, nil
 }
 
 func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInfo, error) {
@@ -791,7 +2011,7 @@ func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInf
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -806,7 +2026,7 @@ func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInf
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.MedicalInfo{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.MedicalInfo{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -815,7 +2035,8 @@ func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInf
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateMedicalFolder model.MedicalInfo `json:"createMedicalFolder"`
 		} `json:"data"`
 	}
@@ -824,7 +2045,60 @@ func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInf
 		return model.MedicalInfo{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.MedicalInfo{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateMedicalFolder, nil
+}
+
+func DeleteDocument(id string) (bool, error) {
+	query := `mutation DeleteDocument($id: String!){
+	    deleteDocument(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteDocument bool `json:"deleteDocument"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteDocument, nil
 }
 
 func UpdateAlert(id string, input model.UpdateAlertInput) (model.Alert, error) {
@@ -842,11 +2116,11 @@ func UpdateAlert(id string, input model.UpdateAlertInput) (model.Alert, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -861,7 +2135,7 @@ func UpdateAlert(id string, input model.UpdateAlertInput) (model.Alert, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Alert{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Alert{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -870,7 +2144,8 @@ func UpdateAlert(id string, input model.UpdateAlertInput) (model.Alert, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateAlert model.Alert `json:"updateAlert"`
 		} `json:"data"`
 	}
@@ -879,7 +2154,60 @@ func UpdateAlert(id string, input model.UpdateAlertInput) (model.Alert, error) {
 		return model.Alert{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Alert{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.UpdateAlert, nil
+}
+
+func DeleteMedicine(id string) (bool, error) {
+	query := `mutation DeleteMedicine($id: String!){
+	    deleteMedicine(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteMedicine bool `json:"deleteMedicine"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteMedicine, nil
 }
 
 func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) {
@@ -898,7 +2226,7 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -913,7 +2241,7 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Treatment{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Treatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -922,7 +2250,8 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateTreatment model.Treatment `json:"createTreatment"`
 		} `json:"data"`
 	}
@@ -931,7 +2260,222 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 		return model.Treatment{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Treatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateTreatment, nil
+}
+
+func DeleteRdv(id string) (bool, error) {
+	query := `mutation DeleteRdv($id: String!){
+	    deleteRdv(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteRdv bool `json:"deleteRdv"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteRdv, nil
+}
+
+func UpdateDisease(id string, input model.UpdateDiseaseInput) (model.Disease, error) {
+	query := `mutation UpdateDisease($id: String!, $input: UpdateDiseaseInput!){
+	    updateDisease(id: $id, input: $input){
+	        id
+	        code
+	        name
+	        symptoms
+	        symptoms_weight{
+	            symptom
+	            value
+	            chronic
+	        }
+	        overweight_factor
+	        advice
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id":    id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Disease{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Disease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			UpdateDisease model.Disease `json:"updateDisease"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Disease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateDisease, nil
+}
+
+func DeleteNotification(id string) (bool, error) {
+	query := `mutation DeleteNotification($id: String!){
+	    deleteNotification(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteNotification bool `json:"deleteNotification"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteNotification, nil
+}
+
+func DeleteSession(id string) (bool, error) {
+	query := `mutation DeleteSession($id: String!){
+	    deleteSession(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteSession bool `json:"deleteSession"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteSession, nil
 }
 
 func UpdateAdmin(id string, input model.UpdateAdminInput) (model.Admin, error) {
@@ -947,11 +2491,11 @@ func UpdateAdmin(id string, input model.UpdateAdminInput) (model.Admin, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -966,7 +2510,7 @@ func UpdateAdmin(id string, input model.UpdateAdminInput) (model.Admin, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Admin{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Admin{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -975,13 +2519,18 @@ func UpdateAdmin(id string, input model.UpdateAdminInput) (model.Admin, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateAdmin model.Admin `json:"updateAdmin"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Admin{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Admin{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.UpdateAdmin, nil
@@ -1005,11 +2554,11 @@ func UpdateSymptom(id string, input model.UpdateSymptomInput) (model.Symptom, er
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1024,7 +2573,7 @@ func UpdateSymptom(id string, input model.UpdateSymptomInput) (model.Symptom, er
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Symptom{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Symptom{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1033,13 +2582,18 @@ func UpdateSymptom(id string, input model.UpdateSymptomInput) (model.Symptom, er
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateSymptom model.Symptom `json:"updateSymptom"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Symptom{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Symptom{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.UpdateSymptom, nil
@@ -1060,7 +2614,7 @@ func CreateTreatmentsFollowUp(input model.CreateTreatmentsFollowUpInput) (model.
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1075,7 +2629,7 @@ func CreateTreatmentsFollowUp(input model.CreateTreatmentsFollowUpInput) (model.
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.TreatmentsFollowUp{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.TreatmentsFollowUp{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1084,7 +2638,8 @@ func CreateTreatmentsFollowUp(input model.CreateTreatmentsFollowUpInput) (model.
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateTreatmentsFollowUp model.TreatmentsFollowUp `json:"createTreatmentsFollowUp"`
 		} `json:"data"`
 	}
@@ -1093,7 +2648,74 @@ func CreateTreatmentsFollowUp(input model.CreateTreatmentsFollowUpInput) (model.
 		return model.TreatmentsFollowUp{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.TreatmentsFollowUp{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateTreatmentsFollowUp, nil
+}
+
+func CreateDisease(input model.CreateDiseaseInput) (model.Disease, error) {
+	query := `mutation CreateDisease($input: CreateDiseaseInput!){
+	    createDisease(input: $input){
+	        id
+	        code
+	        name
+	        symptoms
+	        symptoms_weight{
+	            symptom
+	            value
+	            chronic
+	        }
+	        overweight_factor
+	        advice
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Disease{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Disease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			CreateDisease model.Disease `json:"createDisease"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Disease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateDisease, nil
 }
 
 func UpdateNotification(id string, input model.UpdateNotificationInput) (model.Notification, error) {
@@ -1108,11 +2730,11 @@ func UpdateNotification(id string, input model.UpdateNotificationInput) (model.N
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1127,7 +2749,7 @@ func UpdateNotification(id string, input model.UpdateNotificationInput) (model.N
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Notification{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Notification{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1136,13 +2758,18 @@ func UpdateNotification(id string, input model.UpdateNotificationInput) (model.N
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateNotification model.Notification `json:"updateNotification"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Notification{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Notification{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.UpdateNotification, nil
@@ -1163,7 +2790,7 @@ func CreateNotification(input model.CreateNotificationInput) (model.Notification
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1178,7 +2805,7 @@ func CreateNotification(input model.CreateNotificationInput) (model.Notification
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Notification{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Notification{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1187,13 +2814,18 @@ func CreateNotification(input model.CreateNotificationInput) (model.Notification
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateNotification model.Notification `json:"createNotification"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Notification{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Notification{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.CreateNotification, nil
@@ -1210,11 +2842,11 @@ func UpdateAnteFamily(id string, input model.UpdateAnteFamilyInput) (model.AnteF
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1229,7 +2861,7 @@ func UpdateAnteFamily(id string, input model.UpdateAnteFamilyInput) (model.AnteF
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.AnteFamily{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.AnteFamily{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1238,7 +2870,8 @@ func UpdateAnteFamily(id string, input model.UpdateAnteFamilyInput) (model.AnteF
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateAnteFamily model.AnteFamily `json:"updateAnteFamily"`
 		} `json:"data"`
 	}
@@ -1247,7 +2880,60 @@ func UpdateAnteFamily(id string, input model.UpdateAnteFamilyInput) (model.AnteF
 		return model.AnteFamily{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.AnteFamily{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.UpdateAnteFamily, nil
+}
+
+func DeleteTreatmentsFollowUp(id string) (bool, error) {
+	query := `mutation DeleteTreatmentsFollowUp($id: String!){
+	    deleteTreatmentsFollowUp(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			DeleteTreatmentsFollowUp bool `json:"deleteTreatmentsFollowUp"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteTreatmentsFollowUp, nil
 }
 
 func UpdateAnteDisease(id string, input model.UpdateAnteDiseaseInput) (model.AnteDisease, error) {
@@ -1265,11 +2951,11 @@ func UpdateAnteDisease(id string, input model.UpdateAnteDiseaseInput) (model.Ant
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":    id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1284,7 +2970,7 @@ func UpdateAnteDisease(id string, input model.UpdateAnteDiseaseInput) (model.Ant
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1293,13 +2979,18 @@ func UpdateAnteDisease(id string, input model.UpdateAnteDiseaseInput) (model.Ant
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			UpdateAnteDisease model.AnteDisease `json:"updateAnteDisease"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.AnteDisease{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.UpdateAnteDisease, nil
@@ -1325,7 +3016,7 @@ func CreateRdv(input model.CreateRdvInput) (model.Rdv, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1340,7 +3031,7 @@ func CreateRdv(input model.CreateRdvInput) (model.Rdv, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Rdv{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Rdv{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1349,7 +3040,8 @@ func CreateRdv(input model.CreateRdvInput) (model.Rdv, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			CreateRdv model.Rdv `json:"createRdv"`
 		} `json:"data"`
 	}
@@ -1358,7 +3050,88 @@ func CreateRdv(input model.CreateRdvInput) (model.Rdv, error) {
 		return model.Rdv{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Rdv{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.CreateRdv, nil
+}
+
+func UpdateSession(id string, input model.UpdateSessionInput) (model.Session, error) {
+	query := `mutation UpdateSession($id: String!, $input: UpdateSessionInput!){
+	    updateSession(id: $id, input: $input){
+	        id
+	        diseases{
+	            name
+	            presence
+	        }
+	        symptoms{
+	            name
+	            presence
+	            duration
+	            treated
+	        }
+	        age
+	        height
+	        weight
+	        sex
+	        ante_chirs
+	        ante_diseases
+	        medicine
+	        last_question
+	        logs{
+	            question
+	            answer
+	        }
+	        alerts
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id":    id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Session{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Session{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			UpdateSession model.Session `json:"updateSession"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Session{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateSession, nil
 }
 
 func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error) {
@@ -1379,10 +3152,10 @@ func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error)
 	}`
 	variables := map[string]interface{}{
 		"doctor_id": doctor_id,
-		"option": option,
+		"option":    option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1397,7 +3170,7 @@ func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1406,13 +3179,18 @@ func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error)
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetWaitingRdv []model.Rdv `json:"getWaitingRdv"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetWaitingRdv, nil
@@ -1434,7 +3212,7 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1449,7 +3227,7 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Treatment{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Treatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1458,7 +3236,8 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetTreatmentByID model.Treatment `json:"getTreatmentByID"`
 		} `json:"data"`
 	}
@@ -1467,7 +3246,74 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 		return model.Treatment{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Treatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetTreatmentByID, nil
+}
+
+func GetDiseases(option *model.Options) ([]model.Disease, error) {
+	query := `query GetDiseases($option: Options){
+	    getDiseases(option: $option){
+	        id
+	        code
+	        name
+	        symptoms
+	        symptoms_weight{
+	            symptom
+	            value
+	            chronic
+	        }
+	        overweight_factor
+	        advice
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetDiseases []model.Disease `json:"getDiseases"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetDiseases, nil
 }
 
 func GetAlerts(option *model.Options) ([]model.Alert, error) {
@@ -1488,7 +3334,7 @@ func GetAlerts(option *model.Options) ([]model.Alert, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1503,7 +3349,7 @@ func GetAlerts(option *model.Options) ([]model.Alert, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1512,13 +3358,18 @@ func GetAlerts(option *model.Options) ([]model.Alert, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAlerts []model.Alert `json:"getAlerts"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetAlerts, nil
@@ -1541,7 +3392,7 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1556,7 +3407,7 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Medicine{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Medicine{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1565,7 +3416,8 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetMedicineByID model.Medicine `json:"getMedicineByID"`
 		} `json:"data"`
 	}
@@ -1574,7 +3426,69 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 		return model.Medicine{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Medicine{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetMedicineByID, nil
+}
+
+func GetAnteChirs(option *model.Options) ([]model.AnteChir, error) {
+	query := `query GetAnteChirs($option: Options){
+	    getAnteChirs(option: $option){
+	        id
+	        name
+	        induced_symptoms{
+	            symptom
+	            factor
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetAnteChirs []model.AnteChir `json:"getAnteChirs"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetAnteChirs, nil
 }
 
 func GetRdvById(id string) (model.Rdv, error) {
@@ -1597,7 +3511,7 @@ func GetRdvById(id string) (model.Rdv, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1612,7 +3526,7 @@ func GetRdvById(id string) (model.Rdv, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Rdv{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Rdv{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1621,13 +3535,18 @@ func GetRdvById(id string) (model.Rdv, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetRdvById model.Rdv `json:"getRdvById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Rdv{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Rdv{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetRdvById, nil
@@ -1648,11 +3567,11 @@ func GetPatientDocument(id string, option *model.Options) ([]model.Document, err
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":     id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1667,7 +3586,7 @@ func GetPatientDocument(id string, option *model.Options) ([]model.Document, err
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1676,13 +3595,18 @@ func GetPatientDocument(id string, option *model.Options) ([]model.Document, err
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetPatientDocument []model.Document `json:"getPatientDocument"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetPatientDocument, nil
@@ -1703,7 +3627,7 @@ func GetNotifications(option *model.Options) ([]model.Notification, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1718,7 +3642,7 @@ func GetNotifications(option *model.Options) ([]model.Notification, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1727,13 +3651,18 @@ func GetNotifications(option *model.Options) ([]model.Notification, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetNotifications []model.Notification `json:"getNotifications"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetNotifications, nil
@@ -1757,10 +3686,10 @@ func GetDoctorRdv(doctor_id string, option *model.Options) ([]model.Rdv, error) 
 	}`
 	variables := map[string]interface{}{
 		"doctor_id": doctor_id,
-		"option": option,
+		"option":    option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1775,7 +3704,7 @@ func GetDoctorRdv(doctor_id string, option *model.Options) ([]model.Rdv, error) 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1784,13 +3713,18 @@ func GetDoctorRdv(doctor_id string, option *model.Options) ([]model.Rdv, error) 
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetDoctorRdv []model.Rdv `json:"getDoctorRdv"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetDoctorRdv, nil
@@ -1812,7 +3746,7 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1827,7 +3761,7 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1836,13 +3770,18 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetTreatments []model.Treatment `json:"getTreatments"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetTreatments, nil
@@ -1863,7 +3802,7 @@ func GetNotificationById(id string) (model.Notification, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1878,7 +3817,7 @@ func GetNotificationById(id string) (model.Notification, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Notification{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Notification{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1887,7 +3826,8 @@ func GetNotificationById(id string) (model.Notification, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetNotificationById model.Notification `json:"getNotificationById"`
 		} `json:"data"`
 	}
@@ -1896,7 +3836,74 @@ func GetNotificationById(id string) (model.Notification, error) {
 		return model.Notification{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Notification{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetNotificationById, nil
+}
+
+func GetDiseaseById(id string) (model.Disease, error) {
+	query := `query GetDiseaseById($id: String!){
+	    getDiseaseById(id: $id){
+	        id
+	        code
+	        name
+	        symptoms
+	        symptoms_weight{
+	            symptom
+	            value
+	            chronic
+	        }
+	        overweight_factor
+	        advice
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Disease{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Disease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetDiseaseById model.Disease `json:"getDiseaseById"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Disease{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Disease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetDiseaseById, nil
 }
 
 func GetDocumentById(id string) (model.Document, error) {
@@ -1917,7 +3924,7 @@ func GetDocumentById(id string) (model.Document, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1932,7 +3939,7 @@ func GetDocumentById(id string) (model.Document, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Document{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Document{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1941,13 +3948,18 @@ func GetDocumentById(id string) (model.Document, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetDocumentById model.Document `json:"getDocumentById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Document{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Document{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetDocumentById, nil
@@ -1969,7 +3981,7 @@ func GetAdminById(id string) (model.Admin, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1984,7 +3996,7 @@ func GetAdminById(id string) (model.Admin, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Admin{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Admin{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -1993,13 +4005,18 @@ func GetAdminById(id string) (model.Admin, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAdminById model.Admin `json:"getAdminById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Admin{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Admin{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetAdminById, nil
@@ -2024,7 +4041,7 @@ func GetPatientByEmail(email string) (model.Patient, error) {
 		"email": email,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2039,7 +4056,7 @@ func GetPatientByEmail(email string) (model.Patient, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Patient{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Patient{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2048,7 +4065,8 @@ func GetPatientByEmail(email string) (model.Patient, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetPatientByEmail model.Patient `json:"getPatientByEmail"`
 		} `json:"data"`
 	}
@@ -2057,7 +4075,139 @@ func GetPatientByEmail(email string) (model.Patient, error) {
 		return model.Patient{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Patient{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetPatientByEmail, nil
+}
+
+func GetChatById(id string) (model.Chat, error) {
+	query := `query GetChatById($id: String!){
+	    getChatById(id: $id){
+	        id
+	        participants{
+	            participant_id
+	            last_seen
+	        }
+	        messages{
+	            owner_id
+	            message
+	            sended_time
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Chat{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Chat{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetChatById model.Chat `json:"getChatById"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Chat{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Chat{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetChatById, nil
+}
+
+func GetDoctorByEmail(email string) (model.Doctor, error) {
+	query := `query GetDoctorByEmail($email: String!){
+	    getDoctorByEmail(email: $email){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        address{
+	            street
+	            zip_code
+	            country
+	            city
+	        }
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"email": email,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Doctor{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Doctor{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetDoctorByEmail model.Doctor `json:"getDoctorByEmail"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Doctor{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetDoctorByEmail, nil
 }
 
 func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
@@ -2078,7 +4228,7 @@ func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2093,7 +4243,7 @@ func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2102,7 +4252,8 @@ func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAnteDiseaseByID model.AnteDisease `json:"getAnteDiseaseByID"`
 		} `json:"data"`
 	}
@@ -2111,7 +4262,136 @@ func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
 		return model.AnteDisease{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetAnteDiseaseByID, nil
+}
+
+func GetNlpReports(option *model.Options) ([]model.NlpReport, error) {
+	query := `query GetNlpReports($option: Options){
+	    getNlpReports(option: $option){
+	        id
+	        version
+	        input_symptoms
+	        input_sentence
+	        output{
+	            symptom
+	            present
+	            days
+	        }
+	        computation_time
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetNlpReports []model.NlpReport `json:"getNlpReports"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetNlpReports, nil
+}
+
+func GetNlpReportsByVersion(version int, option *model.Options) ([]model.NlpReport, error) {
+	query := `query GetNlpReportsByVersion($version: Int!, $option: Options){
+	    getNlpReportsByVersion(version: $version, option: $option){
+	        id
+	        version
+	        input_symptoms
+	        input_sentence
+	        output{
+	            symptom
+	            present
+	            days
+	        }
+	        computation_time
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"version": version,
+		"option":  option,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetNlpReportsByVersion []model.NlpReport `json:"getNlpReportsByVersion"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetNlpReportsByVersion, nil
 }
 
 func GetAlertById(id string) (model.Alert, error) {
@@ -2132,7 +4412,7 @@ func GetAlertById(id string) (model.Alert, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2147,7 +4427,7 @@ func GetAlertById(id string) (model.Alert, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Alert{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Alert{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2156,7 +4436,8 @@ func GetAlertById(id string) (model.Alert, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAlertById model.Alert `json:"getAlertById"`
 		} `json:"data"`
 	}
@@ -2165,7 +4446,69 @@ func GetAlertById(id string) (model.Alert, error) {
 		return model.Alert{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Alert{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetAlertById, nil
+}
+
+func GetAnteChirByID(id string) (model.AnteChir, error) {
+	query := `query GetAnteChirByID($id: String!){
+	    getAnteChirByID(id: $id){
+	        id
+	        name
+	        induced_symptoms{
+	            symptom
+	            factor
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.AnteChir{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetAnteChirByID model.AnteChir `json:"getAnteChirByID"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.AnteChir{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AnteChir{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetAnteChirByID, nil
 }
 
 func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
@@ -2189,7 +4532,7 @@ func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2204,7 +4547,7 @@ func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2213,7 +4556,8 @@ func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetSymptoms []model.Symptom `json:"getSymptoms"`
 		} `json:"data"`
 	}
@@ -2222,7 +4566,87 @@ func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
 		return nil, err
 	}
 
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetSymptoms, nil
+}
+
+func GetSessionById(id string) (model.Session, error) {
+	query := `query GetSessionById($id: String!){
+	    getSessionById(id: $id){
+	        id
+	        diseases{
+	            name
+	            presence
+	        }
+	        symptoms{
+	            name
+	            presence
+	            duration
+	            treated
+	        }
+	        age
+	        height
+	        weight
+	        sex
+	        ante_chirs
+	        ante_diseases
+	        medicine
+	        last_question
+	        logs{
+	            question
+	            answer
+	        }
+	        alerts
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Session{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Session{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetSessionById model.Session `json:"getSessionById"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Session{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Session{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetSessionById, nil
 }
 
 func GetPatientsFromDoctorById(id string, option *model.Options) ([]model.Patient, error) {
@@ -2241,11 +4665,11 @@ func GetPatientsFromDoctorById(id string, option *model.Options) ([]model.Patien
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":     id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2260,7 +4684,7 @@ func GetPatientsFromDoctorById(id string, option *model.Options) ([]model.Patien
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2269,13 +4693,18 @@ func GetPatientsFromDoctorById(id string, option *model.Options) ([]model.Patien
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetPatientsFromDoctorById []model.Patient `json:"getPatientsFromDoctorById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetPatientsFromDoctorById, nil
@@ -2302,7 +4731,7 @@ func GetMedicalFolderById(id string) (model.MedicalInfo, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2317,7 +4746,7 @@ func GetMedicalFolderById(id string) (model.MedicalInfo, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.MedicalInfo{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.MedicalInfo{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2326,13 +4755,18 @@ func GetMedicalFolderById(id string) (model.MedicalInfo, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetMedicalFolderById model.MedicalInfo `json:"getMedicalFolderById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.MedicalInfo{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.MedicalInfo{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetMedicalFolderById, nil
@@ -2359,7 +4793,7 @@ func GetSymptomById(id string) (model.Symptom, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2374,7 +4808,7 @@ func GetSymptomById(id string) (model.Symptom, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Symptom{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Symptom{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2383,13 +4817,18 @@ func GetSymptomById(id string) (model.Symptom, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetSymptomById model.Symptom `json:"getSymptomById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Symptom{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Symptom{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetSymptomById, nil
@@ -2414,7 +4853,7 @@ func GetPatientById(id string) (model.Patient, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2429,7 +4868,7 @@ func GetPatientById(id string) (model.Patient, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Patient{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Patient{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2438,13 +4877,18 @@ func GetPatientById(id string) (model.Patient, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetPatientById model.Patient `json:"getPatientById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Patient{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Patient{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetPatientById, nil
@@ -2471,7 +4915,7 @@ func GetMedicalFolder(option *model.Options) ([]model.MedicalInfo, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2486,7 +4930,7 @@ func GetMedicalFolder(option *model.Options) ([]model.MedicalInfo, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2495,13 +4939,18 @@ func GetMedicalFolder(option *model.Options) ([]model.MedicalInfo, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetMedicalFolder []model.MedicalInfo `json:"getMedicalFolder"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetMedicalFolder, nil
@@ -2524,11 +4973,11 @@ func GetSlots(id string, option *model.Options) ([]model.Rdv, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":     id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2543,7 +4992,7 @@ func GetSlots(id string, option *model.Options) ([]model.Rdv, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2552,13 +5001,18 @@ func GetSlots(id string, option *model.Options) ([]model.Rdv, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetSlots []model.Rdv `json:"getSlots"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetSlots, nil
@@ -2582,10 +5036,10 @@ func GetPatientRdv(id_patient string, option *model.Options) ([]model.Rdv, error
 	}`
 	variables := map[string]interface{}{
 		"id_patient": id_patient,
-		"option": option,
+		"option":     option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2600,7 +5054,7 @@ func GetPatientRdv(id_patient string, option *model.Options) ([]model.Rdv, error
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2609,13 +5063,18 @@ func GetPatientRdv(id_patient string, option *model.Options) ([]model.Rdv, error
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetPatientRdv []model.Rdv `json:"getPatientRdv"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetPatientRdv, nil
@@ -2637,7 +5096,7 @@ func GetAdminByEmail(email string) (model.Admin, error) {
 		"email": email,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2652,7 +5111,7 @@ func GetAdminByEmail(email string) (model.Admin, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Admin{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Admin{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2661,13 +5120,18 @@ func GetAdminByEmail(email string) (model.Admin, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAdminByEmail model.Admin `json:"getAdminByEmail"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.Admin{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Admin{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetAdminByEmail, nil
@@ -2693,7 +5157,7 @@ func GetSlotById(id string) (model.Rdv, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2708,7 +5172,7 @@ func GetSlotById(id string) (model.Rdv, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Rdv{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.Rdv{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2717,7 +5181,8 @@ func GetSlotById(id string) (model.Rdv, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetSlotById model.Rdv `json:"getSlotById"`
 		} `json:"data"`
 	}
@@ -2726,7 +5191,77 @@ func GetSlotById(id string) (model.Rdv, error) {
 		return model.Rdv{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.Rdv{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetSlotById, nil
+}
+
+func GetDoctors(option *model.Options) ([]model.Doctor, error) {
+	query := `query GetDoctors($option: Options){
+	    getDoctors(option: $option){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        address{
+	            street
+	            zip_code
+	            country
+	            city
+	        }
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetDoctors []model.Doctor `json:"getDoctors"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetDoctors, nil
 }
 
 func GetAdmins(option *model.Options) ([]model.Admin, error) {
@@ -2745,7 +5280,7 @@ func GetAdmins(option *model.Options) ([]model.Admin, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2760,7 +5295,7 @@ func GetAdmins(option *model.Options) ([]model.Admin, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2769,13 +5304,18 @@ func GetAdmins(option *model.Options) ([]model.Admin, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAdmins []model.Admin `json:"getAdmins"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetAdmins, nil
@@ -2795,7 +5335,7 @@ func GetAnteFamilyByID(id string) (model.AnteFamily, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2810,7 +5350,7 @@ func GetAnteFamilyByID(id string) (model.AnteFamily, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.AnteFamily{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.AnteFamily{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2819,7 +5359,8 @@ func GetAnteFamilyByID(id string) (model.AnteFamily, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAnteFamilyByID model.AnteFamily `json:"getAnteFamilyByID"`
 		} `json:"data"`
 	}
@@ -2828,7 +5369,74 @@ func GetAnteFamilyByID(id string) (model.AnteFamily, error) {
 		return model.AnteFamily{}, err
 	}
 
+	if len(result.Errors) > 0 {
+		return model.AnteFamily{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetAnteFamilyByID, nil
+}
+
+func GetChats(id string, option *model.Options) ([]model.Chat, error) {
+	query := `query GetChats($id: String!, $option: Options){
+	    getChats(id: $id, option: $option){
+	        id
+	        participants{
+	            participant_id
+	            last_seen
+	        }
+	        messages{
+	            owner_id
+	            message
+	            sended_time
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id":     id,
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetChats []model.Chat `json:"getChats"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetChats, nil
 }
 
 func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
@@ -2849,7 +5457,7 @@ func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2864,7 +5472,7 @@ func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2873,7 +5481,8 @@ func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAnteDiseases []model.AnteDisease `json:"getAnteDiseases"`
 		} `json:"data"`
 	}
@@ -2882,7 +5491,87 @@ func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
 		return nil, err
 	}
 
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetAnteDiseases, nil
+}
+
+func GetSessions(option *model.Options) ([]model.Session, error) {
+	query := `query GetSessions($option: Options){
+	    getSessions(option: $option){
+	        id
+	        diseases{
+	            name
+	            presence
+	        }
+	        symptoms{
+	            name
+	            presence
+	            duration
+	            treated
+	        }
+	        age
+	        height
+	        weight
+	        sex
+	        ante_chirs
+	        ante_diseases
+	        medicine
+	        last_question
+	        logs{
+	            question
+	            answer
+	        }
+	        alerts
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetSessions []model.Session `json:"getSessions"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetSessions, nil
 }
 
 func GetMedicines(option *model.Options) ([]model.Medicine, error) {
@@ -2902,7 +5591,7 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2917,7 +5606,7 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2926,7 +5615,8 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetMedicines []model.Medicine `json:"getMedicines"`
 		} `json:"data"`
 	}
@@ -2935,7 +5625,77 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 		return nil, err
 	}
 
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetMedicines, nil
+}
+
+func GetDoctorById(id string) (model.Doctor, error) {
+	query := `query GetDoctorById($id: String!){
+	    getDoctorById(id: $id){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        address{
+	            street
+	            zip_code
+	            country
+	            city
+	        }
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Doctor{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Doctor{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
+			GetDoctorById model.Doctor `json:"getDoctorById"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Doctor{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetDoctorById, nil
 }
 
 func GetPatients(option *model.Options) ([]model.Patient, error) {
@@ -2957,7 +5717,7 @@ func GetPatients(option *model.Options) ([]model.Patient, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2972,7 +5732,7 @@ func GetPatients(option *model.Options) ([]model.Patient, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -2981,13 +5741,18 @@ func GetPatients(option *model.Options) ([]model.Patient, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetPatients []model.Patient `json:"getPatients"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetPatients, nil
@@ -3008,7 +5773,7 @@ func GetTreatmentsFollowUpById(id string) (model.TreatmentsFollowUp, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3023,7 +5788,7 @@ func GetTreatmentsFollowUpById(id string) (model.TreatmentsFollowUp, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.TreatmentsFollowUp{}, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return model.TreatmentsFollowUp{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -3032,13 +5797,18 @@ func GetTreatmentsFollowUpById(id string) (model.TreatmentsFollowUp, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetTreatmentsFollowUpById model.TreatmentsFollowUp `json:"getTreatmentsFollowUpById"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return model.TreatmentsFollowUp{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.TreatmentsFollowUp{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetTreatmentsFollowUpById, nil
@@ -3062,7 +5832,7 @@ func GetDocuments(option *model.Options) ([]model.Document, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3077,7 +5847,7 @@ func GetDocuments(option *model.Options) ([]model.Document, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -3086,13 +5856,18 @@ func GetDocuments(option *model.Options) ([]model.Document, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetDocuments []model.Document `json:"getDocuments"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetDocuments, nil
@@ -3110,11 +5885,11 @@ func GetTreatmentsFollowUps(id string, option *model.Options) ([]model.Treatment
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id": id,
+		"id":     id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3129,7 +5904,7 @@ func GetTreatmentsFollowUps(id string, option *model.Options) ([]model.Treatment
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -3138,13 +5913,18 @@ func GetTreatmentsFollowUps(id string, option *model.Options) ([]model.Treatment
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetTreatmentsFollowUps []model.TreatmentsFollowUp `json:"getTreatmentsFollowUps"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
 	return result.Data.GetTreatmentsFollowUps, nil
@@ -3164,7 +5944,7 @@ func GetAnteFamilies(option *model.Options) ([]model.AnteFamily, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query": query,
+		"query":     query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3179,7 +5959,7 @@ func GetAnteFamilies(option *model.Options) ([]model.AnteFamily, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %!v(MISSING)", resp.Status)
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
@@ -3188,7 +5968,8 @@ func GetAnteFamilies(option *model.Options) ([]model.AnteFamily, error) {
 	}
 
 	var result struct {
-		Data struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data   struct {
 			GetAnteFamilies []model.AnteFamily `json:"getAnteFamilies"`
 		} `json:"data"`
 	}
@@ -3197,6 +5978,9 @@ func GetAnteFamilies(option *model.Options) ([]model.AnteFamily, error) {
 		return nil, err
 	}
 
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
 	return result.Data.GetAnteFamilies, nil
 }
-

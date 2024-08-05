@@ -35,17 +35,30 @@ func parseGraphQLQueriesAndMutations(filename string) ([]GraphQLQueryInfo, error
 
 	content := string(data)
 
-	queryRegex := regexp.MustCompile(`(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*{[^}]*}\s*}`)
+	queryRegex := regexp.MustCompile(`(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*{(?:[^{}]}*|{(?:[^{}]*|{[^{}]*})*})*}|(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*}`)
 	matches := queryRegex.FindAllStringSubmatch(content, -1)
-
 	var graphqlInfos []GraphQLQueryInfo
 
 	for _, match := range matches {
-		graphqlType := match[1]
-		givenName := match[2]
-		fullQuery := match[0]
-		queryName := match[4]
-		inputsString := match[3]
+		var graphqlType string
+		var givenName string
+		var fullQuery string
+		var queryName string
+		var inputsString string
+
+		if match[1] != "" {
+			graphqlType = match[1]
+			givenName = match[2]
+			fullQuery = match[0]
+			queryName = match[4]
+			inputsString = match[3]
+		} else {
+			graphqlType = match[6]
+			givenName = match[7]
+			fullQuery = match[0]
+			queryName = match[9]
+			inputsString = match[8]
+		}
 
 		var inputs []string
 		if inputsString != "" {
