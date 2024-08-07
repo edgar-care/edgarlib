@@ -192,15 +192,18 @@ mutation CreateDoctor($input: CreateDoctorInput!){
         password
         name
         firstname
-        address{
+        address {
             street
             zip_code
             country
-            city
         }
         rendez_vous_ids
         patient_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -314,6 +317,10 @@ mutation CreatePatient($input: CreatePatientInput!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -333,6 +340,10 @@ mutation UpdatePatient($id: String!, $input: UpdatePatientInput!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -363,6 +374,7 @@ mutation CreateSession($input: CreateSessionInput!){
             question
             answer
         }
+        hereditary_disease
         alerts
         createdAt
         updatedAt
@@ -380,15 +392,18 @@ mutation UpdateDoctor($id: String!, $input: UpdateDoctorInput!){
         password
         name
         firstname
-        address{
-            street
-            zip_code
-            country
-            city
-        }
         rendez_vous_ids
         patient_ids
         chat_ids
+        address {
+            street
+            zip_code
+            country
+        }
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -461,6 +476,7 @@ mutation UpdateDisease($id: String!, $input: UpdateDiseaseInput!){
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
         createdAt
         updatedAt
@@ -527,6 +543,7 @@ mutation CreateDisease($input: CreateDiseaseInput!){
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
         createdAt
         updatedAt
@@ -624,6 +641,7 @@ mutation UpdateSession($id: String!, $input: UpdateSessionInput!){
             question
             answer
         }
+        hereditary_disease
         alerts
         createdAt
         updatedAt
@@ -670,6 +688,7 @@ query GetDiseases($option: Options){
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
         createdAt
         updatedAt
@@ -808,9 +827,16 @@ query GetDiseaseById($id: String!){
             chronic
         }
         overweight_factor
+        heredity_factor
         advice
         createdAt
         updatedAt
+    }
+}
+
+query GetSymptomsByDiseaseName($name: String!){
+    getSymptomsByDiseaseName(name: $name) {
+        symptoms
     }
 }
 
@@ -850,6 +876,10 @@ query GetPatientByEmail($email: String!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -888,6 +918,10 @@ query GetDoctorByEmail($email: String!){
         rendez_vous_ids
         patient_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -1010,6 +1044,7 @@ query GetSessionById($id: String!){
             question
             answer
         }
+        hereditary_disease
         alerts
         createdAt
         updatedAt
@@ -1026,12 +1061,16 @@ query GetPatientsFromDoctorById($id: String!, $option: Options){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
 }
 
-query GetMedicalFolderById($id: String!){
+query GetMedicalFolderByID($id: String!){
     getMedicalFolderById(id: $id){
         id
         name
@@ -1041,8 +1080,9 @@ query GetMedicalFolderById($id: String!){
         height
         weight
         primary_doctor_id
-        onboarding_status
         antecedent_disease_ids
+        onboarding_status
+        family_members_med_info_id
         createdAt
         updatedAt
     }
@@ -1075,6 +1115,10 @@ query GetPatientById($id: String!){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -1092,6 +1136,7 @@ query GetMedicalFolder($option: Options){
         primary_doctor_id
         onboarding_status
         antecedent_disease_ids
+        family_members_med_info_id
         createdAt
         updatedAt
     }
@@ -1107,7 +1152,6 @@ query GetSlots($id: String!, $option: Options){
         cancelation_reason
         appointment_status
         session_id
-        health_method
         createdAt
         updatedAt
     }
@@ -1173,6 +1217,9 @@ query GetDoctors($option: Options){
         rendez_vous_ids
         patient_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
         createdAt
         updatedAt
     }
@@ -1256,6 +1303,7 @@ query GetSessions($option: Options){
             question
             answer
         }
+        hereditary_disease
         alerts
         createdAt
         updatedAt
@@ -1291,6 +1339,10 @@ query GetDoctorById($id: String!){
         rendez_vous_ids
         patient_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -1306,6 +1358,10 @@ query GetPatients($option: Options){
         document_ids
         treatment_follow_up_ids
         chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
         createdAt
         updatedAt
     }
@@ -1354,5 +1410,167 @@ query GetAnteFamilies($option: Options){
         disease
         createdAt
         updatedAt
+    }
+}
+
+mutation CreateDeviceConnect($input: CreateDeviceConnectInput!) {
+    createDeviceConnect(input: $input) {
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation UpdateDeviceConnect($id: String!, $input: UpdateDeviceConnectInput!) {
+    updateDeviceConnect(id: $id, input: $input) {
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation DeleteDeviceConnect($id: String!){
+    deleteDeviceConnect(id: $id)
+}
+
+
+query GetDevicesConnect($option: Options){
+    getDevicesConnect(option: $option){
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+query GetDeviceConnectById($id: String!){
+    getDeviceConnectById(id:$id){
+        id
+        device_name
+        ip_address
+        latitude
+        longitude
+        date
+        trust_device
+    }
+}
+
+mutation CreateDoubleAuth($input: CreateDoubleAuthInput!) {
+    createDoubleAuth(input: $input) {
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+mutation UpdateDoubleAuth($id: String!, $input: UpdateDoubleAuthInput!) {
+    updateDoubleAuth(id: $id, input: $input) {
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+mutation DeleteDoubleAuth($id: String!){
+    deleteDoubleAuth(id: $id)
+}
+
+
+query GetDoubleAuths($option: Options){
+    getDoubleAuths(option: $option){
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+query GetDoubleAuthById($id: String!){
+    getDoubleAuthById(id: $id){
+        id
+        methods
+        secret
+        url
+        trust_device_id
+    }
+}
+
+mutation CreateBlackList($input: CreateBlackListInput!) {
+    createBlackList(input: $input){
+        id
+        token
+    }
+}
+
+mutation UpdateBlackList($id: String!, $input: UpdateBlackListInput!) {
+    updateBlackList(id: $id, input: $input){
+        id
+        token
+    }
+}
+
+mutation DeleteBlackList($id: String!){
+    deleteDoubleAuth(id: $id)
+}
+
+query GetBlackListById($id: String!){
+    getBlackListById(id: $id){
+        id
+        token
+    }
+}
+
+query GetBlackList($option: Options){
+    getBlackList(option: $option){
+        id
+        token
+    }
+}
+
+mutation CreateSaveCode($input: CreateSaveCodeInput!){
+    createSaveCode(input: $input){
+        id
+        code
+    }
+}
+
+mutation UpdateSaveCode($id: String!, $input: UpdateSaveCodeInput!){
+    updateSaveCode(id: $id, input: $input){
+        id
+        code
+    }
+}
+
+mutation DeleteSaveCode($id: String!){
+    deleteSaveCode(id: $id)
+}
+
+query GetSaveCodeById($id: String!){
+    getSaveCodeById(id: $id){
+        id
+        code
+    }
+}
+
+query GetSaveCode($option: Options){
+    getSaveCode(option: $option){
+        id
+        code
     }
 }

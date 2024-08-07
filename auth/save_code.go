@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/server/model"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"math/big"
 	"net/http"
 )
