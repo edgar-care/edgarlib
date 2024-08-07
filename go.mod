@@ -3,8 +3,8 @@ module github.com/edgar-care/edgarlib
 go 1.19
 
 require (
-	github.com/99designs/gqlgen v0.17.44
-	github.com/Khan/genqlient v0.7.0
+	github.com/99designs/gqlgen v0.17.43
+	github.com/Khan/genqlient v0.6.0
 	github.com/aws/aws-sdk-go v1.50.11
 	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/jwtauth/v5 v5.1.1
