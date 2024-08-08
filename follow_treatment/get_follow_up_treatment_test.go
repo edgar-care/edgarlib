@@ -1,7 +1,7 @@
 package follow_treatment
 
 import (
-	"context"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"log"
 	"testing"
 
@@ -14,9 +14,8 @@ func TestGetTreatmentFollowUp(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_patient_get_treatment_follow_up@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{Email: "test_patient_get_treatment_follow_up@edgar-sante.fr", Password: "password"})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
@@ -25,17 +24,21 @@ func TestGetTreatmentFollowUp(t *testing.T) {
 		Period: []string{"MORNING"},
 	}
 
-	periods := make([]graphql.Period, len(input.Period))
+	periods := make([]model.Period, len(input.Period))
 	for i, p := range input.Period {
-		periods[i] = graphql.Period(p)
+		periods[i] = model.Period(p)
 	}
 
-	_, err = graphql.CreateTreatmentsFollowUp(context.Background(), gqlClient, "treament_id", 123456, periods)
+	_, err = graphql.CreateTreatmentsFollowUp(model.CreateTreatmentsFollowUpInput{
+		TreatmentID: "treament_id",
+		Date:        123456,
+		Period:      periods,
+	})
 	if err != nil {
 		t.Errorf("Error while creating follow up treatment: %v", err)
 	}
 
-	response := GetTreatmentFollowUp(patient.CreatePatient.Id)
+	response := GetTreatmentFollowUp(patient.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
@@ -73,9 +76,15 @@ func TestGetTreatmentFollowUpById(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	_, err := graphql.CreatePatient(context.Background(), gqlClient, "test_patient_appointment2@edgar-sante.fr", "password")
+	_, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:               "test_patient_appointment2@edgar-sante.fr",
+		Password:            "password",
+		Status:              false,
+		DeviceConnect:       nil,
+		DoubleAuthMethodsID: nil,
+		TrustDevices:        nil,
+	})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
@@ -84,17 +93,21 @@ func TestGetTreatmentFollowUpById(t *testing.T) {
 		Period: []string{"MORNING"},
 	}
 
-	periods := make([]graphql.Period, len(input.Period))
+	periods := make([]model.Period, len(input.Period))
 	for i, p := range input.Period {
-		periods[i] = graphql.Period(p)
+		periods[i] = model.Period(p)
 	}
 
-	follow, err := graphql.CreateTreatmentsFollowUp(context.Background(), gqlClient, "treament_id", 123456, periods)
+	follow, err := graphql.CreateTreatmentsFollowUp(model.CreateTreatmentsFollowUpInput{
+		TreatmentID: "treament_id",
+		Date:        123456,
+		Period:      periods,
+	})
 	if err != nil {
 		t.Errorf("Error while creating follow up treatment: %v", err)
 	}
 
-	response := GetTreatmentFollowUpById(follow.CreateTreatmentsFollowUp.Id)
+	response := GetTreatmentFollowUpById(follow.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)

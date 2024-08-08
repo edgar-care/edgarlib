@@ -1,8 +1,8 @@
 package dashboard
 
 import (
-	"context"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/edgar-care/edgarlib/medical_folder"
 	"github.com/joho/godotenv"
 	"log"
@@ -13,19 +13,31 @@ func TestGetPatientById(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_get_patient_by_id@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_get_patient_by_id@edgar-sante.fr",
+		Password: "password",
+	})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
 
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, "test_get_patient_by_id@edgar-sante.fr", "password", "name", "first", graphql.AddressInput{"", "", "", ""})
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_get_patient_by_id@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address:   &model.AddressInput{"", "", "", ""},
+		Status:    false,
+	})
 	if err != nil {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
 
-	_, err = graphql.UpdateDoctor(context.Background(), gqlClient, doctor.CreateDoctor.Id, doctor.CreateDoctor.Email, doctor.CreateDoctor.Password, doctor.CreateDoctor.Name, doctor.CreateDoctor.Firstname, []string{}, []string{patient.CreatePatient.Id}, graphql.AddressInput{"", "", "", ""})
+	_, err = graphql.UpdateDoctor(doctor.ID, model.UpdateDoctorInput{
+		RendezVousIds: []*string{},
+		PatientIds:    []*string{&patient.ID},
+	})
 	if err != nil {
 		t.Errorf("Error while updating doctor: %v", err)
 	}
@@ -43,13 +55,13 @@ func TestGetPatientById(t *testing.T) {
 			Medicines:     nil,
 			StillRelevant: false,
 		}},
-	}, patient.CreatePatient.Id)
+	}, patient.ID)
 
 	if medical_folder_resp.Err != nil {
 		t.Errorf("Unexpected error while creating medical info: %v", medical_folder_resp.Err)
 	}
 
-	response := GetPatientById(patient.GetCreatePatient().Id, doctor.CreateDoctor.Id)
+	response := GetPatientById(patient.ID, doctor.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)

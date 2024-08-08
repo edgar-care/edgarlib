@@ -45,9 +45,6 @@ type RegisterAndLoginResponse struct {
 
 func RegisterDoctor(email string, password string, name string, firstname string, address AddressInput) (model.Doctor, error) {
 	password = utils.HashPassword(password)
-<<<<<<< HEAD
-	doctor, err := graphql.CreateDoctor(context.Background(), gqlClient, email, password, firstname, name, graphql.AddressInput{Street: address.Street, Zip_code: address.ZipCode, Country: address.Country, City: address.City}, true)
-=======
 	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
 		Email:     email,
 		Password:  password,
@@ -59,8 +56,8 @@ func RegisterDoctor(email string, password string, name string, firstname string
 			Country: address.Country,
 			City:    address.City,
 		},
+		Status: true,
 	})
->>>>>>> d5ec330 (wip aled)
 	if err != nil {
 		return model.Doctor{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
@@ -68,35 +65,37 @@ func RegisterDoctor(email string, password string, name string, firstname string
 	return doctor, nil
 }
 
-func RegisterAndLoginDoctor(email string, password string, name string, firstname string, address AddressInput) RegisterAndLoginResponse {
+func RegisterAndLoginDoctor(email string, password string, name string, firstname string, address AddressInput, nameDevice string) RegisterAndLoginResponse {
 	doctor, err := RegisterDoctor(email, password, name, firstname, address)
 	if err != nil {
 		return RegisterAndLoginResponse{"", http.StatusBadRequest, err}
 	}
 	token, err := utils.CreateToken(map[string]interface{}{
-		"doctor": doctor,
+		"doctor":      doctor.Email,
+		"id":          doctor.ID,
+		"name_device": nameDevice,
 	})
 	return RegisterAndLoginResponse{token, 200, err}
 }
 
 func RegisterPatient(email string, password string) (model.Patient, error) {
 	password = utils.HashPassword(password)
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, email, password, true)
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{Email: email, Password: password, Status: true})
 	if err != nil {
 		return model.Patient{}, fmt.Errorf("Unable to create account: %s", err.Error())
 	}
 	return patient, nil
 }
 
-func RegisterAndLoginPatient(email string, password string, ip string) RegisterAndLoginResponse {
+func RegisterAndLoginPatient(email string, password string, nameDevice string) RegisterAndLoginResponse {
 	patient, err := RegisterPatient(email, password)
 	if err != nil {
 		return RegisterAndLoginResponse{"", http.StatusBadRequest, err}
 	}
 	token, err := utils.CreateToken(map[string]interface{}{
-		"patient":   patient.Email,
-		"id":        patient.ID,
-		"ip_device": ip,
+		"patient":     patient.Email,
+		"id":          patient.ID,
+		"name_device": nameDevice,
 	})
 	return RegisterAndLoginResponse{token, 200, err}
 }

@@ -17,7 +17,6 @@ type MissingPasswordResponse struct {
 }
 
 func MissingPassword(email string) MissingPasswordResponse {
-
 	_, err := graphql.GetPatientByEmail(email)
 	if err != nil {
 		return MissingPasswordResponse{400, errors.New("no patient corresponds to this email")}

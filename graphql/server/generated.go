@@ -4271,6 +4271,10 @@ input UpdatePatientInput {
     document_ids: [String]
     treatment_follow_up_ids: [String]
     chat_ids: [String]
+    status: Boolean
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
 }
 
 input CreateDoctorInput {
@@ -30327,7 +30331,7 @@ func (ec *executionContext) unmarshalInputUpdatePatientInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"email", "password", "medical_info_id", "rendez_vous_ids", "document_ids", "treatment_follow_up_ids", "chat_ids"}
+	fieldsInOrder := [...]string{"email", "password", "medical_info_id", "rendez_vous_ids", "document_ids", "treatment_follow_up_ids", "chat_ids", "status", "device_connect", "double_auth_methods_id", "trust_devices"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -30383,6 +30387,34 @@ func (ec *executionContext) unmarshalInputUpdatePatientInput(ctx context.Context
 				return it, err
 			}
 			it.ChatIds = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
+		case "device_connect":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceConnect = data
+		case "double_auth_methods_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DoubleAuthMethodsID = data
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
 		}
 	}
 

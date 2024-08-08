@@ -30,6 +30,9 @@ test-server:
 	@DATABASE_URL="mongodb://localhost:27017" go run graphql/test/test_server.go
 	@docker stop my-mongodb-test
 
+clean-test-server:
+	@mongosh mongodb://localhost:27017 --eval "db.getSiblingDB('web').dropDatabase();"
+
 .PHONY: all \
 		publish \
 		install	\

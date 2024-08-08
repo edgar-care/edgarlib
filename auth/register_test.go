@@ -19,8 +19,9 @@ func TestRegisterAndLoginDoctor_Success(t *testing.T) {
 	name := "last"
 	firstname := "first"
 	address := AddressInput{"123 Street", "City", "Country", "City"}
+	nameDevice := "testDevice"
 
-	response := RegisterAndLoginDoctor(email, password, name, firstname, address)
+	response := RegisterAndLoginDoctor(email, password, name, firstname, address, nameDevice)
 
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
@@ -45,8 +46,9 @@ func TestRegisterAndLoginDoctor_Error(t *testing.T) {
 	name := "last"
 	firstname := "first"
 	address := AddressInput{"123 Street", "City", "Country", "City"}
+	nameDevice := "testDevice"
 
-	response := RegisterAndLoginDoctor(email, password, name, firstname, address)
+	response := RegisterAndLoginDoctor(email, password, name, firstname, address, nameDevice)
 
 	if response.Token != "" {
 		t.Error("Expected token to be empty, but got an non-empty token")

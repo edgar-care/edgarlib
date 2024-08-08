@@ -368,6 +368,10 @@ input UpdatePatientInput {
     document_ids: [String]
     treatment_follow_up_ids: [String]
     chat_ids: [String]
+    status: Boolean
+    device_connect: [String]
+    double_auth_methods_id: String
+    trust_devices: [String]
 }
 
 input CreateDoctorInput {

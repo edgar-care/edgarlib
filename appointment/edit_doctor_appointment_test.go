@@ -1,7 +1,7 @@
 package appointment
 
 import (
-	"context"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/joho/godotenv"
 	"log"
 	"testing"
@@ -13,22 +13,38 @@ func TestUpdateDoctorAppointment(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "update_doctor_appointment@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "update_doctor_appointment@edgar-sante.fr",
+		Password: "password",
+	})
 	if err != nil {
 		t.Errorf("Error while creating patient: %v", err)
 	}
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, patient.CreatePatient.Id, "doctorId", 0, 100, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         patient.ID,
+		DoctorID:          "doctorId",
+		StartDate:         0,
+		EndDate:           100,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error while creating appointment: %v", err)
 	}
-	newAppointment, err := graphql.CreateRdv(context.Background(), gqlClient, "", "newDoctor", 0, 10, "WAITING_FOR_REVIEW", "")
+	newAppointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "",
+		DoctorID:          "newDoctor",
+		StartDate:         0,
+		EndDate:           10,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error while creating appointment: %v", err)
 	}
 
-	response := UpdateDoctorAppointment(newAppointment.CreateRdv.Id, appointment.CreateRdv.Id)
+	response := UpdateDoctorAppointment(newAppointment.ID, appointment.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
@@ -54,40 +70,58 @@ func TestUpdateDoctorAppointmentInvalidId(t *testing.T) {
 }
 
 func TestUpdateDoctorAppointmentAlreadyBooked(t *testing.T) {
-	gqlClient := graphql.CreateClient()
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "booked", "doctorId", 0, 100, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{"booked", "doctorId", 0, 100, "WAITING_FOR_REVIEW", ""})
 	if err != nil {
 		t.Errorf("Error while creating appointment: %v", err)
 	}
-	response := UpdateDoctorAppointment(appointment.CreateRdv.Id, "test")
+	response := UpdateDoctorAppointment(appointment.ID, "test")
 	if response.Code != 400 || response.Err == nil {
 		t.Errorf("Expected error and code 400 but got code %d and err: %s", response.Code, response.Err.Error())
 	}
 }
 
 func TestUpdateDoctorAppointmentInvalidSecondId(t *testing.T) {
-	gqlClient := graphql.CreateClient()
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "", "doctorId", 0, 100, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "",
+		DoctorID:          "doctorId",
+		StartDate:         0,
+		EndDate:           100,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error while creating appointment: %v", err)
 	}
-	response := UpdateDoctorAppointment(appointment.CreateRdv.Id, "invalidId")
+	response := UpdateDoctorAppointment(appointment.ID, "invalidId")
 	if response.Code != 400 || response.Err == nil {
 		t.Errorf("Expected error and code 400 but got code %d and err: %s", response.Code, response.Err.Error())
 	}
 }
 
 func TestUpdateDoctorAppointmentInvalidPatientId(t *testing.T) {
-	gqlClient := graphql.CreateClient()
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, "invalidPatientId", "doctorId", 0, 100, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "invalidPatientId",
+		DoctorID:          "doctorId",
+		StartDate:         0,
+		EndDate:           100,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error while creating appointment: %v", err)
 	}
-	newAppointment, err := graphql.CreateRdv(context.Background(), gqlClient, "", "newDoctor", 0, 10, "WAITING_FOR_REVIEW", "")
+	newAppointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         "",
+		DoctorID:          "newDoctor",
+		StartDate:         0,
+		EndDate:           10,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error while creating appointment: %v", err)
 	}
-	response := UpdateDoctorAppointment(newAppointment.CreateRdv.Id, appointment.CreateRdv.Id)
+	response := UpdateDoctorAppointment(newAppointment.ID, appointment.ID)
 	if response.Code != 400 || response.Err == nil {
 		t.Errorf("Expected error and code 400 but got code %d and err: %s", response.Code, response.Err.Error())
 	}

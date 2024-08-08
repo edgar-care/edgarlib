@@ -18,7 +18,7 @@ type LoginResponse struct {
 	Err   error
 }
 
-func Login(input LoginInput, t string, ip string) LoginResponse {
+func Login(input LoginInput, t string, nameDevice string) LoginResponse {
 	var resp LoginResponse
 	var doctor model.Doctor
 	var admin model.Admin
@@ -49,7 +49,9 @@ func Login(input LoginInput, t string, ip string) LoginResponse {
 
 	if t == "d" {
 		token, err = CreateToken(map[string]interface{}{
-			"doctor": doctor,
+			"doctor":      doctor.Email,
+			"id":          doctor.ID,
+			"name_device": nameDevice,
 		})
 	} else if t == "a" {
 		token, err = CreateToken(map[string]interface{}{
@@ -57,9 +59,9 @@ func Login(input LoginInput, t string, ip string) LoginResponse {
 		})
 	} else {
 		token, err = CreateToken(map[string]interface{}{
-			"patient":   patient.GetPatientByEmail.Email,
-			"id":        patient.GetPatientByEmail.Id,
-			"ip_device": ip,
+			"patient":     patient.Email,
+			"id":          patient.ID,
+			"name_device": nameDevice,
 		})
 	}
 	resp.Token = token

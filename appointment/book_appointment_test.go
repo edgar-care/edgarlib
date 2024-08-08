@@ -14,11 +14,11 @@ func TestBookAppointment(t *testing.T) {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
 
-	patient, err := graphql.CreatePatient(model.CreatePatientInput{"test_appointment@edgar-sante.fr", "password"})
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{Email: "test_appointment@edgar-sante.fr", Password: "password"})
 	if err != nil {
 		t.Errorf("Error creating patient: %v", err)
 	}
-	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{"test_doctor_appointment@edgar-sante.fr", "password", "name", "first", &model.AddressInput{"", "", "", ""}})
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{Email: "test_doctor_appointment@edgar-sante.fr", Password: "password", Name: "name", Firstname: "first", Address: &model.AddressInput{"", "", "", ""}})
 	if err != nil {
 		t.Errorf("Error while creating doctor: %v", err)
 	}
@@ -58,7 +58,7 @@ func TestBookAppointment(t *testing.T) {
 
 	found := false
 	for _, id := range patientResult.RendezVousIds {
-		if id == &appointmentID {
+		if *id == appointmentID {
 			found = true
 			break
 		}
@@ -141,7 +141,7 @@ func TestBookAppointmentInvalidDoctorId(t *testing.T) {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
 
-	patient, err := graphql.CreatePatient(model.CreatePatientInput{"test_invalid_doctor_appointment@edgar-sante.fr", "password"})
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{Email: "test_invalid_doctor_appointment@edgar-sante.fr", Password: "password"})
 	if err != nil {
 		t.Errorf("Error creating patient: %v", err)
 	}

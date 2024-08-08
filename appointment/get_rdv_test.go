@@ -1,7 +1,7 @@
 package appointment
 
 import (
-	"context"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/joho/godotenv"
 	"log"
 	"testing"
@@ -13,19 +13,28 @@ func TestGetRdv(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	gqlClient := graphql.CreateClient()
 
-	patient, err := graphql.CreatePatient(context.Background(), gqlClient, "test_get_rdv@edgar-sante.fr", "password")
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_get_rdv@edgar-sante.fr",
+		Password: "password",
+	})
 	if err != nil {
 		t.Errorf("Error creating patient: %v", err)
 	}
 
-	appointment, err := graphql.CreateRdv(context.Background(), gqlClient, patient.CreatePatient.Id, "doctorID", 0, 10, "WAITING_FOR_REVIEW", "")
+	appointment, err := graphql.CreateRdv(model.CreateRdvInput{
+		IDPatient:         patient.ID,
+		DoctorID:          "doctorID",
+		StartDate:         0,
+		EndDate:           10,
+		AppointmentStatus: "WAITING_FOR_REVIEW",
+		SessionID:         "",
+	})
 	if err != nil {
 		t.Errorf("Error creating appointment: %v", err)
 	}
 
-	response := GetRdv(patient.CreatePatient.Id)
+	response := GetRdv(patient.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
@@ -38,8 +47,8 @@ func TestGetRdv(t *testing.T) {
 	if len(response.Rdv) == 0 {
 		t.Errorf("Expected non-empty Rdv slice, got empty slice")
 	}
-	if response.Rdv[0].ID != appointment.CreateRdv.Id {
-		t.Errorf("Expected first Rdv slice to have it's ID=%s but go ID=%s", response.Rdv[0].ID, appointment.CreateRdv.Id)
+	if response.Rdv[0].ID != appointment.ID {
+		t.Errorf("Expected first Rdv slice to have it's ID=%s but go ID=%s", response.Rdv[0].ID, appointment.ID)
 	}
 }
 

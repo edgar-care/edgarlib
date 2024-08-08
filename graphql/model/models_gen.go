@@ -731,6 +731,10 @@ type UpdatePatientInput struct {
 	DocumentIds          []*string `json:"document_ids,omitempty" bson:"document_ids"`
 	TreatmentFollowUpIds []*string `json:"treatment_follow_up_ids,omitempty" bson:"treatment_follow_up_ids"`
 	ChatIds              []*string `json:"chat_ids,omitempty" bson:"chat_ids"`
+	Status               *bool     `json:"status,omitempty" bson:"status"`
+	DeviceConnect        []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	DoubleAuthMethodsID  *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
+	TrustDevices         []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
 }
 
 type UpdateRdvInput struct {
