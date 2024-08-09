@@ -1,0 +1,17 @@
+# Use an official Redis image as a base
+FROM redis:latest
+
+# Install SSH server
+RUN apt-get update && apt-get install -y openssh-server
+
+# Create a directory for the SSH daemon and set up a password for the root user
+RUN mkdir /var/run/sshd && echo 'root:password' | chpasswd
+
+# Allow root login via SSH
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Expose the SSH port and the Redis port
+EXPOSE 22 6379
+
+# Start both Redis and SSH server
+CMD service ssh start && redis-server

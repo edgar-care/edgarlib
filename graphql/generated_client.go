@@ -2005,6 +2005,76 @@ func UpdateDoctor(id string, input model.UpdateDoctorInput) (model.Doctor, error
 	return result.Data.UpdateDoctor, nil
 }
 
+func UpdateDoctorsPatientIDs(id string, input model.UpdateDoctorsPatientIDsInput) (model.Doctor, error) {
+	query := `mutation UpdateDoctorsPatientIDs($id: String!, $input: UpdateDoctorsPatientIDsInput!){
+	    updateDoctorsPatientIDs(id: $id, input: $input){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        address {
+	            street
+	            zip_code
+	            country
+	        }
+	        device_connect
+	        double_auth_methods_id
+	        trust_devices
+	        status
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Doctor{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Doctor{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdateDoctorsPatientIDs model.Doctor `json:"updateDoctorsPatientIDs"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Doctor{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateDoctorsPatientIDs, nil
+}
+
 func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInfo, error) {
 	query := `mutation CreateMedicalFolder($input: CreateMedicalFolderInput!){
 	    createMedicalFolder(input: $input){

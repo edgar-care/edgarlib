@@ -409,6 +409,30 @@ mutation UpdateDoctor($id: String!, $input: UpdateDoctorInput!){
     }
 }
 
+mutation UpdateDoctorsPatientIDs($id: String!, $input: UpdateDoctorsPatientIDsInput!){
+    updateDoctorsPatientIDs(id: $id, input: $input){
+        id
+        email
+        password
+        name
+        firstname
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        address {
+            street
+            zip_code
+            country
+        }
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
 mutation CreateMedicalFolder($input: CreateMedicalFolderInput!){
     createMedicalFolder(input: $input){
         id

@@ -96,12 +96,11 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 	}
 
 	for _, antecedent := range input.MedicalAntecedents {
-		var treatmentIDsPerAnte []string
+		var treatmentIDsPerAnte = []string{}
 		var antediseaseTreatments []model.Treatment
 
 		for _, medicine := range antecedent.Medicines {
 			periods, days := ConvertPeriodsAndDays(medicine.Period, medicine.Day)
-
 			treatmentRes, err := graphql.CreateTreatment(model.CreateTreatmentInput{Period: periods, Day: days, Quantity: medicine.Quantity, MedicineID: medicine.MedicineID})
 			if err != nil {
 				return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create treatment: " + err.Error())}
@@ -111,9 +110,13 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 			antediseaseTreatments = append(antediseaseTreatments, treatmentRes)
 		}
 
+		chronicity := 0.0
 		antedisease, err := graphql.CreateAnteDisease(model.CreateAnteDiseaseInput{
 			Name:          antecedent.Name,
+			Chronicity:    &chronicity,
 			TreatmentIds:  treatmentIDsPerAnte,
+			SurgeryIds:    []string{},
+			Symptoms:      []string{},
 			StillRelevant: antecedent.StillRelevant,
 		})
 		if err != nil {

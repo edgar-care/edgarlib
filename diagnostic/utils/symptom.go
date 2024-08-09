@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"context"
 	"fmt"
 	"github.com/edgar-care/edgarlib/exam"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 	"strings"
 )
 
@@ -46,9 +46,8 @@ func StringToSymptoms(strings []string) []Symptom {
 	return newSymptoms
 }
 
-func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion string) ([]graphql.SessionSymptomInput, string, string) {
-	gqlClient := graphql.CreateClient()
-	allSymptoms, _ := graphql.GetSymptoms(context.Background(), gqlClient)
+func CheckSymptomDuration(symptoms []*model.SessionSymptomInput, lastQuestion string) ([]*model.SessionSymptomInput, string, string) {
+	allSymptoms, _ := graphql.GetSymptoms(nil)
 	list := strings.Split(lastQuestion, " ")
 	question := ""
 	nextLastQuestion := ""
@@ -58,11 +57,11 @@ func CheckSymptomDuration(symptoms []graphql.SessionSymptomInput, lastQuestion s
 		symptomName = list[1]
 	}
 	for _, symptom := range symptoms {
-		if symptom.Duration == 0 && symptom.Presence == 1 && symptomName != symptom.Name {
-			if len(allSymptoms.GetSymptoms) > 0 {
-				for _, s := range allSymptoms.GetSymptoms {
-					if s.Code == symptom.Name && s.Question_duration != "" {
-						question = exam.AddDiscursiveConnector(s.Question_duration)
+		if symptom.Duration != nil && *symptom.Duration == 0 && symptom.Presence == 1 && symptomName != symptom.Name {
+			if len(allSymptoms) > 0 {
+				for _, s := range allSymptoms {
+					if s.Code == symptom.Name && s.QuestionAnte != "" {
+						question = exam.AddDiscursiveConnector(s.QuestionAnte)
 						break
 					} else {
 						question = exam.AddDiscursiveConnector("{{connecteur}}. Depuis combien de jours souffrez-vous de " + symptom.Name)

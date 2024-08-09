@@ -37,7 +37,7 @@ func DeletePatient(PatientId string, doctorId string) DeletePatientResponse {
 		return DeletePatientResponse{UpdatedDoctor: model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	updatedDoctor, err := graphql.UpdateDoctor(doctorId, model.UpdateDoctorInput{
+	updatedDoctor, err := graphql.UpdateDoctorsPatientIDs(doctorId, model.UpdateDoctorsPatientIDsInput{
 		PatientIds: remElement(doctor.PatientIds, PatientId),
 	})
 

@@ -55,6 +55,7 @@ func TestGetPatientById(t *testing.T) {
 			Medicines:     nil,
 			StillRelevant: false,
 		}},
+		FamilyMembersMedInfoId: []string{},
 	}, patient.ID)
 
 	if medical_folder_resp.Err != nil {

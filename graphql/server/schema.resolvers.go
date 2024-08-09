@@ -199,6 +199,26 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, input mo
 	return &updatedDoctor, nil
 }
 
+// UpdateDoctorsPatientIDs is the resolver for the updateDoctorsPatientIDs field.
+func (r *mutationResolver) UpdateDoctorsPatientIDs(ctx context.Context, id string, input model.UpdateDoctorsPatientIDsInput) (*model.Doctor, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+	update["patient_ids"] = input.PatientIds
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDoctor model.Doctor
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDoctor)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedDoctor, nil
+}
+
 // DeleteDoctor is the resolver for the deleteDoctor field.
 func (r *mutationResolver) DeleteDoctor(ctx context.Context, id string) (*bool, error) {
 	resp := false
@@ -873,10 +893,14 @@ func (r *mutationResolver) DeleteAnteChir(ctx context.Context, id string) (*bool
 // CreateAnteDisease is the resolver for the createAnteDisease field.
 func (r *mutationResolver) CreateAnteDisease(ctx context.Context, input model.CreateAnteDiseaseInput) (*model.AnteDisease, error) {
 	now := int(time.Now().Unix())
+	chronicity := 0.0
+	if input.Chronicity != nil {
+		chronicity = *input.Chronicity
+	}
 	anteDisease := &model.AnteDisease{
 		ID:            primitive.NewObjectID().Hex(),
 		Name:          input.Name,
-		Chronicity:    *input.Chronicity,
+		Chronicity:    chronicity,
 		SurgeryIds:    input.SurgeryIds,
 		Symptoms:      input.Symptoms,
 		TreatmentIds:  input.TreatmentIds,
@@ -1212,7 +1236,7 @@ func (r *mutationResolver) CreateMedicalFolder(ctx context.Context, input model.
 
 // UpdateMedicalFolder is the resolver for the updateMedicalFolder field.
 func (r *mutationResolver) UpdateMedicalFolder(ctx context.Context, id string, input model.UpdateMedicalFolderInput) (*model.MedicalInfo, error) {
-	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalFolder")
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo")
 	filter := bson.M{"_id": id}
 
 	update := bson.M{}

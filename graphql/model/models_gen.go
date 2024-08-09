@@ -532,8 +532,9 @@ type Session struct {
 }
 
 type SessionDiseases struct {
-	Name     string  `json:"name" bson:"name"`
-	Presence float64 `json:"presence" bson:"presence"`
+	Name            string  `json:"name" bson:"name"`
+	Presence        float64 `json:"presence" bson:"presence"`
+	UnknownPresence float64 `json:"unknown_presence" bson:"unknown_presence"`
 }
 
 type SessionDiseasesInput struct {
@@ -692,6 +693,10 @@ type UpdateDoctorInput struct {
 	Status              *bool         `json:"status,omitempty" bson:"status"`
 }
 
+type UpdateDoctorsPatientIDsInput struct {
+	PatientIds []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
+}
+
 type UpdateDocumentInput struct {
 	Name       *string `json:"name,omitempty" bson:"name"`
 	IsFavorite *bool   `json:"is_favorite,omitempty" bson:"is_favorite"`
@@ -753,7 +758,6 @@ type UpdateSaveCodeInput struct {
 }
 
 type UpdateSessionInput struct {
-	ID                string                  `json:"id" bson:"_id"`
 	Diseases          []*SessionDiseasesInput `json:"diseases,omitempty" bson:"diseases"`
 	Symptoms          []*SessionSymptomInput  `json:"symptoms,omitempty" bson:"symptoms"`
 	Age               *int                    `json:"age,omitempty" bson:"age"`

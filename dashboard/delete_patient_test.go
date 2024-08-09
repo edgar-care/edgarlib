@@ -1,7 +1,6 @@
 package dashboard
 
 import (
-	"github.com/davecgh/go-spew/spew"
 	"github.com/edgar-care/edgarlib/graphql"
 	"github.com/edgar-care/edgarlib/graphql/model"
 	"github.com/joho/godotenv"
@@ -50,7 +49,6 @@ func TestDeletePatient(t *testing.T) {
 	}
 
 	response := DeletePatient(patient.ID, doctor.ID)
-	spew.Dump(response)
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
 	}

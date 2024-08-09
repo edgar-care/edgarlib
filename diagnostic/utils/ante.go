@@ -1,41 +1,40 @@
 package utils
 
 import (
-	"context"
 	"github.com/edgar-care/edgarlib/exam"
 	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/graphql/model"
 )
 
-func CheckAnteDiseaseInSymptoms(session graphql.GetSessionByIdGetSessionByIdSession) (string, string, error) {
-	gqlClient := graphql.CreateClient()
+func CheckAnteDiseaseInSymptoms(session model.Session) (string, string, error) {
 	var question string
 	var questionSymptomName string
 
-	for _, anteId := range session.Ante_diseases {
+	for _, anteId := range session.AnteDiseases {
 		if anteId != "" {
-			ante, err := graphql.GetAnteDiseaseByID(context.Background(), gqlClient, anteId)
+			ante, err := graphql.GetAnteDiseaseByID(anteId)
 			if err != nil {
 				return "", "", err
 			}
-			if ante.GetAnteDiseaseByID.Still_relevant == true && len(ante.GetGetAnteDiseaseByID().Symptoms) > 0 {
-				for _, anteSymptomId := range ante.GetAnteDiseaseByID.Symptoms {
+			if ante.StillRelevant == true && len(ante.Symptoms) > 0 {
+				for _, anteSymptomId := range ante.Symptoms {
 					if anteSymptomId == "" {
 						continue
 					}
-					anteSymptom, err := graphql.GetSymptomById(context.Background(), gqlClient, anteSymptomId)
+					anteSymptom, err := graphql.GetSymptomById(anteSymptomId)
 					if err != nil {
 						return "", "", err
 					}
-					if anteSymptom.GetSymptomById.Code != session.Last_question {
-						if anteSymptom.GetSymptomById.Question_ante != "" {
-							question = exam.AddDiscursiveConnector(anteSymptom.GetSymptomById.Question_ante)
+					if anteSymptom.Code != session.LastQuestion {
+						if anteSymptom.QuestionAnte != "" {
+							question = exam.AddDiscursiveConnector(anteSymptom.QuestionAnte)
 						} else {
-							question = exam.AddDiscursiveConnector("{{connecteur}}. Ressentez-vous " + anteSymptom.GetSymptomById.Name + " plus intensément récemment ?")
+							question = exam.AddDiscursiveConnector("{{connecteur}}. Ressentez-vous " + anteSymptom.Name + " plus intensément récemment ?")
 						}
-						questionSymptomName = anteSymptom.GetSymptomById.Code
+						questionSymptomName = anteSymptom.Code
 					}
 					for _, sessionSymptom := range session.Symptoms {
-						if anteSymptom.GetSymptomById.Code == sessionSymptom.Name || anteSymptom.GetSymptomById.Code == session.Last_question {
+						if anteSymptom.Code == sessionSymptom.Name || anteSymptom.Code == session.LastQuestion {
 							question = ""
 							questionSymptomName = ""
 						}

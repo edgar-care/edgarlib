@@ -56,9 +56,12 @@ func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) Pat
 	existingPatient, err := graphql.GetPatientByEmail(newPatient.Email)
 	if err == nil {
 		updateMedicalInfoInput := ConvertCreateToUpdateMedicalInfoInput(newPatient.MedicalInfo)
+		if existingPatient.MedicalInfoID == nil || *existingPatient.MedicalInfoID == "" {
+			return PatientByIdResponse{Code: 404, Err: errors.New("medical folder not found")}
+		}
 		medicalInfo := medical_folder.UpdateMedicalFolder(updateMedicalInfoInput, *existingPatient.MedicalInfoID)
 		if medicalInfo.Err != nil {
-			return PatientByIdResponse{Code: 400, Err: errors.New("unable to update medical information")}
+			return PatientByIdResponse{Code: 400, Err: errors.New("unable to update medical information" + medicalInfo.Err.Error())}
 		}
 
 		doctor, err := graphql.GetDoctorById(doctorID)
@@ -91,7 +94,7 @@ func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) Pat
 
 	patient := auth.CreatePatientAccount(newPatient.Email)
 	if patient.Err != nil {
-		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create a new account")}
+		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create a new account" + patient.Err.Error())}
 	}
 
 	getPatient, err := graphql.GetPatientById(patient.Id)
@@ -101,7 +104,7 @@ func CreatePatientFormDoctor(newPatient CreatePatientInput, doctorID string) Pat
 
 	medicalInfo := medical_folder.CreateMedicalInfo(newPatient.MedicalInfo, patient.Id)
 	if medicalInfo.Err != nil {
-		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create medical information")}
+		return PatientByIdResponse{Code: 400, Err: errors.New("unable to create medical information" + medicalInfo.Err.Error())}
 	}
 
 	doctor, err := graphql.GetDoctorById(doctorID)

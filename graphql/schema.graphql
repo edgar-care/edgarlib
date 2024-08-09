@@ -330,6 +330,7 @@ type Logs {
 type SessionDiseases {
     name: String!
     presence: Float!
+    unknown_presence: Float!
 }
 
 type NlpReportOutput {
@@ -398,6 +399,10 @@ input UpdateDoctorInput {
     status: Boolean
 }
 
+input UpdateDoctorsPatientIDsInput {
+    patient_ids: [String]
+}
+
 input AddressInput {
     street: String!
     zip_code: String!
@@ -436,7 +441,6 @@ input CreateSessionInput {
 }
 
 input UpdateSessionInput {
-    id: String!
     diseases: [SessionDiseasesInput!]
     symptoms: [SessionSymptomInput!]
     age: Int
@@ -1055,6 +1059,8 @@ type Mutation {
 
     # Update a doctor.
     updateDoctor(id: String!, input: UpdateDoctorInput!): Doctor
+
+    updateDoctorsPatientIDs(id: String!, input: UpdateDoctorsPatientIDsInput!): Doctor
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
