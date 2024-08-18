@@ -1,7 +1,7 @@
 package double_auth
 
 import (
-	"github.com/edgar-care/edgarlib/auth"
+	"github.com/edgar-care/edgarlib/v2/auth"
 	"testing"
 )
 

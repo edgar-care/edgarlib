@@ -1,13 +1,13 @@
 package appointment
 
 import (
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"log"
 	"testing"
 
 	"github.com/joho/godotenv"
 
-	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql"
 )
 
 func TestDeleteRdv(t *testing.T) {

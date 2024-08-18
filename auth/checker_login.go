@@ -3,7 +3,7 @@ package auth
 import (
 	"net/http"
 
-	lib "github.com/edgar-care/edgarlib/http"
+	lib "github.com/edgar-care/edgarlib/v2/http"
 )
 
 func AuthenticateRequest(w http.ResponseWriter, req *http.Request) (string, bool) {

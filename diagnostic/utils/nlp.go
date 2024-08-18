@@ -3,7 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/edgar-care/edgarlib"
+	"github.com/edgar-care/edgarlib/v2"
 	"net/http"
 	"os"
 )

@@ -2,12 +2,12 @@ package auth
 
 import (
 	"errors"
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"strings"
 
-	"github.com/edgar-care/edgarlib/auth/utils"
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/redis"
+	"github.com/edgar-care/edgarlib/v2/auth/utils"
+	"github.com/edgar-care/edgarlib/v2/graphql"
+	"github.com/edgar-care/edgarlib/v2/redis"
 )
 
 type ResetPasswordResponse struct {

@@ -11,7 +11,7 @@ import (
 
 	_ "embed"
 
-	"github.com/edgar-care/edgarlib"
+	"github.com/edgar-care/edgarlib/v2"
 )
 
 //go:embed templates/*.html

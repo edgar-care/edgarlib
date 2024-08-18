@@ -2,7 +2,7 @@ package disease
 
 import (
 	"errors"
-	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql"
 )
 
 type GetSymptomsByDiseaseNameResponse struct {

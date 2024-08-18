@@ -1,4 +1,4 @@
-module github.com/edgar-care/edgarlib
+module github.com/edgar-care/edgarlib/v2
 
 go 1.19
 
@@ -7,17 +7,13 @@ require (
 	github.com/aws/aws-sdk-go v1.50.11
 	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/jwtauth/v5 v5.1.1
-	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lestrrat-go/jwx/v2 v2.0.11
-	github.com/stretchr/testify v1.8.4
 	github.com/vektah/gqlparser/v2 v2.5.11
 	go.mongodb.org/mongo-driver v1.13.1
 	golang.org/x/crypto v0.18.0
 )
-
-require github.com/pmezard/go-difflib v1.0.0 // indirect
 
 require (
 	github.com/agnivade/levenshtein v1.1.1 // indirect

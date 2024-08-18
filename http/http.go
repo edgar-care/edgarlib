@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/edgar-care/edgarlib"
+	"github.com/edgar-care/edgarlib/v2"
 )
 
 func WriteResponse(w http.ResponseWriter, body interface{}, status int) {

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
 
 type GetDocumentByIdResponse struct {

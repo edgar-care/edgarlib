@@ -2,10 +2,10 @@ package dashboard
 
 import (
 	"errors"
-	"github.com/edgar-care/edgarlib/medical_folder"
+	"github.com/edgar-care/edgarlib/v2/medical_folder"
 
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
 
 type GetPatientByIdResponse struct {

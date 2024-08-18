@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/joho/godotenv"
 	"log"
 	"testing"
