@@ -2,10 +2,10 @@ package double_auth
 
 import (
 	"errors"
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 
-	"github.com/edgar-care/edgarlib/black_list"
-	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/v2/black_list"
+	"github.com/edgar-care/edgarlib/v2/graphql"
 )
 
 type DeleteDeviceConnectResponse struct {

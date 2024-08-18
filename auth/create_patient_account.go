@@ -3,10 +3,10 @@ package auth
 import (
 	"fmt"
 
-	"github.com/edgar-care/edgarlib"
-	"github.com/edgar-care/edgarlib/auth/utils"
-	edgarmail "github.com/edgar-care/edgarlib/email"
-	"github.com/edgar-care/edgarlib/redis"
+	"github.com/edgar-care/edgarlib/v2"
+	"github.com/edgar-care/edgarlib/v2/auth/utils"
+	edgarmail "github.com/edgar-care/edgarlib/v2/email"
+	"github.com/edgar-care/edgarlib/v2/redis"
 	"github.com/google/uuid"
 )
 

@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/edgar-care/edgarlib"
-	edgarmail "github.com/edgar-care/edgarlib/email"
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/redis"
+	"github.com/edgar-care/edgarlib/v2"
+	edgarmail "github.com/edgar-care/edgarlib/v2/email"
+	"github.com/edgar-care/edgarlib/v2/graphql"
+	"github.com/edgar-care/edgarlib/v2/redis"
 	"github.com/google/uuid"
 )
 

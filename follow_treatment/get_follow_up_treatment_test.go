@@ -1,13 +1,13 @@
 package follow_treatment
 
 import (
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"log"
 	"testing"
 
 	"github.com/joho/godotenv"
 
-	"github.com/edgar-care/edgarlib/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql"
 )
 
 func TestGetTreatmentFollowUp(t *testing.T) {

@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"github.com/edgar-care/edgarlib/exam"
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/exam"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
 
 type examRequestBody struct {

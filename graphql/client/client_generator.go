@@ -50,7 +50,7 @@ func GenerateFunctionDefinitions(queryDefinitions []QueryDefinitionInfo, graphql
 	sb.WriteString("\t\"io/ioutil\"\n")
 	sb.WriteString("\t\"net/http\"\n")
 	sb.WriteString("\t\"os\"\n")
-	sb.WriteString("\t\"github.com/edgar-care/edgarlib/graphql/model\"\n")
+	sb.WriteString("\t\"github.com/edgar-care/edgarlib/v2/graphql/model\"\n")
 	sb.WriteString(")\n\n")
 
 	queryDefMap := make(map[string]QueryDefinitionInfo)

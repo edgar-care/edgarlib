@@ -2,9 +2,9 @@ package diagnostic
 
 import (
 	"errors"
-	"github.com/edgar-care/edgarlib/diagnostic/utils"
-	"github.com/edgar-care/edgarlib/graphql"
-	"github.com/edgar-care/edgarlib/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/diagnostic/utils"
+	"github.com/edgar-care/edgarlib/v2/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
 
 type InitiateResponse struct {

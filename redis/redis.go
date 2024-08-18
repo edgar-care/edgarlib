@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/edgar-care/edgarlib"
+	"github.com/edgar-care/edgarlib/v2"
 	"golang.org/x/crypto/ssh"
 )
 
