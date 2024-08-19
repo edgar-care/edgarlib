@@ -109,6 +109,11 @@ func (r *mutationResolver) UpdatePatientsDeviceConnect(ctx context.Context, id s
 	filter := bson.M{"_id": id}
 	update := bson.M{}
 	update["device_connect"] = input.DeviceConnect
+
+	if input.TrustDevices != nil {
+		update["trust_devices"] = input.TrustDevices
+	}
+
 	update["updatedAt"] = time.Now().Unix()
 	updateData := bson.M{"$set": update}
 
@@ -297,6 +302,11 @@ func (r *mutationResolver) UpdateDoctorsDeviceConnect(ctx context.Context, id st
 	filter := bson.M{"_id": id}
 	update := bson.M{}
 	update["device_connect"] = input.DeviceConnect
+
+	if input.TrustDevices != nil {
+		update["trust_devices"] = input.TrustDevices
+	}
+
 	update["updatedAt"] = time.Now().Unix()
 	updateData := bson.M{"$set": update}
 
@@ -1598,8 +1608,8 @@ func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, input model.
 		ID:          primitive.NewObjectID().Hex(),
 		DeviceName:  input.DeviceName,
 		IPAddress:   input.IPAddress,
-		Latitude:    input.Latitude,
-		Longitude:   input.Longitude,
+		City:        input.City,
+		Country:     input.Country,
 		Date:        input.Date,
 		TrustDevice: input.TrustDevice,
 		CreatedAt:   now,
@@ -1625,11 +1635,11 @@ func (r *mutationResolver) UpdateDeviceConnect(ctx context.Context, id string, i
 	if input.IPAddress != nil {
 		update["ip_address"] = *input.IPAddress
 	}
-	if input.Latitude != nil {
-		update["latitude"] = *input.Latitude
+	if input.City != nil {
+		update["city"] = *input.City
 	}
-	if input.Longitude != nil {
-		update["longitude"] = *input.Longitude
+	if input.Country != nil {
+		update["country"] = *input.Country
 	}
 	if input.Date != nil {
 		update["date"] = *input.Date

@@ -42,7 +42,9 @@ func DeleteDeviceConnect(DeviceId string, ownerId string) DeleteDeviceConnectRes
 
 	patient, errPatient := graphql.GetPatientById(ownerId)
 	if errPatient == nil {
-		_, err := graphql.UpdatePatientsDeviceConnect(ownerId, model.UpdatePatientsDeviceConnectInput{DeviceConnect: remElement(patient.DeviceConnect, &DeviceId)})
+
+		_, err := graphql.UpdatePatientsDeviceConnect(ownerId, model.UpdatePatientsDeviceConnectInput{DeviceConnect: remElement(patient.DeviceConnect, &DeviceId), TrustDevices: remElement(patient.TrustDevices, &DeviceId)})
+
 		if err != nil {
 			return DeleteDeviceConnectResponse{Deleted: false, Code: http.StatusInternalServerError, Err: errors.New("error updating patient: " + err.Error())}
 		}
@@ -62,7 +64,7 @@ func DeleteDeviceConnect(DeviceId string, ownerId string) DeleteDeviceConnectRes
 	doctor, errDoctor := graphql.GetDoctorById(ownerId)
 	if errDoctor == nil {
 
-		_, err := graphql.UpdateDoctorsDeviceConnect(ownerId, model.UpdateDoctorsDeviceConnectInput{DeviceConnect: remElement(doctor.DeviceConnect, &DeviceId)})
+		_, err := graphql.UpdateDoctorsDeviceConnect(ownerId, model.UpdateDoctorsDeviceConnectInput{DeviceConnect: remElement(doctor.DeviceConnect, &DeviceId), TrustDevices: remElement(doctor.TrustDevices, &DeviceId)})
 		if err != nil {
 			return DeleteDeviceConnectResponse{Deleted: false, Code: http.StatusInternalServerError, Err: errors.New("error updating doctor: " + err.Error())}
 		}

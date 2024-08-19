@@ -52,6 +52,33 @@ func UpdateMedicalFolder(input UpdateMedicalInfoInput, medicalInfoID string) Upd
 
 	var updatedAntecedentDiseaseIDs []string
 
+	if len(input.MedicalAntecedents) == 0 {
+
+		status := model.OnboardingStatusDone
+
+		medical, err := graphql.UpdateMedicalFolder(medicalInfoID, model.UpdateMedicalFolderInput{
+			Name:                   &input.Name,
+			Firstname:              &input.Firstname,
+			Birthdate:              &input.Birthdate,
+			Sex:                    &input.Sex,
+			Height:                 &input.Height,
+			Weight:                 &input.Weight,
+			PrimaryDoctorID:        &input.PrimaryDoctorID,
+			AntecedentDiseaseIds:   []string{},
+			OnboardingStatus:       &status,
+			FamilyMembersMedInfoID: input.FamilyMembersMedInfoId,
+		})
+		if err != nil {
+			return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to update medical folder: " + err.Error())}
+		}
+
+		return UpdateMedicalFolderResponse{
+			MedicalInfo: medical,
+			Code:        200,
+			Err:         nil,
+		}
+	}
+
 	for _, antecedent := range input.MedicalAntecedents {
 		var treatmentIDsPerAnte []string
 		var antediseaseTreatments []model.Treatment
