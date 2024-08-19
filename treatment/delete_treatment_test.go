@@ -27,6 +27,8 @@ func TestDeleteTreatmentWithValidInput(t *testing.T) {
 		Quantity:   1,
 		Period:     []model.Period{"MORNING"},
 		Day:        []model.Day{"MONDAY"},
+		StartDate:  1234,
+		EndDate:    2344,
 	})
 	if err != nil {
 		t.Errorf("Failed to create treatment: %v", err)

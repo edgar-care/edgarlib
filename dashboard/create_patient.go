@@ -31,6 +31,8 @@ func ConvertCreateToUpdateMedicalInfoInput(createInput medical_folder.CreateMedi
 				Period:     medicine.Period,
 				Day:        medicine.Day,
 				Quantity:   medicine.Quantity,
+				StartDate:  medicine.StartDate,
+				EndDate:    medicine.EndDate,
 			})
 		}
 		updateAntecedents = append(updateAntecedents, medical_folder.UpdateMedicalAntecedentInput{

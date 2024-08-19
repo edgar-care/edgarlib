@@ -53,6 +53,8 @@ func TestCreateTreatment(t *testing.T) {
 					Period:     []string{"MORNING"},
 					Day:        []string{"MONDAY"},
 					Quantity:   1,
+					StartDate:  1234,
+					EndDate:    2344,
 				},
 			},
 		}
@@ -87,6 +89,8 @@ func TestCreateTreatment(t *testing.T) {
 					Period:     []string{"EVENING"},
 					Day:        []string{"SUNDAY"},
 					Quantity:   1,
+					StartDate:  1234,
+					EndDate:    2344,
 				},
 			},
 		}
@@ -123,6 +127,8 @@ func TestCreateTreatment(t *testing.T) {
 					Period:     []string{"MORNING"},
 					Day:        []string{"TUESDAY"},
 					Quantity:   3,
+					StartDate:  1234,
+					EndDate:    2344,
 				},
 			},
 		}

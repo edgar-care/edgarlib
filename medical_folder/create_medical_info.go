@@ -29,6 +29,8 @@ type CreateMedicineInput struct {
 	Period     []string `json:"period"`
 	Day        []string `json:"day"`
 	Quantity   int      `json:"quantity"`
+	StartDate  int      `json:"start_date"`
+	EndDate    int      `json:"end_date"`
 }
 
 type CreateMedicalInfoResponse struct {
@@ -101,7 +103,7 @@ func CreateMedicalInfo(input CreateMedicalInfoInput, patientID string) CreateMed
 
 		for _, medicine := range antecedent.Medicines {
 			periods, days := ConvertPeriodsAndDays(medicine.Period, medicine.Day)
-			treatmentRes, err := graphql.CreateTreatment(model.CreateTreatmentInput{Period: periods, Day: days, Quantity: medicine.Quantity, MedicineID: medicine.MedicineID})
+			treatmentRes, err := graphql.CreateTreatment(model.CreateTreatmentInput{Period: periods, Day: days, Quantity: medicine.Quantity, MedicineID: medicine.MedicineID, StartDate: medicine.StartDate, EndDate: medicine.EndDate})
 			if err != nil {
 				return CreateMedicalInfoResponse{Code: 400, Err: errors.New("unable to create treatment: " + err.Error())}
 			}

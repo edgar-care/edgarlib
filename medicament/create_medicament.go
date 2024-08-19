@@ -13,6 +13,9 @@ type CreateMedicamentInput struct {
 	TargetDiseases  []string `json:"target_diseases"`
 	TreatedSymptoms []string `json:"treated_symptoms"`
 	SideEffects     []string `json:"side_effects"`
+	Type            string   `json:"type"`
+	Content         string   `json:"content"`
+	Quantity        int      `json:"quantity"`
 }
 
 type CreateMedicamentResponse struct {
@@ -28,6 +31,9 @@ func CreateMedicament(input CreateMedicamentInput) CreateMedicamentResponse {
 		TargetDiseases:  input.TargetDiseases,
 		TreatedSymptoms: input.TreatedSymptoms,
 		SideEffects:     input.SideEffects,
+		Type:            input.Type,
+		Content:         input.Content,
+		Quantity:        input.Quantity,
 	})
 	if err != nil {
 		return CreateMedicamentResponse{Medicament: model.Medicine{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}

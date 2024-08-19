@@ -14,13 +14,11 @@ type RemoveTrustDeviceResponse struct {
 }
 
 func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceResponse {
-
-	var updateError error
 	var doubleAuthID string
 
 	patient, err := graphql.GetPatientById(id_user)
 	if err == nil {
-		_, updateError = graphql.UpdatePatient(id_user, model.UpdatePatientInput{
+		_, updateError := graphql.UpdatePatientTrustDevice(id_user, model.UpdatePatientTrustDeviceInput{
 			TrustDevices: removeTrustDevice(patient.TrustDevices, &id_device),
 		})
 		if updateError != nil {
@@ -37,7 +35,9 @@ func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceRespon
 			return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("id does not correspond to a patient or doctor")}
 		}
 
-		_, updateError = graphql.UpdateDoctor(doctor.ID, model.UpdateDoctorInput{TrustDevices: removeTrustDevice(doctor.TrustDevices, &id_device)})
+		_, updateError := graphql.UpdateDoctorsTrustDevice(id_user, model.UpdateDoctorsTrustDeviceInput{
+			TrustDevices: removeTrustDevice(patient.TrustDevices, &id_device),
+		})
 		if updateError != nil {
 			return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("update doctor failed: " + updateError.Error())}
 		}
@@ -71,7 +71,7 @@ func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceRespon
 func removeTrustDevice(trustDevices []*string, id_device *string) []*string {
 	var updatedDevices []*string
 	for _, device := range trustDevices {
-		if device != id_device {
+		if *device != *id_device {
 			updatedDevices = append(updatedDevices, device)
 		}
 	}

@@ -39,6 +39,8 @@ func TestUpdateTreatmentWithValidInput(t *testing.T) {
 		Quantity:   1,
 		Period:     []model.Period{"MORNING"},
 		Day:        []model.Day{"FRIDAY"},
+		StartDate:  1234,
+		EndDate:    2344,
 	})
 	if err != nil {
 		t.Errorf("Failed to create treatment: %v", err)
@@ -52,6 +54,8 @@ func TestUpdateTreatmentWithValidInput(t *testing.T) {
 				Period:     []string{"EVENING"},
 				Day:        []string{"TUESDAY"},
 				Quantity:   2,
+				StartDate:  123,
+				EndDate:    2344,
 			},
 		},
 	}
@@ -85,6 +89,8 @@ func TestUpdateTreatmentWithInvalidPatientID(t *testing.T) {
 				Period:     []string{"MORNING"},
 				Day:        []string{"MONDAY"},
 				Quantity:   1,
+				StartDate:  123,
+				EndDate:    2344,
 			},
 		},
 	}
@@ -119,6 +125,8 @@ func TestUpdateTreatmentWithNonExistentTreatmentID(t *testing.T) {
 				Period:     []string{"MORNING"},
 				Day:        []string{"MONDAY"},
 				Quantity:   1,
+				StartDate:  123,
+				EndDate:    2344,
 			},
 		},
 	}
@@ -153,6 +161,8 @@ func TestUpdateTreatmentWithNoMedicalFolder(t *testing.T) {
 				Period:     []string{"MORNING"},
 				Day:        []string{"MONDAY"},
 				Quantity:   1,
+				StartDate:  123,
+				EndDate:    234,
 			},
 		},
 	}

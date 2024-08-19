@@ -16,6 +16,8 @@ type TreatmentsInput struct {
 	Period     []string `json:"period"`
 	Day        []string `json:"day"`
 	Quantity   int      `json:"quantity"`
+	StartDate  int      `json:"start_date"`
+	EndDate    int      `json:"end_date"`
 }
 
 type UpdateTreatmentResponse struct {
@@ -43,7 +45,7 @@ func UpdateTreatment(input UpdateTreatmentInput, patientID string) UpdateTreatme
 			return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to get treatment by id: " + err.Error())}
 		}
 
-		treatment, err := graphql.UpdateTreatment(treat.ID, model.UpdateTreatmentInput{Period: periods, Day: days, Quantity: &treat.Quantity, MedicineID: &treat.MedicineId})
+		treatment, err := graphql.UpdateTreatment(treat.ID, model.UpdateTreatmentInput{Period: periods, Day: days, Quantity: &treat.Quantity, MedicineID: &treat.MedicineId, StartDate: &treat.StartDate, EndDate: &treat.EndDate})
 		if err != nil {
 			return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to update treatment: " + err.Error())}
 		}

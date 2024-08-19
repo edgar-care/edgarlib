@@ -147,6 +147,7 @@ type Document {
     category: Category!
     is_favorite: Boolean!
     download_url: String!
+    uploader_id: String!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -189,6 +190,8 @@ type Treatment {
     day: [Day!]!
     quantity: Int!
     medicine_id: String!
+    start_date: Int!
+    end_date: Int!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -224,6 +227,9 @@ type Medicine {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
+    type: String!
+    content: String!
+    quantity: Int!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -403,6 +409,22 @@ input UpdateDoctorsPatientIDsInput {
     patient_ids: [String]
 }
 
+input UpdatePatientsDeviceConnectInput {
+    device_connect: [String]
+}
+
+input UpdateDoctorsDeviceConnectInput {
+    device_connect: [String]
+}
+
+input UpdateDoctorsTrustDeviceInput {
+    trust_devices: [String]
+}
+
+input UpdatePatientTrustDeviceInput {
+    trust_devices: [String]
+}
+
 input AddressInput {
     street: String!
     zip_code: String!
@@ -546,6 +568,7 @@ input CreateDocumentInput {
     category: String!
     is_favorite: Boolean!
     download_url: String!
+    uploader_id: String!
 }
 
 input UpdateDocumentInput {
@@ -596,6 +619,8 @@ input CreateTreatmentInput {
     day: [Day!]!
     quantity: Int!
     medicine_id: String!
+    start_date: Int!
+    end_date: Int!
 }
 
 input UpdateTreatmentInput {
@@ -603,6 +628,8 @@ input UpdateTreatmentInput {
     day: [Day!]
     quantity: Int
     medicine_id: String
+    start_date: Int
+    end_date: Int
 }
 
 input CreateAlertInput {
@@ -629,6 +656,9 @@ input CreateMedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
+    type: String!
+    content: String!
+    quantity: Int!
 }
 
 
@@ -699,6 +729,8 @@ input TreatmentInput {
     day: [Day]!
     quantity: Int!
     medicine_id: String!
+    start_date: Int!
+    end_date: Int!
 }
 
 input MedicineInput {
@@ -707,6 +739,9 @@ input MedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
+    type: String!
+    content: String!
+    quantity: Int!
 }
 
 input ChirInducedSymptomInput {
@@ -1051,6 +1086,10 @@ type Mutation {
     # Update a patient.
     updatePatient(id: String!, input: UpdatePatientInput!): Patient
 
+    UpdatePatientsDeviceConnect(id: String!, input: UpdatePatientsDeviceConnectInput!): Patient
+
+    UpdatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
+
     # Delete a patient.
     deletePatient(id: String!): Boolean
 
@@ -1061,6 +1100,10 @@ type Mutation {
     updateDoctor(id: String!, input: UpdateDoctorInput!): Doctor
 
     updateDoctorsPatientIDs(id: String!, input: UpdateDoctorsPatientIDsInput!): Doctor
+
+    UpdateDoctorsDeviceConnect(id: String!, input: UpdateDoctorsDeviceConnectInput!): Doctor
+
+    UpdateDoctorsTrustDevice(id: String!, input: UpdateDoctorsTrustDeviceInput!): Doctor
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean

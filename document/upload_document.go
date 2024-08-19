@@ -32,6 +32,7 @@ func CreateDocument(newdoc UploadDocumentInput, id string) CreateDocumentRespons
 		Category:     newdoc.Category,
 		IsFavorite:   newdoc.IsFavorite,
 		DownloadURL:  newdoc.DownloadURL,
+		UploaderID:   id,
 	})
 	if err != nil {
 		return CreateDocumentResponse{Document: model.Document{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}

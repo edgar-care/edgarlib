@@ -71,6 +71,7 @@ mutation CreateDocument($input: CreateDocumentInput!){
         category
         is_favorite
         download_url
+        uploader_id
         createdAt
         updatedAt
     }
@@ -164,6 +165,9 @@ mutation CreateMedicine($input: CreateMedicineInput!){
         target_diseases
         treated_symptoms
         side_effects
+        type
+        content
+        quantity
         createdAt
         updatedAt
     }
@@ -180,6 +184,8 @@ mutation UpdateTreatment($id: String!, $input: UpdateTreatmentInput!){
         day
         quantity
         medicine_id
+        start_date
+        end_date
         createdAt
         updatedAt
     }
@@ -260,6 +266,7 @@ mutation UpdateDocument($id: String!, $input: UpdateDocumentInput!){
         category
         is_favorite
         download_url
+        uploader_id
         createdAt
         updatedAt
     }
@@ -349,6 +356,45 @@ mutation UpdatePatient($id: String!, $input: UpdatePatientInput!){
     }
 }
 
+mutation UpdatePatientsDeviceConnect($id: String!, $input: UpdatePatientsDeviceConnectInput!){
+    UpdatePatientsDeviceConnect(id: $id, input: $input){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+
+mutation UpdatePatientTrustDevice($id: String!, $input: UpdatePatientTrustDeviceInput!){
+    UpdatePatientTrustDevice(id: $id, input: $input){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
 mutation CreateSession($input: CreateSessionInput!){
     createSession(input: $input){
         id
@@ -387,6 +433,54 @@ mutation DeleteAnteDisease($id: String!){
 
 mutation UpdateDoctor($id: String!, $input: UpdateDoctorInput!){
     updateDoctor(id: $id, input: $input){
+        id
+        email
+        password
+        name
+        firstname
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        address {
+            street
+            zip_code
+            country
+        }
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateDoctorsDeviceConnect($id: String!, $input: UpdateDoctorsDeviceConnectInput!){
+    UpdateDoctorsDeviceConnect(id: $id, input: $input){
+        id
+        email
+        password
+        name
+        firstname
+        rendez_vous_ids
+        patient_ids
+        chat_ids
+        address {
+            street
+            zip_code
+            country
+        }
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateDoctorsTrustDevice($id: String!, $input: UpdateDoctorsTrustDeviceInput!){
+    UpdateDoctorsTrustDevice(id: $id, input: $input){
         id
         email
         password
@@ -479,6 +573,8 @@ mutation CreateTreatment($input: CreateTreatmentInput!){
         day
         quantity
         medicine_id
+        start_date
+        end_date
         createdAt
         updatedAt
     }
@@ -695,6 +791,8 @@ query GetTreatmentByID($id: String!){
         day
         quantity
         medicine_id
+        start_date
+        end_date
         createdAt
         updatedAt
     }
@@ -741,6 +839,9 @@ query GetMedicineByID($id: String!){
         target_diseases
         treated_symptoms
         side_effects
+        type
+        content
+        quantity
         createdAt
         updatedAt
     }
@@ -823,6 +924,8 @@ query GetTreatments($option: Options){
         day
         quantity
         medicine_id
+        start_date
+        end_date
         createdAt
         updatedAt
     }
@@ -873,6 +976,7 @@ query GetDocumentById($id: String!){
         category
         is_favorite
         download_url
+        uploader_id
         createdAt
         updatedAt
     }
@@ -1342,6 +1446,9 @@ query GetMedicines($option: Options){
         target_diseases
         treated_symptoms
         side_effects
+        type
+        content
+        quantity
         createdAt
         updatedAt
     }
@@ -1411,6 +1518,7 @@ query GetDocuments($option: Options){
         category
         is_favorite
         download_url
+        uploader_id
         createdAt
         updatedAt
     }
