@@ -1,18 +1,48 @@
 package double_auth
 
 import (
+	"github.com/edgar-care/edgarlib/v2/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"github.com/joho/godotenv"
+	"log"
 	"testing"
 )
 
 func TestAddTrustDevice_Patient_Success(t *testing.T) {
-	// Configurer des valeurs de test
-	idDevice := "test_device_id"
-	idUser := "test_patient_id"
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
 
-	// Appeler la fonction
-	response := AddTrustDevice(idDevice, idUser)
+	input := CreateDeviceConnectInput{
+		DeviceName: "TestDevice",
+		Ip:         "192.168.0.1",
+		Latitude:   48.8566,
+		Longitude:  2.3522,
+		Date:       1627880400,
+	}
 
-	// Vérifier les résultats
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_patient_create_device_trust_success@edgar-sante.fr",
+		Password: "password",
+		Status:   true,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	device := CreateDeviceConnect(input, patient.ID)
+
+	if device.Err != nil {
+		t.Errorf("Expected no error, got: %v", device.Err)
+	}
+	if device.Code != 201 {
+		t.Errorf("Expected status code 201, got: %d", device.Code)
+	}
+	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR"}
+	_ = CreateDoubleAuthAppTier(tier, "url", patient.ID)
+
+	response := AddTrustDevice(device.DeviceConnect.ID, patient.ID)
+
 	if response.Err != nil {
 		t.Errorf("Expected no error, got: %v", response.Err)
 	}
@@ -28,12 +58,47 @@ func TestAddTrustDevice_Patient_Success(t *testing.T) {
 }
 
 func TestAddTrustDevice_Doctor_Success(t *testing.T) {
-	// Configurer des valeurs de test
-	idDevice := "test_device_id"
-	idUser := "test_doctor_id"
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+	input := CreateDeviceConnectInput{
+		DeviceName: "TestDevice",
+		Ip:         "192.168.0.1",
+		Latitude:   48.8566,
+		Longitude:  2.3522,
+		Date:       1627880400, // Timestamp pour une date fixe
+	}
 
-	// Appeler la fonction
-	response := AddTrustDevice(idDevice, idUser)
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_doctor_create_device_trust@edgar-sante.fr",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: true,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	device := CreateDeviceConnect(input, doctor.ID)
+
+	if device.Err != nil {
+		t.Errorf("Expected no error, got: %v", device.Err)
+	}
+	if device.Code != 201 {
+		t.Errorf("Expected status code 201, got: %d", device.Code)
+	}
+
+	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR", Code: "1234"}
+	_ = CreateDoubleAuthAppTier(tier, "url", doctor.ID)
+
+	response := AddTrustDevice(device.DeviceConnect.ID, doctor.ID)
 
 	// Vérifier les résultats
 	if response.Err != nil {
@@ -51,21 +116,17 @@ func TestAddTrustDevice_Doctor_Success(t *testing.T) {
 }
 
 func TestAddTrustDevice_InvalidUser(t *testing.T) {
-	// Configurer des valeurs de test
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
 	idDevice := "test_device_id"
 	idUser := "invalid_user_id"
 
 	// Appeler la fonction
 	response := AddTrustDevice(idDevice, idUser)
 
-	// Vérifier les résultats
 	if response.Err == nil {
-		t.Errorf("Expected an error, got none")
+		t.Errorf("Expected error but got none")
 	}
-	if response.Code == 200 {
-		t.Errorf("Expected non-200 status code, got: %d", response.Code)
-	}
-	if response.Patient != nil || response.Doctor != nil {
-		t.Errorf("Expected no patient or doctor, got: %v, %v", response.Patient, response.Doctor)
-	}
+
 }

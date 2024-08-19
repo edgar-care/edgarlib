@@ -15,7 +15,8 @@ func TestGetAuthenticatedUser(t *testing.T) {
 	req := httptest.NewRequest("GET", "/", nil)
 
 	token := jwt.New()
-	token.Set("patient", map[string]interface{}{"id": "test_patient_id"})
+	token.Set("patient", "test_patient_email")
+	token.Set("id", "test_patient_id")
 
 	ctx := jwtauth.NewContext(req.Context(), token, nil)
 
@@ -134,7 +135,8 @@ func TestAuthMiddlewareWithValidToken(t *testing.T) {
 	req.Header.Set("Authorization", "Bearer "+response.Token)
 
 	token := jwt.New()
-	token.Set("patient", map[string]interface{}{"id": "test_patient_id"})
+	token.Set("patient", "test_patient_email")
+	token.Set("id", "test_patient_id")
 
 	ctx := jwtauth.NewContext(req.Context(), token, nil)
 
@@ -189,4 +191,79 @@ func TestHashPassword(t *testing.T) {
 	if hashedPassword == password {
 		t.Error("Hashed password is the same as the original password")
 	}
+}
+
+func TestGetAuthenticatedDoctor(t *testing.T) {
+	req := httptest.NewRequest("GET", "/", nil)
+
+	token := jwt.New()
+	token.Set("doctor", "test_doctor_email")
+	token.Set("id", "test_doctor_id")
+
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+
+	req = req.WithContext(ctx)
+
+	doctorID := GetAuthenticatedDoctor(nil, req)
+
+	expectedDoctorID := "test_doctor_id"
+	if doctorID != expectedDoctorID {
+		t.Errorf("Expected patient ID: %s, got: %s", expectedDoctorID, doctorID)
+	}
+}
+
+func TestGetAuthenticatedDoctorError(t *testing.T) {
+	req := httptest.NewRequest("GET", "/", nil)
+
+	token := jwt.New()
+	token.Set("doctor", map[string]interface{}{"id": "test_doctor_id"})
+
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+
+	req = req.WithContext(ctx)
+
+	doctorID := GetAuthenticatedDoctor(nil, req)
+
+	expectedDoctorID := "invalid_id"
+	if doctorID == expectedDoctorID {
+		t.Errorf("Expected error but didn't get one")
+	}
+}
+
+func TestAuthMiddlewareDoctorWithValidToken(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	email := "test_doctor_auth_middelware@example.com"
+	password := "password"
+	input := AddressInput{
+		Street:  "12",
+		ZipCode: "1234",
+		Country: "France",
+		City:    "City",
+	}
+
+	response := RegisterAndLoginDoctor(email, password, "test_doctor_middle", "auth", input, "1256")
+	if response.Err != nil {
+		t.Error("Error trying to create account")
+	}
+	req := httptest.NewRequest("GET", "/", nil)
+	req.Header.Set("Authorization", "Bearer "+response.Token)
+
+	token := jwt.New()
+	token.Set("doctor", "test_doctor_email")
+	token.Set("id", "test_doctor_id")
+
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+
+	req = req.WithContext(ctx)
+
+	rw := httptest.NewRecorder()
+
+	authenticatedUser := AuthMiddlewareDoctor(rw, req)
+	if authenticatedUser == "" {
+		t.Error("Expected authenticated user, got empty string")
+	}
+
 }

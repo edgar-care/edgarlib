@@ -17,12 +17,11 @@ type CreateDeviceConnectInput struct {
 
 type CreateDeviceConnectResponse struct {
 	DeviceConnect model.DeviceConnect
-	Patient       model.Patient
 	Code          int
 	Err           error
 }
 
-func CreateDeviceConnect(input CreateDeviceConnectInput, patientId string) CreateDeviceConnectResponse {
+func CreateDeviceConnect(input CreateDeviceConnectInput, ownerId string) CreateDeviceConnectResponse {
 	device, err := graphql.CreateDeviceConnect(model.CreateDeviceConnectInput{
 		DeviceName:  input.DeviceName,
 		IPAddress:   input.Ip,
@@ -32,22 +31,54 @@ func CreateDeviceConnect(input CreateDeviceConnectInput, patientId string) Creat
 		TrustDevice: false,
 	})
 	if err != nil {
-		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
+		return CreateDeviceConnectResponse{
+			DeviceConnect: model.DeviceConnect{},
+			Code:          400,
+			Err:           errors.New("unable to create device connection (check if you shared all information)"),
+		}
 	}
 
-	patient, err := graphql.GetPatientById(patientId)
-	if err != nil {
-		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
+	patient, patientErr := graphql.GetPatientById(ownerId)
+	if patientErr == nil {
+		_, err = graphql.UpdatePatient(ownerId, model.UpdatePatientInput{
+			DeviceConnect: append(patient.DeviceConnect, &device.ID),
+		})
+		if err != nil {
+			return CreateDeviceConnectResponse{
+				DeviceConnect: model.DeviceConnect{},
+				Code:          400,
+				Err:           errors.New("failed to update patient device connection: " + err.Error()),
+			}
+		}
+		return CreateDeviceConnectResponse{
+			DeviceConnect: device,
+			Code:          201,
+			Err:           nil,
+		}
 	}
 
-	_, err = graphql.UpdatePatient(patientId, model.UpdatePatientInput{DeviceConnect: append(patient.DeviceConnect, &device.ID)})
-	if err != nil {
-		return CreateDeviceConnectResponse{DeviceConnect: model.DeviceConnect{}, Patient: model.Patient{}, Code: 400, Err: errors.New("update failed" + err.Error())}
+	doctor, doctorErr := graphql.GetDoctorById(ownerId)
+	if doctorErr == nil {
+		_, err = graphql.UpdateDoctor(ownerId, model.UpdateDoctorInput{
+			DeviceConnect: append(doctor.DeviceConnect, &device.ID),
+		})
+		if err != nil {
+			return CreateDeviceConnectResponse{
+				DeviceConnect: model.DeviceConnect{},
+				Code:          400,
+				Err:           errors.New("failed to update doctor device connection: " + err.Error()),
+			}
+		}
+		return CreateDeviceConnectResponse{
+			DeviceConnect: device,
+			Code:          201,
+			Err:           nil,
+		}
 	}
 
 	return CreateDeviceConnectResponse{
-		DeviceConnect: device,
-		Code:          201,
-		Err:           nil,
+		DeviceConnect: model.DeviceConnect{},
+		Code:          400,
+		Err:           errors.New("owner ID does not correspond to a valid patient or doctor"),
 	}
 }

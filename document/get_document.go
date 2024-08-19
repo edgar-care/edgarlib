@@ -47,6 +47,8 @@ func GetDocument(id string) GetDocumentByIdResponse {
 		Category:     document.Category,
 		IsFavorite:   document.IsFavorite,
 		DownloadURL:  signedURL,
+		UploaderID:   document.UploaderID,
+		CreatedAt:    document.CreatedAt,
 	}
 
 	return GetDocumentByIdResponse{res, 200, nil}
@@ -80,6 +82,8 @@ func GetDocuments(id string) GetDocumentsResponse {
 			Category:     document.Category,
 			IsFavorite:   document.IsFavorite,
 			DownloadURL:  signedURL,
+			UploaderID:   document.UploaderID,
+			CreatedAt:    document.CreatedAt,
 		})
 	}
 	return GetDocumentsResponse{res, 200, nil}

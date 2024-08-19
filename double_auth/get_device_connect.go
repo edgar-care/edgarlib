@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"net/http"
 )
 
 type GetDeviceConnectByIdResponse struct {
@@ -27,16 +28,28 @@ func GetDeviceConnectById(id string) GetDeviceConnectByIdResponse {
 	return GetDeviceConnectByIdResponse{device, 200, nil}
 }
 
-func GetDeviceConnect(patientId string) GetDevicesConnectResponse {
-	_, err := graphql.GetPatientById(patientId)
-	if err != nil {
-		return GetDevicesConnectResponse{[]model.DeviceConnect{}, 400, errors.New("id does not correspond to a doctor")}
+func GetDeviceConnect(ownerId string) GetDevicesConnectResponse {
+
+	_, errPatient := graphql.GetPatientById(ownerId)
+	if errPatient == nil {
+
+		devices, err := graphql.GetDevicesConnect(nil)
+		if err != nil {
+			return GetDevicesConnectResponse{[]model.DeviceConnect{}, http.StatusBadRequest, errors.New("invalid input: " + err.Error())}
+		}
+		return GetDevicesConnectResponse{devices, http.StatusOK, nil}
 	}
 
-	devices, err := graphql.GetDevicesConnect(nil)
-	if err != nil {
-		return GetDevicesConnectResponse{[]model.DeviceConnect{}, 400, errors.New("invalid input: " + err.Error())}
+	_, errDoctor := graphql.GetDoctorById(ownerId)
+	if errDoctor == nil {
+		// Fetch devices connected to the doctor
+		devices, err := graphql.GetDevicesConnect(nil)
+		if err != nil {
+			return GetDevicesConnectResponse{[]model.DeviceConnect{}, http.StatusBadRequest, errors.New("invalid input: " + err.Error())}
+		}
+		return GetDevicesConnectResponse{devices, http.StatusOK, nil}
 	}
 
-	return GetDevicesConnectResponse{devices, 200, nil}
+	// If neither patient nor doctor retrieval succeeds, return an error
+	return GetDevicesConnectResponse{[]model.DeviceConnect{}, http.StatusBadRequest, errors.New("id does not correspond to a patient or doctor")}
 }
