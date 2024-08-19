@@ -17,6 +17,9 @@ func TestCreateMedicament(t *testing.T) {
 		TargetDiseases:  []string{"test_target_disease"},
 		TreatedSymptoms: []string{"test_treated_symptoms"},
 		SideEffects:     []string{"test_side_effects"},
+		Type:            "test_type",
+		Content:         "test_content",
+		Quantity:        2,
 	}
 
 	response := CreateMedicament(content)

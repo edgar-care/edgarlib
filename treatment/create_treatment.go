@@ -18,6 +18,8 @@ type CreateTreatInput struct {
 	Period     []string `json:"period"`
 	Day        []string `json:"day"`
 	Quantity   int      `json:"quantity"`
+	StartDate  int      `json:"start_date"`
+	EndDate    int      `json:"end_date"`
 }
 
 type CreateTreatmentResponse struct {
@@ -58,6 +60,8 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 			Period:     periods,
 			Day:        days,
 			Quantity:   treat.Quantity,
+			StartDate:  treat.StartDate,
+			EndDate:    treat.EndDate,
 			MedicineID: treat.MedicineId,
 		})
 		if err != nil {

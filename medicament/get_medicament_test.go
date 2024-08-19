@@ -17,6 +17,9 @@ func TestGetMedicamentById(t *testing.T) {
 		TargetDiseases:  []string{"test_target_disease_get"},
 		TreatedSymptoms: []string{"test_treated_symptoms_get"},
 		SideEffects:     []string{"test_side_effects_get"},
+		Type:            "test_type_get",
+		Content:         "test_content_get",
+		Quantity:        2,
 	}
 
 	getMedicamentByID := CreateMedicament(content)
@@ -59,6 +62,9 @@ func TestGetMedicaments(t *testing.T) {
 		TargetDiseases:  []string{"test_target_disease_get_all"},
 		TreatedSymptoms: []string{"test_treated_symptoms_get_all"},
 		SideEffects:     []string{"test_side_effects_get_all"},
+		Type:            "test_type_get_all",
+		Content:         "test_content_get_all",
+		Quantity:        4,
 	}
 
 	getMedicamentByID := CreateMedicament(content)

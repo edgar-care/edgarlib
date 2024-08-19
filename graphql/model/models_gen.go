@@ -198,6 +198,7 @@ type CreateDocumentInput struct {
 	Category     string `json:"category" bson:"category"`
 	IsFavorite   bool   `json:"is_favorite" bson:"is_favorite"`
 	DownloadURL  string `json:"download_url" bson:"download_url"`
+	UploaderID   string `json:"uploader_id" bson:"uploader_id"`
 }
 
 type CreateDoubleAuthInput struct {
@@ -226,6 +227,9 @@ type CreateMedicineInput struct {
 	TargetDiseases  []string `json:"target_diseases" bson:"target_diseases"`
 	TreatedSymptoms []string `json:"treated_symptoms" bson:"treated_symptoms"`
 	SideEffects     []string `json:"side_effects" bson:"side_effects"`
+	Type            string   `json:"type" bson:"type"`
+	Content         string   `json:"content" bson:"content"`
+	Quantity        int      `json:"quantity" bson:"quantity"`
 }
 
 type CreateNlpReportInput struct {
@@ -297,6 +301,8 @@ type CreateTreatmentInput struct {
 	Day        []Day    `json:"day" bson:"day"`
 	Quantity   int      `json:"quantity" bson:"quantity"`
 	MedicineID string   `json:"medicine_id" bson:"medicine_id"`
+	StartDate  int      `json:"start_date" bson:"start_date"`
+	EndDate    int      `json:"end_date" bson:"end_date"`
 }
 
 type CreateTreatmentsFollowUpInput struct {
@@ -356,6 +362,7 @@ type Document struct {
 	Category     Category     `json:"category" bson:"category"`
 	IsFavorite   bool         `json:"is_favorite" bson:"is_favorite"`
 	DownloadURL  string       `json:"download_url" bson:"download_url"`
+	UploaderID   string       `json:"uploader_id" bson:"uploader_id"`
 	CreatedAt    int          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt    int          `json:"updatedAt" bson:"updatedAt"`
 }
@@ -418,6 +425,9 @@ type Medicine struct {
 	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
 	TreatedSymptoms []string     `json:"treated_symptoms" bson:"treated_symptoms"`
 	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
+	Type            string       `json:"type" bson:"type"`
+	Content         string       `json:"content" bson:"content"`
+	Quantity        int          `json:"quantity" bson:"quantity"`
 	CreatedAt       int          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt       int          `json:"updatedAt" bson:"updatedAt"`
 }
@@ -428,6 +438,9 @@ type MedicineInput struct {
 	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
 	TreatedSymptoms []string     `json:"treated_symptoms" bson:"treated_symptoms"`
 	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
+	Type            string       `json:"type" bson:"type"`
+	Content         string       `json:"content" bson:"content"`
+	Quantity        int          `json:"quantity" bson:"quantity"`
 }
 
 type Mutation struct {
@@ -595,6 +608,8 @@ type Treatment struct {
 	Day        []Day    `json:"day" bson:"day"`
 	Quantity   int      `json:"quantity" bson:"quantity"`
 	MedicineID string   `json:"medicine_id" bson:"medicine_id"`
+	StartDate  int      `json:"start_date" bson:"start_date"`
+	EndDate    int      `json:"end_date" bson:"end_date"`
 	CreatedAt  int      `json:"createdAt" bson:"createdAt"`
 	UpdatedAt  int      `json:"updatedAt" bson:"updatedAt"`
 }
@@ -604,6 +619,8 @@ type TreatmentInput struct {
 	Day        []*Day    `json:"day" bson:"day"`
 	Quantity   int       `json:"quantity" bson:"quantity"`
 	MedicineID string    `json:"medicine_id" bson:"medicine_id"`
+	StartDate  int       `json:"start_date" bson:"start_date"`
+	EndDate    int       `json:"end_date" bson:"end_date"`
 }
 
 type TreatmentsFollowUp struct {
@@ -693,8 +710,16 @@ type UpdateDoctorInput struct {
 	Status              *bool         `json:"status,omitempty" bson:"status"`
 }
 
+type UpdateDoctorsDeviceConnectInput struct {
+	DeviceConnect []*string `json:"device_connect,omitempty" bson:"device_connect"`
+}
+
 type UpdateDoctorsPatientIDsInput struct {
 	PatientIds []*string `json:"patient_ids,omitempty" bson:"patient_ids"`
+}
+
+type UpdateDoctorsTrustDeviceInput struct {
+	TrustDevices []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
 }
 
 type UpdateDocumentInput struct {
@@ -740,6 +765,14 @@ type UpdatePatientInput struct {
 	DeviceConnect        []*string `json:"device_connect,omitempty" bson:"device_connect"`
 	DoubleAuthMethodsID  *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
 	TrustDevices         []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
+}
+
+type UpdatePatientTrustDeviceInput struct {
+	TrustDevices []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
+}
+
+type UpdatePatientsDeviceConnectInput struct {
+	DeviceConnect []*string `json:"device_connect,omitempty" bson:"device_connect"`
 }
 
 type UpdateRdvInput struct {
@@ -790,6 +823,8 @@ type UpdateTreatmentInput struct {
 	Day        []Day    `json:"day,omitempty" bson:"day"`
 	Quantity   *int     `json:"quantity,omitempty" bson:"quantity"`
 	MedicineID *string  `json:"medicine_id,omitempty" bson:"medicine_id"`
+	StartDate  *int     `json:"start_date,omitempty" bson:"start_date"`
+	EndDate    *int     `json:"end_date,omitempty" bson:"end_date"`
 }
 
 type UpdateTreatmentsFollowUpInput struct {

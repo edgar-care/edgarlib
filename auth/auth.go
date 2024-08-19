@@ -45,12 +45,12 @@ func CheckPassword(password string, hash string) bool {
 func GetAuthenticatedUser(w http.ResponseWriter, r *http.Request) string {
 	_, claims, _ := jwtauth.FromContext(r.Context())
 
-	patientClaim, ok := claims["patient"].(map[string]interface{})
-	if !ok || patientClaim == nil {
+	patientClaim, ok := claims["patient"].(string)
+	if !ok || patientClaim == "" {
 		return ""
 	}
 
-	id, ok := patientClaim["id"].(string)
+	id, ok := claims["id"].(string)
 	if !ok {
 		return ""
 	}
@@ -71,34 +71,6 @@ func AuthMiddleware(w http.ResponseWriter, r *http.Request) string {
 	}
 	return GetAuthenticatedUser(w, r)
 }
-
-//func AuthMiddlewareGetAccountType(r *http.Request) string {
-//	reqToken := r.Header.Get("Authorization")
-//	if reqToken == "" {
-//		return ""
-//	}
-//	splitToken := strings.Split(reqToken, "Bearer ")
-//	reqToken = splitToken[1]
-//
-//	if VerifyToken(reqToken) == false {
-//		return ""
-//	}
-//	return GetAccountType(r)
-//}
-//
-//func GetAccountType(r *http.Request) string {
-//	_, claims, _ := jwtauth.FromContext(r.Context())
-//
-//	_, valid := claims["patient"].(map[string]interface{})
-//	if valid {
-//		return "patient"
-//	}
-//	_, valid = claims["doctor"].(map[string]interface{})
-//	if valid {
-//		return "doctor"
-//	}
-//	return ""
-//}
 
 func GetBearerToken(req *http.Request) string {
 	authHeader := req.Header.Get("Authorization")
@@ -139,4 +111,34 @@ func GetAccountType(token string) (string, error) {
 	}
 
 	return "", errors.New("no account type found")
+}
+
+func AuthMiddlewareDoctor(w http.ResponseWriter, r *http.Request) string {
+	reqToken := r.Header.Get("Authorization")
+	if reqToken == "" {
+		return ""
+	}
+	splitToken := strings.Split(reqToken, "Bearer ")
+	reqToken = splitToken[1]
+
+	if VerifyToken(reqToken) == false {
+		return ""
+	}
+	return GetAuthenticatedDoctor(w, r)
+}
+
+func GetAuthenticatedDoctor(w http.ResponseWriter, r *http.Request) string {
+	_, claims, _ := jwtauth.FromContext(r.Context())
+
+	doctorClaim, ok := claims["doctor"].(string)
+	if !ok || doctorClaim == "" {
+		return ""
+	}
+
+	id, ok := claims["id"].(string)
+	if !ok {
+		return ""
+	}
+
+	return id
 }

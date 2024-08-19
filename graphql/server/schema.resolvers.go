@@ -103,6 +103,46 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, input m
 	return &updatedPatient, nil
 }
 
+// UpdatePatientsDeviceConnect is the resolver for the UpdatePatientsDeviceConnect field.
+func (r *mutationResolver) UpdatePatientsDeviceConnect(ctx context.Context, id string, input model.UpdatePatientsDeviceConnectInput) (*model.Patient, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+	update["device_connect"] = input.DeviceConnect
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedPatient model.Patient
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedPatient, nil
+}
+
+// UpdatePatientTrustDevice is the resolver for the UpdatePatientTrustDevice field.
+func (r *mutationResolver) UpdatePatientTrustDevice(ctx context.Context, id string, input model.UpdatePatientTrustDeviceInput) (*model.Patient, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+	update["trust_devices"] = input.TrustDevices
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedPatient model.Patient
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedPatient, nil
+}
+
 // DeletePatient is the resolver for the deletePatient field.
 func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool, error) {
 	resp := false
@@ -183,6 +223,18 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, input mo
 	if input.ChatIds != nil {
 		update["chat_ids"] = input.ChatIds
 	}
+	if input.Status != nil {
+		update["status"] = input.Status
+	}
+	if input.TrustDevices != nil {
+		update["trust_devices"] = input.TrustDevices
+	}
+	if input.DoubleAuthMethodsID != nil {
+		update["double_auth_methods_id"] = *input.DoubleAuthMethodsID
+	}
+	if input.DeviceConnect != nil {
+		update["device_connect"] = input.DeviceConnect
+	}
 
 	update["updatedAt"] = time.Now().Unix()
 
@@ -205,6 +257,46 @@ func (r *mutationResolver) UpdateDoctorsPatientIDs(ctx context.Context, id strin
 	filter := bson.M{"_id": id}
 	update := bson.M{}
 	update["patient_ids"] = input.PatientIds
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDoctor model.Doctor
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDoctor)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedDoctor, nil
+}
+
+// UpdateDoctorsDeviceConnect is the resolver for the UpdateDoctorsDeviceConnect field.
+func (r *mutationResolver) UpdateDoctorsDeviceConnect(ctx context.Context, id string, input model.UpdateDoctorsDeviceConnectInput) (*model.Doctor, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+	update["device_connect"] = input.DeviceConnect
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedDoctor model.Doctor
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedDoctor)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedDoctor, nil
+}
+
+// UpdateDoctorsTrustDevice is the resolver for the UpdateDoctorsTrustDevice field.
+func (r *mutationResolver) UpdateDoctorsTrustDevice(ctx context.Context, id string, input model.UpdateDoctorsTrustDeviceInput) (*model.Doctor, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+	update["trust_devices"] = input.TrustDevices
 	update["updatedAt"] = time.Now().Unix()
 	updateData := bson.M{"$set": update}
 
@@ -771,6 +863,7 @@ func (r *mutationResolver) CreateDocument(ctx context.Context, input model.Creat
 		Category:     model.Category(input.Category),
 		IsFavorite:   input.IsFavorite,
 		DownloadURL:  input.DownloadURL,
+		UploaderID:   input.UploaderID,
 		CreatedAt:    now,
 		UpdatedAt:    now,
 	}
@@ -1039,6 +1132,8 @@ func (r *mutationResolver) CreateTreatment(ctx context.Context, input model.Crea
 		Day:        input.Day,
 		Quantity:   input.Quantity,
 		MedicineID: input.MedicineID,
+		StartDate:  input.StartDate,
+		EndDate:    input.EndDate,
 		CreatedAt:  now,
 		UpdatedAt:  now,
 	}
@@ -1068,6 +1163,12 @@ func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, input
 	}
 	if input.MedicineID != nil {
 		update["medicine_id"] = *input.MedicineID
+	}
+	if input.StartDate != nil {
+		update["start_date"] = *input.StartDate
+	}
+	if input.EndDate != nil {
+		update["end_date"] = *input.EndDate
 	}
 
 	update["updatedAt"] = time.Now().Unix()
@@ -1182,6 +1283,9 @@ func (r *mutationResolver) CreateMedicine(ctx context.Context, input model.Creat
 		TargetDiseases:  input.TargetDiseases,
 		TreatedSymptoms: input.TreatedSymptoms,
 		SideEffects:     input.SideEffects,
+		Type:            input.Type,
+		Content:         input.Content,
+		Quantity:        input.Quantity,
 		CreatedAt:       now,
 		UpdatedAt:       now,
 	}

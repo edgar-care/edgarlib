@@ -16,7 +16,7 @@ generate:
 test:
 	@bold=$$(tput bold); \
 	normal=$$(tput sgr0); \
-	count=$$(grc go test -coverprofile=coverage.out -v ./appointment ./auth ./dashboard ./follow_treatment ./chat ./black_list ./medicament ./redis ./slot ./treatment | tee /dev/tty | grep -c '=== RUN'); \
+	count=$$(go test -coverprofile=coverage.out -v ./appointment ./auth ./dashboard ./follow_treatment ./chat ./black_list ./medicament ./redis ./slot ./treatment ./double_auth | tee /dev/tty | grep -c '=== RUN'); \
 	total_coverage=$$(go tool cover -func=coverage.out | grep total | awk '{print $$3}'); \
 	echo "\n==========================================\n" && \
 	echo "$${bold}Number of tests executed: $${count}\n" && \

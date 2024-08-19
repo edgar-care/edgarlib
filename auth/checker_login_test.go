@@ -27,7 +27,8 @@ func TestAuthenticateRequest(t *testing.T) {
 	req.Header.Set("Authorization", "Bearer "+response.Token)
 
 	token := jwt.New()
-	token.Set("patient", map[string]interface{}{"id": "test_patient_id"})
+	token.Set("patient", "test_patient_email")
+	token.Set("id", "test_patient_id")
 
 	ctx := jwtauth.NewContext(req.Context(), token, nil)
 

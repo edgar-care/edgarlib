@@ -19,24 +19,84 @@ type CreateDoubleMobileResponse struct {
 	Err        error
 }
 
-func CreateDoubleAuthMobile(input CreateDoubleMobileInput, patientId string) CreateDoubleMobileResponse {
-	check, err := graphql.GetPatientById(patientId)
+func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) CreateDoubleMobileResponse {
+	var doubleAuthMethodsID *string
+	var trustDevices []*string
+	var isPatient bool
+
+	_, err := graphql.GetDeviceConnectById(input.TrustDevice)
 	if err != nil {
-		return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: http.StatusBadRequest, Err: errors.New("unable to check double auth")}
+		return CreateDoubleMobileResponse{
+			DoubleAuth: model.DoubleAuth{},
+			Code:       400,
+			Err:        errors.New("failed, id invalid: " + err.Error()),
+		}
 	}
 
-	if check.DoubleAuthMethodsID == nil || *check.DoubleAuthMethodsID == "" {
+	if input.Methods != "MOBILE" {
+		return CreateDoubleMobileResponse{
+			DoubleAuth: model.DoubleAuth{},
+			Patient:    model.Patient{},
+			Code:       http.StatusBadRequest,
+			Err:        errors.New("only method_2fa MOBILE is supported"),
+		}
+	}
+
+	checkPatient, errPatient := graphql.GetPatientById(ownerId)
+	if errPatient == nil {
+		doubleAuthMethodsID = checkPatient.DoubleAuthMethodsID
+		trustDevices = checkPatient.TrustDevices
+		isPatient = true
+	} else {
+
+		checkDoctor, errDoctor := graphql.GetDoctorById(ownerId)
+		if errDoctor == nil {
+			doubleAuthMethodsID = checkDoctor.DoubleAuthMethodsID
+			trustDevices = checkDoctor.TrustDevices
+			isPatient = false
+		} else {
+
+			return CreateDoubleMobileResponse{
+				DoubleAuth: model.DoubleAuth{},
+				Patient:    model.Patient{},
+				Code:       http.StatusBadRequest,
+				Err:        errors.New("unable to check double auth: owner ID does not correspond to a valid patient or doctor"),
+			}
+		}
+	}
+
+	if doubleAuthMethodsID == nil || *doubleAuthMethodsID == "" {
 		auth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
 			Methods:       []string{input.Methods},
 			TrustDeviceID: input.TrustDevice,
 		})
 		if err != nil {
-			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: http.StatusBadRequest, Err: errors.New("unable to create double auth")}
+			return CreateDoubleMobileResponse{
+				DoubleAuth: model.DoubleAuth{},
+				Patient:    model.Patient{},
+				Code:       http.StatusBadRequest,
+				Err:        errors.New("unable to create double auth"),
+			}
 		}
 
-		_, err = graphql.UpdatePatient(patientId, model.UpdatePatientInput{DoubleAuthMethodsID: &auth.ID, TrustDevices: []*string{&input.TrustDevice}})
+		if isPatient {
+			_, err = graphql.UpdatePatient(ownerId, model.UpdatePatientInput{
+				DoubleAuthMethodsID: &auth.ID,
+				TrustDevices:        []*string{&input.TrustDevice},
+			})
+		} else {
+			_, err = graphql.UpdateDoctor(ownerId, model.UpdateDoctorInput{
+				DoubleAuthMethodsID: &auth.ID,
+				TrustDevices:        []*string{&input.TrustDevice},
+			})
+		}
 		if err != nil {
-			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: http.StatusBadRequest, Err: errors.New("update failed: " + err.Error())}
+			return CreateDoubleMobileResponse{
+				DoubleAuth: model.DoubleAuth{},
+				Patient:    model.Patient{},
+				Code:       http.StatusBadRequest,
+				Err:        errors.New("update failed: " + err.Error()),
+			}
 		}
 
 		return CreateDoubleMobileResponse{
@@ -46,16 +106,31 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, patientId string) Cre
 		}
 	} else {
 		if input.Methods != "MOBILE" {
-			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: http.StatusBadRequest, Err: errors.New("only method_2fa MOBILE is supported")}
+			return CreateDoubleMobileResponse{
+				DoubleAuth: model.DoubleAuth{},
+				Patient:    model.Patient{},
+				Code:       http.StatusBadRequest,
+				Err:        errors.New("only method_2fa MOBILE is supported"),
+			}
 		}
 
-		if !isTrustedDevice(check.TrustDevices, input.TrustDevice) {
-			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: http.StatusBadRequest, Err: errors.New("trusted_device_id is not valid")}
+		if !isTrustedDevice(trustDevices, input.TrustDevice) {
+			return CreateDoubleMobileResponse{
+				DoubleAuth: model.DoubleAuth{},
+				Patient:    model.Patient{},
+				Code:       http.StatusBadRequest,
+				Err:        errors.New("trusted_device_id is not valid"),
+			}
 		}
 
-		doubleAuth, err := graphql.GetDoubleAuthById(*check.DoubleAuthMethodsID)
+		doubleAuth, err := graphql.GetDoubleAuthById(*doubleAuthMethodsID)
 		if err != nil {
-			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: http.StatusBadRequest, Err: errors.New("get double_auth failed: " + err.Error())}
+			return CreateDoubleMobileResponse{
+				DoubleAuth: model.DoubleAuth{},
+				Patient:    model.Patient{},
+				Code:       http.StatusBadRequest,
+				Err:        errors.New("get double_auth failed: " + err.Error()),
+			}
 		}
 
 		if sliceContains(doubleAuth.Methods, input.Methods) {
@@ -67,9 +142,17 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, patientId string) Cre
 		}
 
 		newMethods := append(doubleAuth.Methods, input.Methods)
-		updated, err := graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{Methods: newMethods, TrustDeviceID: &input.TrustDevice})
+		updated, err := graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
+			Methods:       newMethods,
+			TrustDeviceID: &input.TrustDevice,
+		})
 		if err != nil {
-			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: http.StatusBadRequest, Err: errors.New("update double_auth failed: " + err.Error())}
+			return CreateDoubleMobileResponse{
+				DoubleAuth: model.DoubleAuth{},
+				Patient:    model.Patient{},
+				Code:       http.StatusBadRequest,
+				Err:        errors.New("update double_auth failed: " + err.Error()),
+			}
 		}
 
 		return CreateDoubleMobileResponse{
@@ -82,7 +165,7 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, patientId string) Cre
 
 func isTrustedDevice(trustDevices []*string, trustedDeviceID string) bool {
 	for _, device := range trustDevices {
-		if device == &trustedDeviceID {
+		if device != nil && *device == trustedDeviceID {
 			return true
 		}
 	}

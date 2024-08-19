@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"net/http"
 )
 
 type GetDoubleAuthByIdResponse struct {
@@ -13,18 +14,30 @@ type GetDoubleAuthByIdResponse struct {
 }
 
 func GetDoubleAuthById(id string) GetDoubleAuthByIdResponse {
-	patient, err := graphql.GetPatientById(id)
-	if err != nil {
-		return GetDoubleAuthByIdResponse{model.DoubleAuth{}, 400, errors.New("id does not correspond to a patient")}
+
+	patient, errPatient := graphql.GetPatientById(id)
+	if errPatient == nil {
+		if patient.DoubleAuthMethodsID == nil || *patient.DoubleAuthMethodsID == "" {
+			return GetDoubleAuthByIdResponse{model.DoubleAuth{}, http.StatusNotFound, errors.New("double auth not found on patient")}
+		}
+		device, err := graphql.GetDoubleAuthById(*patient.DoubleAuthMethodsID)
+		if err != nil {
+			return GetDoubleAuthByIdResponse{model.DoubleAuth{}, http.StatusBadRequest, errors.New("id does not correspond to a double auth")}
+		}
+		return GetDoubleAuthByIdResponse{device, http.StatusOK, nil}
 	}
 
-	if patient.DoubleAuthMethodsID == nil {
-		return GetDoubleAuthByIdResponse{model.DoubleAuth{}, 404, errors.New("double auth not found on patient")}
-	}
-	device, err := graphql.GetDoubleAuthById(*patient.DoubleAuthMethodsID)
-	if err != nil {
-		return GetDoubleAuthByIdResponse{model.DoubleAuth{}, 400, errors.New("id does not correspond to a double auth")}
+	doctor, errDoctor := graphql.GetDoctorById(id)
+	if errDoctor == nil {
+		if doctor.DoubleAuthMethodsID == nil || *doctor.DoubleAuthMethodsID == "" {
+			return GetDoubleAuthByIdResponse{model.DoubleAuth{}, http.StatusNotFound, errors.New("double auth not found on doctor")}
+		}
+		device, err := graphql.GetDoubleAuthById(*doctor.DoubleAuthMethodsID)
+		if err != nil {
+			return GetDoubleAuthByIdResponse{model.DoubleAuth{}, http.StatusBadRequest, errors.New("id does not correspond to a double auth")}
+		}
+		return GetDoubleAuthByIdResponse{device, http.StatusOK, nil}
 	}
 
-	return GetDoubleAuthByIdResponse{device, 200, nil}
+	return GetDoubleAuthByIdResponse{model.DoubleAuth{}, http.StatusBadRequest, errors.New("id does not correspond to a patient or doctor")}
 }

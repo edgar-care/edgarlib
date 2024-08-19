@@ -31,6 +31,8 @@ type UpdateMedicineInput struct {
 	Period     []string `json:"period"`
 	Day        []string `json:"day"`
 	Quantity   int      `json:"quantity"`
+	StartDate  int      `json:"start_date"`
+	EndDate    int      `json:"end_date"`
 }
 
 type UpdateMedicalFolderResponse struct {
@@ -61,6 +63,8 @@ func UpdateMedicalFolder(input UpdateMedicalInfoInput, medicalInfoID string) Upd
 					Day:        days,
 					Quantity:   medicine.Quantity,
 					MedicineID: medicine.MedicineID,
+					StartDate:  medicine.StartDate,
+					EndDate:    medicine.EndDate,
 				})
 				if err != nil {
 					return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to create treatment: " + err.Error())}
@@ -135,6 +139,8 @@ func UpdateMedicalFolder(input UpdateMedicalInfoInput, medicalInfoID string) Upd
 						Day:        days,
 						Quantity:   medicine.Quantity,
 						MedicineID: medicine.MedicineID,
+						StartDate:  medicine.StartDate,
+						EndDate:    medicine.EndDate,
 					})
 					if err != nil {
 						return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to create treatment: " + err.Error())}
@@ -149,6 +155,8 @@ func UpdateMedicalFolder(input UpdateMedicalInfoInput, medicalInfoID string) Upd
 						Day:        days,
 						Quantity:   &medicine.Quantity,
 						MedicineID: &medicine.MedicineID,
+						StartDate:  &medicine.StartDate,
+						EndDate:    &medicine.EndDate,
 					})
 					if err != nil {
 						return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to update treatment: " + err.Error())}

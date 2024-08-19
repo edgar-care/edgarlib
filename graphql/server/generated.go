@@ -187,6 +187,7 @@ type ComplexityRoot struct {
 		Name         func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
+		UploaderID   func(childComplexity int) int
 	}
 
 	DoubleAuth struct {
@@ -230,85 +231,92 @@ type ComplexityRoot struct {
 	}
 
 	Medicine struct {
+		Content         func(childComplexity int) int
 		CreatedAt       func(childComplexity int) int
 		ID              func(childComplexity int) int
 		Name            func(childComplexity int) int
+		Quantity        func(childComplexity int) int
 		SideEffects     func(childComplexity int) int
 		TargetDiseases  func(childComplexity int) int
 		TreatedSymptoms func(childComplexity int) int
+		Type            func(childComplexity int) int
 		Unit            func(childComplexity int) int
 		UpdatedAt       func(childComplexity int) int
 	}
 
 	Mutation struct {
-		CreateAdmin              func(childComplexity int, input model.CreateAdminInput) int
-		CreateAlert              func(childComplexity int, input model.CreateAlertInput) int
-		CreateAnteChir           func(childComplexity int, input model.CreateAnteChirInput) int
-		CreateAnteDisease        func(childComplexity int, input model.CreateAnteDiseaseInput) int
-		CreateAnteFamily         func(childComplexity int, input model.CreateAnteFamilyInput) int
-		CreateBlackList          func(childComplexity int, input model.CreateBlackListInput) int
-		CreateChat               func(childComplexity int, input model.CreateChatInput) int
-		CreateDeviceConnect      func(childComplexity int, input model.CreateDeviceConnectInput) int
-		CreateDisease            func(childComplexity int, input model.CreateDiseaseInput) int
-		CreateDoctor             func(childComplexity int, input model.CreateDoctorInput) int
-		CreateDocument           func(childComplexity int, input model.CreateDocumentInput) int
-		CreateDoubleAuth         func(childComplexity int, input model.CreateDoubleAuthInput) int
-		CreateMedicalFolder      func(childComplexity int, input model.CreateMedicalFolderInput) int
-		CreateMedicine           func(childComplexity int, input model.CreateMedicineInput) int
-		CreateNlpReport          func(childComplexity int, input model.CreateNlpReportInput) int
-		CreateNotification       func(childComplexity int, input model.CreateNotificationInput) int
-		CreatePatient            func(childComplexity int, input model.CreatePatientInput) int
-		CreateRdv                func(childComplexity int, input model.CreateRdvInput) int
-		CreateSaveCode           func(childComplexity int, input model.CreateSaveCodeInput) int
-		CreateSession            func(childComplexity int, input model.CreateSessionInput) int
-		CreateSymptom            func(childComplexity int, input model.CreateSymptomInput) int
-		CreateTreatment          func(childComplexity int, input model.CreateTreatmentInput) int
-		CreateTreatmentsFollowUp func(childComplexity int, input model.CreateTreatmentsFollowUpInput) int
-		DeleteAdmin              func(childComplexity int, id string) int
-		DeleteAlert              func(childComplexity int, id string) int
-		DeleteAnteChir           func(childComplexity int, id string) int
-		DeleteAnteDisease        func(childComplexity int, id string) int
-		DeleteAnteFamily         func(childComplexity int, id string) int
-		DeleteBlackList          func(childComplexity int, id string) int
-		DeleteChat               func(childComplexity int, id string) int
-		DeleteDeviceConnect      func(childComplexity int, id string) int
-		DeleteDisease            func(childComplexity int, id string) int
-		DeleteDoctor             func(childComplexity int, id string) int
-		DeleteDocument           func(childComplexity int, id string) int
-		DeleteDoubleAuth         func(childComplexity int, id string) int
-		DeleteMedicalFolder      func(childComplexity int, id string) int
-		DeleteMedicine           func(childComplexity int, id string) int
-		DeleteNotification       func(childComplexity int, id string) int
-		DeletePatient            func(childComplexity int, id string) int
-		DeleteRdv                func(childComplexity int, id string) int
-		DeleteSaveCode           func(childComplexity int, id string) int
-		DeleteSession            func(childComplexity int, id string) int
-		DeleteSlot               func(childComplexity int, id string) int
-		DeleteSymptom            func(childComplexity int, id string) int
-		DeleteTreatment          func(childComplexity int, id string) int
-		DeleteTreatmentsFollowUp func(childComplexity int, id string) int
-		UpdateAdmin              func(childComplexity int, id string, input model.UpdateAdminInput) int
-		UpdateAlert              func(childComplexity int, id string, input model.UpdateAlertInput) int
-		UpdateAnteChir           func(childComplexity int, id string, input model.UpdateAnteChirInput) int
-		UpdateAnteDisease        func(childComplexity int, id string, input model.UpdateAnteDiseaseInput) int
-		UpdateAnteFamily         func(childComplexity int, id string, input model.UpdateAnteFamilyInput) int
-		UpdateBlackList          func(childComplexity int, id string, input model.UpdateBlackListInput) int
-		UpdateChat               func(childComplexity int, id string, input model.UpdateChatInput) int
-		UpdateDeviceConnect      func(childComplexity int, id string, input model.UpdateDeviceConnectInput) int
-		UpdateDisease            func(childComplexity int, id string, input model.UpdateDiseaseInput) int
-		UpdateDoctor             func(childComplexity int, id string, input model.UpdateDoctorInput) int
-		UpdateDoctorsPatientIDs  func(childComplexity int, id string, input model.UpdateDoctorsPatientIDsInput) int
-		UpdateDocument           func(childComplexity int, id string, input model.UpdateDocumentInput) int
-		UpdateDoubleAuth         func(childComplexity int, id string, input model.UpdateDoubleAuthInput) int
-		UpdateMedicalFolder      func(childComplexity int, id string, input model.UpdateMedicalFolderInput) int
-		UpdateNotification       func(childComplexity int, id string, input model.UpdateNotificationInput) int
-		UpdatePatient            func(childComplexity int, id string, input model.UpdatePatientInput) int
-		UpdateRdv                func(childComplexity int, id string, input model.UpdateRdvInput) int
-		UpdateSaveCode           func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
-		UpdateSession            func(childComplexity int, id string, input model.UpdateSessionInput) int
-		UpdateSymptom            func(childComplexity int, id string, input model.UpdateSymptomInput) int
-		UpdateTreatment          func(childComplexity int, id string, input model.UpdateTreatmentInput) int
-		UpdateTreatmentsFollowUp func(childComplexity int, id string, input model.UpdateTreatmentsFollowUpInput) int
+		CreateAdmin                 func(childComplexity int, input model.CreateAdminInput) int
+		CreateAlert                 func(childComplexity int, input model.CreateAlertInput) int
+		CreateAnteChir              func(childComplexity int, input model.CreateAnteChirInput) int
+		CreateAnteDisease           func(childComplexity int, input model.CreateAnteDiseaseInput) int
+		CreateAnteFamily            func(childComplexity int, input model.CreateAnteFamilyInput) int
+		CreateBlackList             func(childComplexity int, input model.CreateBlackListInput) int
+		CreateChat                  func(childComplexity int, input model.CreateChatInput) int
+		CreateDeviceConnect         func(childComplexity int, input model.CreateDeviceConnectInput) int
+		CreateDisease               func(childComplexity int, input model.CreateDiseaseInput) int
+		CreateDoctor                func(childComplexity int, input model.CreateDoctorInput) int
+		CreateDocument              func(childComplexity int, input model.CreateDocumentInput) int
+		CreateDoubleAuth            func(childComplexity int, input model.CreateDoubleAuthInput) int
+		CreateMedicalFolder         func(childComplexity int, input model.CreateMedicalFolderInput) int
+		CreateMedicine              func(childComplexity int, input model.CreateMedicineInput) int
+		CreateNlpReport             func(childComplexity int, input model.CreateNlpReportInput) int
+		CreateNotification          func(childComplexity int, input model.CreateNotificationInput) int
+		CreatePatient               func(childComplexity int, input model.CreatePatientInput) int
+		CreateRdv                   func(childComplexity int, input model.CreateRdvInput) int
+		CreateSaveCode              func(childComplexity int, input model.CreateSaveCodeInput) int
+		CreateSession               func(childComplexity int, input model.CreateSessionInput) int
+		CreateSymptom               func(childComplexity int, input model.CreateSymptomInput) int
+		CreateTreatment             func(childComplexity int, input model.CreateTreatmentInput) int
+		CreateTreatmentsFollowUp    func(childComplexity int, input model.CreateTreatmentsFollowUpInput) int
+		DeleteAdmin                 func(childComplexity int, id string) int
+		DeleteAlert                 func(childComplexity int, id string) int
+		DeleteAnteChir              func(childComplexity int, id string) int
+		DeleteAnteDisease           func(childComplexity int, id string) int
+		DeleteAnteFamily            func(childComplexity int, id string) int
+		DeleteBlackList             func(childComplexity int, id string) int
+		DeleteChat                  func(childComplexity int, id string) int
+		DeleteDeviceConnect         func(childComplexity int, id string) int
+		DeleteDisease               func(childComplexity int, id string) int
+		DeleteDoctor                func(childComplexity int, id string) int
+		DeleteDocument              func(childComplexity int, id string) int
+		DeleteDoubleAuth            func(childComplexity int, id string) int
+		DeleteMedicalFolder         func(childComplexity int, id string) int
+		DeleteMedicine              func(childComplexity int, id string) int
+		DeleteNotification          func(childComplexity int, id string) int
+		DeletePatient               func(childComplexity int, id string) int
+		DeleteRdv                   func(childComplexity int, id string) int
+		DeleteSaveCode              func(childComplexity int, id string) int
+		DeleteSession               func(childComplexity int, id string) int
+		DeleteSlot                  func(childComplexity int, id string) int
+		DeleteSymptom               func(childComplexity int, id string) int
+		DeleteTreatment             func(childComplexity int, id string) int
+		DeleteTreatmentsFollowUp    func(childComplexity int, id string) int
+		UpdateAdmin                 func(childComplexity int, id string, input model.UpdateAdminInput) int
+		UpdateAlert                 func(childComplexity int, id string, input model.UpdateAlertInput) int
+		UpdateAnteChir              func(childComplexity int, id string, input model.UpdateAnteChirInput) int
+		UpdateAnteDisease           func(childComplexity int, id string, input model.UpdateAnteDiseaseInput) int
+		UpdateAnteFamily            func(childComplexity int, id string, input model.UpdateAnteFamilyInput) int
+		UpdateBlackList             func(childComplexity int, id string, input model.UpdateBlackListInput) int
+		UpdateChat                  func(childComplexity int, id string, input model.UpdateChatInput) int
+		UpdateDeviceConnect         func(childComplexity int, id string, input model.UpdateDeviceConnectInput) int
+		UpdateDisease               func(childComplexity int, id string, input model.UpdateDiseaseInput) int
+		UpdateDoctor                func(childComplexity int, id string, input model.UpdateDoctorInput) int
+		UpdateDoctorsDeviceConnect  func(childComplexity int, id string, input model.UpdateDoctorsDeviceConnectInput) int
+		UpdateDoctorsPatientIDs     func(childComplexity int, id string, input model.UpdateDoctorsPatientIDsInput) int
+		UpdateDoctorsTrustDevice    func(childComplexity int, id string, input model.UpdateDoctorsTrustDeviceInput) int
+		UpdateDocument              func(childComplexity int, id string, input model.UpdateDocumentInput) int
+		UpdateDoubleAuth            func(childComplexity int, id string, input model.UpdateDoubleAuthInput) int
+		UpdateMedicalFolder         func(childComplexity int, id string, input model.UpdateMedicalFolderInput) int
+		UpdateNotification          func(childComplexity int, id string, input model.UpdateNotificationInput) int
+		UpdatePatient               func(childComplexity int, id string, input model.UpdatePatientInput) int
+		UpdatePatientTrustDevice    func(childComplexity int, id string, input model.UpdatePatientTrustDeviceInput) int
+		UpdatePatientsDeviceConnect func(childComplexity int, id string, input model.UpdatePatientsDeviceConnectInput) int
+		UpdateRdv                   func(childComplexity int, id string, input model.UpdateRdvInput) int
+		UpdateSaveCode              func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
+		UpdateSession               func(childComplexity int, id string, input model.UpdateSessionInput) int
+		UpdateSymptom               func(childComplexity int, id string, input model.UpdateSymptomInput) int
+		UpdateTreatment             func(childComplexity int, id string, input model.UpdateTreatmentInput) int
+		UpdateTreatmentsFollowUp    func(childComplexity int, id string, input model.UpdateTreatmentsFollowUpInput) int
 	}
 
 	NlpReport struct {
@@ -490,10 +498,12 @@ type ComplexityRoot struct {
 	Treatment struct {
 		CreatedAt  func(childComplexity int) int
 		Day        func(childComplexity int) int
+		EndDate    func(childComplexity int) int
 		ID         func(childComplexity int) int
 		MedicineID func(childComplexity int) int
 		Period     func(childComplexity int) int
 		Quantity   func(childComplexity int) int
+		StartDate  func(childComplexity int) int
 		UpdatedAt  func(childComplexity int) int
 	}
 
@@ -510,10 +520,14 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreatePatient(ctx context.Context, input model.CreatePatientInput) (*model.Patient, error)
 	UpdatePatient(ctx context.Context, id string, input model.UpdatePatientInput) (*model.Patient, error)
+	UpdatePatientsDeviceConnect(ctx context.Context, id string, input model.UpdatePatientsDeviceConnectInput) (*model.Patient, error)
+	UpdatePatientTrustDevice(ctx context.Context, id string, input model.UpdatePatientTrustDeviceInput) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error)
 	UpdateDoctor(ctx context.Context, id string, input model.UpdateDoctorInput) (*model.Doctor, error)
 	UpdateDoctorsPatientIDs(ctx context.Context, id string, input model.UpdateDoctorsPatientIDsInput) (*model.Doctor, error)
+	UpdateDoctorsDeviceConnect(ctx context.Context, id string, input model.UpdateDoctorsDeviceConnectInput) (*model.Doctor, error)
+	UpdateDoctorsTrustDevice(ctx context.Context, id string, input model.UpdateDoctorsTrustDeviceInput) (*model.Doctor, error)
 	DeleteDoctor(ctx context.Context, id string) (*bool, error)
 	CreateAdmin(ctx context.Context, input model.CreateAdminInput) (*model.Admin, error)
 	UpdateAdmin(ctx context.Context, id string, input model.UpdateAdminInput) (*model.Admin, error)
@@ -1341,6 +1355,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Document.UpdatedAt(childComplexity), true
 
+	case "Document.uploader_id":
+		if e.complexity.Document.UploaderID == nil {
+			break
+		}
+
+		return e.complexity.Document.UploaderID(childComplexity), true
+
 	case "DoubleAuth.createdAt":
 		if e.complexity.DoubleAuth.CreatedAt == nil {
 			break
@@ -1537,6 +1558,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.MedicalInfo.Weight(childComplexity), true
 
+	case "Medicine.content":
+		if e.complexity.Medicine.Content == nil {
+			break
+		}
+
+		return e.complexity.Medicine.Content(childComplexity), true
+
 	case "Medicine.createdAt":
 		if e.complexity.Medicine.CreatedAt == nil {
 			break
@@ -1558,6 +1586,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Medicine.Name(childComplexity), true
 
+	case "Medicine.quantity":
+		if e.complexity.Medicine.Quantity == nil {
+			break
+		}
+
+		return e.complexity.Medicine.Quantity(childComplexity), true
+
 	case "Medicine.side_effects":
 		if e.complexity.Medicine.SideEffects == nil {
 			break
@@ -1578,6 +1613,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Medicine.TreatedSymptoms(childComplexity), true
+
+	case "Medicine.type":
+		if e.complexity.Medicine.Type == nil {
+			break
+		}
+
+		return e.complexity.Medicine.Type(childComplexity), true
 
 	case "Medicine.unit":
 		if e.complexity.Medicine.Unit == nil {
@@ -2265,6 +2307,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateDoctor(childComplexity, args["id"].(string), args["input"].(model.UpdateDoctorInput)), true
 
+	case "Mutation.UpdateDoctorsDeviceConnect":
+		if e.complexity.Mutation.UpdateDoctorsDeviceConnect == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_UpdateDoctorsDeviceConnect_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDoctorsDeviceConnect(childComplexity, args["id"].(string), args["input"].(model.UpdateDoctorsDeviceConnectInput)), true
+
 	case "Mutation.updateDoctorsPatientIDs":
 		if e.complexity.Mutation.UpdateDoctorsPatientIDs == nil {
 			break
@@ -2276,6 +2330,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateDoctorsPatientIDs(childComplexity, args["id"].(string), args["input"].(model.UpdateDoctorsPatientIDsInput)), true
+
+	case "Mutation.UpdateDoctorsTrustDevice":
+		if e.complexity.Mutation.UpdateDoctorsTrustDevice == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_UpdateDoctorsTrustDevice_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDoctorsTrustDevice(childComplexity, args["id"].(string), args["input"].(model.UpdateDoctorsTrustDeviceInput)), true
 
 	case "Mutation.updateDocument":
 		if e.complexity.Mutation.UpdateDocument == nil {
@@ -2336,6 +2402,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientInput)), true
+
+	case "Mutation.UpdatePatientTrustDevice":
+		if e.complexity.Mutation.UpdatePatientTrustDevice == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_UpdatePatientTrustDevice_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePatientTrustDevice(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientTrustDeviceInput)), true
+
+	case "Mutation.UpdatePatientsDeviceConnect":
+		if e.complexity.Mutation.UpdatePatientsDeviceConnect == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_UpdatePatientsDeviceConnect_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePatientsDeviceConnect(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientsDeviceConnectInput)), true
 
 	case "Mutation.updateRdv":
 		if e.complexity.Mutation.UpdateRdv == nil {
@@ -3683,6 +3773,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Treatment.Day(childComplexity), true
 
+	case "Treatment.end_date":
+		if e.complexity.Treatment.EndDate == nil {
+			break
+		}
+
+		return e.complexity.Treatment.EndDate(childComplexity), true
+
 	case "Treatment.id":
 		if e.complexity.Treatment.ID == nil {
 			break
@@ -3710,6 +3807,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Treatment.Quantity(childComplexity), true
+
+	case "Treatment.start_date":
+		if e.complexity.Treatment.StartDate == nil {
+			break
+		}
+
+		return e.complexity.Treatment.StartDate(childComplexity), true
 
 	case "Treatment.updatedAt":
 		if e.complexity.Treatment.UpdatedAt == nil {
@@ -3815,12 +3919,16 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateDeviceConnectInput,
 		ec.unmarshalInputUpdateDiseaseInput,
 		ec.unmarshalInputUpdateDoctorInput,
+		ec.unmarshalInputUpdateDoctorsDeviceConnectInput,
 		ec.unmarshalInputUpdateDoctorsPatientIDsInput,
+		ec.unmarshalInputUpdateDoctorsTrustDeviceInput,
 		ec.unmarshalInputUpdateDocumentInput,
 		ec.unmarshalInputUpdateDoubleAuthInput,
 		ec.unmarshalInputUpdateMedicalFolderInput,
 		ec.unmarshalInputUpdateNotificationInput,
 		ec.unmarshalInputUpdatePatientInput,
+		ec.unmarshalInputUpdatePatientTrustDeviceInput,
+		ec.unmarshalInputUpdatePatientsDeviceConnectInput,
 		ec.unmarshalInputUpdateRdvInput,
 		ec.unmarshalInputUpdateSaveCodeInput,
 		ec.unmarshalInputUpdateSessionInput,
@@ -4073,6 +4181,7 @@ type Document {
     category: Category!
     is_favorite: Boolean!
     download_url: String!
+    uploader_id: String!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -4115,6 +4224,8 @@ type Treatment {
     day: [Day!]!
     quantity: Int!
     medicine_id: String!
+    start_date: Int!
+    end_date: Int!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -4150,6 +4261,9 @@ type Medicine {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
+    type: String!
+    content: String!
+    quantity: Int!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -4329,6 +4443,22 @@ input UpdateDoctorsPatientIDsInput {
     patient_ids: [String]
 }
 
+input UpdatePatientsDeviceConnectInput {
+    device_connect: [String]
+}
+
+input UpdateDoctorsDeviceConnectInput {
+    device_connect: [String]
+}
+
+input UpdateDoctorsTrustDeviceInput {
+    trust_devices: [String]
+}
+
+input UpdatePatientTrustDeviceInput {
+    trust_devices: [String]
+}
+
 input AddressInput {
     street: String!
     zip_code: String!
@@ -4472,6 +4602,7 @@ input CreateDocumentInput {
     category: String!
     is_favorite: Boolean!
     download_url: String!
+    uploader_id: String!
 }
 
 input UpdateDocumentInput {
@@ -4522,6 +4653,8 @@ input CreateTreatmentInput {
     day: [Day!]!
     quantity: Int!
     medicine_id: String!
+    start_date: Int!
+    end_date: Int!
 }
 
 input UpdateTreatmentInput {
@@ -4529,6 +4662,8 @@ input UpdateTreatmentInput {
     day: [Day!]
     quantity: Int
     medicine_id: String
+    start_date: Int
+    end_date: Int
 }
 
 input CreateAlertInput {
@@ -4555,6 +4690,9 @@ input CreateMedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
+    type: String!
+    content: String!
+    quantity: Int!
 }
 
 
@@ -4625,6 +4763,8 @@ input TreatmentInput {
     day: [Day]!
     quantity: Int!
     medicine_id: String!
+    start_date: Int!
+    end_date: Int!
 }
 
 input MedicineInput {
@@ -4633,6 +4773,9 @@ input MedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
+    type: String!
+    content: String!
+    quantity: Int!
 }
 
 input ChirInducedSymptomInput {
@@ -4977,6 +5120,10 @@ type Mutation {
     # Update a patient.
     updatePatient(id: String!, input: UpdatePatientInput!): Patient
 
+    UpdatePatientsDeviceConnect(id: String!, input: UpdatePatientsDeviceConnectInput!): Patient
+
+    UpdatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
+
     # Delete a patient.
     deletePatient(id: String!): Boolean
 
@@ -4987,6 +5134,10 @@ type Mutation {
     updateDoctor(id: String!, input: UpdateDoctorInput!): Doctor
 
     updateDoctorsPatientIDs(id: String!, input: UpdateDoctorsPatientIDsInput!): Doctor
+
+    UpdateDoctorsDeviceConnect(id: String!, input: UpdateDoctorsDeviceConnectInput!): Doctor
+
+    UpdateDoctorsTrustDevice(id: String!, input: UpdateDoctorsTrustDeviceInput!): Doctor
 
     # Delete a doctor.
     deleteDoctor(id: String!): Boolean
@@ -5181,13 +5332,109 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_UpdateDoctorsDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdateDoctorsDeviceConnectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDoctorsDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorsDeviceConnectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_UpdateDoctorsTrustDevice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdateDoctorsTrustDeviceInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateDoctorsTrustDeviceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorsTrustDeviceInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_UpdatePatientTrustDevice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdatePatientTrustDeviceInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientTrustDeviceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientTrustDeviceInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_UpdatePatientsDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdatePatientsDeviceConnectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientsDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientsDeviceConnectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createAdmin_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.CreateAdminInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAdminInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAdminInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5202,7 +5449,7 @@ func (ec *executionContext) field_Mutation_createAlert_args(ctx context.Context,
 	var arg0 model.CreateAlertInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAlertInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAlertInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5217,7 +5464,7 @@ func (ec *executionContext) field_Mutation_createAnteChir_args(ctx context.Conte
 	var arg0 model.CreateAnteChirInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteChirInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteChirInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5232,7 +5479,7 @@ func (ec *executionContext) field_Mutation_createAnteDisease_args(ctx context.Co
 	var arg0 model.CreateAnteDiseaseInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteDiseaseInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5247,7 +5494,7 @@ func (ec *executionContext) field_Mutation_createAnteFamily_args(ctx context.Con
 	var arg0 model.CreateAnteFamilyInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5262,7 +5509,7 @@ func (ec *executionContext) field_Mutation_createBlackList_args(ctx context.Cont
 	var arg0 model.CreateBlackListInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateBlackListInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateBlackListInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5277,7 +5524,7 @@ func (ec *executionContext) field_Mutation_createChat_args(ctx context.Context, 
 	var arg0 model.CreateChatInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateChatInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateChatInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5292,7 +5539,7 @@ func (ec *executionContext) field_Mutation_createDeviceConnect_args(ctx context.
 	var arg0 model.CreateDeviceConnectInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDeviceConnectInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDeviceConnectInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5307,7 +5554,7 @@ func (ec *executionContext) field_Mutation_createDisease_args(ctx context.Contex
 	var arg0 model.CreateDiseaseInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDiseaseInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5322,7 +5569,7 @@ func (ec *executionContext) field_Mutation_createDoctor_args(ctx context.Context
 	var arg0 model.CreateDoctorInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoctorInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDoctorInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5337,7 +5584,7 @@ func (ec *executionContext) field_Mutation_createDocument_args(ctx context.Conte
 	var arg0 model.CreateDocumentInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDocumentInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDocumentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5352,7 +5599,7 @@ func (ec *executionContext) field_Mutation_createDoubleAuth_args(ctx context.Con
 	var arg0 model.CreateDoubleAuthInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoubleAuthInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDoubleAuthInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5367,7 +5614,7 @@ func (ec *executionContext) field_Mutation_createMedicalFolder_args(ctx context.
 	var arg0 model.CreateMedicalFolderInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicalFolderInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateMedicalFolderInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5382,7 +5629,7 @@ func (ec *executionContext) field_Mutation_createMedicine_args(ctx context.Conte
 	var arg0 model.CreateMedicineInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateMedicineInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicineInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateMedicineInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateMedicineInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5397,7 +5644,7 @@ func (ec *executionContext) field_Mutation_createNlpReport_args(ctx context.Cont
 	var arg0 model.CreateNlpReportInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateNlpReportInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNlpReportInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateNlpReportInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateNlpReportInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5412,7 +5659,7 @@ func (ec *executionContext) field_Mutation_createNotification_args(ctx context.C
 	var arg0 model.CreateNotificationInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNotificationInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateNotificationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5427,7 +5674,7 @@ func (ec *executionContext) field_Mutation_createPatient_args(ctx context.Contex
 	var arg0 model.CreatePatientInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreatePatientInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreatePatientInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5442,7 +5689,7 @@ func (ec *executionContext) field_Mutation_createRdv_args(ctx context.Context, r
 	var arg0 model.CreateRdvInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateRdvInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateRdvInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5457,7 +5704,7 @@ func (ec *executionContext) field_Mutation_createSaveCode_args(ctx context.Conte
 	var arg0 model.CreateSaveCodeInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSaveCodeInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateSaveCodeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5472,7 +5719,7 @@ func (ec *executionContext) field_Mutation_createSession_args(ctx context.Contex
 	var arg0 model.CreateSessionInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSessionInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateSessionInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5487,7 +5734,7 @@ func (ec *executionContext) field_Mutation_createSymptom_args(ctx context.Contex
 	var arg0 model.CreateSymptomInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSymptomInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateSymptomInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5502,7 +5749,7 @@ func (ec *executionContext) field_Mutation_createTreatment_args(ctx context.Cont
 	var arg0 model.CreateTreatmentInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateTreatmentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5517,7 +5764,7 @@ func (ec *executionContext) field_Mutation_createTreatmentsFollowUp_args(ctx con
 	var arg0 model.CreateTreatmentsFollowUpInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentsFollowUpInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateTreatmentsFollowUpInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5886,7 +6133,7 @@ func (ec *executionContext) field_Mutation_updateAdmin_args(ctx context.Context,
 	var arg1 model.UpdateAdminInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAdminInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAdminInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5910,7 +6157,7 @@ func (ec *executionContext) field_Mutation_updateAlert_args(ctx context.Context,
 	var arg1 model.UpdateAlertInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAlertInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAlertInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5934,7 +6181,7 @@ func (ec *executionContext) field_Mutation_updateAnteChir_args(ctx context.Conte
 	var arg1 model.UpdateAnteChirInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteChirInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAnteChirInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5958,7 +6205,7 @@ func (ec *executionContext) field_Mutation_updateAnteDisease_args(ctx context.Co
 	var arg1 model.UpdateAnteDiseaseInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteDiseaseInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAnteDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5982,7 +6229,7 @@ func (ec *executionContext) field_Mutation_updateAnteFamily_args(ctx context.Con
 	var arg1 model.UpdateAnteFamilyInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteFamilyInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAnteFamilyInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6006,7 +6253,7 @@ func (ec *executionContext) field_Mutation_updateBlackList_args(ctx context.Cont
 	var arg1 model.UpdateBlackListInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateBlackListInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateBlackListInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6030,7 +6277,7 @@ func (ec *executionContext) field_Mutation_updateChat_args(ctx context.Context, 
 	var arg1 model.UpdateChatInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateChatInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateChatInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6054,7 +6301,7 @@ func (ec *executionContext) field_Mutation_updateDeviceConnect_args(ctx context.
 	var arg1 model.UpdateDeviceConnectInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDeviceConnectInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDeviceConnectInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6078,7 +6325,7 @@ func (ec *executionContext) field_Mutation_updateDisease_args(ctx context.Contex
 	var arg1 model.UpdateDiseaseInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDiseaseInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDiseaseInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6102,7 +6349,7 @@ func (ec *executionContext) field_Mutation_updateDoctor_args(ctx context.Context
 	var arg1 model.UpdateDoctorInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6126,7 +6373,7 @@ func (ec *executionContext) field_Mutation_updateDoctorsPatientIDs_args(ctx cont
 	var arg1 model.UpdateDoctorsPatientIDsInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateDoctorsPatientIDsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorsPatientIDsInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateDoctorsPatientIDsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorsPatientIDsInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6150,7 +6397,7 @@ func (ec *executionContext) field_Mutation_updateDocument_args(ctx context.Conte
 	var arg1 model.UpdateDocumentInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDocumentInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDocumentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6174,7 +6421,7 @@ func (ec *executionContext) field_Mutation_updateDoubleAuth_args(ctx context.Con
 	var arg1 model.UpdateDoubleAuthInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoubleAuthInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoubleAuthInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6198,7 +6445,7 @@ func (ec *executionContext) field_Mutation_updateMedicalFolder_args(ctx context.
 	var arg1 model.UpdateMedicalFolderInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateMedicalFolderInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateMedicalFolderInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6222,7 +6469,7 @@ func (ec *executionContext) field_Mutation_updateNotification_args(ctx context.C
 	var arg1 model.UpdateNotificationInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateNotificationInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateNotificationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6246,7 +6493,7 @@ func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Contex
 	var arg1 model.UpdatePatientInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6270,7 +6517,7 @@ func (ec *executionContext) field_Mutation_updateRdv_args(ctx context.Context, r
 	var arg1 model.UpdateRdvInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateRdvInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateRdvInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6294,7 +6541,7 @@ func (ec *executionContext) field_Mutation_updateSaveCode_args(ctx context.Conte
 	var arg1 model.UpdateSaveCodeInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSaveCodeInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateSaveCodeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6318,7 +6565,7 @@ func (ec *executionContext) field_Mutation_updateSession_args(ctx context.Contex
 	var arg1 model.UpdateSessionInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSessionInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateSessionInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6342,7 +6589,7 @@ func (ec *executionContext) field_Mutation_updateSymptom_args(ctx context.Contex
 	var arg1 model.UpdateSymptomInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSymptomInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateSymptomInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6366,7 +6613,7 @@ func (ec *executionContext) field_Mutation_updateTreatment_args(ctx context.Cont
 	var arg1 model.UpdateTreatmentInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateTreatmentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6390,7 +6637,7 @@ func (ec *executionContext) field_Mutation_updateTreatmentsFollowUp_args(ctx con
 	var arg1 model.UpdateTreatmentsFollowUpInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentsFollowUpInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateTreatmentsFollowUpInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6450,7 +6697,7 @@ func (ec *executionContext) field_Query_getAdmins_args(ctx context.Context, rawA
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6480,7 +6727,7 @@ func (ec *executionContext) field_Query_getAlerts_args(ctx context.Context, rawA
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6510,7 +6757,7 @@ func (ec *executionContext) field_Query_getAnteChirs_args(ctx context.Context, r
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6540,7 +6787,7 @@ func (ec *executionContext) field_Query_getAnteDiseases_args(ctx context.Context
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6555,7 +6802,7 @@ func (ec *executionContext) field_Query_getAnteFamilies_args(ctx context.Context
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6600,7 +6847,7 @@ func (ec *executionContext) field_Query_getBlackList_args(ctx context.Context, r
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6639,7 +6886,7 @@ func (ec *executionContext) field_Query_getChats_args(ctx context.Context, rawAr
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6669,7 +6916,7 @@ func (ec *executionContext) field_Query_getDevicesConnect_args(ctx context.Conte
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6699,7 +6946,7 @@ func (ec *executionContext) field_Query_getDiseases_args(ctx context.Context, ra
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6753,7 +7000,7 @@ func (ec *executionContext) field_Query_getDoctorRdv_args(ctx context.Context, r
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6768,7 +7015,7 @@ func (ec *executionContext) field_Query_getDoctors_args(ctx context.Context, raw
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6798,7 +7045,7 @@ func (ec *executionContext) field_Query_getDocuments_args(ctx context.Context, r
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6828,7 +7075,7 @@ func (ec *executionContext) field_Query_getDoubleAuths_args(ctx context.Context,
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6858,7 +7105,7 @@ func (ec *executionContext) field_Query_getMedicalFolder_args(ctx context.Contex
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6888,7 +7135,7 @@ func (ec *executionContext) field_Query_getMedicines_args(ctx context.Context, r
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6912,7 +7159,7 @@ func (ec *executionContext) field_Query_getNlpReportsByVersion_args(ctx context.
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6927,7 +7174,7 @@ func (ec *executionContext) field_Query_getNlpReports_args(ctx context.Context, 
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6957,7 +7204,7 @@ func (ec *executionContext) field_Query_getNotifications_args(ctx context.Contex
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7011,7 +7258,7 @@ func (ec *executionContext) field_Query_getPatientDocument_args(ctx context.Cont
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7035,7 +7282,7 @@ func (ec *executionContext) field_Query_getPatientRdv_args(ctx context.Context, 
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7059,7 +7306,7 @@ func (ec *executionContext) field_Query_getPatientsFromDoctorById_args(ctx conte
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7074,7 +7321,7 @@ func (ec *executionContext) field_Query_getPatients_args(ctx context.Context, ra
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7119,7 +7366,7 @@ func (ec *executionContext) field_Query_getSaveCode_args(ctx context.Context, ra
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7149,7 +7396,7 @@ func (ec *executionContext) field_Query_getSessions_args(ctx context.Context, ra
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7188,7 +7435,7 @@ func (ec *executionContext) field_Query_getSlots_args(ctx context.Context, rawAr
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7233,7 +7480,7 @@ func (ec *executionContext) field_Query_getSymptoms_args(ctx context.Context, ra
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7287,7 +7534,7 @@ func (ec *executionContext) field_Query_getTreatmentsFollowUps_args(ctx context.
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7302,7 +7549,7 @@ func (ec *executionContext) field_Query_getTreatments_args(ctx context.Context, 
 	var arg0 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -7326,7 +7573,7 @@ func (ec *executionContext) field_Query_getWaitingRdv_args(ctx context.Context, 
 	var arg1 *model.Options
 	if tmp, ok := rawArgs["option"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -8357,7 +8604,7 @@ func (ec *executionContext) _AnteChir_induced_symptoms(ctx context.Context, fiel
 	}
 	res := resTmp.([]*model.ChirInducedSymptom)
 	fc.Result = res
-	return ec.marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomᚄ(ctx, field.Selections, res)
+	return ec.marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptomᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AnteChir_induced_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9322,7 +9569,7 @@ func (ec *executionContext) _Chat_participants(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.ChatParticipants)
 	fc.Result = res
-	return ec.marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsᚄ(ctx, field.Selections, res)
+	return ec.marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Chat_participants(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9372,7 +9619,7 @@ func (ec *executionContext) _Chat_messages(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.ChatMessages)
 	fc.Result = res
-	return ec.marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesᚄ(ctx, field.Selections, res)
+	return ec.marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Chat_messages(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -10389,7 +10636,7 @@ func (ec *executionContext) _Disease_symptoms_weight(ctx context.Context, field 
 	}
 	res := resTmp.([]*model.SymptomsWeight)
 	fc.Result = res
-	return ec.marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightᚄ(ctx, field.Selections, res)
+	return ec.marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeightᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Disease_symptoms_weight(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -10878,7 +11125,7 @@ func (ec *executionContext) _Doctor_address(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Address)
 	fc.Result = res
-	return ec.marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddress(ctx, field.Selections, res)
+	return ec.marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAddress(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Doctor_address(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -11442,7 +11689,7 @@ func (ec *executionContext) _Document_document_type(ctx context.Context, field g
 	}
 	res := resTmp.(model.DocumentType)
 	fc.Result = res
-	return ec.marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocumentType(ctx, field.Selections, res)
+	return ec.marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocumentType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Document_document_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -11486,7 +11733,7 @@ func (ec *executionContext) _Document_category(ctx context.Context, field graphq
 	}
 	res := resTmp.(model.Category)
 	fc.Result = res
-	return ec.marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCategory(ctx, field.Selections, res)
+	return ec.marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Document_category(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -11578,6 +11825,50 @@ func (ec *executionContext) _Document_download_url(ctx context.Context, field gr
 }
 
 func (ec *executionContext) fieldContext_Document_download_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Document",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Document_uploader_id(ctx context.Context, field graphql.CollectedField, obj *model.Document) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Document_uploader_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UploaderID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Document_uploader_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Document",
 		Field:      field,
@@ -12190,7 +12481,7 @@ func (ec *executionContext) _MedicalAntecedents_medicines(ctx context.Context, f
 	}
 	res := resTmp.([]*model.Treatment)
 	fc.Result = res
-	return ec.marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentᚄ(ctx, field.Selections, res)
+	return ec.marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MedicalAntecedents_medicines(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12211,6 +12502,10 @@ func (ec *executionContext) fieldContext_MedicalAntecedents_medicines(ctx contex
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Treatment_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Treatment_end_date(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Treatment_createdAt(ctx, field)
 			case "updatedAt":
@@ -12558,7 +12853,7 @@ func (ec *executionContext) _MedicalInfo_sex(ctx context.Context, field graphql.
 	}
 	res := resTmp.(model.Sex)
 	fc.Result = res
-	return ec.marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSex(ctx, field.Selections, res)
+	return ec.marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSex(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MedicalInfo_sex(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -12734,7 +13029,7 @@ func (ec *executionContext) _MedicalInfo_onboarding_status(ctx context.Context, 
 	}
 	res := resTmp.(model.OnboardingStatus)
 	fc.Result = res
-	return ec.marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx, field.Selections, res)
+	return ec.marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOnboardingStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MedicalInfo_onboarding_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13042,7 +13337,7 @@ func (ec *executionContext) _Medicine_unit(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(model.MedicineUnit)
 	fc.Result = res
-	return ec.marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx, field.Selections, res)
+	return ec.marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicineUnit(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Medicine_unit(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13190,6 +13485,138 @@ func (ec *executionContext) fieldContext_Medicine_side_effects(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Medicine_type(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Medicine_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Medicine",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Medicine_content(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_content(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Content, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Medicine_content(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Medicine",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Medicine_quantity(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Medicine_quantity(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Quantity, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Medicine_quantity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Medicine",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Medicine_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Medicine) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Medicine_createdAt(ctx, field)
 	if err != nil {
@@ -13303,7 +13730,7 @@ func (ec *executionContext) _Mutation_createPatient(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createPatient(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13385,7 +13812,7 @@ func (ec *executionContext) _Mutation_updatePatient(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13436,6 +13863,170 @@ func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Cont
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updatePatient_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_UpdatePatientsDeviceConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_UpdatePatientsDeviceConnect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatientsDeviceConnect(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdatePatientsDeviceConnectInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Patient)
+	fc.Result = res
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_UpdatePatientsDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Patient_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Patient_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Patient_password(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
+			case "medical_info_id":
+				return ec.fieldContext_Patient_medical_info_id(ctx, field)
+			case "document_ids":
+				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_UpdatePatientsDeviceConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_UpdatePatientTrustDevice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_UpdatePatientTrustDevice(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatientTrustDevice(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdatePatientTrustDeviceInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Patient)
+	fc.Result = res
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_UpdatePatientTrustDevice(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Patient_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Patient_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Patient_password(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
+			case "medical_info_id":
+				return ec.fieldContext_Patient_medical_info_id(ctx, field)
+			case "document_ids":
+				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_UpdatePatientTrustDevice_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13519,7 +14110,7 @@ func (ec *executionContext) _Mutation_createDoctor(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDoctor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13603,7 +14194,7 @@ func (ec *executionContext) _Mutation_updateDoctor(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDoctor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13687,7 +14278,7 @@ func (ec *executionContext) _Mutation_updateDoctorsPatientIDs(ctx context.Contex
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDoctorsPatientIDs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13740,6 +14331,174 @@ func (ec *executionContext) fieldContext_Mutation_updateDoctorsPatientIDs(ctx co
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateDoctorsPatientIDs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_UpdateDoctorsDeviceConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_UpdateDoctorsDeviceConnect(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateDoctorsDeviceConnect(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDoctorsDeviceConnectInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Doctor)
+	fc.Result = res
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_UpdateDoctorsDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Doctor_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Doctor_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Doctor_password(ctx, field)
+			case "name":
+				return ec.fieldContext_Doctor_name(ctx, field)
+			case "firstname":
+				return ec.fieldContext_Doctor_firstname(ctx, field)
+			case "address":
+				return ec.fieldContext_Doctor_address(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Doctor_rendez_vous_ids(ctx, field)
+			case "patient_ids":
+				return ec.fieldContext_Doctor_patient_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_UpdateDoctorsDeviceConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_UpdateDoctorsTrustDevice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_UpdateDoctorsTrustDevice(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateDoctorsTrustDevice(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateDoctorsTrustDeviceInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Doctor)
+	fc.Result = res
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_UpdateDoctorsTrustDevice(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Doctor_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Doctor_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Doctor_password(ctx, field)
+			case "name":
+				return ec.fieldContext_Doctor_name(ctx, field)
+			case "firstname":
+				return ec.fieldContext_Doctor_firstname(ctx, field)
+			case "address":
+				return ec.fieldContext_Doctor_address(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Doctor_rendez_vous_ids(ctx, field)
+			case "patient_ids":
+				return ec.fieldContext_Doctor_patient_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Doctor_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Doctor_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Doctor_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Doctor_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Doctor_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Doctor_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Doctor_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_UpdateDoctorsTrustDevice_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13823,7 +14582,7 @@ func (ec *executionContext) _Mutation_createAdmin(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAdmin(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -13891,7 +14650,7 @@ func (ec *executionContext) _Mutation_updateAdmin(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAdmin(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14011,7 +14770,7 @@ func (ec *executionContext) _Mutation_createSession(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createSession(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14097,7 +14856,7 @@ func (ec *executionContext) _Mutation_updateSession(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateSession(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14235,7 +14994,7 @@ func (ec *executionContext) _Mutation_createSymptom(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createSymptom(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14313,7 +15072,7 @@ func (ec *executionContext) _Mutation_updateSymptom(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateSymptom(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14443,7 +15202,7 @@ func (ec *executionContext) _Mutation_createDisease(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14517,7 +15276,7 @@ func (ec *executionContext) _Mutation_updateDisease(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14643,7 +15402,7 @@ func (ec *executionContext) _Mutation_createNotification(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createNotification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14709,7 +15468,7 @@ func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateNotification(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14827,7 +15586,7 @@ func (ec *executionContext) _Mutation_createRdv(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14903,7 +15662,7 @@ func (ec *executionContext) _Mutation_updateRdv(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15083,7 +15842,7 @@ func (ec *executionContext) _Mutation_createDocument(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDocument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15108,6 +15867,8 @@ func (ec *executionContext) fieldContext_Mutation_createDocument(ctx context.Con
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "uploader_id":
+				return ec.fieldContext_Document_uploader_id(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Document_createdAt(ctx, field)
 			case "updatedAt":
@@ -15155,7 +15916,7 @@ func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDocument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15180,6 +15941,8 @@ func (ec *executionContext) fieldContext_Mutation_updateDocument(ctx context.Con
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "uploader_id":
+				return ec.fieldContext_Document_uploader_id(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Document_createdAt(ctx, field)
 			case "updatedAt":
@@ -15279,7 +16042,7 @@ func (ec *executionContext) _Mutation_createAnteChir(ctx context.Context, field 
 	}
 	res := resTmp.(*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAnteChir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15343,7 +16106,7 @@ func (ec *executionContext) _Mutation_updateAnteChir(ctx context.Context, field 
 	}
 	res := resTmp.(*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAnteChir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15459,7 +16222,7 @@ func (ec *executionContext) _Mutation_createAnteDisease(ctx context.Context, fie
 	}
 	res := resTmp.(*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAnteDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15531,7 +16294,7 @@ func (ec *executionContext) _Mutation_updateAnteDisease(ctx context.Context, fie
 	}
 	res := resTmp.(*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAnteDisease(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15655,7 +16418,7 @@ func (ec *executionContext) _Mutation_createAnteFamily(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAnteFamily(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15719,7 +16482,7 @@ func (ec *executionContext) _Mutation_updateAnteFamily(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAnteFamily(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15835,7 +16598,7 @@ func (ec *executionContext) _Mutation_createTreatment(ctx context.Context, field
 	}
 	res := resTmp.(*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTreatment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15856,6 +16619,10 @@ func (ec *executionContext) fieldContext_Mutation_createTreatment(ctx context.Co
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Treatment_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Treatment_end_date(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Treatment_createdAt(ctx, field)
 			case "updatedAt":
@@ -15903,7 +16670,7 @@ func (ec *executionContext) _Mutation_updateTreatment(ctx context.Context, field
 	}
 	res := resTmp.(*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateTreatment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15924,6 +16691,10 @@ func (ec *executionContext) fieldContext_Mutation_updateTreatment(ctx context.Co
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Treatment_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Treatment_end_date(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Treatment_createdAt(ctx, field)
 			case "updatedAt":
@@ -16023,7 +16794,7 @@ func (ec *executionContext) _Mutation_createAlert(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAlert(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16095,7 +16866,7 @@ func (ec *executionContext) _Mutation_updateAlert(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAlert(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16219,7 +16990,7 @@ func (ec *executionContext) _Mutation_createMedicine(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createMedicine(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16242,6 +17013,12 @@ func (ec *executionContext) fieldContext_Mutation_createMedicine(ctx context.Con
 				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
 				return ec.fieldContext_Medicine_side_effects(ctx, field)
+			case "type":
+				return ec.fieldContext_Medicine_type(ctx, field)
+			case "content":
+				return ec.fieldContext_Medicine_content(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Medicine_quantity(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Medicine_createdAt(ctx, field)
 			case "updatedAt":
@@ -16341,7 +17118,7 @@ func (ec *executionContext) _Mutation_createMedicalFolder(ctx context.Context, f
 	}
 	res := resTmp.(*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createMedicalFolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16421,7 +17198,7 @@ func (ec *executionContext) _Mutation_updateMedicalFolder(ctx context.Context, f
 	}
 	res := resTmp.(*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateMedicalFolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16553,7 +17330,7 @@ func (ec *executionContext) _Mutation_createTreatmentsFollowUp(ctx context.Conte
 	}
 	res := resTmp.(*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16619,7 +17396,7 @@ func (ec *executionContext) _Mutation_updateTreatmentsFollowUp(ctx context.Conte
 	}
 	res := resTmp.(*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateTreatmentsFollowUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16737,7 +17514,7 @@ func (ec *executionContext) _Mutation_createNlpReport(ctx context.Context, field
 	}
 	res := resTmp.(*model.NlpReport)
 	fc.Result = res
-	return ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
+	return ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createNlpReport(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16807,7 +17584,7 @@ func (ec *executionContext) _Mutation_createChat(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createChat(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16871,7 +17648,7 @@ func (ec *executionContext) _Mutation_updateChat(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateChat(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -16987,7 +17764,7 @@ func (ec *executionContext) _Mutation_createDeviceConnect(ctx context.Context, f
 	}
 	res := resTmp.(*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17059,7 +17836,7 @@ func (ec *executionContext) _Mutation_updateDeviceConnect(ctx context.Context, f
 	}
 	res := resTmp.(*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17183,7 +17960,7 @@ func (ec *executionContext) _Mutation_createDoubleAuth(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createDoubleAuth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17251,7 +18028,7 @@ func (ec *executionContext) _Mutation_updateDoubleAuth(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateDoubleAuth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17371,7 +18148,7 @@ func (ec *executionContext) _Mutation_createBlackList(ctx context.Context, field
 	}
 	res := resTmp.(*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createBlackList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17433,7 +18210,7 @@ func (ec *executionContext) _Mutation_updateBlackList(ctx context.Context, field
 	}
 	res := resTmp.(*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateBlackList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17547,7 +18324,7 @@ func (ec *executionContext) _Mutation_createSaveCode(ctx context.Context, field 
 	}
 	res := resTmp.(*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17609,7 +18386,7 @@ func (ec *executionContext) _Mutation_updateSaveCode(ctx context.Context, field 
 	}
 	res := resTmp.(*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -17902,7 +18679,7 @@ func (ec *executionContext) _NlpReport_output(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.NlpReportOutput)
 	fc.Result = res
-	return ec.marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputᚄ(ctx, field.Selections, res)
+	return ec.marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutputᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_NlpReport_output(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19065,7 +19842,7 @@ func (ec *executionContext) _Query_getPatients(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatients(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19147,7 +19924,7 @@ func (ec *executionContext) _Query_getPatientById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19229,7 +20006,7 @@ func (ec *executionContext) _Query_getPatientByEmail(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19311,7 +20088,7 @@ func (ec *executionContext) _Query_getDoctors(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19395,7 +20172,7 @@ func (ec *executionContext) _Query_getDoctorById(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctorById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19479,7 +20256,7 @@ func (ec *executionContext) _Query_getDoctorByEmail(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Doctor)
 	fc.Result = res
-	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
+	return ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctorByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19563,7 +20340,7 @@ func (ec *executionContext) _Query_getAdmins(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAdmins(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19631,7 +20408,7 @@ func (ec *executionContext) _Query_getAdminById(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAdminById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19699,7 +20476,7 @@ func (ec *executionContext) _Query_getAdminByEmail(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Admin)
 	fc.Result = res
-	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
+	return ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAdminByEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19767,7 +20544,7 @@ func (ec *executionContext) _Query_getSessions(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSessions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19853,7 +20630,7 @@ func (ec *executionContext) _Query_getSessionById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSessionById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -19939,7 +20716,7 @@ func (ec *executionContext) _Query_getSymptomById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSymptomById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20017,7 +20794,7 @@ func (ec *executionContext) _Query_getSymptomsByDiseaseName(ctx context.Context,
 	}
 	res := resTmp.(*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSymptomsByDiseaseName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20091,7 +20868,7 @@ func (ec *executionContext) _Query_getDiseaseById(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDiseaseById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20165,7 +20942,7 @@ func (ec *executionContext) _Query_getSymptoms(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Symptom)
 	fc.Result = res
-	return ec.marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
+	return ec.marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSymptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20243,7 +21020,7 @@ func (ec *executionContext) _Query_getDiseases(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Disease)
 	fc.Result = res
-	return ec.marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
+	return ec.marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDiseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20317,7 +21094,7 @@ func (ec *executionContext) _Query_getNotifications(ctx context.Context, field g
 	}
 	res := resTmp.([]*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNotifications(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20383,7 +21160,7 @@ func (ec *executionContext) _Query_getNotificationById(ctx context.Context, fiel
 	}
 	res := resTmp.(*model.Notification)
 	fc.Result = res
-	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNotificationById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20449,7 +21226,7 @@ func (ec *executionContext) _Query_getPatientRdv(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20525,7 +21302,7 @@ func (ec *executionContext) _Query_getDoctorRdv(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoctorRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20601,7 +21378,7 @@ func (ec *executionContext) _Query_getRdvById(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getRdvById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20677,7 +21454,7 @@ func (ec *executionContext) _Query_getSlotById(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSlotById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20753,7 +21530,7 @@ func (ec *executionContext) _Query_getSlots(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSlots(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20829,7 +21606,7 @@ func (ec *executionContext) _Query_getWaitingRdv(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Rdv)
 	fc.Result = res
-	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getWaitingRdv(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20905,7 +21682,7 @@ func (ec *executionContext) _Query_getDocuments(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDocuments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -20930,6 +21707,8 @@ func (ec *executionContext) fieldContext_Query_getDocuments(ctx context.Context,
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "uploader_id":
+				return ec.fieldContext_Document_uploader_id(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Document_createdAt(ctx, field)
 			case "updatedAt":
@@ -20977,7 +21756,7 @@ func (ec *executionContext) _Query_getDocumentById(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDocumentById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21002,6 +21781,8 @@ func (ec *executionContext) fieldContext_Query_getDocumentById(ctx context.Conte
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "uploader_id":
+				return ec.fieldContext_Document_uploader_id(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Document_createdAt(ctx, field)
 			case "updatedAt":
@@ -21049,7 +21830,7 @@ func (ec *executionContext) _Query_getPatientDocument(ctx context.Context, field
 	}
 	res := resTmp.([]*model.Document)
 	fc.Result = res
-	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientDocument(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21074,6 +21855,8 @@ func (ec *executionContext) fieldContext_Query_getPatientDocument(ctx context.Co
 				return ec.fieldContext_Document_is_favorite(ctx, field)
 			case "download_url":
 				return ec.fieldContext_Document_download_url(ctx, field)
+			case "uploader_id":
+				return ec.fieldContext_Document_uploader_id(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Document_createdAt(ctx, field)
 			case "updatedAt":
@@ -21121,7 +21904,7 @@ func (ec *executionContext) _Query_getAnteChirs(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteChirs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21185,7 +21968,7 @@ func (ec *executionContext) _Query_getAnteChirByID(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.AnteChir)
 	fc.Result = res
-	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
+	return ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteChir(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteChirByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21249,7 +22032,7 @@ func (ec *executionContext) _Query_getAnteDiseases(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteDiseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21321,7 +22104,7 @@ func (ec *executionContext) _Query_getAnteDiseaseByID(ctx context.Context, field
 	}
 	res := resTmp.(*model.AnteDisease)
 	fc.Result = res
-	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteDiseaseByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21393,7 +22176,7 @@ func (ec *executionContext) _Query_getAnteFamilies(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteFamilies(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21457,7 +22240,7 @@ func (ec *executionContext) _Query_getAnteFamilyByID(ctx context.Context, field 
 	}
 	res := resTmp.(*model.AnteFamily)
 	fc.Result = res
-	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
+	return ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAnteFamilyByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21521,7 +22304,7 @@ func (ec *executionContext) _Query_getTreatments(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21542,6 +22325,10 @@ func (ec *executionContext) fieldContext_Query_getTreatments(ctx context.Context
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Treatment_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Treatment_end_date(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Treatment_createdAt(ctx, field)
 			case "updatedAt":
@@ -21589,7 +22376,7 @@ func (ec *executionContext) _Query_getTreatmentByID(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Treatment)
 	fc.Result = res
-	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
+	return ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatmentByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21610,6 +22397,10 @@ func (ec *executionContext) fieldContext_Query_getTreatmentByID(ctx context.Cont
 				return ec.fieldContext_Treatment_quantity(ctx, field)
 			case "medicine_id":
 				return ec.fieldContext_Treatment_medicine_id(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Treatment_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Treatment_end_date(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Treatment_createdAt(ctx, field)
 			case "updatedAt":
@@ -21657,7 +22448,7 @@ func (ec *executionContext) _Query_getAlerts(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAlerts(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21729,7 +22520,7 @@ func (ec *executionContext) _Query_getAlertById(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Alert)
 	fc.Result = res
-	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
+	return ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAlert(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getAlertById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21801,7 +22592,7 @@ func (ec *executionContext) _Query_getMedicalFolder(ctx context.Context, field g
 	}
 	res := resTmp.([]*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicalFolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21881,7 +22672,7 @@ func (ec *executionContext) _Query_getMedicalFolderById(ctx context.Context, fie
 	}
 	res := resTmp.(*model.MedicalInfo)
 	fc.Result = res
-	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicalFolderById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21961,7 +22752,7 @@ func (ec *executionContext) _Query_getMedicines(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicines(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -21984,6 +22775,12 @@ func (ec *executionContext) fieldContext_Query_getMedicines(ctx context.Context,
 				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
 				return ec.fieldContext_Medicine_side_effects(ctx, field)
+			case "type":
+				return ec.fieldContext_Medicine_type(ctx, field)
+			case "content":
+				return ec.fieldContext_Medicine_content(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Medicine_quantity(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Medicine_createdAt(ctx, field)
 			case "updatedAt":
@@ -22031,7 +22828,7 @@ func (ec *executionContext) _Query_getMedicineByID(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Medicine)
 	fc.Result = res
-	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
+	return ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicine(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getMedicineByID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22054,6 +22851,12 @@ func (ec *executionContext) fieldContext_Query_getMedicineByID(ctx context.Conte
 				return ec.fieldContext_Medicine_treated_symptoms(ctx, field)
 			case "side_effects":
 				return ec.fieldContext_Medicine_side_effects(ctx, field)
+			case "type":
+				return ec.fieldContext_Medicine_type(ctx, field)
+			case "content":
+				return ec.fieldContext_Medicine_content(ctx, field)
+			case "quantity":
+				return ec.fieldContext_Medicine_quantity(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Medicine_createdAt(ctx, field)
 			case "updatedAt":
@@ -22101,7 +22904,7 @@ func (ec *executionContext) _Query_getPatientsFromDoctorById(ctx context.Context
 	}
 	res := resTmp.([]*model.Patient)
 	fc.Result = res
-	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+	return ec.marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getPatientsFromDoctorById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22183,7 +22986,7 @@ func (ec *executionContext) _Query_getTreatmentsFollowUpById(ctx context.Context
 	}
 	res := resTmp.(*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUpById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22249,7 +23052,7 @@ func (ec *executionContext) _Query_getTreatmentsFollowUps(ctx context.Context, f
 	}
 	res := resTmp.([]*model.TreatmentsFollowUp)
 	fc.Result = res
-	return ec.marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
+	return ec.marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getTreatmentsFollowUps(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22315,7 +23118,7 @@ func (ec *executionContext) _Query_getNlpReports(ctx context.Context, field grap
 	}
 	res := resTmp.([]*model.NlpReport)
 	fc.Result = res
-	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
+	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNlpReports(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22385,7 +23188,7 @@ func (ec *executionContext) _Query_getNlpReportsByVersion(ctx context.Context, f
 	}
 	res := resTmp.([]*model.NlpReport)
 	fc.Result = res
-	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
+	return ec.marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReport(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNlpReportsByVersion(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22455,7 +23258,7 @@ func (ec *executionContext) _Query_getChats(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getChats(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22519,7 +23322,7 @@ func (ec *executionContext) _Query_getChatById(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Chat)
 	fc.Result = res
-	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
+	return ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChat(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getChatById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22583,7 +23386,7 @@ func (ec *executionContext) _Query_getDeviceConnectById(ctx context.Context, fie
 	}
 	res := resTmp.(*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDeviceConnectById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22655,7 +23458,7 @@ func (ec *executionContext) _Query_getDevicesConnect(ctx context.Context, field 
 	}
 	res := resTmp.([]*model.DeviceConnect)
 	fc.Result = res
-	return ec.marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+	return ec.marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDevicesConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22727,7 +23530,7 @@ func (ec *executionContext) _Query_getDoubleAuthById(ctx context.Context, field 
 	}
 	res := resTmp.(*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoubleAuthById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22795,7 +23598,7 @@ func (ec *executionContext) _Query_getDoubleAuths(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.DoubleAuth)
 	fc.Result = res
-	return ec.marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
+	return ec.marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoubleAuth(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getDoubleAuths(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22863,7 +23666,7 @@ func (ec *executionContext) _Query_getBlackListById(ctx context.Context, field g
 	}
 	res := resTmp.(*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getBlackListById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22925,7 +23728,7 @@ func (ec *executionContext) _Query_getBlackList(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.BlackList)
 	fc.Result = res
-	return ec.marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
+	return ec.marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐBlackList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getBlackList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -22987,7 +23790,7 @@ func (ec *executionContext) _Query_getSaveCodeById(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSaveCodeById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -23049,7 +23852,7 @@ func (ec *executionContext) _Query_getSaveCode(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.SaveCode)
 	fc.Result = res
-	return ec.marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
+	return ec.marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSaveCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getSaveCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -23504,7 +24307,7 @@ func (ec *executionContext) _Rdv_appointment_status(ctx context.Context, field g
 	}
 	res := resTmp.(model.AppointmentStatus)
 	fc.Result = res
-	return ec.marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, field.Selections, res)
+	return ec.marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Rdv_appointment_status(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -23941,7 +24744,7 @@ func (ec *executionContext) _Session_diseases(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.SessionDiseases)
 	fc.Result = res
-	return ec.marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesᚄ(ctx, field.Selections, res)
+	return ec.marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Session_diseases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -23993,7 +24796,7 @@ func (ec *executionContext) _Session_symptoms(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.SessionSymptom)
 	fc.Result = res
-	return ec.marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomᚄ(ctx, field.Selections, res)
+	return ec.marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Session_symptoms(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -24399,7 +25202,7 @@ func (ec *executionContext) _Session_logs(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Logs)
 	fc.Result = res
-	return ec.marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsᚄ(ctx, field.Selections, res)
+	return ec.marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Session_logs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -25625,7 +26428,7 @@ func (ec *executionContext) _Treatment_period(ctx context.Context, field graphql
 	}
 	res := resTmp.([]model.Period)
 	fc.Result = res
-	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
+	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Treatment_period(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -25669,7 +26472,7 @@ func (ec *executionContext) _Treatment_day(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]model.Day)
 	fc.Result = res
-	return ec.marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx, field.Selections, res)
+	return ec.marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDayᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Treatment_day(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -25768,6 +26571,94 @@ func (ec *executionContext) fieldContext_Treatment_medicine_id(ctx context.Conte
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Treatment_start_date(ctx context.Context, field graphql.CollectedField, obj *model.Treatment) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Treatment_start_date(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StartDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Treatment_start_date(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Treatment",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Treatment_end_date(ctx context.Context, field graphql.CollectedField, obj *model.Treatment) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Treatment_end_date(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EndDate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Treatment_end_date(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Treatment",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -26021,7 +26912,7 @@ func (ec *executionContext) _TreatmentsFollowUp_period(ctx context.Context, fiel
 	}
 	res := resTmp.([]model.Period)
 	fc.Result = res
-	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
+	return ec.marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_TreatmentsFollowUp_period(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -28188,7 +29079,7 @@ func (ec *executionContext) unmarshalInputCreateAnteChirInput(ctx context.Contex
 			it.Name = data
 		case "induced_symptoms":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
-			data, err := ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx, v)
+			data, err := ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -28338,14 +29229,14 @@ func (ec *executionContext) unmarshalInputCreateChatInput(ctx context.Context, o
 		switch k {
 		case "participants":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("participants"))
-			data, err := ec.unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx, v)
+			data, err := ec.unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Participants = data
 		case "messages":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("messages"))
-			data, err := ec.unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx, v)
+			data, err := ec.unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -28455,7 +29346,7 @@ func (ec *executionContext) unmarshalInputCreateDiseaseInput(ctx context.Context
 			it.Symptoms = data
 		case "symptoms_weight":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
-			data, err := ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx, v)
+			data, err := ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -28531,7 +29422,7 @@ func (ec *executionContext) unmarshalInputCreateDoctorInput(ctx context.Context,
 			it.Firstname = data
 		case "address":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-			data, err := ec.unmarshalNAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx, v)
+			data, err := ec.unmarshalNAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAddressInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -28556,7 +29447,7 @@ func (ec *executionContext) unmarshalInputCreateDocumentInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"owner_id", "name", "document_type", "category", "is_favorite", "download_url"}
+	fieldsInOrder := [...]string{"owner_id", "name", "document_type", "category", "is_favorite", "download_url", "uploader_id"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -28605,6 +29496,13 @@ func (ec *executionContext) unmarshalInputCreateDocumentInput(ctx context.Contex
 				return it, err
 			}
 			it.DownloadURL = data
+		case "uploader_id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uploader_id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UploaderID = data
 		}
 	}
 
@@ -28756,7 +29654,7 @@ func (ec *executionContext) unmarshalInputCreateMedicineInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "unit", "target_diseases", "treated_symptoms", "side_effects"}
+	fieldsInOrder := [...]string{"name", "unit", "target_diseases", "treated_symptoms", "side_effects", "type", "content", "quantity"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -28798,6 +29696,27 @@ func (ec *executionContext) unmarshalInputCreateMedicineInput(ctx context.Contex
 				return it, err
 			}
 			it.SideEffects = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "content":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Content = data
+		case "quantity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Quantity = data
 		}
 	}
 
@@ -28841,7 +29760,7 @@ func (ec *executionContext) unmarshalInputCreateNlpReportInput(ctx context.Conte
 			it.InputSentence = data
 		case "output":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("output"))
-			data, err := ec.unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInputᚄ(ctx, v)
+			data, err := ec.unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutputInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29006,7 +29925,7 @@ func (ec *executionContext) unmarshalInputCreateRdvInput(ctx context.Context, ob
 			it.EndDate = data
 		case "appointment_status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
-			data, err := ec.unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, v)
+			data, err := ec.unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29067,14 +29986,14 @@ func (ec *executionContext) unmarshalInputCreateSessionInput(ctx context.Context
 		switch k {
 		case "diseases":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
-			data, err := ec.unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx, v)
+			data, err := ec.unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Diseases = data
 		case "symptoms":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-			data, err := ec.unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx, v)
+			data, err := ec.unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29137,7 +30056,7 @@ func (ec *executionContext) unmarshalInputCreateSessionInput(ctx context.Context
 			it.LastQuestion = data
 		case "logs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
-			data, err := ec.unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx, v)
+			data, err := ec.unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29252,7 +30171,7 @@ func (ec *executionContext) unmarshalInputCreateTreatmentInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id"}
+	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id", "start_date", "end_date"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -29261,14 +30180,14 @@ func (ec *executionContext) unmarshalInputCreateTreatmentInput(ctx context.Conte
 		switch k {
 		case "period":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			data, err := ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Period = data
 		case "day":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
-			data, err := ec.unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx, v)
+			data, err := ec.unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDayᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29287,6 +30206,20 @@ func (ec *executionContext) unmarshalInputCreateTreatmentInput(ctx context.Conte
 				return it, err
 			}
 			it.MedicineID = data
+		case "start_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "end_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("end_date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
 		}
 	}
 
@@ -29323,7 +30256,7 @@ func (ec *executionContext) unmarshalInputCreateTreatmentsFollowUpInput(ctx cont
 			it.Date = data
 		case "period":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			data, err := ec.unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29391,7 +30324,7 @@ func (ec *executionContext) unmarshalInputMedicalAntecedentsInput(ctx context.Co
 			it.Name = data
 		case "medicines":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("medicines"))
-			data, err := ec.unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInputᚄ(ctx, v)
+			data, err := ec.unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29416,7 +30349,7 @@ func (ec *executionContext) unmarshalInputMedicineInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "unit", "target_diseases", "treated_symptoms", "side_effects"}
+	fieldsInOrder := [...]string{"name", "unit", "target_diseases", "treated_symptoms", "side_effects", "type", "content", "quantity"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -29432,7 +30365,7 @@ func (ec *executionContext) unmarshalInputMedicineInput(ctx context.Context, obj
 			it.Name = data
 		case "unit":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("unit"))
-			data, err := ec.unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx, v)
+			data, err := ec.unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicineUnit(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29458,6 +30391,27 @@ func (ec *executionContext) unmarshalInputMedicineInput(ctx context.Context, obj
 				return it, err
 			}
 			it.SideEffects = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "content":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Content = data
+		case "quantity":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("quantity"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Quantity = data
 		}
 	}
 
@@ -29521,7 +30475,7 @@ func (ec *executionContext) unmarshalInputOptions(ctx context.Context, obj inter
 		switch k {
 		case "sort":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sort"))
-			data, err := ec.unmarshalNSortingOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortingOptions(ctx, v)
+			data, err := ec.unmarshalNSortingOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSortingOptions(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29651,7 +30605,7 @@ func (ec *executionContext) unmarshalInputSortingOptions(ctx context.Context, ob
 		switch k {
 		case "order":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("order"))
-			data, err := ec.unmarshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortOrder(ctx, v)
+			data, err := ec.unmarshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSortOrder(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29717,7 +30671,7 @@ func (ec *executionContext) unmarshalInputTreatmentInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id"}
+	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id", "start_date", "end_date"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -29726,14 +30680,14 @@ func (ec *executionContext) unmarshalInputTreatmentInput(ctx context.Context, ob
 		switch k {
 		case "period":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, v)
+			data, err := ec.unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Period = data
 		case "day":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
-			data, err := ec.unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, v)
+			data, err := ec.unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -29752,6 +30706,20 @@ func (ec *executionContext) unmarshalInputTreatmentInput(ctx context.Context, ob
 				return it, err
 			}
 			it.MedicineID = data
+		case "start_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "end_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("end_date"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
 		}
 	}
 
@@ -29891,7 +30859,7 @@ func (ec *executionContext) unmarshalInputUpdateAnteChirInput(ctx context.Contex
 			it.Name = data
 		case "induced_symptoms":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("induced_symptoms"))
-			data, err := ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx, v)
+			data, err := ec.unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30041,14 +31009,14 @@ func (ec *executionContext) unmarshalInputUpdateChatInput(ctx context.Context, o
 		switch k {
 		case "participants":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("participants"))
-			data, err := ec.unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx, v)
+			data, err := ec.unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Participants = data
 		case "messages":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("messages"))
-			data, err := ec.unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx, v)
+			data, err := ec.unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30158,7 +31126,7 @@ func (ec *executionContext) unmarshalInputUpdateDiseaseInput(ctx context.Context
 			it.Symptoms = data
 		case "symptoms_weight":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms_weight"))
-			data, err := ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx, v)
+			data, err := ec.unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30248,7 +31216,7 @@ func (ec *executionContext) unmarshalInputUpdateDoctorInput(ctx context.Context,
 			it.PatientIds = data
 		case "address":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address"))
-			data, err := ec.unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx, v)
+			data, err := ec.unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAddressInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30294,6 +31262,33 @@ func (ec *executionContext) unmarshalInputUpdateDoctorInput(ctx context.Context,
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateDoctorsDeviceConnectInput(ctx context.Context, obj interface{}) (model.UpdateDoctorsDeviceConnectInput, error) {
+	var it model.UpdateDoctorsDeviceConnectInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"device_connect"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "device_connect":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceConnect = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateDoctorsPatientIDsInput(ctx context.Context, obj interface{}) (model.UpdateDoctorsPatientIDsInput, error) {
 	var it model.UpdateDoctorsPatientIDsInput
 	asMap := map[string]interface{}{}
@@ -30315,6 +31310,33 @@ func (ec *executionContext) unmarshalInputUpdateDoctorsPatientIDsInput(ctx conte
 				return it, err
 			}
 			it.PatientIds = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateDoctorsTrustDeviceInput(ctx context.Context, obj interface{}) (model.UpdateDoctorsTrustDeviceInput, error) {
+	var it model.UpdateDoctorsTrustDeviceInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"trust_devices"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
 		}
 	}
 
@@ -30475,7 +31497,7 @@ func (ec *executionContext) unmarshalInputUpdateMedicalFolderInput(ctx context.C
 			it.AntecedentDiseaseIds = data
 		case "onboarding_status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("onboarding_status"))
-			data, err := ec.unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx, v)
+			data, err := ec.unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOnboardingStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30631,6 +31653,60 @@ func (ec *executionContext) unmarshalInputUpdatePatientInput(ctx context.Context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdatePatientTrustDeviceInput(ctx context.Context, obj interface{}) (model.UpdatePatientTrustDeviceInput, error) {
+	var it model.UpdatePatientTrustDeviceInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"trust_devices"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdatePatientsDeviceConnectInput(ctx context.Context, obj interface{}) (model.UpdatePatientsDeviceConnectInput, error) {
+	var it model.UpdatePatientsDeviceConnectInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"device_connect"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "device_connect":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_connect"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DeviceConnect = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateRdvInput(ctx context.Context, obj interface{}) (model.UpdateRdvInput, error) {
 	var it model.UpdateRdvInput
 	asMap := map[string]interface{}{}
@@ -30682,7 +31758,7 @@ func (ec *executionContext) unmarshalInputUpdateRdvInput(ctx context.Context, ob
 			it.CancelationReason = data
 		case "appointment_status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("appointment_status"))
-			data, err := ec.unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, v)
+			data, err := ec.unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30750,14 +31826,14 @@ func (ec *executionContext) unmarshalInputUpdateSessionInput(ctx context.Context
 		switch k {
 		case "diseases":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("diseases"))
-			data, err := ec.unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx, v)
+			data, err := ec.unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Diseases = data
 		case "symptoms":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symptoms"))
-			data, err := ec.unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx, v)
+			data, err := ec.unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30820,7 +31896,7 @@ func (ec *executionContext) unmarshalInputUpdateSessionInput(ctx context.Context
 			it.LastQuestion = data
 		case "logs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logs"))
-			data, err := ec.unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx, v)
+			data, err := ec.unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30935,7 +32011,7 @@ func (ec *executionContext) unmarshalInputUpdateTreatmentInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id"}
+	fieldsInOrder := [...]string{"period", "day", "quantity", "medicine_id", "start_date", "end_date"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -30944,14 +32020,14 @@ func (ec *executionContext) unmarshalInputUpdateTreatmentInput(ctx context.Conte
 		switch k {
 		case "period":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			data, err := ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Period = data
 		case "day":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("day"))
-			data, err := ec.unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx, v)
+			data, err := ec.unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDayᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -30970,6 +32046,20 @@ func (ec *executionContext) unmarshalInputUpdateTreatmentInput(ctx context.Conte
 				return it, err
 			}
 			it.MedicineID = data
+		case "start_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartDate = data
+		case "end_date":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("end_date"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndDate = data
 		}
 	}
 
@@ -31006,7 +32096,7 @@ func (ec *executionContext) unmarshalInputUpdateTreatmentsFollowUpInput(ctx cont
 			it.Date = data
 		case "period":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
+			data, err := ec.unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -31947,6 +33037,11 @@ func (ec *executionContext) _Document(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "uploader_id":
+			out.Values[i] = ec._Document_uploader_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createdAt":
 			out.Values[i] = ec._Document_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -32297,6 +33392,21 @@ func (ec *executionContext) _Medicine(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "type":
+			out.Values[i] = ec._Medicine_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "content":
+			out.Values[i] = ec._Medicine_content(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "quantity":
+			out.Values[i] = ec._Medicine_quantity(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createdAt":
 			out.Values[i] = ec._Medicine_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -32357,6 +33467,14 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePatient(ctx, field)
 			})
+		case "UpdatePatientsDeviceConnect":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_UpdatePatientsDeviceConnect(ctx, field)
+			})
+		case "UpdatePatientTrustDevice":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_UpdatePatientTrustDevice(ctx, field)
+			})
 		case "deletePatient":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deletePatient(ctx, field)
@@ -32372,6 +33490,14 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateDoctorsPatientIDs":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateDoctorsPatientIDs(ctx, field)
+			})
+		case "UpdateDoctorsDeviceConnect":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_UpdateDoctorsDeviceConnect(ctx, field)
+			})
+		case "UpdateDoctorsTrustDevice":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_UpdateDoctorsTrustDevice(ctx, field)
 			})
 		case "deleteDoctor":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -34540,6 +35666,16 @@ func (ec *executionContext) _Treatment(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "start_date":
+			out.Values[i] = ec._Treatment_start_date(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "end_date":
+			out.Values[i] = ec._Treatment_end_date(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createdAt":
 			out.Values[i] = ec._Treatment_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -34963,7 +36099,7 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v *model.Address) graphql.Marshaler {
+func (ec *executionContext) marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v *model.Address) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -34973,18 +36109,18 @@ func (ec *executionContext) marshalNAddress2ᚖgithubᚗcomᚋedgarᚑcareᚋedg
 	return ec._Address(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
+func (ec *executionContext) unmarshalNAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
 	res, err := ec.unmarshalInputAddressInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (model.AppointmentStatus, error) {
+func (ec *executionContext) unmarshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (model.AppointmentStatus, error) {
 	var res model.AppointmentStatus
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v model.AppointmentStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v model.AppointmentStatus) graphql.Marshaler {
 	return v
 }
 
@@ -35003,17 +36139,17 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCategory(ctx context.Context, v interface{}) (model.Category, error) {
+func (ec *executionContext) unmarshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCategory(ctx context.Context, v interface{}) (model.Category, error) {
 	var res model.Category
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v model.Category) graphql.Marshaler {
+func (ec *executionContext) marshalNCategory2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCategory(ctx context.Context, sel ast.SelectionSet, v model.Category) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatMessages) graphql.Marshaler {
+func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatMessages) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35037,7 +36173,7 @@ func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑca
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessages(ctx, sel, v[i])
+			ret[i] = ec.marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessages(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35057,7 +36193,7 @@ func (ec *executionContext) marshalNChatMessages2ᚕᚖgithubᚗcomᚋedgarᚑca
 	return ret
 }
 
-func (ec *executionContext) marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessages(ctx context.Context, sel ast.SelectionSet, v *model.ChatMessages) graphql.Marshaler {
+func (ec *executionContext) marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessages(ctx context.Context, sel ast.SelectionSet, v *model.ChatMessages) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -35067,7 +36203,7 @@ func (ec *executionContext) marshalNChatMessages2ᚖgithubᚗcomᚋedgarᚑcare�
 	return ec._ChatMessages(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
+func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35076,7 +36212,7 @@ func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	res := make([]*model.ChatMessagesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35084,12 +36220,12 @@ func (ec *executionContext) unmarshalNChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInput(ctx context.Context, v interface{}) (*model.ChatMessagesInput, error) {
+func (ec *executionContext) unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesInput(ctx context.Context, v interface{}) (*model.ChatMessagesInput, error) {
 	res, err := ec.unmarshalInputChatMessagesInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatParticipants) graphql.Marshaler {
+func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChatParticipants) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35113,7 +36249,7 @@ func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgar�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipants(ctx, sel, v[i])
+			ret[i] = ec.marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipants(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35133,7 +36269,7 @@ func (ec *executionContext) marshalNChatParticipants2ᚕᚖgithubᚗcomᚋedgar�
 	return ret
 }
 
-func (ec *executionContext) marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipants(ctx context.Context, sel ast.SelectionSet, v *model.ChatParticipants) graphql.Marshaler {
+func (ec *executionContext) marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipants(ctx context.Context, sel ast.SelectionSet, v *model.ChatParticipants) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -35143,7 +36279,7 @@ func (ec *executionContext) marshalNChatParticipants2ᚖgithubᚗcomᚋedgarᚑc
 	return ec._ChatParticipants(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
+func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35152,7 +36288,7 @@ func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcom�
 	res := make([]*model.ChatParticipantsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35160,12 +36296,12 @@ func (ec *executionContext) unmarshalNChatParticipantsInput2ᚕᚖgithubᚗcom�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx context.Context, v interface{}) (*model.ChatParticipantsInput, error) {
+func (ec *executionContext) unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx context.Context, v interface{}) (*model.ChatParticipantsInput, error) {
 	res, err := ec.unmarshalInputChatParticipantsInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptom(ctx context.Context, sel ast.SelectionSet, v *model.ChirInducedSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptom(ctx context.Context, sel ast.SelectionSet, v *model.ChirInducedSymptom) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -35175,137 +36311,137 @@ func (ec *executionContext) marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgar�
 	return ec._ChirInducedSymptom(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInput(ctx context.Context, v interface{}) (*model.ChirInducedSymptomInput, error) {
+func (ec *executionContext) unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptomInput(ctx context.Context, v interface{}) (*model.ChirInducedSymptomInput, error) {
 	res, err := ec.unmarshalInputChirInducedSymptomInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAdminInput(ctx context.Context, v interface{}) (model.CreateAdminInput, error) {
+func (ec *executionContext) unmarshalNCreateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAdminInput(ctx context.Context, v interface{}) (model.CreateAdminInput, error) {
 	res, err := ec.unmarshalInputCreateAdminInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAlertInput(ctx context.Context, v interface{}) (model.CreateAlertInput, error) {
+func (ec *executionContext) unmarshalNCreateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAlertInput(ctx context.Context, v interface{}) (model.CreateAlertInput, error) {
 	res, err := ec.unmarshalInputCreateAlertInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteChirInput(ctx context.Context, v interface{}) (model.CreateAnteChirInput, error) {
+func (ec *executionContext) unmarshalNCreateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteChirInput(ctx context.Context, v interface{}) (model.CreateAnteChirInput, error) {
 	res, err := ec.unmarshalInputCreateAnteChirInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteDiseaseInput(ctx context.Context, v interface{}) (model.CreateAnteDiseaseInput, error) {
+func (ec *executionContext) unmarshalNCreateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteDiseaseInput(ctx context.Context, v interface{}) (model.CreateAnteDiseaseInput, error) {
 	res, err := ec.unmarshalInputCreateAnteDiseaseInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx context.Context, v interface{}) (model.CreateAnteFamilyInput, error) {
+func (ec *executionContext) unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx context.Context, v interface{}) (model.CreateAnteFamilyInput, error) {
 	res, err := ec.unmarshalInputCreateAnteFamilyInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateBlackListInput(ctx context.Context, v interface{}) (model.CreateBlackListInput, error) {
+func (ec *executionContext) unmarshalNCreateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateBlackListInput(ctx context.Context, v interface{}) (model.CreateBlackListInput, error) {
 	res, err := ec.unmarshalInputCreateBlackListInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateChatInput(ctx context.Context, v interface{}) (model.CreateChatInput, error) {
+func (ec *executionContext) unmarshalNCreateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateChatInput(ctx context.Context, v interface{}) (model.CreateChatInput, error) {
 	res, err := ec.unmarshalInputCreateChatInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDeviceConnectInput(ctx context.Context, v interface{}) (model.CreateDeviceConnectInput, error) {
+func (ec *executionContext) unmarshalNCreateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDeviceConnectInput(ctx context.Context, v interface{}) (model.CreateDeviceConnectInput, error) {
 	res, err := ec.unmarshalInputCreateDeviceConnectInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDiseaseInput(ctx context.Context, v interface{}) (model.CreateDiseaseInput, error) {
+func (ec *executionContext) unmarshalNCreateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDiseaseInput(ctx context.Context, v interface{}) (model.CreateDiseaseInput, error) {
 	res, err := ec.unmarshalInputCreateDiseaseInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoctorInput(ctx context.Context, v interface{}) (model.CreateDoctorInput, error) {
+func (ec *executionContext) unmarshalNCreateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDoctorInput(ctx context.Context, v interface{}) (model.CreateDoctorInput, error) {
 	res, err := ec.unmarshalInputCreateDoctorInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDocumentInput(ctx context.Context, v interface{}) (model.CreateDocumentInput, error) {
+func (ec *executionContext) unmarshalNCreateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDocumentInput(ctx context.Context, v interface{}) (model.CreateDocumentInput, error) {
 	res, err := ec.unmarshalInputCreateDocumentInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateDoubleAuthInput(ctx context.Context, v interface{}) (model.CreateDoubleAuthInput, error) {
+func (ec *executionContext) unmarshalNCreateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateDoubleAuthInput(ctx context.Context, v interface{}) (model.CreateDoubleAuthInput, error) {
 	res, err := ec.unmarshalInputCreateDoubleAuthInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicalFolderInput(ctx context.Context, v interface{}) (model.CreateMedicalFolderInput, error) {
+func (ec *executionContext) unmarshalNCreateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateMedicalFolderInput(ctx context.Context, v interface{}) (model.CreateMedicalFolderInput, error) {
 	res, err := ec.unmarshalInputCreateMedicalFolderInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateMedicineInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateMedicineInput(ctx context.Context, v interface{}) (model.CreateMedicineInput, error) {
+func (ec *executionContext) unmarshalNCreateMedicineInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateMedicineInput(ctx context.Context, v interface{}) (model.CreateMedicineInput, error) {
 	res, err := ec.unmarshalInputCreateMedicineInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateNlpReportInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNlpReportInput(ctx context.Context, v interface{}) (model.CreateNlpReportInput, error) {
+func (ec *executionContext) unmarshalNCreateNlpReportInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateNlpReportInput(ctx context.Context, v interface{}) (model.CreateNlpReportInput, error) {
 	res, err := ec.unmarshalInputCreateNlpReportInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateNotificationInput(ctx context.Context, v interface{}) (model.CreateNotificationInput, error) {
+func (ec *executionContext) unmarshalNCreateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateNotificationInput(ctx context.Context, v interface{}) (model.CreateNotificationInput, error) {
 	res, err := ec.unmarshalInputCreateNotificationInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreatePatientInput(ctx context.Context, v interface{}) (model.CreatePatientInput, error) {
+func (ec *executionContext) unmarshalNCreatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreatePatientInput(ctx context.Context, v interface{}) (model.CreatePatientInput, error) {
 	res, err := ec.unmarshalInputCreatePatientInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateRdvInput(ctx context.Context, v interface{}) (model.CreateRdvInput, error) {
+func (ec *executionContext) unmarshalNCreateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateRdvInput(ctx context.Context, v interface{}) (model.CreateRdvInput, error) {
 	res, err := ec.unmarshalInputCreateRdvInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSaveCodeInput(ctx context.Context, v interface{}) (model.CreateSaveCodeInput, error) {
+func (ec *executionContext) unmarshalNCreateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateSaveCodeInput(ctx context.Context, v interface{}) (model.CreateSaveCodeInput, error) {
 	res, err := ec.unmarshalInputCreateSaveCodeInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSessionInput(ctx context.Context, v interface{}) (model.CreateSessionInput, error) {
+func (ec *executionContext) unmarshalNCreateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateSessionInput(ctx context.Context, v interface{}) (model.CreateSessionInput, error) {
 	res, err := ec.unmarshalInputCreateSessionInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateSymptomInput(ctx context.Context, v interface{}) (model.CreateSymptomInput, error) {
+func (ec *executionContext) unmarshalNCreateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateSymptomInput(ctx context.Context, v interface{}) (model.CreateSymptomInput, error) {
 	res, err := ec.unmarshalInputCreateSymptomInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentInput(ctx context.Context, v interface{}) (model.CreateTreatmentInput, error) {
+func (ec *executionContext) unmarshalNCreateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateTreatmentInput(ctx context.Context, v interface{}) (model.CreateTreatmentInput, error) {
 	res, err := ec.unmarshalInputCreateTreatmentInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCreateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐCreateTreatmentsFollowUpInput(ctx context.Context, v interface{}) (model.CreateTreatmentsFollowUpInput, error) {
+func (ec *executionContext) unmarshalNCreateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateTreatmentsFollowUpInput(ctx context.Context, v interface{}) (model.CreateTreatmentsFollowUpInput, error) {
 	res, err := ec.unmarshalInputCreateTreatmentsFollowUpInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) (model.Day, error) {
+func (ec *executionContext) unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) (model.Day, error) {
 	var res model.Day
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v model.Day) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
+func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35314,7 +36450,7 @@ func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	res := make([]model.Day, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35322,7 +36458,7 @@ func (ec *executionContext) unmarshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	return res, nil
 }
 
-func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35346,7 +36482,7 @@ func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
+			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35366,7 +36502,7 @@ func (ec *executionContext) marshalNDay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 	return ret
 }
 
-func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) ([]*model.Day, error) {
+func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) ([]*model.Day, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35375,7 +36511,7 @@ func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	res := make([]*model.Day, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
+		res[i], err = ec.unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35383,7 +36519,7 @@ func (ec *executionContext) unmarshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return res, nil
 }
 
-func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v []*model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v []*model.Day) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35407,7 +36543,7 @@ func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
+			ret[i] = ec.marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35421,13 +36557,13 @@ func (ec *executionContext) marshalNDay2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocumentType(ctx context.Context, v interface{}) (model.DocumentType, error) {
+func (ec *executionContext) unmarshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocumentType(ctx context.Context, v interface{}) (model.DocumentType, error) {
 	var res model.DocumentType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v model.DocumentType) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v model.DocumentType) graphql.Marshaler {
 	return v
 }
 
@@ -35476,7 +36612,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Logs) graphql.Marshaler {
+func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Logs) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35500,7 +36636,7 @@ func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogs(ctx, sel, v[i])
+			ret[i] = ec.marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogs(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35520,7 +36656,7 @@ func (ec *executionContext) marshalNLogs2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 	return ret
 }
 
-func (ec *executionContext) marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogs(ctx context.Context, sel ast.SelectionSet, v *model.Logs) graphql.Marshaler {
+func (ec *executionContext) marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogs(ctx context.Context, sel ast.SelectionSet, v *model.Logs) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -35530,7 +36666,7 @@ func (ec *executionContext) marshalNLogs2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarl
 	return ec._Logs(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
+func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35539,7 +36675,7 @@ func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	res := make([]*model.LogsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35547,22 +36683,22 @@ func (ec *executionContext) unmarshalNLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInput(ctx context.Context, v interface{}) (*model.LogsInput, error) {
+func (ec *executionContext) unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsInput(ctx context.Context, v interface{}) (*model.LogsInput, error) {
 	res, err := ec.unmarshalInputLogsInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx context.Context, v interface{}) (model.MedicineUnit, error) {
+func (ec *executionContext) unmarshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicineUnit(ctx context.Context, v interface{}) (model.MedicineUnit, error) {
 	var res model.MedicineUnit
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicineUnit(ctx context.Context, sel ast.SelectionSet, v model.MedicineUnit) graphql.Marshaler {
+func (ec *executionContext) marshalNMedicineUnit2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicineUnit(ctx context.Context, sel ast.SelectionSet, v model.MedicineUnit) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReportOutput) graphql.Marshaler {
+func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutputᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReportOutput) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35586,7 +36722,7 @@ func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgar�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutput(ctx, sel, v[i])
+			ret[i] = ec.marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutput(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35606,7 +36742,7 @@ func (ec *executionContext) marshalNNlpReportOutput2ᚕᚖgithubᚗcomᚋedgar�
 	return ret
 }
 
-func (ec *executionContext) marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutput(ctx context.Context, sel ast.SelectionSet, v *model.NlpReportOutput) graphql.Marshaler {
+func (ec *executionContext) marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutput(ctx context.Context, sel ast.SelectionSet, v *model.NlpReportOutput) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -35616,7 +36752,7 @@ func (ec *executionContext) marshalNNlpReportOutput2ᚖgithubᚗcomᚋedgarᚑca
 	return ec._NlpReportOutput(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInputᚄ(ctx context.Context, v interface{}) ([]*model.NlpReportOutputInput, error) {
+func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutputInputᚄ(ctx context.Context, v interface{}) ([]*model.NlpReportOutputInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35625,7 +36761,7 @@ func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.NlpReportOutputInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutputInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35633,32 +36769,32 @@ func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReportOutputInput(ctx context.Context, v interface{}) (*model.NlpReportOutputInput, error) {
+func (ec *executionContext) unmarshalNNlpReportOutputInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReportOutputInput(ctx context.Context, v interface{}) (*model.NlpReportOutputInput, error) {
 	res, err := ec.unmarshalInputNlpReportOutputInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (model.OnboardingStatus, error) {
+func (ec *executionContext) unmarshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (model.OnboardingStatus, error) {
 	var res model.OnboardingStatus
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v model.OnboardingStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNOnboardingStatus2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v model.OnboardingStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) (model.Period, error) {
+func (ec *executionContext) unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) (model.Period, error) {
 	var res model.Period
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v model.Period) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
+func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35667,7 +36803,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	res := make([]model.Period, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35675,7 +36811,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	return res, nil
 }
 
-func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35699,7 +36835,7 @@ func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
+			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35719,7 +36855,7 @@ func (ec *executionContext) marshalNPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) ([]*model.Period, error) {
+func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) ([]*model.Period, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35728,7 +36864,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	res := make([]*model.Period, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35736,7 +36872,7 @@ func (ec *executionContext) unmarshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return res, nil
 }
 
-func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v []*model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v []*model.Period) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35760,7 +36896,7 @@ func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
+			ret[i] = ec.marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35774,7 +36910,7 @@ func (ec *executionContext) marshalNPeriod2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 	return ret
 }
 
-func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionDiseases) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionDiseases) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35798,7 +36934,7 @@ func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgar�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseases(ctx, sel, v[i])
+			ret[i] = ec.marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseases(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35818,7 +36954,7 @@ func (ec *executionContext) marshalNSessionDiseases2ᚕᚖgithubᚗcomᚋedgar�
 	return ret
 }
 
-func (ec *executionContext) marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseases(ctx context.Context, sel ast.SelectionSet, v *model.SessionDiseases) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseases(ctx context.Context, sel ast.SelectionSet, v *model.SessionDiseases) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -35828,7 +36964,7 @@ func (ec *executionContext) marshalNSessionDiseases2ᚖgithubᚗcomᚋedgarᚑca
 	return ec._SessionDiseases(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
+func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35837,7 +36973,7 @@ func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.SessionDiseasesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35845,12 +36981,12 @@ func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx context.Context, v interface{}) (*model.SessionDiseasesInput, error) {
+func (ec *executionContext) unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx context.Context, v interface{}) (*model.SessionDiseasesInput, error) {
 	res, err := ec.unmarshalInputSessionDiseasesInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SessionSymptom) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -35874,7 +37010,7 @@ func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptom(ctx, sel, v[i])
+			ret[i] = ec.marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptom(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -35894,7 +37030,7 @@ func (ec *executionContext) marshalNSessionSymptom2ᚕᚖgithubᚗcomᚋedgarᚑ
 	return ret
 }
 
-func (ec *executionContext) marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptom(ctx context.Context, sel ast.SelectionSet, v *model.SessionSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptom(ctx context.Context, sel ast.SelectionSet, v *model.SessionSymptom) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -35904,7 +37040,7 @@ func (ec *executionContext) marshalNSessionSymptom2ᚖgithubᚗcomᚋedgarᚑcar
 	return ec._SessionSymptom(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
+func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -35913,7 +37049,7 @@ func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋe
 	res := make([]*model.SessionSymptomInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -35921,32 +37057,32 @@ func (ec *executionContext) unmarshalNSessionSymptomInput2ᚕᚖgithubᚗcomᚋe
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx context.Context, v interface{}) (*model.SessionSymptomInput, error) {
+func (ec *executionContext) unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx context.Context, v interface{}) (*model.SessionSymptomInput, error) {
 	res, err := ec.unmarshalInputSessionSymptomInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSex(ctx context.Context, v interface{}) (model.Sex, error) {
+func (ec *executionContext) unmarshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSex(ctx context.Context, v interface{}) (model.Sex, error) {
 	var res model.Sex
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSex(ctx context.Context, sel ast.SelectionSet, v model.Sex) graphql.Marshaler {
+func (ec *executionContext) marshalNSex2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSex(ctx context.Context, sel ast.SelectionSet, v model.Sex) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortOrder(ctx context.Context, v interface{}) (model.SortOrder, error) {
+func (ec *executionContext) unmarshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSortOrder(ctx context.Context, v interface{}) (model.SortOrder, error) {
 	var res model.SortOrder
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortOrder(ctx context.Context, sel ast.SelectionSet, v model.SortOrder) graphql.Marshaler {
+func (ec *executionContext) marshalNSortOrder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSortOrder(ctx context.Context, sel ast.SelectionSet, v model.SortOrder) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNSortingOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSortingOptions(ctx context.Context, v interface{}) (*model.SortingOptions, error) {
+func (ec *executionContext) unmarshalNSortingOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSortingOptions(ctx context.Context, v interface{}) (*model.SortingOptions, error) {
 	res, err := ec.unmarshalInputSortingOptions(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
@@ -35998,7 +37134,7 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeight(ctx context.Context, sel ast.SelectionSet, v *model.SymptomsWeight) graphql.Marshaler {
+func (ec *executionContext) marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeight(ctx context.Context, sel ast.SelectionSet, v *model.SymptomsWeight) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -36008,12 +37144,12 @@ func (ec *executionContext) marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcar
 	return ec._SymptomsWeight(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInput(ctx context.Context, v interface{}) (*model.SymptomsWeightInput, error) {
+func (ec *executionContext) unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeightInput(ctx context.Context, v interface{}) (*model.SymptomsWeightInput, error) {
 	res, err := ec.unmarshalInputSymptomsWeightInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
+func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -36037,7 +37173,7 @@ func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, sel, v[i])
+			ret[i] = ec.marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36057,7 +37193,7 @@ func (ec *executionContext) marshalNTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
+func (ec *executionContext) marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -36067,7 +37203,7 @@ func (ec *executionContext) marshalNTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋe
 	return ec._Treatment(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInputᚄ(ctx context.Context, v interface{}) ([]*model.TreatmentInput, error) {
+func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentInputᚄ(ctx context.Context, v interface{}) ([]*model.TreatmentInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -36076,7 +37212,7 @@ func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgar�
 	res := make([]*model.TreatmentInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -36084,117 +37220,137 @@ func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgar�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentInput(ctx context.Context, v interface{}) (*model.TreatmentInput, error) {
+func (ec *executionContext) unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentInput(ctx context.Context, v interface{}) (*model.TreatmentInput, error) {
 	res, err := ec.unmarshalInputTreatmentInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAdminInput(ctx context.Context, v interface{}) (model.UpdateAdminInput, error) {
+func (ec *executionContext) unmarshalNUpdateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAdminInput(ctx context.Context, v interface{}) (model.UpdateAdminInput, error) {
 	res, err := ec.unmarshalInputUpdateAdminInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAlertInput(ctx context.Context, v interface{}) (model.UpdateAlertInput, error) {
+func (ec *executionContext) unmarshalNUpdateAlertInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAlertInput(ctx context.Context, v interface{}) (model.UpdateAlertInput, error) {
 	res, err := ec.unmarshalInputUpdateAlertInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteChirInput(ctx context.Context, v interface{}) (model.UpdateAnteChirInput, error) {
+func (ec *executionContext) unmarshalNUpdateAnteChirInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAnteChirInput(ctx context.Context, v interface{}) (model.UpdateAnteChirInput, error) {
 	res, err := ec.unmarshalInputUpdateAnteChirInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteDiseaseInput(ctx context.Context, v interface{}) (model.UpdateAnteDiseaseInput, error) {
+func (ec *executionContext) unmarshalNUpdateAnteDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAnteDiseaseInput(ctx context.Context, v interface{}) (model.UpdateAnteDiseaseInput, error) {
 	res, err := ec.unmarshalInputUpdateAnteDiseaseInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateAnteFamilyInput(ctx context.Context, v interface{}) (model.UpdateAnteFamilyInput, error) {
+func (ec *executionContext) unmarshalNUpdateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAnteFamilyInput(ctx context.Context, v interface{}) (model.UpdateAnteFamilyInput, error) {
 	res, err := ec.unmarshalInputUpdateAnteFamilyInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateBlackListInput(ctx context.Context, v interface{}) (model.UpdateBlackListInput, error) {
+func (ec *executionContext) unmarshalNUpdateBlackListInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateBlackListInput(ctx context.Context, v interface{}) (model.UpdateBlackListInput, error) {
 	res, err := ec.unmarshalInputUpdateBlackListInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateChatInput(ctx context.Context, v interface{}) (model.UpdateChatInput, error) {
+func (ec *executionContext) unmarshalNUpdateChatInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateChatInput(ctx context.Context, v interface{}) (model.UpdateChatInput, error) {
 	res, err := ec.unmarshalInputUpdateChatInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDeviceConnectInput(ctx context.Context, v interface{}) (model.UpdateDeviceConnectInput, error) {
+func (ec *executionContext) unmarshalNUpdateDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDeviceConnectInput(ctx context.Context, v interface{}) (model.UpdateDeviceConnectInput, error) {
 	res, err := ec.unmarshalInputUpdateDeviceConnectInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDiseaseInput(ctx context.Context, v interface{}) (model.UpdateDiseaseInput, error) {
+func (ec *executionContext) unmarshalNUpdateDiseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDiseaseInput(ctx context.Context, v interface{}) (model.UpdateDiseaseInput, error) {
 	res, err := ec.unmarshalInputUpdateDiseaseInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorInput(ctx context.Context, v interface{}) (model.UpdateDoctorInput, error) {
+func (ec *executionContext) unmarshalNUpdateDoctorInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorInput(ctx context.Context, v interface{}) (model.UpdateDoctorInput, error) {
 	res, err := ec.unmarshalInputUpdateDoctorInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateDoctorsPatientIDsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoctorsPatientIDsInput(ctx context.Context, v interface{}) (model.UpdateDoctorsPatientIDsInput, error) {
+func (ec *executionContext) unmarshalNUpdateDoctorsDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorsDeviceConnectInput(ctx context.Context, v interface{}) (model.UpdateDoctorsDeviceConnectInput, error) {
+	res, err := ec.unmarshalInputUpdateDoctorsDeviceConnectInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDoctorsPatientIDsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorsPatientIDsInput(ctx context.Context, v interface{}) (model.UpdateDoctorsPatientIDsInput, error) {
 	res, err := ec.unmarshalInputUpdateDoctorsPatientIDsInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDocumentInput(ctx context.Context, v interface{}) (model.UpdateDocumentInput, error) {
+func (ec *executionContext) unmarshalNUpdateDoctorsTrustDeviceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorsTrustDeviceInput(ctx context.Context, v interface{}) (model.UpdateDoctorsTrustDeviceInput, error) {
+	res, err := ec.unmarshalInputUpdateDoctorsTrustDeviceInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateDocumentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDocumentInput(ctx context.Context, v interface{}) (model.UpdateDocumentInput, error) {
 	res, err := ec.unmarshalInputUpdateDocumentInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateDoubleAuthInput(ctx context.Context, v interface{}) (model.UpdateDoubleAuthInput, error) {
+func (ec *executionContext) unmarshalNUpdateDoubleAuthInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoubleAuthInput(ctx context.Context, v interface{}) (model.UpdateDoubleAuthInput, error) {
 	res, err := ec.unmarshalInputUpdateDoubleAuthInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateMedicalFolderInput(ctx context.Context, v interface{}) (model.UpdateMedicalFolderInput, error) {
+func (ec *executionContext) unmarshalNUpdateMedicalFolderInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateMedicalFolderInput(ctx context.Context, v interface{}) (model.UpdateMedicalFolderInput, error) {
 	res, err := ec.unmarshalInputUpdateMedicalFolderInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateNotificationInput(ctx context.Context, v interface{}) (model.UpdateNotificationInput, error) {
+func (ec *executionContext) unmarshalNUpdateNotificationInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateNotificationInput(ctx context.Context, v interface{}) (model.UpdateNotificationInput, error) {
 	res, err := ec.unmarshalInputUpdateNotificationInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx context.Context, v interface{}) (model.UpdatePatientInput, error) {
+func (ec *executionContext) unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx context.Context, v interface{}) (model.UpdatePatientInput, error) {
 	res, err := ec.unmarshalInputUpdatePatientInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateRdvInput(ctx context.Context, v interface{}) (model.UpdateRdvInput, error) {
+func (ec *executionContext) unmarshalNUpdatePatientTrustDeviceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientTrustDeviceInput(ctx context.Context, v interface{}) (model.UpdatePatientTrustDeviceInput, error) {
+	res, err := ec.unmarshalInputUpdatePatientTrustDeviceInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePatientsDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientsDeviceConnectInput(ctx context.Context, v interface{}) (model.UpdatePatientsDeviceConnectInput, error) {
+	res, err := ec.unmarshalInputUpdatePatientsDeviceConnectInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateRdvInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateRdvInput(ctx context.Context, v interface{}) (model.UpdateRdvInput, error) {
 	res, err := ec.unmarshalInputUpdateRdvInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSaveCodeInput(ctx context.Context, v interface{}) (model.UpdateSaveCodeInput, error) {
+func (ec *executionContext) unmarshalNUpdateSaveCodeInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateSaveCodeInput(ctx context.Context, v interface{}) (model.UpdateSaveCodeInput, error) {
 	res, err := ec.unmarshalInputUpdateSaveCodeInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSessionInput(ctx context.Context, v interface{}) (model.UpdateSessionInput, error) {
+func (ec *executionContext) unmarshalNUpdateSessionInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateSessionInput(ctx context.Context, v interface{}) (model.UpdateSessionInput, error) {
 	res, err := ec.unmarshalInputUpdateSessionInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateSymptomInput(ctx context.Context, v interface{}) (model.UpdateSymptomInput, error) {
+func (ec *executionContext) unmarshalNUpdateSymptomInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateSymptomInput(ctx context.Context, v interface{}) (model.UpdateSymptomInput, error) {
 	res, err := ec.unmarshalInputUpdateSymptomInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentInput(ctx context.Context, v interface{}) (model.UpdateTreatmentInput, error) {
+func (ec *executionContext) unmarshalNUpdateTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateTreatmentInput(ctx context.Context, v interface{}) (model.UpdateTreatmentInput, error) {
 	res, err := ec.unmarshalInputUpdateTreatmentInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNUpdateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐUpdateTreatmentsFollowUpInput(ctx context.Context, v interface{}) (model.UpdateTreatmentsFollowUpInput, error) {
+func (ec *executionContext) unmarshalNUpdateTreatmentsFollowUpInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateTreatmentsFollowUpInput(ctx context.Context, v interface{}) (model.UpdateTreatmentsFollowUpInput, error) {
 	res, err := ec.unmarshalInputUpdateTreatmentsFollowUpInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -36452,7 +37608,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
+func (ec *executionContext) unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (*model.AddressInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -36460,7 +37616,7 @@ func (ec *executionContext) unmarshalOAddressInput2ᚖgithubᚗcomᚋedgarᚑcar
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v []*model.Admin) graphql.Marshaler {
+func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v []*model.Admin) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36487,7 +37643,7 @@ func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx, sel, v[i])
+			ret[i] = ec.marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36501,14 +37657,14 @@ func (ec *executionContext) marshalOAdmin2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return ret
 }
 
-func (ec *executionContext) marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v *model.Admin) graphql.Marshaler {
+func (ec *executionContext) marshalOAdmin2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAdmin(ctx context.Context, sel ast.SelectionSet, v *model.Admin) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Admin(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v []*model.Alert) graphql.Marshaler {
+func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v []*model.Alert) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36535,7 +37691,7 @@ func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx, sel, v[i])
+			ret[i] = ec.marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAlert(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36549,14 +37705,14 @@ func (ec *executionContext) marshalOAlert2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return ret
 }
 
-func (ec *executionContext) marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v *model.Alert) graphql.Marshaler {
+func (ec *executionContext) marshalOAlert2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAlert(ctx context.Context, sel ast.SelectionSet, v *model.Alert) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Alert(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v []*model.AnteChir) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v []*model.AnteChir) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36583,7 +37739,7 @@ func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx, sel, v[i])
+			ret[i] = ec.marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteChir(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36597,14 +37753,14 @@ func (ec *executionContext) marshalOAnteChir2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v *model.AnteChir) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteChir2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteChir(ctx context.Context, sel ast.SelectionSet, v *model.AnteChir) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AnteChir(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v []*model.AnteDisease) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v []*model.AnteDisease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36631,7 +37787,7 @@ func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx, sel, v[i])
+			ret[i] = ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36645,14 +37801,14 @@ func (ec *executionContext) marshalOAnteDisease2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return ret
 }
 
-func (ec *executionContext) marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v *model.AnteDisease) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx context.Context, sel ast.SelectionSet, v *model.AnteDisease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AnteDisease(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v []*model.AnteFamily) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v []*model.AnteFamily) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36679,7 +37835,7 @@ func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcare
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx, sel, v[i])
+			ret[i] = ec.marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteFamily(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36693,14 +37849,14 @@ func (ec *executionContext) marshalOAnteFamily2ᚕᚖgithubᚗcomᚋedgarᚑcare
 	return ret
 }
 
-func (ec *executionContext) marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v *model.AnteFamily) graphql.Marshaler {
+func (ec *executionContext) marshalOAnteFamily2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteFamily(ctx context.Context, sel ast.SelectionSet, v *model.AnteFamily) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AnteFamily(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (*model.AppointmentStatus, error) {
+func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, v interface{}) (*model.AppointmentStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -36709,14 +37865,14 @@ func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgar�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v *model.AppointmentStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v *model.AppointmentStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v []*model.BlackList) graphql.Marshaler {
+func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v []*model.BlackList) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36743,7 +37899,7 @@ func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx, sel, v[i])
+			ret[i] = ec.marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐBlackList(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36757,7 +37913,7 @@ func (ec *executionContext) marshalOBlackList2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v *model.BlackList) graphql.Marshaler {
+func (ec *executionContext) marshalOBlackList2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐBlackList(ctx context.Context, sel ast.SelectionSet, v *model.BlackList) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36790,7 +37946,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v []*model.Chat) graphql.Marshaler {
+func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v []*model.Chat) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36817,7 +37973,7 @@ func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx, sel, v[i])
+			ret[i] = ec.marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChat(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36831,14 +37987,14 @@ func (ec *executionContext) marshalOChat2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedg
 	return ret
 }
 
-func (ec *executionContext) marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v *model.Chat) graphql.Marshaler {
+func (ec *executionContext) marshalOChat2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChat(ctx context.Context, sel ast.SelectionSet, v *model.Chat) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Chat(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
+func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatMessagesInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -36850,7 +38006,7 @@ func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	res := make([]*model.ChatMessagesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatMessagesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatMessagesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -36858,7 +38014,7 @@ func (ec *executionContext) unmarshalOChatMessagesInput2ᚕᚖgithubᚗcomᚋedg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
+func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsInputᚄ(ctx context.Context, v interface{}) ([]*model.ChatParticipantsInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -36870,7 +38026,7 @@ func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcom�
 	res := make([]*model.ChatParticipantsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChatParticipantsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChatParticipantsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -36878,7 +38034,7 @@ func (ec *executionContext) unmarshalOChatParticipantsInput2ᚕᚖgithubᚗcom�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChirInducedSymptom) graphql.Marshaler {
+func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptomᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ChirInducedSymptom) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36905,7 +38061,7 @@ func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptom(ctx, sel, v[i])
+			ret[i] = ec.marshalNChirInducedSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptom(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -36925,7 +38081,7 @@ func (ec *executionContext) marshalOChirInducedSymptom2ᚕᚖgithubᚗcomᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.ChirInducedSymptomInput, error) {
+func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.ChirInducedSymptomInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -36937,7 +38093,7 @@ func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcom
 	res := make([]*model.ChirInducedSymptomInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐChirInducedSymptomInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChirInducedSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐChirInducedSymptomInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -36945,7 +38101,7 @@ func (ec *executionContext) unmarshalOChirInducedSymptomInput2ᚕᚖgithubᚗcom
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
+func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, v interface{}) ([]model.Day, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -36957,7 +38113,7 @@ func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	res := make([]model.Day, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -36965,7 +38121,7 @@ func (ec *executionContext) unmarshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgar
 	return res, nil
 }
 
-func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDayᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Day) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -36992,7 +38148,7 @@ func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
+			ret[i] = ec.marshalNDay2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37012,7 +38168,7 @@ func (ec *executionContext) marshalODay2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarli
 	return ret
 }
 
-func (ec *executionContext) unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) (*model.Day, error) {
+func (ec *executionContext) unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx context.Context, v interface{}) (*model.Day, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37021,14 +38177,14 @@ func (ec *executionContext) unmarshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgar
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v *model.Day) graphql.Marshaler {
+func (ec *executionContext) marshalODay2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDay(ctx context.Context, sel ast.SelectionSet, v *model.Day) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v []*model.DeviceConnect) graphql.Marshaler {
+func (ec *executionContext) marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v []*model.DeviceConnect) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37055,7 +38211,7 @@ func (ec *executionContext) marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑc
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx, sel, v[i])
+			ret[i] = ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37069,14 +38225,14 @@ func (ec *executionContext) marshalODeviceConnect2ᚕᚖgithubᚗcomᚋedgarᚑc
 	return ret
 }
 
-func (ec *executionContext) marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v *model.DeviceConnect) graphql.Marshaler {
+func (ec *executionContext) marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx context.Context, sel ast.SelectionSet, v *model.DeviceConnect) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._DeviceConnect(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v []*model.Disease) graphql.Marshaler {
+func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v []*model.Disease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37103,7 +38259,7 @@ func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx, sel, v[i])
+			ret[i] = ec.marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37117,14 +38273,14 @@ func (ec *executionContext) marshalODisease2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v *model.Disease) graphql.Marshaler {
+func (ec *executionContext) marshalODisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDisease(ctx context.Context, sel ast.SelectionSet, v *model.Disease) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Disease(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v []*model.Doctor) graphql.Marshaler {
+func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v []*model.Doctor) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37151,7 +38307,7 @@ func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx, sel, v[i])
+			ret[i] = ec.marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37165,14 +38321,14 @@ func (ec *executionContext) marshalODoctor2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋe
 	return ret
 }
 
-func (ec *executionContext) marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v *model.Doctor) graphql.Marshaler {
+func (ec *executionContext) marshalODoctor2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoctor(ctx context.Context, sel ast.SelectionSet, v *model.Doctor) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Doctor(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v []*model.Document) graphql.Marshaler {
+func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v []*model.Document) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37199,7 +38355,7 @@ func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx, sel, v[i])
+			ret[i] = ec.marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37213,14 +38369,14 @@ func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v *model.Document) graphql.Marshaler {
+func (ec *executionContext) marshalODocument2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDocument(ctx context.Context, sel ast.SelectionSet, v *model.Document) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Document(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v []*model.DoubleAuth) graphql.Marshaler {
+func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v []*model.DoubleAuth) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37247,7 +38403,7 @@ func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcare
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx, sel, v[i])
+			ret[i] = ec.marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoubleAuth(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37261,7 +38417,7 @@ func (ec *executionContext) marshalODoubleAuth2ᚕᚖgithubᚗcomᚋedgarᚑcare
 	return ret
 }
 
-func (ec *executionContext) marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v *model.DoubleAuth) graphql.Marshaler {
+func (ec *executionContext) marshalODoubleAuth2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDoubleAuth(ctx context.Context, sel ast.SelectionSet, v *model.DoubleAuth) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37300,7 +38456,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
+func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsInputᚄ(ctx context.Context, v interface{}) ([]*model.LogsInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37312,7 +38468,7 @@ func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	res := make([]*model.LogsInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐLogsInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNLogsInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐLogsInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -37320,7 +38476,7 @@ func (ec *executionContext) unmarshalOLogsInput2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return res, nil
 }
 
-func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v []*model.MedicalInfo) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v []*model.MedicalInfo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37347,7 +38503,7 @@ func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx, sel, v[i])
+			ret[i] = ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37361,14 +38517,14 @@ func (ec *executionContext) marshalOMedicalInfo2ᚕᚖgithubᚗcomᚋedgarᚑcar
 	return ret
 }
 
-func (ec *executionContext) marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v *model.MedicalInfo) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx context.Context, sel ast.SelectionSet, v *model.MedicalInfo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._MedicalInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v []*model.Medicine) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v []*model.Medicine) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37395,7 +38551,7 @@ func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx, sel, v[i])
+			ret[i] = ec.marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicine(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37409,14 +38565,14 @@ func (ec *executionContext) marshalOMedicine2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v *model.Medicine) graphql.Marshaler {
+func (ec *executionContext) marshalOMedicine2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicine(ctx context.Context, sel ast.SelectionSet, v *model.Medicine) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Medicine(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReport) graphql.Marshaler {
+func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v []*model.NlpReport) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37443,7 +38599,7 @@ func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx, sel, v[i])
+			ret[i] = ec.marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReport(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37457,14 +38613,14 @@ func (ec *executionContext) marshalONlpReport2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v *model.NlpReport) graphql.Marshaler {
+func (ec *executionContext) marshalONlpReport2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNlpReport(ctx context.Context, sel ast.SelectionSet, v *model.NlpReport) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._NlpReport(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37491,7 +38647,7 @@ func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑca
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx, sel, v[i])
+			ret[i] = ec.marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNotification(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37505,14 +38661,14 @@ func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋedgarᚑca
 	return ret
 }
 
-func (ec *executionContext) marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v *model.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalONotification2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v *model.Notification) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Notification(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (*model.OnboardingStatus, error) {
+func (ec *executionContext) unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, v interface{}) (*model.OnboardingStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37521,14 +38677,14 @@ func (ec *executionContext) unmarshalOOnboardingStatus2ᚖgithubᚗcomᚋedgar�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v *model.OnboardingStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOOnboardingStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOnboardingStatus(ctx context.Context, sel ast.SelectionSet, v *model.OnboardingStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐOptions(ctx context.Context, v interface{}) (*model.Options, error) {
+func (ec *executionContext) unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx context.Context, v interface{}) (*model.Options, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37536,7 +38692,7 @@ func (ec *executionContext) unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v []*model.Patient) graphql.Marshaler {
+func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v []*model.Patient) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37563,7 +38719,7 @@ func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx, sel, v[i])
+			ret[i] = ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37577,14 +38733,14 @@ func (ec *executionContext) marshalOPatient2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v *model.Patient) graphql.Marshaler {
+func (ec *executionContext) marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx context.Context, sel ast.SelectionSet, v *model.Patient) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Patient(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
+func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, v interface{}) ([]model.Period, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37596,7 +38752,7 @@ func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	res := make([]model.Period, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -37604,7 +38760,7 @@ func (ec *executionContext) unmarshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋed
 	return res, nil
 }
 
-func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriodᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Period) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37631,7 +38787,7 @@ func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
+			ret[i] = ec.marshalNPeriod2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37651,7 +38807,7 @@ func (ec *executionContext) marshalOPeriod2ᚕgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) (*model.Period, error) {
+func (ec *executionContext) unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, v interface{}) (*model.Period, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37660,14 +38816,14 @@ func (ec *executionContext) unmarshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋed
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v *model.Period) graphql.Marshaler {
+func (ec *executionContext) marshalOPeriod2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPeriod(ctx context.Context, sel ast.SelectionSet, v *model.Period) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v []*model.Rdv) graphql.Marshaler {
+func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v []*model.Rdv) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37694,7 +38850,7 @@ func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx, sel, v[i])
+			ret[i] = ec.marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37708,14 +38864,14 @@ func (ec *executionContext) marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedga
 	return ret
 }
 
-func (ec *executionContext) marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v *model.Rdv) graphql.Marshaler {
+func (ec *executionContext) marshalORdv2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx context.Context, sel ast.SelectionSet, v *model.Rdv) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Rdv(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v []*model.SaveCode) graphql.Marshaler {
+func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v []*model.SaveCode) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37742,7 +38898,7 @@ func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx, sel, v[i])
+			ret[i] = ec.marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSaveCode(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37756,14 +38912,14 @@ func (ec *executionContext) marshalOSaveCode2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v *model.SaveCode) graphql.Marshaler {
+func (ec *executionContext) marshalOSaveCode2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSaveCode(ctx context.Context, sel ast.SelectionSet, v *model.SaveCode) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._SaveCode(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
+func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37790,7 +38946,7 @@ func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx, sel, v[i])
+			ret[i] = ec.marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSession(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37804,14 +38960,14 @@ func (ec *executionContext) marshalOSession2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
+func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Session(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
+func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionDiseasesInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37823,7 +38979,7 @@ func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.SessionDiseasesInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionDiseasesInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionDiseasesInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -37831,7 +38987,7 @@ func (ec *executionContext) unmarshalOSessionDiseasesInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
+func (ec *executionContext) unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomInputᚄ(ctx context.Context, v interface{}) ([]*model.SessionSymptomInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -37843,7 +38999,7 @@ func (ec *executionContext) unmarshalOSessionSymptomInput2ᚕᚖgithubᚗcomᚋe
 	res := make([]*model.SessionSymptomInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSessionSymptomInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSessionSymptomInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -37937,7 +39093,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v []*model.Symptom) graphql.Marshaler {
+func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v []*model.Symptom) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -37964,7 +39120,7 @@ func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx, sel, v[i])
+			ret[i] = ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -37978,14 +39134,14 @@ func (ec *executionContext) marshalOSymptom2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v *model.Symptom) graphql.Marshaler {
+func (ec *executionContext) marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v *model.Symptom) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Symptom(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SymptomsWeight) graphql.Marshaler {
+func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeightᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.SymptomsWeight) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -38012,7 +39168,7 @@ func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeight(ctx, sel, v[i])
+			ret[i] = ec.marshalNSymptomsWeight2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeight(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -38032,7 +39188,7 @@ func (ec *executionContext) marshalOSymptomsWeight2ᚕᚖgithubᚗcomᚋedgarᚑ
 	return ret
 }
 
-func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx context.Context, v interface{}) ([]*model.SymptomsWeightInput, error) {
+func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeightInputᚄ(ctx context.Context, v interface{}) ([]*model.SymptomsWeightInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -38044,7 +39200,7 @@ func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋe
 	res := make([]*model.SymptomsWeightInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐSymptomsWeightInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNSymptomsWeightInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptomsWeightInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -38052,7 +39208,7 @@ func (ec *executionContext) unmarshalOSymptomsWeightInput2ᚕᚖgithubᚗcomᚋe
 	return res, nil
 }
 
-func (ec *executionContext) marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v []*model.Treatment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -38079,7 +39235,7 @@ func (ec *executionContext) marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx, sel, v[i])
+			ret[i] = ec.marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -38093,14 +39249,14 @@ func (ec *executionContext) marshalOTreatment2ᚕᚖgithubᚗcomᚋedgarᚑcare�
 	return ret
 }
 
-func (ec *executionContext) marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatment2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatment(ctx context.Context, sel ast.SelectionSet, v *model.Treatment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Treatment(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v []*model.TreatmentsFollowUp) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v []*model.TreatmentsFollowUp) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -38127,7 +39283,7 @@ func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, sel, v[i])
+			ret[i] = ec.marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -38141,7 +39297,7 @@ func (ec *executionContext) marshalOTreatmentsFollowUp2ᚕᚖgithubᚗcomᚋedga
 	return ret
 }
 
-func (ec *executionContext) marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v *model.TreatmentsFollowUp) graphql.Marshaler {
+func (ec *executionContext) marshalOTreatmentsFollowUp2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentsFollowUp(ctx context.Context, sel ast.SelectionSet, v *model.TreatmentsFollowUp) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

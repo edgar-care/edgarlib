@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
 
 func DeleteTreatment(id string) (bool, error) {
@@ -18,7 +18,7 @@ func DeleteTreatment(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -43,7 +43,7 @@ func DeleteTreatment(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteTreatment bool `json:"deleteTreatment"`
 		} `json:"data"`
 	}
@@ -76,7 +76,7 @@ func CreateAnteChir(input model.CreateAnteChirInput) (model.AnteChir, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -101,7 +101,7 @@ func CreateAnteChir(input model.CreateAnteChirInput) (model.AnteChir, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateAnteChir model.AnteChir `json:"createAnteChir"`
 		} `json:"data"`
 	}
@@ -135,7 +135,7 @@ func CreateAnteDisease(input model.CreateAnteDiseaseInput) (model.AnteDisease, e
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -160,7 +160,7 @@ func CreateAnteDisease(input model.CreateAnteDiseaseInput) (model.AnteDisease, e
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateAnteDisease model.AnteDisease `json:"createAnteDisease"`
 		} `json:"data"`
 	}
@@ -197,7 +197,7 @@ func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -222,7 +222,7 @@ func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateSymptom model.Symptom `json:"createSymptom"`
 		} `json:"data"`
 	}
@@ -246,7 +246,7 @@ func DeleteDisease(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -271,7 +271,7 @@ func DeleteDisease(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteDisease bool `json:"deleteDisease"`
 		} `json:"data"`
 	}
@@ -295,7 +295,7 @@ func DeleteSymptom(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -320,7 +320,7 @@ func DeleteSymptom(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteSymptom bool `json:"deleteSymptom"`
 		} `json:"data"`
 	}
@@ -344,7 +344,7 @@ func DeleteAdmin(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -369,7 +369,7 @@ func DeleteAdmin(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteAdmin bool `json:"deleteAdmin"`
 		} `json:"data"`
 	}
@@ -393,7 +393,7 @@ func DeleteDoctor(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -418,7 +418,7 @@ func DeleteDoctor(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteDoctor bool `json:"deleteDoctor"`
 		} `json:"data"`
 	}
@@ -444,6 +444,7 @@ func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
 	        category
 	        is_favorite
 	        download_url
+	        uploader_id
 	        createdAt
 	        updatedAt
 	    }
@@ -452,7 +453,7 @@ func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -477,7 +478,7 @@ func CreateDocument(input model.CreateDocumentInput) (model.Document, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateDocument model.Document `json:"createDocument"`
 		} `json:"data"`
 	}
@@ -514,7 +515,7 @@ func CreateChat(input model.CreateChatInput) (model.Chat, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -539,7 +540,7 @@ func CreateChat(input model.CreateChatInput) (model.Chat, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateChat model.Chat `json:"createChat"`
 		} `json:"data"`
 	}
@@ -571,7 +572,7 @@ func CreateAdmin(input model.CreateAdminInput) (model.Admin, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -596,7 +597,7 @@ func CreateAdmin(input model.CreateAdminInput) (model.Admin, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateAdmin model.Admin `json:"createAdmin"`
 		} `json:"data"`
 	}
@@ -620,7 +621,7 @@ func DeletePatient(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -645,7 +646,7 @@ func DeletePatient(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeletePatient bool `json:"deletePatient"`
 		} `json:"data"`
 	}
@@ -682,7 +683,7 @@ func CreateNlpReport(input model.CreateNlpReportInput) (model.NlpReport, error) 
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -707,7 +708,7 @@ func CreateNlpReport(input model.CreateNlpReportInput) (model.NlpReport, error) 
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateNlpReport model.NlpReport `json:"createNlpReport"`
 		} `json:"data"`
 	}
@@ -737,11 +738,11 @@ func UpdateAnteChir(id string, input model.UpdateAnteChirInput) (model.AnteChir,
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -766,7 +767,7 @@ func UpdateAnteChir(id string, input model.UpdateAnteChirInput) (model.AnteChir,
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateAnteChir model.AnteChir `json:"updateAnteChir"`
 		} `json:"data"`
 	}
@@ -800,11 +801,11 @@ func UpdateMedicalFolder(id string, input model.UpdateMedicalFolderInput) (model
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -829,7 +830,7 @@ func UpdateMedicalFolder(id string, input model.UpdateMedicalFolderInput) (model
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateMedicalFolder model.MedicalInfo `json:"updateMedicalFolder"`
 		} `json:"data"`
 	}
@@ -854,6 +855,9 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 	        target_diseases
 	        treated_symptoms
 	        side_effects
+	        type
+	        content
+	        quantity
 	        createdAt
 	        updatedAt
 	    }
@@ -862,7 +866,7 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -887,7 +891,7 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateMedicine model.Medicine `json:"createMedicine"`
 		} `json:"data"`
 	}
@@ -911,7 +915,7 @@ func DeleteAlert(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -936,7 +940,7 @@ func DeleteAlert(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteAlert bool `json:"deleteAlert"`
 		} `json:"data"`
 	}
@@ -960,16 +964,18 @@ func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatme
 	        day
 	        quantity
 	        medicine_id
+	        start_date
+	        end_date
 	        createdAt
 	        updatedAt
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -994,7 +1000,7 @@ func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatme
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateTreatment model.Treatment `json:"updateTreatment"`
 		} `json:"data"`
 	}
@@ -1038,7 +1044,7 @@ func CreateDoctor(input model.CreateDoctorInput) (model.Doctor, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1063,7 +1069,7 @@ func CreateDoctor(input model.CreateDoctorInput) (model.Doctor, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateDoctor model.Doctor `json:"createDoctor"`
 		} `json:"data"`
 	}
@@ -1087,7 +1093,7 @@ func DeleteChat(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1112,7 +1118,7 @@ func DeleteChat(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteChat bool `json:"deleteChat"`
 		} `json:"data"`
 	}
@@ -1146,11 +1152,11 @@ func UpdateChat(id string, input model.UpdateChatInput) (model.Chat, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1175,7 +1181,7 @@ func UpdateChat(id string, input model.UpdateChatInput) (model.Chat, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateChat model.Chat `json:"updateChat"`
 		} `json:"data"`
 	}
@@ -1205,7 +1211,7 @@ func CreateAnteFamily(input model.CreateAnteFamilyInput) (model.AnteFamily, erro
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1230,7 +1236,7 @@ func CreateAnteFamily(input model.CreateAnteFamilyInput) (model.AnteFamily, erro
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateAnteFamily model.AnteFamily `json:"createAnteFamily"`
 		} `json:"data"`
 	}
@@ -1258,11 +1264,11 @@ func UpdateTreatmentsFollowUp(id string, input model.UpdateTreatmentsFollowUpInp
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1287,7 +1293,7 @@ func UpdateTreatmentsFollowUp(id string, input model.UpdateTreatmentsFollowUpInp
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateTreatmentsFollowUp model.TreatmentsFollowUp `json:"updateTreatmentsFollowUp"`
 		} `json:"data"`
 	}
@@ -1313,16 +1319,17 @@ func UpdateDocument(id string, input model.UpdateDocumentInput) (model.Document,
 	        category
 	        is_favorite
 	        download_url
+	        uploader_id
 	        createdAt
 	        updatedAt
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1347,7 +1354,7 @@ func UpdateDocument(id string, input model.UpdateDocumentInput) (model.Document,
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateDocument model.Document `json:"updateDocument"`
 		} `json:"data"`
 	}
@@ -1371,7 +1378,7 @@ func DeleteSlot(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1396,7 +1403,7 @@ func DeleteSlot(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteSlot bool `json:"deleteSlot"`
 		} `json:"data"`
 	}
@@ -1429,11 +1436,11 @@ func UpdateRdv(id string, input model.UpdateRdvInput) (model.Rdv, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1458,7 +1465,7 @@ func UpdateRdv(id string, input model.UpdateRdvInput) (model.Rdv, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateRdv model.Rdv `json:"updateRdv"`
 		} `json:"data"`
 	}
@@ -1482,7 +1489,7 @@ func DeleteAnteFamily(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1507,7 +1514,7 @@ func DeleteAnteFamily(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteAnteFamily bool `json:"deleteAnteFamily"`
 		} `json:"data"`
 	}
@@ -1541,7 +1548,7 @@ func CreateAlert(input model.CreateAlertInput) (model.Alert, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1566,7 +1573,7 @@ func CreateAlert(input model.CreateAlertInput) (model.Alert, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateAlert model.Alert `json:"createAlert"`
 		} `json:"data"`
 	}
@@ -1590,7 +1597,7 @@ func DeleteMedicalFolder(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1615,7 +1622,7 @@ func DeleteMedicalFolder(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteMedicalFolder bool `json:"deleteMedicalFolder"`
 		} `json:"data"`
 	}
@@ -1654,7 +1661,7 @@ func CreatePatient(input model.CreatePatientInput) (model.Patient, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1679,7 +1686,7 @@ func CreatePatient(input model.CreatePatientInput) (model.Patient, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreatePatient model.Patient `json:"createPatient"`
 		} `json:"data"`
 	}
@@ -1703,7 +1710,7 @@ func DeleteAnteChir(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1728,7 +1735,7 @@ func DeleteAnteChir(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteAnteChir bool `json:"deleteAnteChir"`
 		} `json:"data"`
 	}
@@ -1764,11 +1771,11 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1793,7 +1800,7 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdatePatient model.Patient `json:"updatePatient"`
 		} `json:"data"`
 	}
@@ -1807,6 +1814,136 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 	}
 
 	return result.Data.UpdatePatient, nil
+}
+
+func UpdatePatientsDeviceConnect(id string, input model.UpdatePatientsDeviceConnectInput) (model.Patient, error) {
+	query := `mutation UpdatePatientsDeviceConnect($id: String!, $input: UpdatePatientsDeviceConnectInput!){
+	    UpdatePatientsDeviceConnect(id: $id, input: $input){
+	        id
+	        email
+	        password
+	        rendez_vous_ids
+	        medical_info_id
+	        document_ids
+	        treatment_follow_up_ids
+	        chat_ids
+	        device_connect
+	        double_auth_methods_id
+	        trust_devices
+	        status
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Patient{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Patient{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdatePatientsDeviceConnect model.Patient `json:"UpdatePatientsDeviceConnect"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Patient{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdatePatientsDeviceConnect, nil
+}
+
+func UpdatePatientTrustDevice(id string, input model.UpdatePatientTrustDeviceInput) (model.Patient, error) {
+	query := `mutation UpdatePatientTrustDevice($id: String!, $input: UpdatePatientTrustDeviceInput!){
+	    UpdatePatientTrustDevice(id: $id, input: $input){
+	        id
+	        email
+	        password
+	        rendez_vous_ids
+	        medical_info_id
+	        document_ids
+	        treatment_follow_up_ids
+	        chat_ids
+	        device_connect
+	        double_auth_methods_id
+	        trust_devices
+	        status
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Patient{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Patient{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdatePatientTrustDevice model.Patient `json:"UpdatePatientTrustDevice"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Patient{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdatePatientTrustDevice, nil
 }
 
 func CreateSession(input model.CreateSessionInput) (model.Session, error) {
@@ -1845,7 +1982,7 @@ func CreateSession(input model.CreateSessionInput) (model.Session, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1870,7 +2007,7 @@ func CreateSession(input model.CreateSessionInput) (model.Session, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateSession model.Session `json:"createSession"`
 		} `json:"data"`
 	}
@@ -1894,7 +2031,7 @@ func DeleteAnteDisease(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1919,7 +2056,7 @@ func DeleteAnteDisease(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteAnteDisease bool `json:"deleteAnteDisease"`
 		} `json:"data"`
 	}
@@ -1960,11 +2097,11 @@ func UpdateDoctor(id string, input model.UpdateDoctorInput) (model.Doctor, error
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -1989,7 +2126,7 @@ func UpdateDoctor(id string, input model.UpdateDoctorInput) (model.Doctor, error
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateDoctor model.Doctor `json:"updateDoctor"`
 		} `json:"data"`
 	}
@@ -2003,6 +2140,146 @@ func UpdateDoctor(id string, input model.UpdateDoctorInput) (model.Doctor, error
 	}
 
 	return result.Data.UpdateDoctor, nil
+}
+
+func UpdateDoctorsDeviceConnect(id string, input model.UpdateDoctorsDeviceConnectInput) (model.Doctor, error) {
+	query := `mutation UpdateDoctorsDeviceConnect($id: String!, $input: UpdateDoctorsDeviceConnectInput!){
+	    UpdateDoctorsDeviceConnect(id: $id, input: $input){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        address {
+	            street
+	            zip_code
+	            country
+	        }
+	        device_connect
+	        double_auth_methods_id
+	        trust_devices
+	        status
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Doctor{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Doctor{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdateDoctorsDeviceConnect model.Doctor `json:"UpdateDoctorsDeviceConnect"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Doctor{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateDoctorsDeviceConnect, nil
+}
+
+func UpdateDoctorsTrustDevice(id string, input model.UpdateDoctorsTrustDeviceInput) (model.Doctor, error) {
+	query := `mutation UpdateDoctorsTrustDevice($id: String!, $input: UpdateDoctorsTrustDeviceInput!){
+	    UpdateDoctorsTrustDevice(id: $id, input: $input){
+	        id
+	        email
+	        password
+	        name
+	        firstname
+	        rendez_vous_ids
+	        patient_ids
+	        chat_ids
+	        address {
+	            street
+	            zip_code
+	            country
+	        }
+	        device_connect
+	        double_auth_methods_id
+	        trust_devices
+	        status
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Doctor{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Doctor{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdateDoctorsTrustDevice model.Doctor `json:"UpdateDoctorsTrustDevice"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Doctor{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Doctor{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateDoctorsTrustDevice, nil
 }
 
 func UpdateDoctorsPatientIDs(id string, input model.UpdateDoctorsPatientIDsInput) (model.Doctor, error) {
@@ -2030,11 +2307,11 @@ func UpdateDoctorsPatientIDs(id string, input model.UpdateDoctorsPatientIDsInput
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2059,7 +2336,7 @@ func UpdateDoctorsPatientIDs(id string, input model.UpdateDoctorsPatientIDsInput
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateDoctorsPatientIDs model.Doctor `json:"updateDoctorsPatientIDs"`
 		} `json:"data"`
 	}
@@ -2096,7 +2373,7 @@ func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInf
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2121,7 +2398,7 @@ func CreateMedicalFolder(input model.CreateMedicalFolderInput) (model.MedicalInf
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateMedicalFolder model.MedicalInfo `json:"createMedicalFolder"`
 		} `json:"data"`
 	}
@@ -2145,7 +2422,7 @@ func DeleteDocument(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2170,7 +2447,7 @@ func DeleteDocument(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteDocument bool `json:"deleteDocument"`
 		} `json:"data"`
 	}
@@ -2201,11 +2478,11 @@ func UpdateAlert(id string, input model.UpdateAlertInput) (model.Alert, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2230,7 +2507,7 @@ func UpdateAlert(id string, input model.UpdateAlertInput) (model.Alert, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateAlert model.Alert `json:"updateAlert"`
 		} `json:"data"`
 	}
@@ -2254,7 +2531,7 @@ func DeleteMedicine(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2279,7 +2556,7 @@ func DeleteMedicine(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteMedicine bool `json:"deleteMedicine"`
 		} `json:"data"`
 	}
@@ -2303,6 +2580,8 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 	        day
 	        quantity
 	        medicine_id
+	        start_date
+	        end_date
 	        createdAt
 	        updatedAt
 	    }
@@ -2311,7 +2590,7 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2336,7 +2615,7 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateTreatment model.Treatment `json:"createTreatment"`
 		} `json:"data"`
 	}
@@ -2360,7 +2639,7 @@ func DeleteRdv(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2385,7 +2664,7 @@ func DeleteRdv(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteRdv bool `json:"deleteRdv"`
 		} `json:"data"`
 	}
@@ -2421,11 +2700,11 @@ func UpdateDisease(id string, input model.UpdateDiseaseInput) (model.Disease, er
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2450,7 +2729,7 @@ func UpdateDisease(id string, input model.UpdateDiseaseInput) (model.Disease, er
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateDisease model.Disease `json:"updateDisease"`
 		} `json:"data"`
 	}
@@ -2474,7 +2753,7 @@ func DeleteNotification(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2499,7 +2778,7 @@ func DeleteNotification(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteNotification bool `json:"deleteNotification"`
 		} `json:"data"`
 	}
@@ -2523,7 +2802,7 @@ func DeleteSession(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2548,7 +2827,7 @@ func DeleteSession(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteSession bool `json:"deleteSession"`
 		} `json:"data"`
 	}
@@ -2577,11 +2856,11 @@ func UpdateAdmin(id string, input model.UpdateAdminInput) (model.Admin, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2606,7 +2885,7 @@ func UpdateAdmin(id string, input model.UpdateAdminInput) (model.Admin, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateAdmin model.Admin `json:"updateAdmin"`
 		} `json:"data"`
 	}
@@ -2640,11 +2919,11 @@ func UpdateSymptom(id string, input model.UpdateSymptomInput) (model.Symptom, er
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2669,7 +2948,7 @@ func UpdateSymptom(id string, input model.UpdateSymptomInput) (model.Symptom, er
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateSymptom model.Symptom `json:"updateSymptom"`
 		} `json:"data"`
 	}
@@ -2700,7 +2979,7 @@ func CreateTreatmentsFollowUp(input model.CreateTreatmentsFollowUpInput) (model.
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2725,7 +3004,7 @@ func CreateTreatmentsFollowUp(input model.CreateTreatmentsFollowUpInput) (model.
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateTreatmentsFollowUp model.TreatmentsFollowUp `json:"createTreatmentsFollowUp"`
 		} `json:"data"`
 	}
@@ -2764,7 +3043,7 @@ func CreateDisease(input model.CreateDiseaseInput) (model.Disease, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2789,7 +3068,7 @@ func CreateDisease(input model.CreateDiseaseInput) (model.Disease, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateDisease model.Disease `json:"createDisease"`
 		} `json:"data"`
 	}
@@ -2817,11 +3096,11 @@ func UpdateNotification(id string, input model.UpdateNotificationInput) (model.N
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2846,7 +3125,7 @@ func UpdateNotification(id string, input model.UpdateNotificationInput) (model.N
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateNotification model.Notification `json:"updateNotification"`
 		} `json:"data"`
 	}
@@ -2877,7 +3156,7 @@ func CreateNotification(input model.CreateNotificationInput) (model.Notification
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2902,7 +3181,7 @@ func CreateNotification(input model.CreateNotificationInput) (model.Notification
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateNotification model.Notification `json:"createNotification"`
 		} `json:"data"`
 	}
@@ -2929,11 +3208,11 @@ func UpdateAnteFamily(id string, input model.UpdateAnteFamilyInput) (model.AnteF
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -2958,7 +3237,7 @@ func UpdateAnteFamily(id string, input model.UpdateAnteFamilyInput) (model.AnteF
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateAnteFamily model.AnteFamily `json:"updateAnteFamily"`
 		} `json:"data"`
 	}
@@ -2982,7 +3261,7 @@ func DeleteTreatmentsFollowUp(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3007,7 +3286,7 @@ func DeleteTreatmentsFollowUp(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteTreatmentsFollowUp bool `json:"deleteTreatmentsFollowUp"`
 		} `json:"data"`
 	}
@@ -3038,11 +3317,11 @@ func UpdateAnteDisease(id string, input model.UpdateAnteDiseaseInput) (model.Ant
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3067,7 +3346,7 @@ func UpdateAnteDisease(id string, input model.UpdateAnteDiseaseInput) (model.Ant
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateAnteDisease model.AnteDisease `json:"updateAnteDisease"`
 		} `json:"data"`
 	}
@@ -3103,7 +3382,7 @@ func CreateRdv(input model.CreateRdvInput) (model.Rdv, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3128,7 +3407,7 @@ func CreateRdv(input model.CreateRdvInput) (model.Rdv, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateRdv model.Rdv `json:"createRdv"`
 		} `json:"data"`
 	}
@@ -3177,11 +3456,11 @@ func UpdateSession(id string, input model.UpdateSessionInput) (model.Session, er
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3206,7 +3485,7 @@ func UpdateSession(id string, input model.UpdateSessionInput) (model.Session, er
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateSession model.Session `json:"updateSession"`
 		} `json:"data"`
 	}
@@ -3240,10 +3519,10 @@ func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error)
 	}`
 	variables := map[string]interface{}{
 		"doctor_id": doctor_id,
-		"option":    option,
+		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3268,7 +3547,7 @@ func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error)
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetWaitingRdv []model.Rdv `json:"getWaitingRdv"`
 		} `json:"data"`
 	}
@@ -3292,6 +3571,8 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 	        day
 	        quantity
 	        medicine_id
+	        start_date
+	        end_date
 	        createdAt
 	        updatedAt
 	    }
@@ -3300,7 +3581,7 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3325,7 +3606,7 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetTreatmentByID model.Treatment `json:"getTreatmentByID"`
 		} `json:"data"`
 	}
@@ -3364,7 +3645,7 @@ func GetDiseases(option *model.Options) ([]model.Disease, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3389,7 +3670,7 @@ func GetDiseases(option *model.Options) ([]model.Disease, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDiseases []model.Disease `json:"getDiseases"`
 		} `json:"data"`
 	}
@@ -3423,7 +3704,7 @@ func GetAlerts(option *model.Options) ([]model.Alert, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3448,7 +3729,7 @@ func GetAlerts(option *model.Options) ([]model.Alert, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAlerts []model.Alert `json:"getAlerts"`
 		} `json:"data"`
 	}
@@ -3473,6 +3754,9 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 	        target_diseases
 	        treated_symptoms
 	        side_effects
+	        type
+	        content
+	        quantity
 	        createdAt
 	        updatedAt
 	    }
@@ -3481,7 +3765,7 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3506,7 +3790,7 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetMedicineByID model.Medicine `json:"getMedicineByID"`
 		} `json:"data"`
 	}
@@ -3539,7 +3823,7 @@ func GetAnteChirs(option *model.Options) ([]model.AnteChir, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3564,7 +3848,7 @@ func GetAnteChirs(option *model.Options) ([]model.AnteChir, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAnteChirs []model.AnteChir `json:"getAnteChirs"`
 		} `json:"data"`
 	}
@@ -3600,7 +3884,7 @@ func GetRdvById(id string) (model.Rdv, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3625,7 +3909,7 @@ func GetRdvById(id string) (model.Rdv, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetRdvById model.Rdv `json:"getRdvById"`
 		} `json:"data"`
 	}
@@ -3656,11 +3940,11 @@ func GetPatientDocument(id string, option *model.Options) ([]model.Document, err
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":     id,
+		"id": id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3685,7 +3969,7 @@ func GetPatientDocument(id string, option *model.Options) ([]model.Document, err
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetPatientDocument []model.Document `json:"getPatientDocument"`
 		} `json:"data"`
 	}
@@ -3716,7 +4000,7 @@ func GetNotifications(option *model.Options) ([]model.Notification, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3741,7 +4025,7 @@ func GetNotifications(option *model.Options) ([]model.Notification, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetNotifications []model.Notification `json:"getNotifications"`
 		} `json:"data"`
 	}
@@ -3775,10 +4059,10 @@ func GetDoctorRdv(doctor_id string, option *model.Options) ([]model.Rdv, error) 
 	}`
 	variables := map[string]interface{}{
 		"doctor_id": doctor_id,
-		"option":    option,
+		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3803,7 +4087,7 @@ func GetDoctorRdv(doctor_id string, option *model.Options) ([]model.Rdv, error) 
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDoctorRdv []model.Rdv `json:"getDoctorRdv"`
 		} `json:"data"`
 	}
@@ -3827,6 +4111,8 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 	        day
 	        quantity
 	        medicine_id
+	        start_date
+	        end_date
 	        createdAt
 	        updatedAt
 	    }
@@ -3835,7 +4121,7 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3860,7 +4146,7 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetTreatments []model.Treatment `json:"getTreatments"`
 		} `json:"data"`
 	}
@@ -3891,7 +4177,7 @@ func GetNotificationById(id string) (model.Notification, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3916,7 +4202,7 @@ func GetNotificationById(id string) (model.Notification, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetNotificationById model.Notification `json:"getNotificationById"`
 		} `json:"data"`
 	}
@@ -3955,7 +4241,7 @@ func GetDiseaseById(id string) (model.Disease, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -3980,7 +4266,7 @@ func GetDiseaseById(id string) (model.Disease, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDiseaseById model.Disease `json:"getDiseaseById"`
 		} `json:"data"`
 	}
@@ -4006,7 +4292,7 @@ func GetSymptomsByDiseaseName(name string) (model.Disease, error) {
 		"name": name,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4031,7 +4317,7 @@ func GetSymptomsByDiseaseName(name string) (model.Disease, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSymptomsByDiseaseName model.Disease `json:"getSymptomsByDiseaseName"`
 		} `json:"data"`
 	}
@@ -4057,6 +4343,7 @@ func GetDocumentById(id string) (model.Document, error) {
 	        category
 	        is_favorite
 	        download_url
+	        uploader_id
 	        createdAt
 	        updatedAt
 	    }
@@ -4065,7 +4352,7 @@ func GetDocumentById(id string) (model.Document, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4090,7 +4377,7 @@ func GetDocumentById(id string) (model.Document, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDocumentById model.Document `json:"getDocumentById"`
 		} `json:"data"`
 	}
@@ -4122,7 +4409,7 @@ func GetAdminById(id string) (model.Admin, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4147,7 +4434,7 @@ func GetAdminById(id string) (model.Admin, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAdminById model.Admin `json:"getAdminById"`
 		} `json:"data"`
 	}
@@ -4186,7 +4473,7 @@ func GetPatientByEmail(email string) (model.Patient, error) {
 		"email": email,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4211,7 +4498,7 @@ func GetPatientByEmail(email string) (model.Patient, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetPatientByEmail model.Patient `json:"getPatientByEmail"`
 		} `json:"data"`
 	}
@@ -4248,7 +4535,7 @@ func GetChatById(id string) (model.Chat, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4273,7 +4560,7 @@ func GetChatById(id string) (model.Chat, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetChatById model.Chat `json:"getChatById"`
 		} `json:"data"`
 	}
@@ -4318,7 +4605,7 @@ func GetDoctorByEmail(email string) (model.Doctor, error) {
 		"email": email,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4343,7 +4630,7 @@ func GetDoctorByEmail(email string) (model.Doctor, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDoctorByEmail model.Doctor `json:"getDoctorByEmail"`
 		} `json:"data"`
 	}
@@ -4377,7 +4664,7 @@ func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4402,7 +4689,7 @@ func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAnteDiseaseByID model.AnteDisease `json:"getAnteDiseaseByID"`
 		} `json:"data"`
 	}
@@ -4439,7 +4726,7 @@ func GetNlpReports(option *model.Options) ([]model.NlpReport, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4464,7 +4751,7 @@ func GetNlpReports(option *model.Options) ([]model.NlpReport, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetNlpReports []model.NlpReport `json:"getNlpReports"`
 		} `json:"data"`
 	}
@@ -4499,10 +4786,10 @@ func GetNlpReportsByVersion(version int, option *model.Options) ([]model.NlpRepo
 	}`
 	variables := map[string]interface{}{
 		"version": version,
-		"option":  option,
+		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4527,7 +4814,7 @@ func GetNlpReportsByVersion(version int, option *model.Options) ([]model.NlpRepo
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetNlpReportsByVersion []model.NlpReport `json:"getNlpReportsByVersion"`
 		} `json:"data"`
 	}
@@ -4561,7 +4848,7 @@ func GetAlertById(id string) (model.Alert, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4586,7 +4873,7 @@ func GetAlertById(id string) (model.Alert, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAlertById model.Alert `json:"getAlertById"`
 		} `json:"data"`
 	}
@@ -4619,7 +4906,7 @@ func GetAnteChirByID(id string) (model.AnteChir, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4644,7 +4931,7 @@ func GetAnteChirByID(id string) (model.AnteChir, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAnteChirByID model.AnteChir `json:"getAnteChirByID"`
 		} `json:"data"`
 	}
@@ -4681,7 +4968,7 @@ func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4706,7 +4993,7 @@ func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSymptoms []model.Symptom `json:"getSymptoms"`
 		} `json:"data"`
 	}
@@ -4758,7 +5045,7 @@ func GetSessionById(id string) (model.Session, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4783,7 +5070,7 @@ func GetSessionById(id string) (model.Session, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSessionById model.Session `json:"getSessionById"`
 		} `json:"data"`
 	}
@@ -4819,11 +5106,11 @@ func GetPatientsFromDoctorById(id string, option *model.Options) ([]model.Patien
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":     id,
+		"id": id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4848,7 +5135,7 @@ func GetPatientsFromDoctorById(id string, option *model.Options) ([]model.Patien
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetPatientsFromDoctorById []model.Patient `json:"getPatientsFromDoctorById"`
 		} `json:"data"`
 	}
@@ -4886,7 +5173,7 @@ func GetMedicalFolderByID(id string) (model.MedicalInfo, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4911,7 +5198,7 @@ func GetMedicalFolderByID(id string) (model.MedicalInfo, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetMedicalFolderByID model.MedicalInfo `json:"getMedicalFolderById"`
 		} `json:"data"`
 	}
@@ -4948,7 +5235,7 @@ func GetSymptomById(id string) (model.Symptom, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -4973,7 +5260,7 @@ func GetSymptomById(id string) (model.Symptom, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSymptomById model.Symptom `json:"getSymptomById"`
 		} `json:"data"`
 	}
@@ -5012,7 +5299,7 @@ func GetPatientById(id string) (model.Patient, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5037,7 +5324,7 @@ func GetPatientById(id string) (model.Patient, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetPatientById model.Patient `json:"getPatientById"`
 		} `json:"data"`
 	}
@@ -5075,7 +5362,7 @@ func GetMedicalFolder(option *model.Options) ([]model.MedicalInfo, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5100,7 +5387,7 @@ func GetMedicalFolder(option *model.Options) ([]model.MedicalInfo, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetMedicalFolder []model.MedicalInfo `json:"getMedicalFolder"`
 		} `json:"data"`
 	}
@@ -5132,11 +5419,11 @@ func GetSlots(id string, option *model.Options) ([]model.Rdv, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":     id,
+		"id": id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5161,7 +5448,7 @@ func GetSlots(id string, option *model.Options) ([]model.Rdv, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSlots []model.Rdv `json:"getSlots"`
 		} `json:"data"`
 	}
@@ -5195,10 +5482,10 @@ func GetPatientRdv(id_patient string, option *model.Options) ([]model.Rdv, error
 	}`
 	variables := map[string]interface{}{
 		"id_patient": id_patient,
-		"option":     option,
+		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5223,7 +5510,7 @@ func GetPatientRdv(id_patient string, option *model.Options) ([]model.Rdv, error
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetPatientRdv []model.Rdv `json:"getPatientRdv"`
 		} `json:"data"`
 	}
@@ -5255,7 +5542,7 @@ func GetAdminByEmail(email string) (model.Admin, error) {
 		"email": email,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5280,7 +5567,7 @@ func GetAdminByEmail(email string) (model.Admin, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAdminByEmail model.Admin `json:"getAdminByEmail"`
 		} `json:"data"`
 	}
@@ -5316,7 +5603,7 @@ func GetSlotById(id string) (model.Rdv, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5341,7 +5628,7 @@ func GetSlotById(id string) (model.Rdv, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSlotById model.Rdv `json:"getSlotById"`
 		} `json:"data"`
 	}
@@ -5385,7 +5672,7 @@ func GetDoctors(option *model.Options) ([]model.Doctor, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5410,7 +5697,7 @@ func GetDoctors(option *model.Options) ([]model.Doctor, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDoctors []model.Doctor `json:"getDoctors"`
 		} `json:"data"`
 	}
@@ -5442,7 +5729,7 @@ func GetAdmins(option *model.Options) ([]model.Admin, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5467,7 +5754,7 @@ func GetAdmins(option *model.Options) ([]model.Admin, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAdmins []model.Admin `json:"getAdmins"`
 		} `json:"data"`
 	}
@@ -5497,7 +5784,7 @@ func GetAnteFamilyByID(id string) (model.AnteFamily, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5522,7 +5809,7 @@ func GetAnteFamilyByID(id string) (model.AnteFamily, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAnteFamilyByID model.AnteFamily `json:"getAnteFamilyByID"`
 		} `json:"data"`
 	}
@@ -5556,11 +5843,11 @@ func GetChats(id string, option *model.Options) ([]model.Chat, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":     id,
+		"id": id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5585,7 +5872,7 @@ func GetChats(id string, option *model.Options) ([]model.Chat, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetChats []model.Chat `json:"getChats"`
 		} `json:"data"`
 	}
@@ -5619,7 +5906,7 @@ func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5644,7 +5931,7 @@ func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAnteDiseases []model.AnteDisease `json:"getAnteDiseases"`
 		} `json:"data"`
 	}
@@ -5696,7 +5983,7 @@ func GetSessions(option *model.Options) ([]model.Session, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5721,7 +6008,7 @@ func GetSessions(option *model.Options) ([]model.Session, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSessions []model.Session `json:"getSessions"`
 		} `json:"data"`
 	}
@@ -5746,6 +6033,9 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 	        target_diseases
 	        treated_symptoms
 	        side_effects
+	        type
+	        content
+	        quantity
 	        createdAt
 	        updatedAt
 	    }
@@ -5754,7 +6044,7 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5779,7 +6069,7 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetMedicines []model.Medicine `json:"getMedicines"`
 		} `json:"data"`
 	}
@@ -5824,7 +6114,7 @@ func GetDoctorById(id string) (model.Doctor, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5849,7 +6139,7 @@ func GetDoctorById(id string) (model.Doctor, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDoctorById model.Doctor `json:"getDoctorById"`
 		} `json:"data"`
 	}
@@ -5888,7 +6178,7 @@ func GetPatients(option *model.Options) ([]model.Patient, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5913,7 +6203,7 @@ func GetPatients(option *model.Options) ([]model.Patient, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetPatients []model.Patient `json:"getPatients"`
 		} `json:"data"`
 	}
@@ -5944,7 +6234,7 @@ func GetTreatmentsFollowUpById(id string) (model.TreatmentsFollowUp, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -5969,7 +6259,7 @@ func GetTreatmentsFollowUpById(id string) (model.TreatmentsFollowUp, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetTreatmentsFollowUpById model.TreatmentsFollowUp `json:"getTreatmentsFollowUpById"`
 		} `json:"data"`
 	}
@@ -5995,6 +6285,7 @@ func GetDocuments(option *model.Options) ([]model.Document, error) {
 	        category
 	        is_favorite
 	        download_url
+	        uploader_id
 	        createdAt
 	        updatedAt
 	    }
@@ -6003,7 +6294,7 @@ func GetDocuments(option *model.Options) ([]model.Document, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6028,7 +6319,7 @@ func GetDocuments(option *model.Options) ([]model.Document, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDocuments []model.Document `json:"getDocuments"`
 		} `json:"data"`
 	}
@@ -6056,11 +6347,11 @@ func GetTreatmentsFollowUps(id string, option *model.Options) ([]model.Treatment
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":     id,
+		"id": id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6085,7 +6376,7 @@ func GetTreatmentsFollowUps(id string, option *model.Options) ([]model.Treatment
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetTreatmentsFollowUps []model.TreatmentsFollowUp `json:"getTreatmentsFollowUps"`
 		} `json:"data"`
 	}
@@ -6115,7 +6406,7 @@ func GetAnteFamilies(option *model.Options) ([]model.AnteFamily, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6140,7 +6431,7 @@ func GetAnteFamilies(option *model.Options) ([]model.AnteFamily, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetAnteFamilies []model.AnteFamily `json:"getAnteFamilies"`
 		} `json:"data"`
 	}
@@ -6172,7 +6463,7 @@ func CreateDeviceConnect(input model.CreateDeviceConnectInput) (model.DeviceConn
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6197,7 +6488,7 @@ func CreateDeviceConnect(input model.CreateDeviceConnectInput) (model.DeviceConn
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateDeviceConnect model.DeviceConnect `json:"createDeviceConnect"`
 		} `json:"data"`
 	}
@@ -6226,11 +6517,11 @@ func UpdateDeviceConnect(id string, input model.UpdateDeviceConnectInput) (model
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6255,7 +6546,7 @@ func UpdateDeviceConnect(id string, input model.UpdateDeviceConnectInput) (model
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateDeviceConnect model.DeviceConnect `json:"updateDeviceConnect"`
 		} `json:"data"`
 	}
@@ -6279,7 +6570,7 @@ func DeleteDeviceConnect(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6304,7 +6595,7 @@ func DeleteDeviceConnect(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteDeviceConnect bool `json:"deleteDeviceConnect"`
 		} `json:"data"`
 	}
@@ -6336,7 +6627,7 @@ func GetDevicesConnect(option *model.Options) ([]model.DeviceConnect, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6361,7 +6652,7 @@ func GetDevicesConnect(option *model.Options) ([]model.DeviceConnect, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDevicesConnect []model.DeviceConnect `json:"getDevicesConnect"`
 		} `json:"data"`
 	}
@@ -6393,7 +6684,7 @@ func GetDeviceConnectById(id string) (model.DeviceConnect, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6418,7 +6709,7 @@ func GetDeviceConnectById(id string) (model.DeviceConnect, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDeviceConnectById model.DeviceConnect `json:"getDeviceConnectById"`
 		} `json:"data"`
 	}
@@ -6448,7 +6739,7 @@ func CreateDoubleAuth(input model.CreateDoubleAuthInput) (model.DoubleAuth, erro
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6473,7 +6764,7 @@ func CreateDoubleAuth(input model.CreateDoubleAuthInput) (model.DoubleAuth, erro
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateDoubleAuth model.DoubleAuth `json:"createDoubleAuth"`
 		} `json:"data"`
 	}
@@ -6500,11 +6791,11 @@ func UpdateDoubleAuth(id string, input model.UpdateDoubleAuthInput) (model.Doubl
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6529,7 +6820,7 @@ func UpdateDoubleAuth(id string, input model.UpdateDoubleAuthInput) (model.Doubl
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateDoubleAuth model.DoubleAuth `json:"updateDoubleAuth"`
 		} `json:"data"`
 	}
@@ -6553,7 +6844,7 @@ func DeleteDoubleAuth(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6578,7 +6869,7 @@ func DeleteDoubleAuth(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteDoubleAuth bool `json:"deleteDoubleAuth"`
 		} `json:"data"`
 	}
@@ -6608,7 +6899,7 @@ func GetDoubleAuths(option *model.Options) ([]model.DoubleAuth, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6633,7 +6924,7 @@ func GetDoubleAuths(option *model.Options) ([]model.DoubleAuth, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDoubleAuths []model.DoubleAuth `json:"getDoubleAuths"`
 		} `json:"data"`
 	}
@@ -6663,7 +6954,7 @@ func GetDoubleAuthById(id string) (model.DoubleAuth, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6688,7 +6979,7 @@ func GetDoubleAuthById(id string) (model.DoubleAuth, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetDoubleAuthById model.DoubleAuth `json:"getDoubleAuthById"`
 		} `json:"data"`
 	}
@@ -6715,7 +7006,7 @@ func CreateBlackList(input model.CreateBlackListInput) (model.BlackList, error) 
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6740,7 +7031,7 @@ func CreateBlackList(input model.CreateBlackListInput) (model.BlackList, error) 
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateBlackList model.BlackList `json:"createBlackList"`
 		} `json:"data"`
 	}
@@ -6764,11 +7055,11 @@ func UpdateBlackList(id string, input model.UpdateBlackListInput) (model.BlackLi
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6793,7 +7084,7 @@ func UpdateBlackList(id string, input model.UpdateBlackListInput) (model.BlackLi
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateBlackList model.BlackList `json:"updateBlackList"`
 		} `json:"data"`
 	}
@@ -6817,7 +7108,7 @@ func DeleteBlackList(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6842,7 +7133,7 @@ func DeleteBlackList(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteBlackList bool `json:"deleteDoubleAuth"`
 		} `json:"data"`
 	}
@@ -6869,7 +7160,7 @@ func GetBlackListById(id string) (model.BlackList, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6894,7 +7185,7 @@ func GetBlackListById(id string) (model.BlackList, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetBlackListById model.BlackList `json:"getBlackListById"`
 		} `json:"data"`
 	}
@@ -6921,7 +7212,7 @@ func GetBlackList(option *model.Options) ([]model.BlackList, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6946,7 +7237,7 @@ func GetBlackList(option *model.Options) ([]model.BlackList, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetBlackList []model.BlackList `json:"getBlackList"`
 		} `json:"data"`
 	}
@@ -6973,7 +7264,7 @@ func CreateSaveCode(input model.CreateSaveCodeInput) (model.SaveCode, error) {
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -6998,7 +7289,7 @@ func CreateSaveCode(input model.CreateSaveCodeInput) (model.SaveCode, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			CreateSaveCode model.SaveCode `json:"createSaveCode"`
 		} `json:"data"`
 	}
@@ -7022,11 +7313,11 @@ func UpdateSaveCode(id string, input model.UpdateSaveCodeInput) (model.SaveCode,
 	    }
 	}`
 	variables := map[string]interface{}{
-		"id":    id,
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -7051,7 +7342,7 @@ func UpdateSaveCode(id string, input model.UpdateSaveCodeInput) (model.SaveCode,
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			UpdateSaveCode model.SaveCode `json:"updateSaveCode"`
 		} `json:"data"`
 	}
@@ -7075,7 +7366,7 @@ func DeleteSaveCode(id string) (bool, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -7100,7 +7391,7 @@ func DeleteSaveCode(id string) (bool, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			DeleteSaveCode bool `json:"deleteSaveCode"`
 		} `json:"data"`
 	}
@@ -7127,7 +7418,7 @@ func GetSaveCodeById(id string) (model.SaveCode, error) {
 		"id": id,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -7152,7 +7443,7 @@ func GetSaveCodeById(id string) (model.SaveCode, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSaveCodeById model.SaveCode `json:"getSaveCodeById"`
 		} `json:"data"`
 	}
@@ -7179,7 +7470,7 @@ func GetSaveCode(option *model.Options) ([]model.SaveCode, error) {
 		"option": option,
 	}
 	reqBody := map[string]interface{}{
-		"query":     query,
+		"query": query,
 		"variables": variables,
 	}
 	body, err := json.Marshal(reqBody)
@@ -7204,7 +7495,7 @@ func GetSaveCode(option *model.Options) ([]model.SaveCode, error) {
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
-		Data   struct {
+		Data struct {
 			GetSaveCode []model.SaveCode `json:"getSaveCode"`
 		} `json:"data"`
 	}
@@ -7219,3 +7510,4 @@ func GetSaveCode(option *model.Options) ([]model.SaveCode, error) {
 
 	return result.Data.GetSaveCode, nil
 }
+
