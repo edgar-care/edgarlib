@@ -425,6 +425,11 @@ input UpdatePatientTrustDeviceInput {
     trust_devices: [String]
 }
 
+input UpdatePatientRendezVousIdsInput {
+    rendez_vous_ids: [String]
+}
+
+
 input AddressInput {
     street: String!
     zip_code: String!
@@ -1086,9 +1091,11 @@ type Mutation {
     # Update a patient.
     updatePatient(id: String!, input: UpdatePatientInput!): Patient
 
-    UpdatePatientsDeviceConnect(id: String!, input: UpdatePatientsDeviceConnectInput!): Patient
+    updatePatientsDeviceConnect(id: String!, input: UpdatePatientsDeviceConnectInput!): Patient
 
-    UpdatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
+    updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
+
+    updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
