@@ -1818,7 +1818,7 @@ func UpdatePatient(id string, input model.UpdatePatientInput) (model.Patient, er
 
 func UpdatePatientsDeviceConnect(id string, input model.UpdatePatientsDeviceConnectInput) (model.Patient, error) {
 	query := `mutation UpdatePatientsDeviceConnect($id: String!, $input: UpdatePatientsDeviceConnectInput!){
-	    UpdatePatientsDeviceConnect(id: $id, input: $input){
+	    updatePatientsDeviceConnect(id: $id, input: $input){
 	        id
 	        email
 	        password
@@ -1866,7 +1866,7 @@ func UpdatePatientsDeviceConnect(id string, input model.UpdatePatientsDeviceConn
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			UpdatePatientsDeviceConnect model.Patient `json:"UpdatePatientsDeviceConnect"`
+			UpdatePatientsDeviceConnect model.Patient `json:"updatePatientsDeviceConnect"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
@@ -1883,7 +1883,7 @@ func UpdatePatientsDeviceConnect(id string, input model.UpdatePatientsDeviceConn
 
 func UpdatePatientTrustDevice(id string, input model.UpdatePatientTrustDeviceInput) (model.Patient, error) {
 	query := `mutation UpdatePatientTrustDevice($id: String!, $input: UpdatePatientTrustDeviceInput!){
-	    UpdatePatientTrustDevice(id: $id, input: $input){
+	    updatePatientTrustDevice(id: $id, input: $input){
 	        id
 	        email
 	        password
@@ -1931,7 +1931,7 @@ func UpdatePatientTrustDevice(id string, input model.UpdatePatientTrustDeviceInp
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			UpdatePatientTrustDevice model.Patient `json:"UpdatePatientTrustDevice"`
+			UpdatePatientTrustDevice model.Patient `json:"updatePatientTrustDevice"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)

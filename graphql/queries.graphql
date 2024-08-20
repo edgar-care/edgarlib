@@ -357,7 +357,7 @@ mutation UpdatePatient($id: String!, $input: UpdatePatientInput!){
 }
 
 mutation UpdatePatientsDeviceConnect($id: String!, $input: UpdatePatientsDeviceConnectInput!){
-    UpdatePatientsDeviceConnect(id: $id, input: $input){
+    updatePatientsDeviceConnect(id: $id, input: $input){
         id
         email
         password
@@ -377,7 +377,26 @@ mutation UpdatePatientsDeviceConnect($id: String!, $input: UpdatePatientsDeviceC
 
 
 mutation UpdatePatientTrustDevice($id: String!, $input: UpdatePatientTrustDeviceInput!){
-    UpdatePatientTrustDevice(id: $id, input: $input){
+    updatePatientTrustDevice(id: $id, input: $input){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdatePatientRendezVousIds($id: String!, $input: UpdatePatientRendezVousIdsInput!){
+    updatePatientRendezVousIds(id: $id, input: $input){
         id
         email
         password

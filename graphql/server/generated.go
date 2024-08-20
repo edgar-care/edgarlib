@@ -311,6 +311,7 @@ type ComplexityRoot struct {
 		UpdatePatient               func(childComplexity int, id string, input model.UpdatePatientInput) int
 		UpdatePatientTrustDevice    func(childComplexity int, id string, input model.UpdatePatientTrustDeviceInput) int
 		UpdatePatientsDeviceConnect func(childComplexity int, id string, input model.UpdatePatientsDeviceConnectInput) int
+		UpdatePatientsRendezVousIds func(childComplexity int, id string, input model.UpdatePatientRendezVousIdsInput) int
 		UpdateRdv                   func(childComplexity int, id string, input model.UpdateRdvInput) int
 		UpdateSaveCode              func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
 		UpdateSession               func(childComplexity int, id string, input model.UpdateSessionInput) int
@@ -522,6 +523,7 @@ type MutationResolver interface {
 	UpdatePatient(ctx context.Context, id string, input model.UpdatePatientInput) (*model.Patient, error)
 	UpdatePatientsDeviceConnect(ctx context.Context, id string, input model.UpdatePatientsDeviceConnectInput) (*model.Patient, error)
 	UpdatePatientTrustDevice(ctx context.Context, id string, input model.UpdatePatientTrustDeviceInput) (*model.Patient, error)
+	UpdatePatientsRendezVousIds(ctx context.Context, id string, input model.UpdatePatientRendezVousIdsInput) (*model.Patient, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error)
 	UpdateDoctor(ctx context.Context, id string, input model.UpdateDoctorInput) (*model.Doctor, error)
@@ -2403,29 +2405,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientInput)), true
 
-	case "Mutation.UpdatePatientTrustDevice":
+	case "Mutation.updatePatientTrustDevice":
 		if e.complexity.Mutation.UpdatePatientTrustDevice == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_UpdatePatientTrustDevice_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_updatePatientTrustDevice_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
 		return e.complexity.Mutation.UpdatePatientTrustDevice(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientTrustDeviceInput)), true
 
-	case "Mutation.UpdatePatientsDeviceConnect":
+	case "Mutation.updatePatientsDeviceConnect":
 		if e.complexity.Mutation.UpdatePatientsDeviceConnect == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_UpdatePatientsDeviceConnect_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_updatePatientsDeviceConnect_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
 		return e.complexity.Mutation.UpdatePatientsDeviceConnect(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientsDeviceConnectInput)), true
+
+	case "Mutation.updatePatientsRendezVousIds":
+		if e.complexity.Mutation.UpdatePatientsRendezVousIds == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePatientsRendezVousIds_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePatientsRendezVousIds(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientRendezVousIdsInput)), true
 
 	case "Mutation.updateRdv":
 		if e.complexity.Mutation.UpdateRdv == nil {
@@ -3927,6 +3941,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateMedicalFolderInput,
 		ec.unmarshalInputUpdateNotificationInput,
 		ec.unmarshalInputUpdatePatientInput,
+		ec.unmarshalInputUpdatePatientRendezVousIdsInput,
 		ec.unmarshalInputUpdatePatientTrustDeviceInput,
 		ec.unmarshalInputUpdatePatientsDeviceConnectInput,
 		ec.unmarshalInputUpdateRdvInput,
@@ -4458,6 +4473,11 @@ input UpdateDoctorsTrustDeviceInput {
 input UpdatePatientTrustDeviceInput {
     trust_devices: [String]
 }
+
+input UpdatePatientRendezVousIdsInput {
+    rendez_vous_ids: [String]
+}
+
 
 input AddressInput {
     street: String!
@@ -5120,9 +5140,11 @@ type Mutation {
     # Update a patient.
     updatePatient(id: String!, input: UpdatePatientInput!): Patient
 
-    UpdatePatientsDeviceConnect(id: String!, input: UpdatePatientsDeviceConnectInput!): Patient
+    updatePatientsDeviceConnect(id: String!, input: UpdatePatientsDeviceConnectInput!): Patient
 
-    UpdatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
+    updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
+
+    updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -5372,54 +5394,6 @@ func (ec *executionContext) field_Mutation_UpdateDoctorsTrustDevice_args(ctx con
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdateDoctorsTrustDeviceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateDoctorsTrustDeviceInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_UpdatePatientTrustDevice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	var arg1 model.UpdatePatientTrustDeviceInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdatePatientTrustDeviceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientTrustDeviceInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_UpdatePatientsDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	var arg1 model.UpdatePatientsDeviceConnectInput
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdatePatientsDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientsDeviceConnectInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6478,6 +6452,30 @@ func (ec *executionContext) field_Mutation_updateNotification_args(ctx context.C
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updatePatientTrustDevice_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdatePatientTrustDeviceInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientTrustDeviceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientTrustDeviceInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -6494,6 +6492,54 @@ func (ec *executionContext) field_Mutation_updatePatient_args(ctx context.Contex
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePatientsDeviceConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdatePatientsDeviceConnectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientsDeviceConnectInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientsDeviceConnectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePatientsRendezVousIds_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdatePatientRendezVousIdsInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientRendezVousIdsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientRendezVousIdsInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -13869,8 +13915,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePatient(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_UpdatePatientsDeviceConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_UpdatePatientsDeviceConnect(ctx, field)
+func (ec *executionContext) _Mutation_updatePatientsDeviceConnect(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePatientsDeviceConnect(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -13897,7 +13943,7 @@ func (ec *executionContext) _Mutation_UpdatePatientsDeviceConnect(ctx context.Co
 	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_UpdatePatientsDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_updatePatientsDeviceConnect(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -13944,15 +13990,15 @@ func (ec *executionContext) fieldContext_Mutation_UpdatePatientsDeviceConnect(ct
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_UpdatePatientsDeviceConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_updatePatientsDeviceConnect_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_UpdatePatientTrustDevice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_UpdatePatientTrustDevice(ctx, field)
+func (ec *executionContext) _Mutation_updatePatientTrustDevice(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePatientTrustDevice(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -13979,7 +14025,7 @@ func (ec *executionContext) _Mutation_UpdatePatientTrustDevice(ctx context.Conte
 	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_UpdatePatientTrustDevice(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_updatePatientTrustDevice(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -14026,7 +14072,89 @@ func (ec *executionContext) fieldContext_Mutation_UpdatePatientTrustDevice(ctx c
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_UpdatePatientTrustDevice_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_updatePatientTrustDevice_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePatientsRendezVousIds(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePatientsRendezVousIds(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatientsRendezVousIds(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdatePatientRendezVousIdsInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Patient)
+	fc.Result = res
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePatientsRendezVousIds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Patient_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Patient_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Patient_password(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
+			case "medical_info_id":
+				return ec.fieldContext_Patient_medical_info_id(ctx, field)
+			case "document_ids":
+				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePatientsRendezVousIds_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -31653,6 +31781,33 @@ func (ec *executionContext) unmarshalInputUpdatePatientInput(ctx context.Context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdatePatientRendezVousIdsInput(ctx context.Context, obj interface{}) (model.UpdatePatientRendezVousIdsInput, error) {
+	var it model.UpdatePatientRendezVousIdsInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"rendez_vous_ids"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "rendez_vous_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rendez_vous_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RendezVousIds = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdatePatientTrustDeviceInput(ctx context.Context, obj interface{}) (model.UpdatePatientTrustDeviceInput, error) {
 	var it model.UpdatePatientTrustDeviceInput
 	asMap := map[string]interface{}{}
@@ -33467,13 +33622,17 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePatient(ctx, field)
 			})
-		case "UpdatePatientsDeviceConnect":
+		case "updatePatientsDeviceConnect":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_UpdatePatientsDeviceConnect(ctx, field)
+				return ec._Mutation_updatePatientsDeviceConnect(ctx, field)
 			})
-		case "UpdatePatientTrustDevice":
+		case "updatePatientTrustDevice":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_UpdatePatientTrustDevice(ctx, field)
+				return ec._Mutation_updatePatientTrustDevice(ctx, field)
+			})
+		case "updatePatientsRendezVousIds":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePatientsRendezVousIds(ctx, field)
 			})
 		case "deletePatient":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -37312,6 +37471,11 @@ func (ec *executionContext) unmarshalNUpdateNotificationInput2githubᚗcomᚋedg
 
 func (ec *executionContext) unmarshalNUpdatePatientInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientInput(ctx context.Context, v interface{}) (model.UpdatePatientInput, error) {
 	res, err := ec.unmarshalInputUpdatePatientInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePatientRendezVousIdsInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientRendezVousIdsInput(ctx context.Context, v interface{}) (model.UpdatePatientRendezVousIdsInput, error) {
+	res, err := ec.unmarshalInputUpdatePatientRendezVousIdsInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

@@ -16,11 +16,14 @@ generate:
 test:
 	@bold=$$(tput bold); \
 	normal=$$(tput sgr0); \
-	count=$$(go test -coverprofile=coverage.out -v ./appointment ./auth ./dashboard ./follow_treatment ./chat ./black_list ./medicament ./redis ./slot ./treatment ./double_auth | tee /dev/tty | grep -c '=== RUN'); \
+	output=$$(go test -coverprofile=coverage.out -v ./appointment ./auth ./dashboard ./follow_treatment ./chat ./black_list ./medicament ./redis ./slot ./treatment ./double_auth | tee /dev/tty); \
+	count=$$(echo "$$output" | grep -c '=== RUN'); \
+	fail_count=$$(echo "$$output" | grep -c 'FAIL'); \
 	total_coverage=$$(go tool cover -func=coverage.out | grep total | awk '{print $$3}'); \
 	echo "\n==========================================\n" && \
 	echo "$${bold}Number of tests executed: $${count}\n" && \
-    echo "Total Coverage: $${total_coverage}$${normal}\n" && \
+	echo "$${bold}Number of failed tests: $${fail_count}\n" && \
+	echo "Total Coverage: $${total_coverage}$${normal}\n" && \
 	echo "=========================================="
 	@go tool cover -html=coverage.out
 

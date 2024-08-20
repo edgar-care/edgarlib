@@ -143,6 +143,26 @@ func (r *mutationResolver) UpdatePatientTrustDevice(ctx context.Context, id stri
 	return &updatedPatient, nil
 }
 
+// UpdatePatientsRendezVousIds is the resolver for the updatePatientsRendezVousIds field.
+func (r *mutationResolver) UpdatePatientsRendezVousIds(ctx context.Context, id string, input model.UpdatePatientRendezVousIdsInput) (*model.Patient, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+	update["rendez_vous_ids"] = input.RendezVousIds
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedPatient model.Patient
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedPatient, nil
+}
+
 // DeletePatient is the resolver for the deletePatient field.
 func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool, error) {
 	resp := false

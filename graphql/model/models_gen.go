@@ -767,6 +767,10 @@ type UpdatePatientInput struct {
 	TrustDevices         []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
 }
 
+type UpdatePatientRendezVousIdsInput struct {
+	RendezVousIds []*string `json:"rendez_vous_ids,omitempty" bson:"rendez_vous_ids"`
+}
+
 type UpdatePatientTrustDeviceInput struct {
 	TrustDevices []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
 }
