@@ -69,7 +69,7 @@ func DeleteRdv(rdvId string, patientId string) DeleteRdvResponse {
 func removeElement(slice []*string, element *string) []*string {
 	var result []*string
 	for _, v := range slice {
-		if v != element {
+		if *v != *element {
 			result = append(result, v)
 		}
 	}

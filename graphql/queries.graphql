@@ -395,8 +395,8 @@ mutation UpdatePatientTrustDevice($id: String!, $input: UpdatePatientTrustDevice
     }
 }
 
-mutation UpdatePatientRendezVousIds($id: String!, $input: UpdatePatientRendezVousIdsInput!){
-    updatePatientRendezVousIds(id: $id, input: $input){
+mutation UpdatePatientsRendezVousIds($id: String!, $input: UpdatePatientRendezVousIdsInput!){
+    updatePatientsRendezVousIds(id: $id, input: $input){
         id
         email
         password

@@ -1946,6 +1946,71 @@ func UpdatePatientTrustDevice(id string, input model.UpdatePatientTrustDeviceInp
 	return result.Data.UpdatePatientTrustDevice, nil
 }
 
+func UpdatePatientsRendezVousIds(id string, input model.UpdatePatientRendezVousIdsInput) (model.Patient, error) {
+	query := `mutation UpdatePatientsRendezVousIds($id: String!, $input: UpdatePatientRendezVousIdsInput!){
+	    updatePatientsRendezVousIds(id: $id, input: $input){
+	        id
+	        email
+	        password
+	        rendez_vous_ids
+	        medical_info_id
+	        document_ids
+	        treatment_follow_up_ids
+	        chat_ids
+	        device_connect
+	        double_auth_methods_id
+	        trust_devices
+	        status
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Patient{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Patient{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdatePatientsRendezVousIds model.Patient `json:"updatePatientsRendezVousIds"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Patient{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Patient{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdatePatientsRendezVousIds, nil
+}
+
 func CreateSession(input model.CreateSessionInput) (model.Session, error) {
 	query := `mutation CreateSession($input: CreateSessionInput!){
 	    createSession(input: $input){
