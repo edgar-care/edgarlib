@@ -76,7 +76,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, input m
 		update["chat_ids"] = input.ChatIds
 	}
 	if input.Status != nil {
-		update["status"] = input.Status
+		update["status"] = *input.Status
 	}
 	if input.TrustDevices != nil {
 		update["trust_devices"] = input.TrustDevices
@@ -218,13 +218,13 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, input mo
 		update["patient_ids"] = input.PatientIds
 	}
 	if input.Address != nil {
-		update["address"] = input.Address
+		update["address"] = *input.Address
 	}
 	if input.ChatIds != nil {
 		update["chat_ids"] = input.ChatIds
 	}
 	if input.Status != nil {
-		update["status"] = input.Status
+		update["status"] = *input.Status
 	}
 	if input.TrustDevices != nil {
 		update["trust_devices"] = input.TrustDevices
