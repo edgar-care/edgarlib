@@ -67,7 +67,7 @@ func EditRdv(newAppointmentId string, appointmentId string, patientId string) Ed
 		return EditRdvResponse{Rdv: model.Rdv{}, Patient: model.Patient{}, Code: 500, Err: errors.New("unable to update appointment")}
 	}
 
-	updatedPatient, err := graphql.UpdatePatient(patientId, model.UpdatePatientInput{
+	updatedPatient, err := graphql.UpdatePatientsRendezVousIds(patientId, model.UpdatePatientRendezVousIdsInput{
 		RendezVousIds: append(removeElement(patient.RendezVousIds, &appointmentId), &newAppointmentId),
 	})
 	if err != nil {
