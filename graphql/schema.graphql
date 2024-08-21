@@ -431,6 +431,10 @@ input UpdatePatientRendezVousIdsInput {
     rendez_vous_ids: [String]
 }
 
+input UpdateAccountMedicalFolder {
+    antecedent_disease_ids: [String]
+}
+
 
 input AddressInput {
     street: String!
@@ -1098,6 +1102,8 @@ type Mutation {
     updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
 
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
+
+    updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
