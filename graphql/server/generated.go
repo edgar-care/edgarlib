@@ -291,6 +291,7 @@ type ComplexityRoot struct {
 		DeleteSymptom               func(childComplexity int, id string) int
 		DeleteTreatment             func(childComplexity int, id string) int
 		DeleteTreatmentsFollowUp    func(childComplexity int, id string) int
+		UpdateAccountsMedicalFolder func(childComplexity int, id string, input model.UpdateAccountMedicalFolder) int
 		UpdateAdmin                 func(childComplexity int, id string, input model.UpdateAdminInput) int
 		UpdateAlert                 func(childComplexity int, id string, input model.UpdateAlertInput) int
 		UpdateAnteChir              func(childComplexity int, id string, input model.UpdateAnteChirInput) int
@@ -524,6 +525,7 @@ type MutationResolver interface {
 	UpdatePatientsDeviceConnect(ctx context.Context, id string, input model.UpdatePatientsDeviceConnectInput) (*model.Patient, error)
 	UpdatePatientTrustDevice(ctx context.Context, id string, input model.UpdatePatientTrustDeviceInput) (*model.Patient, error)
 	UpdatePatientsRendezVousIds(ctx context.Context, id string, input model.UpdatePatientRendezVousIdsInput) (*model.Patient, error)
+	UpdateAccountsMedicalFolder(ctx context.Context, id string, input model.UpdateAccountMedicalFolder) (*model.MedicalInfo, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error)
 	UpdateDoctor(ctx context.Context, id string, input model.UpdateDoctorInput) (*model.Doctor, error)
@@ -2188,6 +2190,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteTreatmentsFollowUp(childComplexity, args["id"].(string)), true
+
+	case "Mutation.updateAccountsMedicalFolder":
+		if e.complexity.Mutation.UpdateAccountsMedicalFolder == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAccountsMedicalFolder_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateAccountsMedicalFolder(childComplexity, args["id"].(string), args["input"].(model.UpdateAccountMedicalFolder)), true
 
 	case "Mutation.updateAdmin":
 		if e.complexity.Mutation.UpdateAdmin == nil {
@@ -3923,6 +3937,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSortingOptions,
 		ec.unmarshalInputSymptomsWeightInput,
 		ec.unmarshalInputTreatmentInput,
+		ec.unmarshalInputUpdateAccountMedicalFolder,
 		ec.unmarshalInputUpdateAdminInput,
 		ec.unmarshalInputUpdateAlertInput,
 		ec.unmarshalInputUpdateAnteChirInput,
@@ -4478,6 +4493,10 @@ input UpdatePatientTrustDeviceInput {
 
 input UpdatePatientRendezVousIdsInput {
     rendez_vous_ids: [String]
+}
+
+input UpdateAccountMedicalFolder {
+    antecedent_disease_ids: [String]
 }
 
 
@@ -5147,6 +5166,8 @@ type Mutation {
     updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
 
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
+
+    updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -6091,6 +6112,30 @@ func (ec *executionContext) field_Mutation_deleteTreatmentsFollowUp_args(ctx con
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateAccountsMedicalFolder_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdateAccountMedicalFolder
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateAccountMedicalFolder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAccountMedicalFolder(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -14157,6 +14202,86 @@ func (ec *executionContext) fieldContext_Mutation_updatePatientsRendezVousIds(ct
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updatePatientsRendezVousIds_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateAccountsMedicalFolder(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateAccountsMedicalFolder(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateAccountsMedicalFolder(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateAccountMedicalFolder))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.MedicalInfo)
+	fc.Result = res
+	return ec.marshalOMedicalInfo2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐMedicalInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateAccountsMedicalFolder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_MedicalInfo_id(ctx, field)
+			case "name":
+				return ec.fieldContext_MedicalInfo_name(ctx, field)
+			case "firstname":
+				return ec.fieldContext_MedicalInfo_firstname(ctx, field)
+			case "birthdate":
+				return ec.fieldContext_MedicalInfo_birthdate(ctx, field)
+			case "sex":
+				return ec.fieldContext_MedicalInfo_sex(ctx, field)
+			case "height":
+				return ec.fieldContext_MedicalInfo_height(ctx, field)
+			case "weight":
+				return ec.fieldContext_MedicalInfo_weight(ctx, field)
+			case "primary_doctor_id":
+				return ec.fieldContext_MedicalInfo_primary_doctor_id(ctx, field)
+			case "onboarding_status":
+				return ec.fieldContext_MedicalInfo_onboarding_status(ctx, field)
+			case "antecedent_disease_ids":
+				return ec.fieldContext_MedicalInfo_antecedent_disease_ids(ctx, field)
+			case "family_members_med_info_id":
+				return ec.fieldContext_MedicalInfo_family_members_med_info_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_MedicalInfo_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_MedicalInfo_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MedicalInfo", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateAccountsMedicalFolder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -30856,6 +30981,33 @@ func (ec *executionContext) unmarshalInputTreatmentInput(ctx context.Context, ob
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateAccountMedicalFolder(ctx context.Context, obj interface{}) (model.UpdateAccountMedicalFolder, error) {
+	var it model.UpdateAccountMedicalFolder
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"antecedent_disease_ids"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "antecedent_disease_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("antecedent_disease_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AntecedentDiseaseIds = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateAdminInput(ctx context.Context, obj interface{}) (model.UpdateAdminInput, error) {
 	var it model.UpdateAdminInput
 	asMap := map[string]interface{}{}
@@ -31413,7 +31565,6 @@ func (ec *executionContext) unmarshalInputUpdateDoctorsDeviceConnectInput(ctx co
 				return it, err
 			}
 			it.DeviceConnect = data
-
 		case "trust_devices":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
 			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
@@ -31866,7 +32017,6 @@ func (ec *executionContext) unmarshalInputUpdatePatientsDeviceConnectInput(ctx c
 				return it, err
 			}
 			it.DeviceConnect = data
-
 		case "trust_devices":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
 			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
@@ -33651,6 +33801,10 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updatePatientsRendezVousIds":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePatientsRendezVousIds(ctx, field)
+			})
+		case "updateAccountsMedicalFolder":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateAccountsMedicalFolder(ctx, field)
 			})
 		case "deletePatient":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -37400,6 +37554,11 @@ func (ec *executionContext) unmarshalNTreatmentInput2ᚕᚖgithubᚗcomᚋedgar�
 func (ec *executionContext) unmarshalNTreatmentInput2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐTreatmentInput(ctx context.Context, v interface{}) (*model.TreatmentInput, error) {
 	res, err := ec.unmarshalInputTreatmentInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateAccountMedicalFolder2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAccountMedicalFolder(ctx context.Context, v interface{}) (model.UpdateAccountMedicalFolder, error) {
+	res, err := ec.unmarshalInputUpdateAccountMedicalFolder(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNUpdateAdminInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAdminInput(ctx context.Context, v interface{}) (model.UpdateAdminInput, error) {

@@ -632,6 +632,10 @@ type TreatmentsFollowUp struct {
 	UpdatedAt   int      `json:"updatedAt" bson:"updatedAt"`
 }
 
+type UpdateAccountMedicalFolder struct {
+	AntecedentDiseaseIds []*string `json:"antecedent_disease_ids,omitempty" bson:"antecedent_disease_ids"`
+}
+
 type UpdateAdminInput struct {
 	Email    *string `json:"email,omitempty" bson:"email"`
 	Password *string `json:"password,omitempty" bson:"password"`

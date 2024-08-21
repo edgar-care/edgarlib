@@ -168,6 +168,27 @@ func (r *mutationResolver) UpdatePatientsRendezVousIds(ctx context.Context, id s
 	return &updatedPatient, nil
 }
 
+// UpdateAccountsMedicalFolder is the resolver for the updateAccountsMedicalFolder field.
+func (r *mutationResolver) UpdateAccountsMedicalFolder(ctx context.Context, id string, input model.UpdateAccountMedicalFolder) (*model.MedicalInfo, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+
+	update["antecedent_disease_ids"] = input.AntecedentDiseaseIds
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedPatient model.MedicalInfo
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedPatient, nil
+}
+
 // DeletePatient is the resolver for the deletePatient field.
 func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool, error) {
 	resp := false

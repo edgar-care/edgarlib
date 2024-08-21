@@ -24,26 +24,26 @@ type CreateDocumentResponse struct {
 	Err            error
 }
 
-func CreateDocument(newdoc UploadDocumentInput, id string) CreateDocumentResponse {
+func CreateDocument(newdoc UploadDocumentInput, ownerId string, uploaderID string) CreateDocumentResponse {
 	document, err := graphql.CreateDocument(model.CreateDocumentInput{
-		OwnerID:      id,
+		OwnerID:      ownerId,
 		Name:         newdoc.Name,
 		DocumentType: newdoc.DocumentType,
 		Category:     newdoc.Category,
 		IsFavorite:   newdoc.IsFavorite,
 		DownloadURL:  newdoc.DownloadURL,
-		UploaderID:   id,
+		UploaderID:   uploaderID,
 	})
 	if err != nil {
 		return CreateDocumentResponse{Document: model.Document{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}
 	}
 
-	patient, err := graphql.GetPatientById(id)
+	patient, err := graphql.GetPatientById(ownerId)
 	if err != nil {
 		return CreateDocumentResponse{Code: 400, Err: errors.New("id does not correspond to a patient")}
 	}
 
-	_, _ = graphql.UpdatePatient(id, model.UpdatePatientInput{DocumentIds: append(patient.DocumentIds, &document.ID)})
+	_, _ = graphql.UpdatePatient(ownerId, model.UpdatePatientInput{DocumentIds: append(patient.DocumentIds, &document.ID)})
 
 	return CreateDocumentResponse{
 		Document: document,
