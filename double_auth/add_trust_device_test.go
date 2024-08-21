@@ -16,8 +16,8 @@ func TestAddTrustDevice_Patient_Success(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testcity",
+		Country:    "testcountry",
 		Date:       1627880400,
 	}
 
@@ -64,8 +64,8 @@ func TestAddTrustDevice_Doctor_Success(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testcountry",
 		Date:       1627880400, // Timestamp pour une date fixe
 	}
 

@@ -279,8 +279,8 @@ type DeviceConnect {
     id: ID!
     device_name: String!
     ip_address: String!
-    latitude: Float!
-    longitude: Float!
+    city: String!
+    country: String!
     date: Int!
     trust_device: Boolean!
     createdAt: Int!
@@ -411,10 +411,12 @@ input UpdateDoctorsPatientIDsInput {
 
 input UpdatePatientsDeviceConnectInput {
     device_connect: [String]
+    trust_devices: [String]
 }
 
 input UpdateDoctorsDeviceConnectInput {
     device_connect: [String]
+    trust_devices: [String]
 }
 
 input UpdateDoctorsTrustDeviceInput {
@@ -770,8 +772,8 @@ input SessionSymptomInput {
 input CreateDeviceConnectInput {
     device_name: String!
     ip_address: String!
-    latitude: Float!
-    longitude: Float!
+    city: String!
+    country: String!
     date: Int!
     trust_device: Boolean!
 }
@@ -779,8 +781,8 @@ input CreateDeviceConnectInput {
 input UpdateDeviceConnectInput {
     device_name: String
     ip_address: String
-    latitude: Float
-    longitude: Float
+    city: String
+    country: String
     date: Int
     trust_device: Boolean
 }
