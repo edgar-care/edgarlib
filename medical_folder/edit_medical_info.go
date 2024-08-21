@@ -72,7 +72,7 @@ func UpdateMedicalFolder(input UpdateMedicalInfoInput, medicalInfoID string) Upd
 			return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to update medical folder: " + err.Error())}
 		}
 
-		edit_antedisease, err := graphql.UpdateAccountsMedicalFolder(medicalInfoID, model.UpdateAccountMedicalFolder{AntecedentDiseaseIds: []*string{}})
+		edit_antedisease, err := graphql.UpdateAccountsMedicalFolder(medicalInfoID, model.UpdateAccountMedicalFolder{AntecedentDiseaseIds: nil})
 		if err != nil {
 			return UpdateMedicalFolderResponse{Code: 400, Err: errors.New("unable to update antecedent diseases: " + err.Error())}
 		}
