@@ -6518,8 +6518,8 @@ func CreateDeviceConnect(input model.CreateDeviceConnectInput) (model.DeviceConn
 	        id
 	        device_name
 	        ip_address
-	        latitude
-	        longitude
+	        city
+	        country
 	        date
 	        trust_device
 	    }
@@ -6575,8 +6575,8 @@ func UpdateDeviceConnect(id string, input model.UpdateDeviceConnectInput) (model
 	        id
 	        device_name
 	        ip_address
-	        latitude
-	        longitude
+	        city
+	        country
 	        date
 	        trust_device
 	    }
@@ -6682,8 +6682,8 @@ func GetDevicesConnect(option *model.Options) ([]model.DeviceConnect, error) {
 	        id
 	        device_name
 	        ip_address
-	        latitude
-	        longitude
+	        city
+	        country
 	        date
 	        trust_device
 	    }
@@ -6739,8 +6739,8 @@ func GetDeviceConnectById(id string) (model.DeviceConnect, error) {
 	        id
 	        device_name
 	        ip_address
-	        latitude
-	        longitude
+	        city
+	        country
 	        date
 	        trust_device
 	    }

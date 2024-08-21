@@ -1569,8 +1569,8 @@ mutation CreateDeviceConnect($input: CreateDeviceConnectInput!) {
         id
         device_name
         ip_address
-        latitude
-        longitude
+        city
+        country
         date
         trust_device
     }
@@ -1581,8 +1581,8 @@ mutation UpdateDeviceConnect($id: String!, $input: UpdateDeviceConnectInput!) {
         id
         device_name
         ip_address
-        latitude
-        longitude
+        city
+        country
         date
         trust_device
     }
@@ -1598,8 +1598,8 @@ query GetDevicesConnect($option: Options){
         id
         device_name
         ip_address
-        latitude
-        longitude
+        city
+        country
         date
         trust_device
     }
@@ -1610,8 +1610,8 @@ query GetDeviceConnectById($id: String!){
         id
         device_name
         ip_address
-        latitude
-        longitude
+        city
+        country
         date
         trust_device
     }

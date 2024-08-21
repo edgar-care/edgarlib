@@ -8,11 +8,11 @@ import (
 )
 
 type CreateDeviceConnectInput struct {
-	DeviceName string  `json:"device_name"`
-	Ip         string  `json:"ip"`
-	Latitude   float64 `json:"latitude"`
-	Longitude  float64 `json:"longitude"`
-	Date       int     `json:"date"`
+	DeviceName string `json:"device_name"`
+	Ip         string `json:"ip"`
+	City       string `json:"city"`
+	Country    string `json:"country"`
+	Date       int    `json:"date"`
 }
 
 type CreateDeviceConnectResponse struct {
@@ -25,8 +25,8 @@ func CreateDeviceConnect(input CreateDeviceConnectInput, ownerId string) CreateD
 	device, err := graphql.CreateDeviceConnect(model.CreateDeviceConnectInput{
 		DeviceName:  input.DeviceName,
 		IPAddress:   input.Ip,
-		Latitude:    input.Latitude,
-		Longitude:   input.Longitude,
+		City:        input.City,
+		Country:     input.Country,
 		Date:        input.Date,
 		TrustDevice: false,
 	})

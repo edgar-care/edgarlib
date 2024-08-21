@@ -135,13 +135,13 @@ type ComplexityRoot struct {
 	}
 
 	DeviceConnect struct {
+		City        func(childComplexity int) int
+		Country     func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		Date        func(childComplexity int) int
 		DeviceName  func(childComplexity int) int
 		ID          func(childComplexity int) int
 		IPAddress   func(childComplexity int) int
-		Latitude    func(childComplexity int) int
-		Longitude   func(childComplexity int) int
 		TrustDevice func(childComplexity int) int
 		UpdatedAt   func(childComplexity int) int
 	}
@@ -1056,6 +1056,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ChirInducedSymptom.Symptom(childComplexity), true
 
+	case "DeviceConnect.city":
+		if e.complexity.DeviceConnect.City == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.City(childComplexity), true
+
+	case "DeviceConnect.country":
+		if e.complexity.DeviceConnect.Country == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.Country(childComplexity), true
+
 	case "DeviceConnect.createdAt":
 		if e.complexity.DeviceConnect.CreatedAt == nil {
 			break
@@ -1090,20 +1104,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.DeviceConnect.IPAddress(childComplexity), true
-
-	case "DeviceConnect.latitude":
-		if e.complexity.DeviceConnect.Latitude == nil {
-			break
-		}
-
-		return e.complexity.DeviceConnect.Latitude(childComplexity), true
-
-	case "DeviceConnect.longitude":
-		if e.complexity.DeviceConnect.Longitude == nil {
-			break
-		}
-
-		return e.complexity.DeviceConnect.Longitude(childComplexity), true
 
 	case "DeviceConnect.trust_device":
 		if e.complexity.DeviceConnect.TrustDevice == nil {
@@ -4328,8 +4328,8 @@ type DeviceConnect {
     id: ID!
     device_name: String!
     ip_address: String!
-    latitude: Float!
-    longitude: Float!
+    city: String!
+    country: String!
     date: Int!
     trust_device: Boolean!
     createdAt: Int!
@@ -4460,10 +4460,12 @@ input UpdateDoctorsPatientIDsInput {
 
 input UpdatePatientsDeviceConnectInput {
     device_connect: [String]
+    trust_devices: [String]
 }
 
 input UpdateDoctorsDeviceConnectInput {
     device_connect: [String]
+    trust_devices: [String]
 }
 
 input UpdateDoctorsTrustDeviceInput {
@@ -4819,8 +4821,8 @@ input SessionSymptomInput {
 input CreateDeviceConnectInput {
     device_name: String!
     ip_address: String!
-    latitude: Float!
-    longitude: Float!
+    city: String!
+    country: String!
     date: Int!
     trust_device: Boolean!
 }
@@ -4828,8 +4830,8 @@ input CreateDeviceConnectInput {
 input UpdateDeviceConnectInput {
     device_name: String
     ip_address: String
-    latitude: Float
-    longitude: Float
+    city: String
+    country: String
     date: Int
     trust_device: Boolean
 }
@@ -10217,8 +10219,8 @@ func (ec *executionContext) fieldContext_DeviceConnect_ip_address(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _DeviceConnect_latitude(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeviceConnect_latitude(ctx, field)
+func (ec *executionContext) _DeviceConnect_city(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_city(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -10231,7 +10233,7 @@ func (ec *executionContext) _DeviceConnect_latitude(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Latitude, nil
+		return obj.City, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10243,26 +10245,26 @@ func (ec *executionContext) _DeviceConnect_latitude(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.(float64)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_DeviceConnect_latitude(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_DeviceConnect_city(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DeviceConnect",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _DeviceConnect_longitude(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeviceConnect_longitude(ctx, field)
+func (ec *executionContext) _DeviceConnect_country(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_country(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -10275,7 +10277,7 @@ func (ec *executionContext) _DeviceConnect_longitude(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Longitude, nil
+		return obj.Country, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10287,19 +10289,19 @@ func (ec *executionContext) _DeviceConnect_longitude(ctx context.Context, field 
 		}
 		return graphql.Null
 	}
-	res := resTmp.(float64)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_DeviceConnect_longitude(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_DeviceConnect_country(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DeviceConnect",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -17909,10 +17911,10 @@ func (ec *executionContext) fieldContext_Mutation_createDeviceConnect(ctx contex
 				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
-			case "latitude":
-				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
-			case "longitude":
-				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "city":
+				return ec.fieldContext_DeviceConnect_city(ctx, field)
+			case "country":
+				return ec.fieldContext_DeviceConnect_country(ctx, field)
 			case "date":
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
@@ -17981,10 +17983,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDeviceConnect(ctx contex
 				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
-			case "latitude":
-				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
-			case "longitude":
-				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "city":
+				return ec.fieldContext_DeviceConnect_city(ctx, field)
+			case "country":
+				return ec.fieldContext_DeviceConnect_country(ctx, field)
 			case "date":
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
@@ -23531,10 +23533,10 @@ func (ec *executionContext) fieldContext_Query_getDeviceConnectById(ctx context.
 				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
-			case "latitude":
-				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
-			case "longitude":
-				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "city":
+				return ec.fieldContext_DeviceConnect_city(ctx, field)
+			case "country":
+				return ec.fieldContext_DeviceConnect_country(ctx, field)
 			case "date":
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
@@ -23603,10 +23605,10 @@ func (ec *executionContext) fieldContext_Query_getDevicesConnect(ctx context.Con
 				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
-			case "latitude":
-				return ec.fieldContext_DeviceConnect_latitude(ctx, field)
-			case "longitude":
-				return ec.fieldContext_DeviceConnect_longitude(ctx, field)
+			case "city":
+				return ec.fieldContext_DeviceConnect_city(ctx, field)
+			case "country":
+				return ec.fieldContext_DeviceConnect_country(ctx, field)
 			case "date":
 				return ec.fieldContext_DeviceConnect_date(ctx, field)
 			case "trust_device":
@@ -29382,7 +29384,7 @@ func (ec *executionContext) unmarshalInputCreateDeviceConnectInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"device_name", "ip_address", "latitude", "longitude", "date", "trust_device"}
+	fieldsInOrder := [...]string{"device_name", "ip_address", "city", "country", "date", "trust_device"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -29403,20 +29405,20 @@ func (ec *executionContext) unmarshalInputCreateDeviceConnectInput(ctx context.C
 				return it, err
 			}
 			it.IPAddress = data
-		case "latitude":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
-			data, err := ec.unmarshalNFloat2float64(ctx, v)
+		case "city":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Latitude = data
-		case "longitude":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
-			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			it.City = data
+		case "country":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
+			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Longitude = data
+			it.Country = data
 		case "date":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
 			data, err := ec.unmarshalNInt2int(ctx, v)
@@ -31162,7 +31164,7 @@ func (ec *executionContext) unmarshalInputUpdateDeviceConnectInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"device_name", "ip_address", "latitude", "longitude", "date", "trust_device"}
+	fieldsInOrder := [...]string{"device_name", "ip_address", "city", "country", "date", "trust_device"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -31183,20 +31185,20 @@ func (ec *executionContext) unmarshalInputUpdateDeviceConnectInput(ctx context.C
 				return it, err
 			}
 			it.IPAddress = data
-		case "latitude":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("latitude"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+		case "city":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Latitude = data
-		case "longitude":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("longitude"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			it.City = data
+		case "country":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Longitude = data
+			it.Country = data
 		case "date":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
@@ -31397,7 +31399,7 @@ func (ec *executionContext) unmarshalInputUpdateDoctorsDeviceConnectInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"device_connect"}
+	fieldsInOrder := [...]string{"device_connect", "trust_devices"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -31411,6 +31413,13 @@ func (ec *executionContext) unmarshalInputUpdateDoctorsDeviceConnectInput(ctx co
 				return it, err
 			}
 			it.DeviceConnect = data
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
 		}
 	}
 
@@ -31842,7 +31851,7 @@ func (ec *executionContext) unmarshalInputUpdatePatientsDeviceConnectInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"device_connect"}
+	fieldsInOrder := [...]string{"device_connect", "trust_devices"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -31856,6 +31865,13 @@ func (ec *executionContext) unmarshalInputUpdatePatientsDeviceConnectInput(ctx c
 				return it, err
 			}
 			it.DeviceConnect = data
+		case "trust_devices":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_devices"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TrustDevices = data
 		}
 	}
 
@@ -32924,13 +32940,13 @@ func (ec *executionContext) _DeviceConnect(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "latitude":
-			out.Values[i] = ec._DeviceConnect_latitude(ctx, field, obj)
+		case "city":
+			out.Values[i] = ec._DeviceConnect_city(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "longitude":
-			out.Values[i] = ec._DeviceConnect_longitude(ctx, field, obj)
+		case "country":
+			out.Values[i] = ec._DeviceConnect_country(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

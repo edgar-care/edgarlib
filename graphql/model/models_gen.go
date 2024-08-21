@@ -164,12 +164,12 @@ type CreateChatInput struct {
 }
 
 type CreateDeviceConnectInput struct {
-	DeviceName  string  `json:"device_name" bson:"device_name"`
-	IPAddress   string  `json:"ip_address" bson:"ip_address"`
-	Latitude    float64 `json:"latitude" bson:"latitude"`
-	Longitude   float64 `json:"longitude" bson:"longitude"`
-	Date        int     `json:"date" bson:"date"`
-	TrustDevice bool    `json:"trust_device" bson:"trust_device"`
+	DeviceName  string `json:"device_name" bson:"device_name"`
+	IPAddress   string `json:"ip_address" bson:"ip_address"`
+	City        string `json:"city" bson:"city"`
+	Country     string `json:"country" bson:"country"`
+	Date        int    `json:"date" bson:"date"`
+	TrustDevice bool   `json:"trust_device" bson:"trust_device"`
 }
 
 type CreateDiseaseInput struct {
@@ -312,15 +312,15 @@ type CreateTreatmentsFollowUpInput struct {
 }
 
 type DeviceConnect struct {
-	ID          string  `json:"id" bson:"_id"`
-	DeviceName  string  `json:"device_name" bson:"device_name"`
-	IPAddress   string  `json:"ip_address" bson:"ip_address"`
-	Latitude    float64 `json:"latitude" bson:"latitude"`
-	Longitude   float64 `json:"longitude" bson:"longitude"`
-	Date        int     `json:"date" bson:"date"`
-	TrustDevice bool    `json:"trust_device" bson:"trust_device"`
-	CreatedAt   int     `json:"createdAt" bson:"createdAt"`
-	UpdatedAt   int     `json:"updatedAt" bson:"updatedAt"`
+	ID          string `json:"id" bson:"_id"`
+	DeviceName  string `json:"device_name" bson:"device_name"`
+	IPAddress   string `json:"ip_address" bson:"ip_address"`
+	City        string `json:"city" bson:"city"`
+	Country     string `json:"country" bson:"country"`
+	Date        int    `json:"date" bson:"date"`
+	TrustDevice bool   `json:"trust_device" bson:"trust_device"`
+	CreatedAt   int    `json:"createdAt" bson:"createdAt"`
+	UpdatedAt   int    `json:"updatedAt" bson:"updatedAt"`
 }
 
 type Disease struct {
@@ -677,12 +677,12 @@ type UpdateChatInput struct {
 }
 
 type UpdateDeviceConnectInput struct {
-	DeviceName  *string  `json:"device_name,omitempty" bson:"device_name"`
-	IPAddress   *string  `json:"ip_address,omitempty" bson:"ip_address"`
-	Latitude    *float64 `json:"latitude,omitempty" bson:"latitude"`
-	Longitude   *float64 `json:"longitude,omitempty" bson:"longitude"`
-	Date        *int     `json:"date,omitempty" bson:"date"`
-	TrustDevice *bool    `json:"trust_device,omitempty" bson:"trust_device"`
+	DeviceName  *string `json:"device_name,omitempty" bson:"device_name"`
+	IPAddress   *string `json:"ip_address,omitempty" bson:"ip_address"`
+	City        *string `json:"city,omitempty" bson:"city"`
+	Country     *string `json:"country,omitempty" bson:"country"`
+	Date        *int    `json:"date,omitempty" bson:"date"`
+	TrustDevice *bool   `json:"trust_device,omitempty" bson:"trust_device"`
 }
 
 type UpdateDiseaseInput struct {
@@ -712,6 +712,7 @@ type UpdateDoctorInput struct {
 
 type UpdateDoctorsDeviceConnectInput struct {
 	DeviceConnect []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	TrustDevices  []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
 }
 
 type UpdateDoctorsPatientIDsInput struct {
@@ -777,6 +778,7 @@ type UpdatePatientTrustDeviceInput struct {
 
 type UpdatePatientsDeviceConnectInput struct {
 	DeviceConnect []*string `json:"device_connect,omitempty" bson:"device_connect"`
+	TrustDevices  []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
 }
 
 type UpdateRdvInput struct {

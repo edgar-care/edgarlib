@@ -10,8 +10,8 @@ func TestGetTrustDeviceConnectById_Success(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -70,8 +70,8 @@ func TestGetTrustDeviceConnect_PatientSuccess(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -116,8 +116,8 @@ func TestGetTrustDeviceConnect_DoctorSuccess(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 

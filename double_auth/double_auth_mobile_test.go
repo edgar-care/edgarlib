@@ -19,8 +19,8 @@ func TestCreateDoubleAuthMobilePatient_Succes(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -59,8 +59,8 @@ func TestCreateDoubleAuthMobileDoctor_Success(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -121,8 +121,8 @@ func TestCreateDoubleAuthMobile_InvalidAccount(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -154,8 +154,8 @@ func TestCreateDoubleAuthMobile_InvalidMethod(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -189,8 +189,8 @@ func TestCreateDoubleAuthMobileADDPatient_Succes(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -224,8 +224,8 @@ func TestCreateDoubleAuthMobileADDPatient_InvalidMehtod(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 
@@ -259,8 +259,8 @@ func TestCreateDoubleAuthMobileADDPatient_InvalidID(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testCountry",
 		Date:       1627880400,
 	}
 

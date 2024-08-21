@@ -16,8 +16,8 @@ func TestCreateDeviceConnect_Success(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testcity",
+		Country:    "testcountry",
 		Date:       1627880400, // Timestamp pour une date fixe
 	}
 	patient, err := graphql.CreatePatient(model.CreatePatientInput{
@@ -50,8 +50,8 @@ func TestCreateDeviceConnect_InvalidPatientId(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testCity",
+		Country:    "testcountry",
 		Date:       1627880400,
 	}
 	invalidPatientId := "invalid_patient_id"
@@ -80,8 +80,8 @@ func TestCreateDeviceConnect_FailedDeviceCreation(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "", // Champ obligatoire manquant ou invalide
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testcity",
+		Country:    "testcountry",
 		Date:       1627880400,
 	}
 	patientId := "valid_patient_id"
@@ -109,8 +109,8 @@ func TestCreateDeviceConnect_SuccessDoctor(t *testing.T) {
 	input := CreateDeviceConnectInput{
 		DeviceName: "TestDevice",
 		Ip:         "192.168.0.1",
-		Latitude:   48.8566,
-		Longitude:  2.3522,
+		City:       "testcity",
+		Country:    "testcountry",
 		Date:       1627880400,
 	}
 	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
