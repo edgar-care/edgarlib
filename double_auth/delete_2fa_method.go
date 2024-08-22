@@ -32,9 +32,22 @@ func RemoveDoubleAuthMethod(methodToRemove string, ownerId string) error {
 			return errors.New("method to remove not found in current methods")
 		}
 
-		_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
-			Methods: methods,
-		})
+		if methodToRemove == "MOBILE" {
+			_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
+				Methods:       methods,
+				TrustDeviceID: nil,
+			})
+		} else if methodToRemove == "AUTHENTIFICATOR" {
+			_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
+				Methods: methods,
+				Code:    nil,
+				URL:     nil,
+			})
+		} else {
+			_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
+				Methods: methods,
+			})
+		}
 		if err != nil {
 			return errors.New("failed to update double_auth")
 		}

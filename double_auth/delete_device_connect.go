@@ -5,7 +5,6 @@ import (
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"net/http"
 
-	"github.com/edgar-care/edgarlib/v2/black_list"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 )
 
@@ -49,11 +48,6 @@ func DeleteDeviceConnect(DeviceId string, ownerId string) DeleteDeviceConnectRes
 			return DeleteDeviceConnectResponse{Deleted: false, Code: http.StatusInternalServerError, Err: errors.New("error updating patient: " + err.Error())}
 		}
 
-		blacklist := black_list.UpdateBlackList(ownerId)
-		if blacklist.Err != nil {
-			return DeleteDeviceConnectResponse{Deleted: false, Code: http.StatusInternalServerError, Err: errors.New("error updating blacklist: " + blacklist.Err.Error())}
-		}
-
 		return DeleteDeviceConnectResponse{
 			Deleted: deleted,
 			Code:    http.StatusOK,
@@ -67,11 +61,6 @@ func DeleteDeviceConnect(DeviceId string, ownerId string) DeleteDeviceConnectRes
 		_, err := graphql.UpdateDoctorsDeviceConnect(ownerId, model.UpdateDoctorsDeviceConnectInput{DeviceConnect: remElement(doctor.DeviceConnect, &DeviceId), TrustDevices: remElement(doctor.TrustDevices, &DeviceId)})
 		if err != nil {
 			return DeleteDeviceConnectResponse{Deleted: false, Code: http.StatusInternalServerError, Err: errors.New("error updating doctor: " + err.Error())}
-		}
-
-		blacklist := black_list.UpdateBlackList(ownerId)
-		if blacklist.Err != nil {
-			return DeleteDeviceConnectResponse{Deleted: false, Code: http.StatusInternalServerError, Err: errors.New("error updating blacklist: " + blacklist.Err.Error())}
 		}
 
 		return DeleteDeviceConnectResponse{

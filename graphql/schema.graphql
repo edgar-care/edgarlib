@@ -269,7 +269,7 @@ type DoubleAuth {
     id: ID!
     methods: [String!]!
     secret: String!
-    url: String!
+    code: String!
     trust_device_id: String!
     createdAt: Int!
     updatedAt: Int!
@@ -794,13 +794,14 @@ input UpdateDeviceConnectInput {
 input CreateDoubleAuthInput {
     methods: [String!]!
     secret: String!
-    url: String!
+    code: String!
     trust_device_id: String!
 }
 
 input UpdateDoubleAuthInput {
     methods: [String!]
     secret: String
+    code: String
     url: String
     trust_device_id: String
 }

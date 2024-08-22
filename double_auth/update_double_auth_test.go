@@ -15,14 +15,12 @@ func TestUpdateDoubleAuth_Success(t *testing.T) {
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "new_secret",
-		URL:             "https://new.url",
 		TrustedDeviceId: "new_device_id",
 	}
 
 	doubleAuth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
 		Methods:       []string{"EMAIL"},
 		Secret:        "old_secret",
-		URL:           "https://old.url",
 		TrustDeviceID: "old_device_id",
 	})
 
@@ -49,10 +47,6 @@ func TestUpdateDoubleAuth_Success(t *testing.T) {
 		t.Errorf("Expected secret %s, but got: %s", input.Secret, response.DoubleAuth.Secret)
 	}
 
-	if response.DoubleAuth.URL != input.URL {
-		t.Errorf("Expected URL %s, but got: %s", input.URL, response.DoubleAuth.URL)
-	}
-
 	if response.DoubleAuth.TrustDeviceID != input.TrustedDeviceId {
 		t.Errorf("Expected trusted device ID %s, but got: %s", input.TrustedDeviceId, response.DoubleAuth.TrustDeviceID)
 	}
@@ -71,14 +65,12 @@ func TestUpdateDoubleAuth_DoctorSuccess(t *testing.T) {
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "new_secret",
-		URL:             "https://new.url",
 		TrustedDeviceId: "new_device_id",
 	}
 
 	doubleAuth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
 		Methods:       []string{"EMAIL"},
 		Secret:        "old_secret",
-		URL:           "https://old.url",
 		TrustDeviceID: "old_device_id",
 	})
 
@@ -105,10 +97,6 @@ func TestUpdateDoubleAuth_DoctorSuccess(t *testing.T) {
 		t.Errorf("Expected secret %s, but got: %s", input.Secret, response.DoubleAuth.Secret)
 	}
 
-	if response.DoubleAuth.URL != input.URL {
-		t.Errorf("Expected URL %s, but got: %s", input.URL, response.DoubleAuth.URL)
-	}
-
 	if response.DoubleAuth.TrustDeviceID != input.TrustedDeviceId {
 		t.Errorf("Expected trusted device ID %s, but got: %s", input.TrustedDeviceId, response.DoubleAuth.TrustDeviceID)
 	}
@@ -119,7 +107,6 @@ func TestUpdateDoubleAuth_PatientNotFound(t *testing.T) {
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "secret",
-		URL:             "https://url",
 		TrustedDeviceId: "device_id",
 	}
 
@@ -139,7 +126,6 @@ func TestUpdateDoubleAuth_DoctorNotFound(t *testing.T) {
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "secret",
-		URL:             "https://url",
 		TrustedDeviceId: "device_id",
 	}
 
@@ -163,7 +149,6 @@ func TestUpdateDoubleAuth_NoDoubleAuth(t *testing.T) {
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "secret",
-		URL:             "https://url",
 		TrustedDeviceId: "device_id",
 	}
 
@@ -192,7 +177,6 @@ func TestUpdateDoubleAuth_NoDoubleAuthForDoctor(t *testing.T) {
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "secret",
-		URL:             "https://url",
 		TrustedDeviceId: "device_id",
 	}
 

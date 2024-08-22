@@ -2,16 +2,10 @@ package double_auth
 
 import (
 	"errors"
-	"net/http"
-
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"net/http"
 )
-
-type CreateDoubleAuthTierInput struct {
-	Methods string `json:"method_2fa"`
-	Code    string `json:"code"`
-}
 
 type CreateDoubleAuthTierResponse struct {
 	DoubleAuth model.DoubleAuth
@@ -19,17 +13,15 @@ type CreateDoubleAuthTierResponse struct {
 	Err        error
 }
 
-func CreateDoubleAuthAppTier(input CreateDoubleAuthTierInput, url string, ownerId string) CreateDoubleAuthResponse {
+type DecrypteSecretResponse struct {
+	Secret string
+	Code   int
+	Err    error
+}
+
+func CreateDoubleAuthAppTier(ownerId string, secret string) CreateDoubleAuthResponse {
 	var doubleAuthMethodsID *string
 	var isPatient bool
-
-	if input.Methods != "AUTHENTIFICATOR" {
-		return CreateDoubleAuthResponse{
-			DoubleAuth: model.DoubleAuth{},
-			Code:       http.StatusBadRequest,
-			Err:        errors.New("only method_2fa AUTHENTIFICATOR is supported"),
-		}
-	}
 
 	checkPatient, errPatient := graphql.GetPatientById(ownerId)
 	if errPatient == nil {
@@ -51,9 +43,8 @@ func CreateDoubleAuthAppTier(input CreateDoubleAuthTierInput, url string, ownerI
 
 	if doubleAuthMethodsID == nil || *doubleAuthMethodsID == "" {
 		auth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
-			Methods: []string{input.Methods},
-			URL:     url,
-			Secret:  input.Code,
+			Methods: []string{"AUTHENTIFICATOR"},
+			Code:    secret,
 		})
 		if err != nil {
 			return CreateDoubleAuthResponse{
@@ -106,7 +97,7 @@ func CreateDoubleAuthAppTier(input CreateDoubleAuthTierInput, url string, ownerI
 		}
 	}
 
-	if sliceContains(doubleAuth.Methods, input.Methods) {
+	if sliceContains(doubleAuth.Methods, "AUTHENTIFICATOR") {
 		return CreateDoubleAuthResponse{
 			DoubleAuth: doubleAuth,
 			Code:       http.StatusOK,
@@ -114,11 +105,10 @@ func CreateDoubleAuthAppTier(input CreateDoubleAuthTierInput, url string, ownerI
 		}
 	}
 
-	newMethods := append(doubleAuth.Methods, input.Methods)
+	newMethods := append(doubleAuth.Methods, "AUTHENTIFICATOR")
 	updatedDoubleAuth, err := graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
 		Methods: newMethods,
-		URL:     &url,
-		Secret:  &input.Code,
+		Code:    &secret,
 	})
 	if err != nil {
 		return CreateDoubleAuthResponse{
@@ -133,4 +123,62 @@ func CreateDoubleAuthAppTier(input CreateDoubleAuthTierInput, url string, ownerI
 		Code:       http.StatusOK,
 		Err:        nil,
 	}
+}
+
+func GetSecretThirdParty(ownerID string) DecrypteSecretResponse {
+
+	var authMethodsId string
+
+	patient, errPatient := graphql.GetPatientById(ownerID)
+	if errPatient != nil {
+		doctor, errDoctor := graphql.GetDoctorById(ownerID)
+		if errDoctor != nil {
+			return DecrypteSecretResponse{
+				Secret: "",
+				Code:   http.StatusBadRequest,
+				Err:    errors.New("Id does not correspond to a valid patient or doctor"),
+			}
+		} else {
+			if doctor.DoubleAuthMethodsID == nil {
+				return DecrypteSecretResponse{
+					Secret: "",
+					Code:   http.StatusBadRequest,
+					Err:    errors.New("Unable to check double auth: auth method id is missing"),
+				}
+			}
+			authMethodsId = *doctor.DoubleAuthMethodsID
+		}
+	} else {
+		if patient.DoubleAuthMethodsID == nil {
+			return DecrypteSecretResponse{
+				Secret: "",
+				Code:   http.StatusBadRequest,
+				Err:    errors.New("Unable to check double auth: auth method id is missing"),
+			}
+		}
+		authMethodsId = *patient.DoubleAuthMethodsID
+	}
+
+	getDoubleAuth, err := graphql.GetDoubleAuthById(authMethodsId)
+	if err != nil {
+		return DecrypteSecretResponse{
+			Secret: "",
+			Code:   http.StatusBadRequest,
+			Err:    errors.New("Unable to check double auth: owner ID does not correspond to a valid patient or doctor"),
+		}
+	}
+	if getDoubleAuth.Code == "" {
+		return DecrypteSecretResponse{
+			Secret: "",
+			Code:   http.StatusBadRequest,
+			Err:    errors.New("Error: value secret empty"),
+		}
+	}
+
+	return DecrypteSecretResponse{
+		Secret: getDoubleAuth.Code,
+		Code:   http.StatusOK,
+		Err:    nil,
+	}
+
 }

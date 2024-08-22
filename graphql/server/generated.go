@@ -191,12 +191,12 @@ type ComplexityRoot struct {
 	}
 
 	DoubleAuth struct {
+		Code          func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
 		Methods       func(childComplexity int) int
 		Secret        func(childComplexity int) int
 		TrustDeviceID func(childComplexity int) int
-		URL           func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 	}
 
@@ -1366,6 +1366,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Document.UploaderID(childComplexity), true
 
+	case "DoubleAuth.code":
+		if e.complexity.DoubleAuth.Code == nil {
+			break
+		}
+
+		return e.complexity.DoubleAuth.Code(childComplexity), true
+
 	case "DoubleAuth.createdAt":
 		if e.complexity.DoubleAuth.CreatedAt == nil {
 			break
@@ -1400,13 +1407,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.DoubleAuth.TrustDeviceID(childComplexity), true
-
-	case "DoubleAuth.url":
-		if e.complexity.DoubleAuth.URL == nil {
-			break
-		}
-
-		return e.complexity.DoubleAuth.URL(childComplexity), true
 
 	case "DoubleAuth.updatedAt":
 		if e.complexity.DoubleAuth.UpdatedAt == nil {
@@ -4333,7 +4333,7 @@ type DoubleAuth {
     id: ID!
     methods: [String!]!
     secret: String!
-    url: String!
+    code: String!
     trust_device_id: String!
     createdAt: Int!
     updatedAt: Int!
@@ -4858,13 +4858,14 @@ input UpdateDeviceConnectInput {
 input CreateDoubleAuthInput {
     methods: [String!]!
     secret: String!
-    url: String!
+    code: String!
     trust_device_id: String!
 }
 
 input UpdateDoubleAuthInput {
     methods: [String!]
     secret: String
+    code: String
     url: String
     trust_device_id: String
 }
@@ -12194,8 +12195,8 @@ func (ec *executionContext) fieldContext_DoubleAuth_secret(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _DoubleAuth_url(ctx context.Context, field graphql.CollectedField, obj *model.DoubleAuth) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DoubleAuth_url(ctx, field)
+func (ec *executionContext) _DoubleAuth_code(ctx context.Context, field graphql.CollectedField, obj *model.DoubleAuth) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DoubleAuth_code(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -12208,7 +12209,7 @@ func (ec *executionContext) _DoubleAuth_url(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.URL, nil
+		return obj.Code, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -12225,7 +12226,7 @@ func (ec *executionContext) _DoubleAuth_url(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_DoubleAuth_url(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_DoubleAuth_code(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DoubleAuth",
 		Field:      field,
@@ -18232,8 +18233,8 @@ func (ec *executionContext) fieldContext_Mutation_createDoubleAuth(ctx context.C
 				return ec.fieldContext_DoubleAuth_methods(ctx, field)
 			case "secret":
 				return ec.fieldContext_DoubleAuth_secret(ctx, field)
-			case "url":
-				return ec.fieldContext_DoubleAuth_url(ctx, field)
+			case "code":
+				return ec.fieldContext_DoubleAuth_code(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
 			case "createdAt":
@@ -18300,8 +18301,8 @@ func (ec *executionContext) fieldContext_Mutation_updateDoubleAuth(ctx context.C
 				return ec.fieldContext_DoubleAuth_methods(ctx, field)
 			case "secret":
 				return ec.fieldContext_DoubleAuth_secret(ctx, field)
-			case "url":
-				return ec.fieldContext_DoubleAuth_url(ctx, field)
+			case "code":
+				return ec.fieldContext_DoubleAuth_code(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
 			case "createdAt":
@@ -23802,8 +23803,8 @@ func (ec *executionContext) fieldContext_Query_getDoubleAuthById(ctx context.Con
 				return ec.fieldContext_DoubleAuth_methods(ctx, field)
 			case "secret":
 				return ec.fieldContext_DoubleAuth_secret(ctx, field)
-			case "url":
-				return ec.fieldContext_DoubleAuth_url(ctx, field)
+			case "code":
+				return ec.fieldContext_DoubleAuth_code(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
 			case "createdAt":
@@ -23870,8 +23871,8 @@ func (ec *executionContext) fieldContext_Query_getDoubleAuths(ctx context.Contex
 				return ec.fieldContext_DoubleAuth_methods(ctx, field)
 			case "secret":
 				return ec.fieldContext_DoubleAuth_secret(ctx, field)
-			case "url":
-				return ec.fieldContext_DoubleAuth_url(ctx, field)
+			case "code":
+				return ec.fieldContext_DoubleAuth_code(ctx, field)
 			case "trust_device_id":
 				return ec.fieldContext_DoubleAuth_trust_device_id(ctx, field)
 			case "createdAt":
@@ -29771,7 +29772,7 @@ func (ec *executionContext) unmarshalInputCreateDoubleAuthInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"methods", "secret", "url", "trust_device_id"}
+	fieldsInOrder := [...]string{"methods", "secret", "code", "trust_device_id"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -29792,13 +29793,13 @@ func (ec *executionContext) unmarshalInputCreateDoubleAuthInput(ctx context.Cont
 				return it, err
 			}
 			it.Secret = data
-		case "url":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.URL = data
+			it.Code = data
 		case "trust_device_id":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device_id"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -31673,7 +31674,7 @@ func (ec *executionContext) unmarshalInputUpdateDoubleAuthInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"methods", "secret", "url", "trust_device_id"}
+	fieldsInOrder := [...]string{"methods", "secret", "code", "url", "trust_device_id"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -31694,6 +31695,13 @@ func (ec *executionContext) unmarshalInputUpdateDoubleAuthInput(ctx context.Cont
 				return it, err
 			}
 			it.Secret = data
+		case "code":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Code = data
 		case "url":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -33424,8 +33432,8 @@ func (ec *executionContext) _DoubleAuth(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "url":
-			out.Values[i] = ec._DoubleAuth_url(ctx, field, obj)
+		case "code":
+			out.Values[i] = ec._DoubleAuth_code(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

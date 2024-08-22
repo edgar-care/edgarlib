@@ -1703,7 +1703,7 @@ func (r *mutationResolver) CreateDoubleAuth(ctx context.Context, input model.Cre
 		ID:            primitive.NewObjectID().Hex(),
 		Methods:       input.Methods,
 		Secret:        input.Secret,
-		URL:           input.URL,
+		Code:          input.Code,
 		TrustDeviceID: input.TrustDeviceID,
 		CreatedAt:     now,
 		UpdatedAt:     now,
@@ -1729,8 +1729,8 @@ func (r *mutationResolver) UpdateDoubleAuth(ctx context.Context, id string, inpu
 	if input.Secret != nil {
 		update["secret"] = *input.Secret
 	}
-	if input.URL != nil {
-		update["url"] = *input.URL
+	if input.Code != nil {
+		update["code"] = *input.Code
 	}
 	if input.TrustDeviceID != nil {
 		update["trust_device_id"] = *input.TrustDeviceID

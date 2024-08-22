@@ -38,8 +38,7 @@ func TestAddTrustDevice_Patient_Success(t *testing.T) {
 	if device.Code != 201 {
 		t.Errorf("Expected status code 201, got: %d", device.Code)
 	}
-	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR"}
-	_ = CreateDoubleAuthAppTier(tier, "url", patient.ID)
+	_ = CreateDoubleAuthAppTier(patient.ID, "1234")
 
 	response := AddTrustDevice(device.DeviceConnect.ID, patient.ID)
 
@@ -95,8 +94,7 @@ func TestAddTrustDevice_Doctor_Success(t *testing.T) {
 		t.Errorf("Expected status code 201, got: %d", device.Code)
 	}
 
-	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR", Code: "1234"}
-	_ = CreateDoubleAuthAppTier(tier, "url", doctor.ID)
+	_ = CreateDoubleAuthAppTier(doctor.ID, "1234")
 
 	response := AddTrustDevice(device.DeviceConnect.ID, doctor.ID)
 
