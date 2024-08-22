@@ -22,7 +22,7 @@ type GetDevicesConnectResponse struct {
 func GetDeviceConnectById(id string) GetDeviceConnectByIdResponse {
 	device, err := graphql.GetDeviceConnectById(id)
 	if err != nil {
-		return GetDeviceConnectByIdResponse{model.DeviceConnect{}, 400, errors.New("id does not correspond to a slot")}
+		return GetDeviceConnectByIdResponse{model.DeviceConnect{}, 400, errors.New("id does not correspond to a device")}
 	}
 
 	return GetDeviceConnectByIdResponse{device, 200, nil}

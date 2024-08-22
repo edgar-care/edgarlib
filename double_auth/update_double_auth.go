@@ -9,7 +9,7 @@ import (
 type UpdateDoubleAuthInput struct {
 	Methods         string `json:"method_2fa"`
 	Secret          string `json:"secret"`
-	URL             string `json:"url"`
+	Code            string `json:"code"`
 	TrustedDeviceId string `json:"trusted_device_id"`
 }
 
@@ -36,7 +36,6 @@ func UpdateDoubleAuth(input UpdateDoubleAuthInput, ownerId string) UpdateDoubleA
 		auth, err := graphql.UpdateDoubleAuth(*patient.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
 			Methods:       append(updateAuth.Methods, input.Methods),
 			Secret:        &input.Secret,
-			URL:           &input.URL,
 			TrustDeviceID: &input.TrustedDeviceId,
 		})
 		if err != nil {
@@ -64,7 +63,6 @@ func UpdateDoubleAuth(input UpdateDoubleAuthInput, ownerId string) UpdateDoubleA
 		auth, err := graphql.UpdateDoubleAuth(*doctor.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
 			Methods:       append(updateAuth.Methods, input.Methods),
 			Secret:        &input.Secret,
-			URL:           &input.URL,
 			TrustDeviceID: &input.TrustedDeviceId,
 		})
 		if err != nil {

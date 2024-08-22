@@ -1640,7 +1640,7 @@ mutation CreateDoubleAuth($input: CreateDoubleAuthInput!) {
         id
         methods
         secret
-        url
+        code
         trust_device_id
     }
 }
@@ -1650,7 +1650,7 @@ mutation UpdateDoubleAuth($id: String!, $input: UpdateDoubleAuthInput!) {
         id
         methods
         secret
-        url
+        code
         trust_device_id
     }
 }
@@ -1665,7 +1665,7 @@ query GetDoubleAuths($option: Options){
         id
         methods
         secret
-        url
+        code
         trust_device_id
     }
 }
@@ -1675,7 +1675,7 @@ query GetDoubleAuthById($id: String!){
         id
         methods
         secret
-        url
+        code
         trust_device_id
     }
 }

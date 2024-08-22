@@ -204,7 +204,7 @@ type CreateDocumentInput struct {
 type CreateDoubleAuthInput struct {
 	Methods       []string `json:"methods" bson:"methods"`
 	Secret        string   `json:"secret" bson:"secret"`
-	URL           string   `json:"url" bson:"url"`
+	Code          string   `json:"code" bson:"code"`
 	TrustDeviceID string   `json:"trust_device_id" bson:"trust_device_id"`
 }
 
@@ -371,7 +371,7 @@ type DoubleAuth struct {
 	ID            string   `json:"id" bson:"_id"`
 	Methods       []string `json:"methods" bson:"methods"`
 	Secret        string   `json:"secret" bson:"secret"`
-	URL           string   `json:"url" bson:"url"`
+	Code          string   `json:"code" bson:"code"`
 	TrustDeviceID string   `json:"trust_device_id" bson:"trust_device_id"`
 	CreatedAt     int      `json:"createdAt" bson:"createdAt"`
 	UpdatedAt     int      `json:"updatedAt" bson:"updatedAt"`
@@ -735,6 +735,7 @@ type UpdateDocumentInput struct {
 type UpdateDoubleAuthInput struct {
 	Methods       []string `json:"methods,omitempty" bson:"methods"`
 	Secret        *string  `json:"secret,omitempty" bson:"secret"`
+	Code          *string  `json:"code,omitempty" bson:"code"`
 	URL           *string  `json:"url,omitempty" bson:"url"`
 	TrustDeviceID *string  `json:"trust_device_id,omitempty" bson:"trust_device_id"`
 }

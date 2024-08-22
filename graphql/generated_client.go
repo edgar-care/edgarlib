@@ -6859,7 +6859,7 @@ func CreateDoubleAuth(input model.CreateDoubleAuthInput) (model.DoubleAuth, erro
 	        id
 	        methods
 	        secret
-	        url
+	        code
 	        trust_device_id
 	    }
 	}`
@@ -6914,7 +6914,7 @@ func UpdateDoubleAuth(id string, input model.UpdateDoubleAuthInput) (model.Doubl
 	        id
 	        methods
 	        secret
-	        url
+	        code
 	        trust_device_id
 	    }
 	}`
@@ -7019,7 +7019,7 @@ func GetDoubleAuths(option *model.Options) ([]model.DoubleAuth, error) {
 	        id
 	        methods
 	        secret
-	        url
+	        code
 	        trust_device_id
 	    }
 	}`
@@ -7074,7 +7074,7 @@ func GetDoubleAuthById(id string) (model.DoubleAuth, error) {
 	        id
 	        methods
 	        secret
-	        url
+	        code
 	        trust_device_id
 	    }
 	}`
