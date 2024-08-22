@@ -26,10 +26,11 @@ func TestRemoveTrustDevice_Success(t *testing.T) {
 
 	device := CreateDeviceConnect(input, patient.ID)
 
-	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR"}
-	_ = CreateDoubleAuthAppTier(tier, "url", patient.ID)
-
-	_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
+	mobile := CreateDoubleMobileInput{
+		Methods:     "MOBILE",
+		TrustDevice: device.DeviceConnect.ID,
+	}
+	_ = CreateDoubleAuthMobile(mobile, patient.ID)
 	response := RemoveTrustDevice(device.DeviceConnect.ID, patient.ID)
 
 	if response.Err != nil {
@@ -76,10 +77,11 @@ func TestRemoveTrustDevice_DoctorSuccess(t *testing.T) {
 
 	device := CreateDeviceConnect(input, doctor.ID)
 
-	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR"}
-	_ = CreateDoubleAuthAppTier(tier, "url", doctor.ID)
-
-	_ = AddTrustDevice(device.DeviceConnect.ID, doctor.ID)
+	mobile := CreateDoubleMobileInput{
+		Methods:     "MOBILE",
+		TrustDevice: device.DeviceConnect.ID,
+	}
+	_ = CreateDoubleAuthMobile(mobile, doctor.ID)
 	response := RemoveTrustDevice(device.DeviceConnect.ID, doctor.ID)
 
 	if response.Err != nil {

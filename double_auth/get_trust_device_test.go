@@ -26,9 +26,6 @@ func TestGetTrustDeviceConnectById_Success(t *testing.T) {
 
 	device := CreateDeviceConnect(input, patient.ID)
 
-	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR"}
-	_ = CreateDoubleAuthAppTier(tier, "url", patient.ID)
-
 	_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
 
 	response := GetTrustDeviceConnectById(device.DeviceConnect.ID)
@@ -77,9 +74,6 @@ func TestGetTrustDeviceConnect_PatientSuccess(t *testing.T) {
 
 	device := CreateDeviceConnect(input, patient.ID)
 
-	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR"}
-	_ = CreateDoubleAuthAppTier(tier, "url", patient.ID)
-
 	_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
 
 	response := GetTrustDeviceConnect(patient.ID)
@@ -122,9 +116,6 @@ func TestGetTrustDeviceConnect_DoctorSuccess(t *testing.T) {
 	}
 
 	device := CreateDeviceConnect(input, doctor.ID)
-
-	tier := CreateDoubleAuthTierInput{Methods: "AUTHENTIFICATOR"}
-	_ = CreateDoubleAuthAppTier(tier, "url", doctor.ID)
 
 	_ = AddTrustDevice(device.DeviceConnect.ID, doctor.ID)
 
