@@ -6579,7 +6579,8 @@ func CreateDeviceConnect(input model.CreateDeviceConnectInput) (model.DeviceConn
 	query := `mutation CreateDeviceConnect($input: CreateDeviceConnectInput!) {
 	    createDeviceConnect(input: $input) {
 	        id
-	        device_name
+	        device_type
+	        browser
 	        ip_address
 	        city
 	        country
@@ -6636,7 +6637,8 @@ func UpdateDeviceConnect(id string, input model.UpdateDeviceConnectInput) (model
 	query := `mutation UpdateDeviceConnect($id: String!, $input: UpdateDeviceConnectInput!) {
 	    updateDeviceConnect(id: $id, input: $input) {
 	        id
-	        device_name
+	        device_type
+	        browser
 	        ip_address
 	        city
 	        country
@@ -6743,7 +6745,8 @@ func GetDevicesConnect(option *model.Options) ([]model.DeviceConnect, error) {
 	query := `query GetDevicesConnect($option: Options){
 	    getDevicesConnect(option: $option){
 	        id
-	        device_name
+	        device_type
+	        browser
 	        ip_address
 	        city
 	        country
@@ -6800,7 +6803,8 @@ func GetDeviceConnectById(id string) (model.DeviceConnect, error) {
 	query := `query GetDeviceConnectById($id: String!){
 	    getDeviceConnectById(id:$id){
 	        id
-	        device_name
+	        device_type
+	        browser
 	        ip_address
 	        city
 	        country
@@ -6851,6 +6855,64 @@ func GetDeviceConnectById(id string) (model.DeviceConnect, error) {
 	}
 
 	return result.Data.GetDeviceConnectById, nil
+}
+
+func GetDeviceConnectByIp(ip_address string) (model.DeviceConnect, error) {
+	query := `query GetDeviceConnectByIp($ip_address: String!){
+	    getDeviceConnectByIp(ip_address:$ip_address){
+	        id
+	        device_type
+	        browser
+	        ip_address
+	        city
+	        country
+	        date
+	        trust_device
+	    }
+	}`
+	variables := map[string]interface{}{
+		"ip_address": ip_address,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.DeviceConnect{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.DeviceConnect{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.DeviceConnect{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.DeviceConnect{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetDeviceConnectByIp model.DeviceConnect `json:"getDeviceConnectByIp"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.DeviceConnect{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.DeviceConnect{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetDeviceConnectByIp, nil
 }
 
 func CreateDoubleAuth(input model.CreateDoubleAuthInput) (model.DoubleAuth, error) {

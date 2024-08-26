@@ -164,7 +164,8 @@ type CreateChatInput struct {
 }
 
 type CreateDeviceConnectInput struct {
-	DeviceName  string `json:"device_name" bson:"device_name"`
+	DeviceType  string `json:"device_type" bson:"device_type"`
+	Browser     string `json:"browser" bson:"browser"`
 	IPAddress   string `json:"ip_address" bson:"ip_address"`
 	City        string `json:"city" bson:"city"`
 	Country     string `json:"country" bson:"country"`
@@ -313,7 +314,8 @@ type CreateTreatmentsFollowUpInput struct {
 
 type DeviceConnect struct {
 	ID          string `json:"id" bson:"_id"`
-	DeviceName  string `json:"device_name" bson:"device_name"`
+	DeviceType  string `json:"device_type" bson:"device_type"`
+	Browser     string `json:"browser" bson:"browser"`
 	IPAddress   string `json:"ip_address" bson:"ip_address"`
 	City        string `json:"city" bson:"city"`
 	Country     string `json:"country" bson:"country"`
@@ -681,7 +683,8 @@ type UpdateChatInput struct {
 }
 
 type UpdateDeviceConnectInput struct {
-	DeviceName  *string `json:"device_name,omitempty" bson:"device_name"`
+	DeviceType  *string `json:"device_type,omitempty" bson:"device_type"`
+	Browser     *string `json:"browser,omitempty" bson:"browser"`
 	IPAddress   *string `json:"ip_address,omitempty" bson:"ip_address"`
 	City        *string `json:"city,omitempty" bson:"city"`
 	Country     *string `json:"country,omitempty" bson:"country"`

@@ -1585,7 +1585,8 @@ query GetAnteFamilies($option: Options){
 mutation CreateDeviceConnect($input: CreateDeviceConnectInput!) {
     createDeviceConnect(input: $input) {
         id
-        device_name
+        device_type
+        browser
         ip_address
         city
         country
@@ -1597,7 +1598,8 @@ mutation CreateDeviceConnect($input: CreateDeviceConnectInput!) {
 mutation UpdateDeviceConnect($id: String!, $input: UpdateDeviceConnectInput!) {
     updateDeviceConnect(id: $id, input: $input) {
         id
-        device_name
+        device_type
+        browser
         ip_address
         city
         country
@@ -1614,7 +1616,8 @@ mutation DeleteDeviceConnect($id: String!){
 query GetDevicesConnect($option: Options){
     getDevicesConnect(option: $option){
         id
-        device_name
+        device_type
+        browser
         ip_address
         city
         country
@@ -1626,7 +1629,8 @@ query GetDevicesConnect($option: Options){
 query GetDeviceConnectById($id: String!){
     getDeviceConnectById(id:$id){
         id
-        device_name
+        device_type
+        browser
         ip_address
         city
         country
@@ -1634,6 +1638,21 @@ query GetDeviceConnectById($id: String!){
         trust_device
     }
 }
+
+
+query GetDeviceConnectByIp($ip_address: String!){
+    getDeviceConnectByIp(ip_address:$ip_address){
+        id
+        device_type
+        browser
+        ip_address
+        city
+        country
+        date
+        trust_device
+    }
+}
+
 
 mutation CreateDoubleAuth($input: CreateDoubleAuthInput!) {
     createDoubleAuth(input: $input) {

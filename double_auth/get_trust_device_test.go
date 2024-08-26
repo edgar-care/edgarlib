@@ -8,7 +8,8 @@ import (
 
 func TestGetTrustDeviceConnectById_Success(t *testing.T) {
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -65,7 +66,8 @@ func TestGetTrustDeviceConnect_PatientSuccess(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -108,7 +110,8 @@ func TestGetTrustDeviceConnect_DoctorSuccess(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
