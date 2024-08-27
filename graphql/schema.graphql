@@ -1076,7 +1076,7 @@ type Query {
     getDeviceConnectByIp(ip_address: String!): DeviceConnect
 
     # Get DeviceConnects
-    getDevicesConnect(option: Options): [DeviceConnect]
+    getDevicesConnect(id: String!, option: Options): [DeviceConnect]
 
     # Get double auth by its id
     getDoubleAuthById(id: String!): DoubleAuth
@@ -1109,6 +1109,10 @@ type Mutation {
     updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
 
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
+
+    updatePatientsPassword(id: String!, password: String): Patient
+
+    updatePatientsDoubleAuth(id: String!, double_auth_methods_id: String): Patient
 
     updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
 
