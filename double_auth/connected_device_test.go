@@ -14,7 +14,8 @@ func TestCreateDeviceConnect_Success(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testcity",
 		Country:    "testcountry",
@@ -48,7 +49,8 @@ func TestCreateDeviceConnect_InvalidPatientId(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testcountry",
@@ -78,7 +80,8 @@ func TestCreateDeviceConnect_FailedDeviceCreation(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "", // Champ obligatoire manquant ou invalide
+		DeviceType: "", // Champ obligatoire manquant ou invalide
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testcity",
 		Country:    "testcountry",
@@ -107,7 +110,8 @@ func TestCreateDeviceConnect_SuccessDoctor(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testcity",
 		Country:    "testcountry",

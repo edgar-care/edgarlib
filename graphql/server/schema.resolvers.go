@@ -1627,7 +1627,8 @@ func (r *mutationResolver) CreateDeviceConnect(ctx context.Context, input model.
 	now := int(time.Now().Unix())
 	device := &model.DeviceConnect{
 		ID:          primitive.NewObjectID().Hex(),
-		DeviceName:  input.DeviceName,
+		DeviceType:  input.DeviceType,
+		Browser:     input.Browser,
 		IPAddress:   input.IPAddress,
 		City:        input.City,
 		Country:     input.Country,
@@ -1650,9 +1651,14 @@ func (r *mutationResolver) UpdateDeviceConnect(ctx context.Context, id string, i
 	filter := bson.M{"_id": id}
 
 	update := bson.M{}
-	if input.DeviceName != nil {
-		update["device_name"] = *input.DeviceName
+	if input.DeviceType != nil {
+		update["device_type"] = *input.DeviceType
 	}
+
+	if input.Browser != nil {
+		update["browser"] = *input.Browser
+	}
+
 	if input.IPAddress != nil {
 		update["ip_address"] = *input.IPAddress
 	}
@@ -2764,6 +2770,19 @@ func (r *queryResolver) GetDeviceConnectByID(ctx context.Context, id string) (*m
 	var result model.DeviceConnect
 
 	filter := bson.M{"_id": id}
+
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetDeviceConnectByIP is the resolver for the getDeviceConnectByIp field.
+func (r *queryResolver) GetDeviceConnectByIP(ctx context.Context, ipAddress string) (*model.DeviceConnect, error) {
+	var result model.DeviceConnect
+
+	filter := bson.M{"ip_address": ipAddress}
 
 	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").FindOne(ctx, filter).Decode(&result)
 	if err != nil {

@@ -14,7 +14,8 @@ func TestAddTrustDevice_Patient_Success(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testcity",
 		Country:    "testcountry",
@@ -61,7 +62,8 @@ func TestAddTrustDevice_Doctor_Success(t *testing.T) {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testcountry",

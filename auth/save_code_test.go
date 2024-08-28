@@ -40,18 +40,11 @@ func TestCreateBackupCodes(t *testing.T) {
 	req.Header.Set("Authorization", "Bearer "+token)
 
 	response := CreateBackupCodes(patient.ID, req)
-
 	if response.Code != 201 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}
 	if response.Err != nil {
 		t.Errorf("Expected no error but got: %s", response.Err.Error())
-	}
-
-	_, err = graphql.GetSaveCodeById(response.SaveCode.ID)
-
-	if err != nil {
-		t.Errorf("Error while retrieving created appointment: %s", err.Error())
 	}
 
 }

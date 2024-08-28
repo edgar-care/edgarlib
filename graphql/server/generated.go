@@ -135,11 +135,12 @@ type ComplexityRoot struct {
 	}
 
 	DeviceConnect struct {
+		Browser     func(childComplexity int) int
 		City        func(childComplexity int) int
 		Country     func(childComplexity int) int
 		CreatedAt   func(childComplexity int) int
 		Date        func(childComplexity int) int
-		DeviceName  func(childComplexity int) int
+		DeviceType  func(childComplexity int) int
 		ID          func(childComplexity int) int
 		IPAddress   func(childComplexity int) int
 		TrustDevice func(childComplexity int) int
@@ -381,6 +382,7 @@ type ComplexityRoot struct {
 		GetChatByID               func(childComplexity int, id string) int
 		GetChats                  func(childComplexity int, id string, option *model.Options) int
 		GetDeviceConnectByID      func(childComplexity int, id string) int
+		GetDeviceConnectByIP      func(childComplexity int, ipAddress string) int
 		GetDevicesConnect         func(childComplexity int, option *model.Options) int
 		GetDiseaseByID            func(childComplexity int, id string) int
 		GetDiseases               func(childComplexity int, option *model.Options) int
@@ -645,6 +647,7 @@ type QueryResolver interface {
 	GetChats(ctx context.Context, id string, option *model.Options) ([]*model.Chat, error)
 	GetChatByID(ctx context.Context, id string) (*model.Chat, error)
 	GetDeviceConnectByID(ctx context.Context, id string) (*model.DeviceConnect, error)
+	GetDeviceConnectByIP(ctx context.Context, ipAddress string) (*model.DeviceConnect, error)
 	GetDevicesConnect(ctx context.Context, option *model.Options) ([]*model.DeviceConnect, error)
 	GetDoubleAuthByID(ctx context.Context, id string) (*model.DoubleAuth, error)
 	GetDoubleAuths(ctx context.Context, option *model.Options) ([]*model.DoubleAuth, error)
@@ -1058,6 +1061,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ChirInducedSymptom.Symptom(childComplexity), true
 
+	case "DeviceConnect.browser":
+		if e.complexity.DeviceConnect.Browser == nil {
+			break
+		}
+
+		return e.complexity.DeviceConnect.Browser(childComplexity), true
+
 	case "DeviceConnect.city":
 		if e.complexity.DeviceConnect.City == nil {
 			break
@@ -1086,12 +1096,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.DeviceConnect.Date(childComplexity), true
 
-	case "DeviceConnect.device_name":
-		if e.complexity.DeviceConnect.DeviceName == nil {
+	case "DeviceConnect.device_type":
+		if e.complexity.DeviceConnect.DeviceType == nil {
 			break
 		}
 
-		return e.complexity.DeviceConnect.DeviceName(childComplexity), true
+		return e.complexity.DeviceConnect.DeviceType(childComplexity), true
 
 	case "DeviceConnect.id":
 		if e.complexity.DeviceConnect.ID == nil {
@@ -2936,6 +2946,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetDeviceConnectByID(childComplexity, args["id"].(string)), true
 
+	case "Query.getDeviceConnectByIp":
+		if e.complexity.Query.GetDeviceConnectByIP == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getDeviceConnectByIp_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetDeviceConnectByIP(childComplexity, args["ip_address"].(string)), true
+
 	case "Query.getDevicesConnect":
 		if e.complexity.Query.GetDevicesConnect == nil {
 			break
@@ -4341,7 +4363,8 @@ type DoubleAuth {
 
 type DeviceConnect {
     id: ID!
-    device_name: String!
+    device_type: String!
+    browser: String!
     ip_address: String!
     city: String!
     country: String!
@@ -4838,7 +4861,8 @@ input SessionSymptomInput {
 }
 
 input CreateDeviceConnectInput {
-    device_name: String!
+    device_type: String!
+    browser: String!
     ip_address: String!
     city: String!
     country: String!
@@ -4847,7 +4871,8 @@ input CreateDeviceConnectInput {
 }
 
 input UpdateDeviceConnectInput {
-    device_name: String
+    device_type: String
+    browser: String
     ip_address: String
     city: String
     country: String
@@ -5132,6 +5157,9 @@ type Query {
 
     # Get device by its id
     getDeviceConnectById(id: String!): DeviceConnect
+
+    # Get device by its ip
+    getDeviceConnectByIp(ip_address: String!): DeviceConnect
 
     # Get DeviceConnects
     getDevicesConnect(option: Options): [DeviceConnect]
@@ -7001,6 +7029,21 @@ func (ec *executionContext) field_Query_getDeviceConnectById_args(ctx context.Co
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getDeviceConnectByIp_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["ip_address"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ip_address"] = arg0
 	return args, nil
 }
 
@@ -10177,8 +10220,8 @@ func (ec *executionContext) fieldContext_DeviceConnect_id(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _DeviceConnect_device_name(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeviceConnect_device_name(ctx, field)
+func (ec *executionContext) _DeviceConnect_device_type(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_device_type(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -10191,7 +10234,7 @@ func (ec *executionContext) _DeviceConnect_device_name(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.DeviceName, nil
+		return obj.DeviceType, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10208,7 +10251,51 @@ func (ec *executionContext) _DeviceConnect_device_name(ctx context.Context, fiel
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_DeviceConnect_device_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_DeviceConnect_device_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "DeviceConnect",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _DeviceConnect_browser(ctx context.Context, field graphql.CollectedField, obj *model.DeviceConnect) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_DeviceConnect_browser(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Browser, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_DeviceConnect_browser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DeviceConnect",
 		Field:      field,
@@ -18033,8 +18120,10 @@ func (ec *executionContext) fieldContext_Mutation_createDeviceConnect(ctx contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_DeviceConnect_id(ctx, field)
-			case "device_name":
-				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "device_type":
+				return ec.fieldContext_DeviceConnect_device_type(ctx, field)
+			case "browser":
+				return ec.fieldContext_DeviceConnect_browser(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
 			case "city":
@@ -18105,8 +18194,10 @@ func (ec *executionContext) fieldContext_Mutation_updateDeviceConnect(ctx contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_DeviceConnect_id(ctx, field)
-			case "device_name":
-				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "device_type":
+				return ec.fieldContext_DeviceConnect_device_type(ctx, field)
+			case "browser":
+				return ec.fieldContext_DeviceConnect_browser(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
 			case "city":
@@ -23655,8 +23746,10 @@ func (ec *executionContext) fieldContext_Query_getDeviceConnectById(ctx context.
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_DeviceConnect_id(ctx, field)
-			case "device_name":
-				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "device_type":
+				return ec.fieldContext_DeviceConnect_device_type(ctx, field)
+			case "browser":
+				return ec.fieldContext_DeviceConnect_browser(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
 			case "city":
@@ -23683,6 +23776,80 @@ func (ec *executionContext) fieldContext_Query_getDeviceConnectById(ctx context.
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getDeviceConnectById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getDeviceConnectByIp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getDeviceConnectByIp(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetDeviceConnectByIP(rctx, fc.Args["ip_address"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.DeviceConnect)
+	fc.Result = res
+	return ec.marshalODeviceConnect2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐDeviceConnect(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getDeviceConnectByIp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_DeviceConnect_id(ctx, field)
+			case "device_type":
+				return ec.fieldContext_DeviceConnect_device_type(ctx, field)
+			case "browser":
+				return ec.fieldContext_DeviceConnect_browser(ctx, field)
+			case "ip_address":
+				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
+			case "city":
+				return ec.fieldContext_DeviceConnect_city(ctx, field)
+			case "country":
+				return ec.fieldContext_DeviceConnect_country(ctx, field)
+			case "date":
+				return ec.fieldContext_DeviceConnect_date(ctx, field)
+			case "trust_device":
+				return ec.fieldContext_DeviceConnect_trust_device(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_DeviceConnect_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_DeviceConnect_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type DeviceConnect", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getDeviceConnectByIp_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -23727,8 +23894,10 @@ func (ec *executionContext) fieldContext_Query_getDevicesConnect(ctx context.Con
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_DeviceConnect_id(ctx, field)
-			case "device_name":
-				return ec.fieldContext_DeviceConnect_device_name(ctx, field)
+			case "device_type":
+				return ec.fieldContext_DeviceConnect_device_type(ctx, field)
+			case "browser":
+				return ec.fieldContext_DeviceConnect_browser(ctx, field)
 			case "ip_address":
 				return ec.fieldContext_DeviceConnect_ip_address(ctx, field)
 			case "city":
@@ -29510,20 +29679,27 @@ func (ec *executionContext) unmarshalInputCreateDeviceConnectInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"device_name", "ip_address", "city", "country", "date", "trust_device"}
+	fieldsInOrder := [...]string{"device_type", "browser", "ip_address", "city", "country", "date", "trust_device"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "device_name":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
+		case "device_type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_type"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.DeviceName = data
+			it.DeviceType = data
+		case "browser":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("browser"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Browser = data
 		case "ip_address":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -31317,20 +31493,27 @@ func (ec *executionContext) unmarshalInputUpdateDeviceConnectInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"device_name", "ip_address", "city", "country", "date", "trust_device"}
+	fieldsInOrder := [...]string{"device_type", "browser", "ip_address", "city", "country", "date", "trust_device"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "device_name":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_name"))
+		case "device_type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("device_type"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.DeviceName = data
+			it.DeviceType = data
+		case "browser":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("browser"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Browser = data
 		case "ip_address":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ip_address"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -33090,8 +33273,13 @@ func (ec *executionContext) _DeviceConnect(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "device_name":
-			out.Values[i] = ec._DeviceConnect_device_name(ctx, field, obj)
+		case "device_type":
+			out.Values[i] = ec._DeviceConnect_device_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "browser":
+			out.Values[i] = ec._DeviceConnect_browser(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -35311,6 +35499,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getDeviceConnectById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getDeviceConnectByIp":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getDeviceConnectByIp(ctx, field)
 				return res
 			}
 

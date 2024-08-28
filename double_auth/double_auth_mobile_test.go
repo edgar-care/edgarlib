@@ -17,7 +17,8 @@ func TestCreateDoubleAuthMobilePatient_Succes(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -57,7 +58,8 @@ func TestCreateDoubleAuthMobileDoctor_Success(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -119,7 +121,8 @@ func TestCreateDoubleAuthMobile_InvalidAccount(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -152,7 +155,8 @@ func TestCreateDoubleAuthMobile_InvalidMethod(t *testing.T) {
 	}
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -187,7 +191,8 @@ func TestCreateDoubleAuthMobileADDPatient_Succes(t *testing.T) {
 	_ = CreateDoubleAuthEmail(email, patient.ID)
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -222,7 +227,8 @@ func TestCreateDoubleAuthMobileADDPatient_InvalidMehtod(t *testing.T) {
 	_ = CreateDoubleAuthEmail(email, patient.ID)
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",
@@ -257,7 +263,8 @@ func TestCreateDoubleAuthMobileADDPatient_InvalidID(t *testing.T) {
 	_ = CreateDoubleAuthEmail(email, patient.ID)
 
 	input := CreateDeviceConnectInput{
-		DeviceName: "TestDevice",
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
 		Ip:         "192.168.0.1",
 		City:       "testCity",
 		Country:    "testCountry",

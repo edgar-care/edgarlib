@@ -98,7 +98,7 @@ func CreateBackupCodes(id string, r *http.Request) CreateSaveCodeResponse {
 		}
 	} else {
 		_, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
-			Methods:       []string{"BACKUPCODE"},
+			Methods:       []string{},
 			Secret:        saveCode.ID,
 			TrustDeviceID: "",
 		})
@@ -108,7 +108,7 @@ func CreateBackupCodes(id string, r *http.Request) CreateSaveCodeResponse {
 	}
 
 	return CreateSaveCodeResponse{
-		SaveCode: saveCode,
+		SaveCode: model.SaveCode{Code: codes},
 		Code:     201,
 		Err:      nil,
 	}
