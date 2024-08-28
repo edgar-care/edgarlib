@@ -1613,8 +1613,8 @@ mutation DeleteDeviceConnect($id: String!){
 }
 
 
-query GetDevicesConnect($option: Options){
-    getDevicesConnect(option: $option){
+query GetDevicesConnect($id: String!, $option: Options){
+    getDevicesConnect(id:$id, option: $option){
         id
         device_type
         browser

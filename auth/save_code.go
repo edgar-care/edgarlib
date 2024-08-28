@@ -2,13 +2,14 @@ package auth
 
 import (
 	"crypto/rand"
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"golang.org/x/crypto/bcrypt"
 	"math/big"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 type CreateSaveCodeResponse struct {
@@ -47,8 +48,9 @@ func generateBackupCodes() ([]string, error) {
 }
 
 func hashCode(code string) string {
-	hash := sha256.Sum256([]byte(code))
-	return hex.EncodeToString(hash[:])
+	salt, _ := strconv.Atoi(os.Getenv("SALT"))
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(code), salt)
+	return string(bytes)
 }
 
 func CreateBackupCodes(id string, r *http.Request) CreateSaveCodeResponse {
@@ -97,13 +99,25 @@ func CreateBackupCodes(id string, r *http.Request) CreateSaveCodeResponse {
 			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
 		}
 	} else {
-		_, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
+		newDoubleAuth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
 			Methods:       []string{},
 			Secret:        saveCode.ID,
 			TrustDeviceID: "",
 		})
 		if err != nil {
 			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
+		}
+
+		if accountType == "patient" {
+			_, err = graphql.UpdatePatient(id, model.UpdatePatientInput{DoubleAuthMethodsID: &newDoubleAuth.ID})
+			if err != nil {
+				return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
+			}
+		} else {
+			_, err = graphql.UpdateDoctor(id, model.UpdateDoctorInput{DoubleAuthMethodsID: &newDoubleAuth.ID})
+			if err != nil {
+				return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
+			}
 		}
 	}
 

@@ -2,8 +2,6 @@ package auth
 
 import (
 	"crypto/rand"
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/auth/utils"
 	"github.com/edgar-care/edgarlib/v2/graphql"
@@ -91,17 +89,6 @@ func TestGenerateBackupCodes(t *testing.T) {
 		if len(code) != expectedCodeLength {
 			t.Errorf("Expected code length of %d but got %d", expectedCodeLength, len(code))
 		}
-	}
-}
-
-func TestHashCode(t *testing.T) {
-	// Test hashing of a code
-	code := "testcode"
-	hashed := hashCode(code)
-	expectedHash := sha256.Sum256([]byte(code))
-	expectedHashString := hex.EncodeToString(expectedHash[:])
-	if hashed != expectedHashString {
-		t.Errorf("Expected hash %s but got %s", expectedHashString, hashed)
 	}
 }
 

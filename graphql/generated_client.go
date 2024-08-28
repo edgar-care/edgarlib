@@ -6741,9 +6741,9 @@ func DeleteDeviceConnect(id string) (bool, error) {
 	return result.Data.DeleteDeviceConnect, nil
 }
 
-func GetDevicesConnect(option *model.Options) ([]model.DeviceConnect, error) {
-	query := `query GetDevicesConnect($option: Options){
-	    getDevicesConnect(option: $option){
+func GetDevicesConnect(id string, option *model.Options) ([]model.DeviceConnect, error) {
+	query := `query GetDevicesConnect($id: String!, $option: Options){
+	    getDevicesConnect(id:$id, option: $option){
 	        id
 	        device_type
 	        browser
@@ -6755,6 +6755,7 @@ func GetDevicesConnect(option *model.Options) ([]model.DeviceConnect, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
+		"id": id,
 		"option": option,
 	}
 	reqBody := map[string]interface{}{

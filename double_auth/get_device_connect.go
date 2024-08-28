@@ -30,20 +30,19 @@ func GetDeviceConnectById(id string) GetDeviceConnectByIdResponse {
 
 func GetDeviceConnect(ownerId string) GetDevicesConnectResponse {
 
-	_, errPatient := graphql.GetPatientById(ownerId)
+	patient, errPatient := graphql.GetPatientById(ownerId)
 	if errPatient == nil {
 
-		devices, err := graphql.GetDevicesConnect(nil)
+		devices, err := graphql.GetDevicesConnect(patient.ID, nil)
 		if err != nil {
 			return GetDevicesConnectResponse{[]model.DeviceConnect{}, http.StatusBadRequest, errors.New("invalid input: " + err.Error())}
 		}
 		return GetDevicesConnectResponse{devices, http.StatusOK, nil}
 	}
 
-	_, errDoctor := graphql.GetDoctorById(ownerId)
+	doctor, errDoctor := graphql.GetDoctorById(ownerId)
 	if errDoctor == nil {
-		// Fetch devices connected to the doctor
-		devices, err := graphql.GetDevicesConnect(nil)
+		devices, err := graphql.GetDevicesConnect(doctor.ID, nil)
 		if err != nil {
 			return GetDevicesConnectResponse{[]model.DeviceConnect{}, http.StatusBadRequest, errors.New("invalid input: " + err.Error())}
 		}
