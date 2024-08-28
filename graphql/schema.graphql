@@ -277,7 +277,8 @@ type DoubleAuth {
 
 type DeviceConnect {
     id: ID!
-    device_name: String!
+    device_type: String!
+    browser: String!
     ip_address: String!
     city: String!
     country: String!
@@ -774,7 +775,8 @@ input SessionSymptomInput {
 }
 
 input CreateDeviceConnectInput {
-    device_name: String!
+    device_type: String!
+    browser: String!
     ip_address: String!
     city: String!
     country: String!
@@ -783,7 +785,8 @@ input CreateDeviceConnectInput {
 }
 
 input UpdateDeviceConnectInput {
-    device_name: String
+    device_type: String
+    browser: String
     ip_address: String
     city: String
     country: String
@@ -1068,6 +1071,9 @@ type Query {
 
     # Get device by its id
     getDeviceConnectById(id: String!): DeviceConnect
+
+    # Get device by its ip
+    getDeviceConnectByIp(ip_address: String!): DeviceConnect
 
     # Get DeviceConnects
     getDevicesConnect(option: Options): [DeviceConnect]
