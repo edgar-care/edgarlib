@@ -383,7 +383,7 @@ type ComplexityRoot struct {
 		GetChats                  func(childComplexity int, id string, option *model.Options) int
 		GetDeviceConnectByID      func(childComplexity int, id string) int
 		GetDeviceConnectByIP      func(childComplexity int, ipAddress string) int
-		GetDevicesConnect         func(childComplexity int, option *model.Options) int
+		GetDevicesConnect         func(childComplexity int, id string, option *model.Options) int
 		GetDiseaseByID            func(childComplexity int, id string) int
 		GetDiseases               func(childComplexity int, option *model.Options) int
 		GetDoctorByEmail          func(childComplexity int, email string) int
@@ -648,7 +648,7 @@ type QueryResolver interface {
 	GetChatByID(ctx context.Context, id string) (*model.Chat, error)
 	GetDeviceConnectByID(ctx context.Context, id string) (*model.DeviceConnect, error)
 	GetDeviceConnectByIP(ctx context.Context, ipAddress string) (*model.DeviceConnect, error)
-	GetDevicesConnect(ctx context.Context, option *model.Options) ([]*model.DeviceConnect, error)
+	GetDevicesConnect(ctx context.Context, id string, option *model.Options) ([]*model.DeviceConnect, error)
 	GetDoubleAuthByID(ctx context.Context, id string) (*model.DoubleAuth, error)
 	GetDoubleAuths(ctx context.Context, option *model.Options) ([]*model.DoubleAuth, error)
 	GetBlackListByID(ctx context.Context, id string) (*model.BlackList, error)
@@ -2968,7 +2968,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetDevicesConnect(childComplexity, args["option"].(*model.Options)), true
+		return e.complexity.Query.GetDevicesConnect(childComplexity, args["id"].(string), args["option"].(*model.Options)), true
 
 	case "Query.getDiseaseById":
 		if e.complexity.Query.GetDiseaseByID == nil {
@@ -5162,7 +5162,7 @@ type Query {
     getDeviceConnectByIp(ip_address: String!): DeviceConnect
 
     # Get DeviceConnects
-    getDevicesConnect(option: Options): [DeviceConnect]
+    getDevicesConnect(id: String!, option: Options): [DeviceConnect]
 
     # Get double auth by its id
     getDoubleAuthById(id: String!): DoubleAuth
@@ -5195,7 +5195,7 @@ type Mutation {
     updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
 
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
-
+    
     updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
 
     # Delete a patient.
@@ -7050,15 +7050,24 @@ func (ec *executionContext) field_Query_getDeviceConnectByIp_args(ctx context.Co
 func (ec *executionContext) field_Query_getDevicesConnect_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *model.Options
-	if tmp, ok := rawArgs["option"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
-		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["option"] = arg0
+	args["id"] = arg0
+	var arg1 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg1, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg1
 	return args, nil
 }
 
@@ -23870,7 +23879,7 @@ func (ec *executionContext) _Query_getDevicesConnect(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetDevicesConnect(rctx, fc.Args["option"].(*model.Options))
+		return ec.resolvers.Query().GetDevicesConnect(rctx, fc.Args["id"].(string), fc.Args["option"].(*model.Options))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

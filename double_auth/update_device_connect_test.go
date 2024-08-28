@@ -33,6 +33,12 @@ func TestUpdateDeviceConnect_IP_Success(t *testing.T) {
 
 	test := CreateDeviceConnect(input, patient.ID)
 
+	_, err = graphql.GetDeviceConnectByIp(test.DeviceConnect.IPAddress)
+
+	if err != nil {
+		t.Errorf("Error while getting device by ip: %v", err)
+	}
+
 	response := UpdateDeviceConnect(UpdateDeviceConnectInput{
 		DeviceType: "Laptop",
 		Browser:    "Chrome",
@@ -40,7 +46,7 @@ func TestUpdateDeviceConnect_IP_Success(t *testing.T) {
 		City:       "TestCity",
 		Country:    "TestCountry",
 		Date:       1627880400,
-	}, test.DeviceConnect.IPAddress)
+	}, test.DeviceConnect.ID)
 
 	if response.Code != 200 {
 		t.Errorf("Expected response code 200, got %v", response.Code)
@@ -50,7 +56,7 @@ func TestUpdateDeviceConnect_IP_Success(t *testing.T) {
 	}
 }
 
-func DeviceConnectByIP_NotFound(t *testing.T) {
+func TestUpdateDeviceConnect_NotFound(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
@@ -83,7 +89,7 @@ func DeviceConnectByIP_NotFound(t *testing.T) {
 		Date:       1627880400,
 	}, "ipAddress")
 
-	if response.Code != 404 {
+	if response.Code != 500 {
 		t.Errorf("Expected response code 404, got %v", response.Code)
 	}
 	if response.Err == nil {

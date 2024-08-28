@@ -1,7 +1,6 @@
 package double_auth
 
 import (
-	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
@@ -21,18 +20,9 @@ type UpdateDeviceConnectResponse struct {
 	Err           error
 }
 
-func UpdateDeviceConnect(input UpdateDeviceConnectInput, ipAddress string) UpdateDeviceConnectResponse {
+func UpdateDeviceConnect(input UpdateDeviceConnectInput, deviceId string) UpdateDeviceConnectResponse {
 
-	device, err := graphql.GetDeviceConnectByIp(ipAddress)
-	if err != nil {
-		return UpdateDeviceConnectResponse{
-			DeviceConnect: model.DeviceConnect{},
-			Code:          404,
-			Err:           errors.New("device not found"),
-		}
-	}
-
-	updatedDevice, err := graphql.UpdateDeviceConnect(device.ID, model.UpdateDeviceConnectInput{
+	updatedDevice, err := graphql.UpdateDeviceConnect(deviceId, model.UpdateDeviceConnectInput{
 		DeviceType: &input.DeviceType,
 		Browser:    &input.Browser,
 		IPAddress:  &input.Ip,

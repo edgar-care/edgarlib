@@ -9,10 +9,13 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lestrrat-go/jwx/v2 v2.0.11
+	github.com/pquerna/otp v1.4.0
 	github.com/vektah/gqlparser/v2 v2.5.11
 	go.mongodb.org/mongo-driver v1.13.1
 	golang.org/x/crypto v0.18.0
 )
+
+require github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
 
 require (
 	github.com/agnivade/levenshtein v1.1.1 // indirect

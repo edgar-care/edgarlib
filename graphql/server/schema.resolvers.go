@@ -7,6 +7,7 @@ package server
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"time"
 
@@ -2792,13 +2793,37 @@ func (r *queryResolver) GetDeviceConnectByIP(ctx context.Context, ipAddress stri
 }
 
 // GetDevicesConnect is the resolver for the getDevicesConnect field.
-func (r *queryResolver) GetDevicesConnect(ctx context.Context, option *model.Options) ([]*model.DeviceConnect, error) {
+func (r *queryResolver) GetDevicesConnect(ctx context.Context, id string, option *model.Options) ([]*model.DeviceConnect, error) {
 	var report []*model.DeviceConnect
-	filter := bson.D{}
+	var reportPatient model.Patient
+	var reportDoctor model.Doctor
 	var findOptions *options.FindOptions = nil
 	if option != nil {
 		findOptions = FindOptions(*option)
 	}
+
+	errPatient := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Patient").FindOne(ctx, bson.M{"_id": id}).Decode(&reportPatient)
+	if errPatient != nil {
+		errDoctor := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, bson.M{"_id": id}).Decode(&reportDoctor)
+		if errDoctor != nil {
+			return nil, fmt.Errorf("neither patient nor doctor found with id: %s", id)
+		}
+
+		filter := bson.M{"_id": bson.M{"$in": reportDoctor.DeviceConnect}}
+
+		cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").Find(ctx, filter, findOptions)
+		if err != nil {
+			return nil, err
+		}
+
+		err = cursor.All(ctx, &report)
+		if err != nil {
+			return nil, err
+		}
+
+		return report, nil
+	}
+	filter := bson.M{"_id": bson.M{"$in": reportPatient.DeviceConnect}}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("DeviceConnect").Find(ctx, filter, findOptions)
 	if err != nil {
