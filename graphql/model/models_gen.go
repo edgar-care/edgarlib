@@ -206,7 +206,7 @@ type CreateDoubleAuthInput struct {
 	Methods       []string `json:"methods" bson:"methods"`
 	Secret        string   `json:"secret" bson:"secret"`
 	Code          string   `json:"code" bson:"code"`
-	TrustDeviceID string   `json:"trust_device_id" bson:"trust_device_id"`
+	TrustDeviceID []string `json:"trust_device_id,omitempty" bson:"trust_device_id"`
 }
 
 type CreateMedicalFolderInput struct {
@@ -374,7 +374,7 @@ type DoubleAuth struct {
 	Methods       []string `json:"methods" bson:"methods"`
 	Secret        string   `json:"secret" bson:"secret"`
 	Code          string   `json:"code" bson:"code"`
-	TrustDeviceID string   `json:"trust_device_id" bson:"trust_device_id"`
+	TrustDeviceID []string `json:"trust_device_id" bson:"trust_device_id"`
 	CreatedAt     int      `json:"createdAt" bson:"createdAt"`
 	UpdatedAt     int      `json:"updatedAt" bson:"updatedAt"`
 }
@@ -740,7 +740,7 @@ type UpdateDoubleAuthInput struct {
 	Secret        *string  `json:"secret,omitempty" bson:"secret"`
 	Code          *string  `json:"code,omitempty" bson:"code"`
 	URL           *string  `json:"url,omitempty" bson:"url"`
-	TrustDeviceID *string  `json:"trust_device_id,omitempty" bson:"trust_device_id"`
+	TrustDeviceID []string `json:"trust_device_id,omitempty" bson:"trust_device_id"`
 }
 
 type UpdateMedicalFolderInput struct {

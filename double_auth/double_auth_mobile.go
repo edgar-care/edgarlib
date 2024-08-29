@@ -68,7 +68,7 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) Creat
 	if doubleAuthMethodsID == nil || *doubleAuthMethodsID == "" {
 		auth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
 			Methods:       []string{input.Methods},
-			TrustDeviceID: input.TrustDevice,
+			TrustDeviceID: []string{input.TrustDevice},
 		})
 		if err != nil {
 			return CreateDoubleMobileResponse{
@@ -144,7 +144,7 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) Creat
 		newMethods := append(doubleAuth.Methods, input.Methods)
 		updated, err := graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
 			Methods:       newMethods,
-			TrustDeviceID: &input.TrustDevice,
+			TrustDeviceID: append(doubleAuth.TrustDeviceID, input.TrustDevice),
 		})
 		if err != nil {
 			return CreateDoubleMobileResponse{

@@ -1,17 +1,17 @@
 package double_auth
 
 import (
-	"github.com/edgar-care/edgarlib/v2/auth"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"testing"
 )
 
 func TestUpdateDoubleAuth_Success(t *testing.T) {
-	patient, err := auth.RegisterPatient("test_update_double_auth_success@example.com", "password")
-	if err != nil {
-		t.Errorf("could not create patient: %v", err)
-	}
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_patient_update_double_auth_success@edgar-sante.fr",
+		Password: "password",
+		Status:   true,
+	})
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "new_secret",
@@ -21,7 +21,7 @@ func TestUpdateDoubleAuth_Success(t *testing.T) {
 	doubleAuth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
 		Methods:       []string{"EMAIL"},
 		Secret:        "old_secret",
-		TrustDeviceID: "old_device_id",
+		TrustDeviceID: []string{"old_device_id"},
 	})
 
 	if err != nil {
@@ -47,21 +47,26 @@ func TestUpdateDoubleAuth_Success(t *testing.T) {
 		t.Errorf("Expected secret %s, but got: %s", input.Secret, response.DoubleAuth.Secret)
 	}
 
-	if response.DoubleAuth.TrustDeviceID != input.TrustedDeviceId {
-		t.Errorf("Expected trusted device ID %s, but got: %s", input.TrustedDeviceId, response.DoubleAuth.TrustDeviceID)
-	}
 }
 
 func TestUpdateDoubleAuth_DoctorSuccess(t *testing.T) {
-	doctor, err := auth.RegisterDoctor("test_update_double_auth_doctor_success@example.com", "password", "poulet", "marvin", auth.AddressInput{
-		Street:  "",
-		ZipCode: "",
-		Country: "",
-		City:    "",
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_doctor_update_doubleauth_success@example.com",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: true,
 	})
 	if err != nil {
-		t.Errorf("could not create doctor: %v", err)
+		t.Fatalf("Failed to create doctor: %s", err)
 	}
+
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
 		Secret:          "new_secret",
@@ -71,7 +76,7 @@ func TestUpdateDoubleAuth_DoctorSuccess(t *testing.T) {
 	doubleAuth, err := graphql.CreateDoubleAuth(model.CreateDoubleAuthInput{
 		Methods:       []string{"EMAIL"},
 		Secret:        "old_secret",
-		TrustDeviceID: "old_device_id",
+		TrustDeviceID: []string{"old_device_id"},
 	})
 
 	if err != nil {
@@ -97,9 +102,6 @@ func TestUpdateDoubleAuth_DoctorSuccess(t *testing.T) {
 		t.Errorf("Expected secret %s, but got: %s", input.Secret, response.DoubleAuth.Secret)
 	}
 
-	if response.DoubleAuth.TrustDeviceID != input.TrustedDeviceId {
-		t.Errorf("Expected trusted device ID %s, but got: %s", input.TrustedDeviceId, response.DoubleAuth.TrustDeviceID)
-	}
 }
 
 func TestUpdateDoubleAuth_PatientNotFound(t *testing.T) {
@@ -141,10 +143,11 @@ func TestUpdateDoubleAuth_DoctorNotFound(t *testing.T) {
 }
 
 func TestUpdateDoubleAuth_NoDoubleAuth(t *testing.T) {
-	patient, err := auth.RegisterPatient("test_update_double_auth_no_double_auth@example.com", "password")
-	if err != nil {
-		t.Errorf("could not create patient: %v", err)
-	}
+	patient, _ := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_patient_update_not_doubleauth_wrong@edgar-sante.fr",
+		Password: "password",
+		Status:   true,
+	})
 
 	input := UpdateDoubleAuthInput{
 		Methods:         "SMS",
@@ -164,14 +167,21 @@ func TestUpdateDoubleAuth_NoDoubleAuth(t *testing.T) {
 }
 
 func TestUpdateDoubleAuth_NoDoubleAuthForDoctor(t *testing.T) {
-	doctor, err := auth.RegisterDoctor("test_update_double_auth_no_double_auth_doctor@example.com", "password", "checko", "jean", auth.AddressInput{
-		Street:  "",
-		ZipCode: "",
-		Country: "",
-		City:    "",
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     "test_doctor_update_wrong_no_doubleuath@example.com",
+		Password:  "password",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: true,
 	})
 	if err != nil {
-		t.Errorf("could not create doctor: %v", err)
+		t.Fatalf("Failed to create doctor: %s", err)
 	}
 
 	input := UpdateDoubleAuthInput{

@@ -52,8 +52,26 @@ func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceRespon
 		return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("get double_auth failed: " + err.Error())}
 	}
 
+	codeList := make([]*string, len(doubleAuth.TrustDeviceID))
+	for i, v := range doubleAuth.TrustDeviceID {
+		codeList[i] = &v
+	}
+
+	newDeviceList := removeTrustDevice(codeList, &id_device)
+
+	updatedDeviceList := make([]string, len(newDeviceList))
+	for i, v := range newDeviceList {
+		updatedDeviceList[i] = *v
+	}
+
+	availableMethods := doubleAuth.Methods
+	if len(updatedDeviceList) == 0 {
+		availableMethods = removeMethods(availableMethods, "MOBILE")
+	}
+
 	_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
-		TrustDeviceID: removeTrustDeviceID(&doubleAuth.TrustDeviceID, &id_device),
+		Methods:       availableMethods,
+		TrustDeviceID: updatedDeviceList,
 	})
 	if err != nil {
 		return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("update double_auth failed: " + err.Error())}
@@ -78,9 +96,12 @@ func removeTrustDevice(trustDevices []*string, id_device *string) []*string {
 	return updatedDevices
 }
 
-func removeTrustDeviceID(trustDeviceID *string, id_device *string) *string {
-	if trustDeviceID == id_device {
-		return nil
+func removeMethods(slice []string, element string) []string {
+	var result []string
+	for _, v := range slice {
+		if v != element {
+			result = append(result, v)
+		}
 	}
-	return trustDeviceID
+	return result
 }

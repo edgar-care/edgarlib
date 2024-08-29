@@ -17,6 +17,12 @@ func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
 	StatusBool := true
 	patient, err := graphql.GetPatientById(id_user)
 	if err == nil {
+		for _, device := range patient.TrustDevices {
+			if *device == id_device {
+				return AddTrustDeviceResponse{Patient: nil, Doctor: nil, Code: 400, Err: errors.New("device already trusted")}
+			}
+		}
+
 		updatedPatient, err := graphql.UpdatePatient(id_user, model.UpdatePatientInput{
 			TrustDevices: append(patient.TrustDevices, &id_device),
 		})
@@ -27,8 +33,14 @@ func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
 		if patient.DoubleAuthMethodsID == nil {
 			return AddTrustDeviceResponse{Patient: nil, Doctor: nil, Code: 404, Err: errors.New("double auth not found on patient")}
 		}
+
+		getDoubleAuth, err := graphql.GetDoubleAuthById(*patient.DoubleAuthMethodsID)
+		if err != nil {
+			return AddTrustDeviceResponse{Patient: nil, Doctor: nil, Code: 404, Err: errors.New("double auth not found on patient")}
+		}
+
 		_, err = graphql.UpdateDoubleAuth(*patient.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
-			TrustDeviceID: &id_device,
+			TrustDeviceID: append(getDoubleAuth.TrustDeviceID, id_device),
 		})
 		if err != nil {
 			return AddTrustDeviceResponse{Patient: &model.Patient{}, Doctor: nil, Code: 400, Err: errors.New("update double_auth failed: " + err.Error())}
@@ -53,6 +65,11 @@ func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
 	if err != nil {
 		return AddTrustDeviceResponse{Patient: nil, Doctor: &model.Doctor{}, Code: 400, Err: errors.New("id does not correspond to a patient or doctor")}
 	}
+	for _, device := range doctor.TrustDevices {
+		if *device == id_device {
+			return AddTrustDeviceResponse{Patient: nil, Doctor: nil, Code: 400, Err: errors.New("device already trusted")}
+		}
+	}
 
 	updatedDoctor, err := graphql.UpdateDoctor(id_user, model.UpdateDoctorInput{
 		TrustDevices: append(patient.TrustDevices, &id_device),
@@ -64,8 +81,13 @@ func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
 	if doctor.DoubleAuthMethodsID == nil {
 		return AddTrustDeviceResponse{Patient: nil, Doctor: nil, Code: 404, Err: errors.New("double auth not found on doctor")}
 	}
+
+	getDoubleAuth, err := graphql.GetDoubleAuthById(*doctor.DoubleAuthMethodsID)
+	if err != nil {
+		return AddTrustDeviceResponse{Patient: nil, Doctor: nil, Code: 404, Err: errors.New("double auth not found on patient")}
+	}
 	_, err = graphql.UpdateDoubleAuth(*doctor.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
-		TrustDeviceID: &id_device,
+		TrustDeviceID: append(getDoubleAuth.TrustDeviceID, id_device),
 	})
 	if err != nil {
 		return AddTrustDeviceResponse{Patient: nil, Doctor: &model.Doctor{}, Code: 400, Err: errors.New("update double_auth failed: " + err.Error())}

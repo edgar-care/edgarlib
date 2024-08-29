@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"github.com/edgar-care/edgarlib/v2/auth/utils"
+	lib "github.com/edgar-care/edgarlib/v2/http"
 	"net/http"
 	"os"
 	"strconv"
@@ -42,23 +44,7 @@ func CheckPassword(password string, hash string) bool {
 	return err == nil
 }
 
-func GetAuthenticatedUser(w http.ResponseWriter, r *http.Request) string {
-	_, claims, _ := jwtauth.FromContext(r.Context())
-
-	patientClaim, ok := claims["patient"].(string)
-	if !ok || patientClaim == "" {
-		return ""
-	}
-
-	id, ok := claims["id"].(string)
-	if !ok {
-		return ""
-	}
-
-	return id
-}
-
-func AuthMiddleware(w http.ResponseWriter, r *http.Request) string {
+func AuthMiddlewarePatient(w http.ResponseWriter, r *http.Request) string {
 	reqToken := r.Header.Get("Authorization")
 	if reqToken == "" {
 		return ""
@@ -69,7 +55,25 @@ func AuthMiddleware(w http.ResponseWriter, r *http.Request) string {
 	if VerifyToken(reqToken) == false {
 		return ""
 	}
-	return GetAuthenticatedUser(w, r)
+	accountID, typeAccount := GetAuthenticatedAccount(reqToken)
+	if typeAccount != "patient" {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this account is not a patient",
+		}, 403)
+		return ""
+	}
+
+	check_account := CheckAccountEnable(accountID)
+	if check_account.Code == 409 {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this account is disable",
+		}, 409)
+		return ""
+	}
+
+	utils.DeviceConnectMiddleware(w, r, accountID)
+
+	return accountID
 }
 
 func GetBearerToken(req *http.Request) string {
@@ -82,10 +86,6 @@ func GetBearerToken(req *http.Request) string {
 	if len(parts) != 2 || parts[0] != "Bearer" {
 		return ""
 	}
-	//checkTokenCode, _ := CheckAccountEnable(parts[1])
-	//if checkTokenCode == http.StatusUnauthorized || checkTokenCode == http.StatusInternalServerError {
-	//	return ""
-	//}
 
 	return parts[1]
 }
@@ -124,21 +124,89 @@ func AuthMiddlewareDoctor(w http.ResponseWriter, r *http.Request) string {
 	if VerifyToken(reqToken) == false {
 		return ""
 	}
-	return GetAuthenticatedDoctor(w, r)
+	accountID, typeAccount := GetAuthenticatedAccount(reqToken)
+	if typeAccount != "doctor" {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this account is not a doctor",
+		}, 403)
+		return ""
+	}
+
+	check_account := CheckAccountEnable(accountID)
+	if check_account.Code == 409 {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this account is disable",
+		}, 409)
+		return ""
+	}
+
+	utils.DeviceConnectMiddleware(w, r, accountID)
+
+	return accountID
 }
 
-func GetAuthenticatedDoctor(w http.ResponseWriter, r *http.Request) string {
-	_, claims, _ := jwtauth.FromContext(r.Context())
+func AuthMiddlewareAccount(w http.ResponseWriter, r *http.Request) string {
+	reqToken := r.Header.Get("Authorization")
+	if reqToken == "" {
+		return ""
+	}
+	splitToken := strings.Split(reqToken, "Bearer ")
+	reqToken = splitToken[1]
 
-	doctorClaim, ok := claims["doctor"].(string)
-	if !ok || doctorClaim == "" {
+	if VerifyToken(reqToken) == false {
+		return ""
+	}
+	accountID, _ := GetAuthenticatedAccount(reqToken)
+	check_account := CheckAccountEnable(accountID)
+	if check_account.Code == 409 {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this account is disable",
+		}, 409)
 		return ""
 	}
 
-	id, ok := claims["id"].(string)
-	if !ok {
-		return ""
+	utils.DeviceConnectMiddleware(w, r, accountID)
+
+	return accountID
+}
+
+func GetAuthenticatedAccount(authToken string) (string, string) {
+	parts := strings.Split(authToken, ".")
+	if len(parts) != 3 {
+		return "", ""
 	}
 
-	return id
+	decodedBytes, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		CheckError(err)
+		return "", ""
+	}
+
+	var jsonMap map[string]interface{}
+	if err := json.Unmarshal(decodedBytes, &jsonMap); err != nil {
+		CheckError(err)
+		return "", ""
+	}
+
+	// Vérifie si l'utilisateur est un patient
+	if patientID, ok := jsonMap["id"].(string); ok {
+		if _, ok := jsonMap["patient"].(string); ok {
+			return patientID, "patient"
+		}
+	}
+
+	// Vérifie si l'utilisateur est un docteur
+	if doctorID, ok := jsonMap["id"].(string); ok {
+		if _, ok := jsonMap["doctor"].(string); ok {
+			return doctorID, "doctor"
+		}
+	}
+
+	return "", ""
+}
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }

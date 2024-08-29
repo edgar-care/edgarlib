@@ -270,7 +270,7 @@ type DoubleAuth {
     methods: [String!]!
     secret: String!
     code: String!
-    trust_device_id: String!
+    trust_device_id: [String!]!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -798,7 +798,7 @@ input CreateDoubleAuthInput {
     methods: [String!]!
     secret: String!
     code: String!
-    trust_device_id: String!
+    trust_device_id: [String!]
 }
 
 input UpdateDoubleAuthInput {
@@ -806,7 +806,7 @@ input UpdateDoubleAuthInput {
     secret: String
     code: String
     url: String
-    trust_device_id: String
+    trust_device_id: [String!]
 }
 
 input CreateBlackListInput {
