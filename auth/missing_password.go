@@ -17,13 +17,13 @@ type MissingPasswordResponse struct {
 }
 
 func MissingPassword(email string) MissingPasswordResponse {
-	_, err := graphql.GetPatientByEmail(email)
+	patient, err := graphql.GetPatientByEmail(email)
 	if err != nil {
 		return MissingPasswordResponse{400, errors.New("no patient corresponds to this email")}
 	}
 	patient_uuid := uuid.New()
 	expire := 600
-	_, err = redis.SetKey(patient_uuid.String(), email, &expire)
+	_, err = redis.SetKey(patient_uuid.String(), patient.ID, &expire)
 	edgarlib.CheckError(err)
 
 	err = edgarmail.SendEmail(edgarmail.Email{

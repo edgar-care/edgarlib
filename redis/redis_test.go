@@ -73,7 +73,7 @@ func TestGetKey(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected no error but got: %s", err.Error())
 	}
-	if resp != "test_value_get\n" {
+	if resp != "test_value_get" {
 		t.Errorf("Expected response 'OK' but got %s", resp)
 	}
 }

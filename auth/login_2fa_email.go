@@ -44,7 +44,10 @@ func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailRes
 		if !isEmail2faValid(checkDoubleAuth.Methods) {
 			return Login2faEmailResponse{Token: "", Code: 400, Err: errors.New("email is not a valid 2FA method")}
 		}
-		_ = CheckPassword(input.Password, patient.Password)
+		check := CheckPassword(input.Password, patient.Password)
+		if !check {
+			return Login2faEmailResponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+		}
 
 		token, err = CreateToken(map[string]interface{}{
 			"patient":     patient.Email,
@@ -70,8 +73,10 @@ func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailRes
 			return Login2faEmailResponse{Token: "", Code: 400, Err: errors.New("email is not a valid 2FA method")}
 		}
 
-		_ = CheckPassword(input.Password, doctor.Password)
-
+		check := CheckPassword(input.Password, doctor.Password)
+		if !check {
+			return Login2faEmailResponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+		}
 		token, err = CreateToken(map[string]interface{}{
 			"doctor":      doctor.Email,
 			"id":          doctor.ID,
