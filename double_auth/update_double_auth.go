@@ -36,7 +36,7 @@ func UpdateDoubleAuth(input UpdateDoubleAuthInput, ownerId string) UpdateDoubleA
 		auth, err := graphql.UpdateDoubleAuth(*patient.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
 			Methods:       append(updateAuth.Methods, input.Methods),
 			Secret:        &input.Secret,
-			TrustDeviceID: &input.TrustedDeviceId,
+			TrustDeviceID: append(updateAuth.TrustDeviceID, input.TrustedDeviceId),
 		})
 		if err != nil {
 			return UpdateDoubleAuthResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: 400, Err: errors.New("unable to update double_auth")}
@@ -63,7 +63,7 @@ func UpdateDoubleAuth(input UpdateDoubleAuthInput, ownerId string) UpdateDoubleA
 		auth, err := graphql.UpdateDoubleAuth(*doctor.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
 			Methods:       append(updateAuth.Methods, input.Methods),
 			Secret:        &input.Secret,
-			TrustDeviceID: &input.TrustedDeviceId,
+			TrustDeviceID: append(updateAuth.TrustDeviceID, input.TrustedDeviceId),
 		})
 		if err != nil {
 			return UpdateDoubleAuthResponse{DoubleAuth: model.DoubleAuth{}, Patient: model.Patient{}, Code: 400, Err: errors.New("unable to update double_auth")}

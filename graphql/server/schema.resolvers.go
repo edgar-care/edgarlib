@@ -169,6 +169,16 @@ func (r *mutationResolver) UpdatePatientsRendezVousIds(ctx context.Context, id s
 	return &updatedPatient, nil
 }
 
+// UpdatePatientsPassword is the resolver for the updatePatientsPassword field.
+func (r *mutationResolver) UpdatePatientsPassword(ctx context.Context, id string, password *string) (*model.Patient, error) {
+	panic(fmt.Errorf("not implemented: UpdatePatientsPassword - updatePatientsPassword"))
+}
+
+// UpdatePatientsDoubleAuth is the resolver for the updatePatientsDoubleAuth field.
+func (r *mutationResolver) UpdatePatientsDoubleAuth(ctx context.Context, id string, doubleAuthMethodsID *string) (*model.Patient, error) {
+	panic(fmt.Errorf("not implemented: UpdatePatientsDoubleAuth - updatePatientsDoubleAuth"))
+}
+
 // UpdateAccountsMedicalFolder is the resolver for the updateAccountsMedicalFolder field.
 func (r *mutationResolver) UpdateAccountsMedicalFolder(ctx context.Context, id string, input model.UpdateAccountMedicalFolder) (*model.MedicalInfo, error) {
 	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo")
@@ -1730,18 +1740,16 @@ func (r *mutationResolver) UpdateDoubleAuth(ctx context.Context, id string, inpu
 	filter := bson.M{"_id": id}
 
 	update := bson.M{}
-	if input.Methods != nil {
-		update["methods"] = input.Methods
-	}
+
+	update["methods"] = input.Methods
 	if input.Secret != nil {
 		update["secret"] = *input.Secret
 	}
 	if input.Code != nil {
 		update["code"] = *input.Code
 	}
-	if input.TrustDeviceID != nil {
-		update["trust_device_id"] = *input.TrustDeviceID
-	}
+
+	update["trust_device_id"] = input.TrustDeviceID
 
 	update["updatedAt"] = time.Now().Unix()
 

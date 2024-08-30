@@ -64,14 +64,33 @@ func TestGetDoubleAuthByIdDoctor_Succes(t *testing.T) {
 }
 
 func TestGetDoubleAuthByIdInvalid(t *testing.T) {
-	invalidDeviceId := "invalid_device_id"
+	invalidIDAccount := "invalid_account_id"
 
-	response := GetDoubleAuthById(invalidDeviceId)
+	response := GetDoubleAuthById(invalidIDAccount)
 
 	if response.Err == nil {
 		t.Errorf("Expected an error, got none")
 	}
 	if response.Code != 400 {
 		t.Errorf("Expected status code 400, got: %d", response.Code)
+	}
+}
+
+func TestGetDoubleAuthById_NoMethodDoubleAuth(t *testing.T) {
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_get_double_auth_no_double_auth@example.com",
+		Password: "password",
+		Status:   true,
+	})
+	if err != nil {
+		t.Fatalf("failed to create patient: %s", err)
+	}
+
+	response := GetDoubleAuthById(patient.ID)
+	if response.Err != nil {
+		t.Errorf("Expected no error, got: %v", response.Err)
+	}
+	if response.Code != 200 {
+		t.Errorf("Expected status code 200, got: %d", response.Code)
 	}
 }

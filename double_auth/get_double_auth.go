@@ -13,12 +13,12 @@ type GetDoubleAuthByIdResponse struct {
 	Err        error
 }
 
-func GetDoubleAuthById(id string) GetDoubleAuthByIdResponse {
+func GetDoubleAuthById(ownerId string) GetDoubleAuthByIdResponse {
 
-	patient, errPatient := graphql.GetPatientById(id)
+	patient, errPatient := graphql.GetPatientById(ownerId)
 	if errPatient == nil {
 		if patient.DoubleAuthMethodsID == nil || *patient.DoubleAuthMethodsID == "" {
-			return GetDoubleAuthByIdResponse{model.DoubleAuth{}, http.StatusNotFound, errors.New("double auth not found on patient")}
+			return GetDoubleAuthByIdResponse{model.DoubleAuth{Methods: []string{}}, http.StatusOK, nil}
 		}
 		device, err := graphql.GetDoubleAuthById(*patient.DoubleAuthMethodsID)
 		if err != nil {
@@ -27,10 +27,10 @@ func GetDoubleAuthById(id string) GetDoubleAuthByIdResponse {
 		return GetDoubleAuthByIdResponse{device, http.StatusOK, nil}
 	}
 
-	doctor, errDoctor := graphql.GetDoctorById(id)
+	doctor, errDoctor := graphql.GetDoctorById(ownerId)
 	if errDoctor == nil {
 		if doctor.DoubleAuthMethodsID == nil || *doctor.DoubleAuthMethodsID == "" {
-			return GetDoubleAuthByIdResponse{model.DoubleAuth{}, http.StatusNotFound, errors.New("double auth not found on doctor")}
+			return GetDoubleAuthByIdResponse{model.DoubleAuth{Methods: []string{}}, http.StatusOK, nil}
 		}
 		device, err := graphql.GetDoubleAuthById(*doctor.DoubleAuthMethodsID)
 		if err != nil {

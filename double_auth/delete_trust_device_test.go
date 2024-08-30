@@ -187,3 +187,50 @@ func TestRemoveTrustDevice_ErrorUpdatingDoctor(t *testing.T) {
 		t.Errorf("Expected status code 400, got: %d", response.Code)
 	}
 }
+
+func TestRemoveTrustDevice_RemoveMethods(t *testing.T) {
+	input := CreateDeviceConnectInput{
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
+		Ip:         "192.168.0.1",
+		City:       "testCity",
+		Country:    "testCountry",
+		Date:       1627880400,
+	}
+
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_rem_device_trust_rem_method@example.com",
+		Password: "password",
+		Status:   true,
+	})
+	if err != nil {
+		t.Fatalf("failed to create patient: %s", err)
+	}
+
+	device := CreateDeviceConnect(input, patient.ID)
+
+	mobile := CreateDoubleMobileInput{
+		Methods:     "MOBILE",
+		TrustDevice: device.DeviceConnect.ID,
+	}
+	test := CreateDoubleAuthMobile(mobile, patient.ID)
+	response := RemoveTrustDevice(device.DeviceConnect.ID, patient.ID)
+
+	if response.Err != nil {
+		t.Errorf("Expected no error, got: %v", response.Err)
+	}
+	if response.Code != 200 {
+		t.Errorf("Expected status code 200, got: %d", response.Code)
+	}
+	if response.Code != 200 {
+		t.Errorf("Expected device to be deleted, but it wasn't")
+	}
+
+	doc, _ := graphql.GetDoubleAuthById(test.DoubleAuth.ID)
+	if len(doc.TrustDeviceID) != 0 {
+		t.Errorf("Expected device to be removed from patient, but it still exists")
+	}
+	if len(doc.Methods) != 0 {
+		t.Errorf("Expected method to be removed from patient, but it still exists")
+	}
+}
