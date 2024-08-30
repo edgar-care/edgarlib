@@ -313,6 +313,8 @@ type ComplexityRoot struct {
 		UpdatePatient               func(childComplexity int, id string, input model.UpdatePatientInput) int
 		UpdatePatientTrustDevice    func(childComplexity int, id string, input model.UpdatePatientTrustDeviceInput) int
 		UpdatePatientsDeviceConnect func(childComplexity int, id string, input model.UpdatePatientsDeviceConnectInput) int
+		UpdatePatientsDoubleAuth    func(childComplexity int, id string, doubleAuthMethodsID *string) int
+		UpdatePatientsPassword      func(childComplexity int, id string, password *string) int
 		UpdatePatientsRendezVousIds func(childComplexity int, id string, input model.UpdatePatientRendezVousIdsInput) int
 		UpdateRdv                   func(childComplexity int, id string, input model.UpdateRdvInput) int
 		UpdateSaveCode              func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
@@ -527,6 +529,8 @@ type MutationResolver interface {
 	UpdatePatientsDeviceConnect(ctx context.Context, id string, input model.UpdatePatientsDeviceConnectInput) (*model.Patient, error)
 	UpdatePatientTrustDevice(ctx context.Context, id string, input model.UpdatePatientTrustDeviceInput) (*model.Patient, error)
 	UpdatePatientsRendezVousIds(ctx context.Context, id string, input model.UpdatePatientRendezVousIdsInput) (*model.Patient, error)
+	UpdatePatientsPassword(ctx context.Context, id string, password *string) (*model.Patient, error)
+	UpdatePatientsDoubleAuth(ctx context.Context, id string, doubleAuthMethodsID *string) (*model.Patient, error)
 	UpdateAccountsMedicalFolder(ctx context.Context, id string, input model.UpdateAccountMedicalFolder) (*model.MedicalInfo, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error)
@@ -2453,6 +2457,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdatePatientsDeviceConnect(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientsDeviceConnectInput)), true
 
+	case "Mutation.updatePatientsDoubleAuth":
+		if e.complexity.Mutation.UpdatePatientsDoubleAuth == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePatientsDoubleAuth_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePatientsDoubleAuth(childComplexity, args["id"].(string), args["double_auth_methods_id"].(*string)), true
+
+	case "Mutation.updatePatientsPassword":
+		if e.complexity.Mutation.UpdatePatientsPassword == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePatientsPassword_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePatientsPassword(childComplexity, args["id"].(string), args["password"].(*string)), true
+
 	case "Mutation.updatePatientsRendezVousIds":
 		if e.complexity.Mutation.UpdatePatientsRendezVousIds == nil {
 			break
@@ -4356,7 +4384,7 @@ type DoubleAuth {
     methods: [String!]!
     secret: String!
     code: String!
-    trust_device_id: String!
+    trust_device_id: [String!]!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -4884,7 +4912,7 @@ input CreateDoubleAuthInput {
     methods: [String!]!
     secret: String!
     code: String!
-    trust_device_id: String!
+    trust_device_id: [String!]
 }
 
 input UpdateDoubleAuthInput {
@@ -4892,7 +4920,7 @@ input UpdateDoubleAuthInput {
     secret: String
     code: String
     url: String
-    trust_device_id: String
+    trust_device_id: [String!]
 }
 
 input CreateBlackListInput {
@@ -5195,7 +5223,11 @@ type Mutation {
     updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
 
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
-    
+
+    updatePatientsPassword(id: String!, password: String): Patient
+
+    updatePatientsDoubleAuth(id: String!, double_auth_methods_id: String): Patient
+
     updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
 
     # Delete a patient.
@@ -6597,6 +6629,54 @@ func (ec *executionContext) field_Mutation_updatePatientsDeviceConnect_args(ctx 
 		}
 	}
 	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePatientsDoubleAuth_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["double_auth_methods_id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
+		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["double_auth_methods_id"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePatientsPassword_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["password"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["password"] = arg1
 	return args, nil
 }
 
@@ -12361,9 +12441,9 @@ func (ec *executionContext) _DoubleAuth_trust_device_id(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.([]string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNString2ᚕstringᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_DoubleAuth_trust_device_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -14299,6 +14379,170 @@ func (ec *executionContext) fieldContext_Mutation_updatePatientsRendezVousIds(ct
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updatePatientsRendezVousIds_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePatientsPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePatientsPassword(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatientsPassword(rctx, fc.Args["id"].(string), fc.Args["password"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Patient)
+	fc.Result = res
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePatientsPassword(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Patient_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Patient_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Patient_password(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
+			case "medical_info_id":
+				return ec.fieldContext_Patient_medical_info_id(ctx, field)
+			case "document_ids":
+				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePatientsPassword_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePatientsDoubleAuth(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePatientsDoubleAuth(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatientsDoubleAuth(rctx, fc.Args["id"].(string), fc.Args["double_auth_methods_id"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Patient)
+	fc.Result = res
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePatientsDoubleAuth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Patient_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Patient_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Patient_password(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
+			case "medical_info_id":
+				return ec.fieldContext_Patient_medical_info_id(ctx, field)
+			case "document_ids":
+				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePatientsDoubleAuth_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -29987,7 +30231,7 @@ func (ec *executionContext) unmarshalInputCreateDoubleAuthInput(ctx context.Cont
 			it.Code = data
 		case "trust_device_id":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device_id"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -31903,7 +32147,7 @@ func (ec *executionContext) unmarshalInputUpdateDoubleAuthInput(ctx context.Cont
 			it.URL = data
 		case "trust_device_id":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trust_device_id"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -34006,6 +34250,14 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updatePatientsRendezVousIds":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePatientsRendezVousIds(ctx, field)
+			})
+		case "updatePatientsPassword":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePatientsPassword(ctx, field)
+			})
+		case "updatePatientsDoubleAuth":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePatientsDoubleAuth(ctx, field)
 			})
 		case "updateAccountsMedicalFolder":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
