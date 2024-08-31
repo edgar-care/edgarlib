@@ -17,11 +17,12 @@ func TestLogin2faThirdParty(t *testing.T) {
 	}
 
 	email := "test_login_2fa_third_party_success@example.com"
-	password := "password"
+	password := "passwordtesttest"
+	haspassword := HashPassword(password)
 
 	patient, err := graphql.CreatePatient(model.CreatePatientInput{
 		Email:    email,
-		Password: password,
+		Password: haspassword,
 		Status:   true,
 	})
 	if err != nil {
