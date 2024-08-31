@@ -116,10 +116,6 @@ func DeviceConnectMiddleware(w http.ResponseWriter, r *http.Request, accountID s
 		WriteError(w, getAllDevice.Code, getAllDevice.Err.Error())
 		return ""
 	}
-	if getAllDevice.Err != nil {
-		WriteError(w, getAllDevice.Code, getAllDevice.Err.Error())
-		return ""
-	}
 
 	var deviceID string
 	for _, device := range getAllDevice.DevicesConnect {
