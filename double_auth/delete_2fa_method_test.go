@@ -1,6 +1,7 @@
 package double_auth
 
 import (
+	"github.com/davecgh/go-spew/spew"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"github.com/joho/godotenv"
@@ -32,6 +33,7 @@ func TestRemoveDoubleAuthMethod_Success(t *testing.T) {
 	}
 
 	patientx, _ := graphql.GetPatientById(patient.ID)
+	spew.Dump(patientx)
 	if patientx.DoubleAuthMethodsID != nil {
 		doubleAuth, _ := graphql.GetDoubleAuthById(*patientx.DoubleAuthMethodsID)
 		for _, method := range doubleAuth.Methods {

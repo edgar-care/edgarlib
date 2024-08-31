@@ -107,7 +107,7 @@ func DeviceConnectMiddleware(w http.ResponseWriter, r *http.Request, accountID s
 
 	operationTime := time.Now().Unix() // Unix timestamp
 
-	userAgent := r.Header.Get("User-Agent")
+	userAgent := strings.Join(r.Header["User-Agent"], " ")
 	deviceType := getDeviceType(userAgent)
 	browser := getBrowser(userAgent)
 

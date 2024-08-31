@@ -39,8 +39,10 @@ func Login2faThirdParty(input Login2faThirdPartyInput, nameDevice string) Login2
 			return Login2faThirdPartyResponse{Token: token, Code: 400, Err: errors.New("token 2fa is invalid")}
 		}
 
-		_ = CheckPassword(input.Password, patient.Password)
-
+		check := CheckPassword(input.Password, patient.Password)
+		if !check {
+			return Login2faThirdPartyResponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+		}
 		// Create a token
 		token, _ := CreateToken(map[string]interface{}{
 			"patient":     patient.Email,
@@ -68,7 +70,10 @@ func Login2faThirdParty(input Login2faThirdPartyInput, nameDevice string) Login2
 			return Login2faThirdPartyResponse{Token: token, Code: 400, Err: errors.New("token 2fa is invalid")}
 		}
 
-		_ = CheckPassword(input.Password, doctor.Password)
+		check := CheckPassword(input.Password, doctor.Password)
+		if !check {
+			return Login2faThirdPartyResponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+		}
 
 		token, _ = CreateToken(map[string]interface{}{
 			"doctor":      doctor.Email,

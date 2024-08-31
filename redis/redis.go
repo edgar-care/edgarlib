@@ -3,6 +3,7 @@ package redis
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/edgar-care/edgarlib/v2"
 	"golang.org/x/crypto/ssh"
@@ -41,6 +42,7 @@ func GetKey(key string) (string, error) {
 
 	resp, err := ExecuteCommand(client, fmt.Sprintf("redis-cli GET %s", key))
 	edgarlib.CheckError(err)
+	resp = strings.TrimSuffix(resp, "\n")
 
 	return resp, nil
 }
