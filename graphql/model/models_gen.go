@@ -53,15 +53,16 @@ type AnteChir struct {
 }
 
 type AnteDisease struct {
-	ID            string   `json:"id" bson:"_id"`
-	Name          string   `json:"name" bson:"name"`
-	Chronicity    float64  `json:"chronicity" bson:"chronicity"`
-	SurgeryIds    []string `json:"surgery_ids,omitempty" bson:"surgery_ids"`
-	Symptoms      []string `json:"symptoms,omitempty" bson:"symptoms"`
-	TreatmentIds  []string `json:"treatment_ids,omitempty" bson:"treatment_ids"`
-	StillRelevant bool     `json:"still_relevant" bson:"still_relevant"`
-	CreatedAt     int      `json:"createdAt" bson:"createdAt"`
-	UpdatedAt     int      `json:"updatedAt" bson:"updatedAt"`
+	ID            string     `json:"id" bson:"_id"`
+	Name          string     `json:"name" bson:"name"`
+	Chronicity    float64    `json:"chronicity" bson:"chronicity"`
+	SurgeryIds    []string   `json:"surgery_ids,omitempty" bson:"surgery_ids"`
+	Symptoms      []string   `json:"symptoms,omitempty" bson:"symptoms"`
+	TreatmentIds  []string   `json:"treatment_ids,omitempty" bson:"treatment_ids"`
+	StillRelevant bool       `json:"still_relevant" bson:"still_relevant"`
+	CreatedAt     int        `json:"createdAt" bson:"createdAt"`
+	UpdatedAt     int        `json:"updatedAt" bson:"updatedAt"`
+	Symptomsclear []*Symptom `json:"symptomsclear,omitempty" bson:"symptomsclear"`
 }
 
 type AnteFamily struct {
@@ -270,19 +271,14 @@ type CreateSaveCodeInput struct {
 }
 
 type CreateSessionInput struct {
-	Diseases          []*SessionDiseasesInput `json:"diseases" bson:"diseases"`
-	Symptoms          []*SessionSymptomInput  `json:"symptoms" bson:"symptoms"`
-	Age               int                     `json:"age" bson:"age"`
-	Height            int                     `json:"height" bson:"height"`
-	Weight            int                     `json:"weight" bson:"weight"`
-	Sex               string                  `json:"sex" bson:"sex"`
-	AnteChirs         []string                `json:"ante_chirs" bson:"ante_chirs"`
-	AnteDiseases      []string                `json:"ante_diseases" bson:"ante_diseases"`
-	Medicine          []string                `json:"medicine" bson:"medicine"`
-	LastQuestion      string                  `json:"last_question" bson:"last_question"`
-	Logs              []*LogsInput            `json:"logs" bson:"logs"`
-	HereditaryDisease []string                `json:"hereditary_disease" bson:"hereditary_disease"`
-	Alerts            []string                `json:"alerts" bson:"alerts"`
+	Age               int      `json:"age" bson:"age"`
+	Height            int      `json:"height" bson:"height"`
+	Weight            int      `json:"weight" bson:"weight"`
+	Sex               string   `json:"sex" bson:"sex"`
+	AnteChirs         []string `json:"ante_chirs" bson:"ante_chirs"`
+	AnteDiseases      []string `json:"ante_diseases" bson:"ante_diseases"`
+	Medicine          []string `json:"medicine" bson:"medicine"`
+	HereditaryDisease []string `json:"hereditary_disease" bson:"hereditary_disease"`
 }
 
 type CreateSymptomInput struct {
@@ -432,6 +428,7 @@ type Medicine struct {
 	Quantity        int          `json:"quantity" bson:"quantity"`
 	CreatedAt       int          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt       int          `json:"updatedAt" bson:"updatedAt"`
+	Symptoms        []*Symptom   `json:"symptoms,omitempty" bson:"symptoms"`
 }
 
 type MedicineInput struct {

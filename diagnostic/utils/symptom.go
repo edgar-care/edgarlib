@@ -47,7 +47,7 @@ func StringToSymptoms(strings []string) []Symptom {
 }
 
 func CheckSymptomDuration(symptoms []*model.SessionSymptomInput, lastQuestion string) ([]*model.SessionSymptomInput, string, string) {
-	allSymptoms, _ := graphql.GetSymptoms(nil)
+	//allSymptoms, _ := graphql.GetSymptoms(nil)
 	list := strings.Split(lastQuestion, " ")
 	question := ""
 	nextLastQuestion := ""
@@ -58,15 +58,9 @@ func CheckSymptomDuration(symptoms []*model.SessionSymptomInput, lastQuestion st
 	}
 	for _, symptom := range symptoms {
 		if symptom.Duration != nil && *symptom.Duration == 0 && symptom.Presence == 1 && symptomName != symptom.Name {
-			if len(allSymptoms) > 0 {
-				for _, s := range allSymptoms {
-					if s.Code == symptom.Name && s.QuestionAnte != "" {
-						question = exam.AddDiscursiveConnector(s.QuestionAnte)
-						break
-					} else {
-						question = exam.AddDiscursiveConnector("{{connecteur}}. Depuis combien de jours souffrez-vous de " + symptom.Name)
-					}
-				}
+			sy, _ := graphql.GetSymptomByCode(symptom.Name)
+			if sy.QuestionDuration != "" {
+				question = exam.AddDiscursiveConnector(sy.QuestionDuration)
 			} else {
 				question = exam.AddDiscursiveConnector("{{connecteur}}. Depuis combien de jours souffrez-vous de " + symptom.Name)
 			}
@@ -74,6 +68,5 @@ func CheckSymptomDuration(symptoms []*model.SessionSymptomInput, lastQuestion st
 		}
 
 	}
-
 	return symptoms, question, nextLastQuestion
 }

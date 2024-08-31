@@ -12,19 +12,12 @@ func CheckAnteDiseaseInSymptoms(session model.Session) (string, string, error) {
 
 	for _, anteId := range session.AnteDiseases {
 		if anteId != "" {
-			ante, err := graphql.GetAnteDiseaseByID(anteId)
+			ante, err := graphql.GetAnteDiseaseByIDWithSymptoms(anteId)
 			if err != nil {
 				return "", "", err
 			}
-			if ante.StillRelevant == true && len(ante.Symptoms) > 0 {
-				for _, anteSymptomId := range ante.Symptoms {
-					if anteSymptomId == "" {
-						continue
-					}
-					anteSymptom, err := graphql.GetSymptomById(anteSymptomId)
-					if err != nil {
-						return "", "", err
-					}
+			if ante.StillRelevant == true {
+				for _, anteSymptom := range ante.Symptomsclear {
 					if anteSymptom.Code != session.LastQuestion {
 						if anteSymptom.QuestionAnte != "" {
 							question = exam.AddDiscursiveConnector(anteSymptom.QuestionAnte)
