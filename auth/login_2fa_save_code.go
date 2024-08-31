@@ -65,20 +65,9 @@ func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string) Login2faSa
 			}
 		}
 
-		codeList := make([]*string, len(saveCodeTable.Code))
-		for i, v := range saveCodeTable.Code {
-			codeList[i] = &v
-		}
-
-		NewCodeList := removeElement(codeList, &input.BackupCode)
-
-		updatedCodeList := make([]string, len(NewCodeList))
-		for i, v := range NewCodeList {
-			updatedCodeList[i] = *v
-		}
-
+		NewCodeList := removeHashedCode(saveCodeTable.Code, input.BackupCode)
 		_, err = graphql.UpdateSaveCode(saveCodeTable.ID, model.UpdateSaveCodeInput{
-			Code: updatedCodeList,
+			Code: NewCodeList,
 		})
 		if err != nil {
 			return Login2faSaveCodeesponse{
@@ -142,20 +131,10 @@ func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string) Login2faSa
 			}
 		}
 
-		codeList := make([]*string, len(saveCodeTable.Code))
-		for i, v := range saveCodeTable.Code {
-			codeList[i] = &v
-		}
-
-		NewCodeList := removeElement(codeList, &input.BackupCode)
-
-		updatedCodeList := make([]string, len(NewCodeList))
-		for i, v := range NewCodeList {
-			updatedCodeList[i] = *v
-		}
+		NewCodeList := removeHashedCode(saveCodeTable.Code, input.BackupCode)
 
 		_, err = graphql.UpdateSaveCode(saveCodeTable.ID, model.UpdateSaveCodeInput{
-			Code: updatedCodeList,
+			Code: NewCodeList,
 		})
 		if err != nil {
 			return Login2faSaveCodeesponse{
@@ -181,12 +160,12 @@ func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string) Login2faSa
 	return Login2faSaveCodeesponse{Token: "", Code: 400, Err: errors.New("email does not correspond to a valid patient or doctor")}
 }
 
-func removeElement(slice []*string, element *string) []*string {
-	var result []*string
-	for _, v := range slice {
-		if *v != *element {
-			result = append(result, v)
+func removeHashedCode(hashedCodes []string, inputCode string) []string {
+	for i, hashedCode := range hashedCodes {
+		err := bcrypt.CompareHashAndPassword([]byte(hashedCode), []byte(inputCode))
+		if err == nil {
+			return append(hashedCodes[:i], hashedCodes[i+1:]...)
 		}
 	}
-	return result
+	return hashedCodes
 }

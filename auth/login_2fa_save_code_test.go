@@ -16,11 +16,12 @@ func TestLogin2faSaveCode(t *testing.T) {
 	}
 
 	email := "test_login_2fa_save_code@example.com"
-	password := "password"
+	password := "passwordtest"
+	haspassword := HashPassword(password)
 
 	patient, err := graphql.CreatePatient(model.CreatePatientInput{
 		Email:    email,
-		Password: password,
+		Password: haspassword,
 		Status:   true,
 	})
 	if err != nil {
@@ -65,10 +66,11 @@ func TestLogin2faSaveCodeDoctor(t *testing.T) {
 
 	email := "test_login_2fa_save_code_doctor@example.com"
 	password := "password"
+	haspassword := HashPassword(password)
 
 	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
 		Email:     email,
-		Password:  password,
+		Password:  haspassword,
 		Name:      "name",
 		Firstname: "first",
 		Address: &model.AddressInput{
