@@ -91,7 +91,7 @@ func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailRes
 
 func isEmail2faValid(methods []string) bool {
 	for _, method := range methods {
-		if method == "EMAIL" {
+		if method == "EMAIL" || method == "MOBILE" {
 			return true
 		}
 	}
