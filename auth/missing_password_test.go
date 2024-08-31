@@ -11,7 +11,7 @@ import (
 func TestMissingPassword(t *testing.T) {
 	email := "testuser_missing_password@example.com"
 
-	_, err := graphql.CreatePatient(model.CreatePatientInput{
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
 		Email:    email,
 		Password: "initial_password",
 		Status:   true,
@@ -29,7 +29,7 @@ func TestMissingPassword(t *testing.T) {
 		t.Errorf("Unexpected error: %v", response.Err)
 	}
 
-	_, err = redis.GetKey(email)
+	_, err = redis.GetKey(patient.ID)
 	if err != nil {
 		t.Errorf("Failed to get key from Redis: %v", err)
 	}

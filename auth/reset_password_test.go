@@ -14,12 +14,7 @@ func TestResetPassword(t *testing.T) {
 	password := "new_password"
 	patientUUID := uuid.New()
 
-	_, err := redis.SetKey(patientUUID.String(), email, nil)
-	if err != nil {
-		t.Errorf("Failed to set patient key: %v", err)
-	}
-
-	_, err = graphql.CreatePatient(model.CreatePatientInput{
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
 		Email:    email,
 		Password: "first_password",
 		Status:   true,
@@ -28,7 +23,12 @@ func TestResetPassword(t *testing.T) {
 		t.Errorf("Failed to create patient: %v", err)
 	}
 
-	response := ResetPassword(email, password, patientUUID.String())
+	_, err = redis.SetKey(patientUUID.String(), patient.ID, nil)
+	if err != nil {
+		t.Errorf("Failed to set patient key: %v", err)
+	}
+
+	response := ResetPassword(password, patientUUID.String())
 
 	if response.Code != 200 {
 		t.Errorf("Expected response code 200, got %v", response.Code)
@@ -48,11 +48,10 @@ func TestResetPassword(t *testing.T) {
 }
 
 func TestResetPasswordWithInvalidUUID(t *testing.T) {
-	email := "testuser@example.com"
 	password := "newpassword123"
 	invalidUUID := "invalid-uuid"
 
-	response := ResetPassword(email, password, invalidUUID)
+	response := ResetPassword(password, invalidUUID)
 
 	if response.Code != 403 {
 		t.Errorf("Expected response code 403, got %v", response.Code)
@@ -64,35 +63,13 @@ func TestResetPasswordWithInvalidUUID(t *testing.T) {
 	}
 }
 
-func TestResetPasswordWithInvalidEmail(t *testing.T) {
-	email := "invaliduser@example.com"
-	password := "newpassword123"
-
-	patientUUID := uuid.New()
-
-	uuid, err := redis.SetKey(patientUUID.String(), email, nil)
-	if err != nil {
-		t.Errorf("Failed to set patient key: %v", err)
-	}
-
-	response := ResetPassword(email, password, uuid)
-
-	if response.Code != 403 {
-		t.Errorf("Expected response code 403, got %v", response.Code)
-	}
-	if response.Err == nil {
-		t.Errorf("Expected an error in response")
-	}
-}
-
 func TestResetPasswordWithoutUUID(t *testing.T) {
-	email := "testuser@example.com"
 	password := "newpassword123"
 	uuid := ""
 
-	response := ResetPassword(email, password, uuid)
+	response := ResetPassword(password, uuid)
 
-	if response.Code != 403 {
+	if response.Code != 400 {
 		t.Errorf("Expected response code 403, got %v", response.Code)
 	}
 	if response.Err == nil {

@@ -88,8 +88,10 @@ func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string) Login2faSa
 			}
 		}
 
-		_ = CheckPassword(input.Password, patient.Password)
-
+		check := CheckPassword(input.Password, patient.Password)
+		if !check {
+			return Login2faSaveCodeesponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+		}
 		token, _ := CreateToken(map[string]interface{}{
 			"patient":     patient.Email,
 			"id":          patient.ID,
@@ -163,8 +165,10 @@ func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string) Login2faSa
 			}
 		}
 
-		_ = CheckPassword(input.Password, doctor.Password)
-
+		check := CheckPassword(input.Password, doctor.Password)
+		if !check {
+			return Login2faSaveCodeesponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+		}
 		token, _ = CreateToken(map[string]interface{}{
 			"doctor":      doctor.Email,
 			"id":          doctor.ID,
