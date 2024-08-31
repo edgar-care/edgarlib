@@ -112,7 +112,11 @@ func DeviceConnectMiddleware(w http.ResponseWriter, r *http.Request, accountID s
 	browser := getBrowser(userAgent)
 
 	getAllDevice := double_auth.GetDeviceConnect(accountID)
-	if !strings.Contains(getAllDevice.Err.Error(), "needs an array") {
+	if getAllDevice.Err != nil && !strings.Contains(getAllDevice.Err.Error(), "needs an array") {
+		WriteError(w, getAllDevice.Code, getAllDevice.Err.Error())
+		return ""
+	}
+	if getAllDevice.Err != nil {
 		WriteError(w, getAllDevice.Code, getAllDevice.Err.Error())
 		return ""
 	}
