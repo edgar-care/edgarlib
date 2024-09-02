@@ -34,7 +34,7 @@ func GetDocument(id string) GetDocumentByIdResponse {
 
 	filename := document.ID + ext
 
-	signedURL, err := generateURL("document-patient", filename, document.Name)
+	signedURL, err := GenerateURL("document-patient", filename, document.Name)
 	if err != nil {
 		return GetDocumentByIdResponse{model.Document{}, 500, fmt.Errorf("error generating signed URL: %v", err)}
 	}
@@ -69,7 +69,7 @@ func GetDocuments(id string) GetDocumentsResponse {
 		}
 
 		filename := document.ID + ext
-		signedURL, err := generateURL("document-patient", filename, document.Name)
+		signedURL, err := GenerateURL("document-patient", filename, document.Name)
 		if err != nil {
 			return GetDocumentsResponse{[]model.Document{}, 500, fmt.Errorf("error generating signed URL: %v", err)}
 		}

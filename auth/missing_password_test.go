@@ -46,7 +46,39 @@ func TestMissingPasswordWithNonExistentEmail(t *testing.T) {
 	}
 	if response.Err == nil {
 		t.Errorf("Expected an error in response, got nil")
-	} else if response.Err.Error() != "no patient corresponds to this email" {
-		t.Errorf("Expected 'no patient corresponds to this email' error, got %v", response.Err.Error())
+	} else if response.Err.Error() != "no account corresponds to this email" {
+		t.Errorf("Expected 'no account corresponds to this email' error, got %v", response.Err.Error())
 	}
+}
+
+func TestMissingPasswordDoctor(t *testing.T) {
+	email := "testdoctor_missing_password@example.com"
+
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     email,
+		Password:  "haspassword",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: true,
+	})
+	response := MissingPassword(email)
+
+	if response.Code != 200 {
+		t.Errorf("Expected response code 200, got %v", response.Code)
+	}
+	if response.Err != nil {
+		t.Errorf("Unexpected error: %v", response.Err)
+	}
+
+	_, err = redis.GetKey(doctor.ID)
+	if err != nil {
+		t.Errorf("Failed to get key from Redis: %v", err)
+	}
+
 }

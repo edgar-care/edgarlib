@@ -47,6 +47,48 @@ func TestResetPassword(t *testing.T) {
 	}
 }
 
+func TestResetPasswordDoctor(t *testing.T) {
+	email := "testdoctor_reset_password@example.com"
+	password := "new_password"
+	patientUUID := uuid.New()
+
+	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
+		Email:     email,
+		Password:  "haspassword",
+		Name:      "name",
+		Firstname: "first",
+		Address: &model.AddressInput{
+			Street:  "",
+			ZipCode: "",
+			Country: "",
+			City:    "",
+		},
+		Status: true,
+	})
+	_, err = redis.SetKey(patientUUID.String(), doctor.ID, nil)
+	if err != nil {
+		t.Errorf("Failed to set patient key: %v", err)
+	}
+
+	response := ResetPassword(password, patientUUID.String())
+
+	if response.Code != 200 {
+		t.Errorf("Expected response code 200, got %v", response.Code)
+	}
+	if response.Err != nil {
+		t.Errorf("Unexpected error: %v", response.Err)
+	}
+
+	updatedPatient, err := graphql.GetDoctorByEmail(email)
+	if err != nil {
+		t.Errorf("Unable to retrieve patient: %v", err)
+	}
+
+	if updatedPatient.Password == "first_password" {
+		t.Errorf("password was not updated")
+	}
+}
+
 func TestResetPasswordWithInvalidUUID(t *testing.T) {
 	password := "newpassword123"
 	invalidUUID := "invalid-uuid"
