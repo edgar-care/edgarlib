@@ -104,6 +104,15 @@ type ComplexityRoot struct {
 		UpdatedAt func(childComplexity int) int
 	}
 
+	AutoAnswer struct {
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Name      func(childComplexity int) int
+		Type      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+		Values    func(childComplexity int) int
+	}
+
 	BlackList struct {
 		CreatedAt func(childComplexity int) int
 		ID        func(childComplexity int) int
@@ -263,6 +272,7 @@ type ComplexityRoot struct {
 		CreateAnteChir              func(childComplexity int, input model.CreateAnteChirInput) int
 		CreateAnteDisease           func(childComplexity int, input model.CreateAnteDiseaseInput) int
 		CreateAnteFamily            func(childComplexity int, input model.CreateAnteFamilyInput) int
+		CreateAutoAnswer            func(childComplexity int, input model.CreateAutoAnswerInput) int
 		CreateBlackList             func(childComplexity int, input model.CreateBlackListInput) int
 		CreateChat                  func(childComplexity int, input model.CreateChatInput) int
 		CreateDeviceConnect         func(childComplexity int, input model.CreateDeviceConnectInput) int
@@ -287,6 +297,7 @@ type ComplexityRoot struct {
 		DeleteAnteChir              func(childComplexity int, id string) int
 		DeleteAnteDisease           func(childComplexity int, id string) int
 		DeleteAnteFamily            func(childComplexity int, id string) int
+		DeleteAutoAnswer            func(childComplexity int, id string) int
 		DeleteBlackList             func(childComplexity int, id string) int
 		DeleteChat                  func(childComplexity int, id string) int
 		DeleteDeviceConnect         func(childComplexity int, id string) int
@@ -312,6 +323,7 @@ type ComplexityRoot struct {
 		UpdateAnteChir              func(childComplexity int, id string, input model.UpdateAnteChirInput) int
 		UpdateAnteDisease           func(childComplexity int, id string, input model.UpdateAnteDiseaseInput) int
 		UpdateAnteFamily            func(childComplexity int, id string, input model.UpdateAnteFamilyInput) int
+		UpdateAutoAnswer            func(childComplexity int, id string, input model.UpdateAutoAnswerInput) int
 		UpdateBlackList             func(childComplexity int, id string, input model.UpdateBlackListInput) int
 		UpdateChat                  func(childComplexity int, id string, input model.UpdateChatInput) int
 		UpdateDeviceConnect         func(childComplexity int, id string, input model.UpdateDeviceConnectInput) int
@@ -328,8 +340,6 @@ type ComplexityRoot struct {
 		UpdatePatient               func(childComplexity int, id string, input model.UpdatePatientInput) int
 		UpdatePatientTrustDevice    func(childComplexity int, id string, input model.UpdatePatientTrustDeviceInput) int
 		UpdatePatientsDeviceConnect func(childComplexity int, id string, input model.UpdatePatientsDeviceConnectInput) int
-		UpdatePatientsDoubleAuth    func(childComplexity int, id string, doubleAuthMethodsID *string) int
-		UpdatePatientsPassword      func(childComplexity int, id string, password *string) int
 		UpdatePatientsRendezVousIds func(childComplexity int, id string, input model.UpdatePatientRendezVousIdsInput) int
 		UpdateRdv                   func(childComplexity int, id string, input model.UpdateRdvInput) int
 		UpdateSaveCode              func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
@@ -413,6 +423,9 @@ type ComplexityRoot struct {
 		GetAnteDiseases                func(childComplexity int, option *model.Options) int
 		GetAnteFamilies                func(childComplexity int, option *model.Options) int
 		GetAnteFamilyByID              func(childComplexity int, id string) int
+		GetAutoAnswerByID              func(childComplexity int, id string) int
+		GetAutoAnswerByName            func(childComplexity int, name string) int
+		GetAutoAnswers                 func(childComplexity int, option *model.Options) int
 		GetBlackList                   func(childComplexity int, option *model.Options) int
 		GetBlackListByID               func(childComplexity int, id string) int
 		GetChatByID                    func(childComplexity int, id string) int
@@ -567,8 +580,6 @@ type MutationResolver interface {
 	UpdatePatientsDeviceConnect(ctx context.Context, id string, input model.UpdatePatientsDeviceConnectInput) (*model.Patient, error)
 	UpdatePatientTrustDevice(ctx context.Context, id string, input model.UpdatePatientTrustDeviceInput) (*model.Patient, error)
 	UpdatePatientsRendezVousIds(ctx context.Context, id string, input model.UpdatePatientRendezVousIdsInput) (*model.Patient, error)
-	UpdatePatientsPassword(ctx context.Context, id string, password *string) (*model.Patient, error)
-	UpdatePatientsDoubleAuth(ctx context.Context, id string, doubleAuthMethodsID *string) (*model.Patient, error)
 	UpdateAccountsMedicalFolder(ctx context.Context, id string, input model.UpdateAccountMedicalFolder) (*model.MedicalInfo, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error)
@@ -641,6 +652,9 @@ type MutationResolver interface {
 	CreateOrdonnance(ctx context.Context, input model.CreateOrdonnanceInput) (*model.Ordonnance, error)
 	UpdateOrdonnance(ctx context.Context, id string, input model.UpdateOrdonnanceInput) (*model.Ordonnance, error)
 	DeleteOrdonnance(ctx context.Context, id string) (*bool, error)
+	CreateAutoAnswer(ctx context.Context, input model.CreateAutoAnswerInput) (*model.AutoAnswer, error)
+	UpdateAutoAnswer(ctx context.Context, id string, input model.UpdateAutoAnswerInput) (*model.AutoAnswer, error)
+	DeleteAutoAnswer(ctx context.Context, id string) (*bool, error)
 }
 type QueryResolver interface {
 	GetPatients(ctx context.Context, option *model.Options) ([]*model.Patient, error)
@@ -705,6 +719,9 @@ type QueryResolver interface {
 	GetSaveCode(ctx context.Context, option *model.Options) ([]*model.SaveCode, error)
 	GetOrdonnanceByID(ctx context.Context, id string) (*model.Ordonnance, error)
 	GetOrdonnanceByDoctorID(ctx context.Context, doctorID string, option *model.Options) ([]*model.Ordonnance, error)
+	GetAutoAnswerByID(ctx context.Context, id string) (*model.AutoAnswer, error)
+	GetAutoAnswerByName(ctx context.Context, name string) (*model.AutoAnswer, error)
+	GetAutoAnswers(ctx context.Context, option *model.Options) ([]*model.AutoAnswer, error)
 }
 
 type executableSchema struct {
@@ -1005,6 +1022,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AnteFamily.UpdatedAt(childComplexity), true
+
+	case "AutoAnswer.createdAt":
+		if e.complexity.AutoAnswer.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.AutoAnswer.CreatedAt(childComplexity), true
+
+	case "AutoAnswer.id":
+		if e.complexity.AutoAnswer.ID == nil {
+			break
+		}
+
+		return e.complexity.AutoAnswer.ID(childComplexity), true
+
+	case "AutoAnswer.name":
+		if e.complexity.AutoAnswer.Name == nil {
+			break
+		}
+
+		return e.complexity.AutoAnswer.Name(childComplexity), true
+
+	case "AutoAnswer.type":
+		if e.complexity.AutoAnswer.Type == nil {
+			break
+		}
+
+		return e.complexity.AutoAnswer.Type(childComplexity), true
+
+	case "AutoAnswer.updatedAt":
+		if e.complexity.AutoAnswer.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.AutoAnswer.UpdatedAt(childComplexity), true
+
+	case "AutoAnswer.values":
+		if e.complexity.AutoAnswer.Values == nil {
+			break
+		}
+
+		return e.complexity.AutoAnswer.Values(childComplexity), true
 
 	case "BlackList.createdAt":
 		if e.complexity.BlackList.CreatedAt == nil {
@@ -1822,6 +1881,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateAnteFamily(childComplexity, args["input"].(model.CreateAnteFamilyInput)), true
 
+	case "Mutation.createAutoAnswer":
+		if e.complexity.Mutation.CreateAutoAnswer == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAutoAnswer_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateAutoAnswer(childComplexity, args["input"].(model.CreateAutoAnswerInput)), true
+
 	case "Mutation.createBlackList":
 		if e.complexity.Mutation.CreateBlackList == nil {
 			break
@@ -2109,6 +2180,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteAnteFamily(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteAutoAnswer":
+		if e.complexity.Mutation.DeleteAutoAnswer == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteAutoAnswer_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteAutoAnswer(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteBlackList":
 		if e.complexity.Mutation.DeleteBlackList == nil {
@@ -2410,6 +2493,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateAnteFamily(childComplexity, args["id"].(string), args["input"].(model.UpdateAnteFamilyInput)), true
 
+	case "Mutation.updateAutoAnswer":
+		if e.complexity.Mutation.UpdateAutoAnswer == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAutoAnswer_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateAutoAnswer(childComplexity, args["id"].(string), args["input"].(model.UpdateAutoAnswerInput)), true
+
 	case "Mutation.updateBlackList":
 		if e.complexity.Mutation.UpdateBlackList == nil {
 			break
@@ -2601,30 +2696,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdatePatientsDeviceConnect(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientsDeviceConnectInput)), true
-
-	case "Mutation.updatePatientsDoubleAuth":
-		if e.complexity.Mutation.UpdatePatientsDoubleAuth == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updatePatientsDoubleAuth_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdatePatientsDoubleAuth(childComplexity, args["id"].(string), args["double_auth_methods_id"].(*string)), true
-
-	case "Mutation.updatePatientsPassword":
-		if e.complexity.Mutation.UpdatePatientsPassword == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updatePatientsPassword_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdatePatientsPassword(childComplexity, args["id"].(string), args["password"].(*string)), true
 
 	case "Mutation.updatePatientsRendezVousIds":
 		if e.complexity.Mutation.UpdatePatientsRendezVousIds == nil {
@@ -3154,6 +3225,42 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetAnteFamilyByID(childComplexity, args["id"].(string)), true
+
+	case "Query.getAutoAnswerById":
+		if e.complexity.Query.GetAutoAnswerByID == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getAutoAnswerById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAutoAnswerByID(childComplexity, args["id"].(string)), true
+
+	case "Query.getAutoAnswerByName":
+		if e.complexity.Query.GetAutoAnswerByName == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getAutoAnswerByName_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAutoAnswerByName(childComplexity, args["name"].(string)), true
+
+	case "Query.getAutoAnswers":
+		if e.complexity.Query.GetAutoAnswers == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getAutoAnswers_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetAutoAnswers(childComplexity, args["option"].(*model.Options)), true
 
 	case "Query.getBlackList":
 		if e.complexity.Query.GetBlackList == nil {
@@ -4248,6 +4355,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateAnteChirInput,
 		ec.unmarshalInputCreateAnteDiseaseInput,
 		ec.unmarshalInputCreateAnteFamilyInput,
+		ec.unmarshalInputCreateAutoAnswerInput,
 		ec.unmarshalInputCreateBlackListInput,
 		ec.unmarshalInputCreateChatInput,
 		ec.unmarshalInputCreateDeviceConnectInput,
@@ -4285,6 +4393,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateAnteChirInput,
 		ec.unmarshalInputUpdateAnteDiseaseInput,
 		ec.unmarshalInputUpdateAnteFamilyInput,
+		ec.unmarshalInputUpdateAutoAnswerInput,
 		ec.unmarshalInputUpdateBlackListInput,
 		ec.unmarshalInputUpdateChatInput,
 		ec.unmarshalInputUpdateDeviceConnectInput,
@@ -4715,7 +4824,6 @@ type SaveCode {
     updatedAt: Int!
 }
 
-
 type Ordonnance {
     id: ID!
     created_by: String!
@@ -4725,6 +4833,14 @@ type Ordonnance {
     updatedAt: Int!
 }
 
+type AutoAnswer {
+    id: ID!
+    name: String!
+    values:[String]!
+    type: AutoAnswerType!
+    createdAt: Int!
+    updatedAt: Int!
+}
 
 ##  Substructure  ----------------------------------------------------------------------------------------------------
 
@@ -5265,6 +5381,18 @@ input UpdateSaveCodeInput {
     code: [String!]
 }
 
+input CreateAutoAnswerInput {
+    name: String!
+    values:[String]!
+    type: AutoAnswerType!
+}
+
+input UpdateAutoAnswerInput {
+    name: String
+    values:[String]
+    type: AutoAnswerType
+}
+
 input LogsInput {
     question: String!
     answer: String!
@@ -5392,7 +5520,6 @@ enum AppointmentStatus {
     OPENED
 }
 
-
 enum unit_enum {
     ml,
     mg
@@ -5433,6 +5560,10 @@ enum time_unit_enum {
     ANNEE
 }
 
+enum AutoAnswerType {
+    UNIQUE_CHOICE,
+    MULTIPLE_CHOICE
+}
 
 ## Utils  -------------------------------------------------------------------------------------------------------------
 
@@ -5639,6 +5770,15 @@ type Query {
 
     #get Ordonance by doctor id
     getOrdonnanceByDoctorId(doctor_id: String!, option: Options): [Ordonnance]
+
+    # Get Automatic Answer by its ID
+    getAutoAnswerById(id: String!): AutoAnswer
+
+    # Get Automatic Answer by its Name
+    getAutoAnswerByName(name: String!): AutoAnswer
+
+    # Get Automatic Answers
+    getAutoAnswers(option: Options): [AutoAnswer]
 }
 
 type Mutation {
@@ -5653,10 +5793,6 @@ type Mutation {
     updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
 
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
-
-    updatePatientsPassword(id: String!, password: String): Patient
-
-    updatePatientsDoubleAuth(id: String!, double_auth_methods_id: String): Patient
 
     updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
 
@@ -5861,7 +5997,6 @@ type Mutation {
     #Delete a SaveCode
     deleteSaveCode(id: String!): Boolean
 
-
     # Create a new Ordonnance
     createOrdonnance(input: CreateOrdonnanceInput!): Ordonnance
 
@@ -5870,6 +6005,15 @@ type Mutation {
 
     #Delete a Ordonnance
     deleteOrdonnance(id: String!): Boolean
+
+    # Create new AutoAnswer
+    createAutoAnswer(input: CreateAutoAnswerInput!): AutoAnswer
+
+    # Update an AutoAnswer
+    updateAutoAnswer(id: String!, input: UpdateAutoAnswerInput!): AutoAnswer
+
+    # Delete an AutoAnswer
+    deleteAutoAnswer(id: String!): Boolean
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -5993,6 +6137,21 @@ func (ec *executionContext) field_Mutation_createAnteFamily_args(ctx context.Con
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createAutoAnswer_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.CreateAutoAnswerInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreateAutoAnswerInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAutoAnswerInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -6347,6 +6506,21 @@ func (ec *executionContext) field_Mutation_deleteAnteDisease_args(ctx context.Co
 }
 
 func (ec *executionContext) field_Mutation_deleteAnteFamily_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteAutoAnswer_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -6790,6 +6964,30 @@ func (ec *executionContext) field_Mutation_updateAnteFamily_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateAutoAnswer_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdateAutoAnswerInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdateAutoAnswerInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAutoAnswerInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateBlackList_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -7123,54 +7321,6 @@ func (ec *executionContext) field_Mutation_updatePatientsDeviceConnect_args(ctx 
 		}
 	}
 	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updatePatientsDoubleAuth_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["double_auth_methods_id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("double_auth_methods_id"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["double_auth_methods_id"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updatePatientsPassword_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["id"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["id"] = arg0
-	var arg1 *string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["password"] = arg1
 	return args, nil
 }
 
@@ -7534,6 +7684,51 @@ func (ec *executionContext) field_Query_getAnteFamilyByID_args(ctx context.Conte
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAutoAnswerById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAutoAnswerByName_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getAutoAnswers_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -10182,6 +10377,270 @@ func (ec *executionContext) _AnteFamily_updatedAt(ctx context.Context, field gra
 func (ec *executionContext) fieldContext_AnteFamily_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "AnteFamily",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AutoAnswer_id(ctx context.Context, field graphql.CollectedField, obj *model.AutoAnswer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AutoAnswer_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AutoAnswer_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AutoAnswer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AutoAnswer_name(ctx context.Context, field graphql.CollectedField, obj *model.AutoAnswer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AutoAnswer_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AutoAnswer_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AutoAnswer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AutoAnswer_values(ctx context.Context, field graphql.CollectedField, obj *model.AutoAnswer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AutoAnswer_values(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Values, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	fc.Result = res
+	return ec.marshalNString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AutoAnswer_values(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AutoAnswer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AutoAnswer_type(ctx context.Context, field graphql.CollectedField, obj *model.AutoAnswer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AutoAnswer_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.AutoAnswerType)
+	fc.Result = res
+	return ec.marshalNAutoAnswerType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswerType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AutoAnswer_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AutoAnswer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type AutoAnswerType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AutoAnswer_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.AutoAnswer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AutoAnswer_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AutoAnswer_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AutoAnswer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AutoAnswer_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.AutoAnswer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AutoAnswer_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AutoAnswer_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AutoAnswer",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -15413,170 +15872,6 @@ func (ec *executionContext) fieldContext_Mutation_updatePatientsRendezVousIds(ct
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updatePatientsPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updatePatientsPassword(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePatientsPassword(rctx, fc.Args["id"].(string), fc.Args["password"].(*string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Patient)
-	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updatePatientsPassword(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Patient_id(ctx, field)
-			case "email":
-				return ec.fieldContext_Patient_email(ctx, field)
-			case "password":
-				return ec.fieldContext_Patient_password(ctx, field)
-			case "rendez_vous_ids":
-				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
-			case "medical_info_id":
-				return ec.fieldContext_Patient_medical_info_id(ctx, field)
-			case "document_ids":
-				return ec.fieldContext_Patient_document_ids(ctx, field)
-			case "treatment_follow_up_ids":
-				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
-			case "chat_ids":
-				return ec.fieldContext_Patient_chat_ids(ctx, field)
-			case "double_auth_methods_id":
-				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
-			case "device_connect":
-				return ec.fieldContext_Patient_device_connect(ctx, field)
-			case "trust_devices":
-				return ec.fieldContext_Patient_trust_devices(ctx, field)
-			case "status":
-				return ec.fieldContext_Patient_status(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Patient_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Patient_updatedAt(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updatePatientsPassword_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updatePatientsDoubleAuth(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updatePatientsDoubleAuth(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePatientsDoubleAuth(rctx, fc.Args["id"].(string), fc.Args["double_auth_methods_id"].(*string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.Patient)
-	fc.Result = res
-	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updatePatientsDoubleAuth(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Patient_id(ctx, field)
-			case "email":
-				return ec.fieldContext_Patient_email(ctx, field)
-			case "password":
-				return ec.fieldContext_Patient_password(ctx, field)
-			case "rendez_vous_ids":
-				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
-			case "medical_info_id":
-				return ec.fieldContext_Patient_medical_info_id(ctx, field)
-			case "document_ids":
-				return ec.fieldContext_Patient_document_ids(ctx, field)
-			case "treatment_follow_up_ids":
-				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
-			case "chat_ids":
-				return ec.fieldContext_Patient_chat_ids(ctx, field)
-			case "double_auth_methods_id":
-				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
-			case "device_connect":
-				return ec.fieldContext_Patient_device_connect(ctx, field)
-			case "trust_devices":
-				return ec.fieldContext_Patient_trust_devices(ctx, field)
-			case "status":
-				return ec.fieldContext_Patient_status(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Patient_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Patient_updatedAt(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updatePatientsDoubleAuth_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_updateAccountsMedicalFolder(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_updateAccountsMedicalFolder(ctx, field)
 	if err != nil {
@@ -20299,6 +20594,190 @@ func (ec *executionContext) fieldContext_Mutation_deleteOrdonnance(ctx context.C
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteOrdonnance_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createAutoAnswer(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createAutoAnswer(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateAutoAnswer(rctx, fc.Args["input"].(model.CreateAutoAnswerInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.AutoAnswer)
+	fc.Result = res
+	return ec.marshalOAutoAnswer2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createAutoAnswer(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_AutoAnswer_id(ctx, field)
+			case "name":
+				return ec.fieldContext_AutoAnswer_name(ctx, field)
+			case "values":
+				return ec.fieldContext_AutoAnswer_values(ctx, field)
+			case "type":
+				return ec.fieldContext_AutoAnswer_type(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AutoAnswer_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AutoAnswer_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AutoAnswer", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createAutoAnswer_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateAutoAnswer(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateAutoAnswer(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateAutoAnswer(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdateAutoAnswerInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.AutoAnswer)
+	fc.Result = res
+	return ec.marshalOAutoAnswer2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateAutoAnswer(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_AutoAnswer_id(ctx, field)
+			case "name":
+				return ec.fieldContext_AutoAnswer_name(ctx, field)
+			case "values":
+				return ec.fieldContext_AutoAnswer_values(ctx, field)
+			case "type":
+				return ec.fieldContext_AutoAnswer_type(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AutoAnswer_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AutoAnswer_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AutoAnswer", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateAutoAnswer_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteAutoAnswer(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteAutoAnswer(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteAutoAnswer(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteAutoAnswer(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteAutoAnswer_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -26713,6 +27192,204 @@ func (ec *executionContext) fieldContext_Query_getOrdonnanceByDoctorId(ctx conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getAutoAnswerById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getAutoAnswerById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetAutoAnswerByID(rctx, fc.Args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.AutoAnswer)
+	fc.Result = res
+	return ec.marshalOAutoAnswer2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getAutoAnswerById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_AutoAnswer_id(ctx, field)
+			case "name":
+				return ec.fieldContext_AutoAnswer_name(ctx, field)
+			case "values":
+				return ec.fieldContext_AutoAnswer_values(ctx, field)
+			case "type":
+				return ec.fieldContext_AutoAnswer_type(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AutoAnswer_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AutoAnswer_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AutoAnswer", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAutoAnswerById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getAutoAnswerByName(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getAutoAnswerByName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetAutoAnswerByName(rctx, fc.Args["name"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.AutoAnswer)
+	fc.Result = res
+	return ec.marshalOAutoAnswer2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getAutoAnswerByName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_AutoAnswer_id(ctx, field)
+			case "name":
+				return ec.fieldContext_AutoAnswer_name(ctx, field)
+			case "values":
+				return ec.fieldContext_AutoAnswer_values(ctx, field)
+			case "type":
+				return ec.fieldContext_AutoAnswer_type(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AutoAnswer_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AutoAnswer_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AutoAnswer", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAutoAnswerByName_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getAutoAnswers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getAutoAnswers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetAutoAnswers(rctx, fc.Args["option"].(*model.Options))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.AutoAnswer)
+	fc.Result = res
+	return ec.marshalOAutoAnswer2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getAutoAnswers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_AutoAnswer_id(ctx, field)
+			case "name":
+				return ec.fieldContext_AutoAnswer_name(ctx, field)
+			case "values":
+				return ec.fieldContext_AutoAnswer_values(ctx, field)
+			case "type":
+				return ec.fieldContext_AutoAnswer_type(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AutoAnswer_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AutoAnswer_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AutoAnswer", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getAutoAnswers_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query___type(ctx, field)
 	if err != nil {
@@ -32010,6 +32687,47 @@ func (ec *executionContext) unmarshalInputCreateAnteFamilyInput(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCreateAutoAnswerInput(ctx context.Context, obj interface{}) (model.CreateAutoAnswerInput, error) {
+	var it model.CreateAutoAnswerInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "values", "type"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "values":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("values"))
+			data, err := ec.unmarshalNString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Values = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNAutoAnswerType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswerType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateBlackListInput(ctx context.Context, obj interface{}) (model.CreateBlackListInput, error) {
 	var it model.CreateBlackListInput
 	asMap := map[string]interface{}{}
@@ -33961,6 +34679,47 @@ func (ec *executionContext) unmarshalInputUpdateAnteFamilyInput(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateAutoAnswerInput(ctx context.Context, obj interface{}) (model.UpdateAutoAnswerInput, error) {
+	var it model.UpdateAutoAnswerInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "values", "type"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "values":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("values"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Values = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOAutoAnswerType2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswerType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateBlackListInput(ctx context.Context, obj interface{}) (model.UpdateBlackListInput, error) {
 	var it model.UpdateBlackListInput
 	asMap := map[string]interface{}{}
@@ -35710,6 +36469,70 @@ func (ec *executionContext) _AnteFamily(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
+var autoAnswerImplementors = []string{"AutoAnswer"}
+
+func (ec *executionContext) _AutoAnswer(ctx context.Context, sel ast.SelectionSet, obj *model.AutoAnswer) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, autoAnswerImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AutoAnswer")
+		case "id":
+			out.Values[i] = ec._AutoAnswer_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._AutoAnswer_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "values":
+			out.Values[i] = ec._AutoAnswer_values(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "type":
+			out.Values[i] = ec._AutoAnswer_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._AutoAnswer_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._AutoAnswer_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var blackListImplementors = []string{"BlackList"}
 
 func (ec *executionContext) _BlackList(ctx context.Context, sel ast.SelectionSet, obj *model.BlackList) graphql.Marshaler {
@@ -36766,14 +37589,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePatientsRendezVousIds(ctx, field)
 			})
-		case "updatePatientsPassword":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updatePatientsPassword(ctx, field)
-			})
-		case "updatePatientsDoubleAuth":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updatePatientsDoubleAuth(ctx, field)
-			})
 		case "updateAccountsMedicalFolder":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateAccountsMedicalFolder(ctx, field)
@@ -37061,6 +37876,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteOrdonnance":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteOrdonnance(ctx, field)
+			})
+		case "createAutoAnswer":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createAutoAnswer(ctx, field)
+			})
+		case "updateAutoAnswer":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateAutoAnswer(ctx, field)
+			})
+		case "deleteAutoAnswer":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteAutoAnswer(ctx, field)
 			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -38665,6 +39492,63 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getAutoAnswerById":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getAutoAnswerById(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getAutoAnswerByName":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getAutoAnswerByName(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getAutoAnswers":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getAutoAnswers(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -39675,6 +40559,16 @@ func (ec *executionContext) marshalNAppointmentStatus2githubᚗcomᚋedgarᚑcar
 	return v
 }
 
+func (ec *executionContext) unmarshalNAutoAnswerType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswerType(ctx context.Context, v interface{}) (model.AutoAnswerType, error) {
+	var res model.AutoAnswerType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAutoAnswerType2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswerType(ctx context.Context, sel ast.SelectionSet, v model.AutoAnswerType) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -39889,6 +40783,11 @@ func (ec *executionContext) unmarshalNCreateAnteDiseaseInput2githubᚗcomᚋedga
 
 func (ec *executionContext) unmarshalNCreateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAnteFamilyInput(ctx context.Context, v interface{}) (model.CreateAnteFamilyInput, error) {
 	res, err := ec.unmarshalInputCreateAnteFamilyInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateAutoAnswerInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐCreateAutoAnswerInput(ctx context.Context, v interface{}) (model.CreateAutoAnswerInput, error) {
+	res, err := ec.unmarshalInputCreateAutoAnswerInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -40781,6 +41680,32 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
+func (ec *executionContext) unmarshalNString2ᚕᚖstring(ctx context.Context, v interface{}) ([]*string, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOString2ᚖstring(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNString2ᚕᚖstring(ctx context.Context, sel ast.SelectionSet, v []*string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalOString2ᚖstring(ctx, sel, v[i])
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalNSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx context.Context, sel ast.SelectionSet, v *model.Symptom) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -40909,6 +41834,11 @@ func (ec *executionContext) unmarshalNUpdateAnteDiseaseInput2githubᚗcomᚋedga
 
 func (ec *executionContext) unmarshalNUpdateAnteFamilyInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAnteFamilyInput(ctx context.Context, v interface{}) (model.UpdateAnteFamilyInput, error) {
 	res, err := ec.unmarshalInputUpdateAnteFamilyInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateAutoAnswerInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateAutoAnswerInput(ctx context.Context, v interface{}) (model.UpdateAutoAnswerInput, error) {
+	res, err := ec.unmarshalInputUpdateAutoAnswerInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -41583,6 +42513,70 @@ func (ec *executionContext) unmarshalOAppointmentStatus2ᚖgithubᚗcomᚋedgar�
 }
 
 func (ec *executionContext) marshalOAppointmentStatus2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAppointmentStatus(ctx context.Context, sel ast.SelectionSet, v *model.AppointmentStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) marshalOAutoAnswer2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx context.Context, sel ast.SelectionSet, v []*model.AutoAnswer) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOAutoAnswer2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOAutoAnswer2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswer(ctx context.Context, sel ast.SelectionSet, v *model.AutoAnswer) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._AutoAnswer(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOAutoAnswerType2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswerType(ctx context.Context, v interface{}) (*model.AutoAnswerType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.AutoAnswerType)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAutoAnswerType2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAutoAnswerType(ctx context.Context, sel ast.SelectionSet, v *model.AutoAnswerType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

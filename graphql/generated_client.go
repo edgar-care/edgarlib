@@ -8251,3 +8251,333 @@ func GetOrdonnanceByDoctorId(doctor_id string, option *model.Options) ([]model.O
 	return result.Data.GetOrdonnanceByDoctorId, nil
 }
 
+func CreateAutoAnswer(input model.CreateAutoAnswerInput) (model.AutoAnswer, error) {
+	query := `mutation CreateAutoAnswer($input: CreateAutoAnswerInput!){
+	    createAutoAnswer(input: $input){
+	        id
+	        name
+	        values
+	        type
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.AutoAnswer{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			CreateAutoAnswer model.AutoAnswer `json:"createAutoAnswer"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AutoAnswer{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateAutoAnswer, nil
+}
+
+func UpdateAutoAnswer(id string, input model.UpdateAutoAnswerInput) (model.AutoAnswer, error) {
+	query := `mutation UpdateAutoAnswer($id: String!, $input: UpdateAutoAnswerInput!){
+	    updateAutoAnswer(id: $id, input: $input){
+	        id
+	        name
+	        values
+	        type
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.AutoAnswer{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdateAutoAnswer model.AutoAnswer `json:"updateAutoAnswer"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AutoAnswer{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateAutoAnswer, nil
+}
+
+func DeleteAutoAnswer(id string) (bool, error) {
+	query := `mutation DeleteAutoAnswer($id: String!){
+	    deleteAutoAnswer(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			DeleteAutoAnswer bool `json:"deleteAutoAnswer"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteAutoAnswer, nil
+}
+
+func GetAutoAnswerById(id string) (model.AutoAnswer, error) {
+	query := `query GetAutoAnswerById($id: String!){
+	    getAutoAnswerById(id: $id) {
+	        id
+	        name
+	        values
+	        type
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.AutoAnswer{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetAutoAnswerById model.AutoAnswer `json:"getAutoAnswerById"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AutoAnswer{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetAutoAnswerById, nil
+}
+
+func GetAutoAnswerByName(name string) (model.AutoAnswer, error) {
+	query := `query GetAutoAnswerByName($name: String!){
+	    getAutoAnswerByName(name: $name){
+	        id
+	        name
+	        values
+	        type
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"name": name,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.AutoAnswer{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetAutoAnswerByName model.AutoAnswer `json:"getAutoAnswerByName"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.AutoAnswer{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.AutoAnswer{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetAutoAnswerByName, nil
+}
+
+func GetAutoAnswers(option *model.Options) ([]model.AutoAnswer, error) {
+	query := `query GetAutoAnswers($option: Options){
+	    getAutoAnswers(option: $option){
+	        id
+	        name
+	        values
+	        type
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetAutoAnswers []model.AutoAnswer `json:"getAutoAnswers"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetAutoAnswers, nil
+}
+
