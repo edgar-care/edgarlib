@@ -172,6 +172,7 @@ type AnteDisease {
     still_relevant: Boolean!
     createdAt: Int!
     updatedAt: Int!
+    symptomsclear: [Symptom!]
 }
 
 # AnteFamily entity
@@ -232,6 +233,7 @@ type Medicine {
     quantity: Int!
     createdAt: Int!
     updatedAt: Int!
+    symptoms: [Symptom!]
 }
 
 # TreatmentsFollowUp entity
@@ -459,8 +461,6 @@ input UpdateAdminInput {
 }
 
 input CreateSessionInput {
-    diseases: [SessionDiseasesInput!]!
-    symptoms: [SessionSymptomInput!]!
     age: Int!
     height: Int!
     weight: Int!
@@ -468,10 +468,7 @@ input CreateSessionInput {
     ante_chirs: [String!]!
     ante_diseases: [String!]!
     medicine: [String!]!
-    last_question: String!
-    logs: [LogsInput!]!
     hereditary_disease: [String!]!
-    alerts: [String!]!
 }
 
 input UpdateSessionInput {
@@ -962,6 +959,9 @@ type Query {
     # Find a symptom using its id.
     getSymptomById(id: String!): Symptom
 
+    # Find a symptom using its name.
+    getSymptomByCode(code: String!): Symptom #todo: change by name later and delete codes
+
     # Get a disease's symptoms by its name
     getSymptomsByDiseaseName(name: String!): Disease
 
@@ -1018,6 +1018,9 @@ type Query {
     # Get an antedisease by its id.
     getAnteDiseaseByID(id: String!): AnteDisease
 
+    # Get an antedisease by its id with clear symptoms.
+    getAnteDiseaseByIDWithSymptoms(anteDiseaseId: String!): AnteDisease
+
     # Get the entire list of .
     getAnteFamilies(option: Options): [AnteFamily]
 
@@ -1047,6 +1050,9 @@ type Query {
 
     # Get an Medicine by its id.
     getMedicineByID(id: String!): Medicine
+
+    # Get an Medicine by its id with clear symptoms.
+    getMedicineByIDWithSymptoms(medicineId: String!): Medicine
 
     # Get all patient from doctor with id.
     getPatientsFromDoctorById(id: String!, option: Options): [Patient]

@@ -884,6 +884,36 @@ query GetMedicineByID($id: String!){
     }
 }
 
+query GetMedicineByIDWithSymptoms($medicineId: String!){
+    getMedicineByIDWithSymptoms(medicineId: $medicineId){
+        id
+        name
+        unit
+        target_diseases
+        treated_symptoms
+        side_effects
+        type
+        content
+        quantity
+        createdAt
+        updatedAt
+        symptoms {
+            id
+            code
+            name
+            chronic
+            symptom
+            advice
+            question
+            question_basic
+            question_duration
+            question_ante
+            createdAt
+            updatedAt
+        }
+    }
+}
+
 query GetAnteChirs($option: Options){
     getAnteChirs(option: $option){
         id
@@ -1106,6 +1136,34 @@ query GetAnteDiseaseByID($id: String!){
     }
 }
 
+query GetAnteDiseaseByIDWithSymptoms($anteDiseaseId: String!){
+    getAnteDiseaseByIDWithSymptoms(anteDiseaseId: $anteDiseaseId){
+        id
+        name
+        chronicity
+        surgery_ids
+        symptoms
+        treatment_ids
+        still_relevant
+        createdAt
+        updatedAt
+        symptomsclear{
+            id
+            code
+            name
+            chronic
+            symptom
+            advice
+            question
+            question_basic
+            question_duration
+            question_ante
+            createdAt
+            updatedAt
+        }
+    }
+}
+
 query GetNlpReports($option: Options){
     getNlpReports(option: $option){
         id
@@ -1255,6 +1313,23 @@ query GetMedicalFolderByID($id: String!){
 
 query GetSymptomById($id: String!){
     getSymptomById(id: $id){
+        id
+        code
+        name
+        chronic
+        symptom
+        advice
+        question
+        question_basic
+        question_duration
+        question_ante
+        createdAt
+        updatedAt
+    }
+}
+
+query GetSymptomByCode($code: String!){
+    getSymptomByCode(code: $code) {
         id
         code
         name
