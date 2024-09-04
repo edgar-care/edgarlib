@@ -206,9 +206,12 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	}
 
 	_, err = graphql.UpdateSession(session.ID, model.UpdateSessionInput{
-		Diseases: diseasesinput,
-		Symptoms: symptomsinput,
-		Logs:     logs,
+		Diseases:     diseasesinput,
+		Symptoms:     symptomsinput,
+		Medicine:     session.Medicine,
+		LastQuestion: &session.LastQuestion,
+		Logs:         logs,
+		Alerts:       session.Alerts,
 	})
 	edgarlib.CheckError(err)
 	return DiagnoseResponse{

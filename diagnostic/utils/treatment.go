@@ -16,15 +16,11 @@ func isSymptomTreated(symptom model.SessionSymptomInput, treatmentName string) b
 
 func CheckTreatments(symptoms []*model.SessionSymptomInput, medicines []string) ([]*model.SessionSymptomInput, error) {
 	for _, medicineId := range medicines {
-		medicine, err := graphql.GetMedicineByID(medicineId)
+		medicine, err := graphql.GetMedicineByIDWithSymptoms(medicineId)
 		if err != nil {
 			return nil, err
 		}
-		for _, symptomId := range medicine.TreatedSymptoms {
-			symptomT, err := graphql.GetSymptomById(symptomId)
-			if err != nil {
-				return nil, err
-			}
+		for _, symptomT := range medicine.Symptoms {
 			for i, symptomSy := range symptoms {
 				if symptomSy.Name == symptomT.Code && !isSymptomTreated(*symptomSy, symptomT.Code) {
 					symptoms[i].Treated = append(symptoms[i].Treated, medicine.Name)

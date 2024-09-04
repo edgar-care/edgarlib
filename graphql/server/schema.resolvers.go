@@ -465,37 +465,9 @@ func (r *mutationResolver) DeleteAdmin(ctx context.Context, id string) (*bool, e
 // CreateSession is the resolver for the createSession field.
 func (r *mutationResolver) CreateSession(ctx context.Context, input model.CreateSessionInput) (*model.Session, error) {
 	now := int(time.Now().Unix())
-	var diseases []*model.SessionDiseases
-	var symptoms []*model.SessionSymptom
-	var logs []*model.Logs
-
-	for _, disease := range input.Diseases {
-		diseases = append(diseases, &model.SessionDiseases{
-			Name:     disease.Name,
-			Presence: disease.Presence,
-		})
-	}
-
-	for _, symptom := range input.Symptoms {
-		symptoms = append(symptoms, &model.SessionSymptom{
-			Name:     symptom.Name,
-			Presence: symptom.Presence,
-			Duration: symptom.Duration,
-			Treated:  symptom.Treated,
-		})
-	}
-
-	for _, log := range input.Logs {
-		logs = append(logs, &model.Logs{
-			Question: log.Question,
-			Answer:   log.Answer,
-		})
-	}
 
 	session := &model.Session{
 		ID:                primitive.NewObjectID().Hex(),
-		Diseases:          diseases,
-		Symptoms:          symptoms,
 		Age:               input.Age,
 		Height:            input.Height,
 		Weight:            input.Weight,
@@ -503,10 +475,7 @@ func (r *mutationResolver) CreateSession(ctx context.Context, input model.Create
 		AnteChirs:         input.AnteChirs,
 		AnteDiseases:      input.AnteDiseases,
 		Medicine:          input.Medicine,
-		LastQuestion:      input.LastQuestion,
-		Logs:              logs,
 		HereditaryDisease: input.HereditaryDisease,
-		Alerts:            input.Alerts,
 		CreatedAt:         now,
 		UpdatedAt:         now,
 	}
@@ -549,9 +518,9 @@ func (r *mutationResolver) UpdateSession(ctx context.Context, id string, input m
 	if input.AnteDiseases != nil {
 		update["ante_diseases"] = input.AnteDiseases
 	}
-	if input.Medicine != nil {
-		update["medicine"] = input.Medicine
-	}
+
+	update["medicine"] = input.Medicine
+
 	if input.LastQuestion != nil {
 		update["last_question"] = *input.LastQuestion
 	}
@@ -2075,6 +2044,19 @@ func (r *queryResolver) GetSymptomByID(ctx context.Context, id string) (*model.S
 	return &result, nil
 }
 
+// GetSymptomByCode is the resolver for the getSymptomByCode field.
+func (r *queryResolver) GetSymptomByCode(ctx context.Context, code string) (*model.Symptom, error) {
+	var result model.Symptom
+
+	filter := bson.M{"code": code}
+
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 // GetSymptomsByDiseaseName is the resolver for the getSymptomsByDiseaseName field.
 func (r *queryResolver) GetSymptomsByDiseaseName(ctx context.Context, name string) (*model.Disease, error) {
 	var result model.Disease
@@ -2449,6 +2431,24 @@ func (r *queryResolver) GetAnteDiseaseByID(ctx context.Context, id string) (*mod
 	return &result, nil
 }
 
+// GetAnteDiseaseByIDWithSymptoms is the resolver for the getAnteDiseaseByIDWithSymptoms field.
+func (r *queryResolver) GetAnteDiseaseByIDWithSymptoms(ctx context.Context, anteDiseaseID string) (*model.AnteDisease, error) {
+	anteDisease, err := r.GetAnteDiseaseByID(ctx, anteDiseaseID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, symptomID := range anteDisease.Symptoms {
+		symptom, err := r.GetSymptomByID(ctx, symptomID)
+		if err != nil {
+			return nil, err
+		}
+		anteDisease.Symptomsclear = append(anteDisease.Symptomsclear, symptom)
+	}
+
+	return anteDisease, nil
+}
+
 // GetAnteFamilies is the resolver for the getAnteFamilies field.
 func (r *queryResolver) GetAnteFamilies(ctx context.Context, option *model.Options) ([]*model.AnteFamily, error) {
 	filter := bson.D{}
@@ -2621,6 +2621,24 @@ func (r *queryResolver) GetMedicineByID(ctx context.Context, id string) (*model.
 	}
 
 	return &result, nil
+}
+
+// GetMedicineByIDWithSymptoms is the resolver for the getMedicineByIdWithSymptoms field.
+func (r *queryResolver) GetMedicineByIDWithSymptoms(ctx context.Context, medicineID string) (*model.Medicine, error) {
+	medicine, err := r.GetMedicineByID(ctx, medicineID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, symptomID := range medicine.TreatedSymptoms {
+		symptom, err := r.GetSymptomByID(ctx, symptomID)
+		if err != nil {
+			return nil, err
+		}
+		medicine.Symptoms = append(medicine.Symptoms, symptom)
+	}
+
+	return medicine, nil
 }
 
 // GetPatientsFromDoctorByID is the resolver for the getPatientsFromDoctorById field.
