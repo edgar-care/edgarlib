@@ -36,7 +36,7 @@ func MissingPassword(email string) MissingPasswordResponse {
 
 	link := fmt.Sprintf("app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String())
 	if os.Getenv("ENV") == "demo" {
-		fmt.Sprintf("demo.app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String())
+		link = fmt.Sprintf("demo.app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String())
 	}
 
 	err = edgarmail.SendEmail(edgarmail.Email{
