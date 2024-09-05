@@ -850,14 +850,15 @@ func CreateMedicine(input model.CreateMedicineInput) (model.Medicine, error) {
 	query := `mutation CreateMedicine($input: CreateMedicineInput!){
 	    createMedicine(input: $input){
 	        id
-	        name
-	        unit
+	        dci
 	        target_diseases
 	        treated_symptoms
 	        side_effects
-	        type
-	        content
-	        quantity
+	        dosage
+	        dosage_unit
+	        container
+	        name
+	        dosage_form
 	        createdAt
 	        updatedAt
 	    }
@@ -1035,6 +1036,7 @@ func CreateDoctor(input model.CreateDoctorInput) (model.Doctor, error) {
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        status
 	        createdAt
 	        updatedAt
@@ -2219,6 +2221,7 @@ func UpdateDoctor(id string, input model.UpdateDoctorInput) (model.Doctor, error
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        status
 	        createdAt
 	        updatedAt
@@ -2289,6 +2292,7 @@ func UpdateDoctorsDeviceConnect(id string, input model.UpdateDoctorsDeviceConnec
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        status
 	        createdAt
 	        updatedAt
@@ -2359,6 +2363,7 @@ func UpdateDoctorsTrustDevice(id string, input model.UpdateDoctorsTrustDeviceInp
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        status
 	        createdAt
 	        updatedAt
@@ -2429,6 +2434,7 @@ func UpdateDoctorsPatientIDs(id string, input model.UpdateDoctorsPatientIDsInput
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        status
 	        createdAt
 	        updatedAt
@@ -3877,14 +3883,15 @@ func GetMedicineByID(id string) (model.Medicine, error) {
 	query := `query GetMedicineByID($id: String!){
 	    getMedicineByID(id: $id){
 	        id
-	        name
-	        unit
+	        dci
 	        target_diseases
 	        treated_symptoms
 	        side_effects
-	        type
-	        content
-	        quantity
+	        dosage
+	        dosage_unit
+	        container
+	        name
+	        dosage_form
 	        createdAt
 	        updatedAt
 	    }
@@ -3938,14 +3945,15 @@ func GetMedicineByIDWithSymptoms(medicineId string) (model.Medicine, error) {
 	query := `query GetMedicineByIDWithSymptoms($medicineId: String!){
 	    getMedicineByIDWithSymptoms(medicineId: $medicineId){
 	        id
-	        name
-	        unit
+	        dci
 	        target_diseases
 	        treated_symptoms
 	        side_effects
-	        type
-	        content
-	        quantity
+	        dosage
+	        dosage_unit
+	        container
+	        name
+	        dosage_form
 	        createdAt
 	        updatedAt
 	        symptoms {
@@ -4799,6 +4807,7 @@ func GetDoctorByEmail(email string) (model.Doctor, error) {
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        status
 	        createdAt
 	        updatedAt
@@ -6002,6 +6011,7 @@ func GetDoctors(option *model.Options) ([]model.Doctor, error) {
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        createdAt
 	        updatedAt
 	    }
@@ -6366,14 +6376,15 @@ func GetMedicines(option *model.Options) ([]model.Medicine, error) {
 	query := `query GetMedicines($option: Options){
 	    getMedicines(option: $option){
 	        id
-	        name
-	        unit
+	        dci
 	        target_diseases
 	        treated_symptoms
 	        side_effects
-	        type
-	        content
-	        quantity
+	        dosage
+	        dosage_unit
+	        container
+	        name
+	        dosage_form
 	        createdAt
 	        updatedAt
 	    }
@@ -6443,6 +6454,7 @@ func GetDoctorById(id string) (model.Doctor, error) {
 	        device_connect
 	        double_auth_methods_id
 	        trust_devices
+	        ordonnance_ids
 	        status
 	        createdAt
 	        updatedAt
@@ -7910,5 +7922,332 @@ func GetSaveCode(option *model.Options) ([]model.SaveCode, error) {
 	}
 
 	return result.Data.GetSaveCode, nil
+}
+
+func CreateOrdonnance(input model.CreateOrdonnanceInput) (model.Ordonnance, error) {
+	query := `mutation CreateOrdonnance($input: CreateOrdonnanceInput!){
+	    createOrdonnance(input: $input){
+	        id
+	        created_by
+	        patient_id
+	        medicines {
+	            medicine_id
+	            qsp
+	            qsp_unit
+	            comment
+	            periods {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Ordonnance{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			CreateOrdonnance model.Ordonnance `json:"createOrdonnance"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Ordonnance{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateOrdonnance, nil
+}
+
+func UpdateOrdonnance(id string, input model.UpdateOrdonnanceInput) (model.Ordonnance, error) {
+	query := `mutation UpdateOrdonnance($id: String!, $input: UpdateOrdonnanceInput!){
+	    updateOrdonnance(id: $id, input: $input){
+	        id
+	        created_by
+	        patient_id
+	        medicines {
+	            medicine_id
+	            qsp
+	            qsp_unit
+	            comment
+	            periods {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Ordonnance{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdateOrdonnance model.Ordonnance `json:"updateOrdonnance"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Ordonnance{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateOrdonnance, nil
+}
+
+func DeleteOrdonnance(id string) (bool, error) {
+	query := `mutation DeleteOrdonnance($id: String!){
+	    deleteOrdonnance(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			DeleteOrdonnance bool `json:"deleteOrdonnance"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteOrdonnance, nil
+}
+
+func GetOrdonnanceById(id string) (model.Ordonnance, error) {
+	query := `query GetOrdonnanceById($id: String!){
+	    getOrdonnanceById(id: $id){
+	        id
+	        created_by
+	        patient_id
+	        medicines {
+	            medicine_id
+	            qsp
+	            qsp_unit
+	            comment
+	            periods {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.Ordonnance{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetOrdonnanceById model.Ordonnance `json:"getOrdonnanceById"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.Ordonnance{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.Ordonnance{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetOrdonnanceById, nil
+}
+
+func GetOrdonnanceByDoctorId(doctor_id string, option *model.Options) ([]model.Ordonnance, error) {
+	query := `query GetOrdonnanceByDoctorId($doctor_id: String!, $option: Options){
+	    getOrdonnanceByDoctorId(doctor_id: $doctor_id, option: $option){
+	        id
+	        created_by
+	        patient_id
+	        medicines {
+	            medicine_id
+	            qsp
+	            qsp_unit
+	            comment
+	            periods {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"doctor_id": doctor_id,
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetOrdonnanceByDoctorId []model.Ordonnance `json:"getOrdonnanceByDoctorId"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetOrdonnanceByDoctorId, nil
 }
 

@@ -224,14 +224,15 @@ type CreateMedicalFolderInput struct {
 }
 
 type CreateMedicineInput struct {
-	Name            string   `json:"name" bson:"name"`
-	Unit            *string  `json:"unit,omitempty" bson:"unit"`
-	TargetDiseases  []string `json:"target_diseases" bson:"target_diseases"`
-	TreatedSymptoms []string `json:"treated_symptoms" bson:"treated_symptoms"`
-	SideEffects     []string `json:"side_effects" bson:"side_effects"`
-	Type            string   `json:"type" bson:"type"`
-	Content         string   `json:"content" bson:"content"`
-	Quantity        int      `json:"quantity" bson:"quantity"`
+	Dci             string        `json:"dci" bson:"dci"`
+	TargetDiseases  []string      `json:"target_diseases" bson:"target_diseases"`
+	TreatedSymptoms []string      `json:"treated_symptoms" bson:"treated_symptoms"`
+	SideEffects     []string      `json:"side_effects" bson:"side_effects"`
+	Dosage          int           `json:"dosage" bson:"dosage"`
+	DosageUnit      UnitEnum      `json:"dosage_unit" bson:"dosage_unit"`
+	Container       ContainerEnum `json:"container" bson:"container"`
+	Name            string        `json:"name" bson:"name"`
+	DosageForm      FormEnum      `json:"dosage_form" bson:"dosage_form"`
 }
 
 type CreateNlpReportInput struct {
@@ -246,6 +247,12 @@ type CreateNotificationInput struct {
 	Token   string `json:"token" bson:"token"`
 	Message string `json:"message" bson:"message"`
 	Title   string `json:"title" bson:"title"`
+}
+
+type CreateOrdonnanceInput struct {
+	CreatedBy string                     `json:"created_by" bson:"created_by"`
+	PatientID string                     `json:"patient_id" bson:"patient_id"`
+	Medicines []*MedicineOrdonnanceInput `json:"medicines" bson:"medicines"`
 }
 
 type CreatePatientInput struct {
@@ -347,6 +354,7 @@ type Doctor struct {
 	DoubleAuthMethodsID *string   `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
 	DeviceConnect       []*string `json:"device_connect,omitempty" bson:"device_connect"`
 	TrustDevices        []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
+	OrdonnanceIds       []*string `json:"ordonnance_ids,omitempty" bson:"ordonnance_ids"`
 	Status              bool      `json:"status" bson:"status"`
 	CreatedAt           int       `json:"createdAt" bson:"createdAt"`
 	UpdatedAt           int       `json:"updatedAt" bson:"updatedAt"`
@@ -417,29 +425,47 @@ type MedicalInfo struct {
 }
 
 type Medicine struct {
-	ID              string       `json:"id" bson:"_id"`
-	Name            string       `json:"name" bson:"name"`
-	Unit            MedicineUnit `json:"unit" bson:"unit"`
-	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
-	TreatedSymptoms []string     `json:"treated_symptoms" bson:"treated_symptoms"`
-	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
-	Type            string       `json:"type" bson:"type"`
-	Content         string       `json:"content" bson:"content"`
-	Quantity        int          `json:"quantity" bson:"quantity"`
-	CreatedAt       int          `json:"createdAt" bson:"createdAt"`
-	UpdatedAt       int          `json:"updatedAt" bson:"updatedAt"`
-	Symptoms        []*Symptom   `json:"symptoms,omitempty" bson:"symptoms"`
+	ID              string        `json:"id" bson:"_id"`
+	Dci             string        `json:"dci" bson:"dci"`
+	TargetDiseases  []string      `json:"target_diseases" bson:"target_diseases"`
+	TreatedSymptoms []string      `json:"treated_symptoms" bson:"treated_symptoms"`
+	SideEffects     []string      `json:"side_effects" bson:"side_effects"`
+	Dosage          int           `json:"dosage" bson:"dosage"`
+	DosageUnit      UnitEnum      `json:"dosage_unit" bson:"dosage_unit"`
+	Container       ContainerEnum `json:"container" bson:"container"`
+	Name            string        `json:"name" bson:"name"`
+	DosageForm      FormEnum      `json:"dosage_form" bson:"dosage_form"`
+	CreatedAt       int           `json:"createdAt" bson:"createdAt"`
+	UpdatedAt       int           `json:"updatedAt" bson:"updatedAt"`
+	Symptoms        []*Symptom    `json:"symptoms,omitempty" bson:"symptoms"`
 }
 
 type MedicineInput struct {
-	Name            string       `json:"name" bson:"name"`
-	Unit            MedicineUnit `json:"unit" bson:"unit"`
-	TargetDiseases  []string     `json:"target_diseases" bson:"target_diseases"`
-	TreatedSymptoms []string     `json:"treated_symptoms" bson:"treated_symptoms"`
-	SideEffects     []string     `json:"side_effects" bson:"side_effects"`
-	Type            string       `json:"type" bson:"type"`
-	Content         string       `json:"content" bson:"content"`
-	Quantity        int          `json:"quantity" bson:"quantity"`
+	Dci             string        `json:"dci" bson:"dci"`
+	TargetDiseases  []string      `json:"target_diseases" bson:"target_diseases"`
+	TreatedSymptoms []string      `json:"treated_symptoms" bson:"treated_symptoms"`
+	SideEffects     []string      `json:"side_effects" bson:"side_effects"`
+	Dosage          int           `json:"dosage" bson:"dosage"`
+	DosageUnit      UnitEnum      `json:"dosage_unit" bson:"dosage_unit"`
+	Container       ContainerEnum `json:"container" bson:"container"`
+	Name            string        `json:"name" bson:"name"`
+	DosageForm      FormEnum      `json:"dosage_form" bson:"dosage_form"`
+}
+
+type MedicineOrdonnance struct {
+	MedicineID string              `json:"medicine_id" bson:"medicine_id"`
+	Qsp        int                 `json:"qsp" bson:"qsp"`
+	QspUnit    TimeUnitEnum        `json:"qsp_unit" bson:"qsp_unit"`
+	Comment    *string             `json:"comment,omitempty" bson:"comment"`
+	Periods    []*PeriodOrdonnance `json:"periods" bson:"periods"`
+}
+
+type MedicineOrdonnanceInput struct {
+	MedicineID string                   `json:"medicine_id" bson:"medicine_id"`
+	Qsp        int                      `json:"qsp" bson:"qsp"`
+	QspUnit    TimeUnitEnum             `json:"qsp_unit" bson:"qsp_unit"`
+	Comment    *string                  `json:"comment,omitempty" bson:"comment"`
+	Periods    []*PeriodOrdonnanceInput `json:"periods" bson:"periods"`
 }
 
 type Mutation struct {
@@ -483,6 +509,15 @@ type Options struct {
 	Offset int             `json:"offset" bson:"offset"`
 }
 
+type Ordonnance struct {
+	ID        string                `json:"id" bson:"_id"`
+	CreatedBy string                `json:"created_by" bson:"created_by"`
+	PatientID string                `json:"patient_id" bson:"patient_id"`
+	Medicines []*MedicineOrdonnance `json:"medicines" bson:"medicines"`
+	CreatedAt int                   `json:"createdAt" bson:"createdAt"`
+	UpdatedAt int                   `json:"updatedAt" bson:"updatedAt"`
+}
+
 type Patient struct {
 	ID                   string    `json:"id" bson:"_id"`
 	Email                string    `json:"email" bson:"email"`
@@ -498,6 +533,24 @@ type Patient struct {
 	Status               bool      `json:"status" bson:"status"`
 	CreatedAt            int       `json:"createdAt" bson:"createdAt"`
 	UpdatedAt            int       `json:"updatedAt" bson:"updatedAt"`
+}
+
+type PeriodOrdonnance struct {
+	Quantity       int           `json:"quantity" bson:"quantity"`
+	Frequency      int           `json:"frequency" bson:"frequency"`
+	FrequencyRatio int           `json:"frequency_ratio" bson:"frequency_ratio"`
+	FrequencyUnit  TimeUnitEnum  `json:"frequency_unit" bson:"frequency_unit"`
+	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
+	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
+}
+
+type PeriodOrdonnanceInput struct {
+	Quantity       int           `json:"quantity" bson:"quantity"`
+	Frequency      int           `json:"frequency" bson:"frequency"`
+	FrequencyRatio int           `json:"frequency_ratio" bson:"frequency_ratio"`
+	FrequencyUnit  TimeUnitEnum  `json:"frequency_unit" bson:"frequency_unit"`
+	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
+	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
 }
 
 type Query struct {
@@ -711,6 +764,7 @@ type UpdateDoctorInput struct {
 	DeviceConnect       []*string     `json:"device_connect,omitempty" bson:"device_connect"`
 	DoubleAuthMethodsID *string       `json:"double_auth_methods_id,omitempty" bson:"double_auth_methods_id"`
 	TrustDevices        []*string     `json:"trust_devices,omitempty" bson:"trust_devices"`
+	OrdonnanceIds       []*string     `json:"ordonnance_ids,omitempty" bson:"ordonnance_ids"`
 	Status              *bool         `json:"status,omitempty" bson:"status"`
 }
 
@@ -753,10 +807,24 @@ type UpdateMedicalFolderInput struct {
 	FamilyMembersMedInfoID []string          `json:"family_members_med_info_id,omitempty" bson:"family_members_med_info_id"`
 }
 
+type UpdateMedicineOrdonnanceInput struct {
+	MedicineID *string                        `json:"medicine_id,omitempty" bson:"medicine_id"`
+	Qsp        *int                           `json:"qsp,omitempty" bson:"qsp"`
+	QspUnit    *TimeUnitEnum                  `json:"qsp_unit,omitempty" bson:"qsp_unit"`
+	Comment    *string                        `json:"comment,omitempty" bson:"comment"`
+	Periods    []*UpdatePeriodOrdonnanceInput `json:"periods,omitempty" bson:"periods"`
+}
+
 type UpdateNotificationInput struct {
 	Token   string `json:"token" bson:"token"`
 	Message string `json:"message" bson:"message"`
 	Title   string `json:"title" bson:"title"`
+}
+
+type UpdateOrdonnanceInput struct {
+	CreatedBy *string                    `json:"created_by,omitempty" bson:"created_by"`
+	PatientID *string                    `json:"patient_id,omitempty" bson:"patient_id"`
+	Medicines []*MedicineOrdonnanceInput `json:"medicines,omitempty" bson:"medicines"`
 }
 
 type UpdatePatientInput struct {
@@ -784,6 +852,15 @@ type UpdatePatientTrustDeviceInput struct {
 type UpdatePatientsDeviceConnectInput struct {
 	DeviceConnect []*string `json:"device_connect,omitempty" bson:"device_connect"`
 	TrustDevices  []*string `json:"trust_devices,omitempty" bson:"trust_devices"`
+}
+
+type UpdatePeriodOrdonnanceInput struct {
+	Quantity       *int          `json:"quantity,omitempty" bson:"quantity"`
+	Frequency      *int          `json:"frequency,omitempty" bson:"frequency"`
+	FrequencyRatio *string       `json:"frequency_ratio,omitempty" bson:"frequency_ratio"`
+	FrequencyUnit  *TimeUnitEnum `json:"frequency_unit,omitempty" bson:"frequency_unit"`
+	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
+	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
 }
 
 type UpdateRdvInput struct {
@@ -1242,5 +1319,209 @@ func (e *SortOrder) UnmarshalGQL(v interface{}) error {
 }
 
 func (e SortOrder) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type ContainerEnum string
+
+const (
+	ContainerEnumFlacon ContainerEnum = "FLACON"
+	ContainerEnumTube   ContainerEnum = "TUBE"
+	ContainerEnumBoite  ContainerEnum = "BOITE"
+)
+
+var AllContainerEnum = []ContainerEnum{
+	ContainerEnumFlacon,
+	ContainerEnumTube,
+	ContainerEnumBoite,
+}
+
+func (e ContainerEnum) IsValid() bool {
+	switch e {
+	case ContainerEnumFlacon, ContainerEnumTube, ContainerEnumBoite:
+		return true
+	}
+	return false
+}
+
+func (e ContainerEnum) String() string {
+	return string(e)
+}
+
+func (e *ContainerEnum) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ContainerEnum(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid container_enum", str)
+	}
+	return nil
+}
+
+func (e ContainerEnum) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type FormEnum string
+
+const (
+	FormEnumCreme                FormEnum = "CREME"
+	FormEnumPommade              FormEnum = "POMMADE"
+	FormEnumGelule               FormEnum = "GELULE"
+	FormEnumComprime             FormEnum = "COMPRIME"
+	FormEnumGele                 FormEnum = "GELE"
+	FormEnumSolutionBuvable      FormEnum = "SOLUTION_BUVABLE"
+	FormEnumPoudre               FormEnum = "POUDRE"
+	FormEnumSuppositoire         FormEnum = "SUPPOSITOIRE"
+	FormEnumAmpoule              FormEnum = "AMPOULE"
+	FormEnumSuspensionNasale     FormEnum = "SUSPENSION_NASALE"
+	FormEnumSpray                FormEnum = "SPRAY"
+	FormEnumCollutoire           FormEnum = "COLLUTOIRE"
+	FormEnumShampooing           FormEnum = "SHAMPOOING"
+	FormEnumSolutionInjectable   FormEnum = "SOLUTION_INJECTABLE"
+	FormEnumComprimerEfervescent FormEnum = "COMPRIMER_EFERVESCENT"
+	FormEnumGranulerEnSachet     FormEnum = "GRANULER_EN_SACHET"
+	FormEnumPastille             FormEnum = "PASTILLE"
+	FormEnumSirop                FormEnum = "SIROP"
+)
+
+var AllFormEnum = []FormEnum{
+	FormEnumCreme,
+	FormEnumPommade,
+	FormEnumGelule,
+	FormEnumComprime,
+	FormEnumGele,
+	FormEnumSolutionBuvable,
+	FormEnumPoudre,
+	FormEnumSuppositoire,
+	FormEnumAmpoule,
+	FormEnumSuspensionNasale,
+	FormEnumSpray,
+	FormEnumCollutoire,
+	FormEnumShampooing,
+	FormEnumSolutionInjectable,
+	FormEnumComprimerEfervescent,
+	FormEnumGranulerEnSachet,
+	FormEnumPastille,
+	FormEnumSirop,
+}
+
+func (e FormEnum) IsValid() bool {
+	switch e {
+	case FormEnumCreme, FormEnumPommade, FormEnumGelule, FormEnumComprime, FormEnumGele, FormEnumSolutionBuvable, FormEnumPoudre, FormEnumSuppositoire, FormEnumAmpoule, FormEnumSuspensionNasale, FormEnumSpray, FormEnumCollutoire, FormEnumShampooing, FormEnumSolutionInjectable, FormEnumComprimerEfervescent, FormEnumGranulerEnSachet, FormEnumPastille, FormEnumSirop:
+		return true
+	}
+	return false
+}
+
+func (e FormEnum) String() string {
+	return string(e)
+}
+
+func (e *FormEnum) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FormEnum(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid form_enum", str)
+	}
+	return nil
+}
+
+func (e FormEnum) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TimeUnitEnum string
+
+const (
+	TimeUnitEnumJour    TimeUnitEnum = "JOUR"
+	TimeUnitEnumSemaine TimeUnitEnum = "SEMAINE"
+	TimeUnitEnumMois    TimeUnitEnum = "MOIS"
+	TimeUnitEnumAnnee   TimeUnitEnum = "ANNEE"
+)
+
+var AllTimeUnitEnum = []TimeUnitEnum{
+	TimeUnitEnumJour,
+	TimeUnitEnumSemaine,
+	TimeUnitEnumMois,
+	TimeUnitEnumAnnee,
+}
+
+func (e TimeUnitEnum) IsValid() bool {
+	switch e {
+	case TimeUnitEnumJour, TimeUnitEnumSemaine, TimeUnitEnumMois, TimeUnitEnumAnnee:
+		return true
+	}
+	return false
+}
+
+func (e TimeUnitEnum) String() string {
+	return string(e)
+}
+
+func (e *TimeUnitEnum) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TimeUnitEnum(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid time_unit_enum", str)
+	}
+	return nil
+}
+
+func (e TimeUnitEnum) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type UnitEnum string
+
+const (
+	UnitEnumMl UnitEnum = "ml"
+	UnitEnumMg UnitEnum = "mg"
+	UnitEnumG  UnitEnum = "g"
+)
+
+var AllUnitEnum = []UnitEnum{
+	UnitEnumMl,
+	UnitEnumMg,
+	UnitEnumG,
+}
+
+func (e UnitEnum) IsValid() bool {
+	switch e {
+	case UnitEnumMl, UnitEnumMg, UnitEnumG:
+		return true
+	}
+	return false
+}
+
+func (e UnitEnum) String() string {
+	return string(e)
+}
+
+func (e *UnitEnum) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UnitEnum(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid unit_enum", str)
+	}
+	return nil
+}
+
+func (e UnitEnum) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

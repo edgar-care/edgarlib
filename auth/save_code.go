@@ -92,8 +92,14 @@ func CreateBackupCodes(id string, r *http.Request) CreateSaveCodeResponse {
 	}
 
 	if doubleAuthId != nil {
+		test, err := graphql.GetDoubleAuthById(*doubleAuthId)
+		if err != nil {
+			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}
+		}
+
 		_, err = graphql.UpdateDoubleAuth(*doubleAuthId, model.UpdateDoubleAuthInput{
-			Secret: &saveCode.ID,
+			Methods: test.Methods,
+			Secret:  &saveCode.ID,
 		})
 		if err != nil {
 			return CreateSaveCodeResponse{SaveCode: model.SaveCode{}, Code: 500, Err: err}

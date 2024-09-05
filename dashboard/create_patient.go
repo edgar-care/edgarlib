@@ -43,14 +43,15 @@ func ConvertCreateToUpdateMedicalInfoInput(createInput medical_folder.CreateMedi
 	}
 
 	return medical_folder.UpdateMedicalInfoInput{
-		Name:               createInput.Name,
-		Firstname:          createInput.Firstname,
-		Birthdate:          createInput.Birthdate,
-		Sex:                createInput.Sex,
-		Weight:             createInput.Weight,
-		Height:             createInput.Height,
-		PrimaryDoctorID:    createInput.PrimaryDoctorID,
-		MedicalAntecedents: updateAntecedents,
+		Name:                   createInput.Name,
+		Firstname:              createInput.Firstname,
+		Birthdate:              createInput.Birthdate,
+		Sex:                    createInput.Sex,
+		Weight:                 createInput.Weight,
+		Height:                 createInput.Height,
+		PrimaryDoctorID:        createInput.PrimaryDoctorID,
+		FamilyMembersMedInfoId: createInput.FamilyMembersMedInfoId,
+		MedicalAntecedents:     updateAntecedents,
 	}
 }
 

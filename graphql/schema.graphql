@@ -30,6 +30,7 @@ type Doctor {
     double_auth_methods_id: String
     device_connect: [String]
     trust_devices: [String]
+    ordonnance_ids: [String]
     status: Boolean!
     createdAt: Int!
     updatedAt: Int!
@@ -223,14 +224,15 @@ type MedicalAntecedents {
 # Medicine entity
 type Medicine {
     id: ID!
-    name: String!
-    unit: MedicineUnit!
+    dci: String!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    type: String!
-    content: String!
-    quantity: Int!
+    dosage: Int!
+    dosage_unit: unit_enum!
+    container: container_enum!
+    name: String!
+    dosage_form: form_enum!
     createdAt: Int!
     updatedAt: Int!
     symptoms: [Symptom!]
@@ -304,6 +306,17 @@ type SaveCode {
     updatedAt: Int!
 }
 
+
+type Ordonnance {
+    id: ID!
+    created_by: String!
+    patient_id: String!
+    medicines: [MedicineOrdonnance!]!
+    createdAt: Int!
+    updatedAt: Int!
+}
+
+
 ##  Substructure  ----------------------------------------------------------------------------------------------------
 
 type Address {
@@ -359,6 +372,24 @@ type ChatMessages {
     sended_time: Int!
 }
 
+
+type MedicineOrdonnance {
+    medicine_id: String!
+    qsp: Int!
+    qsp_unit: time_unit_enum!
+    comment: String
+    periods: [PeriodOrdonnance!]!
+}
+
+type PeriodOrdonnance {
+    quantity: Int!
+    frequency: Int!
+    frequency_ratio: Int!
+    frequency_unit: time_unit_enum!
+    period_length: Int
+    period_unit: time_unit_enum
+}
+
 ## Inputs -------------------------------------------------------------------------------------------------------------
 
 input CreatePatientInput {
@@ -405,6 +436,7 @@ input UpdateDoctorInput {
     device_connect: [String]
     double_auth_methods_id: String
     trust_devices: [String]
+    ordonnance_ids: [String]
     status: Boolean
 }
 
@@ -660,14 +692,15 @@ input UpdateAlertInput {
 }
 
 input CreateMedicineInput {
-    name: String!
-    unit: String
+    dci: String!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    type: String!
-    content: String!
-    quantity: Int!
+    dosage: Int!
+    dosage_unit: unit_enum!
+    container: container_enum!
+    name: String!
+    dosage_form: form_enum!
 }
 
 
@@ -743,14 +776,15 @@ input TreatmentInput {
 }
 
 input MedicineInput {
-    name: String!
-    unit: MedicineUnit!
+    dci: String!
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    type: String!
-    content: String!
-    quantity: Int!
+    dosage: Int!
+    dosage_unit: unit_enum!
+    container: container_enum!
+    name: String!
+    dosage_form: form_enum!
 }
 
 input ChirInducedSymptomInput {
@@ -844,6 +878,53 @@ input ChatMessagesInput {
     sended_time: Int!
 }
 
+
+input CreateOrdonnanceInput {
+    created_by: String!
+    patient_id: String!
+    medicines: [MedicineOrdonnanceInput!]!
+}
+
+input MedicineOrdonnanceInput {
+    medicine_id: String!
+    qsp: Int!
+    qsp_unit: time_unit_enum!
+    comment: String
+    periods: [PeriodOrdonnanceInput!]!
+}
+
+input PeriodOrdonnanceInput {
+    quantity: Int!
+    frequency: Int!
+    frequency_ratio: Int!
+    frequency_unit: time_unit_enum!
+    period_length: Int
+    period_unit: time_unit_enum
+}
+
+input UpdateOrdonnanceInput {
+    created_by: String
+    patient_id: String
+    medicines: [MedicineOrdonnanceInput!]
+}
+
+input UpdateMedicineOrdonnanceInput {
+    medicine_id: String
+    qsp: Int
+    qsp_unit: time_unit_enum
+    comment: String
+    periods: [UpdatePeriodOrdonnanceInput!]
+}
+
+input UpdatePeriodOrdonnanceInput {
+    quantity: Int
+    frequency: Int
+    frequency_ratio: String
+    frequency_unit: time_unit_enum
+    period_length: Int
+    period_unit: time_unit_enum
+}
+
 ##  Enums  ------------------------------------------------------------------------------------------------------------
 
 enum Sex {
@@ -901,6 +982,48 @@ enum AppointmentStatus {
     CANCELED,
     OPENED
 }
+
+
+enum unit_enum {
+    ml,
+    mg
+    g
+}
+
+enum container_enum {
+    FLACON,
+    TUBE,
+    BOITE
+}
+
+enum form_enum {
+    CREME,
+    POMMADE,
+    GELULE,
+    COMPRIME,
+    GELE,
+    SOLUTION_BUVABLE,
+    POUDRE,
+    SUPPOSITOIRE,
+    AMPOULE,
+    SUSPENSION_NASALE,
+    SPRAY,
+    COLLUTOIRE,
+    SHAMPOOING,
+    SOLUTION_INJECTABLE,
+    COMPRIMER_EFERVESCENT,
+    GRANULER_EN_SACHET,
+    PASTILLE,
+    SIROP
+}
+
+enum time_unit_enum {
+    JOUR,
+    SEMAINE,
+    MOIS,
+    ANNEE
+}
+
 
 ## Utils  -------------------------------------------------------------------------------------------------------------
 
@@ -1101,6 +1224,12 @@ type Query {
 
     # Get Save Code
     getSaveCode(option: Options): [SaveCode]
+
+    #Get Ordonance by id
+    getOrdonnanceById(id: String!): Ordonnance
+
+    #get Ordonance by doctor id
+    getOrdonnanceByDoctorId(doctor_id: String!, option: Options): [Ordonnance]
 }
 
 type Mutation {
@@ -1322,4 +1451,14 @@ type Mutation {
 
     #Delete a SaveCode
     deleteSaveCode(id: String!): Boolean
+
+
+    # Create a new Ordonnance
+    createOrdonnance(input: CreateOrdonnanceInput!): Ordonnance
+
+    #Update a Ordonnance
+    updateOrdonnance(id: String!, input: UpdateOrdonnanceInput!): Ordonnance
+
+    #Delete a Ordonnance
+    deleteOrdonnance(id: String!): Boolean
 }

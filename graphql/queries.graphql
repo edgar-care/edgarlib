@@ -160,14 +160,15 @@ mutation UpdateMedicalFolder($id: String!, $input: UpdateMedicalFolderInput!){
 mutation CreateMedicine($input: CreateMedicineInput!){
     createMedicine(input: $input){
         id
-        name
-        unit
+        dci
         target_diseases
         treated_symptoms
         side_effects
-        type
-        content
-        quantity
+        dosage
+        dosage_unit
+        container
+        name
+        dosage_form
         createdAt
         updatedAt
     }
@@ -209,6 +210,7 @@ mutation CreateDoctor($input: CreateDoctorInput!){
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         status
         createdAt
         updatedAt
@@ -486,6 +488,7 @@ mutation UpdateDoctor($id: String!, $input: UpdateDoctorInput!){
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         status
         createdAt
         updatedAt
@@ -510,6 +513,7 @@ mutation UpdateDoctorsDeviceConnect($id: String!, $input: UpdateDoctorsDeviceCon
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         status
         createdAt
         updatedAt
@@ -534,6 +538,7 @@ mutation UpdateDoctorsTrustDevice($id: String!, $input: UpdateDoctorsTrustDevice
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         status
         createdAt
         updatedAt
@@ -558,6 +563,7 @@ mutation UpdateDoctorsPatientIDs($id: String!, $input: UpdateDoctorsPatientIDsIn
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         status
         createdAt
         updatedAt
@@ -871,14 +877,15 @@ query GetAlerts($option: Options){
 query GetMedicineByID($id: String!){
     getMedicineByID(id: $id){
         id
-        name
-        unit
+        dci
         target_diseases
         treated_symptoms
         side_effects
-        type
-        content
-        quantity
+        dosage
+        dosage_unit
+        container
+        name
+        dosage_form
         createdAt
         updatedAt
     }
@@ -887,14 +894,15 @@ query GetMedicineByID($id: String!){
 query GetMedicineByIDWithSymptoms($medicineId: String!){
     getMedicineByIDWithSymptoms(medicineId: $medicineId){
         id
-        name
-        unit
+        dci
         target_diseases
         treated_symptoms
         side_effects
-        type
-        content
-        quantity
+        dosage
+        dosage_unit
+        container
+        name
+        dosage_form
         createdAt
         updatedAt
         symptoms {
@@ -1116,6 +1124,7 @@ query GetDoctorByEmail($email: String!){
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         status
         createdAt
         updatedAt
@@ -1460,6 +1469,7 @@ query GetDoctors($option: Options){
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         createdAt
         updatedAt
     }
@@ -1553,14 +1563,15 @@ query GetSessions($option: Options){
 query GetMedicines($option: Options){
     getMedicines(option: $option){
         id
-        name
-        unit
+        dci
         target_diseases
         treated_symptoms
         side_effects
-        type
-        content
-        quantity
+        dosage
+        dosage_unit
+        container
+        name
+        dosage_form
         createdAt
         updatedAt
     }
@@ -1585,6 +1596,7 @@ query GetDoctorById($id: String!){
         device_connect
         double_auth_methods_id
         trust_devices
+        ordonnance_ids
         status
         createdAt
         updatedAt
@@ -1835,5 +1847,109 @@ query GetSaveCode($option: Options){
     getSaveCode(option: $option){
         id
         code
+    }
+}
+
+
+
+mutation CreateOrdonnance($input: CreateOrdonnanceInput!){
+    createOrdonnance(input: $input){
+        id
+        created_by
+        patient_id
+        medicines {
+            medicine_id
+            qsp
+            qsp_unit
+            comment
+            periods {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+            }
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateOrdonnance($id: String!, $input: UpdateOrdonnanceInput!){
+    updateOrdonnance(id: $id, input: $input){
+        id
+        created_by
+        patient_id
+        medicines {
+            medicine_id
+            qsp
+            qsp_unit
+            comment
+            periods {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+            }
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+
+mutation DeleteOrdonnance($id: String!){
+    deleteOrdonnance(id: $id)
+}
+
+
+query GetOrdonnanceById($id: String!){
+    getOrdonnanceById(id: $id){
+        id
+        created_by
+        patient_id
+        medicines {
+            medicine_id
+            qsp
+            qsp_unit
+            comment
+            periods {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+            }
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+query GetOrdonnanceByDoctorId($doctor_id: String!, $option: Options){
+    getOrdonnanceByDoctorId(doctor_id: $doctor_id, option: $option){
+        id
+        created_by
+        patient_id
+        medicines {
+            medicine_id
+            qsp
+            qsp_unit
+            comment
+            periods {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+            }
+        }
+        createdAt
+        updatedAt
     }
 }

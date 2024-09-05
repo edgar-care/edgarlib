@@ -28,7 +28,16 @@ func ResetPassword(password string, uuid string) ResetPasswordResponse {
 
 	patient, err := graphql.GetPatientById(value)
 	if err != nil {
-		return ResetPasswordResponse{400, errors.New("no patient correspond to this email")}
+		doctor, err := graphql.GetDoctorById(value)
+		if err != nil {
+			return ResetPasswordResponse{400, errors.New("no account correspond to this email")}
+		}
+		password = utils.HashPassword(password)
+		_, err = graphql.UpdateDoctor(doctor.ID, model.UpdateDoctorInput{Password: &password})
+		if err != nil {
+			return ResetPasswordResponse{500, err}
+		}
+		return ResetPasswordResponse{200, nil}
 	}
 
 	password = utils.HashPassword(password)

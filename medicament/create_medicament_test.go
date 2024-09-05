@@ -13,13 +13,14 @@ func TestCreateMedicament(t *testing.T) {
 
 	content := CreateMedicamentInput{
 		Name:            "test_medicament_create",
-		Unit:            "test_unit",
+		DCI:             "test_dci_name",
 		TargetDiseases:  []string{"test_target_disease"},
 		TreatedSymptoms: []string{"test_treated_symptoms"},
 		SideEffects:     []string{"test_side_effects"},
-		Type:            "test_type",
-		Content:         "test_content",
-		Quantity:        2,
+		Dosage:          1,
+		DosageUnit:      "ml",
+		Container:       "TUBE",
+		DosageForm:      "AMPOULE",
 	}
 
 	response := CreateMedicament(content)
