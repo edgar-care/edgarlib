@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func generateURL(bucket string, key string, customFilename string) (string, error) {
+func GenerateURL(bucket string, key string, customFilename string) (string, error) {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("eu-west-3")},
 	)

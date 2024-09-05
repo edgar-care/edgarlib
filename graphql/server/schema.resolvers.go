@@ -293,6 +293,10 @@ func (r *mutationResolver) UpdateDoctor(ctx context.Context, id string, input mo
 		update["device_connect"] = input.DeviceConnect
 	}
 
+	if input.OrdonnanceIds != nil {
+		update["ordonnance_ids"] = input.OrdonnanceIds
+	}
+
 	update["updatedAt"] = time.Now().Unix()
 
 	updateData := bson.M{"$set": update}
@@ -1309,14 +1313,15 @@ func (r *mutationResolver) CreateMedicine(ctx context.Context, input model.Creat
 	now := int(time.Now().Unix())
 	medicine := &model.Medicine{
 		ID:              primitive.NewObjectID().Hex(),
-		Name:            input.Name,
-		Unit:            model.MedicineUnit(*input.Unit),
+		Dci:             input.Dci,
 		TargetDiseases:  input.TargetDiseases,
 		TreatedSymptoms: input.TreatedSymptoms,
 		SideEffects:     input.SideEffects,
-		Type:            input.Type,
-		Content:         input.Content,
-		Quantity:        input.Quantity,
+		Dosage:          input.Dosage,
+		DosageUnit:      model.UnitEnum(input.DosageUnit),
+		Container:       model.ContainerEnum(input.Container),
+		Name:            input.Name,
+		DosageForm:      model.FormEnum(input.DosageForm),
 		CreatedAt:       now,
 		UpdatedAt:       now,
 	}
@@ -1850,6 +1855,91 @@ func (r *mutationResolver) DeleteSaveCode(ctx context.Context, id string) (*bool
 	resp := false
 	filter := bson.M{"_id": id}
 	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
+// CreateOrdonnance is the resolver for the createOrdonnance field.
+func (r *mutationResolver) CreateOrdonnance(ctx context.Context, input model.CreateOrdonnanceInput) (*model.Ordonnance, error) {
+	now := int(time.Now().Unix())
+
+	medicines := make([]*model.MedicineOrdonnance, 0)
+	for _, medInput := range input.Medicines {
+		periods := make([]*model.PeriodOrdonnance, 0)
+		for _, periodInput := range medInput.Periods {
+			periods = append(periods, &model.PeriodOrdonnance{
+				Quantity:       periodInput.Quantity,
+				Frequency:      periodInput.Frequency,
+				FrequencyRatio: periodInput.FrequencyRatio,
+				FrequencyUnit:  model.TimeUnitEnum(periodInput.FrequencyUnit),
+				PeriodLength:   periodInput.PeriodLength,
+				PeriodUnit:     (*model.TimeUnitEnum)(periodInput.PeriodUnit),
+			})
+		}
+
+		medicines = append(medicines, &model.MedicineOrdonnance{
+			MedicineID: medInput.MedicineID,
+			Qsp:        medInput.Qsp,
+			QspUnit:    model.TimeUnitEnum(medInput.QspUnit),
+			Comment:    medInput.Comment,
+			Periods:    periods,
+		})
+	}
+
+	ordonnance := &model.Ordonnance{
+		ID:        primitive.NewObjectID().Hex(),
+		PatientID: input.PatientID,
+		CreatedBy: input.CreatedBy,
+		Medicines: medicines,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Ordonnance").InsertOne(ctx, ordonnance)
+	if err != nil {
+		return nil, err
+	}
+
+	return ordonnance, nil
+}
+
+// UpdateOrdonnance is the resolver for the updateOrdonnance field.
+func (r *mutationResolver) UpdateOrdonnance(ctx context.Context, id string, input model.UpdateOrdonnanceInput) (*model.Ordonnance, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Ordonnance")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Medicines != nil {
+		update["medicines"] = input.Medicines
+	}
+
+	if input.Medicines[0].Periods != nil {
+		update["periods"] = input.Medicines[0].Periods
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedOrdonnance model.Ordonnance
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedOrdonnance)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedOrdonnance, nil
+}
+
+// DeleteOrdonnance is the resolver for the deleteOrdonnance field.
+func (r *mutationResolver) DeleteOrdonnance(ctx context.Context, id string) (*bool, error) {
+	resp := false
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Ordonnace").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -2957,6 +3047,48 @@ func (r *queryResolver) GetSaveCode(ctx context.Context, option *model.Options) 
 	}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("SaveCode").Find(ctx, filter, findOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+// GetOrdonnanceByID is the resolver for the getOrdonnanceById field.
+func (r *queryResolver) GetOrdonnanceByID(ctx context.Context, id string) (*model.Ordonnance, error) {
+	var result model.Ordonnance
+
+	filter := bson.M{"_id": id}
+
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Ordonnance").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetOrdonnanceByDoctorID is the resolver for the getOrdonnanceByDoctorId field.
+func (r *queryResolver) GetOrdonnanceByDoctorID(ctx context.Context, doctorID string, option *model.Options) ([]*model.Ordonnance, error) {
+	var report []*model.Ordonnance
+	var reportDoctor model.Doctor
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+
+	errDoctor := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Doctor").FindOne(ctx, bson.M{"_id": doctorID}).Decode(&reportDoctor)
+	if errDoctor != nil {
+		return nil, errDoctor
+	}
+
+	filter := bson.M{"_id": bson.M{"$in": reportDoctor.OrdonnanceIds}}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Ordonnance").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}

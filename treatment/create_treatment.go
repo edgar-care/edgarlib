@@ -106,7 +106,6 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to get ante disease: " + err.Error())}
 		}
 		anteDisease, err := graphql.UpdateAnteDisease(input.DiseaseId, model.UpdateAnteDiseaseInput{
-			Name:         &input.Name,
 			TreatmentIds: append(checkAnte.TreatmentIds, treatmentIds...),
 		})
 		if err != nil {

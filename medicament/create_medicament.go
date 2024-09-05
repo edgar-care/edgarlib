@@ -8,14 +8,15 @@ import (
 )
 
 type CreateMedicamentInput struct {
+	DCI             string   `json:"dci"`
 	Name            string   `json:"name"`
-	Unit            string   `json:"unit"`
 	TargetDiseases  []string `json:"target_diseases"`
 	TreatedSymptoms []string `json:"treated_symptoms"`
 	SideEffects     []string `json:"side_effects"`
-	Type            string   `json:"type"`
-	Content         string   `json:"content"`
-	Quantity        int      `json:"quantity"`
+	Dosage          int      `json:"dosage"`
+	DosageUnit      string   `json:"dosage_unit"`
+	Container       string   `json:"container"`
+	DosageForm      string   `json:"dosage_form"`
 }
 
 type CreateMedicamentResponse struct {
@@ -27,13 +28,14 @@ type CreateMedicamentResponse struct {
 func CreateMedicament(input CreateMedicamentInput) CreateMedicamentResponse {
 	medicament, err := graphql.CreateMedicine(model.CreateMedicineInput{
 		Name:            input.Name,
-		Unit:            &input.Unit,
+		Dci:             input.DCI,
 		TargetDiseases:  input.TargetDiseases,
 		TreatedSymptoms: input.TreatedSymptoms,
 		SideEffects:     input.SideEffects,
-		Type:            input.Type,
-		Content:         input.Content,
-		Quantity:        input.Quantity,
+		Dosage:          input.Dosage,
+		DosageUnit:      model.UnitEnum(input.DosageUnit),
+		Container:       model.ContainerEnum(input.Container),
+		DosageForm:      model.FormEnum(input.DosageForm),
 	})
 	if err != nil {
 		return CreateMedicamentResponse{Medicament: model.Medicine{}, Code: 400, Err: errors.New("unable  (check if you share all information)")}

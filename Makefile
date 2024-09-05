@@ -16,7 +16,7 @@ generate:
 test:
 	@bold=$$(tput bold); \
 	normal=$$(tput sgr0); \
-	output=$$(go test -coverprofile=coverage.out -v ./appointment ./auth ./dashboard ./follow_treatment ./chat ./black_list ./medicament ./redis ./slot ./treatment ./double_auth | tee /dev/tty); \
+	output=$$(go test -coverprofile=coverage.out -v ./appointment ./auth ./dashboard ./follow_treatment ./chat ./black_list ./medicament ./redis ./slot ./treatment ./double_auth ./ordonnance | tee /dev/tty); \
 	count=$$(echo "$$output" | grep -c '=== RUN'); \
 	fail_count=$$(echo "$$output" | grep -c 'FAIL'); \
 	total_coverage=$$(go tool cover -func=coverage.out | grep total | awk '{print $$3}'); \
