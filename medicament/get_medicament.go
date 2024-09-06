@@ -2,6 +2,7 @@ package medicament
 
 import (
 	"errors"
+	"github.com/edgar-care/edgarlib/v2/paging"
 
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
@@ -27,8 +28,8 @@ func GetMedicamentById(id string) GetMedicamentByIdResponse {
 	return GetMedicamentByIdResponse{medicament, 200, nil}
 }
 
-func GetMedicaments() GetMedicamentsResponse {
-	medicaments, err := graphql.GetMedicines(nil)
+func GetMedicaments(page int, size int) GetMedicamentsResponse {
+	medicaments, err := graphql.GetMedicines(paging.CreatePagingOption(page, size))
 	if err != nil {
 		return GetMedicamentsResponse{[]model.Medicine{}, 400, errors.New("invalid input: " + err.Error())}
 	}
