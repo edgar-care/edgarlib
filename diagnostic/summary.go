@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"math"
+	"sort"
 )
 
 type GetSummaryResponse struct {
@@ -15,6 +17,30 @@ type GetSummaryResponse struct {
 	Alerts    []model.Alert
 	Code      int
 	Err       error
+}
+
+func calcFiability(sessionDiseases []model.SessionDiseases) float64 {
+	if len(sessionDiseases) == 0 {
+		return 0
+	}
+
+	sort.Slice(sessionDiseases, func(i, j int) bool {
+		return sessionDiseases[i].Presence > sessionDiseases[j].Presence
+	})
+
+	firstElementPresence := sessionDiseases[0].Presence
+
+	factorGap := 1.0
+	if len(sessionDiseases) >= 2 {
+		gap := sessionDiseases[0].Presence - sessionDiseases[1].Presence/2
+		factorGap = math.Min(gap, 1.0)
+	}
+
+	factorPresence := firstElementPresence * 1.2
+
+	reliability := factorPresence * factorGap
+
+	return math.Max(0, math.Min(reliability, 0.946))
 }
 
 func GetSummary(id string) GetSummaryResponse {
@@ -45,7 +71,7 @@ func GetSummary(id string) GetSummaryResponse {
 	}
 
 	var fiability float64
-	fiability = 0.42 //todo: Add a fiability system
+	fiability = calcFiability(sessionDiseases)
 
 	var sessionSymptoms []model.SessionSymptom
 	for _, sessionSymptom := range session.Symptoms {
