@@ -169,16 +169,6 @@ func (r *mutationResolver) UpdatePatientsRendezVousIds(ctx context.Context, id s
 	return &updatedPatient, nil
 }
 
-// UpdatePatientsPassword is the resolver for the updatePatientsPassword field.
-func (r *mutationResolver) UpdatePatientsPassword(ctx context.Context, id string, password *string) (*model.Patient, error) {
-	panic(fmt.Errorf("not implemented: UpdatePatientsPassword - updatePatientsPassword"))
-}
-
-// UpdatePatientsDoubleAuth is the resolver for the updatePatientsDoubleAuth field.
-func (r *mutationResolver) UpdatePatientsDoubleAuth(ctx context.Context, id string, doubleAuthMethodsID *string) (*model.Patient, error) {
-	panic(fmt.Errorf("not implemented: UpdatePatientsDoubleAuth - updatePatientsDoubleAuth"))
-}
-
 // UpdateAccountsMedicalFolder is the resolver for the updateAccountsMedicalFolder field.
 func (r *mutationResolver) UpdateAccountsMedicalFolder(ctx context.Context, id string, input model.UpdateAccountMedicalFolder) (*model.MedicalInfo, error) {
 	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo")
@@ -1947,6 +1937,70 @@ func (r *mutationResolver) DeleteOrdonnance(ctx context.Context, id string) (*bo
 	return &resp, err
 }
 
+// CreateAutoAnswer is the resolver for the createAutoAnswer field.
+func (r *mutationResolver) CreateAutoAnswer(ctx context.Context, input model.CreateAutoAnswerInput) (*model.AutoAnswer, error) {
+	now := int(time.Now().Unix())
+
+	session := &model.AutoAnswer{
+		ID:        primitive.NewObjectID().Hex(),
+		Name:      input.Name,
+		Values:    input.Values,
+		Type:      input.Type,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AutoAnswer").InsertOne(ctx, session)
+	if err != nil {
+		return nil, err
+	}
+
+	return session, err
+}
+
+// UpdateAutoAnswer is the resolver for the updateAutoAnswer field.
+func (r *mutationResolver) UpdateAutoAnswer(ctx context.Context, id string, input model.UpdateAutoAnswerInput) (*model.AutoAnswer, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AutoAnswer")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.Name != nil {
+		update["name"] = input.Name
+	}
+	if input.Values != nil {
+		update["values"] = input.Values
+	}
+	if input.Type != nil {
+		update["types"] = input.Type
+	}
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedAutoAnswer model.AutoAnswer
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedAutoAnswer)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedAutoAnswer, nil
+}
+
+// DeleteAutoAnswer is the resolver for the deleteAutoAnswer field.
+func (r *mutationResolver) DeleteAutoAnswer(ctx context.Context, id string) (*bool, error) {
+	resp := false
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AutoAnswer").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
 // GetPatients is the resolver for the getPatients field.
 func (r *queryResolver) GetPatients(ctx context.Context, option *model.Options) ([]*model.Patient, error) {
 	filter := bson.D{}
@@ -3089,6 +3143,54 @@ func (r *queryResolver) GetOrdonnanceByDoctorID(ctx context.Context, doctorID st
 	filter := bson.M{"_id": bson.M{"$in": reportDoctor.OrdonnanceIds}}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Ordonnance").Find(ctx, filter, findOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &report)
+	if err != nil {
+		return nil, err
+	}
+
+	return report, nil
+}
+
+// GetAutoAnswerByID is the resolver for the getAutoAnswerById field.
+func (r *queryResolver) GetAutoAnswerByID(ctx context.Context, id string) (*model.AutoAnswer, error) {
+	var result model.AutoAnswer
+
+	filter := bson.M{"_id": id}
+
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AutoAnswer").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetAutoAnswerByName is the resolver for the getAutoAnswerByName field.
+func (r *queryResolver) GetAutoAnswerByName(ctx context.Context, name string) (*model.AutoAnswer, error) {
+	var result model.AutoAnswer
+
+	filter := bson.M{"name": name}
+
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AutoAnswer").FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// GetAutoAnswers is the resolver for the getAutoAnswers field.
+func (r *queryResolver) GetAutoAnswers(ctx context.Context, option *model.Options) ([]*model.AutoAnswer, error) {
+	var report []*model.AutoAnswer
+	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AutoAnswer").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}

@@ -1740,7 +1740,6 @@ query GetDeviceConnectByIp($ip_address: String!){
     }
 }
 
-
 mutation CreateDoubleAuth($input: CreateDoubleAuthInput!) {
     createDoubleAuth(input: $input) {
         id
@@ -1850,8 +1849,6 @@ query GetSaveCode($option: Options){
     }
 }
 
-
-
 mutation CreateOrdonnance($input: CreateOrdonnanceInput!){
     createOrdonnance(input: $input){
         id
@@ -1900,11 +1897,9 @@ mutation UpdateOrdonnance($id: String!, $input: UpdateOrdonnanceInput!){
     }
 }
 
-
 mutation DeleteOrdonnance($id: String!){
     deleteOrdonnance(id: $id)
 }
-
 
 query GetOrdonnanceById($id: String!){
     getOrdonnanceById(id: $id){
@@ -1949,6 +1944,65 @@ query GetOrdonnanceByDoctorId($doctor_id: String!, $option: Options){
                 period_unit
             }
         }
+        createdAt
+        updatedAt
+    }
+}
+
+mutation CreateAutoAnswer($input: CreateAutoAnswerInput!){
+    createAutoAnswer(input: $input){
+        id
+        name
+        values
+        type
+        createdAt
+        updatedAt
+    }
+}
+
+mutation UpdateAutoAnswer($id: String!, $input: UpdateAutoAnswerInput!){
+    updateAutoAnswer(id: $id, input: $input){
+        id
+        name
+        values
+        type
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteAutoAnswer($id: String!){
+    deleteAutoAnswer(id: $id)
+}
+
+query GetAutoAnswerById($id: String!){
+    getAutoAnswerById(id: $id) {
+        id
+        name
+        values
+        type
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAutoAnswerByName($name: String!){
+    getAutoAnswerByName(name: $name){
+        id
+        name
+        values
+        type
+        createdAt
+        updatedAt
+    }
+}
+
+query GetAutoAnswers($option: Options){
+    getAutoAnswers(option: $option){
+        id
+        name
+        values
+        type
         createdAt
         updatedAt
     }

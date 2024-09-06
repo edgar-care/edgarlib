@@ -306,7 +306,6 @@ type SaveCode {
     updatedAt: Int!
 }
 
-
 type Ordonnance {
     id: ID!
     created_by: String!
@@ -316,6 +315,14 @@ type Ordonnance {
     updatedAt: Int!
 }
 
+type AutoAnswer {
+    id: ID!
+    name: String!
+    values:[String]!
+    type: AutoAnswerType!
+    createdAt: Int!
+    updatedAt: Int!
+}
 
 ##  Substructure  ----------------------------------------------------------------------------------------------------
 
@@ -856,6 +863,18 @@ input UpdateSaveCodeInput {
     code: [String!]
 }
 
+input CreateAutoAnswerInput {
+    name: String!
+    values:[String]!
+    type: AutoAnswerType!
+}
+
+input UpdateAutoAnswerInput {
+    name: String
+    values:[String]
+    type: AutoAnswerType
+}
+
 input LogsInput {
     question: String!
     answer: String!
@@ -983,7 +1002,6 @@ enum AppointmentStatus {
     OPENED
 }
 
-
 enum unit_enum {
     ml,
     mg
@@ -1024,6 +1042,10 @@ enum time_unit_enum {
     ANNEE
 }
 
+enum AutoAnswerType {
+    UNIQUE_CHOICE,
+    MULTIPLE_CHOICE
+}
 
 ## Utils  -------------------------------------------------------------------------------------------------------------
 
@@ -1230,6 +1252,15 @@ type Query {
 
     #get Ordonance by doctor id
     getOrdonnanceByDoctorId(doctor_id: String!, option: Options): [Ordonnance]
+
+    # Get Automatic Answer by its ID
+    getAutoAnswerById(id: String!): AutoAnswer
+
+    # Get Automatic Answer by its Name
+    getAutoAnswerByName(name: String!): AutoAnswer
+
+    # Get Automatic Answers
+    getAutoAnswers(option: Options): [AutoAnswer]
 }
 
 type Mutation {
@@ -1244,10 +1275,6 @@ type Mutation {
     updatePatientTrustDevice(id: String!, input: UpdatePatientTrustDeviceInput!): Patient
 
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
-
-    updatePatientsPassword(id: String!, password: String): Patient
-
-    updatePatientsDoubleAuth(id: String!, double_auth_methods_id: String): Patient
 
     updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
 
@@ -1452,7 +1479,6 @@ type Mutation {
     #Delete a SaveCode
     deleteSaveCode(id: String!): Boolean
 
-
     # Create a new Ordonnance
     createOrdonnance(input: CreateOrdonnanceInput!): Ordonnance
 
@@ -1461,4 +1487,13 @@ type Mutation {
 
     #Delete a Ordonnance
     deleteOrdonnance(id: String!): Boolean
+
+    # Create new AutoAnswer
+    createAutoAnswer(input: CreateAutoAnswerInput!): AutoAnswer
+
+    # Update an AutoAnswer
+    updateAutoAnswer(id: String!, input: UpdateAutoAnswerInput!): AutoAnswer
+
+    # Delete an AutoAnswer
+    deleteAutoAnswer(id: String!): Boolean
 }
