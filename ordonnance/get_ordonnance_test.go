@@ -19,10 +19,10 @@ func TestGetOrdonnancebyID(t *testing.T) {
 		Password: "password",
 		Status:   true,
 		Address: &model.AddressInput{
-			Street:  "",
-			ZipCode: "",
-			Country: "",
-			City:    "",
+			Street:  "sqdqsd",
+			ZipCode: "dsfsdf",
+			Country: "fdgdfg",
+			City:    "azeazeaze",
 		},
 	})
 	if err != nil {
@@ -121,10 +121,10 @@ func TestGetOrdonnancesDoctor(t *testing.T) {
 		Password: "password",
 		Status:   true,
 		Address: &model.AddressInput{
-			Street:  "",
-			ZipCode: "",
-			Country: "",
-			City:    "",
+			Street:  "dfsdfsdfsd",
+			ZipCode: "fdgdfgdg",
+			Country: "azfazf",
+			City:    "dsfsdfdsf",
 		},
 	})
 	if err != nil {

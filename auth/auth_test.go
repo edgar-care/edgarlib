@@ -1,5 +1,18 @@
 package auth
 
+import (
+	"github.com/edgar-care/edgarlib/v2/auth/utils"
+	"github.com/edgar-care/edgarlib/v2/double_auth"
+	"github.com/edgar-care/edgarlib/v2/graphql"
+	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"github.com/go-chi/jwtauth/v5"
+	"github.com/joho/godotenv"
+	"log"
+	"net/http/httptest"
+	"testing"
+	"time"
+)
+
 //
 //import (
 //	"github.com/edgar-care/edgarlib/v2/auth/utils"
@@ -268,3 +281,84 @@ package auth
 //	}
 //
 //}
+
+func TestBlackListDevice(t *testing.T) {
+
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_blacklist_middleware@gmail.com",
+		Password: "testtest",
+		Status:   true,
+	})
+	if err != nil {
+		t.Errorf("Error while creating patient: %v", err)
+	}
+
+	operationTime := time.Now().Unix() // Unix timestamp
+
+	input := double_auth.CreateDeviceConnectInput{
+		DeviceType: "Windows",
+		Browser:    "Chrome",
+		Ip:         "127.0.0.1",
+		City:       "Lyon",
+		Country:    "France",
+		Date:       int(operationTime),
+	}
+	test := double_auth.CreateDeviceConnect(input, patient.ID)
+	if test.Err != nil {
+		t.Errorf("Error while creating device connect: %v", test.Err)
+
+	}
+
+	tokenString, err := utils.CreateToken(map[string]interface{}{
+		"patient":     patient.Email,
+		"id":          patient.ID,
+		"name_device": test.DeviceConnect.ID,
+	})
+
+	if err != nil {
+		t.Fatalf("Error creating token: %v", err)
+	}
+
+	req := httptest.NewRequest("GET", "/", nil)
+	req.Header.Set("Authorization", "Bearer "+tokenString)
+
+	token, _, err := jwtauth.FromContext(req.Context())
+	if err != nil {
+		t.Fatalf("Error getting token from context: %v", err)
+	}
+
+	ctx := jwtauth.NewContext(req.Context(), token, nil)
+
+	req = req.WithContext(ctx)
+
+	input2 := double_auth.CreateDeviceConnectInput{
+		DeviceType: "Linux",
+		Browser:    "Firefox",
+		Ip:         "127.0.0.1",
+		City:       "Marseille",
+		Country:    "France",
+		Date:       int(operationTime),
+	}
+	_ = double_auth.CreateDeviceConnect(input2, patient.ID)
+	if test.Err != nil {
+		t.Errorf("Error while creating device connect: %v", test.Err)
+
+	}
+
+	get := double_auth.GetDeviceConnect(patient.ID)
+	if get.Err != nil {
+		t.Errorf("Error getting device connect: %v", get.Err)
+	}
+
+	_ = double_auth.DeleteDeviceConnect(test.DeviceConnect.ID, patient.ID)
+
+	_ = BlackListDevice(tokenString, patient.ID)
+	//if authenticatedUser.Code == 401 {
+	//	t.Errorf("Expected status code: 401 but got: %d", authenticatedUser.Code)
+	//}
+
+}

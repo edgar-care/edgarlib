@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/auth/utils"
+	"github.com/edgar-care/edgarlib/v2/double_auth"
 	lib "github.com/edgar-care/edgarlib/v2/http"
 	"net/http"
 	"os"
@@ -14,6 +15,11 @@ import (
 	"github.com/go-chi/jwtauth/v5"
 	"golang.org/x/crypto/bcrypt"
 )
+
+type BlackListDeviceResponse struct {
+	Code int
+	Err  error
+}
 
 func NewTokenAuth() *jwtauth.JWTAuth {
 	tokenAuth := jwtauth.New("HS256", []byte(os.Getenv("JWT_SECRET")), nil)
@@ -68,6 +74,14 @@ func AuthMiddlewarePatient(w http.ResponseWriter, r *http.Request) string {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this account is disable",
 		}, 409)
+		return ""
+	}
+
+	check_device := BlackListDevice(reqToken, accountID)
+	if check_device.Code == 401 {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this device is not connected",
+		}, 401)
 		return ""
 	}
 
@@ -139,6 +153,13 @@ func AuthMiddlewareDoctor(w http.ResponseWriter, r *http.Request) string {
 		}, 409)
 		return ""
 	}
+	check_device := BlackListDevice(reqToken, accountID)
+	if check_device.Code == 401 {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this device is not connected",
+		}, 401)
+		return ""
+	}
 
 	utils.DeviceConnectMiddleware(w, r, accountID)
 
@@ -162,6 +183,13 @@ func AuthMiddlewareAccount(w http.ResponseWriter, r *http.Request) string {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this account is disable",
 		}, 409)
+		return ""
+	}
+	check_device := BlackListDevice(reqToken, accountID)
+	if check_device.Code == 401 {
+		lib.WriteResponse(w, map[string]string{
+			"message": "Not authorized, this device is not connected",
+		}, 401)
 		return ""
 	}
 
@@ -209,4 +237,45 @@ func CheckError(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func BlackListDevice(token string, ownerID string) BlackListDeviceResponse {
+	// Split the token into parts
+	parts := strings.Split(token, ".")
+	if len(parts) != 3 {
+		return BlackListDeviceResponse{Code: 401, Err: errors.New("Invalid token format")}
+	}
+
+	// Decode the token part that contains the payload
+	decodedBytes, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return BlackListDeviceResponse{Code: 401, Err: errors.New("Error decoding token")}
+	}
+
+	// Unmarshal the payload into a map
+	var jsonMap map[string]interface{}
+	if err := json.Unmarshal(decodedBytes, &jsonMap); err != nil {
+		return BlackListDeviceResponse{Code: 401, Err: errors.New("Error unmarshalling token")}
+	}
+
+	// Extract the device ID from the token
+	deviceID, ok := jsonMap["name_device"].(string)
+	if !ok {
+		return BlackListDeviceResponse{Code: 401, Err: errors.New("Device name not found in token")}
+	}
+
+	// Get the list of connected devices for the owner (patient or doctor)
+	allDeviceAccount := double_auth.GetDeviceConnect(ownerID)
+	if allDeviceAccount.Err != nil {
+		return BlackListDeviceResponse{Code: 401, Err: allDeviceAccount.Err}
+	}
+
+	for _, deviceConnected := range allDeviceAccount.DevicesConnect {
+		if deviceConnected.ID == deviceID {
+			return BlackListDeviceResponse{Code: 200, Err: nil}
+		}
+	}
+
+	return BlackListDeviceResponse{Code: 401, Err: errors.New("Device not found in the list of connected devices")}
+
 }
