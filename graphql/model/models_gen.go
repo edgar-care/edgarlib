@@ -73,6 +73,15 @@ type AnteFamily struct {
 	UpdatedAt int      `json:"updatedAt" bson:"updatedAt"`
 }
 
+type AutoAnswer struct {
+	ID        string         `json:"id" bson:"_id"`
+	Name      string         `json:"name" bson:"name"`
+	Values    []*string      `json:"values" bson:"values"`
+	Type      AutoAnswerType `json:"type" bson:"type"`
+	CreatedAt int            `json:"createdAt" bson:"createdAt"`
+	UpdatedAt int            `json:"updatedAt" bson:"updatedAt"`
+}
+
 type BlackList struct {
 	ID        string   `json:"id" bson:"_id"`
 	Token     []string `json:"token" bson:"token"`
@@ -153,6 +162,12 @@ type CreateAnteDiseaseInput struct {
 type CreateAnteFamilyInput struct {
 	Name    string   `json:"name" bson:"name"`
 	Disease []string `json:"disease" bson:"disease"`
+}
+
+type CreateAutoAnswerInput struct {
+	Name   string         `json:"name" bson:"name"`
+	Values []*string      `json:"values" bson:"values"`
+	Type   AutoAnswerType `json:"type" bson:"type"`
 }
 
 type CreateBlackListInput struct {
@@ -723,6 +738,12 @@ type UpdateAnteFamilyInput struct {
 	Disease []string `json:"disease,omitempty" bson:"disease"`
 }
 
+type UpdateAutoAnswerInput struct {
+	Name   *string         `json:"name,omitempty" bson:"name"`
+	Values []*string       `json:"values,omitempty" bson:"values"`
+	Type   *AutoAnswerType `json:"type,omitempty" bson:"type"`
+}
+
 type UpdateBlackListInput struct {
 	Token []string `json:"token,omitempty" bson:"token"`
 }
@@ -965,6 +986,47 @@ func (e *AppointmentStatus) UnmarshalGQL(v interface{}) error {
 }
 
 func (e AppointmentStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type AutoAnswerType string
+
+const (
+	AutoAnswerTypeUniqueChoice   AutoAnswerType = "UNIQUE_CHOICE"
+	AutoAnswerTypeMultipleChoice AutoAnswerType = "MULTIPLE_CHOICE"
+)
+
+var AllAutoAnswerType = []AutoAnswerType{
+	AutoAnswerTypeUniqueChoice,
+	AutoAnswerTypeMultipleChoice,
+}
+
+func (e AutoAnswerType) IsValid() bool {
+	switch e {
+	case AutoAnswerTypeUniqueChoice, AutoAnswerTypeMultipleChoice:
+		return true
+	}
+	return false
+}
+
+func (e AutoAnswerType) String() string {
+	return string(e)
+}
+
+func (e *AutoAnswerType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AutoAnswerType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AutoAnswerType", str)
+	}
+	return nil
+}
+
+func (e AutoAnswerType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

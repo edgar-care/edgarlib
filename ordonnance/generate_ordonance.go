@@ -16,6 +16,7 @@ import (
 	"io"
 	"log"
 	"mime"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -171,8 +172,27 @@ func GeneratePrescriptionPDF(prescription model.Ordonnance, doctor model.Doctor)
 	pdf := fpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 
-	imagePath := "ressource/edgar-logo.png"
-	pdf.ImageOptions(imagePath, 160, 10, 40, 0, false, fpdf.ImageOptions{ImageType: "PNG"}, 0, "")
+	imageURL := "https://edgar-sante.fr/assets/logo/colored-edgar-logo.png"
+	response, err := http.Get(imageURL)
+	if err != nil {
+		log.Fatalf("Failed to download image: %v", err)
+	}
+	defer response.Body.Close()
+
+	// Step 2: Save the image to a temporary file
+	tempFile, err := os.CreateTemp("", "logo-*.png")
+	if err != nil {
+		log.Fatalf("Failed to create temporary file: %v", err)
+	}
+	defer os.Remove(tempFile.Name())
+
+	_, err = io.Copy(tempFile, response.Body)
+	if err != nil {
+		log.Fatalf("Failed to save image to temporary file: %v", err)
+	}
+
+	// Step 3: Use the temporary file path in the pdf.ImageOptions function
+	pdf.ImageOptions(tempFile.Name(), 160, 10, 40, 0, false, fpdf.ImageOptions{ImageType: "PNG"}, 0, "")
 
 	// Utilisez une police de base compatible ISO-8859-1
 	pdf.SetFont("Arial", "", 12)
