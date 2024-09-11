@@ -14,7 +14,7 @@ func GetCurrentUserDevice(w http.ResponseWriter, req *http.Request, accountID st
 	userAgent := strings.Join(req.Header["User-Agent"], " ")
 	browser := getBrowser(userAgent)
 
-	allDeviceAccount := double_auth.GetDeviceConnect(accountID)
+	allDeviceAccount := double_auth.GetDeviceConnect(accountID, 0, 0)
 	if allDeviceAccount.Err != nil {
 		WriteError(w, allDeviceAccount.Code, allDeviceAccount.Err.Error())
 		return model.DeviceConnect{}

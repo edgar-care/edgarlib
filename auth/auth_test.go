@@ -349,7 +349,7 @@ func TestBlackListDevice(t *testing.T) {
 
 	}
 
-	get := double_auth.GetDeviceConnect(patient.ID)
+	get := double_auth.GetDeviceConnect(patient.ID, 0, 0)
 	if get.Err != nil {
 		t.Errorf("Error getting device connect: %v", get.Err)
 	}

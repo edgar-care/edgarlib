@@ -41,7 +41,7 @@ func TestGetWaitingReview(t *testing.T) {
 		t.Errorf("Error creating appointment: %v", err)
 	}
 
-	response := GetWaitingReview(doctor.ID)
+	response := GetWaitingReview(doctor.ID, 0, 0)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
@@ -64,7 +64,7 @@ func TestGetWaitingReviewInvalid(t *testing.T) {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
 
-	response := GetWaitingReview("111111111111111111111111")
+	response := GetWaitingReview("111111111111111111111111", 0, 0)
 
 	if response.Err == nil {
 		t.Error("Unexpected null error")
