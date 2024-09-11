@@ -14,10 +14,10 @@ type DeleteFollowUpResponse struct {
 	Err            error
 }
 
-func remElement(slice []*string, element *string) []*string {
+func remElement(slice []*string, element string) []*string {
 	var result []*string
 	for _, v := range slice {
-		if v != element {
+		if *v != element {
 			result = append(result, v)
 		}
 	}
@@ -44,7 +44,7 @@ func Delete_follow_up(id string, patientId string) DeleteFollowUpResponse {
 		return DeleteFollowUpResponse{Deleted: false, UpdatedPatient: model.Patient{}, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
 
-	_, err = graphql.UpdatePatient(patientId, model.UpdatePatientInput{TreatmentFollowUpIds: remElement(patient.TreatmentFollowUpIds, &id)})
+	_, err = graphql.UpdatePatientFollowTreatment(patientId, model.UpdatePatientFollowTreatmentInput{TreatmentFollowUpIds: remElement(patient.TreatmentFollowUpIds, id)})
 	if err != nil {
 		return DeleteFollowUpResponse{Deleted: false, UpdatedPatient: model.Patient{}, Code: 500, Err: errors.New("unable to update patient")}
 	}

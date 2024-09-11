@@ -32,14 +32,25 @@ func TestDelete_follow_up(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error while creating follow up treatment: %v", err)
 	}
+
+	tttt, err := graphql.CreateTreatmentsFollowUp(model.CreateTreatmentsFollowUpInput{TreatmentID: "test_treatment_2_id", Date: 123456, Period: periods})
+	if err != nil {
+		t.Errorf("Error while creating follow up treatment: %v", err)
+	}
+
 	follow_upID := follow_up.ID
 	patientID := patient.ID
 
 	_, err = graphql.UpdatePatient(patientID, model.UpdatePatientInput{TreatmentFollowUpIds: append(patient.TreatmentFollowUpIds, &follow_upID)})
+	tt, err := graphql.GetPatientById(patient.ID)
+	_, err = graphql.UpdatePatient(patientID, model.UpdatePatientInput{TreatmentFollowUpIds: append(tt.TreatmentFollowUpIds, &tttt.ID)})
+
+	ttttt, err := graphql.GetPatientById(patient.ID)
+
 	if err != nil {
 		t.Errorf("Error while updating patient: %v", err)
 	}
-	response := Delete_follow_up(follow_upID, patientID)
+	response := Delete_follow_up(follow_upID, ttttt.ID)
 
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)

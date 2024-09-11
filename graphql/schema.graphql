@@ -477,6 +477,14 @@ input UpdateAccountMedicalFolder {
     antecedent_disease_ids: [String]
 }
 
+input UpdatePatientFollowTreatmentInput {
+    treatment_follow_up_ids: [String]
+}
+
+input UpdatePatientAntediseaseInput {
+    treatment_ids: [String]
+}
+
 
 input AddressInput {
     street: String!
@@ -944,6 +952,8 @@ input UpdatePeriodOrdonnanceInput {
     period_unit: time_unit_enum
 }
 
+
+
 ##  Enums  ------------------------------------------------------------------------------------------------------------
 
 enum Sex {
@@ -1277,6 +1287,10 @@ type Mutation {
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
 
     updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
+
+    updatePatientFollowTreatment(id: String!, input: UpdatePatientFollowTreatmentInput!): Patient
+
+    updatePatientAntediesae(id: String!, input: UpdatePatientAntediseaseInput!): AnteDisease
 
     # Delete a patient.
     deletePatient(id: String!): Boolean

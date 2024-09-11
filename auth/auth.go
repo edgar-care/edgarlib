@@ -16,6 +16,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type AuthenticatedAccountResponse struct {
+	ID   string
+	Code int
+	Err  error
+}
+
 type BlackListDeviceResponse struct {
 	Code int
 	Err  error
@@ -50,23 +56,23 @@ func CheckPassword(password string, hash string) bool {
 	return err == nil
 }
 
-func AuthMiddlewarePatient(w http.ResponseWriter, r *http.Request) string {
+func AuthMiddlewarePatient(w http.ResponseWriter, r *http.Request) AuthenticatedAccountResponse {
 	reqToken := r.Header.Get("Authorization")
 	if reqToken == "" {
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("authorization token missing")}
 	}
 	splitToken := strings.Split(reqToken, "Bearer ")
 	reqToken = splitToken[1]
 
 	if VerifyToken(reqToken) == false {
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("invalid token")}
 	}
 	accountID, typeAccount := GetAuthenticatedAccount(reqToken)
 	if typeAccount != "patient" {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this account is not a patient",
 		}, 403)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 403, Err: errors.New("not authorized")}
 	}
 
 	check_account := CheckAccountEnable(accountID)
@@ -74,7 +80,8 @@ func AuthMiddlewarePatient(w http.ResponseWriter, r *http.Request) string {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this account is disable",
 		}, 409)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("account disabled")}
+
 	}
 
 	check_device := BlackListDevice(reqToken, accountID)
@@ -82,12 +89,12 @@ func AuthMiddlewarePatient(w http.ResponseWriter, r *http.Request) string {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this device is not connected",
 		}, 401)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("device not connected")}
 	}
 
 	utils.DeviceConnectMiddleware(w, r, accountID)
 
-	return accountID
+	return AuthenticatedAccountResponse{accountID, 200, nil}
 }
 
 func GetBearerToken(req *http.Request) string {
@@ -127,23 +134,23 @@ func GetAccountType(token string) (string, error) {
 	return "", errors.New("no account type found")
 }
 
-func AuthMiddlewareDoctor(w http.ResponseWriter, r *http.Request) string {
+func AuthMiddlewareDoctor(w http.ResponseWriter, r *http.Request) AuthenticatedAccountResponse {
 	reqToken := r.Header.Get("Authorization")
 	if reqToken == "" {
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("authorization token missing")}
 	}
 	splitToken := strings.Split(reqToken, "Bearer ")
 	reqToken = splitToken[1]
 
 	if VerifyToken(reqToken) == false {
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("invalid token")}
 	}
 	accountID, typeAccount := GetAuthenticatedAccount(reqToken)
 	if typeAccount != "doctor" {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this account is not a doctor",
 		}, 403)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 403, Err: errors.New("not authorized")}
 	}
 
 	check_account := CheckAccountEnable(accountID)
@@ -151,31 +158,31 @@ func AuthMiddlewareDoctor(w http.ResponseWriter, r *http.Request) string {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this account is disable",
 		}, 409)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("account disabled")}
 	}
 	check_device := BlackListDevice(reqToken, accountID)
 	if check_device.Code == 401 {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this device is not connected",
 		}, 401)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("device not connected")}
 	}
 
 	utils.DeviceConnectMiddleware(w, r, accountID)
 
-	return accountID
+	return AuthenticatedAccountResponse{accountID, 200, nil}
 }
 
-func AuthMiddlewareAccount(w http.ResponseWriter, r *http.Request) string {
+func AuthMiddlewareAccount(w http.ResponseWriter, r *http.Request) AuthenticatedAccountResponse {
 	reqToken := r.Header.Get("Authorization")
 	if reqToken == "" {
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("authorization token missing")}
 	}
 	splitToken := strings.Split(reqToken, "Bearer ")
 	reqToken = splitToken[1]
 
 	if VerifyToken(reqToken) == false {
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("invalid token")}
 	}
 	accountID, _ := GetAuthenticatedAccount(reqToken)
 	check_account := CheckAccountEnable(accountID)
@@ -183,19 +190,19 @@ func AuthMiddlewareAccount(w http.ResponseWriter, r *http.Request) string {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this account is disable",
 		}, 409)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("account disabled")}
 	}
 	check_device := BlackListDevice(reqToken, accountID)
 	if check_device.Code == 401 {
 		lib.WriteResponse(w, map[string]string{
 			"message": "Not authorized, this device is not connected",
 		}, 401)
-		return ""
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("device not connected")}
 	}
 
 	utils.DeviceConnectMiddleware(w, r, accountID)
 
-	return accountID
+	return AuthenticatedAccountResponse{accountID, 200, nil}
 }
 
 func GetAuthenticatedAccount(authToken string) (string, string) {

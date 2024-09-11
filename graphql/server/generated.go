@@ -267,86 +267,88 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateAdmin                 func(childComplexity int, input model.CreateAdminInput) int
-		CreateAlert                 func(childComplexity int, input model.CreateAlertInput) int
-		CreateAnteChir              func(childComplexity int, input model.CreateAnteChirInput) int
-		CreateAnteDisease           func(childComplexity int, input model.CreateAnteDiseaseInput) int
-		CreateAnteFamily            func(childComplexity int, input model.CreateAnteFamilyInput) int
-		CreateAutoAnswer            func(childComplexity int, input model.CreateAutoAnswerInput) int
-		CreateBlackList             func(childComplexity int, input model.CreateBlackListInput) int
-		CreateChat                  func(childComplexity int, input model.CreateChatInput) int
-		CreateDeviceConnect         func(childComplexity int, input model.CreateDeviceConnectInput) int
-		CreateDisease               func(childComplexity int, input model.CreateDiseaseInput) int
-		CreateDoctor                func(childComplexity int, input model.CreateDoctorInput) int
-		CreateDocument              func(childComplexity int, input model.CreateDocumentInput) int
-		CreateDoubleAuth            func(childComplexity int, input model.CreateDoubleAuthInput) int
-		CreateMedicalFolder         func(childComplexity int, input model.CreateMedicalFolderInput) int
-		CreateMedicine              func(childComplexity int, input model.CreateMedicineInput) int
-		CreateNlpReport             func(childComplexity int, input model.CreateNlpReportInput) int
-		CreateNotification          func(childComplexity int, input model.CreateNotificationInput) int
-		CreateOrdonnance            func(childComplexity int, input model.CreateOrdonnanceInput) int
-		CreatePatient               func(childComplexity int, input model.CreatePatientInput) int
-		CreateRdv                   func(childComplexity int, input model.CreateRdvInput) int
-		CreateSaveCode              func(childComplexity int, input model.CreateSaveCodeInput) int
-		CreateSession               func(childComplexity int, input model.CreateSessionInput) int
-		CreateSymptom               func(childComplexity int, input model.CreateSymptomInput) int
-		CreateTreatment             func(childComplexity int, input model.CreateTreatmentInput) int
-		CreateTreatmentsFollowUp    func(childComplexity int, input model.CreateTreatmentsFollowUpInput) int
-		DeleteAdmin                 func(childComplexity int, id string) int
-		DeleteAlert                 func(childComplexity int, id string) int
-		DeleteAnteChir              func(childComplexity int, id string) int
-		DeleteAnteDisease           func(childComplexity int, id string) int
-		DeleteAnteFamily            func(childComplexity int, id string) int
-		DeleteAutoAnswer            func(childComplexity int, id string) int
-		DeleteBlackList             func(childComplexity int, id string) int
-		DeleteChat                  func(childComplexity int, id string) int
-		DeleteDeviceConnect         func(childComplexity int, id string) int
-		DeleteDisease               func(childComplexity int, id string) int
-		DeleteDoctor                func(childComplexity int, id string) int
-		DeleteDocument              func(childComplexity int, id string) int
-		DeleteDoubleAuth            func(childComplexity int, id string) int
-		DeleteMedicalFolder         func(childComplexity int, id string) int
-		DeleteMedicine              func(childComplexity int, id string) int
-		DeleteNotification          func(childComplexity int, id string) int
-		DeleteOrdonnance            func(childComplexity int, id string) int
-		DeletePatient               func(childComplexity int, id string) int
-		DeleteRdv                   func(childComplexity int, id string) int
-		DeleteSaveCode              func(childComplexity int, id string) int
-		DeleteSession               func(childComplexity int, id string) int
-		DeleteSlot                  func(childComplexity int, id string) int
-		DeleteSymptom               func(childComplexity int, id string) int
-		DeleteTreatment             func(childComplexity int, id string) int
-		DeleteTreatmentsFollowUp    func(childComplexity int, id string) int
-		UpdateAccountsMedicalFolder func(childComplexity int, id string, input model.UpdateAccountMedicalFolder) int
-		UpdateAdmin                 func(childComplexity int, id string, input model.UpdateAdminInput) int
-		UpdateAlert                 func(childComplexity int, id string, input model.UpdateAlertInput) int
-		UpdateAnteChir              func(childComplexity int, id string, input model.UpdateAnteChirInput) int
-		UpdateAnteDisease           func(childComplexity int, id string, input model.UpdateAnteDiseaseInput) int
-		UpdateAnteFamily            func(childComplexity int, id string, input model.UpdateAnteFamilyInput) int
-		UpdateAutoAnswer            func(childComplexity int, id string, input model.UpdateAutoAnswerInput) int
-		UpdateBlackList             func(childComplexity int, id string, input model.UpdateBlackListInput) int
-		UpdateChat                  func(childComplexity int, id string, input model.UpdateChatInput) int
-		UpdateDeviceConnect         func(childComplexity int, id string, input model.UpdateDeviceConnectInput) int
-		UpdateDisease               func(childComplexity int, id string, input model.UpdateDiseaseInput) int
-		UpdateDoctor                func(childComplexity int, id string, input model.UpdateDoctorInput) int
-		UpdateDoctorsDeviceConnect  func(childComplexity int, id string, input model.UpdateDoctorsDeviceConnectInput) int
-		UpdateDoctorsPatientIDs     func(childComplexity int, id string, input model.UpdateDoctorsPatientIDsInput) int
-		UpdateDoctorsTrustDevice    func(childComplexity int, id string, input model.UpdateDoctorsTrustDeviceInput) int
-		UpdateDocument              func(childComplexity int, id string, input model.UpdateDocumentInput) int
-		UpdateDoubleAuth            func(childComplexity int, id string, input model.UpdateDoubleAuthInput) int
-		UpdateMedicalFolder         func(childComplexity int, id string, input model.UpdateMedicalFolderInput) int
-		UpdateNotification          func(childComplexity int, id string, input model.UpdateNotificationInput) int
-		UpdateOrdonnance            func(childComplexity int, id string, input model.UpdateOrdonnanceInput) int
-		UpdatePatient               func(childComplexity int, id string, input model.UpdatePatientInput) int
-		UpdatePatientTrustDevice    func(childComplexity int, id string, input model.UpdatePatientTrustDeviceInput) int
-		UpdatePatientsDeviceConnect func(childComplexity int, id string, input model.UpdatePatientsDeviceConnectInput) int
-		UpdatePatientsRendezVousIds func(childComplexity int, id string, input model.UpdatePatientRendezVousIdsInput) int
-		UpdateRdv                   func(childComplexity int, id string, input model.UpdateRdvInput) int
-		UpdateSaveCode              func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
-		UpdateSession               func(childComplexity int, id string, input model.UpdateSessionInput) int
-		UpdateSymptom               func(childComplexity int, id string, input model.UpdateSymptomInput) int
-		UpdateTreatment             func(childComplexity int, id string, input model.UpdateTreatmentInput) int
-		UpdateTreatmentsFollowUp    func(childComplexity int, id string, input model.UpdateTreatmentsFollowUpInput) int
+		CreateAdmin                  func(childComplexity int, input model.CreateAdminInput) int
+		CreateAlert                  func(childComplexity int, input model.CreateAlertInput) int
+		CreateAnteChir               func(childComplexity int, input model.CreateAnteChirInput) int
+		CreateAnteDisease            func(childComplexity int, input model.CreateAnteDiseaseInput) int
+		CreateAnteFamily             func(childComplexity int, input model.CreateAnteFamilyInput) int
+		CreateAutoAnswer             func(childComplexity int, input model.CreateAutoAnswerInput) int
+		CreateBlackList              func(childComplexity int, input model.CreateBlackListInput) int
+		CreateChat                   func(childComplexity int, input model.CreateChatInput) int
+		CreateDeviceConnect          func(childComplexity int, input model.CreateDeviceConnectInput) int
+		CreateDisease                func(childComplexity int, input model.CreateDiseaseInput) int
+		CreateDoctor                 func(childComplexity int, input model.CreateDoctorInput) int
+		CreateDocument               func(childComplexity int, input model.CreateDocumentInput) int
+		CreateDoubleAuth             func(childComplexity int, input model.CreateDoubleAuthInput) int
+		CreateMedicalFolder          func(childComplexity int, input model.CreateMedicalFolderInput) int
+		CreateMedicine               func(childComplexity int, input model.CreateMedicineInput) int
+		CreateNlpReport              func(childComplexity int, input model.CreateNlpReportInput) int
+		CreateNotification           func(childComplexity int, input model.CreateNotificationInput) int
+		CreateOrdonnance             func(childComplexity int, input model.CreateOrdonnanceInput) int
+		CreatePatient                func(childComplexity int, input model.CreatePatientInput) int
+		CreateRdv                    func(childComplexity int, input model.CreateRdvInput) int
+		CreateSaveCode               func(childComplexity int, input model.CreateSaveCodeInput) int
+		CreateSession                func(childComplexity int, input model.CreateSessionInput) int
+		CreateSymptom                func(childComplexity int, input model.CreateSymptomInput) int
+		CreateTreatment              func(childComplexity int, input model.CreateTreatmentInput) int
+		CreateTreatmentsFollowUp     func(childComplexity int, input model.CreateTreatmentsFollowUpInput) int
+		DeleteAdmin                  func(childComplexity int, id string) int
+		DeleteAlert                  func(childComplexity int, id string) int
+		DeleteAnteChir               func(childComplexity int, id string) int
+		DeleteAnteDisease            func(childComplexity int, id string) int
+		DeleteAnteFamily             func(childComplexity int, id string) int
+		DeleteAutoAnswer             func(childComplexity int, id string) int
+		DeleteBlackList              func(childComplexity int, id string) int
+		DeleteChat                   func(childComplexity int, id string) int
+		DeleteDeviceConnect          func(childComplexity int, id string) int
+		DeleteDisease                func(childComplexity int, id string) int
+		DeleteDoctor                 func(childComplexity int, id string) int
+		DeleteDocument               func(childComplexity int, id string) int
+		DeleteDoubleAuth             func(childComplexity int, id string) int
+		DeleteMedicalFolder          func(childComplexity int, id string) int
+		DeleteMedicine               func(childComplexity int, id string) int
+		DeleteNotification           func(childComplexity int, id string) int
+		DeleteOrdonnance             func(childComplexity int, id string) int
+		DeletePatient                func(childComplexity int, id string) int
+		DeleteRdv                    func(childComplexity int, id string) int
+		DeleteSaveCode               func(childComplexity int, id string) int
+		DeleteSession                func(childComplexity int, id string) int
+		DeleteSlot                   func(childComplexity int, id string) int
+		DeleteSymptom                func(childComplexity int, id string) int
+		DeleteTreatment              func(childComplexity int, id string) int
+		DeleteTreatmentsFollowUp     func(childComplexity int, id string) int
+		UpdateAccountsMedicalFolder  func(childComplexity int, id string, input model.UpdateAccountMedicalFolder) int
+		UpdateAdmin                  func(childComplexity int, id string, input model.UpdateAdminInput) int
+		UpdateAlert                  func(childComplexity int, id string, input model.UpdateAlertInput) int
+		UpdateAnteChir               func(childComplexity int, id string, input model.UpdateAnteChirInput) int
+		UpdateAnteDisease            func(childComplexity int, id string, input model.UpdateAnteDiseaseInput) int
+		UpdateAnteFamily             func(childComplexity int, id string, input model.UpdateAnteFamilyInput) int
+		UpdateAutoAnswer             func(childComplexity int, id string, input model.UpdateAutoAnswerInput) int
+		UpdateBlackList              func(childComplexity int, id string, input model.UpdateBlackListInput) int
+		UpdateChat                   func(childComplexity int, id string, input model.UpdateChatInput) int
+		UpdateDeviceConnect          func(childComplexity int, id string, input model.UpdateDeviceConnectInput) int
+		UpdateDisease                func(childComplexity int, id string, input model.UpdateDiseaseInput) int
+		UpdateDoctor                 func(childComplexity int, id string, input model.UpdateDoctorInput) int
+		UpdateDoctorsDeviceConnect   func(childComplexity int, id string, input model.UpdateDoctorsDeviceConnectInput) int
+		UpdateDoctorsPatientIDs      func(childComplexity int, id string, input model.UpdateDoctorsPatientIDsInput) int
+		UpdateDoctorsTrustDevice     func(childComplexity int, id string, input model.UpdateDoctorsTrustDeviceInput) int
+		UpdateDocument               func(childComplexity int, id string, input model.UpdateDocumentInput) int
+		UpdateDoubleAuth             func(childComplexity int, id string, input model.UpdateDoubleAuthInput) int
+		UpdateMedicalFolder          func(childComplexity int, id string, input model.UpdateMedicalFolderInput) int
+		UpdateNotification           func(childComplexity int, id string, input model.UpdateNotificationInput) int
+		UpdateOrdonnance             func(childComplexity int, id string, input model.UpdateOrdonnanceInput) int
+		UpdatePatient                func(childComplexity int, id string, input model.UpdatePatientInput) int
+		UpdatePatientAntediesae      func(childComplexity int, id string, input model.UpdatePatientAntediseaseInput) int
+		UpdatePatientFollowTreatment func(childComplexity int, id string, input model.UpdatePatientFollowTreatmentInput) int
+		UpdatePatientTrustDevice     func(childComplexity int, id string, input model.UpdatePatientTrustDeviceInput) int
+		UpdatePatientsDeviceConnect  func(childComplexity int, id string, input model.UpdatePatientsDeviceConnectInput) int
+		UpdatePatientsRendezVousIds  func(childComplexity int, id string, input model.UpdatePatientRendezVousIdsInput) int
+		UpdateRdv                    func(childComplexity int, id string, input model.UpdateRdvInput) int
+		UpdateSaveCode               func(childComplexity int, id string, input model.UpdateSaveCodeInput) int
+		UpdateSession                func(childComplexity int, id string, input model.UpdateSessionInput) int
+		UpdateSymptom                func(childComplexity int, id string, input model.UpdateSymptomInput) int
+		UpdateTreatment              func(childComplexity int, id string, input model.UpdateTreatmentInput) int
+		UpdateTreatmentsFollowUp     func(childComplexity int, id string, input model.UpdateTreatmentsFollowUpInput) int
 	}
 
 	NlpReport struct {
@@ -581,6 +583,8 @@ type MutationResolver interface {
 	UpdatePatientTrustDevice(ctx context.Context, id string, input model.UpdatePatientTrustDeviceInput) (*model.Patient, error)
 	UpdatePatientsRendezVousIds(ctx context.Context, id string, input model.UpdatePatientRendezVousIdsInput) (*model.Patient, error)
 	UpdateAccountsMedicalFolder(ctx context.Context, id string, input model.UpdateAccountMedicalFolder) (*model.MedicalInfo, error)
+	UpdatePatientFollowTreatment(ctx context.Context, id string, input model.UpdatePatientFollowTreatmentInput) (*model.Patient, error)
+	UpdatePatientAntediesae(ctx context.Context, id string, input model.UpdatePatientAntediseaseInput) (*model.AnteDisease, error)
 	DeletePatient(ctx context.Context, id string) (*bool, error)
 	CreateDoctor(ctx context.Context, input model.CreateDoctorInput) (*model.Doctor, error)
 	UpdateDoctor(ctx context.Context, id string, input model.UpdateDoctorInput) (*model.Doctor, error)
@@ -2673,6 +2677,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdatePatient(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientInput)), true
 
+	case "Mutation.updatePatientAntediesae":
+		if e.complexity.Mutation.UpdatePatientAntediesae == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePatientAntediesae_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePatientAntediesae(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientAntediseaseInput)), true
+
+	case "Mutation.updatePatientFollowTreatment":
+		if e.complexity.Mutation.UpdatePatientFollowTreatment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePatientFollowTreatment_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePatientFollowTreatment(childComplexity, args["id"].(string), args["input"].(model.UpdatePatientFollowTreatmentInput)), true
+
 	case "Mutation.updatePatientTrustDevice":
 		if e.complexity.Mutation.UpdatePatientTrustDevice == nil {
 			break
@@ -4408,6 +4436,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateMedicineOrdonnanceInput,
 		ec.unmarshalInputUpdateNotificationInput,
 		ec.unmarshalInputUpdateOrdonnanceInput,
+		ec.unmarshalInputUpdatePatientAntediseaseInput,
+		ec.unmarshalInputUpdatePatientFollowTreatmentInput,
 		ec.unmarshalInputUpdatePatientInput,
 		ec.unmarshalInputUpdatePatientRendezVousIdsInput,
 		ec.unmarshalInputUpdatePatientTrustDeviceInput,
@@ -4995,6 +5025,14 @@ input UpdateAccountMedicalFolder {
     antecedent_disease_ids: [String]
 }
 
+input UpdatePatientFollowTreatmentInput {
+    treatment_follow_up_ids: [String]
+}
+
+input UpdatePatientAntediseaseInput {
+    treatment_ids: [String]
+}
+
 
 input AddressInput {
     street: String!
@@ -5462,6 +5500,8 @@ input UpdatePeriodOrdonnanceInput {
     period_unit: time_unit_enum
 }
 
+
+
 ##  Enums  ------------------------------------------------------------------------------------------------------------
 
 enum Sex {
@@ -5795,6 +5835,10 @@ type Mutation {
     updatePatientsRendezVousIds(id: String!, input: UpdatePatientRendezVousIdsInput!): Patient
 
     updateAccountsMedicalFolder(id: String!, input: UpdateAccountMedicalFolder!): MedicalInfo
+
+    updatePatientFollowTreatment(id: String!, input: UpdatePatientFollowTreatmentInput!): Patient
+
+    updatePatientAntediesae(id: String!, input: UpdatePatientAntediseaseInput!): AnteDisease
 
     # Delete a patient.
     deletePatient(id: String!): Boolean
@@ -7244,6 +7288,54 @@ func (ec *executionContext) field_Mutation_updateOrdonnance_args(ctx context.Con
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdateOrdonnanceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateOrdonnanceInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePatientAntediesae_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdatePatientAntediseaseInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientAntediseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientAntediseaseInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePatientFollowTreatment_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 model.UpdatePatientFollowTreatmentInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePatientFollowTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientFollowTreatmentInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -15946,6 +16038,162 @@ func (ec *executionContext) fieldContext_Mutation_updateAccountsMedicalFolder(ct
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateAccountsMedicalFolder_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePatientFollowTreatment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePatientFollowTreatment(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatientFollowTreatment(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdatePatientFollowTreatmentInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Patient)
+	fc.Result = res
+	return ec.marshalOPatient2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐPatient(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePatientFollowTreatment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Patient_id(ctx, field)
+			case "email":
+				return ec.fieldContext_Patient_email(ctx, field)
+			case "password":
+				return ec.fieldContext_Patient_password(ctx, field)
+			case "rendez_vous_ids":
+				return ec.fieldContext_Patient_rendez_vous_ids(ctx, field)
+			case "medical_info_id":
+				return ec.fieldContext_Patient_medical_info_id(ctx, field)
+			case "document_ids":
+				return ec.fieldContext_Patient_document_ids(ctx, field)
+			case "treatment_follow_up_ids":
+				return ec.fieldContext_Patient_treatment_follow_up_ids(ctx, field)
+			case "chat_ids":
+				return ec.fieldContext_Patient_chat_ids(ctx, field)
+			case "double_auth_methods_id":
+				return ec.fieldContext_Patient_double_auth_methods_id(ctx, field)
+			case "device_connect":
+				return ec.fieldContext_Patient_device_connect(ctx, field)
+			case "trust_devices":
+				return ec.fieldContext_Patient_trust_devices(ctx, field)
+			case "status":
+				return ec.fieldContext_Patient_status(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Patient_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Patient_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Patient", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePatientFollowTreatment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePatientAntediesae(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePatientAntediesae(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePatientAntediesae(rctx, fc.Args["id"].(string), fc.Args["input"].(model.UpdatePatientAntediseaseInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.AnteDisease)
+	fc.Result = res
+	return ec.marshalOAnteDisease2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐAnteDisease(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePatientAntediesae(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_AnteDisease_id(ctx, field)
+			case "name":
+				return ec.fieldContext_AnteDisease_name(ctx, field)
+			case "chronicity":
+				return ec.fieldContext_AnteDisease_chronicity(ctx, field)
+			case "surgery_ids":
+				return ec.fieldContext_AnteDisease_surgery_ids(ctx, field)
+			case "symptoms":
+				return ec.fieldContext_AnteDisease_symptoms(ctx, field)
+			case "treatment_ids":
+				return ec.fieldContext_AnteDisease_treatment_ids(ctx, field)
+			case "still_relevant":
+				return ec.fieldContext_AnteDisease_still_relevant(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_AnteDisease_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_AnteDisease_updatedAt(ctx, field)
+			case "symptomsclear":
+				return ec.fieldContext_AnteDisease_symptomsclear(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AnteDisease", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePatientAntediesae_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -35434,6 +35682,60 @@ func (ec *executionContext) unmarshalInputUpdateOrdonnanceInput(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdatePatientAntediseaseInput(ctx context.Context, obj interface{}) (model.UpdatePatientAntediseaseInput, error) {
+	var it model.UpdatePatientAntediseaseInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"treatment_ids"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "treatment_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatmentIds = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdatePatientFollowTreatmentInput(ctx context.Context, obj interface{}) (model.UpdatePatientFollowTreatmentInput, error) {
+	var it model.UpdatePatientFollowTreatmentInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"treatment_follow_up_ids"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "treatment_follow_up_ids":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("treatment_follow_up_ids"))
+			data, err := ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TreatmentFollowUpIds = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdatePatientInput(ctx context.Context, obj interface{}) (model.UpdatePatientInput, error) {
 	var it model.UpdatePatientInput
 	asMap := map[string]interface{}{}
@@ -37592,6 +37894,14 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateAccountsMedicalFolder":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateAccountsMedicalFolder(ctx, field)
+			})
+		case "updatePatientFollowTreatment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePatientFollowTreatment(ctx, field)
+			})
+		case "updatePatientAntediesae":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePatientAntediesae(ctx, field)
 			})
 		case "deletePatient":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -41904,6 +42214,16 @@ func (ec *executionContext) unmarshalNUpdateNotificationInput2githubᚗcomᚋedg
 
 func (ec *executionContext) unmarshalNUpdateOrdonnanceInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdateOrdonnanceInput(ctx context.Context, v interface{}) (model.UpdateOrdonnanceInput, error) {
 	res, err := ec.unmarshalInputUpdateOrdonnanceInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePatientAntediseaseInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientAntediseaseInput(ctx context.Context, v interface{}) (model.UpdatePatientAntediseaseInput, error) {
+	res, err := ec.unmarshalInputUpdatePatientAntediseaseInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePatientFollowTreatmentInput2githubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐUpdatePatientFollowTreatmentInput(ctx context.Context, v interface{}) (model.UpdatePatientFollowTreatmentInput, error) {
+	res, err := ec.unmarshalInputUpdatePatientFollowTreatmentInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

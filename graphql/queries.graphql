@@ -417,6 +417,42 @@ mutation UpdatePatientsRendezVousIds($id: String!, $input: UpdatePatientRendezVo
 }
 
 
+mutation UpdatePatientFollowTreatment($id: String!, $input: UpdatePatientFollowTreatmentInput!){
+    updatePatientFollowTreatment(id: $id, input: $input){
+        id
+        email
+        password
+        rendez_vous_ids
+        medical_info_id
+        document_ids
+        treatment_follow_up_ids
+        chat_ids
+        device_connect
+        double_auth_methods_id
+        trust_devices
+        status
+        createdAt
+        updatedAt
+    }
+}
+
+
+mutation UpdatePatientAntediesae($id: String!, $input: UpdatePatientAntediseaseInput!){
+    updatePatientAntediesae(id: $id, input: $input){
+        id
+        name
+        chronicity
+        surgery_ids
+        symptoms
+        treatment_ids
+        still_relevant
+        createdAt
+        updatedAt
+    }
+}
+
+
+
 mutation UpdateAccountsMedicalFolder($id: String!, $input: UpdateAccountMedicalFolder!){
     updateAccountsMedicalFolder(id: $id, input: $input){
         id
