@@ -848,6 +848,14 @@ type UpdateOrdonnanceInput struct {
 	Medicines []*MedicineOrdonnanceInput `json:"medicines,omitempty" bson:"medicines"`
 }
 
+type UpdatePatientAntediseaseInput struct {
+	TreatmentIds []*string `json:"treatment_ids,omitempty" bson:"treatment_ids"`
+}
+
+type UpdatePatientFollowTreatmentInput struct {
+	TreatmentFollowUpIds []*string `json:"treatment_follow_up_ids,omitempty" bson:"treatment_follow_up_ids"`
+}
+
 type UpdatePatientInput struct {
 	Email                *string   `json:"email,omitempty" bson:"email"`
 	Password             *string   `json:"password,omitempty" bson:"password"`

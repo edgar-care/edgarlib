@@ -2,6 +2,7 @@ package treatment
 
 import (
 	"errors"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
@@ -12,10 +13,10 @@ type DeleteTreatmentResponse struct {
 	Err     error
 }
 
-func remElement(slice []string, element string) []string {
-	var result []string
+func remElement(slice []*string, element string) []*string {
+	var result []*string
 	for _, v := range slice {
-		if v != element {
+		if *v != element {
 			result = append(result, v)
 		}
 	}
@@ -51,10 +52,14 @@ func DeleteTreatment(treatmentID string) DeleteTreatmentResponse {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antedisease by ID: " + err.Error())}
 		}
 
-		updatedTreatmentIDs := remElement(ad.TreatmentIds, treatmentID)
+		updatedTreatmentIDs := make([]*string, len(ad.TreatmentIds))
+		for i, v := range ad.TreatmentIds {
+			updatedTreatmentIDs[i] = &v
+		}
 
-		_, err = graphql.UpdateAnteDisease(adID, model.UpdateAnteDiseaseInput{
-			TreatmentIds: updatedTreatmentIDs,
+		spew.Dump(remElement(updatedTreatmentIDs, treatmentID))
+		_, err = graphql.UpdatePatientAntediesae(adID, model.UpdatePatientAntediseaseInput{
+			TreatmentIds: remElement(updatedTreatmentIDs, treatmentID),
 		})
 		if err != nil {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating antedisease: " + err.Error())}
