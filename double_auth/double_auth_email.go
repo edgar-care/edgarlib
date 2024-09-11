@@ -114,7 +114,7 @@ func CreateDoubleAuthEmail(input CreateDoubleAuthInput, ownerId string) CreateDo
 	}
 
 	newMethods := append(doubleAuth.Methods, input.Methods)
-	updatedDoubleAuth, err := graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{Methods: newMethods})
+	updatedDoubleAuth, err := graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{Methods: newMethods, TrustDeviceID: doubleAuth.TrustDeviceID})
 	if err != nil {
 		return CreateDoubleAuthResponse{
 			DoubleAuth: model.DoubleAuth{},

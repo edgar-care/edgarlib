@@ -23,6 +23,7 @@ type CreateDeviceConnectResponse struct {
 }
 
 func CreateDeviceConnect(input CreateDeviceConnectInput, ownerId string) CreateDeviceConnectResponse {
+
 	device, err := graphql.CreateDeviceConnect(model.CreateDeviceConnectInput{
 		DeviceType:  input.DeviceType,
 		Browser:     input.Browser,

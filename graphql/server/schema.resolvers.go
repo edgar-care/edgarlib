@@ -83,7 +83,7 @@ func (r *mutationResolver) UpdatePatient(ctx context.Context, id string, input m
 		update["trust_devices"] = input.TrustDevices
 	}
 	if input.DoubleAuthMethodsID != nil {
-		update["double_auth_methods_id"] = *input.DoubleAuthMethodsID
+		update["double_auth_methods_id"] = input.DoubleAuthMethodsID
 	}
 	if input.DeviceConnect != nil {
 		update["device_connect"] = input.DeviceConnect

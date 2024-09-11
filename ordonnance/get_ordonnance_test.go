@@ -86,7 +86,7 @@ func TestGetOrdonnancebyID(t *testing.T) {
 				MedicineID: medoc.ID,
 				Qsp:        2,
 				QspUnit:    "JOUR",
-				Comment:    "test commentaire générale",
+				Comment:    "test commentaire sgénérale",
 				Periods: []PeriodInput{
 					{
 						Quantity:       1,

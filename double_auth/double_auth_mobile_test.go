@@ -26,7 +26,7 @@ func TestCreateDoubleAuthMobilePatient_Succes(t *testing.T) {
 	}
 
 	device := CreateDeviceConnect(input, patient.ID)
-	_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
+	//_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
 
 	mobile := CreateDoubleMobileInput{Methods: "MOBILE", TrustDevice: device.DeviceConnect.ID}
 	response := CreateDoubleAuthMobile(mobile, patient.ID)
@@ -37,6 +37,10 @@ func TestCreateDoubleAuthMobilePatient_Succes(t *testing.T) {
 	if response.Code != 201 {
 		t.Errorf("Expected status code 200, got: %d", response.Code)
 	}
+
+	//pat, err := graphql.GetPatientById(patient.ID)
+
+	_, err = graphql.GetDeviceConnectById(device.DeviceConnect.ID)
 }
 
 func TestCreateDoubleAuthMobileDoctor_Success(t *testing.T) {
