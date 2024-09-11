@@ -1141,6 +1141,9 @@ type Query {
     #Get the entire list of rdv doctors.
     getDoctorRdv(doctor_id: String!, option: Options): [Rdv]
 
+    # Get all rdv
+    getRdvs(option: Options): [Rdv]
+
     # Find a rdv using its id.
     getRdvById(id: String!): Rdv
 
