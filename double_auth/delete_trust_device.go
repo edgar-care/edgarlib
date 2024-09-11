@@ -15,9 +15,11 @@ type RemoveTrustDeviceResponse struct {
 
 func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceResponse {
 	var doubleAuthID string
+	var accountType string
 
 	patient, err := graphql.GetPatientById(id_user)
 	if err == nil {
+		accountType = "patient"
 		_, updateError := graphql.UpdatePatientTrustDevice(id_user, model.UpdatePatientTrustDeviceInput{
 			TrustDevices: removeTrustDevice(patient.TrustDevices, &id_device),
 		})
@@ -29,12 +31,12 @@ func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceRespon
 		}
 		doubleAuthID = *patient.DoubleAuthMethodsID
 	} else {
-
+		accountType = "doctor"
 		doctor, err := graphql.GetDoctorById(id_user)
 		if err != nil {
 			return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("id does not correspond to a patient or doctor")}
 		}
-
+		accountType = "doctor"
 		_, updateError := graphql.UpdateDoctorsTrustDevice(id_user, model.UpdateDoctorsTrustDeviceInput{
 			TrustDevices: removeTrustDevice(patient.TrustDevices, &id_device),
 		})
@@ -75,6 +77,32 @@ func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceRespon
 	})
 	if err != nil {
 		return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("update double_auth failed: " + err.Error())}
+	}
+
+	check, err := graphql.GetDoubleAuthById(doubleAuthID)
+	if err != nil {
+		return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("get double_auth failed: " + err.Error())}
+	}
+	if check.Methods == nil || len(check.Methods) == 0 {
+		_, err := graphql.DeleteDoubleAuth(doubleAuthID)
+		if err != nil {
+			return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("delete double_auth failed: " + err.Error())}
+		}
+		empty := ""
+		if accountType == "doctor" {
+			_, err := graphql.UpdateDoctor(id_user, model.UpdateDoctorInput{DoubleAuthMethodsID: &empty})
+			if err != nil {
+				return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("failed to remove double_auth_methods_id from doctor")}
+			}
+		} else {
+			empty := ""
+			_, err = graphql.UpdatePatient(id_user, model.UpdatePatientInput{
+				DoubleAuthMethodsID: &empty,
+			})
+			if err != nil {
+				return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("failed to remove double_auth_methods_id from patient")}
+			}
+		}
 	}
 
 	status := false

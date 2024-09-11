@@ -19,7 +19,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -233,7 +232,11 @@ func GeneratePrescriptionPDF(prescription model.Ordonnance, doctor model.Doctor)
 	name_patient := fmt.Sprintf("%s %s", info_patient.Name, info_patient.Firstname)
 	pdf.Cell(0, 10, utf8ToISO8859(name_patient))
 	pdf.Ln(5)
-	pdf.Cell(100, 10, utf8ToISO8859(fmt.Sprintf("%s", strconv.Itoa(info_patient.Birthdate))))
+	birthdate := time.Unix(int64(info_patient.Birthdate), 0)
+	formattedBirthdate := birthdate.Format("02-Jan-2006")
+	pdf.Cell(100, 10, utf8ToISO8859(formattedBirthdate))
+
+	//pdf.Cell(100, 10, utf8ToISO8859(fmt.Sprintf("%s", strconv.Itoa(info_patient.Birthdate))))
 	pdf.Ln(12)
 	pdf.Line(10, 55, 200, 55) // Ligne horizontale
 
@@ -257,6 +260,12 @@ func GeneratePrescriptionPDF(prescription model.Ordonnance, doctor model.Doctor)
 		pdf.SetFont("Arial", "B", 12)
 		medicationInfo := fmt.Sprintf("%s (%s %s %s/%d%s)", medication.Dci, medication.Name, formatTitleCase(string(medication.DosageForm)), formatTitleCase(string(medication.Container)), medication.Dosage, medication.DosageUnit)
 		pdf.Cell(0, 10, utf8ToISO8859(medicationInfo))
+		pdf.Ln(6)
+		if med.Comment != nil {
+			pdf.SetFont("Arial", "I", 11)
+			comment := fmt.Sprintf("Commentaire: %s", *med.Comment)
+			pdf.Cell(0, 10, utf8ToISO8859(comment))
+		}
 		pdf.SetFont("Arial", "I", 11)
 		pdf.Ln(6)
 

@@ -68,7 +68,8 @@ func ActivateDoubleAuthTier(ownerId string) ActivateDoubleAuthTierResponse {
 
 	newMethods := append(doubleAuth.Methods, "AUTHENTIFICATOR")
 	updatedDoubleAuth, err := graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
-		Methods: newMethods,
+		Methods:       newMethods,
+		TrustDeviceID: doubleAuth.TrustDeviceID,
 	})
 	if err != nil {
 		return ActivateDoubleAuthTierResponse{
@@ -190,8 +191,9 @@ func CreateDoubleAuthAppTier(ownerId string) CreateDoubleAuthTierResponse {
 	}
 
 	_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
-		Methods: doubleAuth.Methods,
-		Code:    &secret,
+		Methods:       doubleAuth.Methods,
+		Code:          &secret,
+		TrustDeviceID: doubleAuth.TrustDeviceID,
 	})
 	if err != nil {
 		return CreateDoubleAuthTierResponse{

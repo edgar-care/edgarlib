@@ -1731,6 +1731,7 @@ mutation UpdateDeviceConnect($id: String!, $input: UpdateDeviceConnectInput!) {
     }
 }
 
+
 mutation DeleteDeviceConnect($id: String!){
     deleteDeviceConnect(id: $id)
 }

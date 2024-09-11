@@ -2,7 +2,6 @@ package treatment
 
 import (
 	"errors"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
@@ -57,7 +56,6 @@ func DeleteTreatment(treatmentID string) DeleteTreatmentResponse {
 			updatedTreatmentIDs[i] = &v
 		}
 
-		spew.Dump(remElement(updatedTreatmentIDs, treatmentID))
 		_, err = graphql.UpdatePatientAntediesae(adID, model.UpdatePatientAntediseaseInput{
 			TreatmentIds: remElement(updatedTreatmentIDs, treatmentID),
 		})

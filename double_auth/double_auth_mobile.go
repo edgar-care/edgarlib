@@ -99,6 +99,11 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) Creat
 			}
 		}
 
+		status := true
+		_, err = graphql.UpdateDeviceConnect(input.TrustDevice, model.UpdateDeviceConnectInput{
+			TrustDevice: &status,
+		})
+
 		return CreateDoubleMobileResponse{
 			DoubleAuth: auth,
 			Code:       http.StatusCreated,
@@ -155,9 +160,9 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) Creat
 			}
 		}
 
-		status_device := true
+		status := true
 		_, err = graphql.UpdateDeviceConnect(input.TrustDevice, model.UpdateDeviceConnectInput{
-			TrustDevice: &status_device,
+			TrustDevice: &status,
 		})
 		if err != nil {
 			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Code: 400, Err: errors.New("update trust device failed: " + err.Error())}
