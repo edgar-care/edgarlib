@@ -126,31 +126,33 @@ func AddDiscursiveConnector(question string) string {
 	return question
 }
 
-func getTheQuestion(symptomName string, symptoms []model.Symptom) string {
+func getTheQuestion(symptomName string, symptoms []model.Symptom) (string, *string) {
+	autoA := "Oui / Non / Ne sais pas"
 	for _, symptom := range symptoms {
 		if symptomName == symptom.Code {
 			if symptom.Question != "" {
-				return AddDiscursiveConnector(symptom.QuestionBasic)
+				return AddDiscursiveConnector(symptom.QuestionBasic), &autoA
 			} else {
-				return AddDiscursiveConnector("{{connecteur}}. Est-ce que vous avez ce symptôme: " + symptom.Name + " ?")
+				return AddDiscursiveConnector("{{connecteur}}. Est-ce que vous avez ce symptôme: " + symptom.Name + " ?"), &autoA
 			}
 		}
 	}
-	return AddDiscursiveConnector("{{connecteur}}. Est-ce que vous avez ce symptôme: " + symptomName + " ?")
+	return AddDiscursiveConnector("{{connecteur}}. Est-ce que vous avez ce symptôme: " + symptomName + " ?"), &autoA
 }
 
-func GuessQuestion(mapped []DiseaseCoverage) (string, []string, error) {
+func GuessQuestion(mapped []DiseaseCoverage) (string, *string, []string, error) {
 	symptoms, err := graphql.GetSymptoms(nil)
 	if err != nil {
-		return "", nil, err
+		return "", nil, nil, err
 	}
 	i := 0
 
 	for mapped[i].PotentialQuestion == "" {
 		i++
 	}
+	question, autoA := getTheQuestion(mapped[i].PotentialQuestion, symptoms)
 
-	return getTheQuestion(mapped[i].PotentialQuestion, symptoms), []string{mapped[i].PotentialQuestion}, nil
+	return question, autoA, []string{mapped[i].PotentialQuestion}, nil
 }
 
 func Calculi(sessionContext []model.SessionSymptom, imc float64, anteChirIds []string, hereditary_disease []string) ([]DiseaseCoverage, bool) {

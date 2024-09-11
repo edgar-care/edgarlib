@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/paging"
 )
 
 type SessionSummary struct {
@@ -25,8 +26,8 @@ type GetWaitingReviewResponse struct {
 	Err            error
 }
 
-func GetWaitingReview(doctorId string) GetWaitingReviewResponse {
-	rdv, err := graphql.GetWaitingRdv(doctorId, nil)
+func GetWaitingReview(doctorId string, page int, size int) GetWaitingReviewResponse {
+	rdv, err := graphql.GetWaitingRdv(doctorId, paging.CreatePagingOption(page, size))
 	if err != nil {
 		return GetWaitingReviewResponse{RdvWithSession: nil, Code: 400, Err: errors.New("id does not correspond to a doctor")}
 	}
