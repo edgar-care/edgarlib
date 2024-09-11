@@ -2405,6 +2405,27 @@ func (r *queryResolver) GetDoctorRdv(ctx context.Context, doctorID string, optio
 	return results, nil
 }
 
+// GetRdvs is the resolver for the getRdvs field.
+func (r *queryResolver) GetRdvs(ctx context.Context, option *model.Options) ([]*model.Rdv, error) {
+	var results []*model.Rdv
+	filter := bson.D{}
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter, findOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
 // GetRdvByID is the resolver for the getRdvById field.
 func (r *queryResolver) GetRdvByID(ctx context.Context, id string) (*model.Rdv, error) {
 	var result model.Rdv

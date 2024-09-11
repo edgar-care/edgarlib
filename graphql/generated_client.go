@@ -5875,6 +5875,66 @@ func GetMedicalFolder(option *model.Options) ([]model.MedicalInfo, error) {
 	return result.Data.GetMedicalFolder, nil
 }
 
+func GetRdvs(option *model.Options) ([]model.Rdv, error) {
+	query := `query GetRdvs($option: Options){
+	    getRdvs(option: $option){
+	        id
+	        doctor_id
+	        id_patient
+	        start_date
+	        end_date
+	        cancelation_reason
+	        appointment_status
+	        session_id
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetRdvs []model.Rdv `json:"getRdvs"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetRdvs, nil
+}
+
 func GetSlots(id string, option *model.Options) ([]model.Rdv, error) {
 	query := `query GetSlots($id: String!, $option: Options){
 	    getSlots(id: $id, option: $option){
