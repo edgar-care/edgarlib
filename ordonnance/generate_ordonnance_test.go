@@ -43,7 +43,7 @@ func TestCreateOrdonnance(t *testing.T) {
 	input := medical_folder.CreateMedicalInfoInput{
 		Name:            "test",
 		Firstname:       "test",
-		Birthdate:       18,
+		Birthdate:       999636164,
 		Sex:             "M",
 		Weight:          0,
 		Height:          0,
@@ -103,7 +103,7 @@ func TestCreateOrdonnance(t *testing.T) {
 				MedicineID: medoc.ID,
 				Qsp:        2,
 				QspUnit:    "JOUR",
-				Comment:    "test comment",
+				Comment:    "testest",
 				Periods: []PeriodInput{
 					{
 						Quantity:       1,

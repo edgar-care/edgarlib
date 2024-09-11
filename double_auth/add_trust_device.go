@@ -14,7 +14,7 @@ type AddTrustDeviceResponse struct {
 }
 
 func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
-	StatusBool := true
+
 	patient, err := graphql.GetPatientById(id_user)
 	if err == nil {
 		for _, device := range patient.TrustDevices {
@@ -40,14 +40,16 @@ func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
 		}
 
 		_, err = graphql.UpdateDoubleAuth(*patient.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
+			Methods:       getDoubleAuth.Methods,
 			TrustDeviceID: append(getDoubleAuth.TrustDeviceID, id_device),
 		})
 		if err != nil {
 			return AddTrustDeviceResponse{Patient: &model.Patient{}, Doctor: nil, Code: 400, Err: errors.New("update double_auth failed: " + err.Error())}
 		}
 
+		status := true
 		_, err = graphql.UpdateDeviceConnect(id_device, model.UpdateDeviceConnectInput{
-			TrustDevice: &StatusBool,
+			TrustDevice: &status,
 		})
 		if err != nil {
 			return AddTrustDeviceResponse{Patient: &model.Patient{}, Doctor: nil, Code: 400, Err: errors.New("update device_connect failed: " + err.Error())}
@@ -87,13 +89,17 @@ func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
 		return AddTrustDeviceResponse{Patient: nil, Doctor: nil, Code: 404, Err: errors.New("double auth not found on patient")}
 	}
 	_, err = graphql.UpdateDoubleAuth(*doctor.DoubleAuthMethodsID, model.UpdateDoubleAuthInput{
+		Methods:       getDoubleAuth.Methods,
 		TrustDeviceID: append(getDoubleAuth.TrustDeviceID, id_device),
 	})
 	if err != nil {
 		return AddTrustDeviceResponse{Patient: nil, Doctor: &model.Doctor{}, Code: 400, Err: errors.New("update double_auth failed: " + err.Error())}
 	}
 
-	_, err = graphql.UpdateDeviceConnect(id_device, model.UpdateDeviceConnectInput{TrustDevice: &StatusBool})
+	status := true
+	_, err = graphql.UpdateDeviceConnect(id_device, model.UpdateDeviceConnectInput{
+		TrustDevice: &status,
+	})
 	if err != nil {
 		return AddTrustDeviceResponse{Patient: nil, Doctor: &model.Doctor{}, Code: 400, Err: errors.New("update device_connect failed: " + err.Error())}
 	}
