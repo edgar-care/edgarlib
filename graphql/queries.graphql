@@ -1427,6 +1427,21 @@ query GetMedicalFolder($option: Options){
     }
 }
 
+query GetRdvs($option: Options){
+    getRdvs(option: $option){
+        id
+        doctor_id
+        id_patient
+        start_date
+        end_date
+        cancelation_reason
+        appointment_status
+        session_id
+        createdAt
+        updatedAt
+    }
+}
+
 query GetSlots($id: String!, $option: Options){
     getSlots(id: $id, option: $option){
         id

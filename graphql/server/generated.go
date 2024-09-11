@@ -463,6 +463,7 @@ type ComplexityRoot struct {
 		GetPatients                    func(childComplexity int, option *model.Options) int
 		GetPatientsFromDoctorByID      func(childComplexity int, id string, option *model.Options) int
 		GetRdvByID                     func(childComplexity int, id string) int
+		GetRdvs                        func(childComplexity int, option *model.Options) int
 		GetSaveCode                    func(childComplexity int, option *model.Options) int
 		GetSaveCodeByID                func(childComplexity int, id string) int
 		GetSessionByID                 func(childComplexity int, id string) int
@@ -682,6 +683,7 @@ type QueryResolver interface {
 	GetNotificationByID(ctx context.Context, id string) (*model.Notification, error)
 	GetPatientRdv(ctx context.Context, idPatient string, option *model.Options) ([]*model.Rdv, error)
 	GetDoctorRdv(ctx context.Context, doctorID string, option *model.Options) ([]*model.Rdv, error)
+	GetRdvs(ctx context.Context, option *model.Options) ([]*model.Rdv, error)
 	GetRdvByID(ctx context.Context, id string) (*model.Rdv, error)
 	GetSlotByID(ctx context.Context, id string) (*model.Rdv, error)
 	GetSlots(ctx context.Context, id string, option *model.Options) ([]*model.Rdv, error)
@@ -3710,6 +3712,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetRdvByID(childComplexity, args["id"].(string)), true
 
+	case "Query.getRdvs":
+		if e.complexity.Query.GetRdvs == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getRdvs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetRdvs(childComplexity, args["option"].(*model.Options)), true
+
 	case "Query.getSaveCode":
 		if e.complexity.Query.GetSaveCode == nil {
 			break
@@ -5688,6 +5702,9 @@ type Query {
 
     #Get the entire list of rdv doctors.
     getDoctorRdv(doctor_id: String!, option: Options): [Rdv]
+
+    # Get all rdv
+    getRdvs(option: Options): [Rdv]
 
     # Find a rdv using its id.
     getRdvById(id: String!): Rdv
@@ -8418,6 +8435,21 @@ func (ec *executionContext) field_Query_getRdvById_args(ctx context.Context, raw
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getRdvs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Options
+	if tmp, ok := rawArgs["option"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("option"))
+		arg0, err = ec.unmarshalOOptions2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐOptions(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["option"] = arg0
 	return args, nil
 }
 
@@ -24528,6 +24560,82 @@ func (ec *executionContext) fieldContext_Query_getDoctorRdv(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getRdvs(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getRdvs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetRdvs(rctx, fc.Args["option"].(*model.Options))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Rdv)
+	fc.Result = res
+	return ec.marshalORdv2ᚕᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐRdv(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getRdvs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Rdv_id(ctx, field)
+			case "doctor_id":
+				return ec.fieldContext_Rdv_doctor_id(ctx, field)
+			case "id_patient":
+				return ec.fieldContext_Rdv_id_patient(ctx, field)
+			case "start_date":
+				return ec.fieldContext_Rdv_start_date(ctx, field)
+			case "end_date":
+				return ec.fieldContext_Rdv_end_date(ctx, field)
+			case "cancelation_reason":
+				return ec.fieldContext_Rdv_cancelation_reason(ctx, field)
+			case "appointment_status":
+				return ec.fieldContext_Rdv_appointment_status(ctx, field)
+			case "session_id":
+				return ec.fieldContext_Rdv_session_id(ctx, field)
+			case "health_method":
+				return ec.fieldContext_Rdv_health_method(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Rdv_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Rdv_updatedAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Rdv", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getRdvs_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_getRdvById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_getRdvById(ctx, field)
 	if err != nil {
@@ -39014,6 +39122,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getDoctorRdv(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getRdvs":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getRdvs(ctx, field)
 				return res
 			}
 
