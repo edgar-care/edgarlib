@@ -5,15 +5,14 @@ import (
 
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
-	"github.com/google/uuid"
 )
 
 func TestDeleteTreatmentWithValidInput(t *testing.T) {
-	treatmentID := uuid.New().String()
+	//treatmentID := uuid.New().String()
 
 	anteDisease, err := graphql.CreateAnteDisease(model.CreateAnteDiseaseInput{
 		Name:          "Hypertension",
-		TreatmentIds:  []string{treatmentID},
+		TreatmentIds:  []string{""},
 		SurgeryIds:    []string{},
 		Symptoms:      []string{},
 		StillRelevant: true,
@@ -23,7 +22,7 @@ func TestDeleteTreatmentWithValidInput(t *testing.T) {
 	}
 
 	treatment, err := graphql.CreateTreatment(model.CreateTreatmentInput{
-		MedicineID: uuid.New().String(),
+		MedicineID: "test",
 		Quantity:   1,
 		Period:     []model.Period{"MORNING"},
 		Day:        []model.Day{"MONDAY"},
@@ -32,6 +31,15 @@ func TestDeleteTreatmentWithValidInput(t *testing.T) {
 	})
 	if err != nil {
 		t.Errorf("Failed to create treatment: %v", err)
+	}
+
+	input := model.UpdateAnteDiseaseInput{
+		TreatmentIds: []string{treatment.ID},
+	}
+
+	_, err = graphql.UpdateAnteDisease(anteDisease.ID, input)
+	if err != nil {
+		t.Errorf("Failed to update antedisease: %v", err)
 	}
 
 	response := DeleteTreatment(treatment.ID)

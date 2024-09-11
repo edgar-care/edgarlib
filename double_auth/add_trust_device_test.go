@@ -39,10 +39,25 @@ func TestAddTrustDevice_Patient_Success(t *testing.T) {
 	if device.Code != 201 {
 		t.Errorf("Expected status code 201, got: %d", device.Code)
 	}
-	_ = CreateDoubleAuthAppTier(patient.ID)
 
-	response := AddTrustDevice(device.DeviceConnect.ID, patient.ID)
+	input2 := CreateDoubleMobileInput{
+		Methods:     "MOBILE",
+		TrustDevice: device.DeviceConnect.ID,
+	}
 
+	_ = CreateDoubleAuthMobile(input2, patient.ID)
+
+	input3 := CreateDeviceConnectInput{
+		DeviceType: "Windows",
+		Browser:    "Chrome",
+		Ip:         "192.168.0.1",
+		City:       "sdfsdf",
+		Country:    "dfdgdfgdfg",
+		Date:       1627880400,
+	}
+	device2 := CreateDeviceConnect(input3, patient.ID)
+
+	response := AddTrustDevice(device2.DeviceConnect.ID, patient.ID)
 	if response.Err != nil {
 		t.Errorf("Expected no error, got: %v", response.Err)
 	}
@@ -55,6 +70,7 @@ func TestAddTrustDevice_Patient_Success(t *testing.T) {
 	if response.Doctor != nil {
 		t.Errorf("Expected no doctor, got: %v", response.Doctor)
 	}
+
 }
 
 func TestAddTrustDevice_Doctor_Success(t *testing.T) {
