@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/paging"
 	"net/http"
 )
 
@@ -28,12 +29,11 @@ func GetDeviceConnectById(id string) GetDeviceConnectByIdResponse {
 	return GetDeviceConnectByIdResponse{device, 200, nil}
 }
 
-func GetDeviceConnect(ownerId string) GetDevicesConnectResponse {
+func GetDeviceConnect(ownerId string, page int, size int) GetDevicesConnectResponse {
 
 	patient, errPatient := graphql.GetPatientById(ownerId)
 	if errPatient == nil {
-
-		devices, err := graphql.GetDevicesConnect(patient.ID, nil)
+		devices, err := graphql.GetDevicesConnect(patient.ID, paging.CreatePagingOption(page, size))
 		if err != nil {
 			return GetDevicesConnectResponse{[]model.DeviceConnect{}, http.StatusBadRequest, errors.New("invalid input: " + err.Error())}
 		}
@@ -42,7 +42,7 @@ func GetDeviceConnect(ownerId string) GetDevicesConnectResponse {
 
 	doctor, errDoctor := graphql.GetDoctorById(ownerId)
 	if errDoctor == nil {
-		devices, err := graphql.GetDevicesConnect(doctor.ID, nil)
+		devices, err := graphql.GetDevicesConnect(doctor.ID, paging.CreatePagingOption(page, size))
 		if err != nil {
 			return GetDevicesConnectResponse{[]model.DeviceConnect{}, http.StatusBadRequest, errors.New("invalid input: " + err.Error())}
 		}

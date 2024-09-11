@@ -2,6 +2,7 @@ package slot
 
 import (
 	"errors"
+	"github.com/edgar-care/edgarlib/v2/paging"
 
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
@@ -30,13 +31,13 @@ func GetSlotById(id string, doctorId string) GetSlotByIdResponse {
 	return GetSlotByIdResponse{slot, 200, nil}
 }
 
-func GetSlots(doctorId string) GetSlotsResponse {
+func GetSlots(doctorId string, page int, size int) GetSlotsResponse {
 	_, err := graphql.GetDoctorById(doctorId)
 	if err != nil {
 		return GetSlotsResponse{[]model.Rdv{}, 400, errors.New("id does not correspond to a doctor")}
 	}
 
-	slots, err := graphql.GetSlots(doctorId, nil)
+	slots, err := graphql.GetSlots(doctorId, paging.CreatePagingOption(page, size))
 	if err != nil {
 		return GetSlotsResponse{[]model.Rdv{}, 400, errors.New("invalid input: " + err.Error())}
 	}
