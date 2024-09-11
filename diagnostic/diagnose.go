@@ -10,10 +10,16 @@ import (
 )
 
 type DiagnoseResponse struct {
-	Done     bool
-	Question string
-	Code     int
-	Err      error
+	Done       bool
+	Question   string
+	AutoAnswer *model.AutoAnswer
+	Code       int
+	Err        error
+}
+
+type AutoAnswerinfo struct {
+	Name   string
+	Values []string
 }
 
 func nameInList(s utils.Symptom, symptoms []model.SessionSymptom) (bool, int) {
@@ -25,7 +31,7 @@ func nameInList(s utils.Symptom, symptoms []model.SessionSymptom) (bool, int) {
 	return false, 0
 }
 
-func Diagnose(id string, sentence string) DiagnoseResponse {
+func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseResponse {
 	session, err := graphql.GetSessionById(id)
 	if err != nil {
 		return DiagnoseResponse{
@@ -59,12 +65,32 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	if session.LastQuestion != "" && strings.Split(session.LastQuestion, " ")[0] == "duration" {
 		durSymptom = &strings.Split(session.LastQuestion, " ")[1]
 	}
-	var errCode int
-	newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom)
-	if errCode != 200 {
-		return DiagnoseResponse{
-			Code: errCode,
-			Err:  errors.New("NLP error, please try again"),
+
+	if autoAnswer != nil {
+		autoA, _ := graphql.GetAutoAnswerByName(autoAnswer.Name)
+		if autoA.Name == "Oui / Non / Ne sais pas" {
+			if len(questionSymptom) > 0 {
+				if autoAnswer.Values[0] == "Oui." {
+					p := true
+					newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
+				} else if autoAnswer.Values[0] == "Non." {
+					p := false
+					newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
+				} else if autoAnswer.Values[0] == "Je ne sais pas." {
+					var p *bool
+					p = nil
+					newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: p})
+				}
+			}
+		}
+	} else {
+		var errCode int
+		newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom)
+		if errCode != 200 {
+			return DiagnoseResponse{
+				Code: errCode,
+				Err:  errors.New("NLP error, please try again"),
+			}
 		}
 	}
 
@@ -205,6 +231,16 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 		}
 	}
 
+	var autoAnswerOutput *model.AutoAnswer
+	if exam.AutoAnswer != nil {
+		auA, err := graphql.GetAutoAnswerByName(*exam.AutoAnswer)
+		if err != nil {
+			autoAnswerOutput = nil
+		} else {
+			autoAnswerOutput = &auA
+		}
+	}
+
 	_, err = graphql.UpdateSession(session.ID, model.UpdateSessionInput{
 		Diseases:     diseasesinput,
 		Symptoms:     symptomsinput,
@@ -215,9 +251,10 @@ func Diagnose(id string, sentence string) DiagnoseResponse {
 	})
 	edgarlib.CheckError(err)
 	return DiagnoseResponse{
-		Done:     exam.Done,
-		Question: exam.Question,
-		Code:     200,
-		Err:      nil,
+		Done:       exam.Done,
+		Question:   exam.Question,
+		AutoAnswer: autoAnswerOutput,
+		Code:       200,
+		Err:        nil,
 	}
 }

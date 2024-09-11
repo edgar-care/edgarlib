@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/99designs/gqlgen v0.17.43
 	github.com/aws/aws-sdk-go v1.50.11
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/jwtauth/v5 v5.1.1
 	github.com/go-pdf/fpdf v0.9.0
 	github.com/google/uuid v1.6.0

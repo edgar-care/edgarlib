@@ -10,12 +10,13 @@ type examRequestBody struct {
 }
 
 type ExamResponseBody struct {
-	Context  []model.SessionSymptom `json:"context"`
-	Done     bool                   `json:"done"`
-	Question string                 `json:"question"`
-	Symptoms []string               `json:"symptoms"`
-	Alert    []string               `json:"alert"`
-	Err      error                  `json:"err"`
+	Context    []model.SessionSymptom `json:"context"`
+	Done       bool                   `json:"done"`
+	Question   string                 `json:"question"`
+	Symptoms   []string               `json:"symptoms"`
+	AutoAnswer *string                `json:"auto_answer"`
+	Alert      []string               `json:"alert"`
+	Err        error                  `json:"err"`
 }
 
 func CallExam(context []model.SessionSymptom, imc float64, anteChirIds []string, hereditary_disease []string) ExamResponseBody {
@@ -44,6 +45,7 @@ func CallExam(context []model.SessionSymptom, imc float64, anteChirIds []string,
 	respBody.Done = examr.Done
 	respBody.Question = examr.Question
 	respBody.Symptoms = examr.Symptoms
+	respBody.AutoAnswer = examr.AutoAnswer
 	respBody.Alert = examr.Alert
 	respBody.Err = nil
 

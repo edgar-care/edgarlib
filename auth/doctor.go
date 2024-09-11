@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/paging"
 )
 
 type GetDoctorByIdResponse struct {
@@ -27,8 +28,8 @@ func GetDoctorById(id string) GetDoctorByIdResponse {
 	return GetDoctorByIdResponse{doctor, 200, nil}
 }
 
-func GetDoctors() GetDoctorsResponse {
-	doctors, err := graphql.GetDoctors(nil)
+func GetDoctors(page int, size int) GetDoctorsResponse {
+	doctors, err := graphql.GetDoctors(paging.CreatePagingOption(page, size))
 	if err != nil {
 		return GetDoctorsResponse{[]model.Doctor{}, 400, errors.New("invalid input: " + err.Error())}
 	}
