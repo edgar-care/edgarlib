@@ -78,7 +78,7 @@ func TestGetMedicaments(t *testing.T) {
 		t.Errorf("Expected no error but got: %s", getMedicamentByID.Err.Error())
 	}
 
-	response := GetMedicaments()
+	response := GetMedicaments(0, 0)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}

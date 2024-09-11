@@ -125,7 +125,7 @@ func TestGetDeviceConnect(t *testing.T) {
 
 	_ = CreateDeviceConnect(input, patient.ID)
 
-	response := GetDeviceConnect(patient.ID)
+	response := GetDeviceConnect(patient.ID, 0, 0)
 	if response.Err != nil {
 		t.Errorf("Expected no error, got: %v", response.Err)
 	}
@@ -166,7 +166,7 @@ func TestGetDeviceConnectDoctor_Success(t *testing.T) {
 
 	_ = CreateDeviceConnect(input, doctor.ID)
 
-	response := GetDeviceConnect(doctor.ID)
+	response := GetDeviceConnect(doctor.ID, 0, 0)
 	if response.Err != nil {
 		t.Errorf("Expected no error, got: %v", response.Err)
 	}
@@ -178,7 +178,7 @@ func TestGetDeviceConnectDoctor_Success(t *testing.T) {
 func TestGetDeviceConnect_Invalid(t *testing.T) {
 	invalidDeviceId := "invalid_device_id"
 
-	response := GetDeviceConnect(invalidDeviceId)
+	response := GetDeviceConnect(invalidDeviceId, 0, 0)
 
 	if response.Err == nil {
 		t.Errorf("Expected an error, got none")

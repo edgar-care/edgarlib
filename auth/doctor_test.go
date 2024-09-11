@@ -57,7 +57,7 @@ func TestGetDoctors(t *testing.T) {
 	if err := godotenv.Load(".env.test"); err != nil {
 		log.Fatalf("Error loading .env.test file: %v", err)
 	}
-	response := GetDoctors()
+	response := GetDoctors(0, 0)
 	if response.Err != nil {
 		t.Errorf("Unexpected error: %v", response.Err)
 	}

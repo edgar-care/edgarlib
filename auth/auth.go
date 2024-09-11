@@ -265,7 +265,7 @@ func BlackListDevice(token string, ownerID string) BlackListDeviceResponse {
 	}
 
 	// Get the list of connected devices for the owner (patient or doctor)
-	allDeviceAccount := double_auth.GetDeviceConnect(ownerID)
+	allDeviceAccount := double_auth.GetDeviceConnect(ownerID, 0, 0)
 	if allDeviceAccount.Err != nil {
 		return BlackListDeviceResponse{Code: 401, Err: allDeviceAccount.Err}
 	}
