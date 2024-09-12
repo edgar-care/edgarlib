@@ -119,7 +119,7 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) Creat
 			}
 		}
 
-		if !isTrustedDevice(trustDevices, input.TrustDevice) {
+		if isTrustedDevice(trustDevices, input.TrustDevice) {
 			return CreateDoubleMobileResponse{
 				DoubleAuth: model.DoubleAuth{},
 				Patient:    model.Patient{},
