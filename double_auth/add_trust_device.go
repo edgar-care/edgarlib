@@ -73,8 +73,8 @@ func AddTrustDevice(id_device string, id_user string) AddTrustDeviceResponse {
 		}
 	}
 
-	updatedDoctor, err := graphql.UpdateDoctor(id_user, model.UpdateDoctorInput{
-		TrustDevices: append(patient.TrustDevices, &id_device),
+	updatedDoctor, err := graphql.UpdateDoctorsTrustDevice(id_user, model.UpdateDoctorsTrustDeviceInput{
+		TrustDevices: append(doctor.TrustDevices, &id_device),
 	})
 	if err != nil {
 		return AddTrustDeviceResponse{Patient: nil, Doctor: &model.Doctor{}, Code: 400, Err: errors.New("update doctor failed: " + err.Error())}

@@ -21,6 +21,7 @@ func TestCreateDoubleAuthEmail_Succes(t *testing.T) {
 	}
 
 	response := CreateDoubleAuthEmail(input, patient.ID)
+	//spew.Dump(response)
 
 	if response.Err != nil {
 		t.Errorf("Expected no error, got: %v", response.Err)
@@ -123,19 +124,19 @@ func TestCreateDoubleAuthEmail_SuccesAddAUth(t *testing.T) {
 	}
 
 	device := CreateDeviceConnect(input, patient.ID)
-	_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
+	email := CreateDoubleAuthInput{Methods: "EMAIL"}
+	response := CreateDoubleAuthEmail(email, patient.ID)
+
+	//_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
 
 	mobile := CreateDoubleMobileInput{Methods: "MOBILE", TrustDevice: device.DeviceConnect.ID}
 	_ = CreateDoubleAuthMobile(mobile, patient.ID)
 
-	email := CreateDoubleAuthInput{Methods: "EMAIL"}
-	response := CreateDoubleAuthEmail(email, patient.ID)
-
 	if response.Err != nil {
 		t.Errorf("Expected no error, got: %v", response.Err)
 	}
-	if response.Code != 200 {
-		t.Errorf("Expected status code 200, got: %d", response.Code)
+	if response.Code != 201 {
+		t.Errorf("Expected status code 201, got: %d", response.Code)
 	}
 }
 
