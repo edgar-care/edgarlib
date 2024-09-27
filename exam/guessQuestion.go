@@ -130,7 +130,7 @@ func getTheQuestion(symptomName string, symptoms []model.Symptom) (string, *stri
 	autoA := "Oui / Non / Ne sais pas"
 	for _, symptom := range symptoms {
 		if symptomName == symptom.Code {
-			if symptom.Question != "" {
+			if symptom.QuestionBasic != "" {
 				return AddDiscursiveConnector(symptom.QuestionBasic), &autoA
 			} else {
 				return AddDiscursiveConnector("{{connecteur}}. Est-ce que vous avez ce symptôme: " + symptom.Name + " ?"), &autoA
