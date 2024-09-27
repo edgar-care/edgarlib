@@ -1,6 +1,7 @@
 package ordonnance
 
 import (
+	"github.com/davecgh/go-spew/spew"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"github.com/edgar-care/edgarlib/v2/medical_folder"
@@ -103,15 +104,15 @@ func TestCreateOrdonnance(t *testing.T) {
 				MedicineID: medoc.ID,
 				Qsp:        2,
 				QspUnit:    "JOUR",
-				Comment:    "testest",
+				Comment:    "",
 				Periods: []PeriodInput{
 					{
 						Quantity:       1,
 						Frequency:      2,
 						FrequencyRatio: 1,
 						FrequencyUnit:  "JOUR",
-						//PeriodLength:   2,
-						//PeriodUnit:     "ANNEE",
+						PeriodLength:   0,
+						PeriodUnit:     "",
 					},
 					{
 						Quantity:       10,
@@ -143,6 +144,7 @@ func TestCreateOrdonnance(t *testing.T) {
 	}
 
 	response := CreateOrdonnance(test, doctor.ID)
+	spew.Dump(response)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200, got %d", response.Code)
 	}

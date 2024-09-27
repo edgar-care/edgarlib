@@ -1,6 +1,7 @@
 package double_auth
 
 import (
+	"github.com/davecgh/go-spew/spew"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"github.com/joho/godotenv"
@@ -161,6 +162,15 @@ func TestAddTrustDevice_Patient_SuccessDouble(t *testing.T) {
 		Date:       1627880400,
 	}
 
+	//patient, err := graphql.CreatePatient(model.CreatePatientInput{
+	//	Email:    "test_patient_create_device_trust_success@edgar-sante.fr",
+	//	Password: "password",
+	//	Status:   true,
+	//})
+	//if err != nil {
+	//	t.Errorf("Error while creating patient: %v", err)
+	//}
+
 	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
 		Email:     "test_doctor_update_device_trust_add@edgar-sante.fr",
 		Password:  "password",
@@ -192,7 +202,8 @@ func TestAddTrustDevice_Patient_SuccessDouble(t *testing.T) {
 		TrustDevice: device.DeviceConnect.ID,
 	}
 
-	_ = CreateDoubleAuthMobile(input2, doctor.ID)
+	rr := CreateDoubleAuthMobile(input2, doctor.ID)
+	spew.Dump(rr)
 
 	input3 := CreateDeviceConnectInput{
 		DeviceType: "Windows",
@@ -205,6 +216,7 @@ func TestAddTrustDevice_Patient_SuccessDouble(t *testing.T) {
 	device2 := CreateDeviceConnect(input3, doctor.ID)
 
 	response := AddTrustDevice(device2.DeviceConnect.ID, doctor.ID)
+	spew.Dump(response)
 	if response.Err != nil {
 		t.Errorf("Expected no error, got: %v", response.Err)
 	}
@@ -218,5 +230,9 @@ func TestAddTrustDevice_Patient_SuccessDouble(t *testing.T) {
 		t.Errorf("Expected no doctor, got: %v", response.Doctor)
 	}
 
-	_, err = graphql.GetDeviceConnectById(device2.DeviceConnect.ID)
+	test, err := graphql.GetDoubleAuthById(rr.DoubleAuth.ID)
+	spew.Dump(test)
+
+	//ttt, err := graphql.GetDoubleAuthById(*doctor.DoubleAuthMethodsID)
+	//spew.Dump(ttt)
 }

@@ -204,7 +204,7 @@ func TestCreateDoubleAuthMobileADDPatient_Succes(t *testing.T) {
 	}
 
 	device := CreateDeviceConnect(input, patient.ID)
-	_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
+	//_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
 
 	mobile := CreateDoubleMobileInput{Methods: "MOBILE", TrustDevice: device.DeviceConnect.ID}
 	response := CreateDoubleAuthMobile(mobile, patient.ID)

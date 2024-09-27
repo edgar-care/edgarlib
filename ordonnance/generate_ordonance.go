@@ -81,13 +81,16 @@ func CreateOrdonnance(input CreateOrdonnaceInput, ownerID string) CreateOrdonnac
 			})
 		}
 		qspUnit := model.TimeUnitEnum(med.QspUnit)
-		medicines = append(medicines, &model.MedicineOrdonnanceInput{
+		medicineInput := &model.MedicineOrdonnanceInput{
 			MedicineID: med.MedicineID,
 			Qsp:        med.Qsp,
 			QspUnit:    qspUnit,
-			Comment:    &med.Comment,
 			Periods:    periods,
-		})
+		}
+		if med.Comment != "" {
+			medicineInput.Comment = &med.Comment
+		}
+		medicines = append(medicines, medicineInput)
 	}
 
 	newOrdonnance, err := graphql.CreateOrdonnance(model.CreateOrdonnanceInput{
