@@ -57,43 +57,46 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 	questionSymptom := []string{session.LastQuestion}
 
 	var newSymptoms utils.NlpResponseBody
-	if session.LastQuestion == "" || session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
+	if session.LastQuestion == "" {
 		questionSymptom = []string{}
 	}
+	if session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
+		questionSymptom = []string{}
+	} else {
 
-	var durSymptom *string
-	if session.LastQuestion != "" && strings.Split(session.LastQuestion, " ")[0] == "duration" {
-		durSymptom = &strings.Split(session.LastQuestion, " ")[1]
-	}
+		var durSymptom *string
+		if session.LastQuestion != "" && strings.Split(session.LastQuestion, " ")[0] == "duration" {
+			durSymptom = &strings.Split(session.LastQuestion, " ")[1]
+		}
 
-	if autoAnswer != nil {
-		autoA, _ := graphql.GetAutoAnswerByName(autoAnswer.Name)
-		if autoA.Name == "Oui / Non / Ne sais pas" {
-			if len(questionSymptom) > 0 {
-				if autoAnswer.Values[0] == "Oui." {
-					p := true
-					newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
-				} else if autoAnswer.Values[0] == "Non." {
-					p := false
-					newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
-				} else if autoAnswer.Values[0] == "Je ne sais pas." {
-					var p *bool
-					p = nil
-					newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: p})
+		if autoAnswer != nil {
+			autoA, _ := graphql.GetAutoAnswerByName(autoAnswer.Name)
+			if autoA.Name == "Oui / Non / Ne sais pas" {
+				if len(questionSymptom) > 0 {
+					if autoAnswer.Values[0] == "Oui." {
+						p := true
+						newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
+					} else if autoAnswer.Values[0] == "Non." {
+						p := false
+						newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
+					} else if autoAnswer.Values[0] == "Je ne sais pas." {
+						var p *bool
+						p = nil
+						newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: p})
+					}
+				}
+			}
+		} else {
+			var errCode int
+			newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom)
+			if errCode != 200 {
+				return DiagnoseResponse{
+					Code: errCode,
+					Err:  errors.New("NLP error, please try again"),
 				}
 			}
 		}
-	} else {
-		var errCode int
-		newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom)
-		if errCode != 200 {
-			return DiagnoseResponse{
-				Code: errCode,
-				Err:  errors.New("NLP error, please try again"),
-			}
-		}
 	}
-
 	for _, s := range newSymptoms.Context {
 		pres, ite := nameInList(s, symptoms)
 		if pres == true {

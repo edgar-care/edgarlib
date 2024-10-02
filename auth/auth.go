@@ -6,7 +6,6 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/auth/utils"
 	"github.com/edgar-care/edgarlib/v2/double_auth"
-	lib "github.com/edgar-care/edgarlib/v2/http"
 	"net/http"
 	"os"
 	"strconv"
@@ -69,27 +68,18 @@ func AuthMiddlewarePatient(w http.ResponseWriter, r *http.Request) Authenticated
 	}
 	accountID, typeAccount := GetAuthenticatedAccount(reqToken)
 	if typeAccount != "patient" {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this account is not a patient",
-		}, 403)
-		return AuthenticatedAccountResponse{ID: "", Code: 403, Err: errors.New("not authorized")}
+		return AuthenticatedAccountResponse{ID: "", Code: 403, Err: errors.New("Not authorized, this account is not a patient")}
 	}
 
 	check_account := CheckAccountEnable(accountID)
 	if check_account.Code == 409 {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this account is disable",
-		}, 409)
-		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("account disabled")}
+		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("Not authorized, this account is disable")}
 
 	}
 
 	check_device := BlackListDevice(reqToken, accountID)
 	if check_device.Code == 401 {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this device is not connected",
-		}, 401)
-		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("device not connected")}
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("Not authorized, this device is not connected")}
 	}
 
 	utils.DeviceConnectMiddleware(w, r, accountID)
@@ -147,25 +137,16 @@ func AuthMiddlewareDoctor(w http.ResponseWriter, r *http.Request) AuthenticatedA
 	}
 	accountID, typeAccount := GetAuthenticatedAccount(reqToken)
 	if typeAccount != "doctor" {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this account is not a doctor",
-		}, 403)
-		return AuthenticatedAccountResponse{ID: "", Code: 403, Err: errors.New("not authorized")}
+		return AuthenticatedAccountResponse{ID: "", Code: 403, Err: errors.New("Not authorized, this account is not a doctor")}
 	}
 
 	check_account := CheckAccountEnable(accountID)
 	if check_account.Code == 409 {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this account is disable",
-		}, 409)
-		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("account disabled")}
+		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("Not authorized, this account is disable")}
 	}
 	check_device := BlackListDevice(reqToken, accountID)
 	if check_device.Code == 401 {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this device is not connected",
-		}, 401)
-		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("device not connected")}
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("Not authorized, this device is not connected")}
 	}
 
 	utils.DeviceConnectMiddleware(w, r, accountID)
@@ -187,17 +168,11 @@ func AuthMiddlewareAccount(w http.ResponseWriter, r *http.Request) Authenticated
 	accountID, _ := GetAuthenticatedAccount(reqToken)
 	check_account := CheckAccountEnable(accountID)
 	if check_account.Code == 409 {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this account is disable",
-		}, 409)
-		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("account disabled")}
+		return AuthenticatedAccountResponse{ID: "", Code: 409, Err: errors.New("Not authorized, this account is disable")}
 	}
 	check_device := BlackListDevice(reqToken, accountID)
 	if check_device.Code == 401 {
-		lib.WriteResponse(w, map[string]string{
-			"message": "Not authorized, this device is not connected",
-		}, 401)
-		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("device not connected")}
+		return AuthenticatedAccountResponse{ID: "", Code: 401, Err: errors.New("Not authorized, this device is not connected")}
 	}
 
 	utils.DeviceConnectMiddleware(w, r, accountID)
