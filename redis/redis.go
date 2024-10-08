@@ -101,7 +101,7 @@ func RemoveTokenFromList(token string) (string, error) {
 	return resp, nil
 }
 
-func StoreUserInfoHash(key, os, navigation, location string, expire *int) (string, error) {
+func StoreUserInfoHash(key, os string, navigation string, location string, expire *int) (string, error) {
 	client, err := CreateClient()
 	if err != nil {
 		return "", err
