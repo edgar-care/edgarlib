@@ -1,7 +1,6 @@
 package ordonnance
 
 import (
-	"github.com/davecgh/go-spew/spew"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 	"github.com/edgar-care/edgarlib/v2/medical_folder"
@@ -144,7 +143,6 @@ func TestCreateOrdonnance(t *testing.T) {
 	}
 
 	response := CreateOrdonnance(test, doctor.ID)
-	spew.Dump(response)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200, got %d", response.Code)
 	}
