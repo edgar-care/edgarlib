@@ -1189,46 +1189,99 @@ func (r *mutationResolver) DeleteAnteFamily(ctx context.Context, id string) (*bo
 	return &resp, err
 }
 
-// CreateTreatment is the resolver for the createTreatment field.
-func (r *mutationResolver) CreateTreatment(ctx context.Context, input model.CreateTreatmentInput) (*model.Treatment, error) {
+// CreateMedicalAntecedents is the resolver for the createMedicalAntecedents field.
+func (r *mutationResolver) CreateMedicalAntecedents(ctx context.Context, input model.CreateMedicalAntecedentsInput) (*model.MedicalAntecedents, error) {
 	now := int(time.Now().Unix())
-	treatment := &model.Treatment{
+	medicalAntecedents := &model.MedicalAntecedents{
 		ID:         primitive.NewObjectID().Hex(),
-		Period:     input.Period,
-		Day:        input.Day,
-		Quantity:   input.Quantity,
-		MedicineID: input.MedicineID,
-		StartDate:  input.StartDate,
-		EndDate:    input.EndDate,
+		Name:       input.Name,
+		Symptoms:   input.Symptoms,
+		Treatments: []*model.AntecedentTreatment{},
 		CreatedAt:  now,
 		UpdatedAt:  now,
 	}
 
-	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").InsertOne(ctx, treatment)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").InsertOne(ctx, medicalAntecedents)
 	if err != nil {
 		return nil, err
 	}
 
-	return treatment, err
+	return medicalAntecedents, err
 }
 
-// UpdateTreatment is the resolver for the updateTreatment field.
-func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, input model.UpdateTreatmentInput) (*model.Treatment, error) {
-	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment")
+// UpdateMedicalAntecedents is the resolver for the updateMedicalAntecedents field.
+func (r *mutationResolver) UpdateMedicalAntecedents(ctx context.Context, id string, input model.UpdateMedicalAntecedentsInput) (*model.MedicalAntecedents, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
 	filter := bson.M{"_id": id}
 
 	update := bson.M{}
-	if input.Period != nil {
-		update["period"] = input.Period
+	if input.Name != nil {
+		update["name"] = *input.Name
 	}
-	if input.Day != nil {
-		update["day"] = input.Day
+	if input.Symptoms != nil {
+		update["symptoms"] = input.Symptoms
 	}
-	if input.Quantity != nil {
-		update["quantity"] = *input.Quantity
+
+	update["updatedAt"] = time.Now().Unix()
+
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updateMedicalAntecedent model.MedicalAntecedents
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updateMedicalAntecedent)
+	if err != nil {
+		return nil, err
 	}
-	if input.MedicineID != nil {
-		update["medicine_id"] = *input.MedicineID
+
+	return &updateMedicalAntecedent, nil
+}
+
+// DeleteMedicalAntecedents is the resolver for the deleteMedicalAntecedents field.
+func (r *mutationResolver) DeleteMedicalAntecedents(ctx context.Context, id string) (*bool, error) {
+	resp := false
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
+// CreateAntecdentTreatment is the resolver for the createAntecdentTreatment field.
+func (r *mutationResolver) CreateAntecdentTreatment(ctx context.Context, input model.CreateAntecedentTreatmentInput) (*model.AntecedentTreatment, error) {
+
+	now := int(time.Now().Unix())
+	medicalAntecedents := &model.AntecedentTreatment{
+		ID:        primitive.NewObjectID().Hex(),
+		CreatedBy: input.CreatedBy,
+		StartDate: input.StartDate,
+		EndDate:   input.EndDate,
+		Medicines: []*model.AntecedentsMedicines{},
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment").InsertOne(ctx, medicalAntecedents)
+	if err != nil {
+		return nil, err
+	}
+
+	return medicalAntecedents, err
+
+}
+
+// UpdateAntecdentTreatment is the resolver for the updateAntecdentTreatment field.
+func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id string, input model.UpdateAntecedentTreatmentInput) (*model.AntecedentTreatment, error) {
+
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment")
+	filter := bson.M{"_id": id}
+
+	update := bson.M{}
+	if input.CreatedBy != nil {
+		update["created_by"] = *input.CreatedBy
 	}
 	if input.StartDate != nil {
 		update["start_date"] = *input.StartDate
@@ -1238,25 +1291,26 @@ func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, input
 	}
 
 	update["updatedAt"] = time.Now().Unix()
-
 	updateData := bson.M{"$set": update}
 
 	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
-	var updatedTreatment model.Treatment
+	var updateAntecedentTreatment model.AntecedentTreatment
 
-	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedTreatment)
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updateAntecedentTreatment)
 	if err != nil {
 		return nil, err
 	}
 
-	return &updatedTreatment, nil
+	return &updateAntecedentTreatment, nil
+
 }
 
-// DeleteTreatment is the resolver for the deleteTreatment field.
-func (r *mutationResolver) DeleteTreatment(ctx context.Context, id string) (*bool, error) {
+// DeleteAntecdentTreatment is the resolver for the deleteAntecdentTreatment field.
+func (r *mutationResolver) DeleteAntecdentTreatment(ctx context.Context, id string) (*bool, error) {
 	resp := false
+
 	filter := bson.M{"_id": id}
-	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").DeleteOne(ctx, filter)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -2689,38 +2743,24 @@ func (r *queryResolver) GetAnteFamilyByID(ctx context.Context, id string) (*mode
 	return &result, nil
 }
 
-// GetTreatments is the resolver for the getTreatments field.
-func (r *queryResolver) GetTreatments(ctx context.Context, option *model.Options) ([]*model.Treatment, error) {
-	filter := bson.D{}
-	var results []*model.Treatment
-	var findOptions *options.FindOptions = nil
-	if option != nil {
-		findOptions = FindOptions(*option)
-	}
-
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").Find(ctx, filter, findOptions)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
+// GetMedicalAntecedents is the resolver for the getMedicalAntecedents field.
+func (r *queryResolver) GetMedicalAntecedents(ctx context.Context, option *model.Options) ([]*model.MedicalAntecedents, error) {
+	panic(fmt.Errorf("not implemented: GetMedicalAntecedents - getMedicalAntecedents"))
 }
 
-// GetTreatmentByID is the resolver for the getTreatmentByID field.
-func (r *queryResolver) GetTreatmentByID(ctx context.Context, id string) (*model.Treatment, error) {
-	var result model.Treatment
+// GetMedicalAntecedentsByID is the resolver for the getMedicalAntecedentsById field.
+func (r *queryResolver) GetMedicalAntecedentsByID(ctx context.Context, id string) (*model.MedicalAntecedents, error) {
+	panic(fmt.Errorf("not implemented: GetMedicalAntecedentsByID - getMedicalAntecedentsById"))
+}
 
-	filter := bson.M{"_id": id}
+// GetAntecedentTreatments is the resolver for the getAntecedentTreatments field.
+func (r *queryResolver) GetAntecedentTreatments(ctx context.Context, option *model.Options) ([]*model.AntecedentTreatment, error) {
+	panic(fmt.Errorf("not implemented: GetAntecedentTreatments - getAntecedentTreatments"))
+}
 
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+// GetAntecedentTreatmentByID is the resolver for the getAntecedentTreatmentByID field.
+func (r *queryResolver) GetAntecedentTreatmentByID(ctx context.Context, id string) (*model.AntecedentTreatment, error) {
+	panic(fmt.Errorf("not implemented: GetAntecedentTreatmentByID - getAntecedentTreatmentByID"))
 }
 
 // GetAlerts is the resolver for the getAlerts field.
