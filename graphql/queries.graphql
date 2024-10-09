@@ -1,5 +1,5 @@
-mutation DeleteTreatment($id: String!){
-    deleteTreatment(id: $id)
+mutation DeleteAntecdentTreatment($id: String!){
+    deleteAntecdentTreatment(id: $id)
 }
 
 mutation CreateAnteChir($input: CreateAnteChirInput!){
@@ -177,17 +177,24 @@ mutation DeleteAlert($id: String!){
     deleteAlert(id: $id)
 }
 
-mutation UpdateTreatment($id: String!, $input: UpdateTreatmentInput!){
-    updateTreatment(id: $id, input: $input){
+mutation UpdateAntecedentTreatment($id: String!, $antecedentID: String!, $input: UpdateAntecedentTreatmentInput!){
+    updateAntecdentTreatment(id: $id, antecedentID:$antecedentID, input: $input){
         id
-        period
-        day
-        quantity
-        medicine_id
+        created_by
         start_date
         end_date
-        createdAt
-        updatedAt
+        medicines {
+            id
+            period {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+                comment
+            }
+        }
     }
 }
 
@@ -644,17 +651,24 @@ mutation DeleteMedicine($id: String!){
     deleteMedicine(id: $id)
 }
 
-mutation CreateTreatment($input: CreateTreatmentInput!){
-    createTreatment(input: $input){
+mutation CreateAntecdentTreatment($id: String!, $input: CreateAntecedentTreatmentInput!){
+    createAntecdentTreatment(id:$id, input: $input){
         id
-        period
-        day
-        quantity
-        medicine_id
+        created_by
         start_date
         end_date
-        createdAt
-        updatedAt
+        medicines {
+            id
+            period {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+                comment
+            }
+        }
     }
 }
 
@@ -859,17 +873,24 @@ query GetWaitingRdv($doctor_id: String!, $option: Options){
     }
 }
 
-query GetTreatmentByID($id: String!){
-    getTreatmentByID(id: $id){
+query GetAntecedentTreatmentByID($id: String!, $antecedentID: String!){
+    getAntecedentTreatmentByID(id: $id, antecedentID: $antecedentID){
         id
-        period
-        day
-        quantity
-        medicine_id
+        created_by
         start_date
         end_date
-        createdAt
-        updatedAt
+        medicines {
+            id
+            period {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+                comment
+            }
+        }
     }
 }
 
@@ -1022,15 +1043,24 @@ query GetDoctorRdv($doctor_id: String!, $option: Options){
     }
 }
 
-query GetTreatments($option: Options){
-    getTreatments(option: $option){
+query GetAntecedentTreatments($option: Options){
+    getAntecedentTreatments(option: $option){
         id
-        period
-        day
-        quantity
-        medicine_id
+        created_by
         start_date
         end_date
+        medicines {
+            id
+            period {
+                quantity
+                frequency
+                frequency_ratio
+                frequency_unit
+                period_length
+                period_unit
+                comment
+            }
+        }
         createdAt
         updatedAt
     }
@@ -2044,6 +2074,125 @@ query GetAutoAnswers($option: Options){
         name
         values
         type
+        createdAt
+        updatedAt
+    }
+}
+
+
+mutation CreateMedicalAntecedents($input: CreateMedicalAntecedentsInput!){
+    createMedicalAntecedents(input: $input){
+        id
+        name
+        symptoms
+        treatments {
+            id
+            created_by
+            start_date
+            end_date
+            medicines {
+                id
+                period {
+                    quantity
+                    frequency
+                    frequency_ratio
+                    frequency_unit
+                    period_length
+                    period_unit
+                    comment
+                }
+            }
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+
+mutation UpdateMedicalAntecedents($id: String!, $input: UpdateMedicalAntecedentsInput!){
+    updateMedicalAntecedents(id: $id, input: $input){
+        id
+        name
+        symptoms
+        treatments {
+            id
+            created_by
+            start_date
+            end_date
+            medicines {
+                id
+                period {
+                    quantity
+                    frequency
+                    frequency_ratio
+                    frequency_unit
+                    period_length
+                    period_unit
+                    comment
+                }
+            }
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+mutation DeleteMedicalAntecedents($id: String!){
+    deleteMedicalAntecedents(id: $id)
+}
+
+
+query GetMedicalAntecedentsById($id: String!){
+    getMedicalAntecedentsById(id: $id){
+        id
+        name
+        symptoms
+        treatments {
+            id
+            created_by
+            start_date
+            end_date
+            medicines {
+                id
+                period {
+                    quantity
+                    frequency
+                    frequency_ratio
+                    frequency_unit
+                    period_length
+                    period_unit
+                    comment
+                }
+            }
+        }
+        createdAt
+        updatedAt
+    }
+}
+
+query GetMedicalAntecedents($option: Options){
+    getMedicalAntecedents(option: $option){
+        id
+        name
+        symptoms
+        treatments {
+            id
+            created_by
+            start_date
+            end_date
+            medicines {
+                id
+                period {
+                    quantity
+                    frequency
+                    frequency_ratio
+                    frequency_unit
+                    period_length
+                    period_unit
+                    comment
+                }
+            }
+        }
         createdAt
         updatedAt
     }

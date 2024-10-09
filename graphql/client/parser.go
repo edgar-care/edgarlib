@@ -35,8 +35,12 @@ func parseGraphQLQueriesAndMutations(filename string) ([]GraphQLQueryInfo, error
 
 	content := string(data)
 
-	queryRegex := regexp.MustCompile(`(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*{(?:[^{}]}*|{(?:[^{}]*|{[^{}]*})*})*}|(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*}`)
+	queryRegex := regexp.MustCompile(`(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*}|(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{[^{}]*})*})*})*})*})*}\s*}|(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{[^{}]*})*})*})*})*})*})*}\s*}`)
 	matches := queryRegex.FindAllStringSubmatch(content, -1)
+
+	//queryRegex := regexp.MustCompile(`(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{[^{}]*})*})*})*})*})*}|(query|mutation)\s+(\w+)\s*\(([^)]*)\)\s*{\s*(\w+)\s*\(([^)]*)\)\s*{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{(?:[^{}]*|{[^{}]*})*})*})*})*})*})*})*}`)
+	//matches := queryRegex.FindAllStringSubmatch(content, -1)
+
 	var graphqlInfos []GraphQLQueryInfo
 
 	for _, match := range matches {

@@ -15,13 +15,13 @@ type GetPatientByIdResponse struct {
 }
 
 type PatientWithMedicalInfo struct {
-	ID                string                                     `json:"id"`
-	Email             string                                     `json:"email"`
-	MedicalInfo       model.MedicalInfo                          `json:"medical_info"`
-	Antedisease       []medical_folder.AnteDiseaseWithTreatments `json:"antedisease"`
-	RendezVousIds     []*string                                  `json:"rendez_vous_ids"`
-	DocumentsIds      []*string                                  `json:"documents_ids"`
-	TreatmentFollowUp []*string                                  `json:"treatment_follow_up"`
+	ID                string                     `json:"id"`
+	Email             string                     `json:"email"`
+	MedicalInfo       model.MedicalInfo          `json:"medical_info"`
+	Antedisease       []model.MedicalAntecedents `json:"antedisease"`
+	RendezVousIds     []*string                  `json:"rendez_vous_ids"`
+	DocumentsIds      []*string                  `json:"documents_ids"`
+	TreatmentFollowUp []*string                  `json:"treatment_follow_up"`
 }
 
 type GetPatientsResponse struct {
@@ -52,7 +52,7 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 	}
 
 	var patients PatientWithMedicalInfo
-	medicalInfo := medical_folder.GetMedicalInfo(id)
+	medicalInfo := medical_folder.GetMedicalFolder(id)
 	if medicalInfo.Err != nil {
 		return GetPatientByIdResponse{Code: 404, Err: errors.New("error while retrieving medical info by id")}
 	}
@@ -64,7 +64,7 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		DocumentsIds:      patient.DocumentIds,
 		MedicalInfo:       medicalInfo.MedicalInfo,
 		TreatmentFollowUp: patient.TreatmentFollowUpIds,
-		Antedisease:       medicalInfo.AnteDiseasesWithTreatments,
+		Antedisease:       medicalInfo.MedicalAntecedents,
 	}
 
 	return GetPatientByIdResponse{
@@ -82,7 +82,7 @@ func GetPatients(doctorId string) GetPatientsResponse {
 
 	var patients []PatientWithMedicalInfo
 	for _, patient := range patientDoctor {
-		medicalInfo := medical_folder.GetMedicalInfo(patient.ID)
+		medicalInfo := medical_folder.GetMedicalFolder(patient.ID)
 		if medicalInfo.Err != nil {
 			return GetPatientsResponse{Code: 401, Err: errors.New("error while retrieving medical info by id")}
 		}
@@ -93,7 +93,7 @@ func GetPatients(doctorId string) GetPatientsResponse {
 			DocumentsIds:      patient.DocumentIds,
 			MedicalInfo:       medicalInfo.MedicalInfo,
 			TreatmentFollowUp: patient.TreatmentFollowUpIds,
-			Antedisease:       medicalInfo.AnteDiseasesWithTreatments,
+			Antedisease:       medicalInfo.MedicalAntecedents,
 		})
 	}
 	return GetPatientsResponse{

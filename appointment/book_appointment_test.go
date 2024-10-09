@@ -168,31 +168,42 @@ func TestBookAppointmentCheckDoctor(t *testing.T) {
 		t.Errorf("Error creating patient: %v", err)
 	}
 
-	input := medical_folder.CreateMedicalInfoInput{
-		Name:            "test",
-		Firstname:       "test",
+	_ = medical_folder.NewMedicalFolder(medical_folder.CreateNewMedicalInfoInput{
+		Name:            "first",
+		Firstname:       "first",
 		Birthdate:       0,
-		Sex:             "M",
+		Sex:             "",
 		Weight:          0,
 		Height:          0,
 		PrimaryDoctorID: "",
-		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-			Name: "test",
-			Medicines: []medical_folder.CreateMedicineInput{medical_folder.CreateMedicineInput{
-				MedicineID: "test",
-				Period:     []string{"NOON"},
-				Day:        []string{"MONDAY"},
-				Quantity:   2,
-				StartDate:  1234,
-				EndDate:    1234,
-			}},
-			StillRelevant: false,
-		},
-		},
-		FamilyMembersMedInfoId: []string{"test"},
-	}
-
-	_ = medical_folder.CreateMedicalInfo(input, patient.ID)
+		MedicalAntecedents: []medical_folder.CreateNewMedicalAntecedentInput{{
+			Name:     "",
+			Symptoms: []string{"symptom"},
+			Treatments: []medical_folder.CreateTreatInput{
+				{
+					CreatedBy: "ttt",
+					StartDate: 78,
+					EndDate:   90,
+					Medicines: []medical_folder.CreateAntecedentsMedicines{
+						{
+							Period: []*medical_folder.CreateAntecedentPeriod{
+								{
+									Quantity:       6,
+									Frequency:      1,
+									FrequencyRatio: 3,
+									FrequencyUnit:  "MOIS",
+									PeriodLength:   4,
+									PeriodUnit:     "ANNEE",
+									Comment:        "tttt",
+								},
+							},
+						},
+					},
+				},
+			},
+		}},
+		FamilyMembersMedInfoId: []string{},
+	}, patient.ID)
 
 	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{Email: "test_doctor_appointment_check_dupli@edgar-sante.fr", Password: "password", Name: "name", Firstname: "first", Address: &model.AddressInput{"", "", "", ""}})
 	if err != nil {
