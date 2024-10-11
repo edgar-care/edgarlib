@@ -97,3 +97,21 @@ func TestDeleteKey(t *testing.T) {
 		t.Errorf("Expected response 'OK' but got %s", resp)
 	}
 }
+
+func TestStoreUserInfoHash(t *testing.T) {
+	if err := godotenv.Load(".env.test"); err != nil {
+		log.Fatalf("Error loading .env.test file: %v", err)
+	}
+
+	expire := 5
+	_, err := StoreUserInfoHash("test_user_info_hash", "test_value_hash", "vv", "dds", &expire)
+	if err != nil {
+		t.Errorf("Expected no error but got: %s", err.Error())
+	}
+
+	_, err = GetUserInfoHash("test_user_info_hash")
+	if err != nil {
+		t.Errorf("Expected error but got none")
+	}
+
+}

@@ -100,3 +100,53 @@ func RemoveTokenFromList(token string) (string, error) {
 
 	return resp, nil
 }
+
+func StoreUserInfoHash(key, os string, navigation string, location string, expire *int) (string, error) {
+	client, err := CreateClient()
+	if err != nil {
+		return "", err
+	}
+
+	command := fmt.Sprintf("redis-cli HSET %s os %s navigation %s location %s", key, os, navigation, location)
+	resp, err := ExecuteCommand(client, command)
+	if err != nil {
+		return "", err
+	}
+
+	if expire != nil {
+		expireCommand := fmt.Sprintf("redis-cli EXPIRE %s %d", key, *expire)
+		_, err = ExecuteCommand(client, expireCommand)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return resp, nil
+}
+
+func GetUserInfoHash(key string) (map[string]string, error) {
+	client, err := CreateClient()
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := ExecuteCommand(client, fmt.Sprintf("redis-cli HGETALL %s", key))
+	if err != nil {
+		return nil, err
+	}
+
+	if resp == "" {
+		return nil, fmt.Errorf("key does not exist")
+	}
+
+	userInfo := make(map[string]string)
+	lines := strings.Split(strings.TrimSpace(resp), "\n")
+	if len(lines) < 2 {
+		return nil, fmt.Errorf("invalid response format")
+	}
+	for i := 0; i < len(lines); i += 2 {
+		userInfo[lines[i]] = lines[i+1]
+	}
+
+	return userInfo, nil
+}

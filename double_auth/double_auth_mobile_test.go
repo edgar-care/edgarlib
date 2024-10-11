@@ -287,4 +287,7 @@ func TestCreateDoubleAuthMobileADDPatient_InvalidID(t *testing.T) {
 	if response.Code != 400 {
 		t.Errorf("Expected status code 400, got: %d", response.Code)
 	}
+
+	//test := GetTrustDeviceConnect(patient.ID)
+	//spew.Dump(test)
 }

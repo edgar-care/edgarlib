@@ -87,7 +87,7 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) Creat
 		} else {
 			_, err = graphql.UpdateDoctor(ownerId, model.UpdateDoctorInput{
 				DoubleAuthMethodsID: &auth.ID,
-				TrustDevices:        []*string{&input.TrustDevice},
+				TrustDevices:        []*string{&input.TrustDevice}, //mettre a la place un append
 			})
 		}
 		if err != nil {
