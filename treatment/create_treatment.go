@@ -6,44 +6,62 @@ import (
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
 
-type CreateNewTreatmentInput struct {
-	Name          string             `json:"name"`
-	DiseaseId     string             `json:"disease_id"`
-	Treatments    []CreateTreatInput `json:"treatments"`
-	StillRelevant bool               `json:"still_relevant"`
+type CreateTreatInput struct {
+	CreatedBy string                       `json:"created_by"`
+	StartDate int                          `json:"start_date"`
+	EndDate   int                          `json:"end_date"`
+	Medicines []CreateAntecedentsMedicines `json:"medicines"`
 }
 
-type CreateTreatInput struct {
-	MedicineId string   `json:"medicine_id"`
-	Period     []string `json:"period"`
-	Day        []string `json:"day"`
-	Quantity   int      `json:"quantity"`
-	StartDate  int      `json:"start_date"`
-	EndDate    int      `json:"end_date"`
+type CreateAntecedentsMedicines struct {
+	ID     string                   `json:"id"`
+	Period []CreateAntecedentPeriod `json:"period"`
+}
+
+type CreateAntecedentPeriod struct {
+	Quantity       int    `json:"quantity"`
+	Frequency      int    `json:"frequency"`
+	FrequencyRatio int    `json:"frequency_ratio"`
+	FrequencyUnit  string `json:"frequency_unit"`
+	PeriodLength   int    `json:"period_length"`
+	PeriodUnit     string `json:"period_unit"`
+	Comment        string `json:"comment"`
 }
 
 type CreateTreatmentResponse struct {
-	AnteDisease model.AnteDisease
-	Treatment   []model.Treatment
-	Code        int
-	Err         error
+	Treatment []model.AntecedentTreatment
+	Code      int
+	Err       error
 }
 
-func ConvertPeriodsAndDays(periods []string, days []string) ([]model.Period, []model.Day) {
-	convertedPeriods := make([]model.Period, len(periods))
+func ConvertPeriods(periods []CreateAntecedentPeriod) []model.AntecedentPeriod {
+	convertedPeriods := make([]model.AntecedentPeriod, len(periods))
 	for i, p := range periods {
-		convertedPeriods[i] = model.Period(p)
+		freqUnit := model.TimeUnitEnum(p.FrequencyUnit)
+		periodUnit := model.TimeUnitEnum(p.PeriodUnit)
+		convertedPeriods[i] = model.AntecedentPeriod{
+			Quantity:       p.Quantity,
+			Frequency:      p.Frequency,
+			FrequencyRatio: p.FrequencyRatio,
+			FrequencyUnit:  freqUnit,
+			PeriodLength:   &p.PeriodLength,
+			PeriodUnit:     &periodUnit,
+			Comment:        &p.Comment,
+		}
 	}
-
-	convertedDays := make([]model.Day, len(days))
-	for i, d := range days {
-		convertedDays[i] = model.Day(d)
-	}
-	return convertedPeriods, convertedDays
+	return convertedPeriods
 }
 
-func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTreatmentResponse {
-	var res []model.Treatment
+func convertToPointerSlice(periods []model.AntecedentPeriod) []*model.AntecedentPeriod {
+	pointerSlice := make([]*model.AntecedentPeriod, len(periods))
+	for i := range periods {
+		pointerSlice[i] = &periods[i]
+	}
+	return pointerSlice
+}
+
+func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentResponse {
+	var res []model.AntecedentTreatment
 
 	control, err := graphql.GetPatientById(patientID)
 	if err != nil {
@@ -53,69 +71,28 @@ func CreateTreatment(input CreateNewTreatmentInput, patientID string) CreateTrea
 		return CreateTreatmentResponse{Code: 400, Err: errors.New("medical folder has not been created")}
 	}
 
-	for _, treat := range input.Treatments {
-		periods, days := ConvertPeriodsAndDays(treat.Period, treat.Day)
+	for _, medicine := range input.Medicines {
+		periods := ConvertPeriods(medicine.Period)
 
-		treatment, err := graphql.CreateTreatment(model.CreateTreatmentInput{
-			Period:     periods,
-			Day:        days,
-			Quantity:   treat.Quantity,
-			StartDate:  treat.StartDate,
-			EndDate:    treat.EndDate,
-			MedicineID: treat.MedicineId,
+		treatment, err := graphql.CreateAntecdentTreatment(model.CreateAntecedentTreatmentInput{
+			CreatedBy: input.CreatedBy,
+			StartDate: input.StartDate,
+			EndDate:   &input.EndDate,
+			Medicines: []*model.CreateAntecedentsMedicinesInput{
+				{
+					Period: convertToPointerSlice(periods),
+				},
+			},
 		})
 		if err != nil {
-			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to create treatment: " + err.Error())}
+			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to create antecedent treatment: " + err.Error())}
 		}
 		res = append(res, treatment)
 	}
-	var treatmentIds []string
-	for _, treatment := range res {
-		treatmentIds = append(treatmentIds, treatment.ID)
-	}
 
-	if input.DiseaseId == "" {
-		anteDisease, err := graphql.CreateAnteDisease(model.CreateAnteDiseaseInput{
-			Name:          input.Name,
-			TreatmentIds:  treatmentIds,
-			StillRelevant: input.StillRelevant,
-		})
-		if err != nil {
-			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to create ante disease: " + err.Error())}
-		}
-		getMedic, err := graphql.GetMedicalFolderByID(*control.MedicalInfoID)
-		if err != nil {
-			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to get medical folder: " + err.Error())}
-		}
-
-		_, err = graphql.UpdateMedicalFolder(*control.MedicalInfoID, model.UpdateMedicalFolderInput{
-			AntecedentDiseaseIds: append(getMedic.AntecedentDiseaseIds, anteDisease.ID),
-		})
-		if err != nil {
-			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to update medical folder: " + err.Error())}
-		}
-		return CreateTreatmentResponse{
-			AnteDisease: anteDisease,
-			Treatment:   res,
-			Code:        201,
-			Err:         nil,
-		}
-	} else {
-		checkAnte, err := graphql.GetAnteDiseaseByID(input.DiseaseId)
-		if err != nil {
-			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to get ante disease: " + err.Error())}
-		}
-		anteDisease, err := graphql.UpdateAnteDisease(input.DiseaseId, model.UpdateAnteDiseaseInput{
-			TreatmentIds: append(checkAnte.TreatmentIds, treatmentIds...),
-		})
-		if err != nil {
-			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to update ante disease: " + err.Error())}
-		}
-		return CreateTreatmentResponse{
-			AnteDisease: anteDisease,
-			Treatment:   res,
-			Code:        201,
-			Err:         nil,
-		}
+	return CreateTreatmentResponse{
+		Treatment: res,
+		Code:      201,
+		Err:       nil,
 	}
 }

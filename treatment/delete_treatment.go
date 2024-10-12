@@ -27,7 +27,7 @@ func DeleteTreatment(treatmentID string) DeleteTreatmentResponse {
 		return DeleteTreatmentResponse{Deleted: false, Code: 400, Err: errors.New("treatment id is required")}
 	}
 
-	deleted, err := graphql.DeleteTreatment(treatmentID)
+	deleted, err := graphql.DeleteAntecdentTreatment(treatmentID)
 	if err != nil {
 		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error while deleting treatment: " + err.Error())}
 	}

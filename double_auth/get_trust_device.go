@@ -43,7 +43,7 @@ func GetTrustDeviceConnect(id_user string) GetTrustDevicesConnectResponse {
 
 	doctor, err := graphql.GetDoctorById(id_user)
 	if err != nil {
-		return GetTrustDevicesConnectResponse{[]model.DeviceConnect{}, 400, errors.New("id does not correspond to a patient or doctor")}
+		return GetTrustDevicesConnectResponse{[]mo-del.DeviceConnect{}, 400, errors.New("id does not correspond to a patient or doctor")}
 	}
 
 	for _, trustDeviceID := range doctor.TrustDevices {
