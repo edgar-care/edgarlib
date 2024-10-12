@@ -4790,7 +4790,7 @@ type Medicine {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    dosage: Int!
+    dosage: Float!
     dosage_unit: unit_enum!
     container: container_enum!
     name: String!
@@ -5273,7 +5273,7 @@ input CreateMedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    dosage: Int!
+    dosage: Float!
     dosage_unit: unit_enum!
     container: container_enum!
     name: String!
@@ -5357,7 +5357,7 @@ input MedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    dosage: Int!
+    dosage: Float!
     dosage_unit: unit_enum!
     container: container_enum!
     name: String!
@@ -5583,7 +5583,8 @@ enum unit_enum {
 enum container_enum {
     FLACON,
     TUBE,
-    BOITE
+    BOITE,
+    AMPOULE
 }
 
 enum form_enum {
@@ -5604,7 +5605,13 @@ enum form_enum {
     COMPRIMER_EFERVESCENT,
     GRANULER_EN_SACHET,
     PASTILLE,
-    SIROP
+    SIROP,
+    CAPSULE_MOLLE,
+    COMPRIME_ORODISPERSIBLE,
+    SOLUTION_INHALATION,
+    COMPRIME_PELLICULE,
+    COMPRIME_SUBLINGUAL,
+    COMPRIME_ENROBE
 }
 
 enum time_unit_enum {
@@ -15006,9 +15013,9 @@ func (ec *executionContext) _Medicine_dosage(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Medicine_dosage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15018,7 +15025,7 @@ func (ec *executionContext) fieldContext_Medicine_dosage(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -33596,7 +33603,7 @@ func (ec *executionContext) unmarshalInputCreateMedicineInput(ctx context.Contex
 			it.SideEffects = data
 		case "dosage":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dosage"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -34304,7 +34311,7 @@ func (ec *executionContext) unmarshalInputMedicineInput(ctx context.Context, obj
 			it.SideEffects = data
 		case "dosage":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dosage"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
 			if err != nil {
 				return it, err
 			}

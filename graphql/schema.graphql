@@ -228,7 +228,7 @@ type Medicine {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    dosage: Int!
+    dosage: Float!
     dosage_unit: unit_enum!
     container: container_enum!
     name: String!
@@ -711,7 +711,7 @@ input CreateMedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    dosage: Int!
+    dosage: Float!
     dosage_unit: unit_enum!
     container: container_enum!
     name: String!
@@ -795,7 +795,7 @@ input MedicineInput {
     target_diseases: [String!]!
     treated_symptoms: [String!]!
     side_effects: [String!]!
-    dosage: Int!
+    dosage: Float!
     dosage_unit: unit_enum!
     container: container_enum!
     name: String!
@@ -1021,7 +1021,8 @@ enum unit_enum {
 enum container_enum {
     FLACON,
     TUBE,
-    BOITE
+    BOITE,
+    AMPOULE
 }
 
 enum form_enum {
@@ -1042,7 +1043,13 @@ enum form_enum {
     COMPRIMER_EFERVESCENT,
     GRANULER_EN_SACHET,
     PASTILLE,
-    SIROP
+    SIROP,
+    CAPSULE_MOLLE,
+    COMPRIME_ORODISPERSIBLE,
+    SOLUTION_INHALATION,
+    COMPRIME_PELLICULE,
+    COMPRIME_SUBLINGUAL,
+    COMPRIME_ENROBE
 }
 
 enum time_unit_enum {

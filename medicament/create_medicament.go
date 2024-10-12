@@ -13,7 +13,7 @@ type CreateMedicamentInput struct {
 	TargetDiseases  []string `json:"target_diseases"`
 	TreatedSymptoms []string `json:"treated_symptoms"`
 	SideEffects     []string `json:"side_effects"`
-	Dosage          int      `json:"dosage"`
+	Dosage          float64  `json:"dosage"`
 	DosageUnit      string   `json:"dosage_unit"`
 	Container       string   `json:"container"`
 	DosageForm      string   `json:"dosage_form"`
