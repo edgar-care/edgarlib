@@ -12,10 +12,10 @@ type DeleteTreatmentResponse struct {
 	Err     error
 }
 
-func remElement(slice []*string, element string) []*string {
-	var result []*string
+func remElement(slice []string, element string) []string {
+	var result []string
 	for _, v := range slice {
-		if *v != element {
+		if v != element {
 			result = append(result, v)
 		}
 	}
@@ -51,13 +51,14 @@ func DeleteTreatment(treatmentID string) DeleteTreatmentResponse {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antedisease by ID: " + err.Error())}
 		}
 
-		updatedTreatmentIDs := make([]*string, len(ad.TreatmentIds))
-		for i, v := range ad.TreatmentIds {
-			updatedTreatmentIDs[i] = &v
+		updatedTreatmentIDs := remElement(ad.TreatmentIds, treatmentID)
+		updatedTreatmentIDsPtr := make([]*string, len(updatedTreatmentIDs))
+		for i, v := range updatedTreatmentIDs {
+			updatedTreatmentIDsPtr[i] = &v
 		}
 
 		_, err = graphql.UpdatePatientAntediesae(adID, model.UpdatePatientAntediseaseInput{
-			TreatmentIds: remElement(updatedTreatmentIDs, treatmentID),
+			TreatmentIds: updatedTreatmentIDsPtr,
 		})
 		if err != nil {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating antedisease: " + err.Error())}
