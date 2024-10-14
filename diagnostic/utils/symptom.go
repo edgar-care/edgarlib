@@ -64,7 +64,7 @@ func CheckSymptomDuration(symptoms []*model.SessionSymptomInput, lastQuestion st
 			} else {
 				question = exam.AddDiscursiveConnector("{{connecteur}}. Depuis combien de jours souffrez-vous de " + symptom.Name)
 			}
-			nextLastQuestion = "duration " + symptom.Name
+			nextLastQuestion = "duration | " + symptom.Name
 		}
 
 	}
