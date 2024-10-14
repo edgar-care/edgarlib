@@ -70,12 +70,11 @@ type Session {
 # Symptom entity
 type Symptom {
     id: ID!
-    code: String!
     name: String!
     chronic: Int
     symptom: [String!]!
     advice: String
-    question: String!
+    question: String #todo: enlever
     question_basic: String!
     question_duration: String!
     question_ante: String!
@@ -86,7 +85,6 @@ type Symptom {
 # Disease entity
 type Disease {
 	id: ID!
-	code: String!
     name: String!
     symptoms: [String!]!
     symptoms_weight: [SymptomsWeight!]
@@ -541,31 +539,27 @@ input SessionDiseasesInput {
 }
 
 input CreateSymptomInput {
-    code: String!
     name: String!
     chronic: Int
     symptom: [String!]!
     advice: String
-    question: String!
     question_basic: String!
     question_duration: String!
     question_ante: String!
 }
 
 input UpdateSymptomInput {
-    code: String
     name: String
     chronic: Int
     symptom: [String!]
     advice: String
-    question: String
+    question: String # todo: enlever
     question_basic: String
     question_duration: String
     question_ante: String
 }
 
 input CreateDiseaseInput {
-    code: String!
     name: String!
     symptoms: [String!]!
     symptoms_weight: [SymptomsWeightInput!]
@@ -575,7 +569,6 @@ input CreateDiseaseInput {
 }
 
 input UpdateDiseaseInput {
-    code: String
     name: String
     symptoms: [String!]
     symptoms_weight: [SymptomsWeightInput!]
@@ -1122,7 +1115,7 @@ type Query {
     getSymptomById(id: String!): Symptom
 
     # Find a symptom using its name.
-    getSymptomByCode(code: String!): Symptom #todo: change by name later and delete codes
+    getSymptomByName(name: String!): Symptom
 
     # Get a disease's symptoms by its name
     getSymptomsByDiseaseName(name: String!): Disease

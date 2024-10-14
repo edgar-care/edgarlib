@@ -32,7 +32,6 @@ mutation CreateAnteDisease($input: CreateAnteDiseaseInput!){
 mutation CreateSymptom($input: CreateSymptomInput!){
     createSymptom(input: $input){
         id
-        code
         name
         chronic
         symptom
@@ -666,7 +665,6 @@ mutation DeleteRdv($id: String!){
 mutation UpdateDisease($id: String!, $input: UpdateDiseaseInput!){
     updateDisease(id: $id, input: $input){
         id
-        code
         name
         symptoms
         symptoms_weight{
@@ -705,7 +703,6 @@ mutation UpdateAdmin($id: String!, $input: UpdateAdminInput!){
 mutation UpdateSymptom($id: String!, $input: UpdateSymptomInput!){
     updateSymptom(id: $id, input: $input){
         id
-        code
         name
         chronic
         symptom
@@ -733,7 +730,6 @@ mutation CreateTreatmentsFollowUp($input: CreateTreatmentsFollowUpInput!){
 mutation CreateDisease($input: CreateDiseaseInput!){
     createDisease(input: $input){
         id
-        code
         name
         symptoms
         symptoms_weight{
@@ -880,7 +876,6 @@ query GetTreatmentByID($id: String!){
 query GetDiseases($option: Options){
     getDiseases(option: $option){
         id
-        code
         name
         symptoms
         symptoms_weight{
@@ -943,7 +938,6 @@ query GetMedicineByIDWithSymptoms($medicineId: String!){
         updatedAt
         symptoms {
             id
-            code
             name
             chronic
             symptom
@@ -1056,7 +1050,6 @@ query GetNotificationById($id: String!){
 query GetDiseaseById($id: String!){
     getDiseaseById(id: $id){
         id
-        code
         name
         symptoms
         symptoms_weight{
@@ -1194,7 +1187,6 @@ query GetAnteDiseaseByIDWithSymptoms($anteDiseaseId: String!){
         updatedAt
         symptomsclear{
             id
-            code
             name
             chronic
             symptom
@@ -1273,7 +1265,6 @@ query GetAnteChirByID($id: String!){
 query GetSymptoms($option: Options){
     getSymptoms(option: $option){
         id
-        code
         name
         chronic
         symptom
@@ -1359,7 +1350,6 @@ query GetMedicalFolderByID($id: String!){
 query GetSymptomById($id: String!){
     getSymptomById(id: $id){
         id
-        code
         name
         chronic
         symptom
@@ -1373,10 +1363,9 @@ query GetSymptomById($id: String!){
     }
 }
 
-query GetSymptomByCode($code: String!){
-    getSymptomByCode(code: $code) {
+query GetSymptomByName($name: String!){
+    getSymptomByName(name: $name) {
         id
-        code
         name
         chronic
         symptom
