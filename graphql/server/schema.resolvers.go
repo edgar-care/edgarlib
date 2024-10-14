@@ -599,12 +599,10 @@ func (r *mutationResolver) CreateSymptom(ctx context.Context, input model.Create
 	now := int(time.Now().Unix())
 	symptom := &model.Symptom{
 		ID:               primitive.NewObjectID().Hex(),
-		Code:             input.Code,
 		Name:             input.Name,
 		Chronic:          input.Chronic,
 		Symptom:          input.Symptom,
 		Advice:           input.Advice,
-		Question:         input.Question,
 		QuestionBasic:    input.QuestionBasic,
 		QuestionDuration: input.QuestionDuration,
 		QuestionAnte:     input.QuestionAnte,
@@ -625,9 +623,6 @@ func (r *mutationResolver) UpdateSymptom(ctx context.Context, id string, input m
 	filter := bson.M{"_id": id}
 
 	update := bson.M{}
-	if input.Code != nil {
-		update["code"] = *input.Code
-	}
 	if input.Name != nil {
 		update["name"] = *input.Name
 	}
@@ -694,7 +689,6 @@ func (r *mutationResolver) CreateDisease(ctx context.Context, input model.Create
 
 	disease := &model.Disease{
 		ID:               primitive.NewObjectID().Hex(),
-		Code:             input.Code,
 		Name:             input.Name,
 		Symptoms:         input.Symptoms,
 		SymptomsWeight:   symptomWeights,
@@ -719,9 +713,6 @@ func (r *mutationResolver) UpdateDisease(ctx context.Context, id string, input m
 	filter := bson.M{"_id": id}
 
 	update := bson.M{}
-	if input.Code != nil {
-		update["code"] = *input.Code
-	}
 	if input.Name != nil {
 		update["name"] = *input.Name
 	}
@@ -2229,11 +2220,11 @@ func (r *queryResolver) GetSymptomByID(ctx context.Context, id string) (*model.S
 	return &result, nil
 }
 
-// GetSymptomByCode is the resolver for the getSymptomByCode field.
-func (r *queryResolver) GetSymptomByCode(ctx context.Context, code string) (*model.Symptom, error) {
+// GetSymptomByName is the resolver for the getSymptomByName field.
+func (r *queryResolver) GetSymptomByName(ctx context.Context, name string) (*model.Symptom, error) {
 	var result model.Symptom
 
-	filter := bson.M{"code": code}
+	filter := bson.M{"name": name}
 
 	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Symptom").FindOne(ctx, filter).Decode(&result)
 	if err != nil {

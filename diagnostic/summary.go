@@ -58,7 +58,7 @@ func GetSummary(id string) GetSummaryResponse {
 	for _, sessionDisease := range session.Diseases {
 		var nSD model.SessionDiseases
 		for _, d := range diseases {
-			if sessionDisease.Name == d.Code && d.Name != "" {
+			if sessionDisease.Name == d.Name && d.Name != "" {
 				nSD.Name = d.Name
 				break
 			} else {
@@ -77,7 +77,7 @@ func GetSummary(id string) GetSummaryResponse {
 	for _, sessionSymptom := range session.Symptoms {
 		var nSS model.SessionSymptom
 		for _, s := range symptoms {
-			if sessionSymptom.Name == s.Code && s.Name != "" {
+			if sessionSymptom.Name == s.Name && s.Name != "" {
 				nSS.Name = s.Name
 				break
 			} else {

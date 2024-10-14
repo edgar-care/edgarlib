@@ -97,6 +97,7 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 			}
 		}
 	}
+
 	for _, s := range newSymptoms.Context {
 		pres, ite := nameInList(s, symptoms)
 		if pres == true {
