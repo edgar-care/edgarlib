@@ -261,7 +261,7 @@ func GeneratePrescriptionPDF(prescription model.Ordonnance, doctor model.Doctor)
 		pdf.Cell(0, 10, utf8ToISO8859(qspInfo))
 		pdf.Ln(6)
 		pdf.SetFont("Arial", "B", 12)
-		medicationInfo := fmt.Sprintf("%s (%s %s %s/%d%s)", medication.Dci, medication.Name, formatTitleCase(string(medication.DosageForm)), formatTitleCase(string(medication.Container)), medication.Dosage, medication.DosageUnit)
+		medicationInfo := fmt.Sprintf("%s (%s %s %s/%v%s)", medication.Dci, medication.Name, formatTitleCase(string(medication.DosageForm)), formatTitleCase(string(medication.Container)), medication.Dosage, medication.DosageUnit)
 		pdf.Cell(0, 10, utf8ToISO8859(medicationInfo))
 		pdf.Ln(6)
 		if med.Comment != nil {

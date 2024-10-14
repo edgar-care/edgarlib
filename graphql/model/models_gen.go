@@ -243,7 +243,7 @@ type CreateMedicineInput struct {
 	TargetDiseases  []string      `json:"target_diseases" bson:"target_diseases"`
 	TreatedSymptoms []string      `json:"treated_symptoms" bson:"treated_symptoms"`
 	SideEffects     []string      `json:"side_effects" bson:"side_effects"`
-	Dosage          int           `json:"dosage" bson:"dosage"`
+	Dosage          float64       `json:"dosage" bson:"dosage"`
 	DosageUnit      UnitEnum      `json:"dosage_unit" bson:"dosage_unit"`
 	Container       ContainerEnum `json:"container" bson:"container"`
 	Name            string        `json:"name" bson:"name"`
@@ -445,7 +445,7 @@ type Medicine struct {
 	TargetDiseases  []string      `json:"target_diseases" bson:"target_diseases"`
 	TreatedSymptoms []string      `json:"treated_symptoms" bson:"treated_symptoms"`
 	SideEffects     []string      `json:"side_effects" bson:"side_effects"`
-	Dosage          int           `json:"dosage" bson:"dosage"`
+	Dosage          float64       `json:"dosage" bson:"dosage"`
 	DosageUnit      UnitEnum      `json:"dosage_unit" bson:"dosage_unit"`
 	Container       ContainerEnum `json:"container" bson:"container"`
 	Name            string        `json:"name" bson:"name"`
@@ -460,7 +460,7 @@ type MedicineInput struct {
 	TargetDiseases  []string      `json:"target_diseases" bson:"target_diseases"`
 	TreatedSymptoms []string      `json:"treated_symptoms" bson:"treated_symptoms"`
 	SideEffects     []string      `json:"side_effects" bson:"side_effects"`
-	Dosage          int           `json:"dosage" bson:"dosage"`
+	Dosage          float64       `json:"dosage" bson:"dosage"`
 	DosageUnit      UnitEnum      `json:"dosage_unit" bson:"dosage_unit"`
 	Container       ContainerEnum `json:"container" bson:"container"`
 	Name            string        `json:"name" bson:"name"`
@@ -1395,20 +1395,22 @@ func (e SortOrder) MarshalGQL(w io.Writer) {
 type ContainerEnum string
 
 const (
-	ContainerEnumFlacon ContainerEnum = "FLACON"
-	ContainerEnumTube   ContainerEnum = "TUBE"
-	ContainerEnumBoite  ContainerEnum = "BOITE"
+	ContainerEnumFlacon  ContainerEnum = "FLACON"
+	ContainerEnumTube    ContainerEnum = "TUBE"
+	ContainerEnumBoite   ContainerEnum = "BOITE"
+	ContainerEnumAmpoule ContainerEnum = "AMPOULE"
 )
 
 var AllContainerEnum = []ContainerEnum{
 	ContainerEnumFlacon,
 	ContainerEnumTube,
 	ContainerEnumBoite,
+	ContainerEnumAmpoule,
 }
 
 func (e ContainerEnum) IsValid() bool {
 	switch e {
-	case ContainerEnumFlacon, ContainerEnumTube, ContainerEnumBoite:
+	case ContainerEnumFlacon, ContainerEnumTube, ContainerEnumBoite, ContainerEnumAmpoule:
 		return true
 	}
 	return false
@@ -1438,24 +1440,30 @@ func (e ContainerEnum) MarshalGQL(w io.Writer) {
 type FormEnum string
 
 const (
-	FormEnumCreme                FormEnum = "CREME"
-	FormEnumPommade              FormEnum = "POMMADE"
-	FormEnumGelule               FormEnum = "GELULE"
-	FormEnumComprime             FormEnum = "COMPRIME"
-	FormEnumGele                 FormEnum = "GELE"
-	FormEnumSolutionBuvable      FormEnum = "SOLUTION_BUVABLE"
-	FormEnumPoudre               FormEnum = "POUDRE"
-	FormEnumSuppositoire         FormEnum = "SUPPOSITOIRE"
-	FormEnumAmpoule              FormEnum = "AMPOULE"
-	FormEnumSuspensionNasale     FormEnum = "SUSPENSION_NASALE"
-	FormEnumSpray                FormEnum = "SPRAY"
-	FormEnumCollutoire           FormEnum = "COLLUTOIRE"
-	FormEnumShampooing           FormEnum = "SHAMPOOING"
-	FormEnumSolutionInjectable   FormEnum = "SOLUTION_INJECTABLE"
-	FormEnumComprimerEfervescent FormEnum = "COMPRIMER_EFERVESCENT"
-	FormEnumGranulerEnSachet     FormEnum = "GRANULER_EN_SACHET"
-	FormEnumPastille             FormEnum = "PASTILLE"
-	FormEnumSirop                FormEnum = "SIROP"
+	FormEnumCreme                  FormEnum = "CREME"
+	FormEnumPommade                FormEnum = "POMMADE"
+	FormEnumGelule                 FormEnum = "GELULE"
+	FormEnumComprime               FormEnum = "COMPRIME"
+	FormEnumGele                   FormEnum = "GELE"
+	FormEnumSolutionBuvable        FormEnum = "SOLUTION_BUVABLE"
+	FormEnumPoudre                 FormEnum = "POUDRE"
+	FormEnumSuppositoire           FormEnum = "SUPPOSITOIRE"
+	FormEnumAmpoule                FormEnum = "AMPOULE"
+	FormEnumSuspensionNasale       FormEnum = "SUSPENSION_NASALE"
+	FormEnumSpray                  FormEnum = "SPRAY"
+	FormEnumCollutoire             FormEnum = "COLLUTOIRE"
+	FormEnumShampooing             FormEnum = "SHAMPOOING"
+	FormEnumSolutionInjectable     FormEnum = "SOLUTION_INJECTABLE"
+	FormEnumComprimerEfervescent   FormEnum = "COMPRIMER_EFERVESCENT"
+	FormEnumGranulerEnSachet       FormEnum = "GRANULER_EN_SACHET"
+	FormEnumPastille               FormEnum = "PASTILLE"
+	FormEnumSirop                  FormEnum = "SIROP"
+	FormEnumCapsuleMolle           FormEnum = "CAPSULE_MOLLE"
+	FormEnumComprimeOrodispersible FormEnum = "COMPRIME_ORODISPERSIBLE"
+	FormEnumSolutionInhalation     FormEnum = "SOLUTION_INHALATION"
+	FormEnumComprimePellicule      FormEnum = "COMPRIME_PELLICULE"
+	FormEnumComprimeSublingual     FormEnum = "COMPRIME_SUBLINGUAL"
+	FormEnumComprimeEnrobe         FormEnum = "COMPRIME_ENROBE"
 )
 
 var AllFormEnum = []FormEnum{
@@ -1477,11 +1485,17 @@ var AllFormEnum = []FormEnum{
 	FormEnumGranulerEnSachet,
 	FormEnumPastille,
 	FormEnumSirop,
+	FormEnumCapsuleMolle,
+	FormEnumComprimeOrodispersible,
+	FormEnumSolutionInhalation,
+	FormEnumComprimePellicule,
+	FormEnumComprimeSublingual,
+	FormEnumComprimeEnrobe,
 }
 
 func (e FormEnum) IsValid() bool {
 	switch e {
-	case FormEnumCreme, FormEnumPommade, FormEnumGelule, FormEnumComprime, FormEnumGele, FormEnumSolutionBuvable, FormEnumPoudre, FormEnumSuppositoire, FormEnumAmpoule, FormEnumSuspensionNasale, FormEnumSpray, FormEnumCollutoire, FormEnumShampooing, FormEnumSolutionInjectable, FormEnumComprimerEfervescent, FormEnumGranulerEnSachet, FormEnumPastille, FormEnumSirop:
+	case FormEnumCreme, FormEnumPommade, FormEnumGelule, FormEnumComprime, FormEnumGele, FormEnumSolutionBuvable, FormEnumPoudre, FormEnumSuppositoire, FormEnumAmpoule, FormEnumSuspensionNasale, FormEnumSpray, FormEnumCollutoire, FormEnumShampooing, FormEnumSolutionInjectable, FormEnumComprimerEfervescent, FormEnumGranulerEnSachet, FormEnumPastille, FormEnumSirop, FormEnumCapsuleMolle, FormEnumComprimeOrodispersible, FormEnumSolutionInhalation, FormEnumComprimePellicule, FormEnumComprimeSublingual, FormEnumComprimeEnrobe:
 		return true
 	}
 	return false

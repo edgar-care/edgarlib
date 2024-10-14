@@ -61,7 +61,7 @@ func BookAppointment(appointmentId string, patientId string, session_id string) 
 
 	patientFound := false
 	for _, patientID := range doctor.PatientIds {
-		if patientID == &patientId {
+		if *patientID == patientId {
 			patientFound = true
 			break
 		}
