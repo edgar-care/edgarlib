@@ -65,8 +65,8 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 	} else {
 
 		var durSymptom *string
-		if session.LastQuestion != "" && strings.Split(session.LastQuestion, " ")[0] == "duration" {
-			durSymptom = &strings.Split(session.LastQuestion, " ")[1]
+		if session.LastQuestion != "" && strings.Split(session.LastQuestion, " | ")[0] == "duration" {
+			durSymptom = &strings.Split(session.LastQuestion, " | ")[1]
 		}
 
 		if autoAnswer != nil {
