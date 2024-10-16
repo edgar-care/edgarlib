@@ -9,20 +9,22 @@ import (
 )
 
 type nlpRequestBody struct {
-	Input    string   `json:"input"`
-	Symptoms []string `json:"symptoms"`
-	IsTime   bool     `json:"isTime"`
+	Input      string   `json:"input"`
+	Symptoms   []string `json:"symptoms"`
+	IsTime     bool     `json:"isTime"`
+	IsMedicine bool     `json:"isMedicament"`
 }
 
 type NlpResponseBody struct {
 	Context []Symptom `json:"context"`
 }
 
-func CallNlp(sentence string, symptoms []string, durSymptom *string) (NlpResponseBody, int) {
+func CallNlp(sentence string, symptoms []string, durSymptom *string, isMedicine bool) (NlpResponseBody, int) {
 	var rBody = nlpRequestBody{
-		Input:    sentence,
-		Symptoms: symptoms,
-		IsTime:   false,
+		Input:      sentence,
+		Symptoms:   symptoms,
+		IsTime:     false,
+		IsMedicine: isMedicine,
 	}
 
 	var respBody NlpResponseBody
