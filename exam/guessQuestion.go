@@ -26,7 +26,7 @@ func isChronic(sessionSymptom model.SessionSymptom) bool {
 	symptoms, _ := graphql.GetSymptoms(nil)
 
 	for _, symptom := range symptoms {
-		if symptom.Code == sessionSymptom.Name && *sessionSymptom.Duration >= *symptom.Chronic {
+		if symptom.Name == sessionSymptom.Name && *sessionSymptom.Duration >= *symptom.Chronic {
 			return true
 		}
 	}
@@ -115,7 +115,7 @@ func CalculPercentage(context_ []model.SessionSymptom, disease model.Disease, im
 		percentage *= disease.HeredityFactor
 	}
 
-	return DiseaseCoverage{Disease: disease.Code, Percentage: percentage, Unknown: unknown, PotentialQuestion: potentialQuestionSymptom}
+	return DiseaseCoverage{Disease: disease.Name, Percentage: percentage, Unknown: unknown, PotentialQuestion: potentialQuestionSymptom}
 }
 
 func AddDiscursiveConnector(question string) string {
@@ -129,7 +129,7 @@ func AddDiscursiveConnector(question string) string {
 func getTheQuestion(symptomName string, symptoms []model.Symptom) (string, *string) {
 	autoA := "Oui / Non / Ne sais pas"
 	for _, symptom := range symptoms {
-		if symptomName == symptom.Code {
+		if symptomName == symptom.Name {
 			if symptom.QuestionBasic != "" {
 				return AddDiscursiveConnector(symptom.QuestionBasic), &autoA
 			} else {

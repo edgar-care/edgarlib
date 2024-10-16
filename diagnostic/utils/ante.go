@@ -18,16 +18,16 @@ func CheckAnteDiseaseInSymptoms(session model.Session) (string, string, error) {
 			}
 			if ante.StillRelevant == true {
 				for _, anteSymptom := range ante.Symptomsclear {
-					if anteSymptom.Code != session.LastQuestion {
+					if anteSymptom.Name != session.LastQuestion {
 						if anteSymptom.QuestionAnte != "" {
 							question = exam.AddDiscursiveConnector(anteSymptom.QuestionAnte)
 						} else {
 							question = exam.AddDiscursiveConnector("{{connecteur}}. Ressentez-vous " + anteSymptom.Name + " plus intensément récemment ?")
 						}
-						questionSymptomName = anteSymptom.Code
+						questionSymptomName = anteSymptom.Name
 					}
 					for _, sessionSymptom := range session.Symptoms {
-						if anteSymptom.Code == sessionSymptom.Name || anteSymptom.Code == session.LastQuestion {
+						if anteSymptom.Name == sessionSymptom.Name || anteSymptom.Name == session.LastQuestion {
 							question = ""
 							questionSymptomName = ""
 						}

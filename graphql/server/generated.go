@@ -159,7 +159,6 @@ type ComplexityRoot struct {
 
 	Disease struct {
 		Advice           func(childComplexity int) int
-		Code             func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		HeredityFactor   func(childComplexity int) int
 		ID               func(childComplexity int) int
@@ -470,8 +469,8 @@ type ComplexityRoot struct {
 		GetSessions                    func(childComplexity int, option *model.Options) int
 		GetSlotByID                    func(childComplexity int, id string) int
 		GetSlots                       func(childComplexity int, id string, option *model.Options) int
-		GetSymptomByCode               func(childComplexity int, code string) int
 		GetSymptomByID                 func(childComplexity int, id string) int
+		GetSymptomByName               func(childComplexity int, name string) int
 		GetSymptoms                    func(childComplexity int, option *model.Options) int
 		GetSymptomsByDiseaseName       func(childComplexity int, name string) int
 		GetTreatmentByID               func(childComplexity int, id string) int
@@ -537,7 +536,6 @@ type ComplexityRoot struct {
 	Symptom struct {
 		Advice           func(childComplexity int) int
 		Chronic          func(childComplexity int) int
-		Code             func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		ID               func(childComplexity int) int
 		Name             func(childComplexity int) int
@@ -674,7 +672,7 @@ type QueryResolver interface {
 	GetSessions(ctx context.Context, option *model.Options) ([]*model.Session, error)
 	GetSessionByID(ctx context.Context, id string) (*model.Session, error)
 	GetSymptomByID(ctx context.Context, id string) (*model.Symptom, error)
-	GetSymptomByCode(ctx context.Context, code string) (*model.Symptom, error)
+	GetSymptomByName(ctx context.Context, name string) (*model.Symptom, error)
 	GetSymptomsByDiseaseName(ctx context.Context, name string) (*model.Disease, error)
 	GetDiseaseByID(ctx context.Context, id string) (*model.Disease, error)
 	GetSymptoms(ctx context.Context, option *model.Options) ([]*model.Symptom, error)
@@ -1259,13 +1257,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Disease.Advice(childComplexity), true
-
-	case "Disease.code":
-		if e.complexity.Disease.Code == nil {
-			break
-		}
-
-		return e.complexity.Disease.Code(childComplexity), true
 
 	case "Disease.createdAt":
 		if e.complexity.Disease.CreatedAt == nil {
@@ -3796,18 +3787,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetSlots(childComplexity, args["id"].(string), args["option"].(*model.Options)), true
 
-	case "Query.getSymptomByCode":
-		if e.complexity.Query.GetSymptomByCode == nil {
-			break
-		}
-
-		args, err := ec.field_Query_getSymptomByCode_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.GetSymptomByCode(childComplexity, args["code"].(string)), true
-
 	case "Query.getSymptomById":
 		if e.complexity.Query.GetSymptomByID == nil {
 			break
@@ -3819,6 +3798,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.GetSymptomByID(childComplexity, args["id"].(string)), true
+
+	case "Query.getSymptomByName":
+		if e.complexity.Query.GetSymptomByName == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getSymptomByName_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetSymptomByName(childComplexity, args["name"].(string)), true
 
 	case "Query.getSymptoms":
 		if e.complexity.Query.GetSymptoms == nil {
@@ -4183,13 +4174,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Symptom.Chronic(childComplexity), true
-
-	case "Symptom.code":
-		if e.complexity.Symptom.Code == nil {
-			break
-		}
-
-		return e.complexity.Symptom.Code(childComplexity), true
 
 	case "Symptom.createdAt":
 		if e.complexity.Symptom.CreatedAt == nil {
@@ -4632,12 +4616,11 @@ type Session {
 # Symptom entity
 type Symptom {
     id: ID!
-    code: String!
     name: String!
     chronic: Int
     symptom: [String!]!
     advice: String
-    question: String!
+    question: String #todo: enlever
     question_basic: String!
     question_duration: String!
     question_ante: String!
@@ -4648,7 +4631,6 @@ type Symptom {
 # Disease entity
 type Disease {
 	id: ID!
-	code: String!
     name: String!
     symptoms: [String!]!
     symptoms_weight: [SymptomsWeight!]
@@ -5103,31 +5085,27 @@ input SessionDiseasesInput {
 }
 
 input CreateSymptomInput {
-    code: String!
     name: String!
     chronic: Int
     symptom: [String!]!
     advice: String
-    question: String!
     question_basic: String!
     question_duration: String!
     question_ante: String!
 }
 
 input UpdateSymptomInput {
-    code: String
     name: String
     chronic: Int
     symptom: [String!]
     advice: String
-    question: String
+    question: String # todo: enlever
     question_basic: String
     question_duration: String
     question_ante: String
 }
 
 input CreateDiseaseInput {
-    code: String!
     name: String!
     symptoms: [String!]!
     symptoms_weight: [SymptomsWeightInput!]
@@ -5137,7 +5115,6 @@ input CreateDiseaseInput {
 }
 
 input UpdateDiseaseInput {
-    code: String
     name: String
     symptoms: [String!]
     symptoms_weight: [SymptomsWeightInput!]
@@ -5684,7 +5661,7 @@ type Query {
     getSymptomById(id: String!): Symptom
 
     # Find a symptom using its name.
-    getSymptomByCode(code: String!): Symptom #todo: change by name later and delete codes
+    getSymptomByName(name: String!): Symptom
 
     # Get a disease's symptoms by its name
     getSymptomsByDiseaseName(name: String!): Disease
@@ -8559,21 +8536,6 @@ func (ec *executionContext) field_Query_getSlots_args(ctx context.Context, rawAr
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_getSymptomByCode_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["code"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-		arg0, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["code"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_getSymptomById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -8586,6 +8548,21 @@ func (ec *executionContext) field_Query_getSymptomById_args(ctx context.Context,
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getSymptomByName_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
 	return args, nil
 }
 
@@ -10269,8 +10246,6 @@ func (ec *executionContext) fieldContext_AnteDisease_symptomsclear(ctx context.C
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Symptom_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Symptom_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Symptom_name(ctx, field)
 			case "chronic":
@@ -11979,50 +11954,6 @@ func (ec *executionContext) fieldContext_Disease_id(ctx context.Context, field g
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Disease_code(ctx context.Context, field graphql.CollectedField, obj *model.Disease) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Disease_code(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Code, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Disease_code(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Disease",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -15333,8 +15264,6 @@ func (ec *executionContext) fieldContext_Medicine_symptoms(ctx context.Context, 
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Symptom_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Symptom_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Symptom_name(ctx, field)
 			case "chronic":
@@ -17223,8 +17152,6 @@ func (ec *executionContext) fieldContext_Mutation_createSymptom(ctx context.Cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Symptom_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Symptom_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Symptom_name(ctx, field)
 			case "chronic":
@@ -17301,8 +17228,6 @@ func (ec *executionContext) fieldContext_Mutation_updateSymptom(ctx context.Cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Symptom_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Symptom_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Symptom_name(ctx, field)
 			case "chronic":
@@ -17431,8 +17356,6 @@ func (ec *executionContext) fieldContext_Mutation_createDisease(ctx context.Cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Disease_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Disease_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
@@ -17505,8 +17428,6 @@ func (ec *executionContext) fieldContext_Mutation_updateDisease(ctx context.Cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Disease_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Disease_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
@@ -23865,8 +23786,6 @@ func (ec *executionContext) fieldContext_Query_getSymptomById(ctx context.Contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Symptom_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Symptom_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Symptom_name(ctx, field)
 			case "chronic":
@@ -23905,8 +23824,8 @@ func (ec *executionContext) fieldContext_Query_getSymptomById(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_getSymptomByCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_getSymptomByCode(ctx, field)
+func (ec *executionContext) _Query_getSymptomByName(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getSymptomByName(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -23919,7 +23838,7 @@ func (ec *executionContext) _Query_getSymptomByCode(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetSymptomByCode(rctx, fc.Args["code"].(string))
+		return ec.resolvers.Query().GetSymptomByName(rctx, fc.Args["name"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -23933,7 +23852,7 @@ func (ec *executionContext) _Query_getSymptomByCode(ctx context.Context, field g
 	return ec.marshalOSymptom2ᚖgithubᚗcomᚋedgarᚑcareᚋedgarlibᚋv2ᚋgraphqlᚋmodelᚐSymptom(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_getSymptomByCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getSymptomByName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -23943,8 +23862,6 @@ func (ec *executionContext) fieldContext_Query_getSymptomByCode(ctx context.Cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Symptom_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Symptom_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Symptom_name(ctx, field)
 			case "chronic":
@@ -23976,7 +23893,7 @@ func (ec *executionContext) fieldContext_Query_getSymptomByCode(ctx context.Cont
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_getSymptomByCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_getSymptomByName_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -24021,8 +23938,6 @@ func (ec *executionContext) fieldContext_Query_getSymptomsByDiseaseName(ctx cont
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Disease_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Disease_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
@@ -24095,8 +24010,6 @@ func (ec *executionContext) fieldContext_Query_getDiseaseById(ctx context.Contex
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Disease_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Disease_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
@@ -24169,8 +24082,6 @@ func (ec *executionContext) fieldContext_Query_getSymptoms(ctx context.Context, 
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Symptom_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Symptom_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Symptom_name(ctx, field)
 			case "chronic":
@@ -24247,8 +24158,6 @@ func (ec *executionContext) fieldContext_Query_getDiseases(ctx context.Context, 
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Disease_id(ctx, field)
-			case "code":
-				return ec.fieldContext_Disease_code(ctx, field)
 			case "name":
 				return ec.fieldContext_Disease_name(ctx, field)
 			case "symptoms":
@@ -29610,50 +29519,6 @@ func (ec *executionContext) fieldContext_Symptom_id(ctx context.Context, field g
 	return fc, nil
 }
 
-func (ec *executionContext) _Symptom_code(ctx context.Context, field graphql.CollectedField, obj *model.Symptom) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Symptom_code(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Code, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Symptom_code(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Symptom",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Symptom_name(ctx context.Context, field graphql.CollectedField, obj *model.Symptom) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Symptom_name(ctx, field)
 	if err != nil {
@@ -29845,14 +29710,11 @@ func (ec *executionContext) _Symptom_question(ctx context.Context, field graphql
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Symptom_question(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -33228,20 +33090,13 @@ func (ec *executionContext) unmarshalInputCreateDiseaseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"code", "name", "symptoms", "symptoms_weight", "overweight_factor", "heredity_factor", "advice"}
+	fieldsInOrder := [...]string{"name", "symptoms", "symptoms_weight", "overweight_factor", "heredity_factor", "advice"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "code":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Code = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -34013,20 +33868,13 @@ func (ec *executionContext) unmarshalInputCreateSymptomInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"code", "name", "chronic", "symptom", "advice", "question", "question_basic", "question_duration", "question_ante"}
+	fieldsInOrder := [...]string{"name", "chronic", "symptom", "advice", "question_basic", "question_duration", "question_ante"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "code":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Code = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -34055,13 +33903,6 @@ func (ec *executionContext) unmarshalInputCreateSymptomInput(ctx context.Context
 				return it, err
 			}
 			it.Advice = data
-		case "question":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Question = data
 		case "question_basic":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("question_basic"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -35220,20 +35061,13 @@ func (ec *executionContext) unmarshalInputUpdateDiseaseInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"code", "name", "symptoms", "symptoms_weight", "overweight_factor", "heredity_factor", "advice"}
+	fieldsInOrder := [...]string{"name", "symptoms", "symptoms_weight", "overweight_factor", "heredity_factor", "advice"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "code":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Code = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -36319,20 +36153,13 @@ func (ec *executionContext) unmarshalInputUpdateSymptomInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"code", "name", "chronic", "symptom", "advice", "question", "question_basic", "question_duration", "question_ante"}
+	fieldsInOrder := [...]string{"name", "chronic", "symptom", "advice", "question", "question_basic", "question_duration", "question_ante"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "code":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("code"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Code = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -37297,11 +37124,6 @@ func (ec *executionContext) _Disease(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = graphql.MarshalString("Disease")
 		case "id":
 			out.Values[i] = ec._Disease_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "code":
-			out.Values[i] = ec._Disease_code(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -38967,7 +38789,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "getSymptomByCode":
+		case "getSymptomByName":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -38976,7 +38798,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_getSymptomByCode(ctx, field)
+				res = ec._Query_getSymptomByName(ctx, field)
 				return res
 			}
 
@@ -40388,11 +40210,6 @@ func (ec *executionContext) _Symptom(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "code":
-			out.Values[i] = ec._Symptom_code(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "name":
 			out.Values[i] = ec._Symptom_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -40409,9 +40226,6 @@ func (ec *executionContext) _Symptom(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Symptom_advice(ctx, field, obj)
 		case "question":
 			out.Values[i] = ec._Symptom_question(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "question_basic":
 			out.Values[i] = ec._Symptom_question_basic(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
