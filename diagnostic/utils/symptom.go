@@ -58,7 +58,7 @@ func CheckSymptomDuration(symptoms []*model.SessionSymptomInput, lastQuestion st
 	}
 	for _, symptom := range symptoms {
 		if symptom.Duration != nil && *symptom.Duration == 0 && symptom.Presence == 1 && symptomName != symptom.Name {
-			sy, _ := graphql.GetSymptomByCode(symptom.Name)
+			sy, _ := graphql.GetSymptomByName(symptom.Name)
 			if sy.QuestionDuration != "" {
 				question = exam.AddDiscursiveConnector(sy.QuestionDuration)
 			} else {

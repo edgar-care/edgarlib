@@ -22,7 +22,7 @@ func CheckTreatments(symptoms []*model.SessionSymptomInput, medicines []string) 
 		}
 		for _, symptomT := range medicine.Symptoms {
 			for i, symptomSy := range symptoms {
-				if symptomSy.Name == symptomT.Code && !isSymptomTreated(*symptomSy, symptomT.Code) {
+				if symptomSy.Name == symptomT.Name && !isSymptomTreated(*symptomSy, symptomT.Name) {
 					symptoms[i].Treated = append(symptoms[i].Treated, medicine.Name)
 				}
 			}

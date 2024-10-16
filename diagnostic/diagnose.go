@@ -97,6 +97,7 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 			}
 		}
 	}
+
 	for _, s := range newSymptoms.Context {
 		pres, ite := nameInList(s, symptoms)
 		if pres == true {
@@ -242,6 +243,10 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 		} else {
 			autoAnswerOutput = &auA
 		}
+	}
+
+	if len(symptomsinput) > 11 {
+		exam.Done = true
 	}
 
 	_, err = graphql.UpdateSession(session.ID, model.UpdateSessionInput{

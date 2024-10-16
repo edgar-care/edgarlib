@@ -180,7 +180,6 @@ func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 	query := `mutation CreateSymptom($input: CreateSymptomInput!){
 	    createSymptom(input: $input){
 	        id
-	        code
 	        name
 	        chronic
 	        symptom
@@ -2961,7 +2960,6 @@ func UpdateDisease(id string, input model.UpdateDiseaseInput) (model.Disease, er
 	query := `mutation UpdateDisease($id: String!, $input: UpdateDiseaseInput!){
 	    updateDisease(id: $id, input: $input){
 	        id
-	        code
 	        name
 	        symptoms
 	        symptoms_weight{
@@ -3182,7 +3180,6 @@ func UpdateSymptom(id string, input model.UpdateSymptomInput) (model.Symptom, er
 	query := `mutation UpdateSymptom($id: String!, $input: UpdateSymptomInput!){
 	    updateSymptom(id: $id, input: $input){
 	        id
-	        code
 	        name
 	        chronic
 	        symptom
@@ -3301,7 +3298,6 @@ func CreateDisease(input model.CreateDiseaseInput) (model.Disease, error) {
 	query := `mutation CreateDisease($input: CreateDiseaseInput!){
 	    createDisease(input: $input){
 	        id
-	        code
 	        name
 	        symptoms
 	        symptoms_weight{
@@ -3912,7 +3908,6 @@ func GetDiseases(option *model.Options) ([]model.Disease, error) {
 	query := `query GetDiseases($option: Options){
 	    getDiseases(option: $option){
 	        id
-	        code
 	        name
 	        symptoms
 	        symptoms_weight{
@@ -4110,7 +4105,6 @@ func GetMedicineByIDWithSymptoms(medicineId string) (model.Medicine, error) {
 	        updatedAt
 	        symptoms {
 	            id
-	            code
 	            name
 	            chronic
 	            symptom
@@ -4594,7 +4588,6 @@ func GetDiseaseById(id string) (model.Disease, error) {
 	query := `query GetDiseaseById($id: String!){
 	    getDiseaseById(id: $id){
 	        id
-	        code
 	        name
 	        symptoms
 	        symptoms_weight{
@@ -5092,7 +5085,6 @@ func GetAnteDiseaseByIDWithSymptoms(anteDiseaseId string) (model.AnteDisease, er
 	        updatedAt
 	        symptomsclear{
 	            id
-	            code
 	            name
 	            chronic
 	            symptom
@@ -5397,7 +5389,6 @@ func GetSymptoms(option *model.Options) ([]model.Symptom, error) {
 	query := `query GetSymptoms($option: Options){
 	    getSymptoms(option: $option){
 	        id
-	        code
 	        name
 	        chronic
 	        symptom
@@ -5664,7 +5655,6 @@ func GetSymptomById(id string) (model.Symptom, error) {
 	query := `query GetSymptomById($id: String!){
 	    getSymptomById(id: $id){
 	        id
-	        code
 	        name
 	        chronic
 	        symptom
@@ -5722,11 +5712,10 @@ func GetSymptomById(id string) (model.Symptom, error) {
 	return result.Data.GetSymptomById, nil
 }
 
-func GetSymptomByCode(code string) (model.Symptom, error) {
-	query := `query GetSymptomByCode($code: String!){
-	    getSymptomByCode(code: $code) {
+func GetSymptomByName(name string) (model.Symptom, error) {
+	query := `query GetSymptomByName($name: String!){
+	    getSymptomByName(name: $name) {
 	        id
-	        code
 	        name
 	        chronic
 	        symptom
@@ -5740,7 +5729,7 @@ func GetSymptomByCode(code string) (model.Symptom, error) {
 	    }
 	}`
 	variables := map[string]interface{}{
-		"code": code,
+		"name": name,
 	}
 	reqBody := map[string]interface{}{
 		"query": query,
@@ -5769,7 +5758,7 @@ func GetSymptomByCode(code string) (model.Symptom, error) {
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			GetSymptomByCode model.Symptom `json:"getSymptomByCode"`
+			GetSymptomByName model.Symptom `json:"getSymptomByName"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
@@ -5781,7 +5770,7 @@ func GetSymptomByCode(code string) (model.Symptom, error) {
 		return model.Symptom{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
-	return result.Data.GetSymptomByCode, nil
+	return result.Data.GetSymptomByName, nil
 }
 
 func GetPatientById(id string) (model.Patient, error) {

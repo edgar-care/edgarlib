@@ -238,7 +238,6 @@ type CreateDeviceConnectInput struct {
 }
 
 type CreateDiseaseInput struct {
-	Code             string                 `json:"code" bson:"code"`
 	Name             string                 `json:"name" bson:"name"`
 	Symptoms         []string               `json:"symptoms" bson:"symptoms"`
 	SymptomsWeight   []*SymptomsWeightInput `json:"symptoms_weight,omitempty" bson:"symptoms_weight"`
@@ -358,12 +357,10 @@ type CreateSessionInput struct {
 }
 
 type CreateSymptomInput struct {
-	Code             string   `json:"code" bson:"code"`
 	Name             string   `json:"name" bson:"name"`
 	Chronic          *int     `json:"chronic,omitempty" bson:"chronic"`
 	Symptom          []string `json:"symptom" bson:"symptom"`
 	Advice           *string  `json:"advice,omitempty" bson:"advice"`
-	Question         string   `json:"question" bson:"question"`
 	QuestionBasic    string   `json:"question_basic" bson:"question_basic"`
 	QuestionDuration string   `json:"question_duration" bson:"question_duration"`
 	QuestionAnte     string   `json:"question_ante" bson:"question_ante"`
@@ -390,7 +387,6 @@ type DeviceConnect struct {
 
 type Disease struct {
 	ID               string            `json:"id" bson:"_id"`
-	Code             string            `json:"code" bson:"code"`
 	Name             string            `json:"name" bson:"name"`
 	Symptoms         []string          `json:"symptoms" bson:"symptoms"`
 	SymptomsWeight   []*SymptomsWeight `json:"symptoms_weight,omitempty" bson:"symptoms_weight"`
@@ -683,12 +679,11 @@ type SortingOptions struct {
 
 type Symptom struct {
 	ID               string   `json:"id" bson:"_id"`
-	Code             string   `json:"code" bson:"code"`
 	Name             string   `json:"name" bson:"name"`
 	Chronic          *int     `json:"chronic,omitempty" bson:"chronic"`
 	Symptom          []string `json:"symptom" bson:"symptom"`
 	Advice           *string  `json:"advice,omitempty" bson:"advice"`
-	Question         string   `json:"question" bson:"question"`
+	Question         *string  `json:"question,omitempty" bson:"question"`
 	QuestionBasic    string   `json:"question_basic" bson:"question_basic"`
 	QuestionDuration string   `json:"question_duration" bson:"question_duration"`
 	QuestionAnte     string   `json:"question_ante" bson:"question_ante"`
@@ -803,7 +798,6 @@ type UpdateDeviceConnectInput struct {
 }
 
 type UpdateDiseaseInput struct {
-	Code             *string                `json:"code,omitempty" bson:"code"`
 	Name             *string                `json:"name,omitempty" bson:"name"`
 	Symptoms         []string               `json:"symptoms,omitempty" bson:"symptoms"`
 	SymptomsWeight   []*SymptomsWeightInput `json:"symptoms_weight,omitempty" bson:"symptoms_weight"`
@@ -968,7 +962,6 @@ type UpdateSessionInput struct {
 }
 
 type UpdateSymptomInput struct {
-	Code             *string  `json:"code,omitempty" bson:"code"`
 	Name             *string  `json:"name,omitempty" bson:"name"`
 	Chronic          *int     `json:"chronic,omitempty" bson:"chronic"`
 	Symptom          []string `json:"symptom,omitempty" bson:"symptom"`
