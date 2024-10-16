@@ -88,7 +88,11 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 			}
 		} else {
 			var errCode int
-			newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom)
+			isMedicine := false
+			if session.LastQuestion == "describe medicines" {
+				isMedicine = true
+			}
+			newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom, isMedicine)
 			if errCode != 200 {
 				return DiagnoseResponse{
 					Code: errCode,
