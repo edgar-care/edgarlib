@@ -245,6 +245,10 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 		}
 	}
 
+	if len(symptomsinput) > 11 {
+		exam.Done = true
+	}
+
 	_, err = graphql.UpdateSession(session.ID, model.UpdateSessionInput{
 		Diseases:     diseasesinput,
 		Symptoms:     symptomsinput,
