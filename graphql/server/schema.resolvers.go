@@ -1183,21 +1183,53 @@ func (r *mutationResolver) DeleteAnteFamily(ctx context.Context, id string) (*bo
 // CreateMedicalAntecedents is the resolver for the createMedicalAntecedents field.
 func (r *mutationResolver) CreateMedicalAntecedents(ctx context.Context, input model.CreateMedicalAntecedentsInput) (*model.MedicalAntecedents, error) {
 	now := int(time.Now().Unix())
-	medicalAntecedents := &model.MedicalAntecedents{
+
+	treatments := make([]*model.AntecedentTreatment, 0)
+	for _, treatmentInput := range input.Treatments {
+		medicines := make([]*model.AntecedentsMedicines, 0)
+		for _, medicineInput := range treatmentInput.Medicines {
+			periods := make([]*model.AntecedentPeriod, 0)
+			for _, periodInput := range medicineInput.Period {
+				periods = append(periods, &model.AntecedentPeriod{
+					Quantity:       periodInput.Quantity,
+					Frequency:      periodInput.Frequency,
+					FrequencyRatio: periodInput.FrequencyRatio,
+					FrequencyUnit:  periodInput.FrequencyUnit,
+					PeriodLength:   periodInput.PeriodLength,
+					PeriodUnit:     periodInput.PeriodUnit,
+					Comment:        periodInput.Comment,
+				})
+			}
+			medicines = append(medicines, &model.AntecedentsMedicines{
+				ID:     primitive.NewObjectID().Hex(),
+				Period: periods,
+			})
+		}
+
+		treatments = append(treatments, &model.AntecedentTreatment{
+			ID:        primitive.NewObjectID().Hex(),
+			CreatedBy: treatmentInput.CreatedBy,
+			StartDate: treatmentInput.StartDate,
+			EndDate:   treatmentInput.EndDate,
+			Medicines: medicines,
+		})
+	}
+
+	newAntecedent := &model.MedicalAntecedents{
 		ID:         primitive.NewObjectID().Hex(),
 		Name:       input.Name,
 		Symptoms:   input.Symptoms,
-		Treatments: []*model.AntecedentTreatment{},
+		Treatments: treatments,
 		CreatedAt:  now,
 		UpdatedAt:  now,
 	}
 
-	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").InsertOne(ctx, medicalAntecedents)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").InsertOne(ctx, newAntecedent)
 	if err != nil {
 		return nil, err
 	}
 
-	return medicalAntecedents, err
+	return newAntecedent, nil
 }
 
 // UpdateMedicalAntecedents is the resolver for the updateMedicalAntecedents field.
@@ -1243,16 +1275,12 @@ func (r *mutationResolver) DeleteMedicalAntecedents(ctx context.Context, id stri
 
 // CreateAntecdentTreatment is the resolver for the createAntecdentTreatment field.
 func (r *mutationResolver) CreateAntecdentTreatment(ctx context.Context, input model.CreateAntecedentTreatmentInput) (*model.AntecedentTreatment, error) {
-
-	now := int(time.Now().Unix())
 	medicalAntecedents := &model.AntecedentTreatment{
 		ID:        primitive.NewObjectID().Hex(),
 		CreatedBy: input.CreatedBy,
 		StartDate: input.StartDate,
 		EndDate:   input.EndDate,
 		Medicines: []*model.AntecedentsMedicines{},
-		CreatedAt: now,
-		UpdatedAt: now,
 	}
 
 	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment").InsertOne(ctx, medicalAntecedents)
@@ -1261,12 +1289,10 @@ func (r *mutationResolver) CreateAntecdentTreatment(ctx context.Context, input m
 	}
 
 	return medicalAntecedents, err
-
 }
 
 // UpdateAntecdentTreatment is the resolver for the updateAntecdentTreatment field.
 func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id string, input model.UpdateAntecedentTreatmentInput) (*model.AntecedentTreatment, error) {
-
 	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment")
 	filter := bson.M{"_id": id}
 
@@ -1293,7 +1319,6 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 	}
 
 	return &updateAntecedentTreatment, nil
-
 }
 
 // DeleteAntecdentTreatment is the resolver for the deleteAntecdentTreatment field.

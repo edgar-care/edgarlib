@@ -81,8 +81,6 @@ type AntecedentPeriod struct {
 	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
 	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
 	Comment        *string       `json:"comment,omitempty" bson:"comment"`
-	CreatedAt      int           `json:"createdAt" bson:"createdAt"`
-	UpdatedAt      int           `json:"updatedAt" bson:"updatedAt"`
 }
 
 type AntecedentTreatment struct {
@@ -90,9 +88,7 @@ type AntecedentTreatment struct {
 	CreatedBy string                  `json:"created_by" bson:"created_by"`
 	StartDate int                     `json:"start_date" bson:"start_date"`
 	EndDate   *int                    `json:"end_date,omitempty" bson:"end_date"`
-	Medicines []*AntecedentsMedicines `json:"medicines,omitempty" bson:"medicines"`
-	CreatedAt int                     `json:"createdAt" bson:"createdAt"`
-	UpdatedAt int                     `json:"updatedAt" bson:"updatedAt"`
+	Medicines []*AntecedentsMedicines `json:"medicines" bson:"medicines"`
 }
 
 type AntecedentsMedicines struct {
@@ -205,7 +201,7 @@ type CreateAntecedentTreatmentInput struct {
 	CreatedBy string                             `json:"created_by" bson:"created_by"`
 	StartDate int                                `json:"start_date" bson:"start_date"`
 	EndDate   *int                               `json:"end_date,omitempty" bson:"end_date"`
-	Medicines []*CreateAntecedentsMedicinesInput `json:"medicines,omitempty" bson:"medicines"`
+	Medicines []*CreateAntecedentsMedicinesInput `json:"medicines" bson:"medicines"`
 }
 
 type CreateAntecedentsMedicinesInput struct {

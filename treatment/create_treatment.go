@@ -52,10 +52,18 @@ func ConvertPeriods(periods []CreateAntecedentPeriod) []model.AntecedentPeriod {
 	return convertedPeriods
 }
 
-func convertToPointerSlice(periods []model.AntecedentPeriod) []*model.AntecedentPeriod {
-	pointerSlice := make([]*model.AntecedentPeriod, len(periods))
-	for i := range periods {
-		pointerSlice[i] = &periods[i]
+func convertToCreateAntecedentPeriodInputSlice(periods []model.AntecedentPeriod) []*model.CreateAntecedentPeriodInput {
+	pointerSlice := make([]*model.CreateAntecedentPeriodInput, len(periods))
+	for i, p := range periods {
+		pointerSlice[i] = &model.CreateAntecedentPeriodInput{
+			Quantity:       p.Quantity,
+			Frequency:      p.Frequency,
+			FrequencyRatio: p.FrequencyRatio,
+			FrequencyUnit:  p.FrequencyUnit,
+			PeriodLength:   p.PeriodLength,
+			PeriodUnit:     p.PeriodUnit,
+			Comment:        p.Comment,
+		}
 	}
 	return pointerSlice
 }
@@ -80,7 +88,7 @@ func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentRe
 			EndDate:   &input.EndDate,
 			Medicines: []*model.CreateAntecedentsMedicinesInput{
 				{
-					Period: convertToPointerSlice(periods),
+					Period: convertToCreateAntecedentPeriodInputSlice(periods),
 				},
 			},
 		})

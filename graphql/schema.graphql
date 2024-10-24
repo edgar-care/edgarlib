@@ -185,7 +185,6 @@ type AnteFamily {
     updatedAt: Int!
 }
 
-#============================================================
 
 # MedicalAntecedents entity
 type MedicalAntecedents {
@@ -204,9 +203,8 @@ type AntecedentTreatment {
     created_by: String!
     start_date: Int!
     end_date: Int
-    medicines: [AntecedentsMedicines!]
-    createdAt: Int!
-    updatedAt: Int!
+    medicines: [AntecedentsMedicines!]!
+
 }
 
 type AntecedentsMedicines {
@@ -222,13 +220,8 @@ type AntecedentPeriod {
     period_length: Int
     period_unit: time_unit_enum
     comment: String
-    createdAt: Int!
-    updatedAt: Int!
 }
 
-
-
-#============================================================
 
 
 
@@ -777,10 +770,6 @@ input UpdateChatInput {
 }
 
 
-
-#============================================================
-
-
 input CreateMedicalAntecedentsInput {
     name: String!
     symptoms: [String!]!
@@ -791,7 +780,7 @@ input CreateAntecedentTreatmentInput {
     created_by: String!
     start_date: Int!
     end_date: Int
-    medicines: [CreateAntecedentsMedicinesInput!]
+    medicines: [CreateAntecedentsMedicinesInput!]!
 }
 
 input CreateAntecedentsMedicinesInput {
@@ -835,8 +824,6 @@ input UpdateAntecedentPeriodInput {
     comment: String
 }
 
-
-#============================================================
 
 input MedicineInput {
     dci: String!
@@ -1240,9 +1227,6 @@ type Query {
     # Get an antefamily by its id.
     getAnteFamilyByID(id: String!): AnteFamily
 
-
-    #============================================================
-
     #MedicalAntecedents
     getMedicalAntecedents(option: Options): [MedicalAntecedents]
 
@@ -1254,10 +1238,6 @@ type Query {
 
     # Get a treament by its id.
     getAntecedentTreatmentByID(id: String!): AntecedentTreatment
-
-
-    #============================================================
-
 
     # Get the entire list of alerts.
     getAlerts(option: Options): [Alert]
@@ -1474,9 +1454,6 @@ type Mutation {
     # Delete a antefamily.
     deleteAnteFamily(id: String!): Boolean
 
-
-    #============================================================
-
     # Create a new MedicalAntecedents.
     createMedicalAntecedents(input: CreateMedicalAntecedentsInput!): MedicalAntecedents
 
@@ -1494,11 +1471,6 @@ type Mutation {
 
     # Delete a treatment.
     deleteAntecdentTreatment(id: String!): Boolean
-
-
-    #============================================================
-
-
 
     # Create a new alert.
     createAlert(input: CreateAlertInput!): Alert
