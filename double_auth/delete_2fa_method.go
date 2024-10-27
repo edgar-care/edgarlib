@@ -37,6 +37,30 @@ func RemoveDoubleAuthMethod(methodToRemove string, ownerId string) error {
 				Methods:       methods,
 				TrustDeviceID: nil,
 			})
+			if err != nil {
+				return errors.New("failed to update double_auth")
+			}
+			status := false
+			for _, deviceID := range doubleAuth.TrustDeviceID {
+				_, err = graphql.UpdateDeviceConnect(deviceID, model.UpdateDeviceConnectInput{
+					TrustDevice: &status,
+				})
+				if err != nil {
+					return errors.New("failed to update device_connect")
+				}
+				trustDevicePtrs := make([]*string, len(doubleAuth.TrustDeviceID))
+				for i, v := range doubleAuth.TrustDeviceID {
+					trustDevicePtrs[i] = &v
+				}
+				remTrust := remove(trustDevicePtrs, &deviceID)
+				_, err = graphql.UpdatePatientTrustDevice(patient.ID, model.UpdatePatientTrustDeviceInput{
+					TrustDevices: remTrust,
+				})
+				if err != nil {
+					return errors.New("failed to delete trust_device")
+				}
+			}
+
 		} else if methodToRemove == "AUTHENTIFICATOR" {
 			_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
 				Methods: methods,
@@ -90,9 +114,47 @@ func RemoveDoubleAuthMethod(methodToRemove string, ownerId string) error {
 			return errors.New("method to remove not found in current methods")
 		}
 
-		_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
-			Methods: methods,
-		})
+		if methodToRemove == "MOBILE" {
+			_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
+				Methods:       methods,
+				TrustDeviceID: nil,
+			})
+			if err != nil {
+				return errors.New("failed to update double_auth")
+			}
+			status := false
+			for _, deviceID := range doubleAuth.TrustDeviceID {
+				_, err = graphql.UpdateDeviceConnect(deviceID, model.UpdateDeviceConnectInput{
+					TrustDevice: &status,
+				})
+				if err != nil {
+					return errors.New("failed to update device_connect")
+				}
+
+				trustDevicePtrs := make([]*string, len(doubleAuth.TrustDeviceID))
+				for i, v := range doubleAuth.TrustDeviceID {
+					trustDevicePtrs[i] = &v
+				}
+				remTrust := remove(trustDevicePtrs, &deviceID)
+				_, err = graphql.UpdateDoctorsTrustDevice(doctor.ID, model.UpdateDoctorsTrustDeviceInput{
+					TrustDevices: remTrust,
+				})
+				if err != nil {
+					return errors.New("failed to delete trust_device")
+				}
+			}
+
+		} else if methodToRemove == "AUTHENTIFICATOR" {
+			_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
+				Methods: methods,
+				Code:    nil,
+				URL:     nil,
+			})
+		} else {
+			_, err = graphql.UpdateDoubleAuth(doubleAuth.ID, model.UpdateDoubleAuthInput{
+				Methods: methods,
+			})
+		}
 		if err != nil {
 			return errors.New("failed to update double_auth")
 		}
@@ -111,4 +173,14 @@ func RemoveDoubleAuthMethod(methodToRemove string, ownerId string) error {
 	}
 
 	return errors.New("id does not correspond to a patient or doctor")
+}
+
+func remove(trustDevices []*string, id_device *string) []*string {
+	var updatedDevices []*string
+	for _, device := range trustDevices {
+		if *device != *id_device {
+			updatedDevices = append(updatedDevices, device)
+		}
+	}
+	return updatedDevices
 }
