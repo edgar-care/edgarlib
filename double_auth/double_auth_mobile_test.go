@@ -287,4 +287,63 @@ func TestCreateDoubleAuthMobileADDPatient_InvalidID(t *testing.T) {
 	if response.Code != 400 {
 		t.Errorf("Expected status code 400, got: %d", response.Code)
 	}
+
+	//test := GetTrustDeviceConnect(patient.ID)
+	//spew.Dump(test)
+}
+
+func TestCreateDoubleAuthMobileatient_SuccesEmailAfter(t *testing.T) {
+	patient, err := graphql.CreatePatient(model.CreatePatientInput{
+		Email:    "test_add_double_auth_mobile_success_method_add_email@example.com",
+		Password: "password",
+		Status:   true,
+	})
+	if err != nil {
+		t.Fatalf("Failed to create patient: %s", err)
+	}
+
+	input := CreateDeviceConnectInput{
+		DeviceType: "TestDevice",
+		Browser:    "TestBrowser",
+		Ip:         "192.168.0.1",
+		City:       "testCity",
+		Country:    "testCountry",
+		Date:       1627880400,
+	}
+
+	device := CreateDeviceConnect(input, patient.ID)
+	//_ = AddTrustDevice(device.DeviceConnect.ID, patient.ID)
+
+	mobile := CreateDoubleMobileInput{Methods: "MOBILE", TrustDevice: device.DeviceConnect.ID}
+	response := CreateDoubleAuthMobile(mobile, patient.ID)
+
+	if response.Err != nil {
+		t.Errorf("Expected no error, got: %v", response.Err)
+	}
+	if response.Code != 201 {
+		t.Errorf("Expected status code 200, got: %d", response.Code)
+	}
+
+	email := CreateDoubleAuthInput{Methods: "EMAIL"}
+	test := CreateDoubleAuthEmail(email, patient.ID)
+
+	_, err = graphql.GetDoubleAuthById(test.DoubleAuth.ID)
+	if err != nil {
+		t.Errorf("Failed to get double auth: %v", err)
+	}
+
+	_ = GetTrustDeviceConnect(patient.ID)
+
+	_ = RemoveDoubleAuthMethod("MOBILE", patient.ID)
+	_, err = graphql.GetDoubleAuthById(test.DoubleAuth.ID)
+	if err != nil {
+		t.Errorf("Failed to get double auth: %v", err)
+	}
+
+	_, err = graphql.GetPatientById(patient.ID)
+	if err != nil {
+		t.Errorf("Failed to get patient: %v", err)
+	}
+
+	_ = GetTrustDeviceConnect(patient.ID)
 }
