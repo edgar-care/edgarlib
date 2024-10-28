@@ -168,6 +168,26 @@ func CreateDoubleAuthMobile(input CreateDoubleMobileInput, ownerId string) Creat
 			return CreateDoubleMobileResponse{DoubleAuth: model.DoubleAuth{}, Code: 400, Err: errors.New("update trust device failed: " + err.Error())}
 		}
 
+		if isPatient {
+			if trustDevices == nil {
+				trustDevices = []*string{&input.TrustDevice}
+			} else {
+				trustDevices = append(trustDevices, &input.TrustDevice)
+			}
+			_, err = graphql.UpdatePatientTrustDevice(ownerId, model.UpdatePatientTrustDeviceInput{
+				TrustDevices: trustDevices,
+			})
+		} else {
+			if trustDevices == nil {
+				trustDevices = []*string{&input.TrustDevice}
+			} else {
+				trustDevices = append(trustDevices, &input.TrustDevice)
+			}
+			_, err = graphql.UpdateDoctorsTrustDevice(ownerId, model.UpdateDoctorsTrustDeviceInput{
+				TrustDevices: trustDevices,
+			})
+		}
+
 		return CreateDoubleMobileResponse{
 			DoubleAuth: updated,
 			Code:       http.StatusOK,
