@@ -42,18 +42,39 @@ func TestGetPatientById(t *testing.T) {
 		t.Errorf("Error while updating doctor: %v", err)
 	}
 
-	medical_folder_resp := medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
-		Name:            "",
-		Firstname:       "",
+	medical_folder_resp := medical_folder.NewMedicalFolder(medical_folder.CreateNewMedicalInfoInput{
+		Name:            "first",
+		Firstname:       "first",
 		Birthdate:       0,
 		Sex:             "",
 		Weight:          0,
 		Height:          0,
-		PrimaryDoctorID: "",
-		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-			Name:          "",
-			Medicines:     nil,
-			StillRelevant: false,
+		PrimaryDoctorID: doctor.ID,
+		MedicalAntecedents: []medical_folder.CreateNewMedicalAntecedentInput{{
+			Name:     "",
+			Symptoms: []string{"symptom"},
+			Treatments: []medical_folder.CreateTreatInput{
+				{
+					CreatedBy: "ttt",
+					StartDate: 78,
+					EndDate:   90,
+					Medicines: []medical_folder.CreateAntecedentsMedicines{
+						{
+							Period: []*medical_folder.CreateAntecedentPeriod{
+								{
+									Quantity:       6,
+									Frequency:      1,
+									FrequencyRatio: 3,
+									FrequencyUnit:  "MOIS",
+									PeriodLength:   4,
+									PeriodUnit:     "ANNEE",
+									Comment:        "tttt",
+								},
+							},
+						},
+					},
+				},
+			},
 		}},
 		FamilyMembersMedInfoId: []string{},
 	}, patient.ID)
@@ -94,7 +115,7 @@ func TestGetPatients(t *testing.T) {
 		t.Errorf("Failed to create patient1: %v", err)
 	}
 
-	_ = medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
+	_ = medical_folder.NewMedicalFolder(medical_folder.CreateNewMedicalInfoInput{
 		Name:            "first",
 		Firstname:       "first",
 		Birthdate:       0,
@@ -102,10 +123,31 @@ func TestGetPatients(t *testing.T) {
 		Weight:          0,
 		Height:          0,
 		PrimaryDoctorID: doctor.ID,
-		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-			Name:          "",
-			Medicines:     nil,
-			StillRelevant: false,
+		MedicalAntecedents: []medical_folder.CreateNewMedicalAntecedentInput{{
+			Name:     "",
+			Symptoms: []string{"symptom"},
+			Treatments: []medical_folder.CreateTreatInput{
+				{
+					CreatedBy: "ttt",
+					StartDate: 78,
+					EndDate:   90,
+					Medicines: []medical_folder.CreateAntecedentsMedicines{
+						{
+							Period: []*medical_folder.CreateAntecedentPeriod{
+								{
+									Quantity:       6,
+									Frequency:      1,
+									FrequencyRatio: 3,
+									FrequencyUnit:  "MOIS",
+									PeriodLength:   4,
+									PeriodUnit:     "ANNEE",
+									Comment:        "tttt",
+								},
+							},
+						},
+					},
+				},
+			},
 		}},
 		FamilyMembersMedInfoId: []string{},
 	}, patient1.ID)
@@ -119,18 +161,39 @@ func TestGetPatients(t *testing.T) {
 		t.Errorf("Failed to create patient2: %v", err)
 	}
 
-	_ = medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
-		Name:            "second",
-		Firstname:       "second",
+	_ = medical_folder.NewMedicalFolder(medical_folder.CreateNewMedicalInfoInput{
+		Name:            "Second",
+		Firstname:       "Second",
 		Birthdate:       0,
 		Sex:             "",
 		Weight:          0,
 		Height:          0,
 		PrimaryDoctorID: doctor.ID,
-		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-			Name:          "",
-			Medicines:     nil,
-			StillRelevant: false,
+		MedicalAntecedents: []medical_folder.CreateNewMedicalAntecedentInput{{
+			Name:     "",
+			Symptoms: []string{"symptom"},
+			Treatments: []medical_folder.CreateTreatInput{
+				{
+					CreatedBy: "ttt",
+					StartDate: 78,
+					EndDate:   90,
+					Medicines: []medical_folder.CreateAntecedentsMedicines{
+						{
+							Period: []*medical_folder.CreateAntecedentPeriod{
+								{
+									Quantity:       6,
+									Frequency:      1,
+									FrequencyRatio: 3,
+									FrequencyUnit:  "MOIS",
+									PeriodLength:   4,
+									PeriodUnit:     "ANNEE",
+									Comment:        "tttt",
+								},
+							},
+						},
+					},
+				},
+			},
 		}},
 		FamilyMembersMedInfoId: []string{},
 	}, patient2.ID)
