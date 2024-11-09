@@ -7,6 +7,12 @@ import (
 	"strings"
 )
 
+type DeviceInfoResponse struct {
+	Os       string `json:"os"`
+	Browser  string `json:"browser"`
+	Location string `json:"location"`
+}
+
 func GetCurrentUserDevice(w http.ResponseWriter, req *http.Request, accountID string) model.DeviceConnect {
 	var device model.DeviceConnect
 
@@ -23,8 +29,27 @@ func GetCurrentUserDevice(w http.ResponseWriter, req *http.Request, accountID st
 	for _, deviceConnected := range allDeviceAccount.DevicesConnect {
 		if deviceConnected.IPAddress == ip && deviceConnected.Browser == browser {
 			device = deviceConnected
+			break
 		}
 	}
 	return device
 
+}
+
+func GetDeviceInfo(req *http.Request) DeviceInfoResponse {
+	ip := GetIPAddress(req)
+	_, city, _, err := getGeoLocationAndDeviceName(ip)
+	if err != nil {
+		return DeviceInfoResponse{}
+	}
+
+	userAgent := strings.Join(req.Header["User-Agent"], " ")
+	deviceType := getDeviceType(userAgent)
+	browser := getBrowser(userAgent)
+
+	return DeviceInfoResponse{
+		Os:       deviceType,
+		Browser:  browser,
+		Location: city,
+	}
 }
