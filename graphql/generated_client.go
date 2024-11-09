@@ -10,9 +10,9 @@ import (
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
 )
 
-func DeleteTreatment(id string) (bool, error) {
-	query := `mutation DeleteTreatment($id: String!){
-	    deleteTreatment(id: $id)
+func DeleteAntecdentTreatment(id string) (bool, error) {
+	query := `mutation DeleteAntecdentTreatment($id: String!){
+	    deleteAntecdentTreatment(id: $id)
 	}`
 	variables := map[string]interface{}{
 		"id": id,
@@ -44,7 +44,7 @@ func DeleteTreatment(id string) (bool, error) {
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			DeleteTreatment bool `json:"deleteTreatment"`
+			DeleteAntecdentTreatment bool `json:"deleteAntecdentTreatment"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
@@ -56,7 +56,7 @@ func DeleteTreatment(id string) (bool, error) {
 		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
-	return result.Data.DeleteTreatment, nil
+	return result.Data.DeleteAntecdentTreatment, nil
 }
 
 func CreateAnteChir(input model.CreateAnteChirInput) (model.AnteChir, error) {
@@ -956,22 +956,30 @@ func DeleteAlert(id string) (bool, error) {
 	return result.Data.DeleteAlert, nil
 }
 
-func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatment, error) {
-	query := `mutation UpdateTreatment($id: String!, $input: UpdateTreatmentInput!){
-	    updateTreatment(id: $id, input: $input){
+func UpdateAntecedentTreatment(id string, antecedentID string, input model.UpdateAntecedentTreatmentInput) (model.AntecedentTreatment, error) {
+	query := `mutation UpdateAntecedentTreatment($id: String!, $antecedentID: String!, $input: UpdateAntecedentTreatmentInput!){
+	    updateAntecdentTreatment(id: $id, antecedentID:$antecedentID, input: $input){
 	        id
-	        period
-	        day
-	        quantity
-	        medicine_id
+	        created_by
 	        start_date
 	        end_date
-	        createdAt
-	        updatedAt
+	        medicines {
+	            id
+	            period {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	                comment
+	            }
+	        }
 	    }
 	}`
 	variables := map[string]interface{}{
 		"id": id,
+		"antecedentID": antecedentID,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
@@ -980,40 +988,40 @@ func UpdateTreatment(id string, input model.UpdateTreatmentInput) (model.Treatme
 	}
 	body, err := json.Marshal(reqBody)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Treatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+		return model.AntecedentTreatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			UpdateTreatment model.Treatment `json:"updateTreatment"`
+			UpdateAntecedentTreatment model.AntecedentTreatment `json:"updateAntecdentTreatment"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	if len(result.Errors) > 0 {
-		return model.Treatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+		return model.AntecedentTreatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
-	return result.Data.UpdateTreatment, nil
+	return result.Data.UpdateAntecedentTreatment, nil
 }
 
 func CreateDoctor(input model.CreateDoctorInput) (model.Doctor, error) {
@@ -2830,21 +2838,29 @@ func DeleteMedicine(id string) (bool, error) {
 	return result.Data.DeleteMedicine, nil
 }
 
-func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) {
-	query := `mutation CreateTreatment($input: CreateTreatmentInput!){
-	    createTreatment(input: $input){
+func CreateAntecdentTreatment(id string, input model.CreateAntecedentTreatmentInput) (model.AntecedentTreatment, error) {
+	query := `mutation CreateAntecdentTreatment($id: String!, $input: CreateAntecedentTreatmentInput!){
+	    createAntecdentTreatment(id:$id, input: $input){
 	        id
-	        period
-	        day
-	        quantity
-	        medicine_id
+	        created_by
 	        start_date
 	        end_date
-	        createdAt
-	        updatedAt
+	        medicines {
+	            id
+	            period {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	                comment
+	            }
+	        }
 	    }
 	}`
 	variables := map[string]interface{}{
+		"id": id,
 		"input": input,
 	}
 	reqBody := map[string]interface{}{
@@ -2853,40 +2869,40 @@ func CreateTreatment(input model.CreateTreatmentInput) (model.Treatment, error) 
 	}
 	body, err := json.Marshal(reqBody)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Treatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+		return model.AntecedentTreatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			CreateTreatment model.Treatment `json:"createTreatment"`
+			CreateAntecdentTreatment model.AntecedentTreatment `json:"createAntecdentTreatment"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	if len(result.Errors) > 0 {
-		return model.Treatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+		return model.AntecedentTreatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
-	return result.Data.CreateTreatment, nil
+	return result.Data.CreateAntecdentTreatment, nil
 }
 
 func DeleteRdv(id string) (bool, error) {
@@ -3818,22 +3834,30 @@ func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error)
 	return result.Data.GetWaitingRdv, nil
 }
 
-func GetTreatmentByID(id string) (model.Treatment, error) {
-	query := `query GetTreatmentByID($id: String!){
-	    getTreatmentByID(id: $id){
+func GetAntecedentTreatmentByID(id string, antecedentID string) (model.AntecedentTreatment, error) {
+	query := `query GetAntecedentTreatmentByID($id: String!, $antecedentID: String!){
+	    getAntecedentTreatmentByID(id: $id, antecedentID: $antecedentID){
 	        id
-	        period
-	        day
-	        quantity
-	        medicine_id
+	        created_by
 	        start_date
 	        end_date
-	        createdAt
-	        updatedAt
+	        medicines {
+	            id
+	            period {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	                comment
+	            }
+	        }
 	    }
 	}`
 	variables := map[string]interface{}{
 		"id": id,
+		"antecedentID": antecedentID,
 	}
 	reqBody := map[string]interface{}{
 		"query": query,
@@ -3841,40 +3865,40 @@ func GetTreatmentByID(id string) (model.Treatment, error) {
 	}
 	body, err := json.Marshal(reqBody)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return model.Treatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+		return model.AntecedentTreatment{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
 	}
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			GetTreatmentByID model.Treatment `json:"getTreatmentByID"`
+			GetAntecedentTreatmentByID model.AntecedentTreatment `json:"getAntecedentTreatmentByID"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
 	if err != nil {
-		return model.Treatment{}, err
+		return model.AntecedentTreatment{}, err
 	}
 
 	if len(result.Errors) > 0 {
-		return model.Treatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+		return model.AntecedentTreatment{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
-	return result.Data.GetTreatmentByID, nil
+	return result.Data.GetAntecedentTreatmentByID, nil
 }
 
 func GetDiseases(option *model.Options) ([]model.Disease, error) {
@@ -4433,16 +4457,25 @@ func GetDoctorRdv(doctor_id string, option *model.Options) ([]model.Rdv, error) 
 	return result.Data.GetDoctorRdv, nil
 }
 
-func GetTreatments(option *model.Options) ([]model.Treatment, error) {
-	query := `query GetTreatments($option: Options){
-	    getTreatments(option: $option){
+func GetAntecedentTreatments(option *model.Options) ([]model.AntecedentTreatment, error) {
+	query := `query GetAntecedentTreatments($option: Options){
+	    getAntecedentTreatments(option: $option){
 	        id
-	        period
-	        day
-	        quantity
-	        medicine_id
+	        created_by
 	        start_date
 	        end_date
+	        medicines {
+	            id
+	            period {
+	                quantity
+	                frequency
+	                frequency_ratio
+	                frequency_unit
+	                period_length
+	                period_unit
+	                comment
+	            }
+	        }
 	        createdAt
 	        updatedAt
 	    }
@@ -4477,7 +4510,7 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 	var result struct {
 		Errors []model.GraphQLError `json:"errors"`
 		Data struct {
-			GetTreatments []model.Treatment `json:"getTreatments"`
+			GetAntecedentTreatments []model.AntecedentTreatment `json:"getAntecedentTreatments"`
 		} `json:"data"`
 	}
 	err = json.Unmarshal(responseBody, &result)
@@ -4489,7 +4522,7 @@ func GetTreatments(option *model.Options) ([]model.Treatment, error) {
 		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
 	}
 
-	return result.Data.GetTreatments, nil
+	return result.Data.GetAntecedentTreatments, nil
 }
 
 func GetNotificationById(id string) (model.Notification, error) {
@@ -8753,5 +8786,347 @@ func GetAutoAnswers(option *model.Options) ([]model.AutoAnswer, error) {
 	}
 
 	return result.Data.GetAutoAnswers, nil
+}
+
+func CreateMedicalAntecedents(input model.CreateMedicalAntecedentsInput) (model.MedicalAntecedents, error) {
+	query := `mutation CreateMedicalAntecedents($input: CreateMedicalAntecedentsInput!){
+	    createMedicalAntecedents(input: $input){
+	        id
+	        name
+	        symptoms
+	        treatments {
+	            id
+	            created_by
+	            start_date
+	            end_date
+	            medicines {
+	                id
+	                period {
+	                    quantity
+	                    frequency
+	                    frequency_ratio
+	                    frequency_unit
+	                    period_length
+	                    period_unit
+	                    comment
+	                }
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.MedicalAntecedents{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			CreateMedicalAntecedents model.MedicalAntecedents `json:"createMedicalAntecedents"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.MedicalAntecedents{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.CreateMedicalAntecedents, nil
+}
+
+func UpdateMedicalAntecedents(id string, input model.UpdateMedicalAntecedentsInput) (model.MedicalAntecedents, error) {
+	query := `mutation UpdateMedicalAntecedents($id: String!, $input: UpdateMedicalAntecedentsInput!){
+	    updateMedicalAntecedents(id: $id, input: $input){
+	        id
+	        name
+	        symptoms
+	        treatments {
+	            id
+	            created_by
+	            start_date
+	            end_date
+	            medicines {
+	                id
+	                period {
+	                    quantity
+	                    frequency
+	                    frequency_ratio
+	                    frequency_unit
+	                    period_length
+	                    period_unit
+	                    comment
+	                }
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+		"input": input,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.MedicalAntecedents{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			UpdateMedicalAntecedents model.MedicalAntecedents `json:"updateMedicalAntecedents"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.MedicalAntecedents{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.UpdateMedicalAntecedents, nil
+}
+
+func DeleteMedicalAntecedents(id string) (bool, error) {
+	query := `mutation DeleteMedicalAntecedents($id: String!){
+	    deleteMedicalAntecedents(id: $id)
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return false, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return false, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return false, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			DeleteMedicalAntecedents bool `json:"deleteMedicalAntecedents"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return false, err
+	}
+
+	if len(result.Errors) > 0 {
+		return false, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.DeleteMedicalAntecedents, nil
+}
+
+func GetMedicalAntecedentsById(id string) (model.MedicalAntecedents, error) {
+	query := `query GetMedicalAntecedentsById($id: String!){
+	    getMedicalAntecedentsById(id: $id){
+	        id
+	        name
+	        symptoms
+	        treatments {
+	            id
+	            created_by
+	            start_date
+	            end_date
+	            medicines {
+	                id
+	                period {
+	                    quantity
+	                    frequency
+	                    frequency_ratio
+	                    frequency_unit
+	                    period_length
+	                    period_unit
+	                    comment
+	                }
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"id": id,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return model.MedicalAntecedents{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetMedicalAntecedentsById model.MedicalAntecedents `json:"getMedicalAntecedentsById"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return model.MedicalAntecedents{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return model.MedicalAntecedents{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetMedicalAntecedentsById, nil
+}
+
+func GetMedicalAntecedents(option *model.Options) ([]model.MedicalAntecedents, error) {
+	query := `query GetMedicalAntecedents($option: Options){
+	    getMedicalAntecedents(option: $option){
+	        id
+	        name
+	        symptoms
+	        treatments {
+	            id
+	            created_by
+	            start_date
+	            end_date
+	            medicines {
+	                id
+	                period {
+	                    quantity
+	                    frequency
+	                    frequency_ratio
+	                    frequency_unit
+	                    period_length
+	                    period_unit
+	                    comment
+	                }
+	            }
+	        }
+	        createdAt
+	        updatedAt
+	    }
+	}`
+	variables := map[string]interface{}{
+		"option": option,
+	}
+	reqBody := map[string]interface{}{
+		"query": query,
+		"variables": variables,
+	}
+	body, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Errors []model.GraphQLError `json:"errors"`
+		Data struct {
+			GetMedicalAntecedents []model.MedicalAntecedents `json:"getMedicalAntecedents"`
+		} `json:"data"`
+	}
+	err = json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	return result.Data.GetMedicalAntecedents, nil
 }
 

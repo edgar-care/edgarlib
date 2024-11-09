@@ -112,6 +112,7 @@ type MedicalInfo {
     updatedAt: Int!
 }
 
+
 # Notification entity
 type Notification {
 	id:	ID!
@@ -174,6 +175,7 @@ type AnteDisease {
     symptomsclear: [Symptom!]
 }
 
+
 # AnteFamily entity
 type AnteFamily {
     id: ID!
@@ -183,18 +185,45 @@ type AnteFamily {
     updatedAt: Int!
 }
 
-# Treatment entity
-type Treatment {
+
+# MedicalAntecedents entity
+type MedicalAntecedents {
     id: ID!
-    period: [Period!]!
-    day: [Day!]!
-    quantity: Int!
-    medicine_id: String!
-    start_date: Int!
-    end_date: Int!
+    name: String!
+    symptoms: [String!]!
+    treatments: [AntecedentTreatment!]!
     createdAt: Int!
     updatedAt: Int!
 }
+
+
+# Treatment entity
+type AntecedentTreatment {
+    id: ID!
+    created_by: String!
+    start_date: Int!
+    end_date: Int
+    medicines: [AntecedentsMedicines!]!
+
+}
+
+type AntecedentsMedicines {
+    id: ID!
+    period: [AntecedentPeriod!]!
+}
+
+type AntecedentPeriod {
+    quantity: Int!
+    frequency: Int!
+    frequency_ratio: Int!
+    frequency_unit: time_unit_enum!
+    period_length: Int
+    period_unit: time_unit_enum
+    comment: String
+}
+
+
+
 
 # Alert entity
 type Alert {
@@ -205,16 +234,6 @@ type Alert {
     weight: Int
     symptoms: [String!]!
     comment: String!
-    createdAt: Int!
-    updatedAt: Int!
-}
-
-# MedicalAntecedents entity
-type MedicalAntecedents {
-    id: ID!
-    name: String!
-    medicines: [Treatment!]!
-    still_relevant: Boolean!
     createdAt: Int!
     updatedAt: Int!
 }
@@ -663,24 +682,6 @@ input UpdateAnteFamilyInput {
     disease: [String!]
 }
 
-input CreateTreatmentInput {
-    period: [Period!]!
-    day: [Day!]!
-    quantity: Int!
-    medicine_id: String!
-    start_date: Int!
-    end_date: Int!
-}
-
-input UpdateTreatmentInput {
-    period: [Period!]
-    day: [Day!]
-    quantity: Int
-    medicine_id: String
-    start_date: Int
-    end_date: Int
-}
-
 input CreateAlertInput {
     name: String!
     sex: String
@@ -711,7 +712,6 @@ input CreateMedicineInput {
     dosage_form: form_enum!
 }
 
-
 input CreateMedicalFolderInput {
     name: String!
     firstname: String!
@@ -737,6 +737,7 @@ input UpdateMedicalFolderInput {
     onboarding_status: OnboardingStatus
     family_members_med_info_id: [String!]
 }
+
 
 input CreateTreatmentsFollowUpInput {
     treatment_id: String!
@@ -768,20 +769,61 @@ input UpdateChatInput {
     messages: [ChatMessagesInput!]
 }
 
-input MedicalAntecedentsInput {
+
+input CreateMedicalAntecedentsInput {
     name: String!
-    medicines: [TreatmentInput!]!
-    still_relevant: Boolean!
+    symptoms: [String!]!
+    treatments: [CreateAntecedentTreatmentInput!]!
 }
 
-input TreatmentInput {
-    period: [Period]!
-    day: [Day]!
-    quantity: Int!
-    medicine_id: String!
+input CreateAntecedentTreatmentInput {
+    created_by: String!
     start_date: Int!
-    end_date: Int!
+    end_date: Int
+    medicines: [CreateAntecedentsMedicinesInput!]!
 }
+
+input CreateAntecedentsMedicinesInput {
+    period: [CreateAntecedentPeriodInput!]!
+}
+
+input CreateAntecedentPeriodInput {
+    quantity: Int!
+    frequency: Int!
+    frequency_ratio: Int!
+    frequency_unit: time_unit_enum!
+    period_length: Int
+    period_unit: time_unit_enum
+    comment: String
+}
+
+
+input UpdateMedicalAntecedentsInput {
+    name: String
+    symptoms: [String!]
+}
+
+input UpdateAntecedentTreatmentInput {
+    created_by: String
+    start_date: Int
+    end_date: Int
+    medicines: [UpdateAntecedentsMedicinesInput!]
+}
+
+input UpdateAntecedentsMedicinesInput {
+    period: [UpdateAntecedentPeriodInput!]
+}
+
+input UpdateAntecedentPeriodInput {
+    quantity: Int
+    frequency: Int
+    frequency_ratio: Int
+    frequency_unit: time_unit_enum
+    period_length: Int
+    period_unit: time_unit_enum
+    comment: String
+}
+
 
 input MedicineInput {
     dci: String!
@@ -1185,11 +1227,17 @@ type Query {
     # Get an antefamily by its id.
     getAnteFamilyByID(id: String!): AnteFamily
 
+    #MedicalAntecedents
+    getMedicalAntecedents(option: Options): [MedicalAntecedents]
+
+    #MedicalAntecedents by id
+    getMedicalAntecedentsById(id: String!): MedicalAntecedents
+
     # Get the entire list of treatments.
-    getTreatments(option: Options): [Treatment]
+    getAntecedentTreatments(option: Options): [AntecedentTreatment]
 
     # Get a treament by its id.
-    getTreatmentByID(id: String!): Treatment
+    getAntecedentTreatmentByID(id: String!, antecedentID: String!): AntecedentTreatment
 
     # Get the entire list of alerts.
     getAlerts(option: Options): [Alert]
@@ -1406,14 +1454,23 @@ type Mutation {
     # Delete a antefamily.
     deleteAnteFamily(id: String!): Boolean
 
+    # Create a new MedicalAntecedents.
+    createMedicalAntecedents(input: CreateMedicalAntecedentsInput!): MedicalAntecedents
+
+    # Update a new MedicalAntecedents.
+    updateMedicalAntecedents(id: String!, input: UpdateMedicalAntecedentsInput!): MedicalAntecedents
+
+    # Delete a MedicalAntecedents.
+    deleteMedicalAntecedents(id: String!): Boolean
+
     # Create a new treatment.
-    createTreatment(input: CreateTreatmentInput!): Treatment
+    createAntecdentTreatment(id: String!, input: CreateAntecedentTreatmentInput!): AntecedentTreatment
 
     # Update a new treatment.
-    updateTreatment(id: String!, input: UpdateTreatmentInput!): Treatment
+    updateAntecdentTreatment(id: String!, antecedentID: String!, input: UpdateAntecedentTreatmentInput!): AntecedentTreatment
 
     # Delete a treatment.
-    deleteTreatment(id: String!): Boolean
+    deleteAntecdentTreatment(id: String!): Boolean
 
     # Create a new alert.
     createAlert(input: CreateAlertInput!): Alert

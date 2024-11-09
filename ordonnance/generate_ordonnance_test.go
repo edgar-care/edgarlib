@@ -40,31 +40,42 @@ func TestCreateOrdonnance(t *testing.T) {
 		t.Errorf("Error while creating patient: %v", err)
 	}
 
-	input := medical_folder.CreateMedicalInfoInput{
-		Name:            "test",
-		Firstname:       "test",
-		Birthdate:       999636164,
-		Sex:             "M",
+	_ = medical_folder.NewMedicalFolder(medical_folder.CreateNewMedicalInfoInput{
+		Name:            "first",
+		Firstname:       "first",
+		Birthdate:       0,
+		Sex:             "",
 		Weight:          0,
 		Height:          0,
-		PrimaryDoctorID: "",
-		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-			Name: "test",
-			Medicines: []medical_folder.CreateMedicineInput{medical_folder.CreateMedicineInput{
-				MedicineID: "test",
-				Period:     []string{"NOON"},
-				Day:        []string{"MONDAY"},
-				Quantity:   2,
-				StartDate:  1234,
-				EndDate:    1234,
-			}},
-			StillRelevant: false,
-		},
-		},
-		FamilyMembersMedInfoId: []string{"test"},
-	}
-
-	_ = medical_folder.CreateMedicalInfo(input, patient.ID)
+		PrimaryDoctorID: doctor.ID,
+		MedicalAntecedents: []medical_folder.CreateNewMedicalAntecedentInput{{
+			Name:     "",
+			Symptoms: []string{"symptom"},
+			Treatments: []medical_folder.CreateTreatInput{
+				{
+					CreatedBy: "ttt",
+					StartDate: 78,
+					EndDate:   90,
+					Medicines: []medical_folder.CreateAntecedentsMedicines{
+						{
+							Period: []*medical_folder.CreateAntecedentPeriod{
+								{
+									Quantity:       6,
+									Frequency:      1,
+									FrequencyRatio: 3,
+									FrequencyUnit:  "MOIS",
+									PeriodLength:   4,
+									PeriodUnit:     "ANNEE",
+									Comment:        "tttt",
+								},
+							},
+						},
+					},
+				},
+			},
+		}},
+		FamilyMembersMedInfoId: []string{},
+	}, patient.ID)
 
 	medoc, err := graphql.CreateMedicine(model.CreateMedicineInput{
 		Dci:             "Para",

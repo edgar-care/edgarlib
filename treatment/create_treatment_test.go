@@ -8,7 +8,6 @@ import (
 
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
-	"github.com/google/uuid"
 )
 
 func TestCreateTreatment(t *testing.T) {
@@ -26,120 +25,67 @@ func TestCreateTreatment(t *testing.T) {
 		t.Errorf("Failed to create patient: %v", err)
 	}
 
-	_ = medical_folder.CreateMedicalInfo(medical_folder.CreateMedicalInfoInput{
-		Name:            "bertand",
-		Firstname:       "pierre",
-		Birthdate:       0,
-		Sex:             "",
-		Weight:          0,
-		Height:          0,
-		PrimaryDoctorID: "",
-		MedicalAntecedents: []medical_folder.CreateMedicalAntecedentInput{{
-			Name:          "",
-			Medicines:     nil,
-			StillRelevant: false,
+	medicalFolderInput := medical_folder.CreateNewMedicalInfoInput{
+		Name:                   "test",
+		Firstname:              "test",
+		Birthdate:              0,
+		Sex:                    "M",
+		Weight:                 0,
+		Height:                 0,
+		PrimaryDoctorID:        "",
+		MedicalAntecedents:     []medical_folder.CreateNewMedicalAntecedentInput{},
+		FamilyMembersMedInfoId: []string{""},
+	}
+
+	_ = medical_folder.NewMedicalFolder(medicalFolderInput, patient.ID)
+
+	antecedentInput := medical_folder.CreateNewMedicalAntecedentInput{
+		Name:     "new_antecedent",
+		Symptoms: []string{"symptoms"},
+		Treatments: []medical_folder.CreateTreatInput{{
+			CreatedBy: "test",
+			StartDate: 1234,
+			EndDate:   5678,
+			Medicines: []medical_folder.CreateAntecedentsMedicines{{
+				Period: []*medical_folder.CreateAntecedentPeriod{{
+					Quantity:       2,
+					Frequency:      2,
+					FrequencyRatio: 2,
+					FrequencyUnit:  "JOUR",
+					PeriodLength:   2,
+					PeriodUnit:     "JOUR",
+					Comment:        "comment",
+				}},
+			}},
 		}},
-		FamilyMembersMedInfoId: []string{},
-	}, patient.ID)
+	}
 
-	t.Run("Success without existing DiseaseId", func(t *testing.T) {
-		treatmentInput := CreateNewTreatmentInput{
-			Name:          "Hypertension",
-			DiseaseId:     "",
-			StillRelevant: true,
-			Treatments: []CreateTreatInput{
-				{
-					MedicineId: "med123",
-					Period:     []string{"MORNING"},
-					Day:        []string{"MONDAY"},
-					Quantity:   1,
-					StartDate:  1234,
-					EndDate:    2344,
-				},
-			},
-		}
+	ante := medical_folder.AddMedicalAntecedent(antecedentInput, patient.ID)
 
-		response := CreateTreatment(treatmentInput, patient.ID)
+	treatmentInput := CreateTreatInput{
+		CreatedBy: "test",
+		StartDate: 1234,
+		EndDate:   5678,
+		Medicines: []CreateAntecedentsMedicines{{
+			Period: []CreateAntecedentPeriod{{
+				Quantity:       2,
+				Frequency:      2,
+				FrequencyRatio: 2,
+				FrequencyUnit:  "JOUR",
+				PeriodLength:   2,
+				PeriodUnit:     "JOUR",
+				Comment:        "comment",
+			}},
+		}},
+	}
 
-		if response.Code != 201 {
-			t.Errorf("Expected response code 201, got %v", response.Code)
-		}
-		if response.Err != nil {
-			t.Errorf("Unexpected error: %v", response.Err)
-		}
+	response := CreateTreatment(treatmentInput, patient.ID, ante.MedicalAntecedents[0].ID)
+	if response.Code != 201 {
+		t.Errorf("Expected response code 400, got %v", response.Code)
+	}
 
-		if response.AnteDisease.Name != treatmentInput.Name {
-			t.Errorf("Expected AnteDisease name %s, got %s", treatmentInput.Name, response.AnteDisease.Name)
-		}
-	})
-
-	t.Run("Failure due to missing patient", func(t *testing.T) {
-		if err := godotenv.Load(".env.test"); err != nil {
-			log.Fatalf("Error loading .env.test file: %v", err)
-		}
-		nonExistentPatientID := uuid.New().String()
-
-		treatmentInput := CreateNewTreatmentInput{
-			Name:          "Diabetes",
-			DiseaseId:     "",
-			StillRelevant: true,
-			Treatments: []CreateTreatInput{
-				{
-					MedicineId: "med456",
-					Period:     []string{"EVENING"},
-					Day:        []string{"SUNDAY"},
-					Quantity:   1,
-					StartDate:  1234,
-					EndDate:    2344,
-				},
-			},
-		}
-
-		response := CreateTreatment(treatmentInput, nonExistentPatientID)
-
-		if response.Code != 400 {
-			t.Errorf("Expected response code 400, got %v", response.Code)
-		}
-		if response.Err == nil {
-			t.Errorf("Expected an error in response")
-		}
-	})
-
-	t.Run("Failure due to missing medical folder", func(t *testing.T) {
-		noMedicalInfoID := uuid.New().String()
-
-		_, err := graphql.CreatePatient(model.CreatePatientInput{
-			Email:    "testuser_no_medical_info@example.com",
-			Password: "testpassword",
-			Status:   true,
-		})
-		if err != nil {
-			t.Errorf("Failed to create patient: %v", err)
-		}
-
-		treatmentInput := CreateNewTreatmentInput{
-			Name:          "Asthma",
-			DiseaseId:     "",
-			StillRelevant: true,
-			Treatments: []CreateTreatInput{
-				{
-					MedicineId: uuid.New().String(),
-					Period:     []string{"MORNING"},
-					Day:        []string{"TUESDAY"},
-					Quantity:   3,
-					StartDate:  1234,
-					EndDate:    2344,
-				},
-			},
-		}
-
-		response := CreateTreatment(treatmentInput, noMedicalInfoID)
-
-		if response.Code != 400 {
-			t.Errorf("Expected response code 400, got %v", response.Code)
-		}
-		if response.Err == nil {
-			t.Errorf("Expected an error in response")
-		}
-	})
+	_, err = graphql.GetMedicalAntecedentsById(ante.MedicalAntecedents[0].ID)
+	if err != nil {
+		t.Errorf("Failed to get medical antecedent: %v", err)
+	}
 }

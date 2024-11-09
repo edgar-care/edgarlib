@@ -73,6 +73,29 @@ type AnteFamily struct {
 	UpdatedAt int      `json:"updatedAt" bson:"updatedAt"`
 }
 
+type AntecedentPeriod struct {
+	Quantity       int           `json:"quantity" bson:"quantity"`
+	Frequency      int           `json:"frequency" bson:"frequency"`
+	FrequencyRatio int           `json:"frequency_ratio" bson:"frequency_ratio"`
+	FrequencyUnit  TimeUnitEnum  `json:"frequency_unit" bson:"frequency_unit"`
+	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
+	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
+	Comment        *string       `json:"comment,omitempty" bson:"comment"`
+}
+
+type AntecedentTreatment struct {
+	ID        string                  `json:"id" bson:"_id"`
+	CreatedBy string                  `json:"created_by" bson:"created_by"`
+	StartDate int                     `json:"start_date" bson:"start_date"`
+	EndDate   *int                    `json:"end_date,omitempty" bson:"end_date"`
+	Medicines []*AntecedentsMedicines `json:"medicines" bson:"medicines"`
+}
+
+type AntecedentsMedicines struct {
+	ID     string              `json:"id" bson:"_id"`
+	Period []*AntecedentPeriod `json:"period" bson:"period"`
+}
+
 type AutoAnswer struct {
 	ID        string         `json:"id" bson:"_id"`
 	Name      string         `json:"name" bson:"name"`
@@ -164,6 +187,27 @@ type CreateAnteFamilyInput struct {
 	Disease []string `json:"disease" bson:"disease"`
 }
 
+type CreateAntecedentPeriodInput struct {
+	Quantity       int           `json:"quantity" bson:"quantity"`
+	Frequency      int           `json:"frequency" bson:"frequency"`
+	FrequencyRatio int           `json:"frequency_ratio" bson:"frequency_ratio"`
+	FrequencyUnit  TimeUnitEnum  `json:"frequency_unit" bson:"frequency_unit"`
+	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
+	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
+	Comment        *string       `json:"comment,omitempty" bson:"comment"`
+}
+
+type CreateAntecedentTreatmentInput struct {
+	CreatedBy string                             `json:"created_by" bson:"created_by"`
+	StartDate int                                `json:"start_date" bson:"start_date"`
+	EndDate   *int                               `json:"end_date,omitempty" bson:"end_date"`
+	Medicines []*CreateAntecedentsMedicinesInput `json:"medicines" bson:"medicines"`
+}
+
+type CreateAntecedentsMedicinesInput struct {
+	Period []*CreateAntecedentPeriodInput `json:"period" bson:"period"`
+}
+
 type CreateAutoAnswerInput struct {
 	Name   string         `json:"name" bson:"name"`
 	Values []*string      `json:"values" bson:"values"`
@@ -222,6 +266,12 @@ type CreateDoubleAuthInput struct {
 	Secret        string   `json:"secret" bson:"secret"`
 	Code          string   `json:"code" bson:"code"`
 	TrustDeviceID []string `json:"trust_device_id,omitempty" bson:"trust_device_id"`
+}
+
+type CreateMedicalAntecedentsInput struct {
+	Name       string                            `json:"name" bson:"name"`
+	Symptoms   []string                          `json:"symptoms" bson:"symptoms"`
+	Treatments []*CreateAntecedentTreatmentInput `json:"treatments" bson:"treatments"`
 }
 
 type CreateMedicalFolderInput struct {
@@ -312,15 +362,6 @@ type CreateSymptomInput struct {
 	QuestionAnte     string   `json:"question_ante" bson:"question_ante"`
 }
 
-type CreateTreatmentInput struct {
-	Period     []Period `json:"period" bson:"period"`
-	Day        []Day    `json:"day" bson:"day"`
-	Quantity   int      `json:"quantity" bson:"quantity"`
-	MedicineID string   `json:"medicine_id" bson:"medicine_id"`
-	StartDate  int      `json:"start_date" bson:"start_date"`
-	EndDate    int      `json:"end_date" bson:"end_date"`
-}
-
 type CreateTreatmentsFollowUpInput struct {
 	TreatmentID string   `json:"treatment_id" bson:"treatment_id"`
 	Date        int      `json:"date" bson:"date"`
@@ -405,18 +446,12 @@ type LogsInput struct {
 }
 
 type MedicalAntecedents struct {
-	ID            string       `json:"id" bson:"_id"`
-	Name          string       `json:"name" bson:"name"`
-	Medicines     []*Treatment `json:"medicines" bson:"medicines"`
-	StillRelevant bool         `json:"still_relevant" bson:"still_relevant"`
-	CreatedAt     int          `json:"createdAt" bson:"createdAt"`
-	UpdatedAt     int          `json:"updatedAt" bson:"updatedAt"`
-}
-
-type MedicalAntecedentsInput struct {
-	Name          string            `json:"name" bson:"name"`
-	Medicines     []*TreatmentInput `json:"medicines" bson:"medicines"`
-	StillRelevant bool              `json:"still_relevant" bson:"still_relevant"`
+	ID         string                 `json:"id" bson:"_id"`
+	Name       string                 `json:"name" bson:"name"`
+	Symptoms   []string               `json:"symptoms" bson:"symptoms"`
+	Treatments []*AntecedentTreatment `json:"treatments" bson:"treatments"`
+	CreatedAt  int                    `json:"createdAt" bson:"createdAt"`
+	UpdatedAt  int                    `json:"updatedAt" bson:"updatedAt"`
 }
 
 type MedicalInfo struct {
@@ -664,27 +699,6 @@ type SymptomsWeightInput struct {
 	Chronic bool    `json:"chronic" bson:"chronic"`
 }
 
-type Treatment struct {
-	ID         string   `json:"id" bson:"_id"`
-	Period     []Period `json:"period" bson:"period"`
-	Day        []Day    `json:"day" bson:"day"`
-	Quantity   int      `json:"quantity" bson:"quantity"`
-	MedicineID string   `json:"medicine_id" bson:"medicine_id"`
-	StartDate  int      `json:"start_date" bson:"start_date"`
-	EndDate    int      `json:"end_date" bson:"end_date"`
-	CreatedAt  int      `json:"createdAt" bson:"createdAt"`
-	UpdatedAt  int      `json:"updatedAt" bson:"updatedAt"`
-}
-
-type TreatmentInput struct {
-	Period     []*Period `json:"period" bson:"period"`
-	Day        []*Day    `json:"day" bson:"day"`
-	Quantity   int       `json:"quantity" bson:"quantity"`
-	MedicineID string    `json:"medicine_id" bson:"medicine_id"`
-	StartDate  int       `json:"start_date" bson:"start_date"`
-	EndDate    int       `json:"end_date" bson:"end_date"`
-}
-
 type TreatmentsFollowUp struct {
 	ID          string   `json:"id" bson:"_id"`
 	TreatmentID string   `json:"treatment_id" bson:"treatment_id"`
@@ -731,6 +745,27 @@ type UpdateAnteDiseaseInput struct {
 type UpdateAnteFamilyInput struct {
 	Name    *string  `json:"name,omitempty" bson:"name"`
 	Disease []string `json:"disease,omitempty" bson:"disease"`
+}
+
+type UpdateAntecedentPeriodInput struct {
+	Quantity       *int          `json:"quantity,omitempty" bson:"quantity"`
+	Frequency      *int          `json:"frequency,omitempty" bson:"frequency"`
+	FrequencyRatio *int          `json:"frequency_ratio,omitempty" bson:"frequency_ratio"`
+	FrequencyUnit  *TimeUnitEnum `json:"frequency_unit,omitempty" bson:"frequency_unit"`
+	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
+	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
+	Comment        *string       `json:"comment,omitempty" bson:"comment"`
+}
+
+type UpdateAntecedentTreatmentInput struct {
+	CreatedBy *string                            `json:"created_by,omitempty" bson:"created_by"`
+	StartDate *int                               `json:"start_date,omitempty" bson:"start_date"`
+	EndDate   *int                               `json:"end_date,omitempty" bson:"end_date"`
+	Medicines []*UpdateAntecedentsMedicinesInput `json:"medicines,omitempty" bson:"medicines"`
+}
+
+type UpdateAntecedentsMedicinesInput struct {
+	Period []*UpdateAntecedentPeriodInput `json:"period,omitempty" bson:"period"`
 }
 
 type UpdateAutoAnswerInput struct {
@@ -807,6 +842,11 @@ type UpdateDoubleAuthInput struct {
 	Code          *string  `json:"code,omitempty" bson:"code"`
 	URL           *string  `json:"url,omitempty" bson:"url"`
 	TrustDeviceID []string `json:"trust_device_id,omitempty" bson:"trust_device_id"`
+}
+
+type UpdateMedicalAntecedentsInput struct {
+	Name     *string  `json:"name,omitempty" bson:"name"`
+	Symptoms []string `json:"symptoms,omitempty" bson:"symptoms"`
 }
 
 type UpdateMedicalFolderInput struct {
@@ -926,15 +966,6 @@ type UpdateSymptomInput struct {
 	QuestionBasic    *string  `json:"question_basic,omitempty" bson:"question_basic"`
 	QuestionDuration *string  `json:"question_duration,omitempty" bson:"question_duration"`
 	QuestionAnte     *string  `json:"question_ante,omitempty" bson:"question_ante"`
-}
-
-type UpdateTreatmentInput struct {
-	Period     []Period `json:"period,omitempty" bson:"period"`
-	Day        []Day    `json:"day,omitempty" bson:"day"`
-	Quantity   *int     `json:"quantity,omitempty" bson:"quantity"`
-	MedicineID *string  `json:"medicine_id,omitempty" bson:"medicine_id"`
-	StartDate  *int     `json:"start_date,omitempty" bson:"start_date"`
-	EndDate    *int     `json:"end_date,omitempty" bson:"end_date"`
 }
 
 type UpdateTreatmentsFollowUpInput struct {

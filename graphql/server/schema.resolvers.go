@@ -1180,52 +1180,69 @@ func (r *mutationResolver) DeleteAnteFamily(ctx context.Context, id string) (*bo
 	return &resp, err
 }
 
-// CreateTreatment is the resolver for the createTreatment field.
-func (r *mutationResolver) CreateTreatment(ctx context.Context, input model.CreateTreatmentInput) (*model.Treatment, error) {
+// CreateMedicalAntecedents is the resolver for the createMedicalAntecedents field.
+func (r *mutationResolver) CreateMedicalAntecedents(ctx context.Context, input model.CreateMedicalAntecedentsInput) (*model.MedicalAntecedents, error) {
 	now := int(time.Now().Unix())
-	treatment := &model.Treatment{
+
+	treatments := make([]*model.AntecedentTreatment, 0)
+	for _, treatmentInput := range input.Treatments {
+		medicines := make([]*model.AntecedentsMedicines, 0)
+		for _, medicineInput := range treatmentInput.Medicines {
+			periods := make([]*model.AntecedentPeriod, 0)
+			for _, periodInput := range medicineInput.Period {
+				periods = append(periods, &model.AntecedentPeriod{
+					Quantity:       periodInput.Quantity,
+					Frequency:      periodInput.Frequency,
+					FrequencyRatio: periodInput.FrequencyRatio,
+					FrequencyUnit:  periodInput.FrequencyUnit,
+					PeriodLength:   periodInput.PeriodLength,
+					PeriodUnit:     periodInput.PeriodUnit,
+					Comment:        periodInput.Comment,
+				})
+			}
+			medicines = append(medicines, &model.AntecedentsMedicines{
+				ID:     primitive.NewObjectID().Hex(),
+				Period: periods,
+			})
+		}
+
+		treatments = append(treatments, &model.AntecedentTreatment{
+			ID:        primitive.NewObjectID().Hex(),
+			CreatedBy: treatmentInput.CreatedBy,
+			StartDate: treatmentInput.StartDate,
+			EndDate:   treatmentInput.EndDate,
+			Medicines: medicines,
+		})
+	}
+
+	newAntecedent := &model.MedicalAntecedents{
 		ID:         primitive.NewObjectID().Hex(),
-		Period:     input.Period,
-		Day:        input.Day,
-		Quantity:   input.Quantity,
-		MedicineID: input.MedicineID,
-		StartDate:  input.StartDate,
-		EndDate:    input.EndDate,
+		Name:       input.Name,
+		Symptoms:   input.Symptoms,
+		Treatments: treatments,
 		CreatedAt:  now,
 		UpdatedAt:  now,
 	}
 
-	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").InsertOne(ctx, treatment)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").InsertOne(ctx, newAntecedent)
 	if err != nil {
 		return nil, err
 	}
 
-	return treatment, err
+	return newAntecedent, nil
 }
 
-// UpdateTreatment is the resolver for the updateTreatment field.
-func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, input model.UpdateTreatmentInput) (*model.Treatment, error) {
-	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment")
+// UpdateMedicalAntecedents is the resolver for the updateMedicalAntecedents field.
+func (r *mutationResolver) UpdateMedicalAntecedents(ctx context.Context, id string, input model.UpdateMedicalAntecedentsInput) (*model.MedicalAntecedents, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
 	filter := bson.M{"_id": id}
 
 	update := bson.M{}
-	if input.Period != nil {
-		update["period"] = input.Period
+	if input.Name != nil {
+		update["name"] = *input.Name
 	}
-	if input.Day != nil {
-		update["day"] = input.Day
-	}
-	if input.Quantity != nil {
-		update["quantity"] = *input.Quantity
-	}
-	if input.MedicineID != nil {
-		update["medicine_id"] = *input.MedicineID
-	}
-	if input.StartDate != nil {
-		update["start_date"] = *input.StartDate
-	}
-	if input.EndDate != nil {
-		update["end_date"] = *input.EndDate
+	if input.Symptoms != nil {
+		update["symptoms"] = input.Symptoms
 	}
 
 	update["updatedAt"] = time.Now().Unix()
@@ -1233,21 +1250,167 @@ func (r *mutationResolver) UpdateTreatment(ctx context.Context, id string, input
 	updateData := bson.M{"$set": update}
 
 	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
-	var updatedTreatment model.Treatment
+	var updateMedicalAntecedent model.MedicalAntecedents
 
-	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedTreatment)
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updateMedicalAntecedent)
 	if err != nil {
 		return nil, err
 	}
 
-	return &updatedTreatment, nil
+	return &updateMedicalAntecedent, nil
 }
 
-// DeleteTreatment is the resolver for the deleteTreatment field.
-func (r *mutationResolver) DeleteTreatment(ctx context.Context, id string) (*bool, error) {
+// DeleteMedicalAntecedents is the resolver for the deleteMedicalAntecedents field.
+func (r *mutationResolver) DeleteMedicalAntecedents(ctx context.Context, id string) (*bool, error) {
 	resp := false
+
 	filter := bson.M{"_id": id}
-	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").DeleteOne(ctx, filter)
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").DeleteOne(ctx, filter)
+	if err != nil {
+		return &resp, err
+	}
+	resp = true
+	return &resp, err
+}
+
+// CreateAntecdentTreatment is the resolver for the createAntecdentTreatment field.
+func (r *mutationResolver) CreateAntecdentTreatment(ctx context.Context, id string, input model.CreateAntecedentTreatmentInput) (*model.AntecedentTreatment, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
+	filter := bson.M{"_id": id}
+	var medicalAntecedent model.MedicalAntecedents
+
+	err := collection.FindOne(ctx, filter).Decode(&medicalAntecedent)
+	if err != nil {
+		return nil, errors.New("unable to find medical antecedent: " + err.Error())
+	}
+
+	treatment := model.AntecedentTreatment{
+		ID:        primitive.NewObjectID().Hex(),
+		CreatedBy: input.CreatedBy,
+		StartDate: input.StartDate,
+		EndDate:   input.EndDate,
+		Medicines: make([]*model.AntecedentsMedicines, len(input.Medicines)),
+	}
+
+	for i, medicineInput := range input.Medicines {
+		medicine := &model.AntecedentsMedicines{
+			ID:     primitive.NewObjectID().Hex(),
+			Period: make([]*model.AntecedentPeriod, len(medicineInput.Period)),
+		}
+
+		for j, periodInput := range medicineInput.Period {
+			period := &model.AntecedentPeriod{
+				Quantity:       periodInput.Quantity,
+				Frequency:      periodInput.Frequency,
+				FrequencyRatio: periodInput.FrequencyRatio,
+				FrequencyUnit:  periodInput.FrequencyUnit,
+				PeriodLength:   periodInput.PeriodLength,
+				PeriodUnit:     periodInput.PeriodUnit,
+				Comment:        periodInput.Comment,
+			}
+			medicine.Period[j] = period
+		}
+		treatment.Medicines[i] = medicine
+	}
+
+	medicalAntecedent.Treatments = append(medicalAntecedent.Treatments, &treatment)
+
+	update := bson.M{"$set": bson.M{"treatments": medicalAntecedent.Treatments}}
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	err = collection.FindOneAndUpdate(ctx, filter, update, opts).Decode(&medicalAntecedent)
+	if err != nil {
+		return nil, errors.New("unable to update medical antecedent: " + err.Error())
+	}
+
+	return &treatment, nil
+}
+
+// UpdateAntecdentTreatment is the resolver for the updateAntecdentTreatment field.
+func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id string, antecedentID string, input model.UpdateAntecedentTreatmentInput) (*model.AntecedentTreatment, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
+	filter := bson.M{"_id": antecedentID}
+	var medicalAntecedent model.MedicalAntecedents
+
+	err := collection.FindOne(ctx, filter).Decode(&medicalAntecedent)
+	if err != nil {
+		return nil, errors.New("unable to find medical antecedent: " + err.Error())
+	}
+
+	var treatment *model.AntecedentTreatment
+	for _, t := range medicalAntecedent.Treatments {
+		if t.ID == id {
+			treatment = t
+			break
+		}
+	}
+
+	if treatment == nil {
+		return nil, errors.New("treatment not found")
+	}
+
+	if input.CreatedBy != nil {
+		treatment.CreatedBy = *input.CreatedBy
+	}
+	if input.StartDate != nil {
+		treatment.StartDate = *input.StartDate
+	}
+	if input.EndDate != nil {
+		treatment.EndDate = input.EndDate
+	}
+	if input.Medicines != nil {
+		for i, medicineInput := range input.Medicines {
+			if i < len(treatment.Medicines) {
+				medicine := treatment.Medicines[i]
+				if medicineInput.Period != nil {
+					medicine.Period = make([]*model.AntecedentPeriod, len(medicineInput.Period))
+					for j, periodInput := range medicineInput.Period {
+						medicine.Period[j] = &model.AntecedentPeriod{
+							Quantity:       *periodInput.Quantity,
+							Frequency:      *periodInput.Frequency,
+							FrequencyRatio: *periodInput.FrequencyRatio,
+							FrequencyUnit:  *periodInput.FrequencyUnit,
+							PeriodLength:   periodInput.PeriodLength,
+							PeriodUnit:     periodInput.PeriodUnit,
+							Comment:        periodInput.Comment,
+						}
+					}
+				}
+			} else {
+				newMedicine := &model.AntecedentsMedicines{
+					Period: make([]*model.AntecedentPeriod, len(medicineInput.Period)),
+				}
+				for j, periodInput := range medicineInput.Period {
+					newMedicine.Period[j] = &model.AntecedentPeriod{
+						Quantity:       *periodInput.Quantity,
+						Frequency:      *periodInput.Frequency,
+						FrequencyRatio: *periodInput.FrequencyRatio,
+						FrequencyUnit:  *periodInput.FrequencyUnit,
+						PeriodLength:   periodInput.PeriodLength,
+						PeriodUnit:     periodInput.PeriodUnit,
+						Comment:        periodInput.Comment,
+					}
+				}
+				treatment.Medicines = append(treatment.Medicines, newMedicine)
+			}
+		}
+	}
+
+	update := bson.M{"$set": bson.M{"treatments": medicalAntecedent.Treatments}}
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	err = collection.FindOneAndUpdate(ctx, filter, update, opts).Decode(&medicalAntecedent)
+	if err != nil {
+		return nil, errors.New("unable to update medical antecedent: " + err.Error())
+	}
+
+	return treatment, nil
+}
+
+// DeleteAntecdentTreatment is the resolver for the deleteAntecdentTreatment field.
+func (r *mutationResolver) DeleteAntecdentTreatment(ctx context.Context, id string) (*bool, error) {
+	resp := false
+
+	filter := bson.M{"_id": id}
+	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment").DeleteOne(ctx, filter)
 	if err != nil {
 		return &resp, err
 	}
@@ -2680,16 +2843,16 @@ func (r *queryResolver) GetAnteFamilyByID(ctx context.Context, id string) (*mode
 	return &result, nil
 }
 
-// GetTreatments is the resolver for the getTreatments field.
-func (r *queryResolver) GetTreatments(ctx context.Context, option *model.Options) ([]*model.Treatment, error) {
+// GetMedicalAntecedents is the resolver for the getMedicalAntecedents field.
+func (r *queryResolver) GetMedicalAntecedents(ctx context.Context, option *model.Options) ([]*model.MedicalAntecedents, error) {
 	filter := bson.D{}
-	var results []*model.Treatment
+	var results []*model.MedicalAntecedents
 	var findOptions *options.FindOptions = nil
 	if option != nil {
 		findOptions = FindOptions(*option)
 	}
 
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").Find(ctx, filter, findOptions)
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").Find(ctx, filter, findOptions)
 	if err != nil {
 		return nil, err
 	}
@@ -2701,17 +2864,58 @@ func (r *queryResolver) GetTreatments(ctx context.Context, option *model.Options
 	return results, nil
 }
 
-// GetTreatmentByID is the resolver for the getTreatmentByID field.
-func (r *queryResolver) GetTreatmentByID(ctx context.Context, id string) (*model.Treatment, error) {
-	var result model.Treatment
+// GetMedicalAntecedentsByID is the resolver for the getMedicalAntecedentsById field.
+func (r *queryResolver) GetMedicalAntecedentsByID(ctx context.Context, id string) (*model.MedicalAntecedents, error) {
+	var result model.MedicalAntecedents
 
 	filter := bson.M{"_id": id}
 
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Treatment").FindOne(ctx, filter).Decode(&result)
+	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents").FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
 	return &result, nil
+}
+
+// GetAntecedentTreatments is the resolver for the getAntecedentTreatments field.
+func (r *queryResolver) GetAntecedentTreatments(ctx context.Context, option *model.Options) ([]*model.AntecedentTreatment, error) {
+	filter := bson.D{}
+	var results []*model.AntecedentTreatment
+	var findOptions *options.FindOptions = nil
+	if option != nil {
+		findOptions = FindOptions(*option)
+	}
+
+	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment").Find(ctx, filter, findOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+// GetAntecedentTreatmentByID is the resolver for the getAntecedentTreatmentByID field.
+func (r *queryResolver) GetAntecedentTreatmentByID(ctx context.Context, id string, antecedentID string) (*model.AntecedentTreatment, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
+	filter := bson.M{"_id": antecedentID}
+	var medicalAntecedent model.MedicalAntecedents
+
+	err := collection.FindOne(ctx, filter).Decode(&medicalAntecedent)
+	if err != nil {
+		return nil, errors.New("unable to find medical antecedent: " + err.Error())
+	}
+
+	for _, treatment := range medicalAntecedent.Treatments {
+		if treatment.ID == id {
+			return treatment, nil
+		}
+	}
+
+	return nil, errors.New("treatment not found")
 }
 
 // GetAlerts is the resolver for the getAlerts field.
