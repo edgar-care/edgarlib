@@ -3834,9 +3834,9 @@ func GetWaitingRdv(doctor_id string, option *model.Options) ([]model.Rdv, error)
 	return result.Data.GetWaitingRdv, nil
 }
 
-func GetAntecedentTreatmentByID(id string, antecedentID string) (model.AntecedentTreatment, error) {
-	query := `query GetAntecedentTreatmentByID($id: String!, $antecedentID: String!){
-	    getAntecedentTreatmentByID(id: $id, antecedentID: $antecedentID){
+func GetAntecedentTreatmentByID(id string) (model.AntecedentTreatment, error) {
+	query := `query GetAntecedentTreatmentByID($id: String!){
+	    getAntecedentTreatmentByID(id: $id){
 	        id
 	        created_by
 	        start_date
@@ -3857,7 +3857,6 @@ func GetAntecedentTreatmentByID(id string, antecedentID string) (model.Anteceden
 	}`
 	variables := map[string]interface{}{
 		"id": id,
-		"antecedentID": antecedentID,
 	}
 	reqBody := map[string]interface{}{
 		"query": query,
@@ -4476,8 +4475,6 @@ func GetAntecedentTreatments(option *model.Options) ([]model.AntecedentTreatment
 	                comment
 	            }
 	        }
-	        createdAt
-	        updatedAt
 	    }
 	}`
 	variables := map[string]interface{}{

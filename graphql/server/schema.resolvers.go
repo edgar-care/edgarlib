@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -2899,23 +2900,27 @@ func (r *queryResolver) GetAntecedentTreatments(ctx context.Context, option *mod
 }
 
 // GetAntecedentTreatmentByID is the resolver for the getAntecedentTreatmentByID field.
-func (r *queryResolver) GetAntecedentTreatmentByID(ctx context.Context, id string, antecedentID string) (*model.AntecedentTreatment, error) {
-	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
-	filter := bson.M{"_id": antecedentID}
-	var medicalAntecedent model.MedicalAntecedents
+func (r *queryResolver) GetAntecedentTreatmentByID(ctx context.Context, id string) (*model.AntecedentTreatment, error) {
+	var result model.AntecedentTreatment
 
-	err := collection.FindOne(ctx, filter).Decode(&medicalAntecedent)
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
+	filter := bson.M{"treatments._id": id}
+
+	var parentAntecedent model.MedicalAntecedents
+	err := collection.FindOne(ctx, filter).Decode(&parentAntecedent)
 	if err != nil {
-		return nil, errors.New("unable to find medical antecedent: " + err.Error())
+		return nil, errors.New("treatment not found")
 	}
 
-	for _, treatment := range medicalAntecedent.Treatments {
+	for _, treatment := range parentAntecedent.Treatments {
 		if treatment.ID == id {
-			return treatment, nil
+			result = *treatment
+			return &result, nil
 		}
 	}
 
-	return nil, errors.New("treatment not found")
+	log.Printf("Treatment with ID %s not found in parent document", id)
+	return &result, nil
 }
 
 // GetAlerts is the resolver for the getAlerts field.

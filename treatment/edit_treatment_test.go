@@ -62,9 +62,10 @@ func TestUpdateTreatment(t *testing.T) {
 	ante := medical_folder.AddMedicalAntecedent(antecedentInput, patient.ID)
 
 	treatmentInput := CreateTreatInput{
-		CreatedBy: "testgetbyid",
-		StartDate: 1234,
-		EndDate:   5678,
+		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
+		CreatedBy:           "testgetbyid",
+		StartDate:           1234,
+		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
@@ -78,7 +79,7 @@ func TestUpdateTreatment(t *testing.T) {
 		}},
 	}
 
-	treat := CreateTreatment(treatmentInput, patient.ID, ante.MedicalAntecedents[0].ID)
+	treat := CreateTreatment(treatmentInput, patient.ID)
 	if treat.Err != nil {
 		t.Errorf("Error while creating treatment: %v", treat.Err)
 	}

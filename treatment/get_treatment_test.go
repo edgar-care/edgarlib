@@ -60,11 +60,11 @@ func TestGetTreatmentById(t *testing.T) {
 	}
 
 	ante := medical_folder.AddMedicalAntecedent(antecedentInput, patient.ID)
-
 	treatmentInput := CreateTreatInput{
-		CreatedBy: "testgetbyid",
-		StartDate: 1234,
-		EndDate:   5678,
+		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
+		CreatedBy:           "testgetbyid",
+		StartDate:           1234,
+		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
@@ -78,12 +78,24 @@ func TestGetTreatmentById(t *testing.T) {
 		}},
 	}
 
-	treat := CreateTreatment(treatmentInput, patient.ID, ante.MedicalAntecedents[0].ID)
+	treat := CreateTreatment(treatmentInput, patient.ID)
 	if treat.Err != nil {
 		t.Errorf("Error while creating treatment: %v", treat.Err)
 	}
 
-	response := GetTreatmentById(ante.MedicalAntecedents[0].Treatments[0].ID, ante.MedicalAntecedents[0].ID, patient.ID)
+	_ = medical_folder.GetMedicalFolder(patient.ID)
+	//spew.Dump(check)
+
+	id_treatment := treat.Treatment[0].ID
+	//spew.Dump(id_treatment)
+
+	_ = ante.MedicalAntecedents[0].Treatments[0].ID
+	//spew.Dump(id_treatment2)
+
+	_ = GetTreatments(patient.ID)
+	//spew.Dump(lo)
+	response := GetTreatmentById(id_treatment, patient.ID)
+	//spew.Dump(response)
 
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
@@ -152,9 +164,10 @@ func TestGetTreatments(t *testing.T) {
 	ante := medical_folder.AddMedicalAntecedent(antecedentInput, patient.ID)
 
 	treatmentInput := CreateTreatInput{
-		CreatedBy: "testgetbyid",
-		StartDate: 1234,
-		EndDate:   5678,
+		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
+		CreatedBy:           "testgetbyid",
+		StartDate:           1234,
+		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
@@ -168,13 +181,13 @@ func TestGetTreatments(t *testing.T) {
 		}},
 	}
 
-	treat := CreateTreatment(treatmentInput, patient.ID, ante.MedicalAntecedents[0].ID)
+	treat := CreateTreatment(treatmentInput, patient.ID)
 	if treat.Err != nil {
 		t.Errorf("Error while creating treatment: %v", treat.Err)
 	}
 
-	response := GetTreatments(patient.ID, ante.MedicalAntecedents[0].ID)
-
+	response := GetTreatments(patient.ID)
+	//spew.Dump(response)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}
@@ -198,7 +211,7 @@ func TestGetTreatmentsWithInvalidAntecedentID(t *testing.T) {
 		t.Errorf("Failed to create patient: %v", err)
 	}
 
-	response := GetTreatments(patient.ID, "invalid_antecedent_id")
+	response := GetTreatments(patient.ID)
 	if response.Code != 400 {
 		t.Errorf("Expected code 400 but got %d", response.Code)
 	}
@@ -221,7 +234,7 @@ func TestUpdateTreatmentWithInvalidTreatmentID(t *testing.T) {
 		t.Errorf("Failed to create patient: %v", err)
 	}
 
-	response := GetTreatmentById("invalid_treatment_id", "invalid_antecedent_id", patient.ID)
+	response := GetTreatmentById("invalid_treatment_id", patient.ID)
 	if response.Code != 400 {
 		t.Errorf("Expected code 400 but got %d", response.Code)
 	}

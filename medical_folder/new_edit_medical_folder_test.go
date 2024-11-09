@@ -54,12 +54,14 @@ func TestUpdateMedicalAntecedentSuccessfully(t *testing.T) {
 
 	updatedName := "updated_antecedent"
 
-	input := model.UpdateMedicalAntecedentsInput{
-		Name:     &updatedName,
-		Symptoms: []string{"updated_symptoms"},
+	input := UpdateMedicalFolderPatientInput{
+		MedicalAntecedentInput: model.UpdateMedicalAntecedentsInput{
+			Name:     &updatedName,
+			Symptoms: []string{"updated_symptoms"},
+		},
 	}
 
-	response := UpdateMedicalAntecedent(patient.ID, antecedent.MedicalAntecedents[0].ID, input)
+	response := UpdateMedicalAntecedent(patient.ID, input, antecedent.MedicalAntecedents[0].ID)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}
@@ -149,14 +151,15 @@ func TestUpdateMedicalFolderSuccessfully(t *testing.T) {
 
 func TestUpdateMedicalAntecedentWithInvalidPatientID(t *testing.T) {
 	patientID := "invalid_patient_id"
-	antecedentID := "valid_antecedent_id"
 	updatedName := "updated_antecedent"
-	input := model.UpdateMedicalAntecedentsInput{
-		Name:     &updatedName,
-		Symptoms: []string{"updated_symptoms"},
+	input := UpdateMedicalFolderPatientInput{
+		MedicalAntecedentInput: model.UpdateMedicalAntecedentsInput{
+			Name:     &updatedName,
+			Symptoms: []string{"updated_symptoms"},
+		},
 	}
 
-	response := UpdateMedicalAntecedent(patientID, antecedentID, input)
+	response := UpdateMedicalAntecedent(patientID, input, "valid_antecedent_id")
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)
@@ -168,14 +171,15 @@ func TestUpdateMedicalAntecedentWithInvalidPatientID(t *testing.T) {
 
 func TestUpdateMedicalAntecedentWithInvalidAntecedentID(t *testing.T) {
 	patientID := "invalid_patient_id"
-	antecedentID := "valid_antecedent_id"
 	updatedName := "updated_antecedent"
-	input := model.UpdateMedicalAntecedentsInput{
-		Name:     &updatedName,
-		Symptoms: []string{"updated_symptoms"},
+	input := UpdateMedicalFolderPatientInput{
+		MedicalAntecedentInput: model.UpdateMedicalAntecedentsInput{
+			Name:     &updatedName,
+			Symptoms: []string{"updated_symptoms"},
+		},
 	}
 
-	response := UpdateMedicalAntecedent(patientID, antecedentID, input)
+	response := UpdateMedicalAntecedent(patientID, input, "valid_antecedent_id")
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)
@@ -187,14 +191,15 @@ func TestUpdateMedicalAntecedentWithInvalidAntecedentID(t *testing.T) {
 
 func TestUpdateMedicalAntecedentWithNoMedicalFolder(t *testing.T) {
 	patientID := "invalid_patient_id"
-	antecedentID := "valid_antecedent_id"
 	updatedName := "updated_antecedent"
-	input := model.UpdateMedicalAntecedentsInput{
-		Name:     &updatedName,
-		Symptoms: []string{"updated_symptoms"},
+	input := UpdateMedicalFolderPatientInput{
+		MedicalAntecedentInput: model.UpdateMedicalAntecedentsInput{
+			Name:     &updatedName,
+			Symptoms: []string{"updated_symptoms"},
+		},
 	}
 
-	response := UpdateMedicalAntecedent(patientID, antecedentID, input)
+	response := UpdateMedicalAntecedent(patientID, input, "valid_antecedent_id")
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)
@@ -206,14 +211,15 @@ func TestUpdateMedicalAntecedentWithNoMedicalFolder(t *testing.T) {
 
 func TestUpdateMedicalAntecedentWithInvalidInput(t *testing.T) {
 	patientID := "invalid_patient_id"
-	antecedentID := "valid_antecedent_id"
 	updatedName := "updated_antecedent"
-	input := model.UpdateMedicalAntecedentsInput{
-		Name:     &updatedName,
-		Symptoms: []string{"updated_symptoms"},
+	input := UpdateMedicalFolderPatientInput{
+		MedicalAntecedentInput: model.UpdateMedicalAntecedentsInput{
+			Name:     &updatedName,
+			Symptoms: []string{"updated_symptoms"},
+		},
 	}
 
-	response := UpdateMedicalAntecedent(patientID, antecedentID, input)
+	response := UpdateMedicalAntecedent(patientID, input, "valid_antecedent_id")
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)

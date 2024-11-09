@@ -1237,7 +1237,7 @@ type Query {
     getAntecedentTreatments(option: Options): [AntecedentTreatment]
 
     # Get a treament by its id.
-    getAntecedentTreatmentByID(id: String!, antecedentID: String!): AntecedentTreatment
+    getAntecedentTreatmentByID(id: String!): AntecedentTreatment
 
     # Get the entire list of alerts.
     getAlerts(option: Options): [Alert]
