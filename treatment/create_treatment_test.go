@@ -63,9 +63,10 @@ func TestCreateTreatment(t *testing.T) {
 	ante := medical_folder.AddMedicalAntecedent(antecedentInput, patient.ID)
 
 	treatmentInput := CreateTreatInput{
-		CreatedBy: "test",
-		StartDate: 1234,
-		EndDate:   5678,
+		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
+		CreatedBy:           "test",
+		StartDate:           1234,
+		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
@@ -79,7 +80,7 @@ func TestCreateTreatment(t *testing.T) {
 		}},
 	}
 
-	response := CreateTreatment(treatmentInput, patient.ID, ante.MedicalAntecedents[0].ID)
+	response := CreateTreatment(treatmentInput, patient.ID)
 	if response.Code != 201 {
 		t.Errorf("Expected response code 400, got %v", response.Code)
 	}
@@ -88,4 +89,11 @@ func TestCreateTreatment(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to get medical antecedent: %v", err)
 	}
+
+	_, test := graphql.GetAntecedentTreatmentByID(response.Treatment[0].ID)
+	if test != nil {
+		t.Errorf("Failed to get treatment: %v", test)
+	}
+	//spew.Dump(check)
+
 }

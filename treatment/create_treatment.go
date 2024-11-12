@@ -7,10 +7,11 @@ import (
 )
 
 type CreateTreatInput struct {
-	CreatedBy string                       `json:"created_by"`
-	StartDate int                          `json:"start_date"`
-	EndDate   int                          `json:"end_date"`
-	Medicines []CreateAntecedentsMedicines `json:"medicines"`
+	MedicalantecedentID string                       `json:"medical_antecedent_id"`
+	CreatedBy           string                       `json:"created_by"`
+	StartDate           int                          `json:"start_date"`
+	EndDate             int                          `json:"end_date"`
+	Medicines           []CreateAntecedentsMedicines `json:"medicines"`
 }
 
 type CreateAntecedentsMedicines struct {
@@ -68,7 +69,7 @@ func convertToCreateAntecedentPeriodInputSlice(periods []model.AntecedentPeriod)
 	return pointerSlice
 }
 
-func CreateTreatment(input CreateTreatInput, patientID string, antecedentID string) CreateTreatmentResponse {
+func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentResponse {
 	var res []model.AntecedentTreatment
 
 	patient, err := graphql.GetPatientById(patientID)
@@ -86,7 +87,7 @@ func CreateTreatment(input CreateTreatInput, patientID string, antecedentID stri
 
 	found := false
 	for _, id := range medicalFolder.AntecedentDiseaseIds {
-		if id == antecedentID {
+		if id == input.MedicalantecedentID {
 			found = true
 			break
 		}
@@ -98,7 +99,7 @@ func CreateTreatment(input CreateTreatInput, patientID string, antecedentID stri
 	for _, medicine := range input.Medicines {
 		periods := ConvertPeriods(medicine.Period)
 
-		treatment, err := graphql.CreateAntecdentTreatment(antecedentID, model.CreateAntecedentTreatmentInput{
+		treatment, err := graphql.CreateAntecdentTreatment(input.MedicalantecedentID, model.CreateAntecedentTreatmentInput{
 			CreatedBy: input.CreatedBy,
 			StartDate: input.StartDate,
 			EndDate:   &input.EndDate,

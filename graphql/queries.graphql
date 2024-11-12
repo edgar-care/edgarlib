@@ -873,8 +873,8 @@ query GetWaitingRdv($doctor_id: String!, $option: Options){
     }
 }
 
-query GetAntecedentTreatmentByID($id: String!, $antecedentID: String!){
-    getAntecedentTreatmentByID(id: $id, antecedentID: $antecedentID){
+query GetAntecedentTreatmentByID($id: String!){
+    getAntecedentTreatmentByID(id: $id){
         id
         created_by
         start_date
@@ -1061,8 +1061,6 @@ query GetAntecedentTreatments($option: Options){
                 comment
             }
         }
-        createdAt
-        updatedAt
     }
 }
 

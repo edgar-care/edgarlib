@@ -52,7 +52,7 @@ func ConvertUpdatePeriods(periods []UpdateAntecedentPeriod) []model.AntecedentPe
 	return convertedPeriods
 }
 
-func UpdateTreatment(input UpdateTreatmentInput, patientID string, antecedentID string) UpdateTreatmentResponse {
+func UpdateTreatment(input UpdateTreatmentInput, patientID string, MedicalAntecedentID string) UpdateTreatmentResponse {
 	var res []model.AntecedentTreatment
 
 	control, err := graphql.GetPatientById(patientID)
@@ -66,7 +66,7 @@ func UpdateTreatment(input UpdateTreatmentInput, patientID string, antecedentID 
 	for _, medicine := range input.Medicines {
 		periods := ConvertUpdatePeriods(medicine.Period)
 
-		treatment, err := graphql.UpdateAntecedentTreatment(input.ID, antecedentID, model.UpdateAntecedentTreatmentInput{
+		treatment, err := graphql.UpdateAntecedentTreatment(input.ID, MedicalAntecedentID, model.UpdateAntecedentTreatmentInput{
 			CreatedBy: &input.CreatedBy,
 			StartDate: &input.StartDate,
 			EndDate:   &input.EndDate,
