@@ -57,7 +57,7 @@ func GetMedicalFolder(patientID string) MedicalFolderResponse {
 	}
 }
 
-func getMedicalAntecedents(patientID string) GetMedicalAntecedentsResponse {
+func GetMedicalAntecedents(patientID string) GetMedicalAntecedentsResponse {
 	patient, err := graphql.GetPatientById(patientID)
 	if err != nil {
 		return GetMedicalAntecedentsResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
@@ -88,7 +88,7 @@ func getMedicalAntecedents(patientID string) GetMedicalAntecedentsResponse {
 	}
 }
 
-func getMedicalAntecedentById(antecdentID string, patientID string) GetMedicalAntecedentResponse {
+func GetMedicalAntecedentById(antecdentID string, patientID string) GetMedicalAntecedentResponse {
 	patient, err := graphql.GetPatientById(patientID)
 	if err != nil {
 		return GetMedicalAntecedentResponse{Code: 400, Err: errors.New("unable to find patient by ID: " + err.Error())}
