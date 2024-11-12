@@ -232,6 +232,48 @@ func (r *mutationResolver) UpdatePatientAntediesae(ctx context.Context, id strin
 	return &updatedPatient, nil
 }
 
+// UpdateMedicalFolderdAntedisease is the resolver for the updateMedicalFolderdAntedisease field.
+func (r *mutationResolver) UpdateMedicalFolderdAntedisease(ctx context.Context, id string, input model.UpdateMedicalFOlderAntedisease) (*model.MedicalInfo, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+
+	update["antecedent_disease_ids"] = input.AntecedentDiseaseIds
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedPatient model.MedicalInfo
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedPatient, nil
+}
+
+// UpdateTreatmentsMedicalAntecedents is the resolver for the updateTreatmentsMedicalAntecedents field.
+func (r *mutationResolver) UpdateTreatmentsMedicalAntecedents(ctx context.Context, id string, input model.UpdateTreatmentMedicalAntecedentsInput) (*model.MedicalAntecedents, error) {
+	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalAntecedents")
+	filter := bson.M{"_id": id}
+	update := bson.M{}
+
+	update["treatments"] = input.Treatments
+	update["updatedAt"] = time.Now().Unix()
+	updateData := bson.M{"$set": update}
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	var updatedPatient model.MedicalAntecedents
+
+	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedPatient, nil
+}
+
 // DeletePatient is the resolver for the deletePatient field.
 func (r *mutationResolver) DeletePatient(ctx context.Context, id string) (*bool, error) {
 	resp := false
