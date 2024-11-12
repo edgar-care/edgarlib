@@ -59,7 +59,7 @@ func TestGetMedicalAntecedentByIdSuccessfully(t *testing.T) {
 
 	antecedentID := antecedent.MedicalAntecedents[0].ID
 
-	response := getMedicalAntecedentById(antecedentID, patient.ID)
+	response := GetMedicalAntecedentById(antecedentID, patient.ID)
 
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
@@ -76,7 +76,7 @@ func TestGetMedicalAntecedentByIdWithInvalidPatientID(t *testing.T) {
 	patientID := "invalid_patient_id"
 	antecedentID := "valid_antecedent_id"
 
-	response := getMedicalAntecedentById(antecedentID, patientID)
+	response := GetMedicalAntecedentById(antecedentID, patientID)
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)
@@ -90,7 +90,7 @@ func TestGetMedicalAntecedentByIdWithInvalidAntecedentID(t *testing.T) {
 	patientID := "valid_patient_id"
 	antecedentID := "invalid_antecedent_id"
 
-	response := getMedicalAntecedentById(antecedentID, patientID)
+	response := GetMedicalAntecedentById(antecedentID, patientID)
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)
@@ -151,7 +151,7 @@ func TestGetMedicalAntecedentsSuccessfully(t *testing.T) {
 		t.Errorf("Error while adding medical antecedent: %v", err)
 	}
 
-	response := getMedicalAntecedents(patient.ID)
+	response := GetMedicalAntecedents(patient.ID)
 
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
@@ -167,7 +167,7 @@ func TestGetMedicalAntecedentsSuccessfully(t *testing.T) {
 func TestGetMedicalAntecedentsWithInvalidPatientID(t *testing.T) {
 	patientID := "invalid_patient_id"
 
-	response := getMedicalAntecedents(patientID)
+	response := GetMedicalAntecedents(patientID)
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)
@@ -180,7 +180,7 @@ func TestGetMedicalAntecedentsWithInvalidPatientID(t *testing.T) {
 func TestGetMedicalAntecedentsWithNoMedicalFolder(t *testing.T) {
 	patientID := "valid_patient_id_no_medical_folder"
 
-	response := getMedicalAntecedents(patientID)
+	response := GetMedicalAntecedents(patientID)
 
 	if response.Code == 200 {
 		t.Errorf("Expected non-200 code but got %d", response.Code)

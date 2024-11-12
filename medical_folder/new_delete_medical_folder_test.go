@@ -60,13 +60,12 @@ func TestDeleteMedicalAntecedentSuccessfully(t *testing.T) {
 	}
 
 	ante := AddMedicalAntecedent(antecedentInput, patient.ID)
-	_ = GetMedicalFolder(patient.ID)
 	//spew.Dump(getMedicalFolder.MedicalInfo.AntecedentDiseaseIds)
 
 	response := DeleteMedicalAntecedent(ante.MedicalAntecedents[0].ID, patient.ID)
 
 	_ = GetMedicalFolder(patient.ID)
-	//spew.Dump(getMedicalFolder.MedicalInfo.AntecedentDiseaseIds)
+	//spew.Dump(getMedicalFolder.MedicalInfo)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}

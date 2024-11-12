@@ -849,6 +849,10 @@ type UpdateMedicalAntecedentsInput struct {
 	Symptoms []string `json:"symptoms,omitempty" bson:"symptoms"`
 }
 
+type UpdateMedicalFOlderAntedisease struct {
+	AntecedentDiseaseIds []*string `json:"antecedent_disease_ids,omitempty" bson:"antecedent_disease_ids"`
+}
+
 type UpdateMedicalFolderInput struct {
 	Name                   *string           `json:"name,omitempty" bson:"name"`
 	Firstname              *string           `json:"firstname,omitempty" bson:"firstname"`
@@ -966,6 +970,33 @@ type UpdateSymptomInput struct {
 	QuestionBasic    *string  `json:"question_basic,omitempty" bson:"question_basic"`
 	QuestionDuration *string  `json:"question_duration,omitempty" bson:"question_duration"`
 	QuestionAnte     *string  `json:"question_ante,omitempty" bson:"question_ante"`
+}
+
+type UpdateTreatmentMedicalAntecedentsInput struct {
+	Treatments []*UpdateTreatmentMedicalInfoInput `json:"treatments,omitempty" bson:"treatments"`
+}
+
+type UpdateTreatmentMedicalInfoInput struct {
+	ID        *string                                `json:"id,omitempty" bson:"_id"`
+	CreatedBy *string                                `json:"created_by,omitempty" bson:"created_by"`
+	StartDate *int                                   `json:"start_date,omitempty" bson:"start_date"`
+	EndDate   *int                                   `json:"end_date,omitempty" bson:"end_date"`
+	Medicines []*UpdateTreatmentMedicineMedicalInput `json:"medicines,omitempty" bson:"medicines"`
+}
+
+type UpdateTreatmentMedicineMedicalInput struct {
+	ID     *string                              `json:"id,omitempty" bson:"_id"`
+	Period []*UpdateTreatmentPeriodMedicalInput `json:"period,omitempty" bson:"period"`
+}
+
+type UpdateTreatmentPeriodMedicalInput struct {
+	Quantity       *int          `json:"quantity,omitempty" bson:"quantity"`
+	Frequency      *int          `json:"frequency,omitempty" bson:"frequency"`
+	FrequencyRatio *int          `json:"frequency_ratio,omitempty" bson:"frequency_ratio"`
+	FrequencyUnit  *TimeUnitEnum `json:"frequency_unit,omitempty" bson:"frequency_unit"`
+	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
+	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
+	Comment        *string       `json:"comment,omitempty" bson:"comment"`
 }
 
 type UpdateTreatmentsFollowUpInput struct {

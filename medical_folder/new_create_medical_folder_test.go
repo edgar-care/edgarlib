@@ -25,19 +25,61 @@ func TestAddMedicalAntecedent(t *testing.T) {
 
 	// Create a medical folder for the patient
 	medicalFolderInput := CreateNewMedicalInfoInput{
-		Name:                   "test",
-		Firstname:              "test",
-		Birthdate:              0,
-		Sex:                    "M",
-		Weight:                 0,
-		Height:                 0,
-		PrimaryDoctorID:        "",
-		MedicalAntecedents:     []CreateNewMedicalAntecedentInput{},
+		Name:            "test",
+		Firstname:       "test",
+		Birthdate:       32,
+		Sex:             "M",
+		Weight:          123,
+		Height:          123,
+		PrimaryDoctorID: "test",
+		MedicalAntecedents: []CreateNewMedicalAntecedentInput{
+			{
+				Name:     "Hypertension",
+				Symptoms: []string{"headache"},
+				Treatments: []CreateTreatInput{
+					{
+						CreatedBy: "test",
+						StartDate: 123,
+						EndDate:   234,
+						Medicines: []CreateAntecedentsMedicines{
+							{
+								Period: []*CreateAntecedentPeriod{
+									{
+										Quantity:       1,
+										Frequency:      2,
+										FrequencyRatio: 2,
+										FrequencyUnit:  "JOUR",
+										PeriodLength:   2,
+										PeriodUnit:     "ANNEE",
+										Comment:        "test",
+									},
+									{
+										Quantity:       5,
+										Frequency:      1,
+										FrequencyRatio: 6,
+										FrequencyUnit:  "MOIS",
+										PeriodLength:   1,
+										PeriodUnit:     "ANNEE",
+										Comment:        "test",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		FamilyMembersMedInfoId: []string{""},
 	}
 
-	_ = NewMedicalFolder(medicalFolderInput, patient.ID)
+	//jsonInput, err := json.Marshal(medicalFolderInput)
+	//if err != nil {
+	//	log.Fatalf("Error marshaling input: %v", err)
+	//}
+	//fmt.Println("Serialized JSON:", string(jsonInput))
 
+	_ = NewMedicalFolder(medicalFolderInput, patient.ID)
+	//spew.Dump(tt)
 	antecedentInput := CreateNewMedicalAntecedentInput{
 		Name:     "new_antecedent",
 		Symptoms: []string{"symptoms"},
@@ -60,7 +102,7 @@ func TestAddMedicalAntecedent(t *testing.T) {
 	}
 
 	response := AddMedicalAntecedent(antecedentInput, patient.ID)
-
+	_ = GetMedicalFolder(patient.ID)
 	if response.Code != 201 {
 		t.Errorf("Expected code 201 but got %d", response.Code)
 	}

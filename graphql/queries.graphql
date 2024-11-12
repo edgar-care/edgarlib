@@ -156,6 +156,24 @@ mutation UpdateMedicalFolder($id: String!, $input: UpdateMedicalFolderInput!){
     }
 }
 
+
+mutation UpdateMedicalFolderdAntedisease($id: String!, $input: UpdateMedicalFOlderAntedisease!){
+    updateMedicalFolderdAntedisease(id: $id, input: $input){
+        id
+        name
+        firstname
+        birthdate
+        sex
+        height
+        weight
+        primary_doctor_id
+        onboarding_status
+        antecedent_disease_ids
+        createdAt
+        updatedAt
+    }
+}
+
 mutation CreateMedicine($input: CreateMedicineInput!){
     createMedicine(input: $input){
         id
@@ -197,6 +215,35 @@ mutation UpdateAntecedentTreatment($id: String!, $antecedentID: String!, $input:
         }
     }
 }
+
+mutation UpdateTreatmentsMedicalAntecedents($id: String!, $input: UpdateTreatmentMedicalAntecedentsInput!){
+    updateTreatmentsMedicalAntecedents(id: $id, input: $input){
+        id
+        name
+        symptoms
+        treatments {
+            id
+            created_by
+            start_date
+            end_date
+            medicines {
+                id
+                period {
+                    quantity
+                    frequency
+                    frequency_ratio
+                    frequency_unit
+                    period_length
+                    period_unit
+                    comment
+                }
+            }
+        }
+        createdAt
+        updatedAt
+    }
+}
+
 
 mutation CreateDoctor($input: CreateDoctorInput!){
     createDoctor(input: $input){
