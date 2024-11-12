@@ -502,6 +502,10 @@ input UpdatePatientAntediseaseInput {
     treatment_ids: [String]
 }
 
+input UpdateMedicalFOlderAntedisease {
+    antecedent_disease_ids: [String]
+}
+
 
 input AddressInput {
     street: String!
@@ -802,6 +806,37 @@ input UpdateMedicalAntecedentsInput {
     name: String
     symptoms: [String!]
 }
+
+input UpdateTreatmentMedicalAntecedentsInput {
+    treatments: [UpdateTreatmentMedicalInfoInput!]
+}
+
+input UpdateTreatmentMedicalInfoInput {
+    id: ID
+    created_by: String
+    start_date: Int
+    end_date: Int
+    medicines: [UpdateTreatmentMedicineMedicalInput!]
+}
+
+input UpdateTreatmentMedicineMedicalInput {
+    id: ID
+    period: [UpdateTreatmentPeriodMedicalInput!]
+}
+
+
+input UpdateTreatmentPeriodMedicalInput {
+    quantity: Int
+    frequency: Int
+    frequency_ratio: Int
+    frequency_unit: time_unit_enum
+    period_length: Int
+    period_unit: time_unit_enum
+    comment: String
+}
+
+
+
 
 input UpdateAntecedentTreatmentInput {
     created_by: String
@@ -1342,6 +1377,10 @@ type Mutation {
     updatePatientFollowTreatment(id: String!, input: UpdatePatientFollowTreatmentInput!): Patient
 
     updatePatientAntediesae(id: String!, input: UpdatePatientAntediseaseInput!): AnteDisease
+
+    updateMedicalFolderdAntedisease(id: String!, input: UpdateMedicalFOlderAntedisease!): MedicalInfo
+
+    updateTreatmentsMedicalAntecedents(id: String!, input: UpdateTreatmentMedicalAntecedentsInput!): MedicalAntecedents
 
     # Delete a patient.
     deletePatient(id: String!): Boolean

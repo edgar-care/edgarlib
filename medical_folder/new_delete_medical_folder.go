@@ -92,14 +92,15 @@ func DeleteMedicalAntecedent(antecedentId string, patientId string) DeleteMedica
 		return DeleteMedicalAntecedentResponse{Deleted: false, UpdatedPatient: model.Patient{}, Code: 500, Err: errors.New("error while deleting antecedent: " + err.Error())}
 	}
 
-	var updatedAntecedentDiseaseIds []string
+	var updatedAntecedentDiseaseIds []*string
 	for _, id := range medicalFolder.AntecedentDiseaseIds {
 		if id != antecedentId {
-			updatedAntecedentDiseaseIds = append(updatedAntecedentDiseaseIds, id)
+			idCopy := id
+			updatedAntecedentDiseaseIds = append(updatedAntecedentDiseaseIds, &idCopy)
 		}
 	}
 
-	_, err = graphql.UpdateMedicalFolder(*patient.MedicalInfoID, model.UpdateMedicalFolderInput{
+	_, err = graphql.UpdateMedicalFolderdAntedisease(*patient.MedicalInfoID, model.UpdateMedicalFOlderAntedisease{
 		AntecedentDiseaseIds: updatedAntecedentDiseaseIds,
 	})
 	if err != nil {

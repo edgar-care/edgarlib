@@ -32,37 +32,68 @@ func DeleteTreatment(treatmentID string) DeleteTreatmentResponse {
 		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error while deleting treatment: " + err.Error())}
 	}
 
-	antediseases, err := graphql.GetAnteDiseases(nil)
+	medicalAntecedent, err := graphql.GetMedicalAntecedents(nil)
 	if err != nil {
 		return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antediseases: " + err.Error())}
 	}
 
 	var affectedAntediseases []string
 
-	for _, ad := range antediseases {
-		if contains(ad.TreatmentIds, treatmentID) {
-			affectedAntediseases = append(affectedAntediseases, ad.ID)
+	for _, ad := range medicalAntecedent {
+		for _, treatment := range ad.Treatments {
+			if treatment.ID == treatmentID {
+				affectedAntediseases = append(affectedAntediseases, ad.ID)
+				break
+			}
 		}
 	}
 
 	for _, adID := range affectedAntediseases {
-		ad, err := graphql.GetAnteDiseaseByID(adID)
+		ad, err := graphql.GetMedicalAntecedentsById(adID)
 		if err != nil {
 			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error getting antedisease by ID: " + err.Error())}
 		}
 
-		updatedTreatmentIDs := remElement(ad.TreatmentIds, treatmentID)
-		updatedTreatmentIDsPtr := make([]*string, len(updatedTreatmentIDs))
-		for i, v := range updatedTreatmentIDs {
-			updatedTreatmentIDsPtr[i] = &v
+		updatedTreatments := make([]*model.AntecedentTreatment, 0)
+		for _, treatment := range ad.Treatments {
+			if treatment.ID != treatmentID {
+				updatedTreatments = append(updatedTreatments, treatment)
+			}
 		}
 
-		_, err = graphql.UpdatePatientAntediesae(adID, model.UpdatePatientAntediseaseInput{
-			TreatmentIds: updatedTreatmentIDsPtr,
-		})
-		if err != nil {
-			return DeleteTreatmentResponse{Deleted: false, Code: 500, Err: errors.New("error updating antedisease: " + err.Error())}
+		updatedTreatmentsInput := make([]*model.UpdateTreatmentMedicalInfoInput, len(updatedTreatments))
+		for i, treatment := range updatedTreatments {
+			medicinesInput := make([]*model.UpdateTreatmentMedicineMedicalInput, len(treatment.Medicines))
+			for j, medicine := range treatment.Medicines {
+				periodsInput := make([]*model.UpdateTreatmentPeriodMedicalInput, len(medicine.Period))
+				for k, period := range medicine.Period {
+					periodsInput[k] = &model.UpdateTreatmentPeriodMedicalInput{
+						Quantity:       &period.Quantity,
+						Frequency:      &period.Frequency,
+						FrequencyRatio: &period.FrequencyRatio,
+						FrequencyUnit:  &period.FrequencyUnit,
+						PeriodLength:   period.PeriodLength,
+						PeriodUnit:     period.PeriodUnit,
+						Comment:        period.Comment,
+					}
+				}
+				medicinesInput[j] = &model.UpdateTreatmentMedicineMedicalInput{
+					ID:     &medicine.ID,
+					Period: periodsInput,
+				}
+			}
+			updatedTreatmentsInput[i] = &model.UpdateTreatmentMedicalInfoInput{
+				ID:        &treatment.ID,
+				CreatedBy: &treatment.CreatedBy,
+				StartDate: &treatment.StartDate,
+				EndDate:   treatment.EndDate,
+				Medicines: medicinesInput,
+			}
 		}
+
+		_, err = graphql.UpdateTreatmentsMedicalAntecedents(adID, model.UpdateTreatmentMedicalAntecedentsInput{
+			Treatments: updatedTreatmentsInput,
+		})
 	}
 
 	return DeleteTreatmentResponse{
