@@ -60,46 +60,6 @@ type AddMedicalAntecedentResponse struct {
 	Err                error
 }
 
-//func createTreatments(treatments []CreateTreatInput) []*model.CreateAntecedentTreatmentInput {
-//	var treatmentInputs []*model.CreateAntecedentTreatmentInput
-//	for _, treatment := range treatments {
-//		treatmentInputs = append(treatmentInputs, &model.CreateAntecedentTreatmentInput{
-//			CreatedBy: treatment.CreatedBy,
-//			StartDate: treatment.StartDate,
-//			EndDate:   &treatment.EndDate,
-//			Medicines: createMedicines(treatment.Medicines),
-//		})
-//	}
-//	return treatmentInputs
-//}
-//
-//func createMedicines(medicines []CreateAntecedentsMedicines) []*model.CreateAntecedentsMedicinesInput {
-//	var meds []*model.CreateAntecedentsMedicinesInput
-//	for _, med := range medicines {
-//		meds = append(meds, &model.CreateAntecedentsMedicinesInput{
-//			Period: createPeriods(med.Period),
-//		})
-//	}
-//	return meds
-//}
-//
-//func createPeriods(periods []*CreateAntecedentPeriod) []*model.CreateAntecedentPeriodInput {
-//	var per []*model.CreateAntecedentPeriodInput
-//	for _, p := range periods {
-//		periodUnit := p.PeriodUnit
-//		per = append(per, &model.CreateAntecedentPeriodInput{
-//			Quantity:       p.Quantity,
-//			Frequency:      p.Frequency,
-//			FrequencyRatio: p.FrequencyRatio,
-//			FrequencyUnit:  model.TimeUnitEnum(p.FrequencyUnit),
-//			PeriodLength:   &p.PeriodLength,
-//			PeriodUnit:     (*model.TimeUnitEnum)(&periodUnit),
-//			Comment:        &p.Comment,
-//		})
-//	}
-//	return per
-//}
-
 func NewMedicalFolder(input CreateNewMedicalInfoInput, patientID string) CreateNewMedicalInfoResponse {
 	control, err := graphql.GetPatientById(patientID)
 	if err != nil {

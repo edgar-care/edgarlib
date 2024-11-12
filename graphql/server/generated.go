@@ -450,7 +450,7 @@ type ComplexityRoot struct {
 		GetAnteDiseases                func(childComplexity int, option *model.Options) int
 		GetAnteFamilies                func(childComplexity int, option *model.Options) int
 		GetAnteFamilyByID              func(childComplexity int, id string) int
-		GetAntecedentTreatmentByID     func(childComplexity int, id string, antecedentID string) int
+		GetAntecedentTreatmentByID     func(childComplexity int, id string) int
 		GetAntecedentTreatments        func(childComplexity int, option *model.Options) int
 		GetAutoAnswerByID              func(childComplexity int, id string) int
 		GetAutoAnswerByName            func(childComplexity int, name string) int
@@ -718,7 +718,7 @@ type QueryResolver interface {
 	GetMedicalAntecedents(ctx context.Context, option *model.Options) ([]*model.MedicalAntecedents, error)
 	GetMedicalAntecedentsByID(ctx context.Context, id string) (*model.MedicalAntecedents, error)
 	GetAntecedentTreatments(ctx context.Context, option *model.Options) ([]*model.AntecedentTreatment, error)
-	GetAntecedentTreatmentByID(ctx context.Context, id string, antecedentID string) (*model.AntecedentTreatment, error)
+	GetAntecedentTreatmentByID(ctx context.Context, id string) (*model.AntecedentTreatment, error)
 	GetAlerts(ctx context.Context, option *model.Options) ([]*model.Alert, error)
 	GetAlertByID(ctx context.Context, id string) (*model.Alert, error)
 	GetMedicalFolder(ctx context.Context, option *model.Options) ([]*model.MedicalInfo, error)
@@ -3412,7 +3412,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetAntecedentTreatmentByID(childComplexity, args["id"].(string), args["antecedentID"].(string)), true
+		return e.complexity.Query.GetAntecedentTreatmentByID(childComplexity, args["id"].(string)), true
 
 	case "Query.getAntecedentTreatments":
 		if e.complexity.Query.GetAntecedentTreatments == nil {
@@ -5903,7 +5903,7 @@ type Query {
     getAntecedentTreatments(option: Options): [AntecedentTreatment]
 
     # Get a treament by its id.
-    getAntecedentTreatmentByID(id: String!, antecedentID: String!): AntecedentTreatment
+    getAntecedentTreatmentByID(id: String!): AntecedentTreatment
 
     # Get the entire list of alerts.
     getAlerts(option: Options): [Alert]
@@ -8041,15 +8041,6 @@ func (ec *executionContext) field_Query_getAntecedentTreatmentByID_args(ctx cont
 		}
 	}
 	args["id"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["antecedentID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("antecedentID"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["antecedentID"] = arg1
 	return args, nil
 }
 
@@ -26840,7 +26831,7 @@ func (ec *executionContext) _Query_getAntecedentTreatmentByID(ctx context.Contex
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetAntecedentTreatmentByID(rctx, fc.Args["id"].(string), fc.Args["antecedentID"].(string))
+		return ec.resolvers.Query().GetAntecedentTreatmentByID(rctx, fc.Args["id"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
