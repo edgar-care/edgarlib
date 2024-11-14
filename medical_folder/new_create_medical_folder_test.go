@@ -43,6 +43,8 @@ func TestAddMedicalAntecedent(t *testing.T) {
 						EndDate:   234,
 						Medicines: []CreateAntecedentsMedicines{
 							{
+								Comment:    "comment",
+								MedicineID: "test",
 								Period: []*CreateAntecedentPeriod{
 									{
 										Quantity:       1,
@@ -51,7 +53,6 @@ func TestAddMedicalAntecedent(t *testing.T) {
 										FrequencyUnit:  "JOUR",
 										PeriodLength:   2,
 										PeriodUnit:     "ANNEE",
-										Comment:        "test",
 									},
 									{
 										Quantity:       5,
@@ -60,7 +61,6 @@ func TestAddMedicalAntecedent(t *testing.T) {
 										FrequencyUnit:  "MOIS",
 										PeriodLength:   1,
 										PeriodUnit:     "ANNEE",
-										Comment:        "test",
 									},
 								},
 							},
@@ -88,6 +88,8 @@ func TestAddMedicalAntecedent(t *testing.T) {
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []CreateAntecedentsMedicines{{
+				Comment:    "comment",
+				MedicineID: "test",
 				Period: []*CreateAntecedentPeriod{{
 					Quantity:       2,
 					Frequency:      2,
@@ -95,7 +97,6 @@ func TestAddMedicalAntecedent(t *testing.T) {
 					FrequencyUnit:  "JOUR",
 					PeriodLength:   2,
 					PeriodUnit:     "JOUR",
-					Comment:        "comment",
 				}},
 			}},
 		}},

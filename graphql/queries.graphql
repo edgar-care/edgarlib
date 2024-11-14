@@ -202,7 +202,8 @@ mutation UpdateAntecedentTreatment($id: String!, $antecedentID: String!, $input:
         start_date
         end_date
         medicines {
-            id
+            medicine_id
+            comment
             period {
                 quantity
                 frequency
@@ -210,7 +211,6 @@ mutation UpdateAntecedentTreatment($id: String!, $antecedentID: String!, $input:
                 frequency_unit
                 period_length
                 period_unit
-                comment
             }
         }
     }
@@ -227,7 +227,8 @@ mutation UpdateTreatmentsMedicalAntecedents($id: String!, $input: UpdateTreatmen
             start_date
             end_date
             medicines {
-                id
+                medicine_id
+                comment
                 period {
                     quantity
                     frequency
@@ -235,7 +236,6 @@ mutation UpdateTreatmentsMedicalAntecedents($id: String!, $input: UpdateTreatmen
                     frequency_unit
                     period_length
                     period_unit
-                    comment
                 }
             }
         }
@@ -705,7 +705,7 @@ mutation CreateAntecdentTreatment($id: String!, $input: CreateAntecedentTreatmen
         start_date
         end_date
         medicines {
-            id
+            medicine_id
             period {
                 quantity
                 frequency
@@ -713,7 +713,6 @@ mutation CreateAntecdentTreatment($id: String!, $input: CreateAntecedentTreatmen
                 frequency_unit
                 period_length
                 period_unit
-                comment
             }
         }
     }
@@ -927,7 +926,8 @@ query GetAntecedentTreatmentByID($id: String!){
         start_date
         end_date
         medicines {
-            id
+            medicine_id
+            comment
             period {
                 quantity
                 frequency
@@ -935,7 +935,6 @@ query GetAntecedentTreatmentByID($id: String!){
                 frequency_unit
                 period_length
                 period_unit
-                comment
             }
         }
     }
@@ -1097,7 +1096,8 @@ query GetAntecedentTreatments($option: Options){
         start_date
         end_date
         medicines {
-            id
+            medicine_id
+            comment
             period {
                 quantity
                 frequency
@@ -1105,7 +1105,6 @@ query GetAntecedentTreatments($option: Options){
                 frequency_unit
                 period_length
                 period_unit
-                comment
             }
         }
     }
@@ -2136,7 +2135,8 @@ mutation CreateMedicalAntecedents($input: CreateMedicalAntecedentsInput!){
             start_date
             end_date
             medicines {
-                id
+                medicine_id
+                comment
                 period {
                     quantity
                     frequency
@@ -2144,7 +2144,6 @@ mutation CreateMedicalAntecedents($input: CreateMedicalAntecedentsInput!){
                     frequency_unit
                     period_length
                     period_unit
-                    comment
                 }
             }
         }
@@ -2165,7 +2164,8 @@ mutation UpdateMedicalAntecedents($id: String!, $input: UpdateMedicalAntecedents
             start_date
             end_date
             medicines {
-                id
+                medicine_id
+                comment
                 period {
                     quantity
                     frequency
@@ -2173,7 +2173,6 @@ mutation UpdateMedicalAntecedents($id: String!, $input: UpdateMedicalAntecedents
                     frequency_unit
                     period_length
                     period_unit
-                    comment
                 }
             }
         }
@@ -2198,7 +2197,8 @@ query GetMedicalAntecedentsById($id: String!){
             start_date
             end_date
             medicines {
-                id
+                medicine_id
+                comment
                 period {
                     quantity
                     frequency
@@ -2206,7 +2206,6 @@ query GetMedicalAntecedentsById($id: String!){
                     frequency_unit
                     period_length
                     period_unit
-                    comment
                 }
             }
         }
@@ -2226,7 +2225,8 @@ query GetMedicalAntecedents($option: Options){
             start_date
             end_date
             medicines {
-                id
+                medicine_id
+                comment
                 period {
                     quantity
                     frequency
@@ -2234,7 +2234,6 @@ query GetMedicalAntecedents($option: Options){
                     frequency_unit
                     period_length
                     period_unit
-                    comment
                 }
             }
         }

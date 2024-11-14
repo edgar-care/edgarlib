@@ -58,6 +58,8 @@ func TestCreateOrdonnance(t *testing.T) {
 					EndDate:   90,
 					Medicines: []medical_folder.CreateAntecedentsMedicines{
 						{
+							MedicineID: "test",
+							Comment:    "comment",
 							Period: []*medical_folder.CreateAntecedentPeriod{
 								{
 									Quantity:       6,
@@ -66,7 +68,6 @@ func TestCreateOrdonnance(t *testing.T) {
 									FrequencyUnit:  "MOIS",
 									PeriodLength:   4,
 									PeriodUnit:     "ANNEE",
-									Comment:        "tttt",
 								},
 							},
 						},
