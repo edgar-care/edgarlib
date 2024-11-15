@@ -1240,12 +1240,12 @@ func (r *mutationResolver) CreateMedicalAntecedents(ctx context.Context, input m
 					FrequencyUnit:  periodInput.FrequencyUnit,
 					PeriodLength:   periodInput.PeriodLength,
 					PeriodUnit:     periodInput.PeriodUnit,
-					Comment:        periodInput.Comment,
 				})
 			}
 			medicines = append(medicines, &model.AntecedentsMedicines{
-				ID:     primitive.NewObjectID().Hex(),
-				Period: periods,
+				MedicineID: medicineInput.MedicineID,
+				Comment:    medicineInput.Comment,
+				Period:     periods,
 			})
 		}
 
@@ -1337,8 +1337,9 @@ func (r *mutationResolver) CreateAntecdentTreatment(ctx context.Context, id stri
 
 	for i, medicineInput := range input.Medicines {
 		medicine := &model.AntecedentsMedicines{
-			ID:     primitive.NewObjectID().Hex(),
-			Period: make([]*model.AntecedentPeriod, len(medicineInput.Period)),
+			MedicineID: medicineInput.MedicineID,
+			Comment:    medicineInput.Comment,
+			Period:     make([]*model.AntecedentPeriod, len(medicineInput.Period)),
 		}
 
 		for j, periodInput := range medicineInput.Period {
@@ -1349,7 +1350,6 @@ func (r *mutationResolver) CreateAntecdentTreatment(ctx context.Context, id stri
 				FrequencyUnit:  periodInput.FrequencyUnit,
 				PeriodLength:   periodInput.PeriodLength,
 				PeriodUnit:     periodInput.PeriodUnit,
-				Comment:        periodInput.Comment,
 			}
 			medicine.Period[j] = period
 		}
@@ -1414,13 +1414,14 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 							FrequencyUnit:  *periodInput.FrequencyUnit,
 							PeriodLength:   periodInput.PeriodLength,
 							PeriodUnit:     periodInput.PeriodUnit,
-							Comment:        periodInput.Comment,
 						}
 					}
 				}
 			} else {
 				newMedicine := &model.AntecedentsMedicines{
-					Period: make([]*model.AntecedentPeriod, len(medicineInput.Period)),
+					MedicineID: *medicineInput.MedicineID,
+					Comment:    medicineInput.Comment,
+					Period:     make([]*model.AntecedentPeriod, len(medicineInput.Period)),
 				}
 				for j, periodInput := range medicineInput.Period {
 					newMedicine.Period[j] = &model.AntecedentPeriod{
@@ -1430,7 +1431,6 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 						FrequencyUnit:  *periodInput.FrequencyUnit,
 						PeriodLength:   periodInput.PeriodLength,
 						PeriodUnit:     periodInput.PeriodUnit,
-						Comment:        periodInput.Comment,
 					}
 				}
 				treatment.Medicines = append(treatment.Medicines, newMedicine)

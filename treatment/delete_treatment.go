@@ -74,12 +74,12 @@ func DeleteTreatment(treatmentID string) DeleteTreatmentResponse {
 						FrequencyUnit:  &period.FrequencyUnit,
 						PeriodLength:   period.PeriodLength,
 						PeriodUnit:     period.PeriodUnit,
-						Comment:        period.Comment,
 					}
 				}
 				medicinesInput[j] = &model.UpdateTreatmentMedicineMedicalInput{
-					ID:     &medicine.ID,
-					Period: periodsInput,
+					MedicineID: &medicine.MedicineID,
+					Comment:    medicine.Comment,
+					Period:     periodsInput,
 				}
 			}
 			updatedTreatmentsInput[i] = &model.UpdateTreatmentMedicalInfoInput{

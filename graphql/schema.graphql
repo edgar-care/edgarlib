@@ -208,7 +208,8 @@ type AntecedentTreatment {
 }
 
 type AntecedentsMedicines {
-    id: ID!
+    medicine_id: String!
+    comment: String
     period: [AntecedentPeriod!]!
 }
 
@@ -219,7 +220,6 @@ type AntecedentPeriod {
     frequency_unit: time_unit_enum!
     period_length: Int
     period_unit: time_unit_enum
-    comment: String
 }
 
 
@@ -788,6 +788,8 @@ input CreateAntecedentTreatmentInput {
 }
 
 input CreateAntecedentsMedicinesInput {
+    medicine_id: String!
+    comment: String
     period: [CreateAntecedentPeriodInput!]!
 }
 
@@ -798,7 +800,6 @@ input CreateAntecedentPeriodInput {
     frequency_unit: time_unit_enum!
     period_length: Int
     period_unit: time_unit_enum
-    comment: String
 }
 
 
@@ -820,7 +821,8 @@ input UpdateTreatmentMedicalInfoInput {
 }
 
 input UpdateTreatmentMedicineMedicalInput {
-    id: ID
+    medicine_id: String
+    comment: String
     period: [UpdateTreatmentPeriodMedicalInput!]
 }
 
@@ -832,10 +834,7 @@ input UpdateTreatmentPeriodMedicalInput {
     frequency_unit: time_unit_enum
     period_length: Int
     period_unit: time_unit_enum
-    comment: String
 }
-
-
 
 
 input UpdateAntecedentTreatmentInput {
@@ -846,6 +845,8 @@ input UpdateAntecedentTreatmentInput {
 }
 
 input UpdateAntecedentsMedicinesInput {
+    medicine_id: String
+    comment: String
     period: [UpdateAntecedentPeriodInput!]
 }
 
@@ -856,7 +857,6 @@ input UpdateAntecedentPeriodInput {
     frequency_unit: time_unit_enum
     period_length: Int
     period_unit: time_unit_enum
-    comment: String
 }
 
 

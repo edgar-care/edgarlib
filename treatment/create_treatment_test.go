@@ -47,6 +47,8 @@ func TestCreateTreatment(t *testing.T) {
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []medical_folder.CreateAntecedentsMedicines{{
+				Comment:    "comment",
+				MedicineID: "test",
 				Period: []*medical_folder.CreateAntecedentPeriod{{
 					Quantity:       2,
 					Frequency:      2,
@@ -54,7 +56,6 @@ func TestCreateTreatment(t *testing.T) {
 					FrequencyUnit:  "JOUR",
 					PeriodLength:   2,
 					PeriodUnit:     "JOUR",
-					Comment:        "comment",
 				}},
 			}},
 		}},
@@ -68,6 +69,8 @@ func TestCreateTreatment(t *testing.T) {
 		StartDate:           1234,
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
+			MedicineID: "test",
+			Comment:    "comment",
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
 				Frequency:      2,
@@ -75,7 +78,6 @@ func TestCreateTreatment(t *testing.T) {
 				FrequencyUnit:  "JOUR",
 				PeriodLength:   2,
 				PeriodUnit:     "JOUR",
-				Comment:        "comment",
 			}},
 		}},
 	}

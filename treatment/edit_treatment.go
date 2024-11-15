@@ -15,7 +15,9 @@ type UpdateTreatmentInput struct {
 }
 
 type UpdateAntecedentsMedicines struct {
-	Period []UpdateAntecedentPeriod `json:"period"`
+	MedicineID string                   `json:"medicine_id"`
+	Comment    string                   `json:"comment"`
+	Period     []UpdateAntecedentPeriod `json:"period"`
 }
 
 type UpdateAntecedentPeriod struct {
@@ -25,7 +27,6 @@ type UpdateAntecedentPeriod struct {
 	FrequencyUnit  string `json:"frequency_unit"`
 	PeriodLength   int    `json:"period_length"`
 	PeriodUnit     string `json:"period_unit"`
-	Comment        string `json:"comment"`
 }
 
 type UpdateTreatmentResponse struct {
@@ -46,7 +47,6 @@ func ConvertUpdatePeriods(periods []UpdateAntecedentPeriod) []model.AntecedentPe
 			FrequencyUnit:  freqUnit,
 			PeriodLength:   &p.PeriodLength,
 			PeriodUnit:     &periodUnit,
-			Comment:        &p.Comment,
 		}
 	}
 	return convertedPeriods
@@ -72,7 +72,9 @@ func UpdateTreatment(input UpdateTreatmentInput, patientID string, MedicalAntece
 			EndDate:   &input.EndDate,
 			Medicines: []*model.UpdateAntecedentsMedicinesInput{
 				{
-					Period: convertToPointerSliceInput(periods),
+					MedicineID: &medicine.MedicineID,
+					Comment:    &medicine.Comment,
+					Period:     convertToPointerSliceInput(periods),
 				},
 			},
 		})
@@ -99,7 +101,6 @@ func convertToPointerSliceInput(periods []model.AntecedentPeriod) []*model.Updat
 			FrequencyUnit:  &periods[i].FrequencyUnit,
 			PeriodLength:   periods[i].PeriodLength,
 			PeriodUnit:     periods[i].PeriodUnit,
-			Comment:        periods[i].Comment,
 		}
 	}
 	return pointerSlice

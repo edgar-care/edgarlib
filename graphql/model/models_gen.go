@@ -80,7 +80,6 @@ type AntecedentPeriod struct {
 	FrequencyUnit  TimeUnitEnum  `json:"frequency_unit" bson:"frequency_unit"`
 	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
 	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
-	Comment        *string       `json:"comment,omitempty" bson:"comment"`
 }
 
 type AntecedentTreatment struct {
@@ -92,8 +91,9 @@ type AntecedentTreatment struct {
 }
 
 type AntecedentsMedicines struct {
-	ID     string              `json:"id" bson:"_id"`
-	Period []*AntecedentPeriod `json:"period" bson:"period"`
+	MedicineID string              `json:"medicine_id" bson:"medicine_id"`
+	Comment    *string             `json:"comment,omitempty" bson:"comment"`
+	Period     []*AntecedentPeriod `json:"period" bson:"period"`
 }
 
 type AutoAnswer struct {
@@ -194,7 +194,6 @@ type CreateAntecedentPeriodInput struct {
 	FrequencyUnit  TimeUnitEnum  `json:"frequency_unit" bson:"frequency_unit"`
 	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
 	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
-	Comment        *string       `json:"comment,omitempty" bson:"comment"`
 }
 
 type CreateAntecedentTreatmentInput struct {
@@ -205,7 +204,9 @@ type CreateAntecedentTreatmentInput struct {
 }
 
 type CreateAntecedentsMedicinesInput struct {
-	Period []*CreateAntecedentPeriodInput `json:"period" bson:"period"`
+	MedicineID string                         `json:"medicine_id" bson:"medicine_id"`
+	Comment    *string                        `json:"comment,omitempty" bson:"comment"`
+	Period     []*CreateAntecedentPeriodInput `json:"period" bson:"period"`
 }
 
 type CreateAutoAnswerInput struct {
@@ -754,7 +755,6 @@ type UpdateAntecedentPeriodInput struct {
 	FrequencyUnit  *TimeUnitEnum `json:"frequency_unit,omitempty" bson:"frequency_unit"`
 	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
 	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
-	Comment        *string       `json:"comment,omitempty" bson:"comment"`
 }
 
 type UpdateAntecedentTreatmentInput struct {
@@ -765,7 +765,9 @@ type UpdateAntecedentTreatmentInput struct {
 }
 
 type UpdateAntecedentsMedicinesInput struct {
-	Period []*UpdateAntecedentPeriodInput `json:"period,omitempty" bson:"period"`
+	MedicineID *string                        `json:"medicine_id,omitempty" bson:"medicine_id"`
+	Comment    *string                        `json:"comment,omitempty" bson:"comment"`
+	Period     []*UpdateAntecedentPeriodInput `json:"period,omitempty" bson:"period"`
 }
 
 type UpdateAutoAnswerInput struct {
@@ -985,8 +987,9 @@ type UpdateTreatmentMedicalInfoInput struct {
 }
 
 type UpdateTreatmentMedicineMedicalInput struct {
-	ID     *string                              `json:"id,omitempty" bson:"_id"`
-	Period []*UpdateTreatmentPeriodMedicalInput `json:"period,omitempty" bson:"period"`
+	MedicineID *string                              `json:"medicine_id,omitempty" bson:"medicine_id"`
+	Comment    *string                              `json:"comment,omitempty" bson:"comment"`
+	Period     []*UpdateTreatmentPeriodMedicalInput `json:"period,omitempty" bson:"period"`
 }
 
 type UpdateTreatmentPeriodMedicalInput struct {
@@ -996,7 +999,6 @@ type UpdateTreatmentPeriodMedicalInput struct {
 	FrequencyUnit  *TimeUnitEnum `json:"frequency_unit,omitempty" bson:"frequency_unit"`
 	PeriodLength   *int          `json:"period_length,omitempty" bson:"period_length"`
 	PeriodUnit     *TimeUnitEnum `json:"period_unit,omitempty" bson:"period_unit"`
-	Comment        *string       `json:"comment,omitempty" bson:"comment"`
 }
 
 type UpdateTreatmentsFollowUpInput struct {
