@@ -183,6 +183,8 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 							EndDate:   234,
 							Medicines: []medical_folder.CreateAntecedentsMedicines{
 								{
+									MedicineID: "test",
+									Comment:    "comment",
 									Period: []*medical_folder.CreateAntecedentPeriod{
 										{
 											Quantity:       1,
@@ -191,7 +193,6 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 											FrequencyUnit:  "JOUR",
 											PeriodLength:   2,
 											PeriodUnit:     "ANNEE",
-											Comment:        "test",
 										},
 										{
 											Quantity:       5,
@@ -200,7 +201,6 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 											FrequencyUnit:  "MOIS",
 											PeriodLength:   1,
 											PeriodUnit:     "ANNEE",
-											Comment:        "test",
 										},
 									},
 								},
@@ -218,6 +218,8 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 							EndDate:   24,
 							Medicines: []medical_folder.CreateAntecedentsMedicines{
 								{
+									MedicineID: "test",
+									Comment:    "comment",
 									Period: []*medical_folder.CreateAntecedentPeriod{
 										{
 											Quantity:       1,
@@ -226,7 +228,6 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 											FrequencyUnit:  "ANNEE",
 											PeriodLength:   2,
 											PeriodUnit:     "JOUR",
-											Comment:        "test",
 										},
 									},
 								},

@@ -60,6 +60,8 @@ func TestGetPatientById(t *testing.T) {
 					EndDate:   90,
 					Medicines: []medical_folder.CreateAntecedentsMedicines{
 						{
+							MedicineID: "test",
+							Comment:    "comment",
 							Period: []*medical_folder.CreateAntecedentPeriod{
 								{
 									Quantity:       6,
@@ -68,7 +70,6 @@ func TestGetPatientById(t *testing.T) {
 									FrequencyUnit:  "MOIS",
 									PeriodLength:   4,
 									PeriodUnit:     "ANNEE",
-									Comment:        "tttt",
 								},
 							},
 						},
@@ -133,6 +134,8 @@ func TestGetPatients(t *testing.T) {
 					EndDate:   90,
 					Medicines: []medical_folder.CreateAntecedentsMedicines{
 						{
+							MedicineID: "test",
+							Comment:    "comment",
 							Period: []*medical_folder.CreateAntecedentPeriod{
 								{
 									Quantity:       6,
@@ -141,7 +144,6 @@ func TestGetPatients(t *testing.T) {
 									FrequencyUnit:  "MOIS",
 									PeriodLength:   4,
 									PeriodUnit:     "ANNEE",
-									Comment:        "tttt",
 								},
 							},
 						},
@@ -179,6 +181,8 @@ func TestGetPatients(t *testing.T) {
 					EndDate:   90,
 					Medicines: []medical_folder.CreateAntecedentsMedicines{
 						{
+							MedicineID: "test",
+							Comment:    "comment",
 							Period: []*medical_folder.CreateAntecedentPeriod{
 								{
 									Quantity:       6,
@@ -187,7 +191,6 @@ func TestGetPatients(t *testing.T) {
 									FrequencyUnit:  "MOIS",
 									PeriodLength:   4,
 									PeriodUnit:     "ANNEE",
-									Comment:        "tttt",
 								},
 							},
 						},

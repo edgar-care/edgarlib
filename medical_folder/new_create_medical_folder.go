@@ -33,7 +33,9 @@ type CreateTreatInput struct {
 }
 
 type CreateAntecedentsMedicines struct {
-	Period []*CreateAntecedentPeriod `json:"period"`
+	MedicineID string                    `json:"medicine_id"`
+	Comment    string                    `json:"comment"`
+	Period     []*CreateAntecedentPeriod `json:"period"`
 }
 
 type CreateAntecedentPeriod struct {
@@ -43,7 +45,6 @@ type CreateAntecedentPeriod struct {
 	FrequencyUnit  string `json:"frequency_unit"`
 	PeriodLength   int    `json:"period_length"`
 	PeriodUnit     string `json:"period_unit"`
-	Comment        string `json:"comment"`
 }
 
 type CreateNewMedicalInfoResponse struct {
@@ -115,11 +116,12 @@ func NewMedicalFolder(input CreateNewMedicalInfoInput, patientID string) CreateN
 						FrequencyUnit:  model.TimeUnitEnum(period.FrequencyUnit),
 						PeriodLength:   &period.PeriodLength,
 						PeriodUnit:     (*model.TimeUnitEnum)(&period.PeriodUnit),
-						Comment:        &period.Comment,
 					})
 				}
 				medicines = append(medicines, &model.CreateAntecedentsMedicinesInput{
-					Period: periods,
+					MedicineID: medicine.MedicineID,
+					Comment:    &medicine.Comment,
+					Period:     periods,
 				})
 			}
 			treatments = append(treatments, &model.CreateAntecedentTreatmentInput{
@@ -219,11 +221,12 @@ func AddMedicalAntecedent(input CreateNewMedicalAntecedentInput, userID string) 
 					FrequencyUnit:  model.TimeUnitEnum(period.FrequencyUnit),
 					PeriodLength:   &period.PeriodLength,
 					PeriodUnit:     (*model.TimeUnitEnum)(&period.PeriodUnit),
-					Comment:        &period.Comment,
 				})
 			}
 			medicines = append(medicines, &model.CreateAntecedentsMedicinesInput{
-				Period: periods,
+				MedicineID: medicine.MedicineID,
+				Comment:    &medicine.Comment,
+				Period:     periods,
 			})
 		}
 		treatments = append(treatments, &model.CreateAntecedentTreatmentInput{

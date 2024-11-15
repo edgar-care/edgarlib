@@ -15,8 +15,9 @@ type CreateTreatInput struct {
 }
 
 type CreateAntecedentsMedicines struct {
-	ID     string                   `json:"id"`
-	Period []CreateAntecedentPeriod `json:"period"`
+	MedicineID string                   `json:"medicine_id"`
+	Comment    string                   `json:"comment"`
+	Period     []CreateAntecedentPeriod `json:"period"`
 }
 
 type CreateAntecedentPeriod struct {
@@ -26,7 +27,6 @@ type CreateAntecedentPeriod struct {
 	FrequencyUnit  string `json:"frequency_unit"`
 	PeriodLength   int    `json:"period_length"`
 	PeriodUnit     string `json:"period_unit"`
-	Comment        string `json:"comment"`
 }
 
 type CreateTreatmentResponse struct {
@@ -47,7 +47,6 @@ func ConvertPeriods(periods []CreateAntecedentPeriod) []model.AntecedentPeriod {
 			FrequencyUnit:  freqUnit,
 			PeriodLength:   &p.PeriodLength,
 			PeriodUnit:     &periodUnit,
-			Comment:        &p.Comment,
 		}
 	}
 	return convertedPeriods
@@ -63,7 +62,6 @@ func convertToCreateAntecedentPeriodInputSlice(periods []model.AntecedentPeriod)
 			FrequencyUnit:  p.FrequencyUnit,
 			PeriodLength:   p.PeriodLength,
 			PeriodUnit:     p.PeriodUnit,
-			Comment:        p.Comment,
 		}
 	}
 	return pointerSlice
@@ -105,7 +103,9 @@ func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentRe
 			EndDate:   &input.EndDate,
 			Medicines: []*model.CreateAntecedentsMedicinesInput{
 				{
-					Period: convertToCreateAntecedentPeriodInputSlice(periods),
+					MedicineID: medicine.MedicineID,
+					Comment:    &medicine.Comment,
+					Period:     convertToCreateAntecedentPeriodInputSlice(periods),
 				},
 			},
 		})

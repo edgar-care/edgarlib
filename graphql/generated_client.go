@@ -1027,7 +1027,8 @@ func UpdateAntecedentTreatment(id string, antecedentID string, input model.Updat
 	        start_date
 	        end_date
 	        medicines {
-	            id
+	            medicine_id
+	            comment
 	            period {
 	                quantity
 	                frequency
@@ -1035,7 +1036,6 @@ func UpdateAntecedentTreatment(id string, antecedentID string, input model.Updat
 	                frequency_unit
 	                period_length
 	                period_unit
-	                comment
 	            }
 	        }
 	    }
@@ -1099,7 +1099,8 @@ func UpdateTreatmentsMedicalAntecedents(id string, input model.UpdateTreatmentMe
 	            start_date
 	            end_date
 	            medicines {
-	                id
+	                medicine_id
+	                comment
 	                period {
 	                    quantity
 	                    frequency
@@ -1107,7 +1108,6 @@ func UpdateTreatmentsMedicalAntecedents(id string, input model.UpdateTreatmentMe
 	                    frequency_unit
 	                    period_length
 	                    period_unit
-	                    comment
 	                }
 	            }
 	        }
@@ -2983,7 +2983,7 @@ func CreateAntecdentTreatment(id string, input model.CreateAntecedentTreatmentIn
 	        start_date
 	        end_date
 	        medicines {
-	            id
+	            medicine_id
 	            period {
 	                quantity
 	                frequency
@@ -2991,7 +2991,6 @@ func CreateAntecdentTreatment(id string, input model.CreateAntecedentTreatmentIn
 	                frequency_unit
 	                period_length
 	                period_unit
-	                comment
 	            }
 	        }
 	    }
@@ -3979,7 +3978,8 @@ func GetAntecedentTreatmentByID(id string) (model.AntecedentTreatment, error) {
 	        start_date
 	        end_date
 	        medicines {
-	            id
+	            medicine_id
+	            comment
 	            period {
 	                quantity
 	                frequency
@@ -3987,7 +3987,6 @@ func GetAntecedentTreatmentByID(id string) (model.AntecedentTreatment, error) {
 	                frequency_unit
 	                period_length
 	                period_unit
-	                comment
 	            }
 	        }
 	    }
@@ -4601,7 +4600,8 @@ func GetAntecedentTreatments(option *model.Options) ([]model.AntecedentTreatment
 	        start_date
 	        end_date
 	        medicines {
-	            id
+	            medicine_id
+	            comment
 	            period {
 	                quantity
 	                frequency
@@ -4609,7 +4609,6 @@ func GetAntecedentTreatments(option *model.Options) ([]model.AntecedentTreatment
 	                frequency_unit
 	                period_length
 	                period_unit
-	                comment
 	            }
 	        }
 	    }
@@ -8934,7 +8933,8 @@ func CreateMedicalAntecedents(input model.CreateMedicalAntecedentsInput) (model.
 	            start_date
 	            end_date
 	            medicines {
-	                id
+	                medicine_id
+	                comment
 	                period {
 	                    quantity
 	                    frequency
@@ -8942,7 +8942,6 @@ func CreateMedicalAntecedents(input model.CreateMedicalAntecedentsInput) (model.
 	                    frequency_unit
 	                    period_length
 	                    period_unit
-	                    comment
 	                }
 	            }
 	        }
@@ -9007,7 +9006,8 @@ func UpdateMedicalAntecedents(id string, input model.UpdateMedicalAntecedentsInp
 	            start_date
 	            end_date
 	            medicines {
-	                id
+	                medicine_id
+	                comment
 	                period {
 	                    quantity
 	                    frequency
@@ -9015,7 +9015,6 @@ func UpdateMedicalAntecedents(id string, input model.UpdateMedicalAntecedentsInp
 	                    frequency_unit
 	                    period_length
 	                    period_unit
-	                    comment
 	                }
 	            }
 	        }
@@ -9130,7 +9129,8 @@ func GetMedicalAntecedentsById(id string) (model.MedicalAntecedents, error) {
 	            start_date
 	            end_date
 	            medicines {
-	                id
+	                medicine_id
+	                comment
 	                period {
 	                    quantity
 	                    frequency
@@ -9138,7 +9138,6 @@ func GetMedicalAntecedentsById(id string) (model.MedicalAntecedents, error) {
 	                    frequency_unit
 	                    period_length
 	                    period_unit
-	                    comment
 	                }
 	            }
 	        }
@@ -9203,7 +9202,8 @@ func GetMedicalAntecedents(option *model.Options) ([]model.MedicalAntecedents, e
 	            start_date
 	            end_date
 	            medicines {
-	                id
+	                medicine_id
+	                comment
 	                period {
 	                    quantity
 	                    frequency
@@ -9211,7 +9211,6 @@ func GetMedicalAntecedents(option *model.Options) ([]model.MedicalAntecedents, e
 	                    frequency_unit
 	                    period_length
 	                    period_unit
-	                    comment
 	                }
 	            }
 	        }

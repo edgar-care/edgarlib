@@ -220,7 +220,7 @@ func getBrowser(userAgent string) string {
 		return "Firefox"
 	case strings.Contains(userAgent, "safari") && !strings.Contains(userAgent, "chrome"):
 		return "Safari"
-	case strings.Contains(userAgent, "Android"):
+	case strings.Contains(userAgent, "Edgar-App"):
 		return "App edgar"
 	default:
 		return "Other"

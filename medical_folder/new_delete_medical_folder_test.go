@@ -46,6 +46,8 @@ func TestDeleteMedicalAntecedentSuccessfully(t *testing.T) {
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []CreateAntecedentsMedicines{{
+				Comment:    "comment",
+				MedicineID: "test",
 				Period: []*CreateAntecedentPeriod{{
 					Quantity:       2,
 					Frequency:      2,
@@ -53,7 +55,6 @@ func TestDeleteMedicalAntecedentSuccessfully(t *testing.T) {
 					FrequencyUnit:  "JOUR",
 					PeriodLength:   2,
 					PeriodUnit:     "JOUR",
-					Comment:        "comment",
 				}},
 			}},
 		}},
