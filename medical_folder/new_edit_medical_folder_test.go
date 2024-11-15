@@ -34,7 +34,6 @@ func TestUpdateMedicalAntecedentSuccessfully(t *testing.T) {
 		Name:     "new_antecedent",
 		Symptoms: []string{"symptoms"},
 		Treatments: []CreateTreatInput{{
-			CreatedBy: "test",
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []CreateAntecedentsMedicines{{
@@ -99,7 +98,6 @@ func TestUpdateMedicalFolderSuccessfully(t *testing.T) {
 		Name:     "new_antecedent",
 		Symptoms: []string{"symptoms"},
 		Treatments: []CreateTreatInput{{
-			CreatedBy: "test",
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []CreateAntecedentsMedicines{{

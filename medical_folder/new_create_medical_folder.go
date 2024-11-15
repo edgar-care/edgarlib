@@ -26,7 +26,6 @@ type CreateNewMedicalAntecedentInput struct {
 }
 
 type CreateTreatInput struct {
-	CreatedBy string                       `json:"created_by"`
 	StartDate int                          `json:"start_date"`
 	EndDate   int                          `json:"end_date"`
 	Medicines []CreateAntecedentsMedicines `json:"medicines"`
@@ -125,7 +124,7 @@ func NewMedicalFolder(input CreateNewMedicalInfoInput, patientID string) CreateN
 				})
 			}
 			treatments = append(treatments, &model.CreateAntecedentTreatmentInput{
-				CreatedBy: treatment.CreatedBy,
+				CreatedBy: patientID,
 				StartDate: treatment.StartDate,
 				EndDate:   &treatment.EndDate,
 				Medicines: medicines,
@@ -199,10 +198,6 @@ func AddMedicalAntecedent(input CreateNewMedicalAntecedentInput, userID string) 
 
 	treatments := make([]*model.CreateAntecedentTreatmentInput, 0)
 	for _, treatment := range input.Treatments {
-		if treatment.CreatedBy == "" {
-			return AddMedicalAntecedentResponse{Code: 400, Err: errors.New("CreatedBy cannot be empty")}
-		}
-
 		medicines := make([]*model.CreateAntecedentsMedicinesInput, 0)
 		for _, medicine := range treatment.Medicines {
 			if len(medicine.Period) == 0 {
@@ -230,7 +225,7 @@ func AddMedicalAntecedent(input CreateNewMedicalAntecedentInput, userID string) 
 			})
 		}
 		treatments = append(treatments, &model.CreateAntecedentTreatmentInput{
-			CreatedBy: treatment.CreatedBy,
+			CreatedBy: userID,
 			StartDate: treatment.StartDate,
 			EndDate:   &treatment.EndDate,
 			Medicines: medicines,

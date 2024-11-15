@@ -24,7 +24,7 @@ func MissingPassword(email string) MissingPasswordResponse {
 	if err != nil {
 		doctor, err := graphql.GetDoctorByEmail(email)
 		if err != nil {
-			return MissingPasswordResponse{200, errors.New("no account corresponds to this email")}
+			return MissingPasswordResponse{400, errors.New("no account corresponds to this email")}
 		}
 		userID = doctor.ID
 	}

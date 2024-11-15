@@ -42,7 +42,6 @@ func TestGetTreatmentById(t *testing.T) {
 		Name:     "new_antecedent_get_byid",
 		Symptoms: []string{"symptoms"},
 		Treatments: []medical_folder.CreateTreatInput{{
-			CreatedBy: "test1_get_treatmentby_id",
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []medical_folder.CreateAntecedentsMedicines{{
@@ -63,7 +62,6 @@ func TestGetTreatmentById(t *testing.T) {
 	ante := medical_folder.AddMedicalAntecedent(antecedentInput, patient.ID)
 	treatmentInput := CreateTreatInput{
 		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
-		CreatedBy:           "testgetbyid",
 		StartDate:           1234,
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
@@ -146,7 +144,6 @@ func TestGetTreatments(t *testing.T) {
 		Name:     "new_antecedent_get_byid",
 		Symptoms: []string{"symptoms"},
 		Treatments: []medical_folder.CreateTreatInput{{
-			CreatedBy: "test1_get_treatmentby_id",
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []medical_folder.CreateAntecedentsMedicines{{
@@ -168,7 +165,6 @@ func TestGetTreatments(t *testing.T) {
 
 	treatmentInput := CreateTreatInput{
 		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
-		CreatedBy:           "testgetbyid",
 		StartDate:           1234,
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
