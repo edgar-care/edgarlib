@@ -43,7 +43,7 @@ func GetPatientById(id string, doctorid string) GetPatientByIdResponse {
 		}
 	}
 	if !idFound {
-		return GetPatientByIdResponse{Code: 401, Err: errors.New("unauthorized to access to this account")}
+		return GetPatientByIdResponse{Code: 403, Err: errors.New("unauthorized to access to this account")}
 	}
 
 	patient, err := graphql.GetPatientById(id)
