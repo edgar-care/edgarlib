@@ -192,7 +192,7 @@ func GetDeviceNameWithIp(w http.ResponseWriter, r *http.Request) string {
 }
 
 func getDeviceType(userAgent string) string {
-	if strings.Contains(userAgent, "iPhone") {
+	if strings.Contains(userAgent, "iOS") {
 		return "iPhone"
 	} else if strings.Contains(userAgent, "Android") {
 		return "Android"
@@ -211,7 +211,7 @@ func getBrowser(userAgent string) string {
 	userAgent = strings.ToLower(userAgent) // Convert to lowercase for case-insensitive comparison
 	switch {
 	case strings.Contains(userAgent, "edgar-app"):
-		return "Edgar-App"
+		return "edgar-app"
 	case strings.Contains(userAgent, "edg"):
 		return "Edge"
 	case strings.Contains(userAgent, "opr"):
