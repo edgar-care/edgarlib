@@ -43,7 +43,6 @@ func TestCreateTreatment(t *testing.T) {
 		Name:     "new_antecedent",
 		Symptoms: []string{"symptoms"},
 		Treatments: []medical_folder.CreateTreatInput{{
-			CreatedBy: "test",
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []medical_folder.CreateAntecedentsMedicines{{
@@ -65,7 +64,6 @@ func TestCreateTreatment(t *testing.T) {
 
 	treatmentInput := CreateTreatInput{
 		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
-		CreatedBy:           "test",
 		StartDate:           1234,
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{

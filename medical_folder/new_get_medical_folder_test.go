@@ -35,7 +35,6 @@ func TestGetMedicalAntecedentByIdSuccessfully(t *testing.T) {
 		Name:     "new_antecedent_get_byid",
 		Symptoms: []string{"symptoms"},
 		Treatments: []CreateTreatInput{{
-			CreatedBy: "test",
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []CreateAntecedentsMedicines{{
@@ -130,7 +129,6 @@ func TestGetMedicalAntecedentsSuccessfully(t *testing.T) {
 		Name:     "new_antecedent_get",
 		Symptoms: []string{"symptoms"},
 		Treatments: []CreateTreatInput{{
-			CreatedBy: "test",
 			StartDate: 1234,
 			EndDate:   5678,
 			Medicines: []CreateAntecedentsMedicines{{
