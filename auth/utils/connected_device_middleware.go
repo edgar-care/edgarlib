@@ -210,6 +210,8 @@ func getDeviceType(userAgent string) string {
 func getBrowser(userAgent string) string {
 	userAgent = strings.ToLower(userAgent) // Convert to lowercase for case-insensitive comparison
 	switch {
+	case strings.Contains(userAgent, "Edgar-App"):
+		return "Edgar-App"
 	case strings.Contains(userAgent, "edg"):
 		return "Edge"
 	case strings.Contains(userAgent, "opr"):
@@ -220,8 +222,6 @@ func getBrowser(userAgent string) string {
 		return "Firefox"
 	case strings.Contains(userAgent, "safari") && !strings.Contains(userAgent, "chrome"):
 		return "Safari"
-	case strings.Contains(userAgent, "Edgar-App"):
-		return "App edgar"
 	default:
 		return "Other"
 	}
