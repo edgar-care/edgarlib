@@ -66,7 +66,6 @@ func TestGetOrdonnancebyID(t *testing.T) {
 			Symptoms: []string{"symptom"},
 			Treatments: []medical_folder.CreateTreatInput{
 				{
-					CreatedBy: "ttt",
 					StartDate: 78,
 					EndDate:   90,
 					Medicines: []medical_folder.CreateAntecedentsMedicines{
@@ -180,7 +179,6 @@ func TestGetOrdonnancesDoctor(t *testing.T) {
 			Symptoms: []string{"symptom"},
 			Treatments: []medical_folder.CreateTreatInput{
 				{
-					CreatedBy: "ttt",
 					StartDate: 78,
 					EndDate:   90,
 					Medicines: []medical_folder.CreateAntecedentsMedicines{

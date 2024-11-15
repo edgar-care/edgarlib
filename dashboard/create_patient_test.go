@@ -178,7 +178,6 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 					Symptoms: []string{"headache"},
 					Treatments: []medical_folder.CreateTreatInput{
 						{
-							CreatedBy: "test",
 							StartDate: 123,
 							EndDate:   234,
 							Medicines: []medical_folder.CreateAntecedentsMedicines{
@@ -213,7 +212,6 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 					Symptoms: []string{"test"},
 					Treatments: []medical_folder.CreateTreatInput{
 						{
-							CreatedBy: "test",
 							StartDate: 13,
 							EndDate:   24,
 							Medicines: []medical_folder.CreateAntecedentsMedicines{
