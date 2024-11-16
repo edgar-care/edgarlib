@@ -46,14 +46,14 @@ func TestGetTreatmentById(t *testing.T) {
 			EndDate:   5678,
 			Medicines: []medical_folder.CreateAntecedentsMedicines{{
 				MedicineID: "test",
-				Comment:    "comment",
+				Comment:    func(s string) *string { return &s }("comment"),
 				Period: []*medical_folder.CreateAntecedentPeriod{{
 					Quantity:       2,
 					Frequency:      2,
 					FrequencyRatio: 2,
 					FrequencyUnit:  "ANNEE",
-					PeriodLength:   2,
-					PeriodUnit:     "JOUR",
+					PeriodLength:   func(s int) *int { return &s }(2),
+					PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 				}},
 			}},
 		}},
@@ -66,14 +66,14 @@ func TestGetTreatmentById(t *testing.T) {
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			MedicineID: "test",
-			Comment:    "comment",
+			Comment:    func(s string) *string { return &s }("comment"),
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
 				Frequency:      2,
 				FrequencyRatio: 2,
 				FrequencyUnit:  "MOIS",
-				PeriodLength:   2,
-				PeriodUnit:     "JOUR",
+				PeriodLength:   func(s int) *int { return &s }(2),
+				PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 			}},
 		}},
 	}
@@ -148,14 +148,14 @@ func TestGetTreatments(t *testing.T) {
 			EndDate:   5678,
 			Medicines: []medical_folder.CreateAntecedentsMedicines{{
 				MedicineID: "test",
-				Comment:    "comment",
+				Comment:    func(s string) *string { return &s }("comment"),
 				Period: []*medical_folder.CreateAntecedentPeriod{{
 					Quantity:       2,
 					Frequency:      2,
 					FrequencyRatio: 2,
 					FrequencyUnit:  "ANNEE",
-					PeriodLength:   2,
-					PeriodUnit:     "JOUR",
+					PeriodLength:   func(s int) *int { return &s }(2),
+					PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 				}},
 			}},
 		}},
@@ -169,14 +169,14 @@ func TestGetTreatments(t *testing.T) {
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			MedicineID: "test",
-			Comment:    "comment",
+			Comment:    func(s string) *string { return &s }("comment"),
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
 				Frequency:      2,
 				FrequencyRatio: 2,
 				FrequencyUnit:  "MOIS",
-				PeriodLength:   2,
-				PeriodUnit:     "JOUR",
+				PeriodLength:   func(s int) *int { return &s }(2),
+				PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 			}},
 		}},
 	}

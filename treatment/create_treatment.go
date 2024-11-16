@@ -15,17 +15,17 @@ type CreateTreatInput struct {
 
 type CreateAntecedentsMedicines struct {
 	MedicineID string                   `json:"medicine_id"`
-	Comment    string                   `json:"comment"`
+	Comment    *string                  `json:"comment"`
 	Period     []CreateAntecedentPeriod `json:"period"`
 }
 
 type CreateAntecedentPeriod struct {
-	Quantity       int    `json:"quantity"`
-	Frequency      int    `json:"frequency"`
-	FrequencyRatio int    `json:"frequency_ratio"`
-	FrequencyUnit  string `json:"frequency_unit"`
-	PeriodLength   int    `json:"period_length"`
-	PeriodUnit     string `json:"period_unit"`
+	Quantity       int     `json:"quantity"`
+	Frequency      int     `json:"frequency"`
+	FrequencyRatio int     `json:"frequency_ratio"`
+	FrequencyUnit  string  `json:"frequency_unit"`
+	PeriodLength   *int    `json:"period_length"`
+	PeriodUnit     *string `json:"period_unit"`
 }
 
 type CreateTreatmentResponse struct {
@@ -38,14 +38,18 @@ func ConvertPeriods(periods []CreateAntecedentPeriod) []model.AntecedentPeriod {
 	convertedPeriods := make([]model.AntecedentPeriod, len(periods))
 	for i, p := range periods {
 		freqUnit := model.TimeUnitEnum(p.FrequencyUnit)
-		periodUnit := model.TimeUnitEnum(p.PeriodUnit)
+		var periodUnit *model.TimeUnitEnum
+		if p.PeriodUnit != nil {
+			unit := model.TimeUnitEnum(*p.PeriodUnit)
+			periodUnit = &unit
+		}
 		convertedPeriods[i] = model.AntecedentPeriod{
 			Quantity:       p.Quantity,
 			Frequency:      p.Frequency,
 			FrequencyRatio: p.FrequencyRatio,
 			FrequencyUnit:  freqUnit,
-			PeriodLength:   &p.PeriodLength,
-			PeriodUnit:     &periodUnit,
+			PeriodLength:   p.PeriodLength,
+			PeriodUnit:     periodUnit,
 		}
 	}
 	return convertedPeriods
@@ -103,7 +107,7 @@ func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentRe
 			Medicines: []*model.CreateAntecedentsMedicinesInput{
 				{
 					MedicineID: medicine.MedicineID,
-					Comment:    &medicine.Comment,
+					Comment:    medicine.Comment,
 					Period:     convertToCreateAntecedentPeriodInputSlice(periods),
 				},
 			},

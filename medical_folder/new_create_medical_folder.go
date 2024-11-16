@@ -33,17 +33,17 @@ type CreateTreatInput struct {
 
 type CreateAntecedentsMedicines struct {
 	MedicineID string                    `json:"medicine_id"`
-	Comment    string                    `json:"comment"`
+	Comment    *string                   `json:"comment"`
 	Period     []*CreateAntecedentPeriod `json:"period"`
 }
 
 type CreateAntecedentPeriod struct {
-	Quantity       int    `json:"quantity"`
-	Frequency      int    `json:"frequency"`
-	FrequencyRatio int    `json:"frequency_ratio"`
-	FrequencyUnit  string `json:"frequency_unit"`
-	PeriodLength   int    `json:"period_length"`
-	PeriodUnit     string `json:"period_unit"`
+	Quantity       int     `json:"quantity"`
+	Frequency      int     `json:"frequency"`
+	FrequencyRatio int     `json:"frequency_ratio"`
+	FrequencyUnit  string  `json:"frequency_unit"`
+	PeriodLength   *int    `json:"period_length"`
+	PeriodUnit     *string `json:"period_unit"`
 }
 
 type CreateNewMedicalInfoResponse struct {
@@ -113,13 +113,13 @@ func NewMedicalFolder(input CreateNewMedicalInfoInput, patientID string) CreateN
 						Frequency:      period.Frequency,
 						FrequencyRatio: period.FrequencyRatio,
 						FrequencyUnit:  model.TimeUnitEnum(period.FrequencyUnit),
-						PeriodLength:   &period.PeriodLength,
-						PeriodUnit:     (*model.TimeUnitEnum)(&period.PeriodUnit),
+						PeriodLength:   period.PeriodLength,
+						PeriodUnit:     (*model.TimeUnitEnum)(period.PeriodUnit),
 					})
 				}
 				medicines = append(medicines, &model.CreateAntecedentsMedicinesInput{
 					MedicineID: medicine.MedicineID,
-					Comment:    &medicine.Comment,
+					Comment:    medicine.Comment,
 					Period:     periods,
 				})
 			}
@@ -209,18 +209,28 @@ func AddMedicalAntecedent(input CreateNewMedicalAntecedentInput, userID string) 
 				if period.Quantity <= 0 || period.Frequency <= 0 {
 					return AddMedicalAntecedentResponse{Code: 400, Err: errors.New("Quantity, Frequency, and PeriodLength must be greater than 0")}
 				}
+				//if period.PeriodLength == nil || *period.PeriodLength <= 0 {
+				//	period.PeriodLength = nil
+				//}
+				//if period.PeriodUnit == nil || *period.PeriodUnit == "" {
+				//	period.PeriodUnit = nil
+				//}
+
 				periods = append(periods, &model.CreateAntecedentPeriodInput{
 					Quantity:       period.Quantity,
 					Frequency:      period.Frequency,
 					FrequencyRatio: period.FrequencyRatio,
 					FrequencyUnit:  model.TimeUnitEnum(period.FrequencyUnit),
-					PeriodLength:   &period.PeriodLength,
-					PeriodUnit:     (*model.TimeUnitEnum)(&period.PeriodUnit),
+					PeriodLength:   period.PeriodLength,
+					PeriodUnit:     (*model.TimeUnitEnum)(period.PeriodUnit),
 				})
 			}
+			//if medicine.Comment == nil {
+			//	medicine.Comment = nil
+			//}
 			medicines = append(medicines, &model.CreateAntecedentsMedicinesInput{
 				MedicineID: medicine.MedicineID,
-				Comment:    &medicine.Comment,
+				Comment:    medicine.Comment,
 				Period:     periods,
 			})
 		}
