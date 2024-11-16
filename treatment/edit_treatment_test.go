@@ -85,30 +85,31 @@ func TestUpdateTreatment(t *testing.T) {
 	}
 
 	input := UpdateTreatmentInput{
-		ID:        treat.Treatment[0].ID,
 		CreatedBy: "testupdate",
 		StartDate: 9876,
 		EndDate:   7653,
 		Medicines: []UpdateAntecedentsMedicines{{
-			MedicineID: "test",
+			MedicineID: "AZE",
 			Comment:    "comment",
 			Period: []UpdateAntecedentPeriod{{
 				Quantity:       3,
 				Frequency:      3,
 				FrequencyRatio: 3,
-				FrequencyUnit:  "JOUR",
+				FrequencyUnit:  "ANNEE",
 				PeriodLength:   3,
 				PeriodUnit:     "JOUR",
 			}},
 		}},
 	}
 
-	response := UpdateTreatment(input, patient.ID, ante.MedicalAntecedents[0].ID)
+	response := UpdateTreatment(input, patient.ID, treat.Treatment[0].ID)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}
 	if response.Err != nil {
 		t.Errorf("Expected no error but got: %s", response.Err.Error())
 	}
+
+	_ = medical_folder.GetMedicalAntecedents(patient.ID)
 
 }
