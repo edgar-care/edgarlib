@@ -4,10 +4,10 @@ import (
 	"errors"
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"github.com/edgar-care/edgarlib/v2/medical_folder"
 )
 
 type UpdateTreatmentInput struct {
-	ID        string                       `json:"id"`
 	CreatedBy string                       `json:"created_by"`
 	StartDate int                          `json:"start_date"`
 	EndDate   int                          `json:"end_date"`
@@ -52,7 +52,7 @@ func ConvertUpdatePeriods(periods []UpdateAntecedentPeriod) []model.AntecedentPe
 	return convertedPeriods
 }
 
-func UpdateTreatment(input UpdateTreatmentInput, patientID string, MedicalAntecedentID string) UpdateTreatmentResponse {
+func UpdateTreatment(input UpdateTreatmentInput, patientID string, treatmentID string) UpdateTreatmentResponse {
 	var res []model.AntecedentTreatment
 
 	control, err := graphql.GetPatientById(patientID)
@@ -63,10 +63,32 @@ func UpdateTreatment(input UpdateTreatmentInput, patientID string, MedicalAntece
 		return UpdateTreatmentResponse{Code: 400, Err: errors.New("medical folder has not been created")}
 	}
 
+	medicalAntecedent := medical_folder.GetMedicalAntecedents(patientID)
+	if medicalAntecedent.Err != nil {
+		return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to find medical folder by ID: " + err.Error())}
+	}
+
+	var antecedentID string
+	for _, antecedent := range medicalAntecedent.MedicalAntecedents {
+		for _, treatment := range antecedent.Treatments {
+			if treatment.ID == treatmentID {
+				antecedentID = antecedent.ID
+				break
+			}
+		}
+		if antecedentID != "" {
+			break
+		}
+	}
+
+	if antecedentID == "" {
+		return UpdateTreatmentResponse{Code: 404, Err: errors.New("treatment not found in any antecedent")}
+	}
+
 	for _, medicine := range input.Medicines {
 		periods := ConvertUpdatePeriods(medicine.Period)
 
-		treatment, err := graphql.UpdateAntecedentTreatment(input.ID, MedicalAntecedentID, model.UpdateAntecedentTreatmentInput{
+		treatment, err := graphql.UpdateAntecedentTreatment(treatmentID, antecedentID, model.UpdateAntecedentTreatmentInput{
 			CreatedBy: &input.CreatedBy,
 			StartDate: &input.StartDate,
 			EndDate:   &input.EndDate,
