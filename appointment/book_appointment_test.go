@@ -186,15 +186,15 @@ func TestBookAppointmentCheckDoctor(t *testing.T) {
 					Medicines: []medical_folder.CreateAntecedentsMedicines{
 						{
 							MedicineID: "test",
-							Comment:    "comment",
+							Comment:    func(s string) *string { return &s }("comment"),
 							Period: []*medical_folder.CreateAntecedentPeriod{
 								{
 									Quantity:       6,
 									Frequency:      1,
 									FrequencyRatio: 3,
 									FrequencyUnit:  "MOIS",
-									PeriodLength:   4,
-									PeriodUnit:     "ANNEE",
+									PeriodLength:   func(s int) *int { return &s }(2),
+									PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 								},
 							},
 						},

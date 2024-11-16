@@ -183,23 +183,23 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 							Medicines: []medical_folder.CreateAntecedentsMedicines{
 								{
 									MedicineID: "test",
-									Comment:    "comment",
+									Comment:    func(s string) *string { return &s }("comment"),
 									Period: []*medical_folder.CreateAntecedentPeriod{
 										{
 											Quantity:       1,
 											Frequency:      2,
 											FrequencyRatio: 2,
 											FrequencyUnit:  "JOUR",
-											PeriodLength:   2,
-											PeriodUnit:     "ANNEE",
+											PeriodLength:   func(s int) *int { return &s }(2),
+											PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 										},
 										{
 											Quantity:       5,
 											Frequency:      1,
 											FrequencyRatio: 6,
 											FrequencyUnit:  "MOIS",
-											PeriodLength:   1,
-											PeriodUnit:     "ANNEE",
+											PeriodLength:   func(s int) *int { return &s }(2),
+											PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 										},
 									},
 								},
@@ -217,15 +217,15 @@ func TestCreatePatientFormDoctor_NewPatient(t *testing.T) {
 							Medicines: []medical_folder.CreateAntecedentsMedicines{
 								{
 									MedicineID: "test",
-									Comment:    "comment",
+									Comment:    func(s string) *string { return &s }("comment"),
 									Period: []*medical_folder.CreateAntecedentPeriod{
 										{
 											Quantity:       1,
 											Frequency:      2,
 											FrequencyRatio: 2,
 											FrequencyUnit:  "ANNEE",
-											PeriodLength:   2,
-											PeriodUnit:     "JOUR",
+											PeriodLength:   func(s int) *int { return &s }(2),
+											PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 										},
 									},
 								},
