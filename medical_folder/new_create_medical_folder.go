@@ -206,7 +206,7 @@ func AddMedicalAntecedent(input CreateNewMedicalAntecedentInput, userID string) 
 
 			periods := make([]*model.CreateAntecedentPeriodInput, 0)
 			for _, period := range medicine.Period {
-				if period.Quantity <= 0 || period.Frequency <= 0 || period.PeriodLength <= 0 {
+				if period.Quantity <= 0 || period.Frequency <= 0 {
 					return AddMedicalAntecedentResponse{Code: 400, Err: errors.New("Quantity, Frequency, and PeriodLength must be greater than 0")}
 				}
 				periods = append(periods, &model.CreateAntecedentPeriodInput{
