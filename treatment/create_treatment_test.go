@@ -68,11 +68,14 @@ func TestCreateTreatment(t *testing.T) {
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			MedicineID: "test",
+			Comment:    "test commentaire see",
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
 				Frequency:      2,
 				FrequencyRatio: 2,
 				FrequencyUnit:  "JOUR",
+				PeriodLength:   func(s int) *int { return &s }(2),
+				PeriodUnit:     func(s string) *string { return &s }("JOUR"),
 			}},
 		}},
 	}
@@ -88,6 +91,7 @@ func TestCreateTreatment(t *testing.T) {
 	}
 
 	_, test := graphql.GetAntecedentTreatmentByID(response.Treatment[0].ID)
+
 	if test != nil {
 		t.Errorf("Failed to get treatment: %v", test)
 	}
