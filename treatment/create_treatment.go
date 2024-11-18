@@ -15,7 +15,7 @@ type CreateTreatInput struct {
 
 type CreateAntecedentsMedicines struct {
 	MedicineID string                   `json:"medicine_id"`
-	Comment    *string                  `json:"comment"`
+	Comment    string                   `json:"comment"`
 	Period     []CreateAntecedentPeriod `json:"period"`
 }
 
@@ -107,7 +107,7 @@ func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentRe
 			Medicines: []*model.CreateAntecedentsMedicinesInput{
 				{
 					MedicineID: medicine.MedicineID,
-					Comment:    medicine.Comment,
+					Comment:    &medicine.Comment,
 					Period:     convertToCreateAntecedentPeriodInputSlice(periods),
 				},
 			},

@@ -8,7 +8,42 @@ import (
 	"github.com/edgar-care/edgarlib/v2/redis"
 )
 
-func sendDeleteConfirmationEmail(email string) error {
+type InitDeleteAccountResponse struct {
+	Validate bool
+	Code     int
+	Err      error
+}
+
+type DeleteDefinitlyAccountResponse struct {
+	Confirm bool
+	Code    int
+	Err     error
+}
+
+func InitDeleteAccount(ownerID string) InitDeleteAccountResponse {
+
+	email, _, err := GetEmailByOwnerID(ownerID)
+	if err != nil {
+		return InitDeleteAccountResponse{Validate: false, Code: 400, Err: err}
+	}
+
+	err = SendDeleteConfirmationEmail(email)
+	if err != nil {
+		return InitDeleteAccountResponse{Validate: false, Code: 400, Err: errors.New("failed to send email")}
+	}
+
+	time := 30 * 24 * 60 * 60
+
+	_, err = redis.SetKey(ownerID+"_delete_request", "true", &time)
+	if err != nil {
+		return InitDeleteAccountResponse{Validate: false, Code: 500, Err: errors.New("failed to set key in Redis")}
+	}
+
+	return InitDeleteAccountResponse{Validate: true, Err: nil, Code: 200}
+
+}
+
+func SendDeleteConfirmationEmail(email string) error {
 	return edgarmail.SendEmail(edgarmail.Email{
 		To:       email,
 		Subject:  "Confirmation de la demande de suppression de compte",
@@ -22,7 +57,7 @@ func sendDeleteConfirmationEmail(email string) error {
 	})
 }
 
-func sendReminderEmail(email string, daysLeft int) error {
+func SendReminderEmail(email string, daysLeft int) error {
 	return edgarmail.SendEmail(edgarmail.Email{
 		To:       email,
 		Subject:  "Rappel : Demande de suppression de compte",
@@ -36,28 +71,33 @@ func sendReminderEmail(email string, daysLeft int) error {
 	})
 }
 
-func deleteDefinitlyAccount(ownerID, accountType string) error {
+func DeleteDefinitlyAccount(ownerID string) DeleteDefinitlyAccountResponse {
+	_, accountType, err := GetEmailByOwnerID(ownerID)
+	if err != nil {
+		return DeleteDefinitlyAccountResponse{Confirm: false, Code: 400, Err: err}
+	}
+
 	if accountType == "patient" {
 		_, err := graphql.DeletePatient(ownerID)
 		if err != nil {
-			return fmt.Errorf("failed to delete patient: %v", err)
+			return DeleteDefinitlyAccountResponse{Confirm: false, Code: 500, Err: errors.New("failed to delete patient")}
 		}
 	} else {
 		_, err := graphql.DeleteDoctor(ownerID)
 		if err != nil {
-			return fmt.Errorf("failed to delete doctor: %v", err)
+			return DeleteDefinitlyAccountResponse{Confirm: false, Code: 500, Err: errors.New("failed to delete doctor")}
 		}
 	}
 
-	// Suppression de la clé Redis
-	_, err := redis.DeleteKey(ownerID + "_delete_request")
+	_, err = redis.DeleteKey(ownerID + "_delete_request")
 	if err != nil {
-		return fmt.Errorf("failed to delete redis key: %v", err)
+		return DeleteDefinitlyAccountResponse{Confirm: false, Code: 500, Err: errors.New("failed to delete key in Redis")}
 	}
-	return nil
+
+	return DeleteDefinitlyAccountResponse{Confirm: true, Code: 200, Err: nil}
 }
 
-func getEmailByOwnerID(ownerID string) (string, string, error) {
+func GetEmailByOwnerID(ownerID string) (string, string, error) {
 	patient, err := graphql.GetPatientById(ownerID)
 	if err == nil {
 		return patient.Email, "patient", nil

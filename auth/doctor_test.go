@@ -17,7 +17,12 @@ func TestGetDoctorById(t *testing.T) {
 		Password:  "password",
 		Name:      "name",
 		Firstname: "first",
-		Address:   &model.AddressInput{},
+		Address: &model.AddressInput{
+			Street:  "street",
+			City:    "city",
+			ZipCode: "zip",
+			Country: "country",
+		},
 	})
 	if err != nil {
 		t.Errorf("Error while creating doctor: %v", err)

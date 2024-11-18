@@ -67,7 +67,7 @@ func TestDeleteTreatment(t *testing.T) {
 		EndDate:             5678,
 		Medicines: []CreateAntecedentsMedicines{{
 			MedicineID: "test",
-			Comment:    func(s string) *string { return &s }("comment"),
+			Comment:    "comment",
 			Period: []CreateAntecedentPeriod{{
 				Quantity:       2,
 				Frequency:      2,
