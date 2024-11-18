@@ -2984,6 +2984,7 @@ func CreateAntecdentTreatment(id string, input model.CreateAntecedentTreatmentIn
 	        end_date
 	        medicines {
 	            medicine_id
+	            comment
 	            period {
 	                quantity
 	                frequency
