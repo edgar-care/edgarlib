@@ -32,6 +32,19 @@ func TestRemoveTrustDevice_Success(t *testing.T) {
 		TrustDevice: device.DeviceConnect.ID,
 	}
 	_ = CreateDoubleAuthMobile(mobile, patient.ID)
+
+	input2 := CreateDeviceConnectInput{
+		DeviceType: "Android",
+		Browser:    "edgar-app",
+		Ip:         "127.0.0.1",
+		City:       "Canne",
+		Country:    "Fr",
+		Date:       1234,
+	}
+	device2 := CreateDeviceConnect(input2, patient.ID)
+
+	_ = AddTrustDevice(device2.DeviceConnect.ID, patient.ID)
+
 	response := RemoveTrustDevice(device.DeviceConnect.ID, patient.ID)
 
 	if response.Err != nil {
@@ -43,6 +56,7 @@ func TestRemoveTrustDevice_Success(t *testing.T) {
 	if response.Code != 200 {
 		t.Errorf("Expected device to be deleted, but it wasn't")
 	}
+	_ = GetDoubleAuthById(patient.ID)
 
 	updatedPatient, _ := graphql.GetPatientById(patient.ID)
 	for _, devices := range updatedPatient.TrustDevices {

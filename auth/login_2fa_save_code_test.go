@@ -46,7 +46,7 @@ func TestLogin2faSaveCode(t *testing.T) {
 		BackupCode: UseSaveCode,
 	}
 
-	response := Login2faSaveCode(input, "test_device")
+	response := Login2faSaveCode(input, "test_device", patient.ID)
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
 	}
@@ -103,7 +103,7 @@ func TestLogin2faSaveCodeDoctor(t *testing.T) {
 		BackupCode: UseSaveCode,
 	}
 
-	response := Login2faSaveCode(input, "test_device")
+	response := Login2faSaveCode(input, "test_device", doctor.ID)
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
 	}
@@ -156,7 +156,7 @@ func TestLogin2faSaveCode_InvalidCode(t *testing.T) {
 		BackupCode: "Code",
 	}
 
-	response := Login2faSaveCode(input, "test_device")
+	response := Login2faSaveCode(input, "test_device", doctor.ID)
 	if token == "" {
 		t.Error("Expected token to be empty, but got a non-empty token")
 	}
