@@ -117,65 +117,6 @@ func CreateAnteChir(input model.CreateAnteChirInput) (model.AnteChir, error) {
 	return result.Data.CreateAnteChir, nil
 }
 
-func CreateAnteDisease(input model.CreateAnteDiseaseInput) (model.AnteDisease, error) {
-	query := `mutation CreateAnteDisease($input: CreateAnteDiseaseInput!){
-	    createAnteDisease(input: $input){
-	        id
-	        name
-	        chronicity
-	        surgery_ids
-	        symptoms
-	        treatment_ids
-	        still_relevant
-	        createdAt
-	        updatedAt
-	    }
-	}`
-	variables := map[string]interface{}{
-		"input": input,
-	}
-	reqBody := map[string]interface{}{
-		"query": query,
-		"variables": variables,
-	}
-	body, err := json.Marshal(reqBody)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
-	}
-
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	var result struct {
-		Errors []model.GraphQLError `json:"errors"`
-		Data struct {
-			CreateAnteDisease model.AnteDisease `json:"createAnteDisease"`
-		} `json:"data"`
-	}
-	err = json.Unmarshal(responseBody, &result)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	if len(result.Errors) > 0 {
-		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
-	}
-
-	return result.Data.CreateAnteDisease, nil
-}
-
 func CreateSymptom(input model.CreateSymptomInput) (model.Symptom, error) {
 	query := `mutation CreateSymptom($input: CreateSymptomInput!){
 	    createSymptom(input: $input){
@@ -2222,66 +2163,6 @@ func UpdatePatientFollowTreatment(id string, input model.UpdatePatientFollowTrea
 	return result.Data.UpdatePatientFollowTreatment, nil
 }
 
-func UpdatePatientAntediesae(id string, input model.UpdatePatientAntediseaseInput) (model.AnteDisease, error) {
-	query := `mutation UpdatePatientAntediesae($id: String!, $input: UpdatePatientAntediseaseInput!){
-	    updatePatientAntediesae(id: $id, input: $input){
-	        id
-	        name
-	        chronicity
-	        surgery_ids
-	        symptoms
-	        treatment_ids
-	        still_relevant
-	        createdAt
-	        updatedAt
-	    }
-	}`
-	variables := map[string]interface{}{
-		"id": id,
-		"input": input,
-	}
-	reqBody := map[string]interface{}{
-		"query": query,
-		"variables": variables,
-	}
-	body, err := json.Marshal(reqBody)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
-	}
-
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	var result struct {
-		Errors []model.GraphQLError `json:"errors"`
-		Data struct {
-			UpdatePatientAntediesae model.AnteDisease `json:"updatePatientAntediesae"`
-		} `json:"data"`
-	}
-	err = json.Unmarshal(responseBody, &result)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	if len(result.Errors) > 0 {
-		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
-	}
-
-	return result.Data.UpdatePatientAntediesae, nil
-}
-
 func UpdateAccountsMedicalFolder(id string, input model.UpdateAccountMedicalFolder) (model.MedicalInfo, error) {
 	query := `mutation UpdateAccountsMedicalFolder($id: String!, $input: UpdateAccountMedicalFolder!){
 	    updateAccountsMedicalFolder(id: $id, input: $input){
@@ -2363,8 +2244,7 @@ func CreateSession(input model.CreateSessionInput) (model.Session, error) {
 	        height
 	        weight
 	        sex
-	        ante_chirs
-	        ante_diseases
+	        medical_antecedents
 	        medicine
 	        last_question
 	        logs{
@@ -3710,66 +3590,6 @@ func DeleteTreatmentsFollowUp(id string) (bool, error) {
 	return result.Data.DeleteTreatmentsFollowUp, nil
 }
 
-func UpdateAnteDisease(id string, input model.UpdateAnteDiseaseInput) (model.AnteDisease, error) {
-	query := `mutation UpdateAnteDisease($id: String!, $input: UpdateAnteDiseaseInput!){
-	    updateAnteDisease(id: $id, input: $input){
-	        id
-	        name
-	        chronicity
-	        surgery_ids
-	        symptoms
-	        treatment_ids
-	        still_relevant
-	        createdAt
-	        updatedAt
-	    }
-	}`
-	variables := map[string]interface{}{
-		"id": id,
-		"input": input,
-	}
-	reqBody := map[string]interface{}{
-		"query": query,
-		"variables": variables,
-	}
-	body, err := json.Marshal(reqBody)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
-	}
-
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	var result struct {
-		Errors []model.GraphQLError `json:"errors"`
-		Data struct {
-			UpdateAnteDisease model.AnteDisease `json:"updateAnteDisease"`
-		} `json:"data"`
-	}
-	err = json.Unmarshal(responseBody, &result)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	if len(result.Errors) > 0 {
-		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
-	}
-
-	return result.Data.UpdateAnteDisease, nil
-}
-
 func CreateRdv(input model.CreateRdvInput) (model.Rdv, error) {
 	query := `mutation CreateRdv($input: CreateRdvInput!){
 	    createRdv(input: $input){
@@ -3849,8 +3669,7 @@ func UpdateSession(id string, input model.UpdateSessionInput) (model.Session, er
 	        height
 	        weight
 	        sex
-	        ante_chirs
-	        ante_diseases
+	        medical_antecedents
 	        medicine
 	        last_question
 	        logs{
@@ -5143,137 +4962,6 @@ func GetDoctorByEmail(email string) (model.Doctor, error) {
 	return result.Data.GetDoctorByEmail, nil
 }
 
-func GetAnteDiseaseByID(id string) (model.AnteDisease, error) {
-	query := `query GetAnteDiseaseByID($id: String!){
-	    getAnteDiseaseByID(id: $id){
-	        id
-	        name
-	        chronicity
-	        surgery_ids
-	        symptoms
-	        treatment_ids
-	        still_relevant
-	        createdAt
-	        updatedAt
-	    }
-	}`
-	variables := map[string]interface{}{
-		"id": id,
-	}
-	reqBody := map[string]interface{}{
-		"query": query,
-		"variables": variables,
-	}
-	body, err := json.Marshal(reqBody)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
-	}
-
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	var result struct {
-		Errors []model.GraphQLError `json:"errors"`
-		Data struct {
-			GetAnteDiseaseByID model.AnteDisease `json:"getAnteDiseaseByID"`
-		} `json:"data"`
-	}
-	err = json.Unmarshal(responseBody, &result)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	if len(result.Errors) > 0 {
-		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
-	}
-
-	return result.Data.GetAnteDiseaseByID, nil
-}
-
-func GetAnteDiseaseByIDWithSymptoms(anteDiseaseId string) (model.AnteDisease, error) {
-	query := `query GetAnteDiseaseByIDWithSymptoms($anteDiseaseId: String!){
-	    getAnteDiseaseByIDWithSymptoms(anteDiseaseId: $anteDiseaseId){
-	        id
-	        name
-	        chronicity
-	        surgery_ids
-	        symptoms
-	        treatment_ids
-	        still_relevant
-	        createdAt
-	        updatedAt
-	        symptomsclear{
-	            id
-	            name
-	            chronic
-	            symptom
-	            advice
-	            question
-	            question_basic
-	            question_duration
-	            question_ante
-	            createdAt
-	            updatedAt
-	        }
-	    }
-	}`
-	variables := map[string]interface{}{
-		"anteDiseaseId": anteDiseaseId,
-	}
-	reqBody := map[string]interface{}{
-		"query": query,
-		"variables": variables,
-	}
-	body, err := json.Marshal(reqBody)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return model.AnteDisease{}, fmt.Errorf("failed to fetch data: %v", resp.Status)
-	}
-
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	var result struct {
-		Errors []model.GraphQLError `json:"errors"`
-		Data struct {
-			GetAnteDiseaseByIDWithSymptoms model.AnteDisease `json:"getAnteDiseaseByIDWithSymptoms"`
-		} `json:"data"`
-	}
-	err = json.Unmarshal(responseBody, &result)
-	if err != nil {
-		return model.AnteDisease{}, err
-	}
-
-	if len(result.Errors) > 0 {
-		return model.AnteDisease{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
-	}
-
-	return result.Data.GetAnteDiseaseByIDWithSymptoms, nil
-}
-
 func GetNlpReports(option *model.Options) ([]model.NlpReport, error) {
 	query := `query GetNlpReports($option: Options){
 	    getNlpReports(option: $option){
@@ -5595,8 +5283,7 @@ func GetSessionById(id string) (model.Session, error) {
 	        height
 	        weight
 	        sex
-	        ante_chirs
-	        ante_diseases
+	        medical_antecedents
 	        medicine
 	        last_question
 	        logs{
@@ -6577,65 +6264,6 @@ func GetChats(id string, option *model.Options) ([]model.Chat, error) {
 	return result.Data.GetChats, nil
 }
 
-func GetAnteDiseases(option *model.Options) ([]model.AnteDisease, error) {
-	query := `query GetAnteDiseases($option: Options){
-	    getAnteDiseases(option: $option){
-	        id
-	        name
-	        chronicity
-	        surgery_ids
-	        symptoms
-	        treatment_ids
-	        still_relevant
-	        createdAt
-	        updatedAt
-	    }
-	}`
-	variables := map[string]interface{}{
-		"option": option,
-	}
-	reqBody := map[string]interface{}{
-		"query": query,
-		"variables": variables,
-	}
-	body, err := json.Marshal(reqBody)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := http.Post(os.Getenv("GRAPHQL_URL"), "application/json", bytes.NewBuffer(body))
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to fetch data: %v", resp.Status)
-	}
-
-	responseBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var result struct {
-		Errors []model.GraphQLError `json:"errors"`
-		Data struct {
-			GetAnteDiseases []model.AnteDisease `json:"getAnteDiseases"`
-		} `json:"data"`
-	}
-	err = json.Unmarshal(responseBody, &result)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(result.Errors) > 0 {
-		return nil, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
-	}
-
-	return result.Data.GetAnteDiseases, nil
-}
-
 func GetSessions(option *model.Options) ([]model.Session, error) {
 	query := `query GetSessions($option: Options){
 	    getSessions(option: $option){
@@ -6654,8 +6282,7 @@ func GetSessions(option *model.Options) ([]model.Session, error) {
 	        height
 	        weight
 	        sex
-	        ante_chirs
-	        ante_diseases
+	        medical_antecedents
 	        medicine
 	        last_question
 	        logs{

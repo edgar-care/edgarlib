@@ -52,19 +52,6 @@ type AnteChir struct {
 	UpdatedAt       int                   `json:"updatedAt" bson:"updatedAt"`
 }
 
-type AnteDisease struct {
-	ID            string     `json:"id" bson:"_id"`
-	Name          string     `json:"name" bson:"name"`
-	Chronicity    float64    `json:"chronicity" bson:"chronicity"`
-	SurgeryIds    []string   `json:"surgery_ids,omitempty" bson:"surgery_ids"`
-	Symptoms      []string   `json:"symptoms,omitempty" bson:"symptoms"`
-	TreatmentIds  []string   `json:"treatment_ids,omitempty" bson:"treatment_ids"`
-	StillRelevant bool       `json:"still_relevant" bson:"still_relevant"`
-	CreatedAt     int        `json:"createdAt" bson:"createdAt"`
-	UpdatedAt     int        `json:"updatedAt" bson:"updatedAt"`
-	Symptomsclear []*Symptom `json:"symptomsclear,omitempty" bson:"symptomsclear"`
-}
-
 type AnteFamily struct {
 	ID        string   `json:"id" bson:"_id"`
 	Name      string   `json:"name" bson:"name"`
@@ -343,14 +330,13 @@ type CreateSaveCodeInput struct {
 }
 
 type CreateSessionInput struct {
-	Age               int      `json:"age" bson:"age"`
-	Height            int      `json:"height" bson:"height"`
-	Weight            int      `json:"weight" bson:"weight"`
-	Sex               string   `json:"sex" bson:"sex"`
-	AnteChirs         []string `json:"ante_chirs" bson:"ante_chirs"`
-	AnteDiseases      []string `json:"ante_diseases" bson:"ante_diseases"`
-	Medicine          []string `json:"medicine" bson:"medicine"`
-	HereditaryDisease []string `json:"hereditary_disease" bson:"hereditary_disease"`
+	Age                int      `json:"age" bson:"age"`
+	Height             int      `json:"height" bson:"height"`
+	Weight             int      `json:"weight" bson:"weight"`
+	Sex                string   `json:"sex" bson:"sex"`
+	MedicalAntecedents []string `json:"medical_antecedents" bson:"medical_antecedents"`
+	Medicine           []string `json:"medicine" bson:"medicine"`
+	HereditaryDisease  []string `json:"hereditary_disease" bson:"hereditary_disease"`
 }
 
 type CreateSymptomInput struct {
@@ -625,22 +611,21 @@ type SaveCode struct {
 }
 
 type Session struct {
-	ID                string             `json:"id" bson:"_id"`
-	Diseases          []*SessionDiseases `json:"diseases" bson:"diseases"`
-	Symptoms          []*SessionSymptom  `json:"symptoms" bson:"symptoms"`
-	Age               int                `json:"age" bson:"age"`
-	Height            int                `json:"height" bson:"height"`
-	Weight            int                `json:"weight" bson:"weight"`
-	Sex               string             `json:"sex" bson:"sex"`
-	AnteChirs         []string           `json:"ante_chirs" bson:"ante_chirs"`
-	AnteDiseases      []string           `json:"ante_diseases" bson:"ante_diseases"`
-	Medicine          []string           `json:"medicine" bson:"medicine"`
-	LastQuestion      string             `json:"last_question" bson:"last_question"`
-	Logs              []*Logs            `json:"logs" bson:"logs"`
-	HereditaryDisease []string           `json:"hereditary_disease" bson:"hereditary_disease"`
-	Alerts            []string           `json:"alerts" bson:"alerts"`
-	CreatedAt         int                `json:"createdAt" bson:"createdAt"`
-	UpdatedAt         int                `json:"updatedAt" bson:"updatedAt"`
+	ID                 string             `json:"id" bson:"_id"`
+	Diseases           []*SessionDiseases `json:"diseases" bson:"diseases"`
+	Symptoms           []*SessionSymptom  `json:"symptoms" bson:"symptoms"`
+	Age                int                `json:"age" bson:"age"`
+	Height             int                `json:"height" bson:"height"`
+	Weight             int                `json:"weight" bson:"weight"`
+	Sex                string             `json:"sex" bson:"sex"`
+	MedicalAntecedents []string           `json:"medical_antecedents" bson:"medical_antecedents"`
+	Medicine           []string           `json:"medicine" bson:"medicine"`
+	LastQuestion       string             `json:"last_question" bson:"last_question"`
+	Logs               []*Logs            `json:"logs" bson:"logs"`
+	HereditaryDisease  []string           `json:"hereditary_disease" bson:"hereditary_disease"`
+	Alerts             []string           `json:"alerts" bson:"alerts"`
+	CreatedAt          int                `json:"createdAt" bson:"createdAt"`
+	UpdatedAt          int                `json:"updatedAt" bson:"updatedAt"`
 }
 
 type SessionDiseases struct {
@@ -948,19 +933,18 @@ type UpdateSaveCodeInput struct {
 }
 
 type UpdateSessionInput struct {
-	Diseases          []*SessionDiseasesInput `json:"diseases,omitempty" bson:"diseases"`
-	Symptoms          []*SessionSymptomInput  `json:"symptoms,omitempty" bson:"symptoms"`
-	Age               *int                    `json:"age,omitempty" bson:"age"`
-	Height            *int                    `json:"height,omitempty" bson:"height"`
-	Weight            *int                    `json:"weight,omitempty" bson:"weight"`
-	Sex               *string                 `json:"sex,omitempty" bson:"sex"`
-	AnteChirs         []string                `json:"ante_chirs,omitempty" bson:"ante_chirs"`
-	AnteDiseases      []string                `json:"ante_diseases,omitempty" bson:"ante_diseases"`
-	Medicine          []string                `json:"medicine,omitempty" bson:"medicine"`
-	LastQuestion      *string                 `json:"last_question,omitempty" bson:"last_question"`
-	Logs              []*LogsInput            `json:"logs,omitempty" bson:"logs"`
-	HereditaryDisease []string                `json:"hereditary_disease,omitempty" bson:"hereditary_disease"`
-	Alerts            []string                `json:"alerts,omitempty" bson:"alerts"`
+	Diseases           []*SessionDiseasesInput `json:"diseases,omitempty" bson:"diseases"`
+	Symptoms           []*SessionSymptomInput  `json:"symptoms,omitempty" bson:"symptoms"`
+	Age                *int                    `json:"age,omitempty" bson:"age"`
+	Height             *int                    `json:"height,omitempty" bson:"height"`
+	Weight             *int                    `json:"weight,omitempty" bson:"weight"`
+	Sex                *string                 `json:"sex,omitempty" bson:"sex"`
+	MedicalAntecedents []string                `json:"medical_antecedents,omitempty" bson:"medical_antecedents"`
+	Medicine           []string                `json:"medicine,omitempty" bson:"medicine"`
+	LastQuestion       *string                 `json:"last_question,omitempty" bson:"last_question"`
+	Logs               []*LogsInput            `json:"logs,omitempty" bson:"logs"`
+	HereditaryDisease  []string                `json:"hereditary_disease,omitempty" bson:"hereditary_disease"`
+	Alerts             []string                `json:"alerts,omitempty" bson:"alerts"`
 }
 
 type UpdateSymptomInput struct {

@@ -56,8 +56,7 @@ type Session {
     height: Int!
     weight: Int!
     sex: String!
-    ante_chirs: [String!]!
-    ante_diseases: [String!]!
+    medical_antecedents: [String!]!
     medicine: [String!]!
     last_question: String!
     logs: [Logs!]!
@@ -160,21 +159,6 @@ type AnteChir {
     createdAt: Int!
     updatedAt: Int!
 }
-
-# AnteDisease entity
-type AnteDisease {
-    id: ID!
-    name: String!
-    chronicity: Float!
-    surgery_ids: [String!]
-    symptoms: [String!]
-    treatment_ids: [String!]
-    still_relevant: Boolean!
-    createdAt: Int!
-    updatedAt: Int!
-    symptomsclear: [Symptom!]
-}
-
 
 # AnteFamily entity
 type AnteFamily {
@@ -533,8 +517,7 @@ input CreateSessionInput {
     height: Int!
     weight: Int!
     sex: String!
-    ante_chirs: [String!]!
-    ante_diseases: [String!]!
+    medical_antecedents: [String!]!
     medicine: [String!]!
     hereditary_disease: [String!]!
 }
@@ -546,8 +529,7 @@ input UpdateSessionInput {
     height: Int
     weight: Int
     sex: String
-    ante_chirs: [String!]
-    ante_diseases: [String!]
+    medical_antecedents: [String!]
     medicine: [String!]
     last_question: String
     logs: [LogsInput!]
@@ -1247,15 +1229,6 @@ type Query {
     # Get an antechir by its id.
     getAnteChirByID(id: String!): AnteChir
 
-    # Get the entire list of antediseases.
-    getAnteDiseases(option: Options): [AnteDisease]
-
-    # Get an antedisease by its id.
-    getAnteDiseaseByID(id: String!): AnteDisease
-
-    # Get an antedisease by its id with clear symptoms.
-    getAnteDiseaseByIDWithSymptoms(anteDiseaseId: String!): AnteDisease
-
     # Get the entire list of .
     getAnteFamilies(option: Options): [AnteFamily]
 
@@ -1376,8 +1349,6 @@ type Mutation {
 
     updatePatientFollowTreatment(id: String!, input: UpdatePatientFollowTreatmentInput!): Patient
 
-    updatePatientAntediesae(id: String!, input: UpdatePatientAntediseaseInput!): AnteDisease
-
     updateMedicalFolderdAntedisease(id: String!, input: UpdateMedicalFOlderAntedisease!): MedicalInfo
 
     updateTreatmentsMedicalAntecedents(id: String!, input: UpdateTreatmentMedicalAntecedentsInput!): MedicalAntecedents
@@ -1474,12 +1445,6 @@ type Mutation {
 
     # Delete a antechir.
     deleteAnteChir(id: String!): Boolean
-
-    # Create a new antedisease.
-    createAnteDisease(input: CreateAnteDiseaseInput!): AnteDisease
-    
-    # Update a new antedisease.
-    updateAnteDisease(id: String!, input: UpdateAnteDiseaseInput!): AnteDisease
     
     # Delete a antedisease.
     deleteAnteDisease(id: String!): Boolean
@@ -1531,7 +1496,8 @@ type Mutation {
     
     # Update a new MedicalFolder.
     updateMedicalFolder(id: String!, input: UpdateMedicalFolderInput!): MedicalInfo
-    
+
+
     # Delete an MedicalFolder.
     deleteMedicalFolder(id: String!): Boolean
 

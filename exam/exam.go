@@ -15,11 +15,11 @@ type ExamResponse struct {
 	Err        error
 }
 
-func Exam(context []model.SessionSymptom, imc float64, anteChirIds []string, hereditary_disease []string) ExamResponse {
+func Exam(context []model.SessionSymptom, imc float64, hereditaryDisease []string) ExamResponse {
 	var question string
 	var possibleSymptoms []string
 	var autoA *string
-	mappedDiseaseCoverage, isDone := Calculi(context, imc, anteChirIds, hereditary_disease)
+	mappedDiseaseCoverage, isDone := Calculi(context, imc, hereditaryDisease)
 	if isDone == false {
 		var err error
 		question, autoA, possibleSymptoms, err = GuessQuestion(mappedDiseaseCoverage)

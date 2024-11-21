@@ -40,44 +40,21 @@ func Initiate(id string) InitiateResponse {
 	} else {
 		input.Sex = "O"
 	}
-	input.AnteDiseases = patientInfos.AntecedentDiseaseIds
-
-	input.AnteChirs = []string{}
-	if input.AnteDiseases != nil && len(input.AnteDiseases) > 0 {
-		for _, anteDiseaseID := range input.AnteDiseases {
-			if anteDiseaseID != "" {
-				ante, err := graphql.GetAnteDiseaseByID(anteDiseaseID)
-				if err != nil {
-					return InitiateResponse{"", 500, errors.New("problem with anteDisease ID")}
-				}
-				if ante.SurgeryIds != nil && len(ante.SurgeryIds) > 0 && ante.StillRelevant == true {
-					for _, anteChirId := range ante.SurgeryIds {
-						input.AnteChirs = append(input.AnteChirs, anteChirId)
-					}
-				}
-			}
-		}
-	}
+	input.MedicalAntecedents = patientInfos.AntecedentDiseaseIds
 
 	input.Medicine = []string{}
 	input.Medicine = append(input.Medicine, "CanonFlesh")
 
-	for _, antecedentDiseaseId := range input.AnteDiseases {
+	for _, medicalAntecedentsId := range input.MedicalAntecedents {
 		{
-			if antecedentDiseaseId != "" {
-				antecedentDisease, err := graphql.GetAnteDiseaseByID(antecedentDiseaseId)
+			if medicalAntecedentsId != "" {
+				medicalAntecedent, err := graphql.GetMedicalAntecedentsById(medicalAntecedentsId)
 				if err != nil {
-					return InitiateResponse{"", 500, errors.New("problem with antedisease ID")}
+					return InitiateResponse{"", 500, errors.New("problem with MedicalAntecedents ID")}
 				}
-				if antecedentDisease.StillRelevant == true {
-					for _, treatmentIds := range antecedentDisease.TreatmentIds {
-						treatment, err := graphql.GetTreatmentByID(treatmentIds)
-						if err != nil {
-							return InitiateResponse{"", 500, errors.New("problem with treatment ID")}
-						}
-						if treatment.MedicineID != "" {
-							input.Medicine = append(input.Medicine, treatment.MedicineID)
-						}
+				for _, AntecedentTreatment := range medicalAntecedent.Treatments {
+					for _, AntecedentsMedicine := range AntecedentTreatment.Medicines {
+						input.Medicine = append(input.Medicine, AntecedentsMedicine.MedicineID)
 					}
 				}
 			}
@@ -89,12 +66,10 @@ func Initiate(id string) InitiateResponse {
 		if familyMemberInfoId != "" {
 			familyMemberInfo, _ := graphql.GetMedicalFolderByID(familyMemberInfoId)
 			for _, familyMemberAnteId := range familyMemberInfo.AntecedentDiseaseIds {
-				familyMemberAnte, _ := graphql.GetAnteDiseaseByID(familyMemberAnteId)
-				if familyMemberAnte.StillRelevant == true {
-					for _, disease := range diseases {
-						if familyMemberAnte.Name == disease.Name && disease.HeredityFactor != 0 {
-							input.HereditaryDisease = append(input.HereditaryDisease, disease.Name)
-						}
+				familyMemberAnte, _ := graphql.GetMedicalAntecedentsById(familyMemberAnteId)
+				for _, disease := range diseases {
+					if familyMemberAnte.Name == disease.Name && disease.HeredityFactor != 0 {
+						input.HereditaryDisease = append(input.HereditaryDisease, disease.Name)
 					}
 				}
 			}
@@ -104,14 +79,13 @@ func Initiate(id string) InitiateResponse {
 	utils.WakeNlpUp()
 
 	session, err := graphql.CreateSession(model.CreateSessionInput{
-		Age:               input.Age,
-		Height:            input.Height,
-		Weight:            input.Weight,
-		Sex:               input.Sex,
-		AnteChirs:         input.AnteChirs,
-		AnteDiseases:      input.AnteDiseases,
-		Medicine:          input.Medicine,
-		HereditaryDisease: input.HereditaryDisease,
+		Age:                input.Age,
+		Height:             input.Height,
+		Weight:             input.Weight,
+		Sex:                input.Sex,
+		MedicalAntecedents: input.MedicalAntecedents,
+		Medicine:           input.Medicine,
+		HereditaryDisease:  input.HereditaryDisease,
 	})
 
 	if err != nil {
