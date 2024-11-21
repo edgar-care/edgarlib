@@ -3,6 +3,7 @@ package utils
 import (
 	"github.com/edgar-care/edgarlib/v2/graphql"
 	"github.com/edgar-care/edgarlib/v2/graphql/model"
+	"log"
 )
 
 func isSymptomTreated(symptom model.SessionSymptomInput, treatmentName string) bool {
@@ -16,7 +17,9 @@ func isSymptomTreated(symptom model.SessionSymptomInput, treatmentName string) b
 
 func CheckTreatments(symptoms []*model.SessionSymptomInput, medicines []string) ([]*model.SessionSymptomInput, error) {
 	for _, medicineId := range medicines {
+		log.Println(medicineId)
 		medicine, err := graphql.GetMedicineByIDWithSymptoms(medicineId)
+		log.Println(medicine, err)
 		if err != nil {
 			return nil, err
 		}

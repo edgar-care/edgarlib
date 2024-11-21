@@ -10,11 +10,11 @@ import (
 )
 
 type DiagnoseResponse struct {
-	Done       bool
-	Question   string
-	AutoAnswer *model.AutoAnswer
-	Code       int
-	Err        error
+	Done     bool
+	Question string
+	//AutoAnswer *model.AutoAnswer
+	Code int
+	Err  error
 }
 
 type AutoAnswerinfo struct {
@@ -40,71 +40,155 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 		}
 	}
 
-	var symptoms []model.SessionSymptom
-	for _, s := range session.Symptoms {
-		var ns model.SessionSymptom
-		ns.Name = s.Name
-		ns.Presence = s.Presence
-		ns.Duration = s.Duration
-		ns.Treated = s.Treated
-		symptoms = append(symptoms, ns)
+	var newSymptoms utils.NlpResponseBody
+
+	symptoms := extractSymptomsFromSession(session)
+
+	updateLastLogAnswer(&session, sentence)
+
+	questionSymptom := getLastQuestionSymptom(session)
+
+	if len(questionSymptom) > 0 {
+		var errCode int
+		newSymptoms, errCode = processSymptoms(&session, sentence, questionSymptom, autoAnswer)
+		if errCode != 200 {
+			return DiagnoseResponse{
+				Code: errCode,
+				Err:  errors.New("NLP error, please try again"),
+			}
+		}
 	}
 
+	symptoms = updateSymptomsWithNewData(symptoms, newSymptoms)
+
+	symptomsInput := prepareSymptomsInput(symptoms)
+
+	exam := processExam(&session, symptomsInput, symptoms)
+	if exam.Err != nil {
+		return DiagnoseResponse{
+			Code: 500,
+			Err:  exam.Err,
+		}
+	}
+
+	logsInput := updateLogs(session, sentence, &exam)
+
+	var diseasesInput []*model.SessionDiseasesInput
+	if exam.Done {
+		diseasesInput, err = updateDiseases(symptoms, session)
+		if err != nil {
+			return DiagnoseResponse{
+				Code: 500,
+				Err:  errors.New("error during getSessionDiseases"),
+			}
+		}
+	}
+
+	//var autoAnswerOutput *model.AutoAnswer
+	//if exam.AutoAnswer != nil {
+	//	autoAnswerOutput = getAutoAnswerOutput(exam)
+	//}
+
+	if len(symptomsInput) > 11 {
+		exam.Done = true
+	}
+
+	_, err = graphql.UpdateSession(session.ID, model.UpdateSessionInput{
+		Diseases:     diseasesInput,
+		Symptoms:     symptomsInput,
+		Medicine:     session.Medicine,
+		LastQuestion: &session.LastQuestion,
+		Logs:         logsInput,
+		Alerts:       session.Alerts,
+	})
+	edgarlib.CheckError(err)
+	return DiagnoseResponse{
+		Done:     exam.Done,
+		Question: exam.Question,
+		//AutoAnswer: autoAnswerOutput,
+		Code: 200,
+		Err:  nil,
+	}
+}
+
+//func getAutoAnswerOutput(exam utils.ExamResponseBody) *model.AutoAnswer {
+//	var autoAnswerOutput *model.AutoAnswer
+//	auA, err := graphql.GetAutoAnswerByName(*exam.AutoAnswer)
+//	if err != nil {
+//		autoAnswerOutput = nil
+//	} else {
+//		autoAnswerOutput = &auA
+//	}
+//	return autoAnswerOutput
+//}
+
+func extractSymptomsFromSession(session model.Session) []model.SessionSymptom {
+	var symptoms []model.SessionSymptom
+	for _, s := range session.Symptoms {
+		symptoms = append(symptoms, model.SessionSymptom{
+			Name:     s.Name,
+			Presence: s.Presence,
+			Duration: s.Duration,
+			Treated:  s.Treated,
+		})
+	}
+	return symptoms
+}
+
+func updateLastLogAnswer(session *model.Session, sentence string) {
 	if len(session.Logs) > 0 {
 		session.Logs[len(session.Logs)-1].Answer = sentence
 	}
+}
 
-	questionSymptom := []string{session.LastQuestion}
-
-	var newSymptoms utils.NlpResponseBody
-	if session.LastQuestion == "" {
-		questionSymptom = []string{}
+func getLastQuestionSymptom(session model.Session) []string {
+	if session.LastQuestion == "" || session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
+		return []string{}
 	}
-	if session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
-		questionSymptom = []string{}
-	} else {
+	return []string{session.LastQuestion}
+}
 
-		var durSymptom *string
-		if session.LastQuestion != "" && strings.Split(session.LastQuestion, " | ")[0] == "duration" {
-			durSymptom = &strings.Split(session.LastQuestion, " | ")[1]
-		}
+func processSymptoms(session *model.Session, sentence string, questionSymptom []string, autoAnswer *AutoAnswerinfo) (utils.NlpResponseBody, int) {
+	//var newSymptoms utils.NlpResponseBody
+	//if autoAnswer != nil {
+	//	processAutoAnswerSymptoms(autoAnswer, questionSymptom, &newSymptoms)
+	//} else {
+	isMedicine := session.LastQuestion == "describe medicines"
+	durSymptom := getDurationSymptom(session)
+	return utils.CallNlp(sentence, questionSymptom, durSymptom, isMedicine)
+	//}
+	//return newSymptoms, 200
+}
 
-		if autoAnswer != nil {
-			autoA, _ := graphql.GetAutoAnswerByName(autoAnswer.Name)
-			if autoA.Name == "Oui / Non / Ne sais pas" {
-				if len(questionSymptom) > 0 {
-					if autoAnswer.Values[0] == "Oui." {
-						p := true
-						newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
-					} else if autoAnswer.Values[0] == "Non." {
-						p := false
-						newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
-					} else if autoAnswer.Values[0] == "Je ne sais pas." {
-						var p *bool
-						p = nil
-						newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: p})
-					}
-				}
-			}
-		} else {
-			var errCode int
-			isMedicine := false
-			if session.LastQuestion == "describe medicines" {
-				isMedicine = true
-			}
-			newSymptoms, errCode = utils.CallNlp(sentence, questionSymptom, durSymptom, isMedicine)
-			if errCode != 200 {
-				return DiagnoseResponse{
-					Code: errCode,
-					Err:  errors.New("NLP error, please try again"),
-				}
-			}
-		}
+func getDurationSymptom(session *model.Session) *string {
+	if session.LastQuestion != "" && strings.Split(session.LastQuestion, " | ")[0] == "duration" {
+		return &strings.Split(session.LastQuestion, " | ")[1]
 	}
+	return nil
+}
 
+//func processAutoAnswerSymptoms(autoAnswer *AutoAnswerinfo, questionSymptom []string, newSymptoms *utils.NlpResponseBody) {
+//	autoA, _ := graphql.GetAutoAnswerByName(autoAnswer.Name)
+//	if autoA.Name == "Oui / Non / Ne sais pas" {
+//		if len(questionSymptom) > 0 {
+//			if autoAnswer.Values[0] == "Oui." {
+//				p := true
+//				newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
+//			} else if autoAnswer.Values[0] == "Non." {
+//				p := false
+//				newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: &p})
+//			} else if autoAnswer.Values[0] == "Je ne sais pas." {
+//				var p *bool
+//				p = nil
+//				newSymptoms.Context = append(newSymptoms.Context, utils.Symptom{Name: questionSymptom[0], Present: p})
+//			}
+//		}
+//	}
+//}
+
+func updateSymptomsWithNewData(symptoms []model.SessionSymptom, newSymptoms utils.NlpResponseBody) []model.SessionSymptom {
 	for _, s := range newSymptoms.Context {
-		pres, ite := nameInList(s, symptoms)
-		if pres == true {
+		if pres, ite := nameInList(s, symptoms); pres {
 			symptoms[ite].Duration = s.Days
 			continue
 		}
@@ -120,8 +204,11 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 		newSessionSymptom.Duration = s.Days
 		symptoms = append(symptoms, newSessionSymptom)
 	}
+	return symptoms
+}
 
-	var symptomsinput []*model.SessionSymptomInput
+func prepareSymptomsInput(symptoms []model.SessionSymptom) []*model.SessionSymptomInput {
+	var symptomsInput []*model.SessionSymptomInput
 	for _, s := range symptoms {
 		var ns model.SessionSymptomInput
 		ns.Name = s.Name
@@ -132,14 +219,18 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 		} else {
 			ns.Duration = s.Duration
 		}
-		symptomsinput = append(symptomsinput, &ns)
+		symptomsInput = append(symptomsInput, &ns)
 	}
+	return symptomsInput
+}
 
-	var anteSymptom string
-
+func processExam(session *model.Session, symptomsInput []*model.SessionSymptomInput, symptoms []model.SessionSymptom) utils.ExamResponseBody {
 	var exam utils.ExamResponseBody
-	if len(symptomsinput) > 0 {
-		symptomsinput, exam.Question, session.LastQuestion = utils.CheckSymptomDuration(symptomsinput, session.LastQuestion)
+	var anteSymptom string
+	var err error
+
+	if len(symptomsInput) > 0 {
+		symptomsInput, exam.Question, session.LastQuestion = utils.CheckSymptomDuration(symptomsInput, session.LastQuestion)
 	}
 	if len(symptoms) == 0 {
 		exam.Question = "Pourriez-vous décrire vos symptomes ?"
@@ -156,42 +247,32 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 		} else {
 			session.Medicine = []string{}
 		}
-
 	} else if exam.Question == "" && session.LastQuestion == "" {
-		exam = utils.CallExam(symptoms, float64(session.Weight)/(float64(session.Height)/100.0*(float64(session.Height)/100.0)), session.AnteChirs, session.HereditaryDisease)
+		exam = utils.CallExam(symptoms, float64(session.Weight)/(float64(session.Height)/100.0*(float64(session.Height)/100.0)), session.HereditaryDisease)
 		if exam.Err != nil {
-			if exam.Err != nil {
-				return DiagnoseResponse{
-					Code: 500,
-					Err:  exam.Err,
-				}
-			}
+			return exam
 		}
+	}
 
-		if len(exam.Alert) > 0 {
-			for _, alert := range exam.Alert {
-				session.Alerts = append(session.Alerts, alert)
-			}
+	if len(exam.Alert) > 0 {
+		for _, alert := range exam.Alert {
+			session.Alerts = append(session.Alerts, alert)
 		}
 
 		if len(session.Medicine) > 0 {
-			symptomsinput, err = utils.CheckTreatments(symptomsinput, session.Medicine)
+			symptomsInput, err = utils.CheckTreatments(symptomsInput, session.Medicine)
 			if err != nil {
-				return DiagnoseResponse{
-					Code: 500,
-					Err:  errors.New("error during checkTreatment"),
-				}
+				exam.Err = errors.New("error during checkTreatment")
+				return exam
 			}
 		}
 
-		if len(session.AnteDiseases) > 0 {
+		if len(session.MedicalAntecedents) > 0 {
 			var anteSymptomQuestion string
-			anteSymptomQuestion, anteSymptom, err = utils.CheckAnteDiseaseInSymptoms(session)
+			anteSymptomQuestion, anteSymptom, err = utils.CheckAnteDiseaseInSymptoms(*session)
 			if err != nil {
-				return DiagnoseResponse{
-					Code: 400, //metter un code correct
-					Err:  errors.New("error during checkAnteDiseaseInSymptoms"),
-				}
+				exam.Err = errors.New("error during checkTreatment")
+				return exam
 			}
 			if anteSymptom != "" {
 				exam.Question = anteSymptomQuestion
@@ -208,6 +289,10 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 		}
 	}
 
+	return exam
+}
+
+func updateLogs(session model.Session, sentence string, exam *utils.ExamResponseBody) []*model.LogsInput {
 	var logs []*model.LogsInput //
 	for _, log := range session.Logs {
 		logs = append(logs, &model.LogsInput{
@@ -227,46 +312,13 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 			Answer:   "",
 		})
 	}
+	return logs
+}
 
-	var diseasesinput []*model.SessionDiseasesInput
-	if exam.Done == true {
-		diseasesinput, err = utils.GetSessionDiseases(symptoms, float64(session.Weight)/(float64(session.Height)/100.0*(float64(session.Height)/100.0)), session.AnteChirs, session.HereditaryDisease)
-		if err != nil {
-			return DiagnoseResponse{
-				Code: 500,
-				Err:  errors.New("error during getSessionDiseases"),
-			}
-		}
+func updateDiseases(symptoms []model.SessionSymptom, session model.Session) ([]*model.SessionDiseasesInput, error) {
+	diseasesInput, err := utils.GetSessionDiseases(symptoms, float64(session.Weight)/(float64(session.Height)/100.0*(float64(session.Height)/100.0)), session.HereditaryDisease)
+	if err != nil {
+		return nil, err
 	}
-
-	var autoAnswerOutput *model.AutoAnswer
-	if exam.AutoAnswer != nil {
-		auA, err := graphql.GetAutoAnswerByName(*exam.AutoAnswer)
-		if err != nil {
-			autoAnswerOutput = nil
-		} else {
-			autoAnswerOutput = &auA
-		}
-	}
-
-	if len(symptomsinput) > 11 {
-		exam.Done = true
-	}
-
-	_, err = graphql.UpdateSession(session.ID, model.UpdateSessionInput{
-		Diseases:     diseasesinput,
-		Symptoms:     symptomsinput,
-		Medicine:     session.Medicine,
-		LastQuestion: &session.LastQuestion,
-		Logs:         logs,
-		Alerts:       session.Alerts,
-	})
-	edgarlib.CheckError(err)
-	return DiagnoseResponse{
-		Done:       exam.Done,
-		Question:   exam.Question,
-		AutoAnswer: autoAnswerOutput,
-		Code:       200,
-		Err:        nil,
-	}
+	return diseasesInput, nil
 }

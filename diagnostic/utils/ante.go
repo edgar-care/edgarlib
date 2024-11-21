@@ -10,31 +10,33 @@ func CheckAnteDiseaseInSymptoms(session model.Session) (string, string, error) {
 	var question string
 	var questionSymptomName string
 
-	for _, anteId := range session.AnteDiseases {
+	for _, anteId := range session.MedicalAntecedents {
 		if anteId != "" {
-			ante, err := graphql.GetAnteDiseaseByIDWithSymptoms(anteId)
+			ante, err := graphql.GetMedicalAntecedentsById(anteId)
 			if err != nil {
 				return "", "", err
 			}
-			if ante.StillRelevant == true {
-				for _, anteSymptom := range ante.Symptomsclear {
-					if anteSymptom.Name != session.LastQuestion {
-						if anteSymptom.QuestionAnte != "" {
-							question = exam.AddDiscursiveConnector(anteSymptom.QuestionAnte)
-						} else {
-							question = exam.AddDiscursiveConnector("{{connecteur}}. Ressentez-vous " + anteSymptom.Name + " plus intensément récemment ?")
-						}
-						questionSymptomName = anteSymptom.Name
+			for _, anteSymptomName := range ante.Symptoms {
+				if anteSymptomName != session.LastQuestion {
+					anteSymptom, err := graphql.GetSymptomByName(anteSymptomName)
+					if err != nil {
+						continue
 					}
-					for _, sessionSymptom := range session.Symptoms {
-						if anteSymptom.Name == sessionSymptom.Name || anteSymptom.Name == session.LastQuestion {
-							question = ""
-							questionSymptomName = ""
-						}
+					if anteSymptom.QuestionAnte != "" {
+						question = exam.AddDiscursiveConnector(anteSymptom.QuestionAnte)
+					} else {
+						question = exam.AddDiscursiveConnector("{{connecteur}}. Ressentez-vous " + anteSymptom.Name + " plus intensément récemment ?")
 					}
-					if question != "" {
-						return question, questionSymptomName, nil
+					questionSymptomName = anteSymptom.Name
+				}
+				for _, sessionSymptom := range session.Symptoms {
+					if anteSymptomName == sessionSymptom.Name || anteSymptomName == session.LastQuestion {
+						question = ""
+						questionSymptomName = ""
 					}
+				}
+				if question != "" {
+					return question, questionSymptomName, nil
 				}
 			}
 		}

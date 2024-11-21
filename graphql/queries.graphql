@@ -15,20 +15,6 @@ mutation CreateAnteChir($input: CreateAnteChirInput!){
     }
 }
 
-mutation CreateAnteDisease($input: CreateAnteDiseaseInput!){
-    createAnteDisease(input: $input){
-        id
-        name
-        chronicity
-        surgery_ids
-        symptoms
-        treatment_ids
-        still_relevant
-        createdAt
-        updatedAt
-    }
-}
-
 mutation CreateSymptom($input: CreateSymptomInput!){
     createSymptom(input: $input){
         id
@@ -489,23 +475,6 @@ mutation UpdatePatientFollowTreatment($id: String!, $input: UpdatePatientFollowT
     }
 }
 
-
-mutation UpdatePatientAntediesae($id: String!, $input: UpdatePatientAntediseaseInput!){
-    updatePatientAntediesae(id: $id, input: $input){
-        id
-        name
-        chronicity
-        surgery_ids
-        symptoms
-        treatment_ids
-        still_relevant
-        createdAt
-        updatedAt
-    }
-}
-
-
-
 mutation UpdateAccountsMedicalFolder($id: String!, $input: UpdateAccountMedicalFolder!){
     updateAccountsMedicalFolder(id: $id, input: $input){
         id
@@ -540,8 +509,7 @@ mutation CreateSession($input: CreateSessionInput!){
         height
         weight
         sex
-        ante_chirs
-        ante_diseases
+        medical_antecedents
         medicine
         last_question
         logs{
@@ -842,20 +810,6 @@ mutation DeleteTreatmentsFollowUp($id: String!){
     deleteTreatmentsFollowUp(id: $id)
 }
 
-mutation UpdateAnteDisease($id: String!, $input: UpdateAnteDiseaseInput!){
-    updateAnteDisease(id: $id, input: $input){
-        id
-        name
-        chronicity
-        surgery_ids
-        symptoms
-        treatment_ids
-        still_relevant
-        createdAt
-        updatedAt
-    }
-}
-
 mutation CreateRdv($input: CreateRdvInput!){
     createRdv(input: $input){
         id
@@ -889,8 +843,7 @@ mutation UpdateSession($id: String!, $input: UpdateSessionInput!){
         height
         weight
         sex
-        ante_chirs
-        ante_diseases
+        medical_antecedents
         medicine
         last_question
         logs{
@@ -1235,47 +1188,6 @@ query GetDoctorByEmail($email: String!){
     }
 }
 
-query GetAnteDiseaseByID($id: String!){
-    getAnteDiseaseByID(id: $id){
-        id
-        name
-        chronicity
-        surgery_ids
-        symptoms
-        treatment_ids
-        still_relevant
-        createdAt
-        updatedAt
-    }
-}
-
-query GetAnteDiseaseByIDWithSymptoms($anteDiseaseId: String!){
-    getAnteDiseaseByIDWithSymptoms(anteDiseaseId: $anteDiseaseId){
-        id
-        name
-        chronicity
-        surgery_ids
-        symptoms
-        treatment_ids
-        still_relevant
-        createdAt
-        updatedAt
-        symptomsclear{
-            id
-            name
-            chronic
-            symptom
-            advice
-            question
-            question_basic
-            question_duration
-            question_ante
-            createdAt
-            updatedAt
-        }
-    }
-}
-
 query GetNlpReports($option: Options){
     getNlpReports(option: $option){
         id
@@ -1370,8 +1282,7 @@ query GetSessionById($id: String!){
         height
         weight
         sex
-        ante_chirs
-        ante_diseases
+        medical_antecedents
         medicine
         last_question
         logs{
@@ -1629,20 +1540,6 @@ query GetChats($id: String!, $option: Options){
     }
 }
 
-query GetAnteDiseases($option: Options){
-    getAnteDiseases(option: $option){
-        id
-        name
-        chronicity
-        surgery_ids
-        symptoms
-        treatment_ids
-        still_relevant
-        createdAt
-        updatedAt
-    }
-}
-
 query GetSessions($option: Options){
     getSessions(option: $option){
         id
@@ -1660,8 +1557,7 @@ query GetSessions($option: Options){
         height
         weight
         sex
-        ante_chirs
-        ante_diseases
+        medical_antecedents
         medicine
         last_question
         logs{

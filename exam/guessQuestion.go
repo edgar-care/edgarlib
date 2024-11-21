@@ -54,28 +54,11 @@ func isAnteChir(symptomName string, anteChirs []model.AnteChir) float64 {
 	return 1.0
 }
 
-func CalculPercentage(context_ []model.SessionSymptom, disease model.Disease, imc float64, anteChirIds []string, hereditary_disease []string) DiseaseCoverage {
-	var anteChirs []model.AnteChir
+func CalculPercentage(context_ []model.SessionSymptom, disease model.Disease, imc float64, hereditaryDisease []string) DiseaseCoverage {
 	var potentialQuestionSymptom string
 	var buf string
 	percentage := 0.0
 	unknown := 0.0
-
-	if anteChirIds != nil && len(anteChirIds) > 0 {
-		for _, chirId := range anteChirIds {
-			var nAC model.AnteChir
-			anteChir, _ := graphql.GetAnteChirByID(chirId)
-			nAC.ID = anteChir.ID
-			nAC.Name = anteChir.Name
-			for _, iS := range anteChir.InducedSymptoms {
-				var nIS model.ChirInducedSymptom
-				nIS.Symptom = iS.Symptom
-				nIS.Factor = iS.Factor
-				nAC.InducedSymptoms = append(nAC.InducedSymptoms, &nIS)
-			}
-			anteChirs = append(anteChirs, nAC)
-		}
-	}
 
 	for _, symptomWeight := range disease.SymptomsWeight {
 		lock := 1
@@ -86,11 +69,11 @@ func CalculPercentage(context_ []model.SessionSymptom, disease model.Disease, im
 				break
 			} else if symptomWeight.Symptom == contextSymptom.Name && contextSymptom.Presence == 1 {
 				if symptomWeight.Chronic && !isChronic(contextSymptom) {
-					percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
+					percentage += symptomWeight.Value * 0.75
 				} else if !symptomWeight.Chronic && isChronic(contextSymptom) {
-					percentage += symptomWeight.Value * 0.75 * isAnteChir(contextSymptom.Name, anteChirs)
+					percentage += symptomWeight.Value * 0.75
 				} else {
-					percentage += symptomWeight.Value * isAnteChir(contextSymptom.Name, anteChirs)
+					percentage += symptomWeight.Value
 				}
 				lock = 0
 				break
@@ -111,7 +94,7 @@ func CalculPercentage(context_ []model.SessionSymptom, disease model.Disease, im
 	if disease.OverweightFactor != 0 && imc > 25.0 {
 		percentage *= disease.OverweightFactor
 	}
-	if disease.HeredityFactor != 0 && isInStringArray(hereditary_disease, disease.Name) {
+	if disease.HeredityFactor != 0 && isInStringArray(hereditaryDisease, disease.Name) {
 		percentage *= disease.HeredityFactor
 	}
 
@@ -155,11 +138,11 @@ func GuessQuestion(mapped []DiseaseCoverage) (string, *string, []string, error) 
 	return question, autoA, []string{mapped[i].PotentialQuestion}, nil
 }
 
-func Calculi(sessionContext []model.SessionSymptom, imc float64, anteChirIds []string, hereditary_disease []string) ([]DiseaseCoverage, bool) {
+func Calculi(sessionContext []model.SessionSymptom, imc float64, hereditaryDisease []string) ([]DiseaseCoverage, bool) {
 	diseases, _ := graphql.GetDiseases(nil)
 	mapped := make([]DiseaseCoverage, len(diseases))
 	for i, e := range diseases {
-		mapped[i] = CalculPercentage(sessionContext, e, imc, anteChirIds, hereditary_disease)
+		mapped[i] = CalculPercentage(sessionContext, e, imc, hereditaryDisease)
 	}
 	sort.Sort(ByCoverage(mapped))
 
