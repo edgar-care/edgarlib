@@ -48,16 +48,16 @@ func Diagnose(id string, sentence string, autoAnswer *AutoAnswerinfo) DiagnoseRe
 
 	questionSymptom := getLastQuestionSymptom(session)
 
-	if len(questionSymptom) > 0 {
-		var errCode int
-		newSymptoms, errCode = processSymptoms(&session, sentence, questionSymptom, autoAnswer)
-		if errCode != 200 {
-			return DiagnoseResponse{
-				Code: errCode,
-				Err:  errors.New("NLP error, please try again"),
-			}
+	//if len(questionSymptom) > 0 {
+	var errCode int
+	newSymptoms, errCode = processSymptoms(&session, sentence, questionSymptom, autoAnswer)
+	if errCode != 200 {
+		return DiagnoseResponse{
+			Code: errCode,
+			Err:  errors.New("NLP error, please try again"),
 		}
 	}
+	//}
 
 	symptoms = updateSymptomsWithNewData(symptoms, newSymptoms)
 
@@ -143,7 +143,7 @@ func updateLastLogAnswer(session *model.Session, sentence string) {
 
 func getLastQuestionSymptom(session model.Session) []string {
 	//if session.LastQuestion == "" || session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
-	if session.LastQuestion == "" || session.LastQuestion == "describe medicines" {
+	if session.LastQuestion == "" {
 		return []string{}
 	}
 	return []string{session.LastQuestion}
@@ -260,13 +260,13 @@ func processExam(session *model.Session, symptomsInput []*model.SessionSymptomIn
 			}
 		}
 
-		if len(session.Medicine) > 0 {
-			symptomsInput, err = utils.CheckTreatments(symptomsInput, session.Medicine)
-			if err != nil {
-				exam.Err = errors.New("error during checkTreatment")
-				return exam
-			}
-		}
+		//if len(session.Medicine) > 0 {
+		//	symptomsInput, err = utils.CheckTreatments(symptomsInput, session.Medicine)
+		//	if err != nil {
+		//		exam.Err = errors.New("error during checkTreatment")
+		//		return exam
+		//	}
+		//}
 
 		if len(session.MedicalAntecedents) > 0 {
 			var anteSymptomQuestion string
