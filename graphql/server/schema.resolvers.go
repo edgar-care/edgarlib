@@ -211,27 +211,6 @@ func (r *mutationResolver) UpdatePatientFollowTreatment(ctx context.Context, id 
 	return &updatedPatient, nil
 }
 
-// UpdatePatientAntediesae is the resolver for the updatePatientAntediesae field.
-func (r *mutationResolver) UpdatePatientAntediesae(ctx context.Context, id string, input model.UpdatePatientAntediseaseInput) (*model.AnteDisease, error) {
-	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease")
-	filter := bson.M{"_id": id}
-	update := bson.M{}
-
-	update["treatment_ids"] = input.TreatmentIds
-	update["updatedAt"] = time.Now().Unix()
-	updateData := bson.M{"$set": update}
-
-	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
-	var updatedPatient model.AnteDisease
-
-	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedPatient)
-	if err != nil {
-		return nil, err
-	}
-
-	return &updatedPatient, nil
-}
-
 // UpdateMedicalFolderdAntedisease is the resolver for the updateMedicalFolderdAntedisease field.
 func (r *mutationResolver) UpdateMedicalFolderdAntedisease(ctx context.Context, id string, input model.UpdateMedicalFOlderAntedisease) (*model.MedicalInfo, error) {
 	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("MedicalInfo")
@@ -545,17 +524,16 @@ func (r *mutationResolver) CreateSession(ctx context.Context, input model.Create
 	now := int(time.Now().Unix())
 
 	session := &model.Session{
-		ID:                primitive.NewObjectID().Hex(),
-		Age:               input.Age,
-		Height:            input.Height,
-		Weight:            input.Weight,
-		Sex:               input.Sex,
-		AnteChirs:         input.AnteChirs,
-		AnteDiseases:      input.AnteDiseases,
-		Medicine:          input.Medicine,
-		HereditaryDisease: input.HereditaryDisease,
-		CreatedAt:         now,
-		UpdatedAt:         now,
+		ID:                 primitive.NewObjectID().Hex(),
+		Age:                input.Age,
+		Height:             input.Height,
+		Weight:             input.Weight,
+		Sex:                input.Sex,
+		MedicalAntecedents: input.MedicalAntecedents,
+		Medicine:           input.Medicine,
+		HereditaryDisease:  input.HereditaryDisease,
+		CreatedAt:          now,
+		UpdatedAt:          now,
 	}
 
 	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Session").InsertOne(ctx, session)
@@ -590,11 +568,8 @@ func (r *mutationResolver) UpdateSession(ctx context.Context, id string, input m
 	if input.Sex != nil {
 		update["sex"] = *input.Sex
 	}
-	if input.AnteChirs != nil {
-		update["ante_chirs"] = input.AnteChirs
-	}
-	if input.AnteDiseases != nil {
-		update["ante_diseases"] = input.AnteDiseases
+	if input.MedicalAntecedents != nil {
+		update["ante_diseases"] = input.MedicalAntecedents
 	}
 
 	update["medicine"] = input.Medicine
@@ -1081,73 +1056,6 @@ func (r *mutationResolver) DeleteAnteChir(ctx context.Context, id string) (*bool
 	}
 	resp = true
 	return &resp, err
-}
-
-// CreateAnteDisease is the resolver for the createAnteDisease field.
-func (r *mutationResolver) CreateAnteDisease(ctx context.Context, input model.CreateAnteDiseaseInput) (*model.AnteDisease, error) {
-	now := int(time.Now().Unix())
-	chronicity := 0.0
-	if input.Chronicity != nil {
-		chronicity = *input.Chronicity
-	}
-	anteDisease := &model.AnteDisease{
-		ID:            primitive.NewObjectID().Hex(),
-		Name:          input.Name,
-		Chronicity:    chronicity,
-		SurgeryIds:    input.SurgeryIds,
-		Symptoms:      input.Symptoms,
-		TreatmentIds:  input.TreatmentIds,
-		StillRelevant: input.StillRelevant,
-		CreatedAt:     now,
-		UpdatedAt:     now,
-	}
-
-	_, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").InsertOne(ctx, anteDisease)
-	if err != nil {
-		return nil, err
-	}
-
-	return anteDisease, err
-}
-
-// UpdateAnteDisease is the resolver for the updateAnteDisease field.
-func (r *mutationResolver) UpdateAnteDisease(ctx context.Context, id string, input model.UpdateAnteDiseaseInput) (*model.AnteDisease, error) {
-	collection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease")
-	filter := bson.M{"_id": id}
-
-	update := bson.M{}
-	if input.Name != nil {
-		update["name"] = *input.Name
-	}
-	if input.Chronicity != nil {
-		update["chronicity"] = *input.Chronicity
-	}
-	if input.SurgeryIds != nil {
-		update["surgery_ids"] = input.SurgeryIds
-	}
-	if input.Symptoms != nil {
-		update["symptoms"] = input.Symptoms
-	}
-	if input.TreatmentIds != nil {
-		update["treatment_ids"] = input.TreatmentIds
-	}
-	if input.StillRelevant != nil {
-		update["still_relevant"] = *input.StillRelevant
-	}
-
-	update["updatedAt"] = time.Now().Unix()
-
-	updateData := bson.M{"$set": update}
-
-	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
-	var updatedAnteDisease model.AnteDisease
-
-	err := collection.FindOneAndUpdate(ctx, filter, updateData, opts).Decode(&updatedAnteDisease)
-	if err != nil {
-		return nil, err
-	}
-
-	return &updatedAnteDisease, nil
 }
 
 // DeleteAnteDisease is the resolver for the deleteAnteDisease field.
@@ -2800,57 +2708,6 @@ func (r *queryResolver) GetAnteChirByID(ctx context.Context, id string) (*model.
 		return nil, err
 	}
 	return &result, nil
-}
-
-// GetAnteDiseases is the resolver for the getAnteDiseases field.
-func (r *queryResolver) GetAnteDiseases(ctx context.Context, option *model.Options) ([]*model.AnteDisease, error) {
-	filter := bson.D{}
-	var results []*model.AnteDisease
-	var findOptions *options.FindOptions = nil
-	if option != nil {
-		findOptions = FindOptions(*option)
-	}
-	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").Find(ctx, filter, findOptions)
-	if err != nil {
-		return nil, err
-	}
-
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-// GetAnteDiseaseByID is the resolver for the getAnteDiseaseByID field.
-func (r *queryResolver) GetAnteDiseaseByID(ctx context.Context, id string) (*model.AnteDisease, error) {
-	var result model.AnteDisease
-
-	filter := bson.M{"_id": id}
-
-	err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AnteDisease").FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// GetAnteDiseaseByIDWithSymptoms is the resolver for the getAnteDiseaseByIDWithSymptoms field.
-func (r *queryResolver) GetAnteDiseaseByIDWithSymptoms(ctx context.Context, anteDiseaseID string) (*model.AnteDisease, error) {
-	anteDisease, err := r.GetAnteDiseaseByID(ctx, anteDiseaseID)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, symptomID := range anteDisease.Symptoms {
-		symptom, err := r.GetSymptomByID(ctx, symptomID)
-		if err != nil {
-			return nil, err
-		}
-		anteDisease.Symptomsclear = append(anteDisease.Symptomsclear, symptom)
-	}
-
-	return anteDisease, nil
 }
 
 // GetAnteFamilies is the resolver for the getAnteFamilies field.

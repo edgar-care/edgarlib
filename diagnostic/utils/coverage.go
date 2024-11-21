@@ -13,7 +13,7 @@ func (a ByCoverage) Len() int           { return len(a) }
 func (a ByCoverage) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByCoverage) Less(i, j int) bool { return a[i].Percentage > a[j].Percentage }
 
-func GetSessionDiseases(sessionContext []model.SessionSymptom, imc float64, anteChirIds []string, hereditary_disease []string) ([]*model.SessionDiseasesInput, error) {
+func GetSessionDiseases(sessionContext []model.SessionSymptom, imc float64, hereditaryDisease []string) ([]*model.SessionDiseasesInput, error) {
 	diseases, err := graphql.GetDiseases(nil)
 	if err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func GetSessionDiseases(sessionContext []model.SessionSymptom, imc float64, ante
 	mapped := make([]exam.DiseaseCoverage, len(diseases))
 	var sortedDiseases []*model.SessionDiseasesInput
 	for i, e := range diseases {
-		mapped[i] = exam.CalculPercentage(sessionContext, e, imc, anteChirIds, hereditary_disease)
+		mapped[i] = exam.CalculPercentage(sessionContext, e, imc, hereditaryDisease)
 	}
 	sort.Sort(ByCoverage(mapped))
 
