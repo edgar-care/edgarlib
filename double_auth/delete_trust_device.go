@@ -38,7 +38,7 @@ func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceRespon
 		}
 		accountType = "doctor"
 		_, updateError := graphql.UpdateDoctorsTrustDevice(id_user, model.UpdateDoctorsTrustDeviceInput{
-			TrustDevices: removeTrustDevice(patient.TrustDevices, &id_device),
+			TrustDevices: removeTrustDevice(doctor.TrustDevices, &id_device),
 		})
 		if updateError != nil {
 			return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("update doctor failed: " + updateError.Error())}
@@ -54,17 +54,10 @@ func RemoveTrustDevice(id_device string, id_user string) RemoveTrustDeviceRespon
 		return RemoveTrustDeviceResponse{Code: 400, Err: errors.New("get double_auth failed: " + err.Error())}
 	}
 
-	codeList := make([]*string, len(doubleAuth.TrustDeviceID))
-	for i, v := range doubleAuth.TrustDeviceID {
-		codeList[i] = &v
-	}
-
-	newDeviceList := removeTrustDevice(codeList, &id_device)
+	newDeviceList := removeTrustDevice2fa(doubleAuth.TrustDeviceID, id_device)
 
 	updatedDeviceList := make([]string, len(newDeviceList))
-	for i, v := range newDeviceList {
-		updatedDeviceList[i] = *v
-	}
+	copy(updatedDeviceList, newDeviceList)
 
 	availableMethods := doubleAuth.Methods
 	if len(updatedDeviceList) == 0 {
@@ -118,6 +111,16 @@ func removeTrustDevice(trustDevices []*string, id_device *string) []*string {
 	var updatedDevices []*string
 	for _, device := range trustDevices {
 		if *device != *id_device {
+			updatedDevices = append(updatedDevices, device)
+		}
+	}
+	return updatedDevices
+}
+
+func removeTrustDevice2fa(trustDevices []string, id_device string) []string {
+	var updatedDevices []string
+	for _, device := range trustDevices {
+		if device != id_device {
 			updatedDevices = append(updatedDevices, device)
 		}
 	}

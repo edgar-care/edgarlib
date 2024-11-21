@@ -20,11 +20,11 @@ type Login2faSaveCodeesponse struct {
 	Err   error
 }
 
-func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string) Login2faSaveCodeesponse {
+func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string, accountID string) Login2faSaveCodeesponse {
 	var token string
 	var doubleAuthId *string
 
-	patient, patientErr := graphql.GetPatientByEmail(input.Email)
+	patient, patientErr := graphql.GetPatientById(accountID)
 	if patientErr == nil {
 		doubleAuthId = patient.DoubleAuthMethodsID
 		if doubleAuthId == nil {
@@ -90,7 +90,7 @@ func Login2faSaveCode(input Login2faSaveCodeInput, nameDevice string) Login2faSa
 		return Login2faSaveCodeesponse{Token: token, Code: 200, Err: nil}
 	}
 
-	doctor, doctorErr := graphql.GetDoctorByEmail(input.Email)
+	doctor, doctorErr := graphql.GetDoctorById(accountID)
 	if doctorErr == nil {
 		doubleAuthId = doctor.DoubleAuthMethodsID
 		if doubleAuthId == nil {

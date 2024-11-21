@@ -13,6 +13,7 @@ func TestResetPassword(t *testing.T) {
 	email := "testuser_reset_password@example.com"
 	password := "new_password"
 	patientUUID := uuid.New()
+	status := "p"
 
 	patient, err := graphql.CreatePatient(model.CreatePatientInput{
 		Email:    email,
@@ -23,12 +24,14 @@ func TestResetPassword(t *testing.T) {
 		t.Errorf("Failed to create patient: %v", err)
 	}
 
-	_, err = redis.SetKey(patientUUID.String(), patient.ID, nil)
+	expire := 20
+
+	_, err = redis.SetKey(patientUUID.String(), patient.ID, &expire)
 	if err != nil {
 		t.Errorf("Failed to set patient key: %v", err)
 	}
 
-	response := ResetPassword(password, patientUUID.String())
+	response := ResetPassword(password, patientUUID.String(), status)
 
 	if response.Code != 200 {
 		t.Errorf("Expected response code 200, got %v", response.Code)
@@ -70,7 +73,7 @@ func TestResetPasswordDoctor(t *testing.T) {
 		t.Errorf("Failed to set patient key: %v", err)
 	}
 
-	response := ResetPassword(password, patientUUID.String())
+	response := ResetPassword(password, patientUUID.String(), "d")
 
 	if response.Code != 200 {
 		t.Errorf("Expected response code 200, got %v", response.Code)
@@ -93,7 +96,7 @@ func TestResetPasswordWithInvalidUUID(t *testing.T) {
 	password := "newpassword123"
 	invalidUUID := "invalid-uuid"
 
-	response := ResetPassword(password, invalidUUID)
+	response := ResetPassword(password, invalidUUID, "p")
 
 	if response.Code != 403 {
 		t.Errorf("Expected response code 403, got %v", response.Code)
@@ -109,7 +112,7 @@ func TestResetPasswordWithoutUUID(t *testing.T) {
 	password := "newpassword123"
 	uuid := ""
 
-	response := ResetPassword(password, uuid)
+	response := ResetPassword(password, uuid, "p")
 
 	if response.Code != 400 {
 		t.Errorf("Expected response code 403, got %v", response.Code)

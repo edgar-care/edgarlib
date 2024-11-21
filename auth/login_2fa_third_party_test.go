@@ -42,7 +42,7 @@ func TestLogin2faThirdParty(t *testing.T) {
 		Token2fa: token,
 	}
 
-	response := Login2faThirdParty(input, "test_device")
+	response := Login2faThirdParty(input, "test_device", patient.ID)
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
 	}
