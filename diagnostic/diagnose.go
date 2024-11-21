@@ -260,13 +260,13 @@ func processExam(session *model.Session, symptomsInput []*model.SessionSymptomIn
 			}
 		}
 
-		if len(session.Medicine) > 0 {
-			symptomsInput, err = utils.CheckTreatments(symptomsInput, session.Medicine)
-			if err != nil {
-				exam.Err = errors.New("error during checkTreatment")
-				return exam
-			}
-		}
+		//if len(session.Medicine) > 0 {
+		//	symptomsInput, err = utils.CheckTreatments(symptomsInput, session.Medicine)
+		//	if err != nil {
+		//		exam.Err = errors.New("error during checkTreatment")
+		//		return exam
+		//	}
+		//}
 
 		if len(session.MedicalAntecedents) > 0 {
 			var anteSymptomQuestion string
