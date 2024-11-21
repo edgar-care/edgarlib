@@ -142,7 +142,8 @@ func updateLastLogAnswer(session *model.Session, sentence string) {
 }
 
 func getLastQuestionSymptom(session model.Session) []string {
-	if session.LastQuestion == "" || session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
+	//if session.LastQuestion == "" || session.LastQuestion == "describe symptoms" || session.LastQuestion == "describe medicines" {
+	if session.LastQuestion == "" || session.LastQuestion == "describe medicines" {
 		return []string{}
 	}
 	return []string{session.LastQuestion}
@@ -252,11 +253,11 @@ func processExam(session *model.Session, symptomsInput []*model.SessionSymptomIn
 		if exam.Err != nil {
 			return exam
 		}
-	}
 
-	if len(exam.Alert) > 0 {
-		for _, alert := range exam.Alert {
-			session.Alerts = append(session.Alerts, alert)
+		if len(exam.Alert) > 0 {
+			for _, alert := range exam.Alert {
+				session.Alerts = append(session.Alerts, alert)
+			}
 		}
 
 		if len(session.Medicine) > 0 {
