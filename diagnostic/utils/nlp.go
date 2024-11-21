@@ -45,7 +45,7 @@ func CallNlp(sentence string, symptoms []string, durSymptom *string, isMedicine 
 	edgarlib.CheckError(err)
 
 	req, err := http.NewRequest("POST", os.Getenv("NLP_URL"), buf)
-	req.Header.Add(os.Getenv("NLP_KEY"), os.Getenv("NLP_KEY_VALUE"))
+	req.Header.Set(os.Getenv("NLP_KEY"), os.Getenv("NLP_KEY_VALUE"))
 	client := http.Client{}
 	resp, err := client.Do(req)
 	edgarlib.CheckError(err)
