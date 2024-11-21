@@ -19,10 +19,10 @@ type Login2faThirdPartyResponse struct {
 	Err   error
 }
 
-func Login2faThirdParty(input Login2faThirdPartyInput, nameDevice string) Login2faThirdPartyResponse {
+func Login2faThirdParty(input Login2faThirdPartyInput, nameDevice string, accountID string) Login2faThirdPartyResponse {
 	var token string
 
-	patient, patientErr := graphql.GetPatientByEmail(input.Email)
+	patient, patientErr := graphql.GetPatientById(accountID)
 	if patientErr == nil {
 
 		doubleAuth, err := graphql.GetDoubleAuthById(*patient.DoubleAuthMethodsID)
@@ -53,7 +53,7 @@ func Login2faThirdParty(input Login2faThirdPartyInput, nameDevice string) Login2
 		return Login2faThirdPartyResponse{Token: token, Code: 200, Err: nil}
 	}
 
-	doctor, doctorErr := graphql.GetDoctorByEmail(input.Email)
+	doctor, doctorErr := graphql.GetDoctorById(accountID)
 	if doctorErr == nil {
 
 		doubleAuth, err := graphql.GetDoubleAuthById(*doctor.DoubleAuthMethodsID)

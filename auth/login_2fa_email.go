@@ -18,7 +18,7 @@ type Login2faEmailResponse struct {
 	Err   error
 }
 
-func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailResponse {
+func Login2faEmail(input Login2faEmailInput, nameDevice string, accountID string) Login2faEmailResponse {
 	var token string
 	var doubleAuthId *string
 
@@ -28,10 +28,10 @@ func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailRes
 	}
 
 	if verifyToken2fa != input.Token2fa {
-		return Login2faEmailResponse{Token: "", Code: 401, Err: errors.New("invalid 2FA token")}
+		return Login2faEmailResponse{Token: "", Code: 400, Err: errors.New("invalid 2FA token")}
 	}
 
-	patient, patientErr := graphql.GetPatientByEmail(input.Email)
+	patient, patientErr := graphql.GetPatientById(accountID)
 	if patientErr == nil {
 		doubleAuthId = patient.DoubleAuthMethodsID
 		if doubleAuthId == nil {
@@ -46,7 +46,7 @@ func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailRes
 		}
 		check := CheckPassword(input.Password, patient.Password)
 		if !check {
-			return Login2faEmailResponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+			return Login2faEmailResponse{Token: "", Code: 400, Err: errors.New("invalid password")}
 		}
 
 		token, err = CreateToken(map[string]interface{}{
@@ -58,7 +58,7 @@ func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailRes
 		return Login2faEmailResponse{Token: token, Code: 200, Err: nil}
 	}
 
-	doctor, doctorErr := graphql.GetDoctorByEmail(input.Email)
+	doctor, doctorErr := graphql.GetDoctorById(accountID)
 	if doctorErr == nil {
 		doubleAuthId = doctor.DoubleAuthMethodsID
 		if doubleAuthId == nil {
@@ -75,7 +75,7 @@ func Login2faEmail(input Login2faEmailInput, nameDevice string) Login2faEmailRes
 
 		check := CheckPassword(input.Password, doctor.Password)
 		if !check {
-			return Login2faEmailResponse{Token: "", Code: 401, Err: errors.New("invalid password")}
+			return Login2faEmailResponse{Token: "", Code: 400, Err: errors.New("invalid password")}
 		}
 		token, err = CreateToken(map[string]interface{}{
 			"doctor":      doctor.Email,

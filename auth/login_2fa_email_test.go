@@ -52,7 +52,7 @@ func TestLogin2faEmailPatient(t *testing.T) {
 		Token2fa: getToken2fa,
 	}
 
-	response := Login2faEmail(input, "test_device")
+	response := Login2faEmail(input, "test_device", patient.ID)
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
 	}
@@ -114,7 +114,7 @@ func TestLogin2faEmailDoctor(t *testing.T) {
 		Token2fa: getToken2fa,
 	}
 
-	response := Login2faEmail(input, "test_device")
+	response := Login2faEmail(input, "test_device", doctor.ID)
 	if response.Token == "" {
 		t.Error("Expected token to be non-empty, but got an empty token")
 	}
@@ -169,7 +169,7 @@ func TestLogin2faEmail_InvalidDoubleAuth(t *testing.T) {
 		Token2fa: getToken2fa,
 	}
 
-	response := Login2faEmail(input, "test_device")
+	response := Login2faEmail(input, "test_device", "invalid_id")
 	if response.Err == nil {
 		t.Error("Expected an error, but got no error")
 	}
@@ -214,8 +214,8 @@ func TestLogin2faEmail_InvalidToken2fa(t *testing.T) {
 		Token2fa: "12",
 	}
 
-	response := Login2faEmail(input, "test_device")
-	if response.Code != 401 {
+	response := Login2faEmail(input, "test_device", patient.ID)
+	if response.Code != 400 {
 		t.Error("Expected token to be different, but got the same token")
 	}
 	if response.Err == nil {

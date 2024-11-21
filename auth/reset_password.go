@@ -13,7 +13,7 @@ type ResetPasswordResponse struct {
 	Err  error
 }
 
-func ResetPassword(password string, uuid string) ResetPasswordResponse {
+func ResetPassword(password string, uuid string, accountype string) ResetPasswordResponse {
 	if uuid == "" {
 		return ResetPasswordResponse{400, errors.New("uuid has to be provided")}
 	}
@@ -26,10 +26,17 @@ func ResetPassword(password string, uuid string) ResetPasswordResponse {
 		return ResetPasswordResponse{403, errors.New("uuid is expired")}
 	}
 
-	patient, err := graphql.GetPatientById(value)
-	if err != nil {
+	if accountype == "p" {
+		patient, err := graphql.GetPatientById(value)
+		password = utils.HashPassword(password)
+		_, err = graphql.UpdatePatient(patient.ID, model.UpdatePatientInput{Password: &password})
+		if err != nil {
+			return ResetPasswordResponse{500, err}
+		}
+	} else if accountype == "d" {
 		doctor, err := graphql.GetDoctorById(value)
 		if err != nil {
+
 			return ResetPasswordResponse{400, errors.New("no account correspond to this email")}
 		}
 		password = utils.HashPassword(password)
@@ -37,13 +44,10 @@ func ResetPassword(password string, uuid string) ResetPasswordResponse {
 		if err != nil {
 			return ResetPasswordResponse{500, err}
 		}
-		return ResetPasswordResponse{200, nil}
+	} else {
+		return ResetPasswordResponse{400, errors.New("no account type not found")}
 	}
 
-	password = utils.HashPassword(password)
-	_, err = graphql.UpdatePatient(patient.ID, model.UpdatePatientInput{Password: &password})
-	if err != nil {
-		return ResetPasswordResponse{500, err}
-	}
 	return ResetPasswordResponse{200, nil}
+
 }
