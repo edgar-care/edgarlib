@@ -20,7 +20,7 @@ func TestMissingPassword(t *testing.T) {
 		t.Errorf("Failed to create patient: %v", err)
 	}
 
-	response := MissingPassword(email)
+	response := MissingPassword(email, "p")
 
 	if response.Code != 200 {
 		t.Errorf("Expected response code 200, got %v", response.Code)
@@ -39,7 +39,7 @@ func TestMissingPassword(t *testing.T) {
 func TestMissingPasswordWithNonExistentEmail(t *testing.T) {
 	email := "test_missing_password_nonexistentuser@example.com"
 
-	response := MissingPassword(email)
+	response := MissingPassword(email, "p")
 
 	if response.Code != 400 {
 		t.Errorf("Expected response code 400, got %v", response.Code)
@@ -53,7 +53,7 @@ func TestMissingPasswordWithNonExistentEmail(t *testing.T) {
 
 func TestMissingPasswordDoctor(t *testing.T) {
 	email := "testdoctor_missing_password@example.com"
-
+	status := "d"
 	doctor, err := graphql.CreateDoctor(model.CreateDoctorInput{
 		Email:     email,
 		Password:  "haspassword",
@@ -67,7 +67,7 @@ func TestMissingPasswordDoctor(t *testing.T) {
 		},
 		Status: true,
 	})
-	response := MissingPassword(email)
+	response := MissingPassword(email, status)
 
 	if response.Code != 200 {
 		t.Errorf("Expected response code 200, got %v", response.Code)
