@@ -162,7 +162,7 @@ func processSymptoms(session *model.Session, sentence string, questionSymptom []
 }
 
 func getDurationSymptom(session *model.Session) *string {
-	if session.LastQuestion != "" && strings.Split(session.LastQuestion, " | ")[0] == "duration" {
+	if session.LastQuestion != "" && session.LastQuestion != "describe medicines" && strings.Split(session.LastQuestion, " | ")[0] == "duration" {
 		return &strings.Split(session.LastQuestion, " | ")[1]
 	}
 	return nil
@@ -189,6 +189,9 @@ func getDurationSymptom(session *model.Session) *string {
 
 func updateSymptomsWithNewData(symptoms []model.SessionSymptom, newSymptoms utils.NlpResponseBody) []model.SessionSymptom {
 	for _, s := range newSymptoms.Context {
+		if s.Name == "describe medicines" {
+			continue
+		}
 		if pres, ite := nameInList(s, symptoms); pres {
 			symptoms[ite].Duration = s.Days
 			continue
