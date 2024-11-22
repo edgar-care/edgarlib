@@ -1287,63 +1287,34 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 		return nil, errors.New("unable to find medical antecedent: " + err.Error())
 	}
 
-	var treatment *model.AntecedentTreatment
+	var treatment model.AntecedentTreatment
+
 	for _, t := range medicalAntecedent.Treatments {
 		if t.ID == id {
-			treatment = t
+			treatment.CreatedBy = t.CreatedBy
 			break
 		}
 	}
+	treatment.ID = id
+	treatment.StartDate = *input.StartDate
+	treatment.EndDate = input.EndDate
 
-	if treatment == nil {
-		return nil, errors.New("treatment not found")
-	}
+	treatment.Medicines = make([]*model.AntecedentsMedicines, len(input.Medicines))
+	for i, medicineInput := range input.Medicines {
+		treatment.Medicines[i] = &model.AntecedentsMedicines{
+			MedicineID: *medicineInput.MedicineID,
+			Comment:    medicineInput.Comment,
+			Period:     make([]*model.AntecedentPeriod, len(medicineInput.Period)),
+		}
 
-	if input.CreatedBy != nil {
-		treatment.CreatedBy = *input.CreatedBy
-	}
-	if input.StartDate != nil {
-		treatment.StartDate = *input.StartDate
-	}
-	if input.EndDate != nil {
-		treatment.EndDate = input.EndDate
-	}
-	if input.Medicines != nil {
-		for i, medicineInput := range input.Medicines {
-			if i < len(treatment.Medicines) {
-				medicine := treatment.Medicines[i]
-				medicine.MedicineID = *medicineInput.MedicineID
-				medicine.Comment = medicineInput.Comment
-				if medicineInput.Period != nil {
-					medicine.Period = make([]*model.AntecedentPeriod, len(medicineInput.Period))
-					for j, periodInput := range medicineInput.Period {
-						medicine.Period[j] = &model.AntecedentPeriod{
-							Quantity:       *periodInput.Quantity,
-							Frequency:      *periodInput.Frequency,
-							FrequencyRatio: *periodInput.FrequencyRatio,
-							FrequencyUnit:  *periodInput.FrequencyUnit,
-							PeriodLength:   periodInput.PeriodLength,
-							PeriodUnit:     periodInput.PeriodUnit,
-						}
-					}
-				}
-			} else {
-				newMedicine := &model.AntecedentsMedicines{
-					MedicineID: *medicineInput.MedicineID,
-					Comment:    medicineInput.Comment,
-					Period:     make([]*model.AntecedentPeriod, len(medicineInput.Period)),
-				}
-				for j, periodInput := range medicineInput.Period {
-					newMedicine.Period[j] = &model.AntecedentPeriod{
-						Quantity:       *periodInput.Quantity,
-						Frequency:      *periodInput.Frequency,
-						FrequencyRatio: *periodInput.FrequencyRatio,
-						FrequencyUnit:  *periodInput.FrequencyUnit,
-						PeriodLength:   periodInput.PeriodLength,
-						PeriodUnit:     periodInput.PeriodUnit,
-					}
-				}
-				treatment.Medicines = append(treatment.Medicines, newMedicine)
+		for j, periodInput := range medicineInput.Period {
+			treatment.Medicines[i].Period[j] = &model.AntecedentPeriod{
+				Quantity:       *periodInput.Quantity,
+				Frequency:      *periodInput.Frequency,
+				FrequencyRatio: *periodInput.FrequencyRatio,
+				FrequencyUnit:  *periodInput.FrequencyUnit,
+				PeriodLength:   periodInput.PeriodLength,
+				PeriodUnit:     periodInput.PeriodUnit,
 			}
 		}
 	}
@@ -1355,7 +1326,7 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 		return nil, errors.New("unable to update medical antecedent: " + err.Error())
 	}
 
-	return treatment, nil
+	return &treatment, nil
 }
 
 // DeleteAntecdentTreatment is the resolver for the deleteAntecdentTreatment field.
