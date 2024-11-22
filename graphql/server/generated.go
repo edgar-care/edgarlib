@@ -5344,7 +5344,6 @@ input UpdateTreatmentPeriodMedicalInput {
 
 
 input UpdateAntecedentTreatmentInput {
-    created_by: String
     start_date: Int
     end_date: Int
     medicines: [UpdateAntecedentsMedicinesInput!]
@@ -34758,20 +34757,13 @@ func (ec *executionContext) unmarshalInputUpdateAntecedentTreatmentInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"created_by", "start_date", "end_date", "medicines"}
+	fieldsInOrder := [...]string{"start_date", "end_date", "medicines"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "created_by":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("created_by"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
 		case "start_date":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("start_date"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
