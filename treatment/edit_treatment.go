@@ -85,26 +85,29 @@ func UpdateTreatment(input UpdateTreatmentInput, patientID string, treatmentID s
 		return UpdateTreatmentResponse{Code: 404, Err: errors.New("treatment not found in any antecedent")}
 	}
 
+	var medicines []*model.UpdateAntecedentsMedicinesInput
 	for _, medicine := range input.Medicines {
+		medicineID := medicine.MedicineID
+		comment := medicine.Comment
 		periods := ConvertUpdatePeriods(medicine.Period)
 
-		treatment, err := graphql.UpdateAntecedentTreatment(treatmentID, antecedentID, model.UpdateAntecedentTreatmentInput{
-			CreatedBy: &input.CreatedBy,
-			StartDate: &input.StartDate,
-			EndDate:   &input.EndDate,
-			Medicines: []*model.UpdateAntecedentsMedicinesInput{
-				{
-					MedicineID: &medicine.MedicineID,
-					Comment:    &medicine.Comment,
-					Period:     convertToPointerSliceInput(periods),
-				},
-			},
+		medicines = append(medicines, &model.UpdateAntecedentsMedicinesInput{
+			MedicineID: &medicineID,
+			Comment:    &comment,
+			Period:     convertToPointerSliceInput(periods),
 		})
-		if err != nil {
-			return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to update antecedent treatment: " + err.Error())}
-		}
-		res = append(res, treatment)
 	}
+
+	treatment, err := graphql.UpdateAntecedentTreatment(treatmentID, antecedentID, model.UpdateAntecedentTreatmentInput{
+		CreatedBy: &input.CreatedBy,
+		StartDate: &input.StartDate,
+		EndDate:   &input.EndDate,
+		Medicines: medicines,
+	})
+	if err != nil {
+		return UpdateTreatmentResponse{Code: 400, Err: errors.New("unable to update antecedent treatment: " + err.Error())}
+	}
+	res = append(res, treatment)
 
 	return UpdateTreatmentResponse{
 		Treatment: res,

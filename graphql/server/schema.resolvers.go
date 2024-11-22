@@ -1312,6 +1312,8 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 		for i, medicineInput := range input.Medicines {
 			if i < len(treatment.Medicines) {
 				medicine := treatment.Medicines[i]
+				medicine.MedicineID = *medicineInput.MedicineID
+				medicine.Comment = medicineInput.Comment
 				if medicineInput.Period != nil {
 					medicine.Period = make([]*model.AntecedentPeriod, len(medicineInput.Period))
 					for j, periodInput := range medicineInput.Period {
