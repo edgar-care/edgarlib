@@ -97,26 +97,26 @@ func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentRe
 		return CreateTreatmentResponse{Code: 404, Err: errors.New("antecedent ID not found in medical folder")}
 	}
 
+	var medicines []*model.CreateAntecedentsMedicinesInput
 	for _, medicine := range input.Medicines {
 		periods := ConvertPeriods(medicine.Period)
-
-		treatment, err := graphql.CreateAntecdentTreatment(input.MedicalantecedentID, model.CreateAntecedentTreatmentInput{
-			CreatedBy: patientID,
-			StartDate: input.StartDate,
-			EndDate:   &input.EndDate,
-			Medicines: []*model.CreateAntecedentsMedicinesInput{
-				{
-					MedicineID: medicine.MedicineID,
-					Comment:    &medicine.Comment,
-					Period:     convertToCreateAntecedentPeriodInputSlice(periods),
-				},
-			},
+		medicines = append(medicines, &model.CreateAntecedentsMedicinesInput{
+			MedicineID: medicine.MedicineID,
+			Comment:    &medicine.Comment,
+			Period:     convertToCreateAntecedentPeriodInputSlice(periods),
 		})
-		if err != nil {
-			return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to create antecedent treatment: " + err.Error())}
-		}
-		res = append(res, treatment)
 	}
+
+	treatment, err := graphql.CreateAntecdentTreatment(input.MedicalantecedentID, model.CreateAntecedentTreatmentInput{
+		CreatedBy: patientID,
+		StartDate: input.StartDate,
+		EndDate:   &input.EndDate,
+		Medicines: medicines,
+	})
+	if err != nil {
+		return CreateTreatmentResponse{Code: 400, Err: errors.New("unable to create antecedent treatment: " + err.Error())}
+	}
+	res = append(res, treatment)
 
 	return CreateTreatmentResponse{
 		Treatment: res,
