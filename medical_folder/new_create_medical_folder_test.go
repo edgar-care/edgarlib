@@ -85,15 +85,26 @@ func TestAddMedicalAntecedent(t *testing.T) {
 		Treatments: []CreateTreatInput{{
 			StartDate: 1234,
 			EndDate:   5678,
-			Medicines: []CreateAntecedentsMedicines{{
-				MedicineID: "test",
-				Period: []*CreateAntecedentPeriod{{
-					Quantity:       2,
-					Frequency:      2,
-					FrequencyRatio: 2,
-					FrequencyUnit:  "JOUR",
+			Medicines: []CreateAntecedentsMedicines{
+				{
+					MedicineID: "test",
+					Period: []*CreateAntecedentPeriod{{
+						Quantity:       2,
+						Frequency:      2,
+						FrequencyRatio: 2,
+						FrequencyUnit:  "JOUR",
+					}},
+				},
+				{
+					MedicineID: "test",
+					Period: []*CreateAntecedentPeriod{{
+						Quantity:       3,
+						Frequency:      23,
+						FrequencyRatio: 2,
+						FrequencyUnit:  "MOIS",
+					},
+					},
 				}},
-			}},
 		}},
 	}
 
