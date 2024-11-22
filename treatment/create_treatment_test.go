@@ -66,18 +66,32 @@ func TestCreateTreatment(t *testing.T) {
 		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
 		StartDate:           1234,
 		EndDate:             5678,
-		Medicines: []CreateAntecedentsMedicines{{
-			MedicineID: "test",
-			Comment:    "test commentaire see",
-			Period: []CreateAntecedentPeriod{{
-				Quantity:       2,
-				Frequency:      2,
-				FrequencyRatio: 2,
-				FrequencyUnit:  "JOUR",
-				PeriodLength:   func(s int) *int { return &s }(2),
-				PeriodUnit:     func(s string) *string { return &s }("JOUR"),
-			}},
-		}},
+		Medicines: []CreateAntecedentsMedicines{
+			{
+				MedicineID: "test",
+				Comment:    "test commentaire see",
+				Period: []CreateAntecedentPeriod{{
+					Quantity:       2,
+					Frequency:      2,
+					FrequencyRatio: 2,
+					FrequencyUnit:  "JOUR",
+					PeriodLength:   func(s int) *int { return &s }(2),
+					PeriodUnit:     func(s string) *string { return &s }("JOUR"),
+				}},
+			},
+			{
+				MedicineID: "dfvdfvdfvdfvf",
+				Comment:    "cfbcbfb",
+				Period: []CreateAntecedentPeriod{{
+					Quantity:       3,
+					Frequency:      1,
+					FrequencyRatio: 7,
+					FrequencyUnit:  "JOUR",
+					PeriodLength:   func(s int) *int { return &s }(2),
+					PeriodUnit:     func(s string) *string { return &s }("ANNEE"),
+				}},
+			},
+		},
 	}
 
 	response := CreateTreatment(treatmentInput, patient.ID)
