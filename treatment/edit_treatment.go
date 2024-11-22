@@ -8,7 +8,6 @@ import (
 )
 
 type UpdateTreatmentInput struct {
-	CreatedBy string                       `json:"created_by"`
 	StartDate int                          `json:"start_date"`
 	EndDate   int                          `json:"end_date"`
 	Medicines []UpdateAntecedentsMedicines `json:"medicines"`
@@ -99,7 +98,6 @@ func UpdateTreatment(input UpdateTreatmentInput, patientID string, treatmentID s
 	}
 
 	treatment, err := graphql.UpdateAntecedentTreatment(treatmentID, antecedentID, model.UpdateAntecedentTreatmentInput{
-		CreatedBy: &input.CreatedBy,
 		StartDate: &input.StartDate,
 		EndDate:   &input.EndDate,
 		Medicines: medicines,

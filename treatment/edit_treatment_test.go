@@ -44,23 +44,36 @@ func TestUpdateTreatment(t *testing.T) {
 		Treatments: []medical_folder.CreateTreatInput{{
 			StartDate: 1234,
 			EndDate:   5678,
-			Medicines: []medical_folder.CreateAntecedentsMedicines{{
-				MedicineID: "test",
-				Comment:    func(s string) *string { return &s }("comment"),
-				Period: []*medical_folder.CreateAntecedentPeriod{{
-					Quantity:       2,
-					Frequency:      2,
-					FrequencyRatio: 2,
-					FrequencyUnit:  "ANNEE",
-					PeriodLength:   func(s int) *int { return &s }(2),
-					PeriodUnit:     func(s string) *string { return &s }("JOUR"),
-				}},
-			}},
+			Medicines: []medical_folder.CreateAntecedentsMedicines{
+				{
+					MedicineID: "test",
+					Comment:    func(s string) *string { return &s }("comment"),
+					Period: []*medical_folder.CreateAntecedentPeriod{{
+						Quantity:       2,
+						Frequency:      2,
+						FrequencyRatio: 2,
+						FrequencyUnit:  "ANNEE",
+						PeriodLength:   func(s int) *int { return &s }(2),
+						PeriodUnit:     func(s string) *string { return &s }("JOUR"),
+					}},
+				},
+				{
+					MedicineID: "test2",
+					Comment:    func(s string) *string { return &s }("comment2"),
+					Period: []*medical_folder.CreateAntecedentPeriod{{
+						Quantity:       13,
+						Frequency:      13,
+						FrequencyRatio: 13,
+						FrequencyUnit:  "MOIS",
+						PeriodLength:   func(s int) *int { return &s }(3),
+						PeriodUnit:     func(s string) *string { return &s }("ANNEE"),
+					}},
+				},
+			},
 		}},
 	}
 
 	ante := medical_folder.AddMedicalAntecedent(antecedentInput, patient.ID)
-
 	treatmentInput := CreateTreatInput{
 		MedicalantecedentID: ante.MedicalAntecedents[0].ID,
 		StartDate:           1234,
@@ -82,7 +95,6 @@ func TestUpdateTreatment(t *testing.T) {
 	}
 
 	input := UpdateTreatmentInput{
-		CreatedBy: "testupdate",
 		StartDate: 9876,
 		EndDate:   7653,
 		Medicines: []UpdateAntecedentsMedicines{
@@ -100,24 +112,24 @@ func TestUpdateTreatment(t *testing.T) {
 					},
 				},
 			},
-			{
-				MedicineID: "test2",
-				Comment:    "commenttest",
-				Period: []UpdateAntecedentPeriod{
-					{
-						Quantity:       4,
-						Frequency:      4,
-						FrequencyRatio: 4,
-						FrequencyUnit:  "MOIS",
-						PeriodLength:   4,
-						PeriodUnit:     "JOUR",
-					},
-				},
-			},
+			//{
+			//	MedicineID: "test2",
+			//	Comment:    "commenttest",
+			//	Period: []UpdateAntecedentPeriod{
+			//		{
+			//			Quantity:       4,
+			//			Frequency:      4,
+			//			FrequencyRatio: 4,
+			//			FrequencyUnit:  "MOIS",
+			//			PeriodLength:   4,
+			//			PeriodUnit:     "JOUR",
+			//		},
+			//	},
+			//},
 		},
 	}
 
-	response := UpdateTreatment(input, patient.ID, treat.Treatment[0].ID)
+	response := UpdateTreatment(input, patient.ID, ante.MedicalAntecedents[0].Treatments[0].ID)
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}

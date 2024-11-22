@@ -743,7 +743,6 @@ type UpdateAntecedentPeriodInput struct {
 }
 
 type UpdateAntecedentTreatmentInput struct {
-	CreatedBy *string                            `json:"created_by,omitempty" bson:"created_by"`
 	StartDate *int                               `json:"start_date,omitempty" bson:"start_date"`
 	EndDate   *int                               `json:"end_date,omitempty" bson:"end_date"`
 	Medicines []*UpdateAntecedentsMedicinesInput `json:"medicines,omitempty" bson:"medicines"`
