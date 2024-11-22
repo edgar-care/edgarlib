@@ -1288,7 +1288,6 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 	}
 
 	var treatment model.AntecedentTreatment
-
 	for _, t := range medicalAntecedent.Treatments {
 		if t.ID == id {
 			treatment.CreatedBy = t.CreatedBy
@@ -1298,7 +1297,6 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 	treatment.ID = id
 	treatment.StartDate = *input.StartDate
 	treatment.EndDate = input.EndDate
-
 	treatment.Medicines = make([]*model.AntecedentsMedicines, len(input.Medicines))
 	for i, medicineInput := range input.Medicines {
 		treatment.Medicines[i] = &model.AntecedentsMedicines{
@@ -1319,11 +1317,25 @@ func (r *mutationResolver) UpdateAntecdentTreatment(ctx context.Context, id stri
 		}
 	}
 
+	for i, t := range medicalAntecedent.Treatments {
+		if t.ID == id {
+			medicalAntecedent.Treatments[i] = &treatment
+			break
+		}
+	}
 	update := bson.M{"$set": bson.M{"treatments": medicalAntecedent.Treatments}}
 	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
 	err = collection.FindOneAndUpdate(ctx, filter, update, opts).Decode(&medicalAntecedent)
 	if err != nil {
 		return nil, errors.New("unable to update medical antecedent: " + err.Error())
+	}
+
+	treatmentCollection := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("AntecedentTreatment")
+	treatmentFilter := bson.M{"_id": id}
+	treatmentUpdate := bson.M{"$set": treatment}
+	_, err = treatmentCollection.UpdateOne(ctx, treatmentFilter, treatmentUpdate)
+	if err != nil {
+		return nil, errors.New("unable to update antecedent treatment: " + err.Error())
 	}
 
 	return &treatment, nil

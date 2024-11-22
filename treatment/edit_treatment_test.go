@@ -130,12 +130,15 @@ func TestUpdateTreatment(t *testing.T) {
 	}
 
 	response := UpdateTreatment(input, patient.ID, ante.MedicalAntecedents[0].Treatments[0].ID)
+
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}
 	if response.Err != nil {
 		t.Errorf("Expected no error but got: %s", response.Err.Error())
 	}
+
+	_ = GetTreatmentById(ante.MedicalAntecedents[0].Treatments[0].ID, patient.ID)
 
 	_ = medical_folder.GetMedicalAntecedents(patient.ID)
 
