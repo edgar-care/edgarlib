@@ -85,18 +85,36 @@ func TestUpdateTreatment(t *testing.T) {
 		CreatedBy: "testupdate",
 		StartDate: 9876,
 		EndDate:   7653,
-		Medicines: []UpdateAntecedentsMedicines{{
-			MedicineID: "AZE",
-			Comment:    "comment",
-			Period: []UpdateAntecedentPeriod{{
-				Quantity:       3,
-				Frequency:      3,
-				FrequencyRatio: 3,
-				FrequencyUnit:  "ANNEE",
-				PeriodLength:   3,
-				PeriodUnit:     "JOUR",
-			}},
-		}},
+		Medicines: []UpdateAntecedentsMedicines{
+			{
+				MedicineID: "AZE",
+				Comment:    "comment",
+				Period: []UpdateAntecedentPeriod{
+					{
+						Quantity:       3,
+						Frequency:      3,
+						FrequencyRatio: 3,
+						FrequencyUnit:  "ANNEE",
+						PeriodLength:   3,
+						PeriodUnit:     "JOUR",
+					},
+				},
+			},
+			{
+				MedicineID: "test2",
+				Comment:    "commenttest",
+				Period: []UpdateAntecedentPeriod{
+					{
+						Quantity:       4,
+						Frequency:      4,
+						FrequencyRatio: 4,
+						FrequencyUnit:  "MOIS",
+						PeriodLength:   4,
+						PeriodUnit:     "JOUR",
+					},
+				},
+			},
+		},
 	}
 
 	response := UpdateTreatment(input, patient.ID, treat.Treatment[0].ID)
