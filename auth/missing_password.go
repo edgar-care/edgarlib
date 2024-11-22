@@ -20,6 +20,7 @@ type MissingPasswordResponse struct {
 func MissingPassword(email string, accountype string) MissingPasswordResponse {
 	var userID string
 	var link string
+	var app string
 	if accountype == "d" {
 		doctor, err := graphql.GetDoctorByEmail(email)
 		if err != nil {
@@ -41,15 +42,24 @@ func MissingPassword(email string, accountype string) MissingPasswordResponse {
 	_, err := redis.SetKey(account_uuid.String(), userID, &expire)
 	edgarlib.CheckError(err)
 
-	link = fmt.Sprintf("app.edgar-sante.fr/%s/reset-password?uuid=%s", accountype, account_uuid.String())
-	if os.Getenv("ENV") == "demo" {
-		link = fmt.Sprintf("demo.app.edgar-sante.fr/%s/reset-password?uuid=%s", accountype, account_uuid.String())
+	if accountype == "p" {
+		link = fmt.Sprintf("app.edgar-sante.fr/%s/reset-password?uuid=%s", accountype, account_uuid.String())
+		if os.Getenv("ENV") == "demo" {
+			link = fmt.Sprintf("demo.app.edgar-sante.fr/%s/reset-password?uuid=%s", accountype, account_uuid.String())
+		}
+		app = "app"
 	}
-
+	if accountype == "d" {
+		link = fmt.Sprintf("pro.edgar-sante.fr/%s/reset-password?uuid=%s", accountype, account_uuid.String())
+		if os.Getenv("ENV") == "demo" {
+			link = fmt.Sprintf("demo.pro.edgar-sante.fr/%s/reset-password?uuid=%s", accountype, account_uuid.String())
+		}
+		app = "pro"
+	}
 	err = edgarmail.SendEmail(edgarmail.Email{
 		To:       email,
 		Subject:  "Réinitialisation de votre mot de passe",
-		Body:     fmt.Sprintf("Pour réinitialiser votre mot de passe, cliquez ici (app.edgar-sante.fr/%s/reset-password?uuid=%s)", accountype, account_uuid.String()),
+		Body:     fmt.Sprintf("Pour réinitialiser votre mot de passe, cliquez ici (%s.edgar-sante.fr/%s/reset-password?uuid=%s)", app, accountype, account_uuid.String()),
 		Template: "basic_with_button",
 		TemplateInfos: map[string]interface{}{
 			"Body":        "Pour réinitialiser votre mot de passe",
