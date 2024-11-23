@@ -48,14 +48,24 @@ func TestUpdateTreatment(t *testing.T) {
 				{
 					MedicineID: "test",
 					Comment:    func(s string) *string { return &s }("comment"),
-					Period: []*medical_folder.CreateAntecedentPeriod{{
-						Quantity:       2,
-						Frequency:      2,
-						FrequencyRatio: 2,
-						FrequencyUnit:  "ANNEE",
-						PeriodLength:   func(s int) *int { return &s }(2),
-						PeriodUnit:     func(s string) *string { return &s }("JOUR"),
-					}},
+					Period: []*medical_folder.CreateAntecedentPeriod{
+						{
+							Quantity:       2,
+							Frequency:      2,
+							FrequencyRatio: 2,
+							FrequencyUnit:  "ANNEE",
+							PeriodLength:   func(s int) *int { return &s }(2),
+							PeriodUnit:     func(s string) *string { return &s }("JOUR"),
+						},
+						{
+							Quantity:       32,
+							Frequency:      31,
+							FrequencyRatio: 36,
+							FrequencyUnit:  "JOUR",
+							PeriodLength:   func(s int) *int { return &s }(23),
+							PeriodUnit:     func(s string) *string { return &s }("ANNEE"),
+						},
+					},
 				},
 				{
 					MedicineID: "test2",
@@ -107,8 +117,14 @@ func TestUpdateTreatment(t *testing.T) {
 						Frequency:      3,
 						FrequencyRatio: 3,
 						FrequencyUnit:  "ANNEE",
-						PeriodLength:   3,
+						PeriodLength:   32,
 						PeriodUnit:     "JOUR",
+					},
+					{
+						Quantity:       4,
+						Frequency:      4,
+						FrequencyRatio: 4,
+						FrequencyUnit:  "MOIS",
 					},
 				},
 			},
@@ -121,7 +137,7 @@ func TestUpdateTreatment(t *testing.T) {
 			//			Frequency:      4,
 			//			FrequencyRatio: 4,
 			//			FrequencyUnit:  "MOIS",
-			//			PeriodLength:   4,
+			//			PeriodLength:   41,
 			//			PeriodUnit:     "JOUR",
 			//		},
 			//	},
@@ -130,7 +146,6 @@ func TestUpdateTreatment(t *testing.T) {
 	}
 
 	response := UpdateTreatment(input, patient.ID, ante.MedicalAntecedents[0].Treatments[0].ID)
-
 	if response.Code != 200 {
 		t.Errorf("Expected code 200 but got %d", response.Code)
 	}
@@ -139,7 +154,6 @@ func TestUpdateTreatment(t *testing.T) {
 	}
 
 	_ = GetTreatmentById(ante.MedicalAntecedents[0].Treatments[0].ID, patient.ID)
-
 	_ = medical_folder.GetMedicalAntecedents(patient.ID)
 
 }

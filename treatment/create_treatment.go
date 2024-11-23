@@ -99,10 +99,11 @@ func CreateTreatment(input CreateTreatInput, patientID string) CreateTreatmentRe
 
 	var medicines []*model.CreateAntecedentsMedicinesInput
 	for _, medicine := range input.Medicines {
+		comment := medicine.Comment
 		periods := ConvertPeriods(medicine.Period)
 		medicines = append(medicines, &model.CreateAntecedentsMedicinesInput{
 			MedicineID: medicine.MedicineID,
-			Comment:    &medicine.Comment,
+			Comment:    &comment,
 			Period:     convertToCreateAntecedentPeriodInputSlice(periods),
 		})
 	}
