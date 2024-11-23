@@ -50,7 +50,7 @@ func Initiate(id string) InitiateResponse {
 			if medicalAntecedentsId != "" {
 				medicalAntecedent, err := graphql.GetMedicalAntecedentsById(medicalAntecedentsId)
 				if err != nil {
-					return InitiateResponse{"", 500, errors.New("problem with MedicalAntecedents ID")}
+					continue
 				}
 				for _, AntecedentTreatment := range medicalAntecedent.Treatments {
 					for _, AntecedentsMedicine := range AntecedentTreatment.Medicines {
