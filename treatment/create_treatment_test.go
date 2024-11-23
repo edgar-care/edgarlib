@@ -95,6 +95,7 @@ func TestCreateTreatment(t *testing.T) {
 	}
 
 	response := CreateTreatment(treatmentInput, patient.ID)
+	//spew.Dump(response)
 	if response.Code != 201 {
 		t.Errorf("Expected response code 400, got %v", response.Code)
 	}

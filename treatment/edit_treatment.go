@@ -38,14 +38,25 @@ func ConvertUpdatePeriods(periods []UpdateAntecedentPeriod) []model.AntecedentPe
 	convertedPeriods := make([]model.AntecedentPeriod, len(periods))
 	for i, p := range periods {
 		freqUnit := model.TimeUnitEnum(p.FrequencyUnit)
-		periodUnit := model.TimeUnitEnum(p.PeriodUnit)
+		var periodLength *int
+		var periodUnit *model.TimeUnitEnum
+
+		if p.PeriodLength != 0 {
+			periodLength = new(int)
+			*periodLength = p.PeriodLength
+		}
+		if p.PeriodUnit != "" {
+			unit := model.TimeUnitEnum(p.PeriodUnit)
+			periodUnit = &unit
+		}
+
 		convertedPeriods[i] = model.AntecedentPeriod{
 			Quantity:       p.Quantity,
 			Frequency:      p.Frequency,
 			FrequencyRatio: p.FrequencyRatio,
 			FrequencyUnit:  freqUnit,
-			PeriodLength:   &p.PeriodLength,
-			PeriodUnit:     &periodUnit,
+			PeriodLength:   periodLength,
+			PeriodUnit:     periodUnit,
 		}
 	}
 	return convertedPeriods
