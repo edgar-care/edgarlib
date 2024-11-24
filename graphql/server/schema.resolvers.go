@@ -2557,7 +2557,7 @@ func (r *queryResolver) GetSlots(ctx context.Context, id string, option *model.O
 
 	filter := bson.M{
 		"doctor_id":          id,
-		"appointment_status": "OPENED",
+		"appointment_status": bson.M{"$nin": []string{"CANCELED", "CANCELED_DUE_TO_REVIEW"}},
 	}
 
 	cursor, err := r.Db.Client.Database(os.Getenv("DATABASE_NAME")).Collection("Rdv").Find(ctx, filter, findOptions)
