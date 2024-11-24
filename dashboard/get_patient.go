@@ -84,7 +84,7 @@ func GetPatients(doctorId string) GetPatientsResponse {
 	for _, patient := range patientDoctor {
 		medicalInfo := medical_folder.GetMedicalFolder(patient.ID)
 		if medicalInfo.Err != nil {
-			return GetPatientsResponse{Code: 401, Err: errors.New("error while retrieving medical info by id")}
+			return GetPatientsResponse{Code: 400, Err: errors.New("error while retrieving medical info by id")}
 		}
 		patients = append(patients, PatientWithMedicalInfo{
 			ID:                patient.ID,
