@@ -2,6 +2,7 @@ package auth
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/edgar-care/edgarlib/v2"
 	"github.com/edgar-care/edgarlib/v2/auth/utils"
@@ -18,6 +19,7 @@ type CreatePatientAccountResponse struct {
 
 func CreatePatientAccount(email string) CreatePatientAccountResponse {
 	password := utils.GeneratePassword(10)
+	var link string
 
 	patient, err := RegisterPatient(email, password)
 	if err != nil {
@@ -28,6 +30,11 @@ func CreatePatientAccount(email string) CreatePatientAccountResponse {
 	_, err = redis.SetKey(patient_uuid.String(), email, &expire)
 	edgarlib.CheckError(err)
 
+	link = fmt.Sprintf("app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String())
+	if os.Getenv("ENV") == "demo" {
+		link = fmt.Sprintf("demo.app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String())
+	}
+
 	err = edgarmail.SendEmail(edgarmail.Email{
 		To:       email,
 		Subject:  "Création de votre compte - edgar-sante.fr",
@@ -35,7 +42,7 @@ func CreatePatientAccount(email string) CreatePatientAccountResponse {
 		Template: "basic_with_button",
 		TemplateInfos: map[string]interface{}{
 			"Body":        "Votre compte à bien été créé, cliquez ici pour mettre à jour votre mot de passe",
-			"ButtonUrl":   fmt.Sprintf("app.edgar-sante.fr/reset-password?uuid=%s", patient_uuid.String()),
+			"ButtonUrl":   link,
 			"ButtonTitle": "Cliquez ici",
 		},
 	})
