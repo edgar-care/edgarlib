@@ -272,8 +272,8 @@ func TestGetPatientsWithMedicalInfoError(t *testing.T) {
 
 	response := GetPatients(doctor.ID)
 
-	if response.Code != 401 {
-		t.Errorf("Expected response code 401 due to medical info error, got %v", response.Code)
+	if response.Code != 400 {
+		t.Errorf("Expected response code 400 due to medical info error, got %v", response.Code)
 	}
 	if response.Err == nil {
 		t.Errorf("Expected an error in response, got nil")
