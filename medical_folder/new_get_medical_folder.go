@@ -32,7 +32,7 @@ func GetMedicalFolder(patientID string) MedicalFolderResponse {
 	}
 
 	if patient.MedicalInfoID == nil || *patient.MedicalInfoID == "" {
-		return MedicalFolderResponse{Code: 404, Err: errors.New("medical folder not found for the patient")}
+		return MedicalFolderResponse{Code: 400, Err: errors.New("medical folder not found for the patient")}
 	}
 
 	medicalInfo, err := graphql.GetMedicalFolderByID(*patient.MedicalInfoID)
